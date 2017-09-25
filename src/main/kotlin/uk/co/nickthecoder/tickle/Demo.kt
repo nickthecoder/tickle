@@ -17,7 +17,7 @@ class Demo(window: Window, gameInfo: GameInfo, resources: Resources) : Game(wind
     override fun postInitialise() {
         println("Demo postInitialise")
 
-        GL11.glClearColor(0.0f, 1.0f, 0.0f, 0.0f)
+        renderer.clearColor( Color(1.0f, 1.0f, 1.0f, 1.0f))
 
         window.enableVSync(1)
         window.keyboardEvents { onKey(it) }

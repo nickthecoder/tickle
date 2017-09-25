@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.graphics
 
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL
+import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
@@ -70,8 +71,7 @@ class Renderer {
             fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "legacy.frag"))
         }
 
-        program.attachShader(vertexShader)
-        program.attachShader(fragmentShader)
+        program.attachShaders(vertexShader, fragmentShader)
         if (isDefaultContext()) {
             program.bindFragmentDataLocation(0, "fragColor")
         }
@@ -100,17 +100,17 @@ class Renderer {
         /* Specify Vertex Pointers */
         val posAttrib = program.getAttributeLocation("position")
         program.enableVertexAttribute(posAttrib)
-        program.pointVertexAttribute(posAttrib, 2, 7 * java.lang.Float.BYTES, 0)
+        program.pointVertexAttribute(posAttrib, 2, 8 * java.lang.Float.BYTES, 0)
 
         /* Specify Color Pointer */
         val colAttrib = program.getAttributeLocation("color")
         program.enableVertexAttribute(colAttrib)
-        program.pointVertexAttribute(colAttrib, 3, 7 * java.lang.Float.BYTES, 2L * java.lang.Float.BYTES)
+        program.pointVertexAttribute(colAttrib, 4, 8 * java.lang.Float.BYTES, 2L * java.lang.Float.BYTES)
 
         /* Specify Texture Pointer */
         val texAttrib = program.getAttributeLocation("texcoord")
         program.enableVertexAttribute(texAttrib)
-        program.pointVertexAttribute(texAttrib, 2, 7 * java.lang.Float.BYTES, 5L * java.lang.Float.BYTES)
+        program.pointVertexAttribute(texAttrib, 2, 8 * java.lang.Float.BYTES, 6L * java.lang.Float.BYTES)
 
         /* Set texture uniform */
         val uniTex = program.getUniformLocation("texImage")
@@ -134,6 +134,10 @@ class Renderer {
         println("Projection : $projection")
     }
 
+
+    fun clearColor(color: Color) {
+        GL11.glClearColor(color.red, color.green, color.blue, color.alpha)
+    }
 
     fun clear() {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
@@ -235,7 +239,7 @@ class Renderer {
             begin()
             currentTexture = texture
         }
-        if (vertices.remaining() < 7 * 6) {
+        if (vertices.remaining() < 8 * 6) {
             /* We need more space in the buffer, so flush it */
             flush()
         }
@@ -243,14 +247,15 @@ class Renderer {
         val r = color.red
         val g = color.green
         val b = color.blue
+        val a = color.alpha
 
-        vertices.put(x1).put(y1).put(r).put(g).put(b).put(s1).put(t1)
-        vertices.put(x1).put(y2).put(r).put(g).put(b).put(s1).put(t2)
-        vertices.put(x2).put(y2).put(r).put(g).put(b).put(s2).put(t2)
+        vertices.put(x1).put(y1).put(r).put(g).put(b).put(a).put(s1).put(t1)
+        vertices.put(x1).put(y2).put(r).put(g).put(b).put(a).put(s1).put(t2)
+        vertices.put(x2).put(y2).put(r).put(g).put(b).put(a).put(s2).put(t2)
 
-        vertices.put(x1).put(y1).put(r).put(g).put(b).put(s1).put(t1)
-        vertices.put(x2).put(y2).put(r).put(g).put(b).put(s2).put(t2)
-        vertices.put(x2).put(y1).put(r).put(g).put(b).put(s2).put(t1)
+        vertices.put(x1).put(y1).put(r).put(g).put(b).put(a).put(s1).put(t1)
+        vertices.put(x2).put(y2).put(r).put(g).put(b).put(a).put(s2).put(t2)
+        vertices.put(x2).put(y1).put(r).put(g).put(b).put(a).put(s2).put(t1)
 
         numVertices += 6
     }

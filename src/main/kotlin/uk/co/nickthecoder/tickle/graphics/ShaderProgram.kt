@@ -7,13 +7,15 @@ import org.lwjgl.opengl.GL30.glBindFragDataLocation
 import org.lwjgl.system.MemoryStack
 import uk.co.nickthecoder.tickle.math.*
 
-public class ShaderProgram {
+public class ShaderProgram() {
+
+    fun attachShaders(vararg shaders: Shader) {
+        shaders.forEach { shader ->
+            glAttachShader(handle, shader.handle)
+        }
+    }
 
     val handle = glCreateProgram()
-
-    fun attachShader(shader: Shader) {
-        glAttachShader(handle, shader.handle)
-    }
 
     fun bindFragmentDataLocation(number: Int, name: CharSequence) {
         glBindFragDataLocation(handle, number, name);
