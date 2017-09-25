@@ -19,6 +19,7 @@ fun main(args: Array<String>) {
     // Create the window
     val window = Window(gameInfo.title, gameInfo.width, gameInfo.height)
     window.show()
+
     GL.createCapabilities()
 
     val resources = Resources()

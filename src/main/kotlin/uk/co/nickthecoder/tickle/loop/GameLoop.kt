@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.loop
 
 interface GameLoop {
     val tickCount: Long

@@ -1,4 +1,6 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.loop
+
+import uk.co.nickthecoder.tickle.Game
 
 abstract class AbstractGameLoop(val game: Game) : GameLoop {
 

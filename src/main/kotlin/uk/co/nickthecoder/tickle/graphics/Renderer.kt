@@ -11,7 +11,7 @@ import uk.co.nickthecoder.tickle.math.Matrix4
 import java.io.File
 
 
-class Renderer {
+class Renderer() {
 
     private val program = ShaderProgram()
     private var vao: VertexArray? = null
@@ -29,14 +29,14 @@ class Renderer {
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
-        if (isDefaultContext()) {
+        if (isLegacy()) {
+            println("Is legacy Context")
+            vao = null
+        } else {
             println("Is default Context")
             /* Generate Vertex Array Object */
             vao = VertexArray()
             vao!!.bind()
-        } else {
-            println("Is legacy Context")
-            vao = null
         }
 
         /* Generate Vertex Buffer Object */
@@ -61,18 +61,18 @@ class Renderer {
         /* Load shaders */
         val vertexShader: Shader
         val fragmentShader: Shader
-        if (isDefaultContext()) {
-            println("Loading default shaders")
-            vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(Game.resourceDirectory, "default.vert"))
-            fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "default.frag"))
-        } else {
+        if (isLegacy()) {
             println("Loading legacy shaders")
             vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(Game.resourceDirectory, "legacy.vert"))
             fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "legacy.frag"))
+        } else {
+            println("Loading default shaders")
+            vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(Game.resourceDirectory, "default.vert"))
+            fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "default.frag"))
         }
 
         program.attachShaders(vertexShader, fragmentShader)
-        if (isDefaultContext()) {
+        if (!isLegacy()) {
             program.bindFragmentDataLocation(0, "fragColor")
         }
         program.link()
@@ -127,13 +127,19 @@ class Renderer {
         program.setUniform(uniView, view)
 
         /* Set projection matrix to an orthographic projection */
-        val projection = Matrix4.orthographic(left = 0f, right = width.toFloat(), bottom = 0f, top = height.toFloat(), near = -1f, far = 1f)
+        val projection = Matrix4.orthographic(
+                left = 0f, right = width.toFloat(),
+                bottom = 0f, top = height.toFloat(),
+                near = -1f, far = 1f)
         val uniProjection = program.getUniformLocation("projection")
         program.setUniform(uniProjection, projection)
 
         println("Projection : $projection")
     }
 
+    fun isLegacy(): Boolean {
+        return !GL.getCapabilities().OpenGL32
+    }
 
     fun clearColor(color: Color) {
         GL11.glClearColor(color.red, color.green, color.blue, color.alpha)
@@ -267,10 +273,5 @@ class Renderer {
         vertexBuffer.delete()
         program.delete()
     }
-
-    fun isDefaultContext(): Boolean {
-        return GL.getCapabilities().OpenGL32
-    }
-
 
 }

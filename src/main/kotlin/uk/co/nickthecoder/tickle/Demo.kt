@@ -1,12 +1,15 @@
 package uk.co.nickthecoder.tickle
 
 import org.lwjgl.glfw.GLFW
-import org.lwjgl.opengl.GL11
+import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 
-class Demo(window: Window, gameInfo: GameInfo, resources: Resources) : Game(window, gameInfo, resources) {
+class Demo(
+        window: Window,
+        gameInfo: GameInfo,
+        resources: Resources) : Game(window, gameInfo, resources) {
 
     var renderer = Renderer()
 
@@ -36,6 +39,7 @@ class Demo(window: Window, gameInfo: GameInfo, resources: Resources) : Game(wind
             frameStart()
             clear()
 
+            drawTexture(resources.coin, 550f, 10f)
             drawTexture(resources.coin, 10f, 10f)
             drawTexture(resources.coin, 110f, 110f, Color.RED)
             drawTexture(resources.grenade, 10f, 250f)

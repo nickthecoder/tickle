@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.events
 
 import uk.co.nickthecoder.tickle.graphics.Window
 

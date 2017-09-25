@@ -4,12 +4,12 @@ import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
-import uk.co.nickthecoder.tickle.KeyEvent
+import uk.co.nickthecoder.tickle.events.KeyEvent
 
 class Window(
         title: String,
-        width: Int,
-        height: Int,
+        val width: Int,
+        val height: Int,
         resizable: Boolean = false) {
 
     private val handle: Long

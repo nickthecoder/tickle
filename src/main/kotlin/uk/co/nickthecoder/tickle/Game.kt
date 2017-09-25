@@ -2,9 +2,14 @@ package uk.co.nickthecoder.tickle
 
 import org.lwjgl.glfw.GLFW
 import uk.co.nickthecoder.tickle.graphics.Window
+import uk.co.nickthecoder.tickle.loop.FullSpeedGameLoop
+import uk.co.nickthecoder.tickle.loop.GameLoop
 import java.io.File
 
-abstract class Game(val window : Window, val gameInfo: GameInfo, val resources: Resources) {
+abstract class Game(
+        val window: Window,
+        val gameInfo: GameInfo,
+        val resources: Resources) {
 
     lateinit var gameLoop: GameLoop
 
