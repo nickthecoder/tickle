@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import org.lwjgl.glfw.GLFW
+import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.loop.FullSpeedGameLoop
 import uk.co.nickthecoder.tickle.loop.GameLoop
@@ -10,6 +11,8 @@ abstract class Game(
         val window: Window,
         val gameInfo: GameInfo,
         val resources: Resources) {
+
+    var renderer = Renderer(window)
 
     lateinit var gameLoop: GameLoop
 

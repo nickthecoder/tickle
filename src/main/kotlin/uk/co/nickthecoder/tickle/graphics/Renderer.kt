@@ -1,17 +1,15 @@
 package uk.co.nickthecoder.tickle.graphics
 
-import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
-import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.math.Matrix4
 import java.io.File
 
 
-class Renderer() {
+class Renderer(val window: Window) {
 
     private val program = ShaderProgram()
     private var vao: VertexArray? = null
@@ -83,20 +81,6 @@ class Renderer() {
         vertexShader.delete()
         fragmentShader.delete()
 
-        /* Get width and height of framebuffer */
-        val window = GLFW.glfwGetCurrentContext()
-        var width: Int = 0
-        var height: Int = 0
-        MemoryStack.stackPush().use { stack ->
-            val widthBuffer = stack.mallocInt(1)
-            val heightBuffer = stack.mallocInt(1)
-            GLFW.glfwGetFramebufferSize(window, widthBuffer, heightBuffer)
-            width = widthBuffer.get()
-            height = heightBuffer.get()
-        }
-
-        println("Creating view size $width x $height")
-
         /* Specify Vertex Pointers */
         val posAttrib = program.getAttributeLocation("position")
         program.enableVertexAttribute(posAttrib)
@@ -126,15 +110,20 @@ class Renderer() {
         val uniView = program.getUniformLocation("view")
         program.setUniform(uniView, view)
 
+        moveView(0f, 0f)
+    }
+
+    /**
+     * Move the view, so that the bottom left is at position (x,y).
+     */
+    fun moveView(x: Float, y: Float) {
         /* Set projection matrix to an orthographic projection */
         val projection = Matrix4.orthographic(
-                left = 0f, right = width.toFloat(),
-                bottom = 0f, top = height.toFloat(),
+                left = x, right = x + window.width.toFloat(),
+                bottom = y, top = y + window.height.toFloat(),
                 near = -1f, far = 1f)
         val uniProjection = program.getUniformLocation("projection")
         program.setUniform(uniProjection, projection)
-
-        println("Projection : $projection")
     }
 
     fun isLegacy(): Boolean {

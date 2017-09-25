@@ -1,9 +1,11 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.demo
 
 import org.lwjgl.glfw.GLFW
+import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.GameInfo
+import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 
 class Demo(
@@ -11,7 +13,8 @@ class Demo(
         gameInfo: GameInfo,
         resources: Resources) : Game(window, gameInfo, resources) {
 
-    var renderer = Renderer()
+    var scrollX = 0f
+    var scrollY = 0f
 
     override fun preInitialise() {
         println("Starting the Demo")
@@ -20,7 +23,7 @@ class Demo(
     override fun postInitialise() {
         println("Demo postInitialise")
 
-        renderer.clearColor( Color(1.0f, 1.0f, 1.0f, 1.0f))
+        renderer.clearColor(Color(1.0f, 1.0f, 1.0f, 1.0f))
 
         window.enableVSync(1)
         window.keyboardEvents { onKey(it) }
@@ -31,11 +34,18 @@ class Demo(
             println("Escape pressed")
             window.close()
         }
+        if (event.key == GLFW.GLFW_KEY_LEFT) {
+            scrollX += 5
+        }
+        if (event.key == GLFW.GLFW_KEY_RIGHT) {
+            scrollX -= 5
+        }
     }
 
     override fun tick() {
 
         with(renderer) {
+            moveView(scrollX, scrollY)
             frameStart()
             clear()
 

@@ -12,7 +12,7 @@ class Window(
         val height: Int,
         resizable: Boolean = false) {
 
-    private val handle: Long
+    val handle: Long
 
     init {
 
@@ -26,6 +26,20 @@ class Window(
         }
     }
 
+    // TODO If the window is resizeable, then val width and val height will NOT be correct. Need sometimg like this :
+    /*
+        /* Get width and height of framebuffer */
+        var width: Int = 0
+        var height: Int = 0
+        MemoryStack.stackPush().use { stack ->
+            val widthBuffer = stack.mallocInt(1)
+            val heightBuffer = stack.mallocInt(1)
+            GLFW.glfwGetFramebufferSize(window.handle, widthBuffer, heightBuffer)
+            width = widthBuffer.get()
+            height = heightBuffer.get()
+        }
+
+     */
 
     fun keyboardEvents(keyHandler: (KeyEvent) -> Unit) {
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
