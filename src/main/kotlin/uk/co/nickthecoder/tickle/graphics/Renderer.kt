@@ -28,17 +28,127 @@ class Renderer {
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
+        if (isDefaultContext()) {
+            println("Is default Context")
+            /* Generate Vertex Array Object */
+            vao = VertexArray()
+            vao!!.bind()
+        } else {
+            println("Is legacy Context")
+            vao = null
+        }
+
+        /* Generate Vertex Buffer Object */
+        vertexBuffer = VertexBuffer()
         vertexBuffer.bind(Target.ARRAY_BUFFER)
+
+        /* Create FloatBuffer */
+        vertices = MemoryUtil.memAllocFloat(4096)
+
+        println("Created vertices size ${vertices.capacity()}")
 
         /* Upload null data to allocate storage for the VBO */
         val size = (vertices.capacity() * java.lang.Float.BYTES).toLong()
         vertexBuffer.uploadData(Target.ARRAY_BUFFER, size, Usage.DYNAMIC_DRAW)
 
-        setupShaderProgram()
+        /* Initialize variables */
+        numVertices = 0
+        drawing = false
+
+        println("Created vertex buffer ${vertexBuffer.handle}")
+
+        /* Load shaders */
+        val vertexShader: Shader
+        val fragmentShader: Shader
+        if (isDefaultContext()) {
+            println("Loading default shaders")
+            vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(Game.resourceDirectory, "default.vert"))
+            fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "default.frag"))
+        } else {
+            println("Loading legacy shaders")
+            vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(Game.resourceDirectory, "legacy.vert"))
+            fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "legacy.frag"))
+        }
+
+        program.attachShader(vertexShader)
+        program.attachShader(fragmentShader)
+        if (isDefaultContext()) {
+            program.bindFragmentDataLocation(0, "fragColor")
+        }
+        program.link()
+        program.use()
+
+        println("Used the ShaderProgram ${program.handle}")
+
+        vertexShader.delete()
+        fragmentShader.delete()
+
+        /* Get width and height of framebuffer */
+        val window = GLFW.glfwGetCurrentContext()
+        var width: Int = 0
+        var height: Int = 0
+        MemoryStack.stackPush().use { stack ->
+            val widthBuffer = stack.mallocInt(1)
+            val heightBuffer = stack.mallocInt(1)
+            GLFW.glfwGetFramebufferSize(window, widthBuffer, heightBuffer)
+            width = widthBuffer.get()
+            height = heightBuffer.get()
+        }
+
+        println("Creating view size $width x $height")
+
+        /* Specify Vertex Pointers */
+        val posAttrib = program.getAttributeLocation("position")
+        program.enableVertexAttribute(posAttrib)
+        program.pointVertexAttribute(posAttrib, 2, 7 * java.lang.Float.BYTES, 0)
+
+        /* Specify Color Pointer */
+        val colAttrib = program.getAttributeLocation("color")
+        program.enableVertexAttribute(colAttrib)
+        program.pointVertexAttribute(colAttrib, 3, 7 * java.lang.Float.BYTES, 2L * java.lang.Float.BYTES)
+
+        /* Specify Texture Pointer */
+        val texAttrib = program.getAttributeLocation("texcoord")
+        program.enableVertexAttribute(texAttrib)
+        program.pointVertexAttribute(texAttrib, 2, 7 * java.lang.Float.BYTES, 5L * java.lang.Float.BYTES)
+
+        /* Set texture uniform */
+        val uniTex = program.getUniformLocation("texImage")
+        program.setUniform(uniTex, 0)
+
+        /* Set model matrix to identity matrix */
+        val model = Matrix4()
+        val uniModel = program.getUniformLocation("model")
+        program.setUniform(uniModel, model)
+
+        /* Set view matrix to identity matrix */
+        val view = Matrix4()
+        val uniView = program.getUniformLocation("view")
+        program.setUniform(uniView, view)
+
+        /* Set projection matrix to an orthographic projection */
+        val projection = Matrix4.orthographic(left = 0f, right = width.toFloat(), bottom = 0f, top = height.toFloat(), near = -1f, far = 1f)
+        val uniProjection = program.getUniformLocation("projection")
+        program.setUniform(uniProjection, projection)
+
+        println("Projection : $projection")
     }
+
 
     fun clear() {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+    }
+
+    fun frameStart() {
+        currentTexture = null
+    }
+
+    fun frameEnd() {
+        if (drawing) {
+            end()
+        }
+        currentTexture?.unbind()
+        currentTexture = null
     }
 
     fun begin() {
@@ -118,7 +228,11 @@ class Renderer {
 
     fun drawTextureRegion(texture: Texture, x1: Float, y1: Float, x2: Float, y2: Float, s1: Float, t1: Float, s2: Float, t2: Float, color: Color = Color.WHITE) {
         if (currentTexture != texture) {
+            if (drawing) {
+                end()
+            }
             texture.bind()
+            begin()
             currentTexture = texture
         }
         if (vertices.remaining() < 7 * 6) {
@@ -153,116 +267,5 @@ class Renderer {
         return GL.getCapabilities().OpenGL32
     }
 
-    private fun setupShaderProgram() {
-        if (isDefaultContext()) {
-            println("Is default Context")
-            /* Generate Vertex Array Object */
-            vao = VertexArray()
-            vao!!.bind()
-        } else {
-            println("Is legacy Context")
-            vao = null
-        }
-
-        /* Generate Vertex Buffer Object */
-        vertexBuffer = VertexBuffer()
-        vertexBuffer.bind(Target.ARRAY_BUFFER)
-
-        /* Create FloatBuffer */
-        vertices = MemoryUtil.memAllocFloat(4096)
-
-        println("Created vertices size ${vertices.capacity()}")
-
-        /* Upload null data to allocate storage for the VBO */
-        val size = (vertices.capacity() * java.lang.Float.BYTES).toLong()
-        vertexBuffer.uploadData(Target.ARRAY_BUFFER, size, Usage.DYNAMIC_DRAW)
-
-        /* Initialize variables */
-        numVertices = 0
-        drawing = false
-
-        println("Created vertex buffer ${vertexBuffer.handle}")
-
-        /* Load shaders */
-        val vertexShader: Shader
-        val fragmentShader: Shader
-        if (isDefaultContext()) {
-            println("Loading default shaders")
-            vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(Game.resourceDirectory, "default.vert"))
-            fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "default.frag"))
-        } else {
-            println("Loading legacy shaders")
-            vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(Game.resourceDirectory, "legacy.vert"))
-            fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "legacy.frag"))
-        }
-
-        program.attachShader(vertexShader)
-        program.attachShader(fragmentShader)
-        if (isDefaultContext()) {
-            program.bindFragmentDataLocation(0, "fragColor")
-        }
-        program.link()
-        program.use()
-
-        println("Used the ShaderProgram ${program.handle}")
-
-        vertexShader.delete()
-        fragmentShader.delete()
-
-        /* Get width and height of framebuffer */
-        val window = GLFW.glfwGetCurrentContext()
-        var width: Int = 0
-        var height: Int = 0
-        MemoryStack.stackPush().use { stack ->
-            val widthBuffer = stack.mallocInt(1)
-            val heightBuffer = stack.mallocInt(1)
-            GLFW.glfwGetFramebufferSize(window, widthBuffer, heightBuffer)
-            width = widthBuffer.get()
-            height = heightBuffer.get()
-        }
-
-        println("Creating view size $width x $height")
-        /* Specify Vertex Pointers */
-        specifyVertexAttributes()
-
-        /* Set texture uniform */
-        val uniTex = program.getUniformLocation("texImage")
-        program.setUniform(uniTex, 0)
-
-        /* Set model matrix to identity matrix */
-        val model = Matrix4()
-        val uniModel = program.getUniformLocation("model")
-        program.setUniform(uniModel, model)
-
-        /* Set view matrix to identity matrix */
-        val view = Matrix4()
-        val uniView = program.getUniformLocation("view")
-        program.setUniform(uniView, view)
-
-        /* Set projection matrix to an orthographic projection */
-        val projection = Matrix4.orthographic(left = 0f, right = width.toFloat(), bottom = 0f, top = height.toFloat(), near = -1f, far = 1f)
-        val uniProjection = program.getUniformLocation("projection")
-        program.setUniform(uniProjection, projection)
-
-        println("Projection : $projection")
-    }
-
-
-    private fun specifyVertexAttributes() {
-        /* Specify Vertex Pointer */
-        val posAttrib = program.getAttributeLocation("position")
-        program.enableVertexAttribute(posAttrib)
-        program.pointVertexAttribute(posAttrib, 2, 7 * java.lang.Float.BYTES, 0)
-
-        /* Specify Color Pointer */
-        val colAttrib = program.getAttributeLocation("color")
-        program.enableVertexAttribute(colAttrib)
-        program.pointVertexAttribute(colAttrib, 3, 7 * java.lang.Float.BYTES, 2L * java.lang.Float.BYTES)
-
-        /* Specify Texture Pointer */
-        val texAttrib = program.getAttributeLocation("texcoord")
-        program.enableVertexAttribute(texAttrib)
-        program.pointVertexAttribute(texAttrib, 2, 7 * java.lang.Float.BYTES, 5L * java.lang.Float.BYTES)
-    }
 
 }

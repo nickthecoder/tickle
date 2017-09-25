@@ -9,4 +9,3 @@ void main() {
     vec4 textureColor = texture2D(texImage, textureCoord);
     gl_FragColor = vec4(vertexColor, 1.0) * textureColor;
 }
-WGGLq

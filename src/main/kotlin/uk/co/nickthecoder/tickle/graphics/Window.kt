@@ -9,11 +9,17 @@ import uk.co.nickthecoder.tickle.KeyEvent
 class Window(
         title: String,
         width: Int,
-        height: Int) {
+        height: Int,
+        resizable: Boolean = false) {
 
     private val handle: Long
 
     init {
+
+        GLFW.glfwDefaultWindowHints()
+        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE) // the window will stay hidden after creation
+        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, if (resizable) GLFW.GLFW_TRUE else GLFW.GLFW_FALSE)
+
         handle = GLFW.glfwCreateWindow(width, height, title, MemoryUtil.NULL, MemoryUtil.NULL)
         if (handle == MemoryUtil.NULL) {
             throw RuntimeException("Failed to create the GLFW window")
@@ -69,7 +75,7 @@ class Window(
         GLFW.glfwSwapBuffers(handle)
     }
 
-    fun cleanUp() {
+    fun delete() {
         Callbacks.glfwFreeCallbacks(handle)
         GLFW.glfwDestroyWindow(handle)
     }

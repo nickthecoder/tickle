@@ -25,6 +25,10 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
         glBindTexture(GL_TEXTURE_2D, handle)
     }
 
+    fun unbind() {
+        glBindTexture(GL_TEXTURE_2D, 0)
+    }
+
     fun cleanUp() {
         glDeleteTextures(handle)
     }

@@ -5,28 +5,19 @@ import org.lwjgl.opengl.GL11.GL_TRUE
 import org.lwjgl.opengl.GL20.*
 import java.io.File
 
-class Shader(type: ShaderType) {
+class Shader(type: ShaderType, source: CharSequence) {
 
     val handle = glCreateShader(type.value)
 
-    fun source(source: CharSequence) {
+    init {
         glShaderSource(handle, source)
-    }
-
-    fun compile() {
         glCompileShader(handle)
-        checkStatus()
-        println("Shader compiled Ok")
-    }
 
-    /**
-     * Checks if the shader was compiled successfully.
-     */
-    private fun checkStatus() {
         val status = glGetShaderi(handle, GL_COMPILE_STATUS)
         if (status != GL_TRUE) {
             throw RuntimeException(glGetShaderInfoLog(handle))
         }
+        println("Shader compiled Ok")
     }
 
     fun delete() {
@@ -35,16 +26,8 @@ class Shader(type: ShaderType) {
 
     companion object {
 
-        fun create(type: ShaderType, source: CharSequence): Shader {
-            val shader = Shader(type)
-            shader.source(source)
-            shader.compile()
-
-            return shader
-        }
-
         fun load(type: ShaderType, file: File): Shader {
-            return create(type, file.readText())
+            return Shader(type, file.readText())
         }
     }
 

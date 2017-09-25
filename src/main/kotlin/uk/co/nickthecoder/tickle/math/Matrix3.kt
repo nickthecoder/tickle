@@ -52,6 +52,9 @@ class Matrix3(
             m10, m11, m12,
             m20, m21, m22)
 
+    /**
+     * Column major output of the Matrix (i.e. the first floats will be from the 1st column, not from the first row).
+     */
     fun intoBuffer(buffer: FloatBuffer) {
         buffer.put(m00).put(m10).put(m20)
         buffer.put(m01).put(m11).put(m21)
