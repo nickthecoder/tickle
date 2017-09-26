@@ -1,9 +1,7 @@
 package uk.co.nickthecoder.tickle.demo
 
 import org.lwjgl.glfw.GLFW
-import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.GameInfo
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Window
@@ -14,9 +12,9 @@ class Demo(
         gameInfo: GameInfo,
         resources: Resources) : Game(window, gameInfo, resources) {
 
-    var centerX = 0f
-    var centerY = 0f
     var rotationDegrees = 0.0
+
+    val beeA = Actor()
 
     override fun preInitialise() {
         println("Starting the Demo")
@@ -34,6 +32,8 @@ class Demo(
 
         window.enableVSync(1)
         window.keyboardEvents { onKey(it) }
+
+        beeA.appearance = PoseAppearance(beeA, resources.beePose)
     }
 
     fun printProjection() {
@@ -49,25 +49,25 @@ class Demo(
             window.close()
         }
         if (event.key == GLFW.GLFW_KEY_O) {
-            centerX = 0f
-            centerY = 0f
+            beeA.x = 0f
+            beeA.y = 0f
             rotationDegrees = 0.0
             printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_LEFT) {
-            centerX -= 5
+            beeA.x -= 5
             printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_RIGHT) {
-            centerX += 5
+            beeA.x += 5
             printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_UP) {
-            centerY += 5
+            beeA.y += 5
             printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_DOWN) {
-            centerY -= 5
+            beeA.y -= 5
             printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_Z) {
@@ -84,16 +84,17 @@ class Demo(
 
         with(renderer) {
 
-            rotateViewDegrees(centerX, centerY, rotationDegrees)
+            rotateViewDegrees(beeA.x, beeA.y, rotationDegrees)
 
             frameStart()
             clear()
 
-            drawTexture(resources.coin, centerX - 30, centerY - 30)
-            drawTexture(resources.coin, 10f, 10f)
-            drawTexture(resources.coin, 110f, 110f, Color.RED)
-            drawTexture(resources.grenade, 10f, 250f)
-            drawTexture(resources.grenade, 80f, 250f, Color.SEMI_TRANSPARENT)
+            beeA.appearance.draw(renderer)
+
+            drawTexture(resources.coinTexture, 10f, 10f)
+            drawTexture(resources.coinTexture, 110f, 110f, Color.RED)
+            drawTexture(resources.grenadeTexture, 10f, 250f)
+            drawTexture(resources.grenadeTexture, 80f, 250f, Color.SEMI_TRANSPARENT)
 
             frameEnd()
         }

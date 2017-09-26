@@ -211,7 +211,7 @@ class Renderer(val window: Window) {
         }
     }
 
-    fun drawTexture(texture: Texture, x: Float, y: Float, c: Color = Color.WHITE) {
+    fun drawTexture(texture: Texture, x: Float, y: Float, color: Color = Color.WHITE) {
         /* Vertex positions */
         val x1 = x
         val y1 = y
@@ -224,7 +224,7 @@ class Renderer(val window: Window) {
         val s2 = 1f
         val t2 = 1f
 
-        drawTextureRegion(texture, x1, y1, x2, y2, s1, t1, s2, t2, c)
+        drawTextureRegion(texture, x1, y1, x2, y2, s1, t1, s2, t2, color)
     }
 
     fun drawTextureRegion(

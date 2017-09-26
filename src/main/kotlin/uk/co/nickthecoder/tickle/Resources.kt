@@ -9,7 +9,16 @@ import java.io.File
  */
 class Resources {
 
-    var coin: Texture = Texture.createTexture(File(Game.resourceDirectory, "coin.png"))
-    var grenade = Texture.createTexture(File(Game.resourceDirectory, "grenade.png"))
+    val beeTexture: Texture = Texture.createTexture(File(Game.resourceDirectory, "bee.png"))
+    val coinTexture: Texture = Texture.createTexture(File(Game.resourceDirectory, "coin.png"))
+    val grenadeTexture = Texture.createTexture(File(Game.resourceDirectory, "grenade.png"))
 
+    val beePose = Pose("bee", beeTexture)
+    val coinPose = Pose("bee", coinTexture)
+    val grenadePose = Pose("grenade", grenadeTexture)
+
+    init {
+        beePose.offsetX = 30f
+        beePose.offsetY = 30f
+    }
 }
