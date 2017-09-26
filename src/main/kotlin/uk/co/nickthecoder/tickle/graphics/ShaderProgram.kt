@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11.GL_TRUE
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glBindFragDataLocation
 import org.lwjgl.system.MemoryStack
-import uk.co.nickthecoder.tickle.math.*
+import uk.co.nickthecoder.tickle.math.Matrix4
 
 public class ShaderProgram() {
 
@@ -47,46 +47,6 @@ public class ShaderProgram() {
 
     fun setUniform(location: Int, value: Int) {
         glUniform1i(location, value);
-    }
-
-    fun setUniform(location: Int, value: Vector2) {
-        MemoryStack.stackPush().use { stack ->
-            val buffer = stack.mallocFloat(2)
-            value.intoBuffer(buffer)
-            glUniform2fv(location, buffer)
-        }
-    }
-
-    fun setUniform(location: Int, value: Vector3) {
-        MemoryStack.stackPush().use { stack ->
-            val buffer = stack.mallocFloat(3);
-            value.intoBuffer(buffer);
-            glUniform3fv(location, buffer);
-        }
-    }
-
-    fun setUniform(location: Int, value: Vector4) {
-        MemoryStack.stackPush().use { stack ->
-            val buffer = stack.mallocFloat(4)
-            value.intoBuffer(buffer);
-            glUniform4fv(location, buffer);
-        }
-    }
-
-    fun setUniform(location: Int, value: Matrix2) {
-        MemoryStack.stackPush().use { stack ->
-            val buffer = stack.mallocFloat(2 * 2)
-            value.intoBuffer(buffer)
-            glUniformMatrix2fv(location, false, buffer)
-        }
-    }
-
-    fun setUniform(location: Int, value: Matrix3) {
-        MemoryStack.stackPush().use { stack ->
-            val buffer = stack.mallocFloat(3 * 3)
-            value.intoBuffer(buffer)
-            glUniformMatrix3fv(location, false, buffer)
-        }
     }
 
     fun setUniform(location: Int, value: Matrix4) {

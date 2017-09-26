@@ -76,4 +76,19 @@ class Matrix4Test {
         val e = Matrix4(m30 = 12f, m31 = 23f, m32 = 34f)
         assertEquals(e, t)
     }
+
+    @Test
+    fun times2() {
+        val m = Matrix4(
+                1f, 2f, 3f, 4f,
+                5f, 6f, 7f, 8f,
+                9f, 10f, 11f, 12f,
+                13f, 14f, 15f, 16f)
+        val e = Matrix4(
+                2f, 4f, 6f, 8f,
+                10f, 12f, 14f, 16f,
+                18f, 20f, 22f, 24f,
+                26f, 28f, 30f, 32f)
+        assertEquals(e, m * 2f)
+    }
 }

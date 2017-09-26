@@ -8,22 +8,15 @@ class Matrix4(
         val m02: Float = 0f, val m12: Float = 0f, val m22: Float = 1f, val m32: Float = 0f,
         val m03: Float = 0f, val m13: Float = 0f, val m23: Float = 0f, val m33: Float = 1f) {
 
-    constructor(col1: Vector4, col2: Vector4, col3: Vector4, col4: Vector4) : this(
-            col1.x, col2.x, col3.x, col4.x,
-            col1.y, col2.y, col3.y, col4.y,
-            col1.z, col2.z, col3.z, col4.z,
-            col1.w, col2.w, col3.w, col4.w)
-
+    operator fun unaryMinus(): Matrix4 {
+        return this * -1f
+    }
 
     operator fun plus(other: Matrix4) = Matrix4(
             m00 + other.m00, m10 + other.m10, m20 + other.m20, m30 + other.m30,
             m01 + other.m01, m11 + other.m11, m21 + other.m21, m31 + other.m31,
             m02 + other.m02, m12 + other.m12, m22 + other.m22, m32 + other.m32,
             m03 + other.m03, m13 + other.m13, m23 + other.m23, m33 + other.m33)
-
-    operator fun unaryMinus(): Matrix4 {
-        return this * -1f
-    }
 
     operator fun minus(other: Matrix4) = this + (-other)
 
@@ -32,6 +25,8 @@ class Matrix4(
             m01 * scale, m11 * scale, m21 * scale, m31 * scale,
             m02 * scale, m12 * scale, m22 * scale, m32 * scale,
             m03 * scale, m13 * scale, m23 * scale, m33 * scale)
+
+    operator fun div(divisor: Float) = this * (1f / divisor)
 
     operator fun times(other: Matrix4) = Matrix4(
             m00 * other.m00 + m10 * other.m01 + m20 * other.m02 + m30 * other.m03,
@@ -76,6 +71,13 @@ class Matrix4(
                     listOf(m02, m12, m22, m32),
                     listOf(m03, m13, m23, m33))
 
+    fun toList() =
+            listOf(
+                    m00, m10, m20, m30,
+                    m01, m11, m21, m31,
+                    m02, m12, m22, m32,
+                    m03, m13, m23, m33)
+
     override fun equals(other: Any?): Boolean {
         if (other is Matrix4) {
             return m00 == other.m00 &&
@@ -101,6 +103,8 @@ class Matrix4(
             return false
         }
     }
+
+    override fun hashCode() = 33 + toList().hashCode()
 
     override fun toString() = toRowMajorList().toString()
 
@@ -137,12 +141,12 @@ class Matrix4(
                     0f, 0f, 0f, 1f)
         }
 
-        fun zRotation2(x: Float, y: Float, radians: Double) = translate(x, y, 0f) * zRotation(radians) * translate(-x, -y, 0f)
 
         fun zRotation(x: Float, y: Float, radians: Double): Matrix4 {
             val sin = Math.sin(radians).toFloat()
             val cos = Math.cos(radians).toFloat()
 
+            // Slower method : translate(x, y, 0f) * zRotation(radians) * translate(-x, -y, 0f)
             return Matrix4(
                     cos, -sin, 0f, -cos * x + x + sin * y,
                     sin, cos, 0f, -sin * x - cos * y + y,

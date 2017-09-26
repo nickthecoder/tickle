@@ -3,7 +3,7 @@ package uk.co.nickthecoder.tickle.math
 import java.nio.FloatBuffer
 
 /**
- * This class represents a (x,y,z)-Vector. GLSL equivalent to vec3.
+ * Represents a (x,y,z) Vector
  */
 class Vector3(var x: Float, var y: Float, var z: Float) {
 
@@ -17,16 +17,17 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
 
     fun normalize(): Vector3 = this / length()
 
-    operator fun plus(other: Vector3) = Vector3(x + other.x, y + other.y, z + other.z)
-
     operator fun unaryMinus(): Vector3 = this * -1f
 
-    operator fun minus(other: Vector3) = this + (other.unaryMinus())
+    operator fun plus(other: Vector3) = Vector3(x + other.x, y + other.y, z + other.z)
 
+    operator fun minus(other: Vector3) = Vector3(x - other.x, y - other.y, z - other.z)
 
     operator fun times(scale: Float) = Vector3(x * scale, y * scale, z * scale)
 
-    operator fun div(divisor: Float) = this * (1 / divisor)
+    operator fun div(divisor: Float) = Vector3(x / divisor, y / divisor, z / divisor)
+
+    fun linearInterpolation(other: Vector3, alpha: Float) = this * (1f - alpha) + (other * alpha)
 
     fun dotProduct(other: Vector3): Float {
         return x * other.x + y * other.y + z * other.z
@@ -38,20 +39,6 @@ class Vector3(var x: Float, var y: Float, var z: Float) {
         val z = x * other.y - y * other.x
         return Vector3(x, y, z)
     }
-
-    /**
-     * Calculates a linear interpolation between this vector with another
-     * vector.
-
-     * @param other The other vector
-     * *
-     * @param alpha The alpha value, must be between 0.0 and 1.0
-     * *
-     * *
-     * @return Linear interpolated vector
-     */
-    fun linearInterpolation(other: Vector3, alpha: Float) = this * (1f - alpha) + (other * alpha)
-
 
     fun intoBuffer(buffer: FloatBuffer) {
         buffer.put(x).put(y).put(z)

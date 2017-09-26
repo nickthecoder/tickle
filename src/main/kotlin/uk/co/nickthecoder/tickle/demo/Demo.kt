@@ -8,7 +8,6 @@ import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.math.Matrix4
-import uk.co.nickthecoder.tickle.math.toRadians
 
 class Demo(
         window: Window,
@@ -38,10 +37,10 @@ class Demo(
     }
 
     fun printProjection() {
-        println("Projection for $centerX, $centerY, $rotationDegrees")
-        println("Auth   : ${renderer.orthographicProjection(centerX, centerY)}")
-        println("zRot   : ${Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees))}")
-        println("Result : ${renderer.orthographicProjection(centerX, centerY) * Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees))}")
+        //println("Projection for $centerX, $centerY, $rotationDegrees")
+        //println("Auth   : ${renderer.orthographicProjection(centerX, centerY)}")
+        //println("zRot   : ${Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees))}")
+        //println("Result : ${renderer.orthographicProjection(centerX, centerY) * Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees))}")
     }
 
     fun onKey(event: KeyEvent) {

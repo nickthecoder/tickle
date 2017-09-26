@@ -227,7 +227,12 @@ class Renderer(val window: Window) {
         drawTextureRegion(texture, x1, y1, x2, y2, s1, t1, s2, t2, c)
     }
 
-    fun drawTextureRegion(texture: Texture, x1: Float, y1: Float, x2: Float, y2: Float, s1: Float, t1: Float, s2: Float, t2: Float, color: Color = Color.WHITE) {
+    fun drawTextureRegion(
+            texture: Texture,
+            x1: Float, y1: Float, x2: Float, y2: Float,
+            s1: Float, t1: Float, s2: Float, t2: Float,
+            color: Color = Color.WHITE) {
+
         if (currentTexture != texture) {
             if (drawing) {
                 end()
