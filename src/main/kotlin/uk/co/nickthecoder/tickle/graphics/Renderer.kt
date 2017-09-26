@@ -26,6 +26,8 @@ class Renderer(val window: Window) {
 
     private var currentTexture: Texture? = null
 
+    private var uniColor: Int = 0
+
     init {
         println("Creating renderer")
 
@@ -89,17 +91,12 @@ class Renderer(val window: Window) {
         /* Specify Vertex Pointers */
         val posAttrib = program.getAttributeLocation("position")
         program.enableVertexAttribute(posAttrib)
-        program.pointVertexAttribute(posAttrib, 2, 8 * java.lang.Float.BYTES, 0)
-
-        /* Specify Color Pointer */
-        val colAttrib = program.getAttributeLocation("color")
-        program.enableVertexAttribute(colAttrib)
-        program.pointVertexAttribute(colAttrib, 4, 8 * java.lang.Float.BYTES, 2L * java.lang.Float.BYTES)
+        program.pointVertexAttribute(posAttrib, 2, 4 * java.lang.Float.BYTES, 0)
 
         /* Specify Texture Pointer */
         val texAttrib = program.getAttributeLocation("texcoord")
         program.enableVertexAttribute(texAttrib)
-        program.pointVertexAttribute(texAttrib, 2, 8 * java.lang.Float.BYTES, 6L * java.lang.Float.BYTES)
+        program.pointVertexAttribute(texAttrib, 2, 4 * java.lang.Float.BYTES, 2L * java.lang.Float.BYTES)
 
         /* Set texture uniform */
         val uniTex = program.getUniformLocation("texImage")
@@ -109,11 +106,18 @@ class Renderer(val window: Window) {
         val model = Matrix4()
         val uniModel = program.getUniformLocation("model")
         program.setUniform(uniModel, model)
+        println("Model matrix Location = $uniModel")
 
         /* Set view matrix to identity matrix */
         val view = Matrix4()
         val uniView = program.getUniformLocation("view")
         program.setUniform(uniView, view)
+        println("View matrix location = ${uniView}")
+
+        /* Set color uniform */
+        uniColor = program.getUniformLocation("color")
+        program.setUniform(uniColor, Color.SEMI_TRANSPARENT)
+        println("Color location = $uniColor")
 
         centerView(0f, 0f)
     }
@@ -131,7 +135,6 @@ class Renderer(val window: Window) {
 
     fun rotateViewRadians(centerX: Float, centerY: Float, radians: Double) {
         changeView(orthographicProjection(centerX, centerY) * Matrix4.zRotation(centerX, centerY, radians))
-        //changeView(Matrix4.zRotation2(centerX, centerY, radians) * orthographicProjection(centerX, centerY))
     }
 
     fun orthographicProjection(centerX: Float, centerY: Float): Matrix4 {
@@ -162,6 +165,7 @@ class Renderer(val window: Window) {
 
     fun frameStart() {
         currentTexture = null
+
     }
 
     fun frameEnd() {
@@ -170,6 +174,7 @@ class Renderer(val window: Window) {
         }
         currentTexture?.unbind()
         currentTexture = null
+        currentColor = null
     }
 
     fun begin() {
@@ -227,18 +232,27 @@ class Renderer(val window: Window) {
         drawTextureRegion(texture, x1, y1, x2, y2, s1, t1, s2, t2, color)
     }
 
+    var currentColor: Color? = null
+
     fun drawTextureRegion(
             texture: Texture,
             x1: Float, y1: Float, x2: Float, y2: Float,
             s1: Float, t1: Float, s2: Float, t2: Float,
             color: Color = Color.WHITE) {
 
+        if (currentColor != color) {
+            if (drawing) {
+                end()
+            }
+            currentColor = color
+            program.setUniform(uniColor, color)
+        }
+
         if (currentTexture != texture) {
             if (drawing) {
                 end()
             }
             texture.bind()
-            begin()
             currentTexture = texture
         }
         if (vertices.remaining() < 8 * 6) {
@@ -246,18 +260,18 @@ class Renderer(val window: Window) {
             flush()
         }
 
-        val r = color.red
-        val g = color.green
-        val b = color.blue
-        val a = color.alpha
+        if (!drawing) {
+            begin()
+        }
 
-        vertices.put(x1).put(y1).put(r).put(g).put(b).put(a).put(s1).put(t1)
-        vertices.put(x1).put(y2).put(r).put(g).put(b).put(a).put(s1).put(t2)
-        vertices.put(x2).put(y2).put(r).put(g).put(b).put(a).put(s2).put(t2)
+        // Add the two triangles which make up our rectangle
+        vertices.put(x1).put(y1).put(s1).put(t1)
+        vertices.put(x1).put(y2).put(s1).put(t2)
+        vertices.put(x2).put(y2).put(s2).put(t2)
 
-        vertices.put(x1).put(y1).put(r).put(g).put(b).put(a).put(s1).put(t1)
-        vertices.put(x2).put(y2).put(r).put(g).put(b).put(a).put(s2).put(t2)
-        vertices.put(x2).put(y1).put(r).put(g).put(b).put(a).put(s2).put(t1)
+        vertices.put(x1).put(y1).put(s1).put(t1)
+        vertices.put(x2).put(y2).put(s2).put(t2)
+        vertices.put(x2).put(y1).put(s2).put(t1)
 
         numVertices += 6
     }

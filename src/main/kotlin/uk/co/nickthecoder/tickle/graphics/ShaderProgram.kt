@@ -57,6 +57,10 @@ public class ShaderProgram() {
         }
     }
 
+    fun setUniform(location: Int, value: Color) {
+        glUniform4f(location, value.red, value.green, value.blue, value.alpha)
+    }
+
     fun use() {
         glUseProgram(handle)
     }

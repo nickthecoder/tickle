@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle.graphics
 
-import uk.co.nickthecoder.tickle.math.Vector3
-import uk.co.nickthecoder.tickle.math.Vector4
+import java.nio.FloatBuffer
 
 class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
 
@@ -10,9 +9,10 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
     val blue = Math.max(0f, Math.min(1f, b))
     val alpha = Math.max(0f, Math.min(1f, a))
 
-    fun toVector3() = Vector3(red, green, blue)
-
-    fun toVector4f() = Vector4(red, green, blue, alpha)
+    fun intoBuffer(buffer: FloatBuffer) {
+        buffer.put(red).put(green).put(blue).put(alpha)
+        buffer.flip()
+    }
 
     override fun toString() = "r=$red g=$green b=$blue a=$alpha"
 
