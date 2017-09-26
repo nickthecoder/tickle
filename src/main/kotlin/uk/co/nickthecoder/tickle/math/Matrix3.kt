@@ -29,11 +29,6 @@ class Matrix3(
             m01 * scale, m11 * scale, m21 * scale,
             m02 * scale, m12 * scale, m22 * scale)
 
-    operator fun times(vector: Vector3) = Vector3(
-            m00 * vector.x + m01 * vector.y + m02 * vector.z,
-            m10 * vector.x + m11 * vector.y + m12 * vector.z,
-            m20 * vector.x + m21 * vector.y + m22 * vector.z)
-
     operator fun times(other: Matrix3) = Matrix3(
             m00 * other.m00 + m01 * other.m10 + m02 * other.m20,
             m10 * other.m00 + m11 * other.m10 + m12 * other.m20,

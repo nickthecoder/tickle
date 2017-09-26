@@ -55,7 +55,7 @@ abstract class Game(
     fun cleanUp() {
         preCleanup()
 
-        // Free the window callbacks and destroy the window
+        renderer.delete()
         window.delete()
 
         // Terminate GLFW and free the error callback

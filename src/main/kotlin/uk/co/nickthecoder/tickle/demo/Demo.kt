@@ -39,7 +39,9 @@ class Demo(
 
     fun printProjection() {
         println("Projection for $centerX, $centerY, $rotationDegrees")
-        println(Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees)) * renderer.orthographicProjection(centerX, centerY))
+        println("Auth   : ${renderer.orthographicProjection(centerX, centerY)}")
+        println("zRot   : ${Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees))}")
+        println("Result : ${renderer.orthographicProjection(centerX, centerY) * Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees))}")
     }
 
     fun onKey(event: KeyEvent) {
@@ -47,23 +49,35 @@ class Demo(
             println("Escape pressed")
             window.close()
         }
+        if (event.key == GLFW.GLFW_KEY_O) {
+            centerX = 0f
+            centerY = 0f
+            rotationDegrees = 0.0
+            printProjection()
+        }
         if (event.key == GLFW.GLFW_KEY_LEFT) {
-            centerX += 5
+            centerX -= 5
+            printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_RIGHT) {
-            centerX -= 5
+            centerX += 5
+            printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_UP) {
-            centerY -= 5
+            centerY += 5
+            printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_DOWN) {
-            centerY += 5
+            centerY -= 5
+            printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_Z) {
-            rotationDegrees -= 1
+            rotationDegrees += 3
+            printProjection()
         }
         if (event.key == GLFW.GLFW_KEY_X) {
-            rotationDegrees += 1
+            rotationDegrees -= 3
+            printProjection()
         }
     }
 
@@ -76,7 +90,7 @@ class Demo(
             frameStart()
             clear()
 
-            drawTexture(resources.coin, centerX, centerY)
+            drawTexture(resources.coin, centerX - 30, centerY - 30)
             drawTexture(resources.coin, 10f, 10f)
             drawTexture(resources.coin, 110f, 110f, Color.RED)
             drawTexture(resources.grenade, 10f, 250f)

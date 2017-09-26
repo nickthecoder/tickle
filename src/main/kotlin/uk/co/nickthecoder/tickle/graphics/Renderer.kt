@@ -10,6 +10,10 @@ import uk.co.nickthecoder.tickle.math.toRadians
 import java.io.File
 
 
+/**
+ * Based upon the following tutorial :
+ * https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/graphic/Renderer.java
+ */
 class Renderer(val window: Window) {
 
     private val program = ShaderProgram()
@@ -127,6 +131,7 @@ class Renderer(val window: Window) {
 
     fun rotateViewRadians(centerX: Float, centerY: Float, radians: Double) {
         changeView(orthographicProjection(centerX, centerY) * Matrix4.zRotation(centerX, centerY, radians))
+        //changeView(Matrix4.zRotation2(centerX, centerY, radians) * orthographicProjection(centerX, centerY))
     }
 
     fun orthographicProjection(centerX: Float, centerY: Float): Matrix4 {
@@ -218,26 +223,6 @@ class Renderer(val window: Window) {
         val t1 = 0f
         val s2 = 1f
         val t2 = 1f
-
-        drawTextureRegion(texture, x1, y1, x2, y2, s1, t1, s2, t2, c)
-    }
-
-    fun drawTextureRegion(texture: Texture, x: Float, y: Float, regX: Float, regY: Float, regWidth: Float, regHeight: Float) {
-        drawTextureRegion(texture, x, y, regX, regY, regWidth, regHeight, Color.WHITE)
-    }
-
-    fun drawTextureRegion(texture: Texture, x: Float, y: Float, regX: Float, regY: Float, regWidth: Float, regHeight: Float, c: Color) {
-        /* Vertex positions */
-        val x1 = x
-        val y1 = y
-        val x2 = x + regWidth
-        val y2 = y + regHeight
-
-        /* Texture coordinates */
-        val s1 = regX / texture.width
-        val t1 = regY / texture.height
-        val s2 = (regX + regWidth) / texture.width
-        val t2 = (regY + regHeight) / texture.height
 
         drawTextureRegion(texture, x1, y1, x2, y2, s1, t1, s2, t2, c)
     }

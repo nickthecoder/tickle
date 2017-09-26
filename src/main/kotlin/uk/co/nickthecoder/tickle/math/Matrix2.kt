@@ -11,7 +11,7 @@ class Matrix2(
             col1.y, col2.y)
 
 
-    operator fun plus(other: Matrix2) = Matrix3(
+    operator fun plus(other: Matrix2) = Matrix2(
             m00 + other.m00, m10 + other.m10,
             m01 + other.m01, m11 + other.m11)
 
@@ -25,10 +25,6 @@ class Matrix2(
             m00 * scale, m10 * scale,
             m01 * scale, m11 * scale)
 
-    operator fun times(vector: Vector2) = Vector2(
-            m00 * vector.x + m01 * vector.y,
-            m10 * vector.x + m11 * vector.y)
-
     operator fun times(other: Matrix2) = Matrix2(
             m00 * other.m00 + m01 * other.m10,
             m10 * other.m00 + m11 * other.m10,
@@ -36,7 +32,7 @@ class Matrix2(
             m00 * other.m01 + m01 * other.m11,
             m10 * other.m01 + m11 * other.m11)
 
-    fun transpose() = Matrix3(
+    fun transpose() = Matrix2(
             m00, m01,
             m10, m11)
 
