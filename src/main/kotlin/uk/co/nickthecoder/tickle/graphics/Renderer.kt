@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.math.Matrix4
+import uk.co.nickthecoder.tickle.math.toRadians
 import java.io.File
 
 
@@ -110,18 +111,34 @@ class Renderer(val window: Window) {
         val uniView = program.getUniformLocation("view")
         program.setUniform(uniView, view)
 
-        moveView(0f, 0f)
+        centerView(0f, 0f)
     }
 
     /**
      * Move the view, so that the bottom left is at position (x,y).
      */
-    fun moveView(x: Float, y: Float) {
-        /* Set projection matrix to an orthographic projection */
-        val projection = Matrix4.orthographic(
-                left = x, right = x + window.width.toFloat(),
-                bottom = y, top = y + window.height.toFloat(),
+    fun centerView(centerX: Float, centerY: Float) {
+        changeView(orthographicProjection(centerX, centerY))
+    }
+
+    fun rotateViewDegrees(centerX: Float, centerY: Float, degrees: Double) {
+        rotateViewRadians(centerX, centerY, toRadians(degrees))
+    }
+
+    fun rotateViewRadians(centerX: Float, centerY: Float, radians: Double) {
+        changeView(orthographicProjection(centerX, centerY) * Matrix4.zRotation(centerX, centerY, radians))
+    }
+
+    fun orthographicProjection(centerX: Float, centerY: Float): Matrix4 {
+        val w = window.width.toFloat()
+        val h = window.height.toFloat()
+        return Matrix4.orthographic(
+                left = centerX - w / 2, right = centerX + w / 2,
+                bottom = centerY - h / 2, top = centerY + h / 2,
                 near = -1f, far = 1f)
+    }
+
+    fun changeView(projection: Matrix4) {
         val uniProjection = program.getUniformLocation("projection")
         program.setUniform(uniProjection, projection)
     }

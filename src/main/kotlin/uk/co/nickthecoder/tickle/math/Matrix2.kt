@@ -29,7 +29,7 @@ class Matrix2(
             m00 * vector.x + m01 * vector.y,
             m10 * vector.x + m11 * vector.y)
 
-    fun multiply(other: Matrix2) = Matrix2(
+    operator fun times(other: Matrix2) = Matrix2(
             m00 * other.m00 + m01 * other.m10,
             m10 * other.m00 + m11 * other.m10,
 

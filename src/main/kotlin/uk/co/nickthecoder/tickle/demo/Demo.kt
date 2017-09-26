@@ -7,17 +7,25 @@ import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Window
+import uk.co.nickthecoder.tickle.math.Matrix4
+import uk.co.nickthecoder.tickle.math.toRadians
 
 class Demo(
         window: Window,
         gameInfo: GameInfo,
         resources: Resources) : Game(window, gameInfo, resources) {
 
-    var scrollX = 0f
-    var scrollY = 0f
+    var centerX = 0f
+    var centerY = 0f
+    var rotationDegrees = 0.0
 
     override fun preInitialise() {
         println("Starting the Demo")
+        println("Render other proj = ${renderer.orthographicProjection(0f, 0f)}")
+        println(" * identity       = ${renderer.orthographicProjection(0f, 0f) * Matrix4()}")
+        println("Rotate 0          = ${Matrix4.zRotation(0f, 0f, 0.0)}")
+        println("Rotate about 0,0= ${Matrix4.zRotation(0f, 0f, Math.PI / 2)}")
+        println("Rotate about 5,7= ${Matrix4.zRotation(5f, 7f, Math.PI / 2)}")
     }
 
     override fun postInitialise() {
@@ -29,27 +37,46 @@ class Demo(
         window.keyboardEvents { onKey(it) }
     }
 
+    fun printProjection() {
+        println("Projection for $centerX, $centerY, $rotationDegrees")
+        println(Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees)) * renderer.orthographicProjection(centerX, centerY))
+    }
+
     fun onKey(event: KeyEvent) {
         if (event.key == GLFW.GLFW_KEY_ESCAPE && event.action == GLFW.GLFW_RELEASE) {
             println("Escape pressed")
             window.close()
         }
         if (event.key == GLFW.GLFW_KEY_LEFT) {
-            scrollX += 5
+            centerX += 5
         }
         if (event.key == GLFW.GLFW_KEY_RIGHT) {
-            scrollX -= 5
+            centerX -= 5
+        }
+        if (event.key == GLFW.GLFW_KEY_UP) {
+            centerY -= 5
+        }
+        if (event.key == GLFW.GLFW_KEY_DOWN) {
+            centerY += 5
+        }
+        if (event.key == GLFW.GLFW_KEY_Z) {
+            rotationDegrees -= 1
+        }
+        if (event.key == GLFW.GLFW_KEY_X) {
+            rotationDegrees += 1
         }
     }
 
     override fun tick() {
 
         with(renderer) {
-            moveView(scrollX, scrollY)
+
+            rotateViewDegrees(centerX, centerY, rotationDegrees)
+
             frameStart()
             clear()
 
-            drawTexture(resources.coin, 550f, 10f)
+            drawTexture(resources.coin, centerX, centerY)
             drawTexture(resources.coin, 10f, 10f)
             drawTexture(resources.coin, 110f, 110f, Color.RED)
             drawTexture(resources.grenade, 10f, 250f)

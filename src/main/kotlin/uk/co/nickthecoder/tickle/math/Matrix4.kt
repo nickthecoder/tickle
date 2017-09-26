@@ -39,7 +39,7 @@ class Matrix4(
             m20 * vector.x + m21 * vector.y + m22 * vector.z + m23 * vector.w,
             m30 * vector.x + m31 * vector.y + m32 * vector.z + m33 * vector.w)
 
-    fun multiply(other: Matrix4) = Matrix4(
+    operator fun times(other: Matrix4) = Matrix4(
             m00 * other.m00 + m01 * other.m10 + m02 * other.m20 + m03 * other.m30,
             m10 * other.m00 + m11 * other.m10 + m12 * other.m20 + m13 * other.m30,
             m20 * other.m00 + m21 * other.m10 + m22 * other.m20 + m23 * other.m30,
@@ -84,6 +84,7 @@ class Matrix4(
     override fun toString() = toList().toString()
 
     companion object {
+
         fun orthographic(left: Float, right: Float, bottom: Float, top: Float, near: Float, far: Float) = Matrix4(
                 m00 = 2f / (right - left),
                 m11 = 2f / (top - bottom),
@@ -91,6 +92,40 @@ class Matrix4(
                 m03 = -(right + left) / (right - left),
                 m13 = -(top + bottom) / (top - bottom),
                 m23 = -(far + near) / (far - near))
+
+
+        fun zRotation(radians: Double): Matrix4 {
+            val sin = Math.sin(radians).toFloat()
+            val cos = Math.cos(radians).toFloat()
+
+            return Matrix4(
+                    cos, -sin, 0f, 0f,
+                    sin, cos, 0f, 0f,
+                    0f, 0f, 1f, 0f,
+                    0f, 0f, 0f, 1f)
+
+        }
+
+        fun translate(x: Float, y: Float, z: Float) =
+                Matrix4(
+                        1f, 0f, 0f, 0f,
+                        0f, 1f, 0f, 0f,
+                        0f, 0f, 1f, 0f,
+                        x, y, z, 1f)
+
+        fun zRotation(x: Float, y: Float, radians: Double) = translate(x, y, 0f) * zRotation(radians) * translate(-x, -y, 0f)
+
+        fun zRotation2(x: Float, y: Float, radians: Double): Matrix4 {
+            val sin = Math.sin(radians).toFloat()
+            val cos = Math.cos(radians).toFloat()
+
+            return Matrix4(
+                    cos, sin, 0f, cos * x + sin * y - x,
+                    -sin, cos, 0f, -sin * x + cos * y - y,
+                    0f, 0f, 1f, 0f,
+                    0f, 0f, 0f, 1f)
+
+        }
     }
 
 }

@@ -34,7 +34,7 @@ class Matrix3(
             m10 * vector.x + m11 * vector.y + m12 * vector.z,
             m20 * vector.x + m21 * vector.y + m22 * vector.z)
 
-    fun multiply(other: Matrix3) = Matrix3(
+    operator fun times(other: Matrix3) = Matrix3(
             m00 * other.m00 + m01 * other.m10 + m02 * other.m20,
             m10 * other.m00 + m11 * other.m10 + m12 * other.m20,
             m20 * other.m00 + m21 * other.m10 + m22 * other.m20,
