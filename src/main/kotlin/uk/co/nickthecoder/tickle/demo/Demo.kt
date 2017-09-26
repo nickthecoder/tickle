@@ -5,35 +5,67 @@ import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Window
-import uk.co.nickthecoder.tickle.math.Matrix4
+import uk.co.nickthecoder.tickle.stage.GameStage
+import uk.co.nickthecoder.tickle.stage.Rectangle
+import uk.co.nickthecoder.tickle.stage.ZOrderStageView
 
 class Demo(
         window: Window,
         gameInfo: GameInfo,
         resources: Resources) : Game(window, gameInfo, resources) {
 
-    var rotationDegrees = 0.0
+    val director : Director = Play()
 
-    val beeA = Actor()
+    val stage = GameStage("main")
+    val stageView = ZOrderStageView(Rectangle(0, 0, window.width, window.height), stage)
+
+    val beeA = Actor(Bee())
+    val coinA1 = Actor()
+    val coinA2 = Actor()
+    val grenadeA1 = Actor()
+    val grenadeA2 = Actor()
+
+    init {
+        instance = this
+    }
 
     override fun preInitialise() {
-        println("Starting the Demo")
-        println("Render other proj = ${renderer.orthographicProjection(0f, 0f)}")
-        println(" * identity       = ${renderer.orthographicProjection(0f, 0f) * Matrix4()}")
-        println("Rotate 0          = ${Matrix4.zRotation(0f, 0f, 0.0)}")
-        println("Rotate about 0,0= ${Matrix4.zRotation(0f, 0f, Math.PI / 2)}")
-        println("Rotate about 5,7= ${Matrix4.zRotation(5f, 7f, Math.PI / 2)}")
     }
 
     override fun postInitialise() {
-        println("Demo postInitialise")
-
         renderer.clearColor(Color(1.0f, 1.0f, 1.0f, 1.0f))
 
         window.enableVSync(1)
         window.keyboardEvents { onKey(it) }
 
+        // The following code will be replaced by loading a scene from a json file when that is written.
+
         beeA.appearance = PoseAppearance(beeA, resources.beePose)
+        grenadeA1.appearance = PoseAppearance(grenadeA1, resources.grenadePose)
+        grenadeA2.appearance = PoseAppearance(grenadeA2, resources.grenadePose)
+        coinA1.appearance = PoseAppearance(coinA1, resources.coinPose)
+        coinA2.appearance = PoseAppearance(coinA2, resources.coinPose)
+
+        coinA1.x = 100f
+        coinA1.y = 100f
+
+        coinA2.x = 300f
+        coinA2.y = 300f
+
+        grenadeA1.x = -50f
+        grenadeA1.y = -100f
+
+        grenadeA1.x = -150f
+        grenadeA1.y = -100f
+
+        stage.add(beeA)
+        stage.add(coinA1)
+        stage.add(coinA2)
+        stage.add(grenadeA1)
+        stage.add(grenadeA2)
+
+        director.begin()
+        stage.begin()
     }
 
     fun printProjection() {
@@ -46,66 +78,39 @@ class Demo(
     fun onKey(event: KeyEvent) {
         if (event.key == GLFW.GLFW_KEY_ESCAPE && event.action == GLFW.GLFW_RELEASE) {
             println("Escape pressed")
+            stage.end()
             window.close()
-        }
-        if (event.key == GLFW.GLFW_KEY_O) {
-            beeA.x = 0f
-            beeA.y = 0f
-            rotationDegrees = 0.0
-            printProjection()
-        }
-        if (event.key == GLFW.GLFW_KEY_LEFT) {
-            beeA.x -= 5
-            printProjection()
-        }
-        if (event.key == GLFW.GLFW_KEY_RIGHT) {
-            beeA.x += 5
-            printProjection()
-        }
-        if (event.key == GLFW.GLFW_KEY_UP) {
-            beeA.y += 5
-            printProjection()
-        }
-        if (event.key == GLFW.GLFW_KEY_DOWN) {
-            beeA.y -= 5
-            printProjection()
-        }
-        if (event.key == GLFW.GLFW_KEY_Z) {
-            rotationDegrees += 3
-            printProjection()
-        }
-        if (event.key == GLFW.GLFW_KEY_X) {
-            rotationDegrees -= 3
-            printProjection()
         }
     }
 
+
     override fun tick() {
+        director.preTick()
+        stage.tick()
+        director.postTick()
 
         with(renderer) {
-
-            rotateViewDegrees(beeA.x, beeA.y, rotationDegrees)
-
-            frameStart()
+            beginFrame()
             clear()
-
-            beeA.appearance.draw(renderer)
-
-            drawTexture(resources.coinTexture, 10f, 10f)
-            drawTexture(resources.coinTexture, 110f, 110f, Color.RED)
-            drawTexture(resources.grenadeTexture, 10f, 250f)
-            drawTexture(resources.grenadeTexture, 80f, 250f, Color.SEMI_TRANSPARENT)
-
-            frameEnd()
+            stageView.draw(renderer)
+            endFrame()
         }
 
         if (gameLoop.tickCount % 100 == 0L) {
             println("FPS = ${gameLoop.actualFPS()}")
         }
+
     }
 
 
     override fun postCleanup() {
         println("Demo ended cleanly")
+    }
+
+    companion object {
+        /**
+         * A convenience, so that game scripts can easily get access to the game.
+         */
+        lateinit var instance: Demo
     }
 }

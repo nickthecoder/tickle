@@ -49,10 +49,15 @@ class Window(
     }
 
     fun close() {
+        if (current === this) {
+            current = null
+        }
         GLFW.glfwSetWindowShouldClose(handle, true)
     }
 
     fun show() {
+        current = this
+
         // Get the thread stack and push a new frame
         MemoryStack.stackPush().use { stack ->
             val pWidth = stack.mallocInt(1)
@@ -72,7 +77,7 @@ class Window(
             )
         }
 
-        // Make the OpenGL context current
+        // Make the OpenGL context instance
         GLFW.glfwMakeContextCurrent(handle)
 
         // Make the window visible
@@ -92,5 +97,9 @@ class Window(
     fun delete() {
         Callbacks.glfwFreeCallbacks(handle)
         GLFW.glfwDestroyWindow(handle)
+    }
+
+    companion object {
+        var current: Window? = null
     }
 }

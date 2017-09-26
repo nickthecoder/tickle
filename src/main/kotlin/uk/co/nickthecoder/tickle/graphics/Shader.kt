@@ -10,7 +10,6 @@ class Shader(type: ShaderType, source: CharSequence) {
     val handle = glCreateShader(type.value)
 
     init {
-        println("Compiling shader :\n${source}")
         glShaderSource(handle, source)
         glCompileShader(handle)
 

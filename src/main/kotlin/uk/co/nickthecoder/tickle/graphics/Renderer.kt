@@ -1,12 +1,10 @@
 package uk.co.nickthecoder.tickle.graphics
 
-import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.math.Matrix4
-import uk.co.nickthecoder.tickle.math.toRadians
 import java.io.File
 
 
@@ -17,7 +15,6 @@ import java.io.File
 class Renderer(val window: Window) {
 
     private val program = ShaderProgram()
-    private var vao: VertexArray? = null
     private var vertexBuffer = VertexBuffer()
 
     private var vertices = MemoryUtil.memAllocFloat(4096)
@@ -33,16 +30,6 @@ class Renderer(val window: Window) {
 
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-
-        if (isLegacy()) {
-            println("Is legacy Context")
-            vao = null
-        } else {
-            println("Is default Context")
-            /* Generate Vertex Array Object */
-            vao = VertexArray()
-            vao!!.bind()
-        }
 
         /* Generate Vertex Buffer Object */
         vertexBuffer = VertexBuffer()
@@ -66,24 +53,14 @@ class Renderer(val window: Window) {
         /* Load shaders */
         val vertexShader: Shader
         val fragmentShader: Shader
-        if (isLegacy()) {
-            println("Loading legacy shaders")
-            vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(Game.resourceDirectory, "legacy.vert"))
-            fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "legacy.frag"))
-        } else {
-            println("Loading default shaders")
-            vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(Game.resourceDirectory, "default.vert"))
-            fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(Game.resourceDirectory, "default.frag"))
-        }
+        println("Loading shaders")
+        val shadersDir = File(Game.resourceDirectory, "shaders")
+        vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(shadersDir, "legacy.vert"))
+        fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(shadersDir, "legacy.frag"))
 
         program.attachShaders(vertexShader, fragmentShader)
-        if (!isLegacy()) {
-            program.bindFragmentDataLocation(0, "fragColor")
-        }
         program.link()
         program.use()
-
-        println("Used the ShaderProgram ${program.handle}")
 
         vertexShader.delete()
         fragmentShader.delete()
@@ -106,18 +83,15 @@ class Renderer(val window: Window) {
         val model = Matrix4()
         val uniModel = program.getUniformLocation("model")
         program.setUniform(uniModel, model)
-        println("Model matrix Location = $uniModel")
 
         /* Set view matrix to identity matrix */
         val view = Matrix4()
         val uniView = program.getUniformLocation("view")
         program.setUniform(uniView, view)
-        println("View matrix location = ${uniView}")
 
         /* Set color uniform */
         uniColor = program.getUniformLocation("color")
         program.setUniform(uniColor, Color.SEMI_TRANSPARENT)
-        println("Color location = $uniColor")
 
         centerView(0f, 0f)
     }
@@ -129,11 +103,7 @@ class Renderer(val window: Window) {
         changeView(orthographicProjection(centerX, centerY))
     }
 
-    fun rotateViewDegrees(centerX: Float, centerY: Float, degrees: Double) {
-        rotateViewRadians(centerX, centerY, toRadians(degrees))
-    }
-
-    fun rotateViewRadians(centerX: Float, centerY: Float, radians: Double) {
+    fun rotateView(centerX: Float, centerY: Float, radians: Double) {
         changeView(orthographicProjection(centerX, centerY) * Matrix4.zRotation(centerX, centerY, radians))
     }
 
@@ -151,10 +121,6 @@ class Renderer(val window: Window) {
         program.setUniform(uniProjection, projection)
     }
 
-    fun isLegacy(): Boolean {
-        return !GL.getCapabilities().OpenGL32
-    }
-
     fun clearColor(color: Color) {
         GL11.glClearColor(color.red, color.green, color.blue, color.alpha)
     }
@@ -163,12 +129,12 @@ class Renderer(val window: Window) {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
     }
 
-    fun frameStart() {
+    fun beginFrame() {
+        currentColor = null
         currentTexture = null
-
     }
 
-    fun frameEnd() {
+    fun endFrame() {
         if (drawing) {
             end()
         }
@@ -196,12 +162,6 @@ class Renderer(val window: Window) {
     fun flush() {
         if (numVertices > 0) {
             vertices.flip()
-
-            if (vao != null) {
-                vao!!.bind()
-            } else {
-                vertexBuffer.bind(Target.ARRAY_BUFFER)
-            }
 
             /* Upload the new vertex data */
             vertexBuffer.bind(Target.ARRAY_BUFFER)
@@ -263,7 +223,6 @@ class Renderer(val window: Window) {
         if (!drawing) {
             begin()
         }
-
         // Add the two triangles which make up our rectangle
         vertices.put(x1).put(y1).put(s1).put(t1)
         vertices.put(x1).put(y2).put(s1).put(t2)
@@ -279,7 +238,6 @@ class Renderer(val window: Window) {
     fun delete() {
         MemoryUtil.memFree(vertices)
 
-        vao?.delete()
         vertexBuffer.delete()
         program.delete()
     }

@@ -1,9 +1,10 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.demo
 
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
-import uk.co.nickthecoder.tickle.demo.Demo
+import uk.co.nickthecoder.tickle.GameInfo
+import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.graphics.Window
 
 

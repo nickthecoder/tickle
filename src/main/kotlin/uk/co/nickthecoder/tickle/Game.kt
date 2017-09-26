@@ -44,6 +44,7 @@ abstract class Game(
     abstract fun tick()
 
     fun run() {
+        Resources.instance = resources
         initialise()
         loop()
         cleanUp()
@@ -82,4 +83,3 @@ abstract class Game(
     }
 
 }
-

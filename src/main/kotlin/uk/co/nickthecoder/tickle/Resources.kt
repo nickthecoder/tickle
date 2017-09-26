@@ -1,5 +1,9 @@
 package uk.co.nickthecoder.tickle
 
+import org.lwjgl.glfw.GLFW
+import uk.co.nickthecoder.tickle.events.CompoundInput
+import uk.co.nickthecoder.tickle.events.Input
+import uk.co.nickthecoder.tickle.events.KeyInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import java.io.File
 
@@ -9,16 +13,47 @@ import java.io.File
  */
 class Resources {
 
-    val beeTexture: Texture = Texture.createTexture(File(Game.resourceDirectory, "bee.png"))
-    val coinTexture: Texture = Texture.createTexture(File(Game.resourceDirectory, "coin.png"))
-    val grenadeTexture = Texture.createTexture(File(Game.resourceDirectory, "grenade.png"))
+    val imageDir = File(Game.resourceDirectory, "images")
+
+    val beeTexture: Texture = Texture.createTexture(File(imageDir, "bee.png"))
+    val coinTexture: Texture = Texture.createTexture(File(imageDir, "coin.png"))
+    val grenadeTexture = Texture.createTexture(File(imageDir, "grenade.png"))
 
     val beePose = Pose("bee", beeTexture)
     val coinPose = Pose("bee", coinTexture)
     val grenadePose = Pose("grenade", grenadeTexture)
 
+    val inputs = mutableMapOf<String, Input>()
+
+    val dummyInput = CompoundInput()
+
     init {
         beePose.offsetX = 30f
         beePose.offsetY = 30f
+
+        inputs.put("left", KeyInput(GLFW.GLFW_KEY_LEFT))
+        inputs.put("right", KeyInput(GLFW.GLFW_KEY_RIGHT))
+        inputs.put("up", KeyInput(GLFW.GLFW_KEY_UP))
+        inputs.put("down", KeyInput(GLFW.GLFW_KEY_DOWN))
+        inputs.put("reset", KeyInput(GLFW.GLFW_KEY_O))
+        inputs.put("clockwise", KeyInput(GLFW.GLFW_KEY_X))
+        inputs.put("anti-clockwise", KeyInput(GLFW.GLFW_KEY_Z))
+    }
+
+    fun input(name: String): Input {
+        val input = inputs[name]
+        if (input == null) {
+            System.err.println("Warning. Input $name not found.")
+            return dummyInput
+        } else {
+            return input
+        }
+    }
+
+    companion object {
+        /**
+         * A convience, so that game scripts can easily get access to the resources.
+         */
+        var instance = Resources()
     }
 }
