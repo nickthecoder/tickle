@@ -18,10 +18,12 @@ class Resources {
     val beeTexture: Texture = Texture.createTexture(File(imageDir, "bee.png"))
     val coinTexture: Texture = Texture.createTexture(File(imageDir, "coin.png"))
     val grenadeTexture = Texture.createTexture(File(imageDir, "grenade.png"))
+    val sparkTexture = Texture.createTexture(File(imageDir, "spark.png"))
 
     val beePose = Pose("bee", beeTexture)
     val coinPose = Pose("bee", coinTexture)
     val grenadePose = Pose("grenade", grenadeTexture)
+    val sparkPose = Pose("spark", sparkTexture)
 
     val inputs = mutableMapOf<String, Input>()
 

@@ -1,0 +1,49 @@
+Current Work
+============
+
+
+BUGS
+====
+
+New Features
+============
+
+Allow a single texture to contain multiple images
+
+Use the model mat4 to allow for scaling and rotation of Actors.
+
+Fonts
+	Allow loading of multiple ranges of characters.
+
+Tags
+	
+
+Utility Actions
+	MovementXY
+	MovementRotate
+		Constructor takes a speed
+		Also input names with default values
+
+
+Load scenes from a file
+
+Split the project into multiple modules
+	core
+	demo
+	editor
+
+The Resources Editor
+
+Scene Editor
+
+StageConstraint
+
+New Game Wizard
+	Choice of a completely blank project, or a "Hello World"
+	Hello World will have a font, a Play director and a Splash director
+		Splash will display some simple text and a button to lauch "level01"
+		Maybe also have a "Me" Role
+
+Code Templates
+	Create one of Director, Role, Tags
+

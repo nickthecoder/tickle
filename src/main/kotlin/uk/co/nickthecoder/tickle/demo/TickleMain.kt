@@ -26,5 +26,5 @@ fun main(args: Array<String>) {
 
     val resources = Resources()
 
-    Demo(window, gameInfo, resources).run()
+    Demo(window, resources).run()
 }

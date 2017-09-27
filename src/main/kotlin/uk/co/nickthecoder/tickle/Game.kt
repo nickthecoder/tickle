@@ -1,6 +1,9 @@
 package uk.co.nickthecoder.tickle
 
 import org.lwjgl.glfw.GLFW
+import uk.co.nickthecoder.tickle.demo.Director
+import uk.co.nickthecoder.tickle.demo.NoDirector
+import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.loop.FullSpeedGameLoop
@@ -9,10 +12,11 @@ import java.io.File
 
 abstract class Game(
         val window: Window,
-        val gameInfo: GameInfo,
         val resources: Resources) {
 
     var renderer = Renderer(window)
+
+    var director: Director = NoDirector()
 
     lateinit var gameLoop: GameLoop
 
@@ -43,12 +47,17 @@ abstract class Game(
 
     abstract fun tick()
 
+    open fun onKeyEvent(event: KeyEvent) {
+        director.onKeyEvent(event)
+    }
+
     fun run() {
         Resources.instance = resources
         initialise()
         loop()
         cleanUp()
     }
+
 
     open fun preCleanup() {
     }

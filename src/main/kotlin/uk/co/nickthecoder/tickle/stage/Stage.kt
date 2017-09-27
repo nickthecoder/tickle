@@ -14,7 +14,7 @@ interface Stage {
 
     fun tick()
 
-    fun add(actor: Actor)
+    fun add(actor: Actor, activate: Boolean = true)
 
     fun remove(actor: Actor)
 }

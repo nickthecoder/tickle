@@ -10,7 +10,7 @@ class Pose(val name: String, val texture: Texture) {
     var offsetY: Float = 0f
 
     fun draw(renderer: Renderer, actor: Actor) {
-        renderer.drawTexture(texture, actor.x - offsetX, actor.y - offsetY, color=actor.appearance.color)
+        renderer.drawTexture(texture, actor.x - offsetX, actor.y - offsetY, color = actor.color)
     }
 
 }

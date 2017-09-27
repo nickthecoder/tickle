@@ -38,8 +38,6 @@ class Renderer(val window: Window) {
         /* Create FloatBuffer */
         vertices = MemoryUtil.memAllocFloat(4096)
 
-        println("Created vertices size ${vertices.capacity()}")
-
         /* Upload null data to allocate storage for the VBO */
         val size = (vertices.capacity() * java.lang.Float.BYTES).toLong()
         vertexBuffer.uploadData(Target.ARRAY_BUFFER, size, Usage.DYNAMIC_DRAW)
@@ -47,8 +45,6 @@ class Renderer(val window: Window) {
         /* Initialize variables */
         numVertices = 0
         drawing = false
-
-        println("Created vertex buffer ${vertexBuffer.handle}")
 
         /* Load shaders */
         val vertexShader: Shader

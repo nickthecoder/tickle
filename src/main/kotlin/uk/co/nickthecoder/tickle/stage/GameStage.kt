@@ -26,9 +26,11 @@ class GameStage(override val name: String) : Stage {
         }
     }
 
-    override fun add(actor: Actor) {
+    override fun add(actor: Actor, activate: Boolean) {
         actors.add(actor)
+        actor.stage = this
         actor.role?.begin()
+        actor.role?.activated()
     }
 
     override fun remove(actor: Actor) {

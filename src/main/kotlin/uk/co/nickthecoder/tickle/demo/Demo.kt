@@ -1,8 +1,9 @@
 package uk.co.nickthecoder.tickle.demo
 
-import org.lwjgl.glfw.GLFW
-import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.PoseAppearance
+import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.stage.GameStage
@@ -11,19 +12,16 @@ import uk.co.nickthecoder.tickle.stage.ZOrderStageView
 
 class Demo(
         window: Window,
-        gameInfo: GameInfo,
-        resources: Resources) : Game(window, gameInfo, resources) {
-
-    val director : Director = Play()
+        resources: Resources) : Game(window, resources) {
 
     val stage = GameStage("main")
     val stageView = ZOrderStageView(Rectangle(0, 0, window.width, window.height), stage)
 
     val beeA = Actor(Bee())
-    val coinA1 = Actor()
-    val coinA2 = Actor()
-    val grenadeA1 = Actor()
-    val grenadeA2 = Actor()
+    val coinA1 = Actor(Rotating(3f, 30.0, 3.0))
+    val coinA2 = Actor(Rotating(4f, 60.0, 2.0))
+    val grenadeA1 = Actor(Grenade())
+    val grenadeA2 = Actor(Grenade())
 
     init {
         instance = this
@@ -36,9 +34,11 @@ class Demo(
         renderer.clearColor(Color(1.0f, 1.0f, 1.0f, 1.0f))
 
         window.enableVSync(1)
-        window.keyboardEvents { onKey(it) }
+        window.keyboardEvents { onKeyEvent(it) }
 
         // The following code will be replaced by loading a scene from a json file when that is written.
+
+        director = Play()
 
         beeA.appearance = PoseAppearance(beeA, resources.beePose)
         grenadeA1.appearance = PoseAppearance(grenadeA1, resources.grenadePose)
@@ -46,17 +46,17 @@ class Demo(
         coinA1.appearance = PoseAppearance(coinA1, resources.coinPose)
         coinA2.appearance = PoseAppearance(coinA2, resources.coinPose)
 
-        coinA1.x = 100f
-        coinA1.y = 100f
+        coinA1.x = -10f
+        coinA1.y = 30f
 
-        coinA2.x = 300f
-        coinA2.y = 300f
+        coinA2.x = 30f
+        coinA2.y = -50f
 
-        grenadeA1.x = -50f
+        grenadeA1.x = 50f
         grenadeA1.y = -100f
 
-        grenadeA1.x = -150f
-        grenadeA1.y = -100f
+        grenadeA2.x = -150f
+        grenadeA2.y = -100f
 
         stage.add(beeA)
         stage.add(coinA1)
@@ -67,22 +67,6 @@ class Demo(
         director.begin()
         stage.begin()
     }
-
-    fun printProjection() {
-        //println("Projection for $centerX, $centerY, $rotationDegrees")
-        //println("Auth   : ${renderer.orthographicProjection(centerX, centerY)}")
-        //println("zRot   : ${Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees))}")
-        //println("Result : ${renderer.orthographicProjection(centerX, centerY) * Matrix4.zRotation(centerX, centerY, toRadians(rotationDegrees))}")
-    }
-
-    fun onKey(event: KeyEvent) {
-        if (event.key == GLFW.GLFW_KEY_ESCAPE && event.action == GLFW.GLFW_RELEASE) {
-            println("Escape pressed")
-            stage.end()
-            window.close()
-        }
-    }
-
 
     override fun tick() {
         director.preTick()
@@ -101,7 +85,6 @@ class Demo(
         }
 
     }
-
 
     override fun postCleanup() {
         println("Demo ended cleanly")

@@ -11,6 +11,7 @@ class Play : Director {
     val reset = Resources.instance.input("reset")
 
     override fun postTick() {
+
         if (reset.isPressed()) {
             degrees = 0.0
         }

@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.tickle.demo
 
+import uk.co.nickthecoder.tickle.events.KeyEvent
+
 interface Director {
 
     fun begin() {}
@@ -9,6 +11,8 @@ interface Director {
     fun postTick() {}
 
     fun end() {}
+
+    fun onKeyEvent(event: KeyEvent) {}
 
 }
 

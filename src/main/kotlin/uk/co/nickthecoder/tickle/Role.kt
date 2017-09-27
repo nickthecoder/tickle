@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle
 
+import uk.co.nickthecoder.tickle.action.Action
 import java.util.concurrent.CopyOnWriteArrayList
 
 interface Role {
@@ -25,5 +26,11 @@ abstract class AbstractRole : Role {
         actions.forEach { action ->
             action.tick()
         }
+    }
+}
+
+class ActionsRole() : AbstractRole() {
+    override fun tick() {
+        super.tick()
     }
 }

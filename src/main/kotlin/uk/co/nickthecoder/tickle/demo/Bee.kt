@@ -12,6 +12,7 @@ class Bee : AbstractRole() {
     val down = Resources.instance.input("down")
 
     override fun tick() {
+
         if (left.isPressed()) {
             actor.x -= 5
         }
@@ -24,7 +25,6 @@ class Bee : AbstractRole() {
         if (down.isPressed()) {
             actor.y -= 5
         }
-
 
     }
 }
