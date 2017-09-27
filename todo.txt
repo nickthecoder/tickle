@@ -8,6 +8,8 @@ BUGS
 New Features
 ============
 
+Random hues - use it to make each grenade a different hue.
+
 Allow a single texture to contain multiple images
 
 View clipping.

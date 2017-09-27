@@ -1,7 +1,7 @@
 package uk.co.nickthecoder.tickle
 
+import org.joml.Vector2f
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.math.Vector2
 import uk.co.nickthecoder.tickle.math.toDegrees
 import uk.co.nickthecoder.tickle.math.toRadians
 import uk.co.nickthecoder.tickle.stage.Stage
@@ -10,11 +10,21 @@ class Actor(val role: Role? = null) {
 
     internal var stage: Stage? = null
 
-    var x: Float = 0f
+    val position = Vector2f(0f, 0f)
 
-    var y: Float = 0f
+    var x: Float
+        get() = position.x
+        set(v) {
+            position.x = v
+        }
 
-    var z: Int = 0
+    var y: Float
+        get() = position.y
+        set(v) {
+            position.y = v
+        }
+
+    var z: Float = 0f
 
     var directionRadians: Double = 0.0
 
@@ -30,11 +40,6 @@ class Actor(val role: Role? = null) {
 
     init {
         role?.actor = this
-    }
-
-    fun setPosition(position: Vector2) {
-        x = position.x
-        y = position.y
     }
 
     fun changePose(pose: Pose) {

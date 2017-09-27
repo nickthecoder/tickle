@@ -27,6 +27,12 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
 
     companion object {
 
+        fun createFromHSB(hue: Float, saturation: Float, brightness: Float): Color {
+            val awtColor = java.awt.Color(java.awt.Color.HSBtoRGB(hue, saturation, brightness))
+
+            return Color(awtColor.red / 255f, awtColor.green / 255f, awtColor.blue / 255f)
+        }
+
         val WHITE = Color(1f, 1f, 1f)
         val BLACK = Color(0f, 0f, 0f)
         val RED = Color(1f, 0f, 0f)

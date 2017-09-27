@@ -1,18 +1,18 @@
 package uk.co.nickthecoder.tickle.action
 
+import org.joml.Vector2f
 import uk.co.nickthecoder.tickle.Actor
-import uk.co.nickthecoder.tickle.math.Vector2
 
 open class XYMovement(
-        var velocity: Vector2,
-        var drag: Float = 1f)
+        var velocity: Vector2f,
+        var drag: Float = 0f)
 
     : Action {
 
     override fun act(actor: Actor): Boolean {
 
-        if (drag != 1f) {
-            velocity = velocity * drag
+        if (drag != 0f) {
+            velocity.mul(1 - drag)
         }
         actor.x += velocity.x
         actor.y += velocity.y
@@ -22,13 +22,13 @@ open class XYMovement(
 }
 
 open class AcceleratedXYMovement(
-        velocity: Vector2,
-        drag: Float,
-        var acceleration: Vector2)
+        velocity: Vector2f,
+        drag: Float = 0f,
+        var acceleration: Vector2f)
     : XYMovement(velocity, drag) {
 
     override fun act(actor: Actor): Boolean {
-        velocity = velocity + acceleration
+        velocity.add(acceleration)
         super.act(actor)
 
         return false

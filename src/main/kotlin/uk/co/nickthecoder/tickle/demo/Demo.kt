@@ -50,11 +50,12 @@ class Demo(
         stage.add(coinA1)
         stage.add(coinA2)
 
-        for (i in 0..10) {
-            val grenadeA = Actor(Grenade())
+        val count = 10
+        for (i in 0..count - 1) {
+            val grenadeA = Actor(Grenade(i.toFloat() / count))
             with(grenadeA) {
                 appearance = PoseAppearance(grenadeA, resources.grenadePose)
-                x = i * 100f - 200f
+                x = i * 150f - 200f
                 y = -120f
             }
             stage.add(grenadeA)
