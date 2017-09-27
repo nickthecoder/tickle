@@ -5,7 +5,6 @@ import uk.co.nickthecoder.tickle.math.toDegrees
 import uk.co.nickthecoder.tickle.math.toRadians
 
 class HeadingMovement(
-        val actor: Actor,
         speed: Float = 0f,
         headingDegrees: Double = 0.0,
         speedDegrees: Double = 0.0,
@@ -61,7 +60,7 @@ class HeadingMovement(
         }
 
 
-    override fun tick() {
+    override fun act(actor: Actor): Boolean {
 
         headingDegrees += speedDegrees
 
@@ -74,6 +73,7 @@ class HeadingMovement(
             actor.y += sin * speed
         }
 
+        return false
     }
 
 }

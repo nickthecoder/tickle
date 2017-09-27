@@ -1,7 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.action.Action
-import java.util.concurrent.CopyOnWriteArrayList
+import uk.co.nickthecoder.tickle.action.ParallelAction
 
 interface Role {
 
@@ -20,17 +20,24 @@ abstract class AbstractRole : Role {
 
     override lateinit var actor: Actor
 
-    val actions = CopyOnWriteArrayList<Action>()
+    val actions = ParallelAction()
 
     override fun tick() {
-        actions.forEach { action ->
-            action.tick()
-        }
+        actions.act(actor)
     }
 }
 
-class ActionsRole() : AbstractRole() {
+/**
+ * A Role that only has a single Actions, and does nothing in the tick method itself.
+ * When all the action is complete, the actor dies.
+ */
+class ActionRole(val action: Action) : Role {
+
+    override lateinit var actor: Actor
+
     override fun tick() {
-        super.tick()
+        if (action.act(actor)) {
+            actor.die()
+        }
     }
 }

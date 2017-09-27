@@ -20,9 +20,23 @@ abstract class Game(
 
     lateinit var gameLoop: GameLoop
 
+    /**
+     * A measure of time in seconds. Updated once per frame, It is actually just System.nano converted to
+     * seconds (as a float).
+     */
+    var seconds: Float = 0f
+
+    /**
+     * The time between two "ticks" in seconds.
+     */
+    var tickDuration: Float = 1f / 60f
+
+
     open fun preInitialise() {}
 
     fun initialise() {
+        Game.instance = this
+
         preInitialise()
 
         gameLoop = FullSpeedGameLoop(this)
@@ -35,11 +49,15 @@ abstract class Game(
     open fun postInitialise() {}
 
     fun loop() {
+        seconds = System.nanoTime() / 1_000_000_000f
         while (isRunning()) {
             gameLoop.tick()
 
-            // Poll for window events.
             GLFW.glfwPollEvents()
+
+            val now = System.nanoTime() / 1_000_000_000f
+            tickDuration = now - seconds
+            seconds = now
         }
     }
 
@@ -79,6 +97,8 @@ abstract class Game(
     }
 
     companion object {
+
+        lateinit var instance: Game
 
         val resourceDirectory: File by lazy {
             val srcDist = File(File("src"), "dist")

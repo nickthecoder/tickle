@@ -8,12 +8,6 @@ import uk.co.nickthecoder.tickle.stage.Stage
 
 class Actor(val role: Role? = null) {
 
-    init {
-        role?.let {
-            it.actor = this
-        }
-    }
-
     internal var stage: Stage? = null
 
     var x: Float = 0f
@@ -34,6 +28,10 @@ class Actor(val role: Role? = null) {
 
     var appearance: Appearance = InvisibleAppearance()
 
+    init {
+        role?.actor = this
+    }
+
     fun setPosition(position: Vector2) {
         x = position.x
         y = position.y
@@ -45,6 +43,10 @@ class Actor(val role: Role? = null) {
 
     // TODO Should there be a "changeText" method, similar to changePose?
     // Check if
+
+    fun die() {
+        stage?.remove(this)
+    }
 
     override fun toString() = "Actor @ $x,$y Role=$role"
 }

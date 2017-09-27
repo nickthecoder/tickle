@@ -20,14 +20,9 @@ class Demo(
     val beeA = Actor(Bee())
     val coinA1 = Actor(Rotating(3f, 30.0, 3.0))
     val coinA2 = Actor(Rotating(4f, 60.0, 2.0))
-    val grenadeA1 = Actor(Grenade())
-    val grenadeA2 = Actor(Grenade())
-
-    init {
-        instance = this
-    }
 
     override fun preInitialise() {
+        instance = this
     }
 
     override fun postInitialise() {
@@ -41,8 +36,6 @@ class Demo(
         director = Play()
 
         beeA.appearance = PoseAppearance(beeA, resources.beePose)
-        grenadeA1.appearance = PoseAppearance(grenadeA1, resources.grenadePose)
-        grenadeA2.appearance = PoseAppearance(grenadeA2, resources.grenadePose)
         coinA1.appearance = PoseAppearance(coinA1, resources.coinPose)
         coinA2.appearance = PoseAppearance(coinA2, resources.coinPose)
 
@@ -52,17 +45,20 @@ class Demo(
         coinA2.x = 30f
         coinA2.y = -50f
 
-        grenadeA1.x = 50f
-        grenadeA1.y = -100f
-
-        grenadeA2.x = -150f
-        grenadeA2.y = -100f
 
         stage.add(beeA)
         stage.add(coinA1)
         stage.add(coinA2)
-        stage.add(grenadeA1)
-        stage.add(grenadeA2)
+
+        for (i in 0..10) {
+            val grenadeA = Actor(Grenade())
+            with(grenadeA) {
+                appearance = PoseAppearance(grenadeA, resources.grenadePose)
+                x = i * 100f - 200f
+                y = -120f
+            }
+            stage.add(grenadeA)
+        }
 
         director.begin()
         stage.begin()

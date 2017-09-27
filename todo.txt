@@ -10,6 +10,24 @@ New Features
 
 Allow a single texture to contain multiple images
 
+View clipping.
+
+Look at the maths library for vectors.
+
+Add more grenades, and some "solid" objects
+
+Create a random class/helpers
+	Produce floats in a specified range.
+	Produce colors
+	Produce Vector2s (Use interpolation method on Vector2).
+	Maybe also using an "Easy" function, to spread non-linearly.
+
+
+Change the spark to white, and color it with a random color.
+	Color class - factory method using HSB
+
+Create the Costume class, and use it to pick a random Pose for each of the sparks.
+
 Use the model mat4 to allow for scaling and rotation of Actors.
 
 Fonts

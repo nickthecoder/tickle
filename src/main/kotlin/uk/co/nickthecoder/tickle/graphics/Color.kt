@@ -14,6 +14,15 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
         buffer.flip()
     }
 
+    fun linearInterpolation(other: Color, t: Float): Color {
+        val s = 1 - t
+        return Color(
+                red * s + other.red * t,
+                green * s + other.green * t,
+                blue * s + other.blue * t,
+                alpha * s + other.alpha * t)
+    }
+
     override fun toString() = "r=$red g=$green b=$blue a=$alpha"
 
     companion object {
@@ -24,6 +33,9 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
         val GREEN = Color(0f, 1f, 0f)
         val BLUE = Color(0f, 0f, 1f)
         val SEMI_TRANSPARENT = Color(1f, 1f, 1f, 0.5f)
+
+        val TRANSPARENT_WHITE = Color(1f, 1f, 1f, 0.0f)
+        val TRANSPARENT_BLACK = Color(0f, 0f, 0f, 0.0f)
 
         fun create(r: Int, g: Int, b: Int, a: Int) = Color(r.toFloat() / 255f, g.toFloat() / 255f, b.toFloat() / 255f, a.toFloat() / 255f)
     }
