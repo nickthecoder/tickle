@@ -1,8 +1,6 @@
 package uk.co.nickthecoder.tickle.action
 
 import uk.co.nickthecoder.tickle.Actor
-import uk.co.nickthecoder.tickle.math.toDegrees
-import uk.co.nickthecoder.tickle.math.toRadians
 
 class HeadingMovement(
         speed: Float = 0f,
@@ -26,37 +24,37 @@ class HeadingMovement(
         }
 
 
-    private var headingRadians = toRadians(headingDegrees)
+    private var headingRadians = Math.toRadians(headingDegrees)
 
     var headingDegrees: Double
-        get() = toDegrees(headingRadians)
+        get() = Math.toDegrees(headingRadians)
         set(v) {
-            headingRadians = toRadians(v)
+            headingRadians = Math.toRadians(v)
         }
 
-    private var maxRotationRadians = toRadians(maxRotationDegrees)
+    private var maxRotationRadians = Math.toRadians(maxRotationDegrees)
 
     var maxRotationDegrees: Double
-        get() = toDegrees(maxRotationRadians)
+        get() = Math.toDegrees(maxRotationRadians)
         set(v) {
-            maxRotationRadians = toRadians(v)
+            maxRotationRadians = Math.toRadians(v)
         }
 
-    private var speedRadians = toRadians(speedDegrees)
+    private var speedRadians = Math.toRadians(speedDegrees)
         set(v) {
             if (v > maxRotationRadians) {
-                field = toRadians(maxRotationRadians)
+                field = Math.toRadians(maxRotationRadians)
             } else if (v < -maxRotationRadians) {
-                field = toRadians(-maxRotationRadians)
+                field = Math.toRadians(-maxRotationRadians)
             } else {
-                field = toRadians(v)
+                field = Math.toRadians(v)
             }
         }
 
     var speedDegrees: Double
-        get() = toDegrees(speedRadians)
+        get() = Math.toDegrees(speedRadians)
         set(v) {
-            speedRadians = toRadians(v)
+            speedRadians = Math.toRadians(v)
         }
 
 
@@ -65,7 +63,7 @@ class HeadingMovement(
         headingDegrees += speedDegrees
 
         if (speed != 0f) {
-            val radians = toRadians(headingDegrees)
+            val radians = Math.toRadians(headingDegrees)
             val cos = Math.cos(radians).toFloat()
             val sin = Math.sin(radians).toFloat()
 

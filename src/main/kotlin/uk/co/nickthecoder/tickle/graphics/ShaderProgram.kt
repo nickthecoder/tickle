@@ -1,11 +1,11 @@
 package uk.co.nickthecoder.tickle.graphics
 
+import org.joml.Matrix4f
 import org.lwjgl.opengl.GL11.GL_FLOAT
 import org.lwjgl.opengl.GL11.GL_TRUE
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glBindFragDataLocation
 import org.lwjgl.system.MemoryStack
-import uk.co.nickthecoder.tickle.math.Matrix4
 
 public class ShaderProgram() {
 
@@ -49,10 +49,10 @@ public class ShaderProgram() {
         glUniform1i(location, value);
     }
 
-    fun setUniform(location: Int, value: Matrix4) {
+    fun setUniform(location: Int, value: Matrix4f) {
         MemoryStack.stackPush().use { stack ->
             val buffer = stack.mallocFloat(4 * 4)
-            value.intoBuffer(buffer);
+            value[0, buffer]
             glUniformMatrix4fv(location, false, buffer);
         }
     }

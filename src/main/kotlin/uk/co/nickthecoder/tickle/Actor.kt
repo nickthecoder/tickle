@@ -2,8 +2,6 @@ package uk.co.nickthecoder.tickle
 
 import org.joml.Vector2f
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.math.toDegrees
-import uk.co.nickthecoder.tickle.math.toRadians
 import uk.co.nickthecoder.tickle.stage.Stage
 
 class Actor(val role: Role? = null) {
@@ -29,9 +27,9 @@ class Actor(val role: Role? = null) {
     var directionRadians: Double = 0.0
 
     var directionDegrees: Double
-        get() = toDegrees(directionRadians)
+        get() = Math.toDegrees(directionRadians)
         set(v) {
-            directionRadians = toRadians(v)
+            directionRadians = Math.toRadians(v)
         }
 
     var color: Color = Color.WHITE

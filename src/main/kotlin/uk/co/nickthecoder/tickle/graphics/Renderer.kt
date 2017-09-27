@@ -1,10 +1,10 @@
 package uk.co.nickthecoder.tickle.graphics
 
+import org.joml.Matrix4f
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.math.Matrix4
 import java.io.File
 
 
@@ -16,6 +16,8 @@ class Renderer(val window: Window) {
 
     private val program = ShaderProgram()
     private var vertexBuffer = VertexBuffer()
+
+    private val projection = Matrix4f()
 
     private var vertices = MemoryUtil.memAllocFloat(4096)
     private var numVertices: Int = 0
@@ -76,12 +78,12 @@ class Renderer(val window: Window) {
         program.setUniform(uniTex, 0)
 
         /* Set model matrix to identity matrix */
-        val model = Matrix4()
+        val model = Matrix4f()
         val uniModel = program.getUniformLocation("model")
         program.setUniform(uniModel, model)
 
         /* Set view matrix to identity matrix */
-        val view = Matrix4()
+        val view = Matrix4f()
         val uniView = program.getUniformLocation("view")
         program.setUniform(uniView, view)
 
@@ -92,27 +94,43 @@ class Renderer(val window: Window) {
         centerView(0f, 0f)
     }
 
+
     /**
      * Move the view, so that the bottom left is at position (x,y).
      */
     fun centerView(centerX: Float, centerY: Float) {
-        changeView(orthographicProjection(centerX, centerY))
+        rotateView(centerX, centerY, 0f)
     }
 
-    fun rotateView(centerX: Float, centerY: Float, radians: Double) {
-        changeView(orthographicProjection(centerX, centerY) * Matrix4.zRotation(centerX, centerY, radians))
-    }
-
-    fun orthographicProjection(centerX: Float, centerY: Float): Matrix4 {
+    fun rotateView(centerX: Float, centerY: Float, radians: Float) {
         val w = window.width.toFloat()
         val h = window.height.toFloat()
-        return Matrix4.orthographic(
-                left = centerX - w / 2, right = centerX + w / 2,
-                bottom = centerY - h / 2, top = centerY + h / 2,
-                near = -1f, far = 1f)
+        projection.identity()
+        projection.ortho2D(
+                centerX - w / 2, centerX + w / 2,
+                centerY - h / 2, centerY + h / 2)
+        if (radians != 0f) {
+            projection.translate(-centerX, -centerY, 0f).rotateZ(radians).translate(centerX, centerY, 0f)
+        }
+        changedProjection()
     }
 
-    fun changeView(projection: Matrix4) {
+    /*
+    fun orthographicProjection(centerX: Float, centerY: Float): Matrix4f {
+        val w = window.width.toFloat()
+        val h = window.height.toFloat()
+        return Matrix4f().ortho2D(
+                centerX - w / 2, centerX + w / 2,
+                centerY - h / 2, centerY + h / 2)
+    }
+    */
+
+    fun changedProjection() {
+        val uniProjection = program.getUniformLocation("projection")
+        program.setUniform(uniProjection, projection)
+    }
+
+    fun changeView(projection: Matrix4f) {
         val uniProjection = program.getUniformLocation("projection")
         program.setUniform(uniProjection, projection)
     }
