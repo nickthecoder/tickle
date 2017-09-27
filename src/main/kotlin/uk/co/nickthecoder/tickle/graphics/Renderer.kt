@@ -110,7 +110,7 @@ class Renderer(val window: Window) {
                 centerX - w / 2, centerX + w / 2,
                 centerY - h / 2, centerY + h / 2)
         if (radians != 0f) {
-            projection.translate(-centerX, -centerY, 0f).rotateZ(radians).translate(centerX, centerY, 0f)
+            projection.translate(centerX, centerY, 0f).rotateZ(radians).translate(-centerX, -centerY, 0f)
         }
         changedProjection()
     }

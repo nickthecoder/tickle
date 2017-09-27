@@ -45,10 +45,10 @@ class Actor(val role: Role? = null) {
     }
 
     // TODO Should there be a "changeText" method, similar to changePose?
-    // Check if
 
     fun die() {
         stage?.remove(this)
+        role?.end()
     }
 
     override fun toString() = "Actor @ $x,$y Role=$role"
