@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.action.Action
+import uk.co.nickthecoder.tickle.action.NoAction
 
 interface Role {
 
@@ -35,19 +36,43 @@ interface Role {
      * placing it on a new Stage. Weirdness may ensue.
      */
     fun end() {}
+
+    /**
+     * Finds the closest role from the list, or null if the list is empty (or only contains this).
+     * If the list contains 'this', then 'this' is ignored (this will never be returned).
+     */
+    fun closest(roles: Iterable<Role>): Role? {
+        var closest: Role? = null
+        var closestD2 = Float.MAX_VALUE
+        roles.forEach { other ->
+            if (this !== other) {
+                val d2 = actor.position.distanceSquared(other.actor.position)
+                if (d2 < closestD2) {
+                    closestD2 = d2
+                    closest = other
+                }
+            }
+        }
+        return closest
+    }
+
 }
 
 abstract class AbstractRole : Role {
 
     override lateinit var actor: Actor
 
+    override fun toString() = javaClass.simpleName
+
 }
 
 /**
- * A Role that only has a single Actions, and does nothing in the tick method itself.
- * When all the action is complete, the actor dies.
+ * A Role that only has a single Action, and does nothing in the tick method itself.
+ * If 'die' is true, then the Actor will be automatically killed when the Action ends.
  */
-class ActionRole(val action: Action<Actor>) : Role {
+class ActionRole(action: Action<Actor>, die: Boolean = true) : Role {
+
+    val action = if (die) action else action.then(NoAction())
 
     override lateinit var actor: Actor
 

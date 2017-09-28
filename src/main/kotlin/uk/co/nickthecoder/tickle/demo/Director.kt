@@ -1,8 +1,11 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.util.TagManager
 
 interface Director {
+
+    val tagManager: TagManager
 
     fun begin() {}
 
@@ -16,4 +19,10 @@ interface Director {
 
 }
 
-class NoDirector : Director {}
+open class AbstractDirector : Director {
+
+    override val tagManager = TagManager()
+
+}
+
+class NoDirector : AbstractDirector()
