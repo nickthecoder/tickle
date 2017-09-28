@@ -8,15 +8,13 @@ BUGS
 New Features
 ============
 
-Random hues - use it to make each grenade a different hue.
+Model matrix to allow objects to rotate and scale.
 
 Allow a single texture to contain multiple images
 
 View clipping.
 
-Look at the maths library for vectors.
-
-Add more grenades, and some "solid" objects
+Add some "solid" objects, and use overlap detection to kill the sparks.
 
 Create a random class/helpers
 	Produce floats in a specified range.

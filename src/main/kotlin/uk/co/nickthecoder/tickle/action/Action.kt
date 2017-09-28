@@ -18,4 +18,8 @@ interface Action {
     fun and(other: Action): ParallelAction {
         return ParallelAction(this, other)
     }
+
+    fun forever(): ForeverAction {
+        return ForeverAction(this)
+    }
 }

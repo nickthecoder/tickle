@@ -18,8 +18,8 @@ class Demo(
     val stageView = ZOrderStageView(Rectangle(0, 0, window.width, window.height), stage)
 
     val beeA = Actor(Bee())
-    val coinA1 = Actor(Rotating(3f, 30.0, 3.0))
-    val coinA2 = Actor(Rotating(4f, 60.0, 2.0))
+    val coinA1 = Actor(Coin(3f, 30.0, 3.0))
+    val coinA2 = Actor(Coin(4f, 60.0, 2.0))
 
     override fun preInitialise() {
         instance = this
@@ -46,10 +46,6 @@ class Demo(
         coinA2.y = -50f
 
 
-        stage.add(beeA)
-        stage.add(coinA1)
-        stage.add(coinA2)
-
         val count = 10
         for (i in 0..count - 1) {
             val grenadeA = Actor(Grenade(i.toFloat() / count))
@@ -58,8 +54,13 @@ class Demo(
                 x = i * 150f - 200f
                 y = -120f
             }
-            stage.add(grenadeA)
+            stage.add(grenadeA, false)
         }
+
+
+        stage.add(beeA, false)
+        stage.add(coinA1, false)
+        //stage.add(coinA2, false)
 
         director.begin()
         stage.begin()
@@ -78,7 +79,7 @@ class Demo(
         }
 
         if (gameLoop.tickCount % 100 == 0L) {
-            println("FPS = ${gameLoop.actualFPS()}")
+            println("FPS = ${gameLoop.actualFPS().toInt()} Actors : ${stage.actors.size}")
         }
 
     }

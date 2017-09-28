@@ -23,9 +23,16 @@ class Renderer(val window: Window) {
     private var numVertices: Int = 0
     private var drawing: Boolean = false
 
-    private var currentTexture: Texture? = null
 
-    private var uniColor: Int = 0
+    val identityMatrix = Matrix4f()
+
+    private var currentTexture: Texture? = null
+    var currentColor: Color? = null
+    var currentModelMatrix = identityMatrix
+
+    private var uniColor: Int = -1
+    private var uniModel: Int = -1
+
 
     init {
         println("Creating renderer")
@@ -79,7 +86,7 @@ class Renderer(val window: Window) {
 
         /* Set model matrix to identity matrix */
         val model = Matrix4f()
-        val uniModel = program.getUniformLocation("model")
+        uniModel = program.getUniformLocation("model")
         program.setUniform(uniModel, model)
 
         /* Set view matrix to identity matrix */
@@ -115,22 +122,7 @@ class Renderer(val window: Window) {
         changedProjection()
     }
 
-    /*
-    fun orthographicProjection(centerX: Float, centerY: Float): Matrix4f {
-        val w = window.width.toFloat()
-        val h = window.height.toFloat()
-        return Matrix4f().ortho2D(
-                centerX - w / 2, centerX + w / 2,
-                centerY - h / 2, centerY + h / 2)
-    }
-    */
-
-    fun changedProjection() {
-        val uniProjection = program.getUniformLocation("projection")
-        program.setUniform(uniProjection, projection)
-    }
-
-    fun changeView(projection: Matrix4f) {
+    private fun changedProjection() {
         val uniProjection = program.getUniformLocation("projection")
         program.setUniform(uniProjection, projection)
     }
@@ -191,6 +183,16 @@ class Renderer(val window: Window) {
     }
 
     fun drawTexture(texture: Texture, x: Float, y: Float, color: Color = Color.WHITE) {
+        drawTexture(texture, x, y, color, identityMatrix)
+    }
+
+    fun drawTexture(texture: Texture, x: Float, y: Float, color: Color = Color.WHITE, modelMatrix: Matrix4f) {
+        if (modelMatrix !== currentModelMatrix) {
+            flush()
+            program.setUniform(uniModel, modelMatrix)
+            currentModelMatrix = modelMatrix
+        }
+
         /* Vertex positions */
         val x1 = x
         val y1 = y
@@ -205,8 +207,6 @@ class Renderer(val window: Window) {
 
         drawTextureRegion(texture, x1, y1, x2, y2, s1, t1, s2, t2, color)
     }
-
-    var currentColor: Color? = null
 
     fun drawTextureRegion(
             texture: Texture,
@@ -247,6 +247,9 @@ class Renderer(val window: Window) {
         vertices.put(x2).put(y1).put(s2).put(t1)
 
         numVertices += 6
+
+        // While tinkering, I'm ALWAYS flushing!
+        // flush()
     }
 
     fun delete() {

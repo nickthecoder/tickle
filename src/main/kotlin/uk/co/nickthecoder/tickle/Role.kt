@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.action.Action
-import uk.co.nickthecoder.tickle.action.ParallelAction
 
 interface Role {
 
@@ -32,7 +31,7 @@ interface Role {
     fun tick()
 
     /**
-     * Signals that the Actor has died, and been removed from the Stage. Do not attempt to revive a dead Actor, by
+     * Signals that the Actor has died, and has been removed from the Stage. Do not attempt to revive a dead Actor, by
      * placing it on a new Stage. Weirdness may ensue.
      */
     fun end() {}
@@ -42,11 +41,6 @@ abstract class AbstractRole : Role {
 
     override lateinit var actor: Actor
 
-    val actions = ParallelAction()
-
-    override fun tick() {
-        actions.act(actor)
-    }
 }
 
 /**
@@ -56,6 +50,11 @@ abstract class AbstractRole : Role {
 class ActionRole(val action: Action) : Role {
 
     override lateinit var actor: Actor
+
+    override fun activated() {
+        super.activated()
+        action.begin(actor)
+    }
 
     override fun tick() {
         if (action.act(actor)) {

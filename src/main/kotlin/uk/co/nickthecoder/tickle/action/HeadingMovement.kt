@@ -1,10 +1,10 @@
 package uk.co.nickthecoder.tickle.action
 
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Role
 
-class HeadingMovement(
+abstract class AbstractHeadingMovement(
         speed: Float = 0f,
-        headingDegrees: Double = 0.0,
         speedDegrees: Double = 0.0,
         var maxSpeed: Float = 10f,
         var minSpeed: Float = -maxSpeed,
@@ -23,16 +23,7 @@ class HeadingMovement(
             }
         }
 
-
-    private var headingRadians = Math.toRadians(headingDegrees)
-
-    var headingDegrees: Double
-        get() = Math.toDegrees(headingRadians)
-        set(v) {
-            headingRadians = Math.toRadians(v)
-        }
-
-    private var maxRotationRadians = Math.toRadians(maxRotationDegrees)
+    var maxRotationRadians = Math.toRadians(maxRotationDegrees)
 
     var maxRotationDegrees: Double
         get() = Math.toDegrees(maxRotationRadians)
@@ -40,14 +31,14 @@ class HeadingMovement(
             maxRotationRadians = Math.toRadians(v)
         }
 
-    private var speedRadians = Math.toRadians(speedDegrees)
+    var speedRadians = Math.toRadians(speedDegrees)
         set(v) {
             if (v > maxRotationRadians) {
-                field = Math.toRadians(maxRotationRadians)
+                field = maxRotationRadians
             } else if (v < -maxRotationRadians) {
-                field = Math.toRadians(-maxRotationRadians)
+                field = -maxRotationRadians
             } else {
-                field = Math.toRadians(v)
+                field = v
             }
         }
 
@@ -60,7 +51,7 @@ class HeadingMovement(
 
     override fun act(actor: Actor): Boolean {
 
-        headingDegrees += speedDegrees
+        headingRadians += speedRadians
 
         if (speed != 0f) {
             val radians = Math.toRadians(headingDegrees)
@@ -74,4 +65,53 @@ class HeadingMovement(
         return false
     }
 
+    abstract var headingRadians: Double
+
+    var headingDegrees: Double
+        get() = Math.toDegrees(headingRadians)
+        set(v) {
+            headingRadians = Math.toRadians(v)
+        }
+}
+
+class HeadingMovement(
+        speed: Float = 0f,
+        headingDegrees: Double = 0.0,
+        speedDegrees: Double = 0.0,
+        maxSpeed: Float = 10f,
+        minSpeed: Float = -maxSpeed,
+        maxRotationDegrees: Double = 10.0)
+
+    : AbstractHeadingMovement(
+        speed = speed,
+        speedDegrees = speedDegrees,
+        maxSpeed = maxSpeed,
+        minSpeed = minSpeed,
+        maxRotationDegrees = maxRotationDegrees) {
+
+
+    override var headingRadians = Math.toRadians(headingDegrees)
+
+}
+
+open class DirectionMovement(
+        val role: Role,
+        speed: Float = 0f,
+        speedDegrees: Double = 0.0,
+        maxSpeed: Float = 10f,
+        minSpeed: Float = -maxSpeed,
+        maxRotationDegrees: Double)
+
+    : AbstractHeadingMovement(
+        speed = speed,
+        speedDegrees = speedDegrees,
+        maxSpeed = maxSpeed,
+        minSpeed = minSpeed,
+        maxRotationDegrees = maxRotationDegrees) {
+
+    override var headingRadians: Double
+        get() = role.actor.directionRadians
+        set(v) {
+            role.actor.directionRadians = v
+        }
 }

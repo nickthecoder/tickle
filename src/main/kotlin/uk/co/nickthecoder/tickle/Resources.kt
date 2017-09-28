@@ -40,6 +40,7 @@ class Resources {
         inputs.put("reset", KeyInput(GLFW.GLFW_KEY_O))
         inputs.put("clockwise", KeyInput(GLFW.GLFW_KEY_X))
         inputs.put("anti-clockwise", KeyInput(GLFW.GLFW_KEY_Z))
+        inputs.put("toggle", KeyInput(GLFW.GLFW_KEY_SPACE))
     }
 
     fun input(name: String): Input {
