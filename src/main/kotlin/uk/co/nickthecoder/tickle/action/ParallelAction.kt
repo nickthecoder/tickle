@@ -15,7 +15,7 @@ class ParallelAction(vararg child: Action) : CompoundAction() {
         children.addAll(child)
     }
 
-    override fun begin(actor: Actor) {
+    override fun begin(actor: Actor): Boolean {
         super.begin(actor)
 
         // If we are being restarted (from a ForeverAction, or a RepeatAction), then
@@ -26,10 +26,15 @@ class ParallelAction(vararg child: Action) : CompoundAction() {
             finishedChildren.clear()
         }
 
+        var finished = true
         children.forEach { child ->
-            child.begin(actor)
+            if (!child.begin(actor)) {
+                finished = false // One child isn't finished, so we aren't finished.
+            }
         }
         unstartedChildren.clear()
+
+        return finished
     }
 
     override fun add(action: Action) {

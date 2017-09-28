@@ -11,6 +11,10 @@ class PeriodicFactory(
 
     var remainder: Float = 0f
 
+    override fun begin(actor: Actor): Boolean {
+        return amount ?: 1 <= 0
+    }
+
     override fun act(actor: Actor): Boolean {
         remainder += 1
         while (remainder >= period) {

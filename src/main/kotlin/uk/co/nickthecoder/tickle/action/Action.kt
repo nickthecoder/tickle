@@ -4,10 +4,13 @@ import uk.co.nickthecoder.tickle.Actor
 
 interface Action {
 
-    fun begin(actor: Actor) {}
+    /**
+     *  Returns true iff the action is complete, and therefore act should not be called.
+     */
+    fun begin(actor: Actor): Boolean = false
 
     /**
-     * Returns true iff the action is complete (and show not be called again).
+     * Returns true iff the action is complete (and should not be called again).
      */
     fun act(actor: Actor): Boolean
 

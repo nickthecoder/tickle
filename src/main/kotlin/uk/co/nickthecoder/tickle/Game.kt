@@ -32,6 +32,14 @@ abstract class Game(
     var tickDuration: Float = 1f / 60f
 
 
+    init {
+        // TODO Move later in the Game lifecycle when scene loading is implemented.
+        // At the moment this needs to be here, because Demo creates the actors in it's constructor.
+
+        seconds = System.nanoTime() / 1_000_000_000f
+        println("Set initial start time to $seconds")
+    }
+
     open fun preInitialise() {}
 
     fun initialise() {
@@ -49,7 +57,6 @@ abstract class Game(
     open fun postInitialise() {}
 
     fun loop() {
-        seconds = System.nanoTime() / 1_000_000_000f
         while (isRunning()) {
             gameLoop.tick()
 

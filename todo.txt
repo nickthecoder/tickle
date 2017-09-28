@@ -8,40 +8,23 @@ BUGS
 New Features
 ============
 
-Model matrix to allow objects to rotate and scale.
-
-Allow a single texture to contain multiple images
+Allow a single texture to contain multiple images.
+	i.e. Pose has a SpriteSheet and a Rect, not a Texture
 
 View clipping.
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 
-Create a random class/helpers
-	Produce floats in a specified range.
-	Produce colors
-	Produce Vector2s (Use interpolation method on Vector2).
-	Maybe also using an "Easy" function, to spread non-linearly.
-
-
-Change the spark to white, and color it with a random color.
-	Color class - factory method using HSB
+Rand to have an "ease" to spread non-linearly.
 
 Create the Costume class, and use it to pick a random Pose for each of the sparks.
-
-Use the model mat4 to allow for scaling and rotation of Actors.
 
 Fonts
 	Allow loading of multiple ranges of characters.
 
 Tags
 	
-
-Utility Actions
-	MovementXY
-	MovementRotate
-		Constructor takes a speed
-		Also input names with default values
-
+Create an action which moves an Actor based on Inputs (and XY and a Direction variant)
 
 Load scenes from a file
 

@@ -4,8 +4,8 @@ import org.joml.Vector2f
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.action.AcceleratedXYMovement
 import uk.co.nickthecoder.tickle.action.Die
-import uk.co.nickthecoder.tickle.action.Fade
 import uk.co.nickthecoder.tickle.action.PeriodicFactory
+import uk.co.nickthecoder.tickle.action.animation.Fade
 import uk.co.nickthecoder.tickle.graphics.Color
 
 val gravity = -0.1f
@@ -16,13 +16,16 @@ class Grenade(val hue: Float) : AbstractRole() {
 
         val dx = Rand.plusMinus(0.03f)
         val newColor = Color.createFromHSB(hue + dx, 1f, 1f)
+        val transparent = Color(newColor.red, newColor.green, newColor.blue, 0f)
         val newRole = ActionRole(
                 AcceleratedXYMovement(
                         velocity = (Vector2f(dx * 20, Rand.between(10f, 5f))),
                         drag = 0.01f,
                         acceleration = Vector2f(0f, gravity)
                 ).and(
-                        Fade(Color.TRANSPARENT_WHITE, 3f).then(Die())
+                        Fade(3f, transparent)
+                                .then(Die()
+                                )
                 )
         )
         val newActor = Actor(newRole)

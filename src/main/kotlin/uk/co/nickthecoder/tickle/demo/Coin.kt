@@ -1,16 +1,18 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.AbstractRole
-import uk.co.nickthecoder.tickle.action.Grow
 import uk.co.nickthecoder.tickle.action.HeadingMovement
+import uk.co.nickthecoder.tickle.action.animation.Eases
+import uk.co.nickthecoder.tickle.action.animation.Grow
 
 class Coin(val speed: Float, val heading: Double, val rotationSpeed: Double) : AbstractRole() {
 
-    // TODO Add parameters for the speed, heading etc.
-
     val action = HeadingMovement(speed, heading, speedDegrees = rotationSpeed)
             .and(
-                    Grow(2f, 1f).then(Grow(1f, 0.2f)).forever()
+                    Grow(1f, 1.3f, Eases.easeInOut)
+                            .then(Grow(0.5f, 1f, Eases.easeInOut)
+
+                            ).forever()
             )
 
     override fun activated() {

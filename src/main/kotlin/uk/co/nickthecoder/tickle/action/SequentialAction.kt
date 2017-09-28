@@ -14,10 +14,17 @@ class SequentialAction(vararg child: Action) : CompoundAction() {
         children.addAll(child)
     }
 
-    override fun begin(actor: Actor) {
-        index = 0
-        currentChild = children.firstOrNull()
-        currentChild?.begin(actor)
+    override fun begin(actor: Actor): Boolean {
+        children.forEachIndexed { i, child ->
+            if (!child.begin(actor)) {
+                index = i
+                currentChild = child
+                return false
+            }
+        }
+        index = -1
+        currentChild = null
+        return true
     }
 
     override fun act(actor: Actor): Boolean {
