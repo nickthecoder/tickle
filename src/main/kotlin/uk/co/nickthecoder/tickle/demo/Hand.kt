@@ -1,12 +1,12 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.Actor
-import uk.co.nickthecoder.tickle.action.ActorAction
+import uk.co.nickthecoder.tickle.action.Action
 
 
-class Hand : Controlable() {
+class Hand : Controllable() {
 
-    override val movement = object : ActorAction {
+    override val movement = object : Action<Actor> {
         override fun act(target: Actor): Boolean {
 
             if (left.isPressed()) {

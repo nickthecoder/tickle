@@ -4,7 +4,7 @@ package uk.co.nickthecoder.tickle.demo
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.action.DirectionMovement
 
-class Bee : Controlable() {
+class Bee : Controllable() {
 
     override val movement = object : DirectionMovement(
             this,
@@ -13,7 +13,7 @@ class Bee : Controlable() {
             minSpeed = -10f,
             maxRotationDegrees = 5.0) {
 
-        override fun act(actor: Actor): Boolean {
+        override fun act(target: Actor): Boolean {
 
             if (left.isPressed()) {
                 speedDegrees += 1

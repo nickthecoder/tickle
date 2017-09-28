@@ -1,6 +1,5 @@
 package uk.co.nickthecoder.tickle.action.animation
 
-import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.action.Action
 
@@ -24,10 +23,20 @@ abstract class AnimationAction<T>(
 
         update(target, ease.ease(t))
 
+        if (t == 1f) {
+            ended()
+        }
         return t == 1f
     }
 
     abstract protected fun storeInitialValue(target: T)
 
     abstract protected fun update(target: T, t: Float)
+
+    open protected fun ended() {}
+
+    companion object {
+        fun lerp(from: Float, to: Float, t: Float) = (1 - t) * from + t * to
+    }
+
 }

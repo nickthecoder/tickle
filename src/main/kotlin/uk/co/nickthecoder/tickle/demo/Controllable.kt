@@ -1,10 +1,11 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.AbstractRole
+import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.action.ActorAction
+import uk.co.nickthecoder.tickle.action.Action
 
-abstract class Controlable : AbstractRole() {
+abstract class Controllable : AbstractRole() {
 
     var hasInput: Boolean = false
 
@@ -13,7 +14,7 @@ abstract class Controlable : AbstractRole() {
     val up = Resources.instance.input("up")
     val down = Resources.instance.input("down")
 
-    abstract val movement: ActorAction
+    abstract val movement: Action<Actor>
 
     override fun tick() {
         if (hasInput) {

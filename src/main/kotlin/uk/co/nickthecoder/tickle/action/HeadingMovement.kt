@@ -10,7 +10,7 @@ abstract class AbstractHeadingMovement(
         var minSpeed: Float = -maxSpeed,
         maxRotationDegrees: Double = 10.0)
 
-    : ActorAction {
+    : Action<Actor> {
 
     var speed: Float = speed
         set(v) {

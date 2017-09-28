@@ -1,7 +1,5 @@
 package uk.co.nickthecoder.tickle.action
 
-import uk.co.nickthecoder.tickle.Actor
-
 interface Action<T> {
 
     /**
@@ -25,6 +23,5 @@ interface Action<T> {
     fun forever(): ForeverAction<T> {
         return ForeverAction(this)
     }
-}
 
-interface ActorAction : Action<Actor>
+}
