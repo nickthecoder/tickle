@@ -33,6 +33,9 @@ class Resources {
         beePose.offsetX = 30f
         beePose.offsetY = 30f
 
+        coinPose.offsetX = 30f
+        coinPose.offsetY = 30f
+
         inputs.put("left", KeyInput(GLFW.GLFW_KEY_LEFT))
         inputs.put("right", KeyInput(GLFW.GLFW_KEY_RIGHT))
         inputs.put("up", KeyInput(GLFW.GLFW_KEY_UP))
