@@ -2,27 +2,29 @@ package uk.co.nickthecoder.tickle.action
 
 import uk.co.nickthecoder.tickle.Actor
 
-interface Action {
+interface Action<T> {
 
     /**
      *  Returns true iff the action is complete, and therefore act should not be called.
      */
-    fun begin(actor: Actor): Boolean = false
+    fun begin(target: T): Boolean = false
 
     /**
      * Returns true iff the action is complete (and should not be called again).
      */
-    fun act(actor: Actor): Boolean
+    fun act(target: T): Boolean
 
-    fun then(other: Action): SequentialAction {
-        return SequentialAction(this, other)
+    fun then(other: Action<T>): SequentialAction<T> {
+        return SequentialAction<T>(this, other)
     }
 
-    fun and(other: Action): ParallelAction {
+    fun and(other: Action<T>): ParallelAction<T> {
         return ParallelAction(this, other)
     }
 
-    fun forever(): ForeverAction {
+    fun forever(): ForeverAction<T> {
         return ForeverAction(this)
     }
 }
+
+interface ActorAction : Action<Actor>

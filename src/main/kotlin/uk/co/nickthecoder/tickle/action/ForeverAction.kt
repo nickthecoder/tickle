@@ -1,17 +1,15 @@
 package uk.co.nickthecoder.tickle.action
 
-import uk.co.nickthecoder.tickle.Actor
+class ForeverAction<T>(val child: Action<T>) : Action<T> {
 
-class ForeverAction(val child: Action) : Action {
-
-    override fun begin(actor: Actor): Boolean {
-        child.begin(actor)
+    override fun begin(target: T): Boolean {
+        child.begin(target)
         return false
     }
 
-    override fun act(actor: Actor): Boolean {
-        if (child.act(actor)) {
-            child.begin(actor)
+    override fun act(target: T): Boolean {
+        if (child.act(target)) {
+            child.begin(target)
         }
         return false
     }

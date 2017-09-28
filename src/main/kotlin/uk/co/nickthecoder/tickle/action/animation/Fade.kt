@@ -8,15 +8,15 @@ class Fade(
         val finalColor: Color,
         ease: Ease = LinearEase.instance)
 
-    : AnimationAction(seconds, ease) {
+    : AnimationAction<Actor>(seconds, ease) {
 
     private lateinit var initialColor: Color
 
-    override fun storeInitialValue(actor: Actor) {
-        initialColor = actor.color
+    override fun storeInitialValue(target: Actor) {
+        initialColor = target.color
     }
 
-    override fun update(actor: Actor, t: Float) {
-        actor.color = initialColor.linearInterpolation(finalColor, t)
+    override fun update(target: Actor, t: Float) {
+        target.color = initialColor.linearInterpolation(finalColor, t)
     }
 }

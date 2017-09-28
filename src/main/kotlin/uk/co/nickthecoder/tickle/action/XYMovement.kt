@@ -7,15 +7,15 @@ open class XYMovement(
         var velocity: Vector2f,
         var drag: Float = 0f)
 
-    : Action {
+    : Action<Actor> {
 
-    override fun act(actor: Actor): Boolean {
+    override fun act(target: Actor): Boolean {
 
         if (drag != 0f) {
             velocity.mul(1 - drag)
         }
-        actor.x += velocity.x
-        actor.y += velocity.y
+        target.x += velocity.x
+        target.y += velocity.y
 
         return false
     }
@@ -27,9 +27,9 @@ open class AcceleratedXYMovement(
         var acceleration: Vector2f)
     : XYMovement(velocity, drag) {
 
-    override fun act(actor: Actor): Boolean {
+    override fun act(target: Actor): Boolean {
         velocity.add(acceleration)
-        super.act(actor)
+        super.act(target)
 
         return false
     }

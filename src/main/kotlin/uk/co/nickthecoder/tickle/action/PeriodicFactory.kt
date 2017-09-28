@@ -1,21 +1,19 @@
 package uk.co.nickthecoder.tickle.action
 
-import uk.co.nickthecoder.tickle.Actor
-
-class PeriodicFactory(
+class PeriodicFactory<T>(
         val period: Float = 1f,
         var amount: Int? = null,
-        val factory: (PeriodicFactory) -> Unit)
+        val factory: (PeriodicFactory<T>) -> Unit)
 
-    : Action {
+    : Action<T> {
 
     var remainder: Float = 0f
 
-    override fun begin(actor: Actor): Boolean {
+    override fun begin(target: T): Boolean {
         return amount ?: 1 <= 0
     }
 
-    override fun act(actor: Actor): Boolean {
+    override fun act(target: T): Boolean {
         remainder += 1
         while (remainder >= period) {
             remainder -= period

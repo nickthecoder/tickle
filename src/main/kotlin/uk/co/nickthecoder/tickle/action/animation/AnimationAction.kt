@@ -4,30 +4,30 @@ import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.action.Action
 
-abstract class AnimationAction(
+abstract class AnimationAction<T>(
         val seconds: Float,
         val ease: Ease)
 
-    : Action {
+    : Action<T> {
 
     protected var startTime: Float = -1f
 
-    override fun begin(actor: Actor): Boolean {
+    override fun begin(target: T): Boolean {
         startTime = Game.instance.seconds
-        storeInitialValue(actor)
+        storeInitialValue(target)
         return seconds <= 0f
     }
 
-    override fun act(actor: Actor): Boolean {
+    override fun act(target: T): Boolean {
         val now = Game.instance.seconds
         val t = Math.min(1.0f, (now - startTime) / seconds)
 
-        update(actor, ease.ease(t))
+        update(target, ease.ease(t))
 
         return t == 1f
     }
 
-    abstract protected fun storeInitialValue(actor: Actor)
+    abstract protected fun storeInitialValue(target: T)
 
-    abstract protected fun update(actor: Actor, t: Float)
+    abstract protected fun update(target: T, t: Float)
 }

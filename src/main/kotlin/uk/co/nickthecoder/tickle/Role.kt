@@ -47,7 +47,7 @@ abstract class AbstractRole : Role {
  * A Role that only has a single Actions, and does nothing in the tick method itself.
  * When all the action is complete, the actor dies.
  */
-class ActionRole(val action: Action) : Role {
+class ActionRole(val action: Action<Actor>) : Role {
 
     override lateinit var actor: Actor
 

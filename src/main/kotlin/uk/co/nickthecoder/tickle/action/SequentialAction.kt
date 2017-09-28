@@ -2,11 +2,11 @@ package uk.co.nickthecoder.tickle.action
 
 import uk.co.nickthecoder.tickle.Actor
 
-class SequentialAction(vararg child: Action) : CompoundAction() {
+class SequentialAction<T>(vararg child: Action<T>) : CompoundAction<T>() {
 
-    override val children = mutableListOf<Action>()
+    override val children = mutableListOf<Action<T>>()
 
-    var currentChild: Action? = null
+    var currentChild: Action<T>? = null
 
     var index: Int = -1
 
@@ -14,9 +14,9 @@ class SequentialAction(vararg child: Action) : CompoundAction() {
         children.addAll(child)
     }
 
-    override fun begin(actor: Actor): Boolean {
+    override fun begin(target: T): Boolean {
         children.forEachIndexed { i, child ->
-            if (!child.begin(actor)) {
+            if (!child.begin(target)) {
                 index = i
                 currentChild = child
                 return false
@@ -27,13 +27,13 @@ class SequentialAction(vararg child: Action) : CompoundAction() {
         return true
     }
 
-    override fun act(actor: Actor): Boolean {
+    override fun act(target: T): Boolean {
         currentChild?.let { child ->
-            if (child.act(actor)) {
+            if (child.act(target)) {
                 index++
                 currentChild = children.elementAtOrNull(index)
                 currentChild?.let {
-                    it.begin(actor)
+                    it.begin(target)
                     return false // Child finished, but there is another one after it
                 }
                 return true // Child finished, and there is none after it
@@ -43,7 +43,7 @@ class SequentialAction(vararg child: Action) : CompoundAction() {
         return true // There was no current child.
     }
 
-    override fun then(other: Action): SequentialAction {
+    override fun then(other: Action<T>): SequentialAction<T> {
         children.add(other)
         return this
     }

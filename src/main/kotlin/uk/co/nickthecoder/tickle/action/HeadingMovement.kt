@@ -10,7 +10,7 @@ abstract class AbstractHeadingMovement(
         var minSpeed: Float = -maxSpeed,
         maxRotationDegrees: Double = 10.0)
 
-    : Action {
+    : ActorAction {
 
     var speed: Float = speed
         set(v) {
@@ -49,7 +49,7 @@ abstract class AbstractHeadingMovement(
         }
 
 
-    override fun act(actor: Actor): Boolean {
+    override fun act(target: Actor): Boolean {
 
         headingRadians += speedRadians
 
@@ -58,8 +58,8 @@ abstract class AbstractHeadingMovement(
             val cos = Math.cos(radians).toFloat()
             val sin = Math.sin(radians).toFloat()
 
-            actor.x += cos * speed
-            actor.y += sin * speed
+            target.x += cos * speed
+            target.y += sin * speed
         }
 
         return false

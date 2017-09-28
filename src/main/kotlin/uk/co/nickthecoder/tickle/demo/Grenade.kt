@@ -13,7 +13,7 @@ val gravity = -0.1f
 
 class Grenade(val hue: Float) : AbstractRole() {
 
-    val action = PeriodicFactory(10f) {
+    val action = PeriodicFactory<Actor>(10f) {
 
         // If we used a linear ease, instead of in-out, the sparks would be more concentrated in the middle.
         val dx = Rand.plusMinus(0.03f, Eases.easeInOut)

@@ -7,17 +7,17 @@ class Grow(
         val finalScale: Float,
         ease: Ease = LinearEase.instance)
 
-    : AnimationAction(seconds, ease) {
+    : AnimationAction<Actor>(seconds, ease) {
 
     private var initialScale: Float = 0f
 
-    override fun storeInitialValue(actor: Actor) {
-        initialScale = actor.scale
+    override fun storeInitialValue(target: Actor) {
+        initialScale = target.scale
     }
 
 
-    override fun update(actor: Actor, t: Float) {
-        actor.scale = initialScale * (1 - t) + finalScale * t
+    override fun update(target: Actor, t: Float) {
+        target.scale = initialScale * (1 - t) + finalScale * t
     }
 
 }

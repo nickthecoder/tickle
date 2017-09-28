@@ -1,13 +1,13 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.Actor
-import uk.co.nickthecoder.tickle.action.Action
+import uk.co.nickthecoder.tickle.action.ActorAction
 
 
 class Hand : Controlable() {
 
-    override val movement = object : Action {
-        override fun act(actor: Actor): Boolean {
+    override val movement = object : ActorAction {
+        override fun act(target: Actor): Boolean {
 
             if (left.isPressed()) {
                 actor.x -= 5
