@@ -32,8 +32,8 @@ class Resources {
     val dummyInput = CompoundInput()
 
     init {
-        beePose.offsetX = 30f
-        beePose.offsetY = 30f
+        beePose.offsetX = 38f
+        beePose.offsetY = 29f
 
         handPose.offsetX = 17f
         handPose.offsetY = 27f

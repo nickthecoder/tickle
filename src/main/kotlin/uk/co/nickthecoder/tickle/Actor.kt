@@ -9,7 +9,7 @@ private var nextId: Int = 0
 
 class Actor(val role: Role? = null) {
 
-    val id = nextId ++
+    val id = nextId++
 
     internal var stage: Stage? = null
 
@@ -66,7 +66,23 @@ class Actor(val role: Role? = null) {
 
     fun getModelMatrix(): Matrix4f {
         if (dirtyMatrix) {
-            modelMatrix.identity().translate(x, y, 0f).rotateZ(directionRadians.toFloat()).scale(scale).translate(-x, -y, 0f)
+            modelMatrix.identity().translate(x, y, 0f)
+            if (directionRadians != 0.0) {
+                modelMatrix.rotateZ(directionRadians.toFloat())
+            }
+            if (scale != 1f) {
+                modelMatrix.scale(scale)
+            }
+            if (flipX) {
+                modelMatrix.reflect(1f, 0f, 0f, 0f)
+            }
+            if (flipY) {
+                modelMatrix.reflect(0f, 1f, 0f, 0f)
+            }
+            customTransformation?.let {
+                modelMatrix.mul(it)
+            }
+            modelMatrix.translate(-x, -y, 0f)
         }
         return modelMatrix
     }
@@ -75,7 +91,30 @@ class Actor(val role: Role? = null) {
         appearance = PoseAppearance(this, pose)
     }
 
-    // TODO Should there be a "changeText" method, similar to changePose?
+    var flipX: Boolean = false
+        set(v) {
+            if (field != v) {
+                field = v
+                dirtyMatrix = true
+            }
+        }
+
+
+    var flipY: Boolean = false
+        set(v) {
+            if (field != v) {
+                field = v
+                dirtyMatrix = true
+            }
+        }
+
+    var customTransformation: Matrix4f? = null
+        set(v) {
+            if (field !== v) {
+                field = v
+                dirtyMatrix
+            }
+        }
 
     fun die() {
         stage?.remove(this)
