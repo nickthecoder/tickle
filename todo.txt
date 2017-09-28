@@ -1,6 +1,8 @@
 Current Work
 ============
 
+	
+Create an action which moves an Actor based on Inputs (and XY and a Direction variant)
 
 BUGS
 ====
@@ -15,16 +17,12 @@ View clipping.
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 
-Rand to have an "ease" to spread non-linearly.
-
 Create the Costume class, and use it to pick a random Pose for each of the sparks.
 
 Fonts
 	Allow loading of multiple ranges of characters.
 
 Tags
-	
-Create an action which moves an Actor based on Inputs (and XY and a Direction variant)
 
 Load scenes from a file
 

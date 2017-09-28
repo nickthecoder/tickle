@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle.action
 
 import uk.co.nickthecoder.tickle.Actor
-import uk.co.nickthecoder.tickle.Role
 
 abstract class AbstractHeadingMovement(
         speed: Float = 0f,
@@ -95,7 +94,6 @@ class HeadingMovement(
 }
 
 open class DirectionMovement(
-        val role: Role,
         speed: Float = 0f,
         speedDegrees: Double = 0.0,
         maxSpeed: Float = 10f,
@@ -109,9 +107,16 @@ open class DirectionMovement(
         minSpeed = minSpeed,
         maxRotationDegrees = maxRotationDegrees) {
 
+    private lateinit var actor: Actor
+
+    override fun begin(target: Actor): Boolean {
+        this.actor = target
+        return super.begin(target)
+    }
+
     override var headingRadians: Double
-        get() = role.actor.directionRadians
+        get() = actor.directionRadians
         set(v) {
-            role.actor.directionRadians = v
+            actor.directionRadians = v
         }
 }

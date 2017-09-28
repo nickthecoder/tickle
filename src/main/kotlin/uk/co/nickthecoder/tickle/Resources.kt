@@ -51,6 +51,13 @@ class Resources {
         inputs.put("toggle", KeyInput(GLFW.GLFW_KEY_TAB))
     }
 
+    fun optionalInput(name: String?): Input {
+        name?.let {
+            return input(it)
+        }
+        return dummyInput
+    }
+
     fun input(name: String): Input {
         val input = inputs[name]
         if (input == null) {
