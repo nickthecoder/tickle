@@ -16,11 +16,13 @@ class Resources {
     val imageDir = File(Game.resourceDirectory, "images")
 
     val beeTexture: Texture = Texture.createTexture(File(imageDir, "bee.png"))
+    val handTexture: Texture = Texture.createTexture(File(imageDir, "hand.png"))
     val coinTexture: Texture = Texture.createTexture(File(imageDir, "coin.png"))
     val grenadeTexture = Texture.createTexture(File(imageDir, "grenade.png"))
     val sparkTexture = Texture.createTexture(File(imageDir, "spark.png"))
 
     val beePose = Pose("bee", beeTexture)
+    val handPose = Pose("hand", handTexture)
     val coinPose = Pose("bee", coinTexture)
     val grenadePose = Pose("grenade", grenadeTexture)
     val sparkPose = Pose("spark", sparkTexture)
@@ -33,6 +35,9 @@ class Resources {
         beePose.offsetX = 30f
         beePose.offsetY = 30f
 
+        handPose.offsetX = 17f
+        handPose.offsetY = 27f
+
         coinPose.offsetX = 30f
         coinPose.offsetY = 30f
 
@@ -43,7 +48,7 @@ class Resources {
         inputs.put("reset", KeyInput(GLFW.GLFW_KEY_O))
         inputs.put("clockwise", KeyInput(GLFW.GLFW_KEY_X))
         inputs.put("anti-clockwise", KeyInput(GLFW.GLFW_KEY_Z))
-        inputs.put("toggle", KeyInput(GLFW.GLFW_KEY_SPACE))
+        inputs.put("toggle", KeyInput(GLFW.GLFW_KEY_TAB))
     }
 
     fun input(name: String): Input {

@@ -5,6 +5,7 @@ import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.action.AcceleratedXYMovement
 import uk.co.nickthecoder.tickle.action.Die
 import uk.co.nickthecoder.tickle.action.PeriodicFactory
+import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.action.animation.Fade
 import uk.co.nickthecoder.tickle.graphics.Color
 
@@ -14,12 +15,14 @@ class Grenade(val hue: Float) : AbstractRole() {
 
     val action = PeriodicFactory(10f) {
 
-        val dx = Rand.plusMinus(0.03f)
+        // If we used a linear ease, instead of in-out, the sparks would be more concentrated in the middle.
+        val dx = Rand.plusMinus(0.03f, Eases.easeInOut)
         val newColor = Color.createFromHSB(hue + dx, 1f, 1f)
         val transparent = Color(newColor.red, newColor.green, newColor.blue, 0f)
         val newRole = ActionRole(
                 AcceleratedXYMovement(
-                        velocity = (Vector2f(dx * 20, Rand.between(10f, 5f))),
+                        // Note. By using an in-out ease, fewer intermediate speed sparks.
+                        velocity = (Vector2f(dx * 20, Rand.between(2f, 12f, Eases.easeInOutExpo))),
                         drag = 0.01f,
                         acceleration = Vector2f(0f, gravity)
                 ).and(

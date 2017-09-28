@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.events.KeyEvent
 
 class Play : Director {
 
@@ -9,6 +10,15 @@ class Play : Director {
     val clockwise = Resources.instance.input("clockwise")
     val antiClockwise = Resources.instance.input("anti-clockwise")
     val reset = Resources.instance.input("reset")
+    val toggle = Resources.instance.input("toggle")
+
+    var oldActiveRole: Controlable = Demo.instance.bee
+    var activeRole: Controlable = Demo.instance.bee
+
+    override fun begin() {
+        super.begin()
+        activeRole.hasInput = true
+    }
 
     override fun postTick() {
 
@@ -22,8 +32,21 @@ class Play : Director {
             degrees += 2
         }
 
-        Demo.instance.stageView.centerX = Demo.instance.beeA.x
-        Demo.instance.stageView.centerY = Demo.instance.beeA.y
+        Demo.instance.stageView.centerX = activeRole.actor.x
+        Demo.instance.stageView.centerY = activeRole.actor.y
         Demo.instance.stageView.degrees = degrees
     }
+
+    override fun onKeyEvent(event: KeyEvent) {
+        super.onKeyEvent(event)
+
+        if (toggle.matches(event)) {
+            println("Toggle")
+            oldActiveRole = activeRole
+            activeRole.hasInput = false
+            activeRole = if (activeRole === Demo.instance.bee) Demo.instance.hand else Demo.instance.bee
+            activeRole.hasInput = true
+        }
+    }
+
 }

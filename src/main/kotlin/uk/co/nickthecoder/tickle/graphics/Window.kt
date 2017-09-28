@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFW
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.events.KeyEventType
 
 class Window(
         title: String,
@@ -44,7 +45,7 @@ class Window(
     fun keyboardEvents(keyHandler: (KeyEvent) -> Unit) {
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         GLFW.glfwSetKeyCallback(handle) { _, key, scanCode, action, mods ->
-            keyHandler(KeyEvent(this, key, scanCode, action, mods))
+            keyHandler(KeyEvent(this, key, scanCode, KeyEventType.of(action), mods))
         }
     }
 

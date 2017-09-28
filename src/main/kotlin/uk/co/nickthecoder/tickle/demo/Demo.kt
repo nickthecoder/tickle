@@ -17,7 +17,11 @@ class Demo(
     val stage = GameStage("main")
     val stageView = ZOrderStageView(Rectangle(0, 0, window.width, window.height), stage)
 
-    val beeA = Actor(Bee())
+    val bee = Bee()
+    val hand = Hand()
+
+    val handA = Actor(hand)
+    val beeA = Actor(bee)
     val coinA1 = Actor(Coin(3f, 30.0, 3.0))
     val coinA2 = Actor(Coin(4f, 60.0, 2.0))
 
@@ -36,15 +40,18 @@ class Demo(
         director = Play()
 
         beeA.appearance = PoseAppearance(beeA, resources.beePose)
+        handA.appearance = PoseAppearance(handA, resources.handPose)
         coinA1.appearance = PoseAppearance(coinA1, resources.coinPose)
         coinA2.appearance = PoseAppearance(coinA2, resources.coinPose)
+
+        handA.x = -50f
+        handA.y = 50f
 
         coinA1.x = -10f
         coinA1.y = 30f
 
         coinA2.x = 30f
         coinA2.y = -50f
-
 
         val count = 10
         for (i in 0..count - 1) {
@@ -59,8 +66,9 @@ class Demo(
 
 
         stage.add(beeA, false)
+        stage.add(handA, false)
         stage.add(coinA1, false)
-        //stage.add(coinA2, false)
+        stage.add(coinA2, false)
 
         director.begin()
         stage.begin()
