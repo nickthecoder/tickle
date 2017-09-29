@@ -1,10 +1,11 @@
 package uk.co.nickthecoder.tickle.stage
 
 import uk.co.nickthecoder.tickle.graphics.Renderer
+import uk.co.nickthecoder.tickle.util.Recti
 
 class ZOrderStageView(
 
-        override var rect: Rectangle,
+        override var rect: Recti,
         override val stage: Stage)
     : StageView {
 

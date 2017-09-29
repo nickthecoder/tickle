@@ -5,6 +5,7 @@ import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.events.KeyInput
 import uk.co.nickthecoder.tickle.graphics.Texture
+import uk.co.nickthecoder.tickle.util.Recti
 import java.io.File
 
 /**
@@ -15,23 +16,26 @@ class Resources {
 
     val imageDir = File(Game.resourceDirectory, "images")
 
-    val beeTexture: Texture = Texture.createTexture(File(imageDir, "bee.png"))
-    val handTexture: Texture = Texture.createTexture(File(imageDir, "hand.png"))
-    val coinTexture: Texture = Texture.createTexture(File(imageDir, "coin.png"))
-    val grenadeTexture = Texture.createTexture(File(imageDir, "grenade.png"))
-    val sparkTexture = Texture.createTexture(File(imageDir, "spark.png"))
+    val spritesTexture: Texture = Texture.createTexture(File(imageDir, "sprites.png"))
 
-    val beePose = Pose("bee", beeTexture)
-    val handPose = Pose("hand", handTexture)
-    val coinPose = Pose("bee", coinTexture)
-    val grenadePose = Pose("grenade", grenadeTexture)
-    val sparkPose = Pose("spark", sparkTexture)
+    val grenadePose = Pose("grenade", spritesTexture, Recti(0, 199, 44, 139))
+    val beePose = Pose("bee", spritesTexture, Recti(0, 60, 75, 0))
+    val handPose = Pose("hand", spritesTexture, Recti(135, 60, 185, 0))
+    val coinPose = Pose("coin", spritesTexture, Recti(75, 60, 135, 0))
+    val sparkPose = Pose("spark", spritesTexture, Recti(0, 100, 40, 60))
 
     val inputs = mutableMapOf<String, Input>()
 
     val dummyInput = CompoundInput()
 
     init {
+
+        sparkPose.offsetX = 20f
+        sparkPose.offsetY = 20f
+
+        grenadePose.offsetX = 20f
+        grenadePose.offsetY = 30f
+
         beePose.offsetX = 38f
         beePose.offsetY = 29f
 

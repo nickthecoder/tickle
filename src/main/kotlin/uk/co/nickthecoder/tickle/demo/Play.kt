@@ -8,13 +8,13 @@ import uk.co.nickthecoder.tickle.action.animation.AnimationAction
 import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.stage.GameStage
-import uk.co.nickthecoder.tickle.stage.Rectangle
+import uk.co.nickthecoder.tickle.util.Recti
 import uk.co.nickthecoder.tickle.stage.ZOrderStageView
 
 class Play : AbstractDirector() {
 
     val stage = GameStage("main")
-    val stageView = ZOrderStageView(Rectangle(0, 0, Demo.instance.window.width, Demo.instance.window.height), stage)
+    val stageView = ZOrderStageView(Recti(0, 0, Demo.instance.window.width, Demo.instance.window.height), stage)
 
 
     var degrees = 0.0

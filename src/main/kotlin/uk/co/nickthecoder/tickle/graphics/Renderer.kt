@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.util.Rectf
 import java.io.File
 
 
@@ -182,30 +183,20 @@ class Renderer(val window: Window) {
         }
     }
 
-    fun drawTexture(texture: Texture, x: Float, y: Float, color: Color = Color.WHITE) {
-        drawTexture(texture, x, y, color, identityMatrix)
+    fun drawTexture(texture: Texture, left: Float, bottom: Float, right: Float, top: Float, textureRect: Rectf, color: Color = Color.WHITE) {
+        drawTexture(texture, left, bottom, right, top, textureRect, color, identityMatrix)
     }
 
-    fun drawTexture(texture: Texture, x: Float, y: Float, color: Color = Color.WHITE, modelMatrix: Matrix4f) {
+    fun drawTexture(texture: Texture, left: Float, bottom: Float, right: Float, top: Float, textureRect: Rectf, color: Color = Color.WHITE, modelMatrix: Matrix4f) {
         if (modelMatrix !== currentModelMatrix) {
             flush()
             program.setUniform(uniModel, modelMatrix)
             currentModelMatrix = modelMatrix
         }
 
-        /* Vertex positions */
-        val x1 = x
-        val y1 = y
-        val x2 = x1 + texture.width
-        val y2 = y1 + texture.height
-
-        /* Texture coordinates */
-        val s1 = 0f
-        val t1 = 0f
-        val s2 = 1f
-        val t2 = 1f
-
-        drawTextureRegion(texture, x1, y1, x2, y2, s1, t1, s2, t2, color)
+        drawTextureRegion(
+                texture,
+                left, bottom, right, top, textureRect.left, textureRect.bottom, textureRect.right, textureRect.top, color)
     }
 
     fun drawTextureRegion(

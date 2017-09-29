@@ -1,8 +1,6 @@
 Current Work
 ============
 
-	
-Create an action which moves an Actor based on Inputs (and XY and a Direction variant)
 
 BUGS
 ====
