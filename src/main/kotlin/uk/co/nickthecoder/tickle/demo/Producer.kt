@@ -21,6 +21,8 @@ interface Producer {
 
     fun begin() {}
 
+    fun startScene(sceneName: String) {}
+
     fun preTick() {}
 
     fun postTick() {}
@@ -30,7 +32,10 @@ interface Producer {
     fun onKeyEvent(event: KeyEvent) {}
 }
 
+abstract class AbstractProducder() : Producer {
+    // TODO Load scene
+}
 
-class NoProducer() : Producer {
+class NoProducer() : AbstractProducder() {
 
 }

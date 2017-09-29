@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.util
 
 import uk.co.nickthecoder.tickle.Role
+import uk.co.nickthecoder.tickle.TaggedRole
 
 /**
  * Tag your roles, so that they can later be found from other Roles.
@@ -26,7 +27,7 @@ import uk.co.nickthecoder.tickle.Role
  */
 class Tagged(
         val tagManager: TagManager,
-        val role: Role) {
+        val role: TaggedRole) {
 
     private val tags = mutableSetOf<Any>()
 

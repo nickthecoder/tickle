@@ -4,6 +4,8 @@ import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
+import uk.co.nickthecoder.tickle.Layout
+import uk.co.nickthecoder.tickle.LayoutView
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.demo.NoProducer
@@ -31,6 +33,7 @@ class JsonResources {
         val jroot = Json.parse(InputStreamReader(FileInputStream(file))).asObject()
 
         val jinfo = jroot.get("info")
+        val jlayouts = jroot.get("layouts")
         val jtextures = jroot.get("textures")
         val jposes = jroot.get("poses")
         val jinputs = jroot.get("inputs")
@@ -40,6 +43,9 @@ class JsonResources {
         }
         if (jtextures is JsonArray) {
             loadTextures(jtextures)
+        }
+        if (jlayouts is JsonArray) {
+            loadLayouts(jlayouts)
         }
         if (jposes is JsonArray) {
             loadPoses(jposes)
@@ -59,6 +65,70 @@ class JsonResources {
             producerString = jinfo.getString("producer", NoProducer::javaClass.name)
 
             println("Loaded info : $title : $width x $height Resize? $resizable. Game=$producerString")
+        }
+    }
+
+    fun loadLayouts(jlayouts: JsonArray) {
+        jlayouts.forEach { jele ->
+            val jlayout = jele.asObject()
+            val name = jlayout.get("name").asString()
+            val layout = Layout()
+            jlayout.get("views")?.let {
+                val jviews = it.asArray()
+                jviews.forEach {
+                    val jview = it.asObject()
+                    val layoutView = LayoutView()
+                    val viewName = jview.get("name").asString()
+                    layoutView.viewString = jview.get("view").asString()
+
+                    val left = jview.getInt("left", -1)
+                    if (left >= 0) {
+                        layoutView.leftRightMargin = left
+                        layoutView.leftAligned = true
+                    } else {
+                        var right = jview.getInt("right", -1)
+                        if (right < 0) {
+                            System.err.println("ERROR. Neither left nor right specified for view $viewName in layout $name")
+                            right = 0
+                        }
+                        layoutView.leftRightMargin = right
+                        layoutView.leftAligned = false
+                    }
+
+                    val bottom = jview.getInt("bottom", -1)
+                    if (bottom >= 0) {
+                        layoutView.topBottomMargin = bottom
+                        layoutView.bottomAligned = true
+                    } else {
+                        var top = jview.getInt("top", -1)
+                        if (top < 0) {
+                            System.err.println("ERROR. Neither top nor bottom specified for view $viewName in layout $name")
+                            top = 0
+                        }
+                        layoutView.topBottomMargin = top
+                        layoutView.bottomAligned = false
+                    }
+
+                    val width = jview.getInt("width", -1)
+                    if (width > 0) {
+                        layoutView.width = width
+                    } else {
+                        val widthRatio = jview.getFloat("widthRatio", -1f)
+                        layoutView.widthRatio = if (widthRatio > 0) widthRatio else null
+                    }
+
+                    val height = jview.getInt("height", -1)
+                    if (height > 0) {
+                        layoutView.height = height
+                    } else {
+                        val heightRatio = jview.getFloat("heightRatio", -1f)
+                        layoutView.heightRatio = if (heightRatio > 0) heightRatio else null
+                    }
+                    layout.views[viewName] = layoutView
+                }
+            }
+            resources.addLayout(name, layout)
+
         }
     }
 
@@ -122,6 +192,7 @@ class JsonResources {
 
         val jroot = JsonObject()
         jroot.add("info", createJsonInfo())
+        jroot.add("layouts", createJsonLayouts())
         jroot.add("textures", createJsonTextures())
         jroot.add("poses", createJsonPoses())
         jroot.add("inputs", createJsonInputs())
@@ -152,6 +223,32 @@ class JsonResources {
         jinfo.add("resizable", resources.gameInfo.resizable)
         jinfo.add("producer", resources.gameInfo.producerString)
         return jinfo
+    }
+
+
+    fun createJsonLayouts(): JsonArray {
+        val jlayouts = JsonArray()
+        resources.layouts().forEach { name, layout ->
+            val jlayout = JsonObject()
+            jlayout.add("name", name)
+            val jviews = JsonArray()
+            jlayout.add("views", jviews)
+
+            layout.views.forEach { viewName, layoutView ->
+                val jview = JsonObject()
+                jview.add("name", viewName)
+                jview.add("view", layoutView.viewString)
+
+                jview.add(if (layoutView.leftAligned) "left" else "right", layoutView.leftRightMargin)
+                layoutView.width?.let { jview.add("width", it) }
+                layoutView.widthRatio?.let { jview.add("widthRatio", it) }
+
+                jview.add(if (layoutView.bottomAligned) "bottom" else "top", layoutView.topBottomMargin)
+                layoutView.height?.let { jview.add("height", it) }
+                layoutView.heightRatio?.let { jview.add("heightRatio", it) }
+            }
+        }
+        return jlayouts
     }
 
     fun createJsonTextures(): JsonArray {

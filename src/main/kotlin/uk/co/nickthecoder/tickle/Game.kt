@@ -37,6 +37,8 @@ class Game(
 
     init {
         Resources.instance = resources
+        producer = resources.gameInfo.createProducer()
+
         instance = this
         // TODO Move later in the Game lifecycle when scene loading is implemented.
         // At the moment this needs to be here, because Demo creates the actors in it's constructor.
@@ -45,9 +47,10 @@ class Game(
         println("Set initial start time to $seconds")
     }
 
-
     fun run() {
         initialise()
+        producer.begin()
+        producer.startScene(resources.gameInfo.startScene)
         loop()
         cleanUp()
     }

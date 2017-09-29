@@ -21,6 +21,8 @@ class Resources {
 
     private val inputs = mutableMapOf<String, Input>()
 
+    private val layouts = mutableMapOf<String, Layout>()
+
     private val dummyInput = CompoundInput()
 
 
@@ -87,6 +89,25 @@ class Resources {
 
     fun addInput(name: String, input: Input) {
         inputs[name] = input
+    }
+
+
+    fun layouts(): Map<String, Layout> = layouts
+
+    fun layout(name: String): Layout {
+        val layout = layouts[name]
+        if (layout == null)
+            if (name == "default") {
+                throw IllegalArgumentException("Couldn't find layout '$name'")
+            } else {
+                System.err.println("ERROR. Couldn't find layout '$name'. Attempting to use 'default' instead.")
+                return layout("default")
+            }
+        return layout
+    }
+
+    fun addLayout(name: String, layout: Layout) {
+        layouts[name] = layout
     }
 
 

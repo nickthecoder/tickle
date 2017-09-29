@@ -6,6 +6,21 @@
         "resizable": true,
         "producer": "uk.co.nickthecoder.tickle.demo.Demo"
     },
+    "layouts" : [
+        {
+            "name": "default",
+            "views": [
+                {
+                    "name": "main",
+                    "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView",
+                    "left": 0,
+                    "bottom": 0,
+                    "widthRatio": 1.0,
+                    "heightRatio": 1.0
+                }
+            ]
+        }
+    ],
     "textures": [
         {
             "name": "sprites",

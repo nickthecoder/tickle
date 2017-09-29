@@ -10,13 +10,15 @@ class Demo : Producer {
     }
 
     override fun begin() {
-        Game.instance.renderer.clearColor(Color(1.0f, 1.0f, 1.0f, 1.0f))
-
+        println("Demo being")
         Game.instance.window.enableVSync(1)
+    }
 
-        // The following code will be replaced by loading a scene from a json file when that is written.
-
+    override fun startScene(sceneName: String) {
+        println("Demo startScene")
+        // TODO Remove when scene loading is implemented
         Game.instance.director = Play()
+        Game.instance.renderer.clearColor(Color.BLACK)
         Game.instance.director.begin()
     }
 

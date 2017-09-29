@@ -1,37 +1,9 @@
 Current Work
 ============
 
-Load scenes from a file
-
-
-resources= {
-	info = {
-		title="Demo", width="640", height="400", gameClass="uk.co.nickthecoder.tickle.demo.Demo"
-	},
-	textures = [
-		{
-			name = "foo", filename="images/sprites.png"
-		},
-		...
-	],
-	poses = [
-		{
-			name = "bee", textture = "foo", rect = "0,0,60,60", direction="0"
-		},
-		...
-	],
-	inputs = [
-		{
-			name = "left", inputs = [
-				{ type="key", code="123", action="PRESSED" },
-				{ type="key", code="456", action="PRESSED" },
-				{ type="mouse", button="1" }
-			]
-		},
-		...
-	]
-}
-
+Create a Scene object, which has a set of stages and views.
+	Load scenes from a .scene file.
+	Remove cruft from Play
 
 BUGS
 ====
@@ -47,9 +19,17 @@ Fonts
 
 View clipping.
 
-Create the Costume class, and use it to pick a random Pose for each of the sparks.
-
 The Resources Editor
+
+Tags
+	Consider special methods on Tagged and TagManager to use inline reified typed methods to return Roles of the
+		specified type.
+	Maybe also using a Class as the tag.
+	How about finding roles with tag x AND tag y. Tag x OR tag y?
+		Or should this be done by the client?
+	Nearby - Only return those in a the surrounding N blocks.
+		N=0 when it will be used for collision detection.
+		Create a new TaggedRole interface.
 
 
 Later
@@ -60,10 +40,18 @@ Split the project into multiple modules
 	demo
 	editor
 
+Load pose meta-data from SVG files.
+	Any objects with a name pose_XXX, where XXX is the pose name.
+	Can get the offesetX,Y from the object's center of rotation.
+	Can still use GIMP, by linking pngs and exporting the pngs from GIMP.
+
 Scene Editor
+
 
 Much Later
 ==========
+
+When adding an actor to a scene, also add child actors as dictated by the costume
 
 StageConstraint
 

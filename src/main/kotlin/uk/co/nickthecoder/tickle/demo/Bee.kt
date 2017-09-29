@@ -8,6 +8,7 @@ class Bee : Controllable() {
 
     override val movement = DirectionControls(
             maxSpeed = 10f,
+            speedChange = 0.2f,
             maxRotationSpeed = 5.0,
             rotationDrag = 0.07)
 

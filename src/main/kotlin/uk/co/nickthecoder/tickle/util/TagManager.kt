@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.util
 
 import uk.co.nickthecoder.tickle.Role
+import uk.co.nickthecoder.tickle.TaggedRole
 
 /**
  * Remembers which Roles have which tags. Director has a TagManager, and is the easiest way to manage tags.
@@ -8,9 +9,9 @@ import uk.co.nickthecoder.tickle.Role
  */
 class TagManager {
 
-    private val tagRoleMap = mutableMapOf<Any, MutableSet<Role>>()
+    private val tagRoleMap = mutableMapOf<Any, MutableSet<TaggedRole>>()
 
-    fun findRoles(tag: Any): Set<Role> = tagRoleMap[tag] ?: emptySet()
+    fun findRoles(tag: Any): Set<TaggedRole> = tagRoleMap[tag] ?: emptySet()
 
     fun findARole(tag: Any): Role? = tagRoleMap[tag]?.firstOrNull()
 
@@ -23,7 +24,7 @@ class TagManager {
         return toMe.closest(findRoles(tag))
     }
 
-    internal fun add(role: Role, vararg tags: Any) {
+    internal fun add(role: TaggedRole, vararg tags: Any) {
         tags.forEach { tag ->
             val set = tagRoleMap[tag]
             if (set == null) {

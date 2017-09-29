@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.NoAction
+import uk.co.nickthecoder.tickle.util.Tagged
 
 interface Role {
 
@@ -56,6 +57,27 @@ interface Role {
         return closest
     }
 
+    companion object {
+
+        fun create(roleString: String): Role? {
+            try {
+                val klass = Class.forName(roleString)
+                val newRole = klass.newInstance()
+                if (newRole is Role) {
+                    return newRole
+                } else {
+                    System.err.println("'$roleString' is not a type of Role")
+                }
+            } catch (e: Exception) {
+                System.err.println("Failed to create a Role from : '$roleString'")
+            }
+            return null
+        }
+    }
+}
+
+interface TaggedRole : Role {
+    val tagged: Tagged
 }
 
 abstract class AbstractRole : Role {

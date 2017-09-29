@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
         throw IllegalStateException("Unable to initialize GLFW")
     }
 
-    val window = Window("Loading", 600, 400)
+    val window = Window("Loading", 220, 50)
     window.show()
     GL.createCapabilities()
 
@@ -29,10 +29,5 @@ fun main(args: Array<String>) {
     }
 
     println("Creating the Game")
-    val game = Game(window, resources)
-
-    // TODO Remove, and replace with code to start the first scene.
-    game.director = Play()
-    game.director.begin()
-    game.run()
+    Game(window, resources).run()
 }
