@@ -4,7 +4,7 @@
         "width": 600,
         "height": 400,
         "resizable": true,
-        "gameClass": "uk.co.nickthecoder.tickle.DefaultGame"
+        "producer": "uk.co.nickthecoder.tickle.demo.Demo"
     },
     "textures": [
         {

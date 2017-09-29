@@ -5,17 +5,13 @@ import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.graphics.Texture
 import java.io.File
 
-/**
- * This is currently a placeholder class, containing a coupld of textures, but eventually, it will contain
- * information about all of the resources used by a game, and the meta data will be loaded from a file.
- */
 class Resources {
 
     var file: File = File("")
 
     val resourceDirectory: File
         get() = file.parentFile ?: File(".").absoluteFile
-    
+
 
     val gameInfo = GameInfo("Tickle", 600, 400, true)
 

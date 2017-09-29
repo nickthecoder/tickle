@@ -3,6 +3,8 @@ package uk.co.nickthecoder.tickle
 import org.lwjgl.glfw.GLFW
 import uk.co.nickthecoder.tickle.demo.Director
 import uk.co.nickthecoder.tickle.demo.NoDirector
+import uk.co.nickthecoder.tickle.demo.NoProducer
+import uk.co.nickthecoder.tickle.demo.Producer
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
@@ -10,12 +12,13 @@ import uk.co.nickthecoder.tickle.loop.FullSpeedGameLoop
 import uk.co.nickthecoder.tickle.loop.GameLoop
 import java.io.File
 
-abstract class Game(
+class Game(
         val window: Window,
         val resources: Resources) {
 
     var renderer = Renderer(window)
 
+    var producer: Producer = NoProducer()
     var director: Director = NoDirector()
 
     lateinit var gameLoop: GameLoop
@@ -33,6 +36,8 @@ abstract class Game(
 
 
     init {
+        Resources.instance = resources
+        instance = this
         // TODO Move later in the Game lifecycle when scene loading is implemented.
         // At the moment this needs to be here, because Demo creates the actors in it's constructor.
 
@@ -40,21 +45,23 @@ abstract class Game(
         println("Set initial start time to $seconds")
     }
 
-    open fun preInitialise() {}
+
+    fun run() {
+        initialise()
+        loop()
+        cleanUp()
+    }
 
     fun initialise() {
         Game.instance = this
 
-        preInitialise()
-
+        window.keyboardEvents { onKeyEvent(it) }
         gameLoop = FullSpeedGameLoop(this)
 
-        postInitialise()
+        producer.begin()
         gameLoop.resetStats()
 
     }
-
-    open fun postInitialise() {}
 
     fun loop() {
         while (isRunning()) {
@@ -68,28 +75,7 @@ abstract class Game(
         }
     }
 
-    open fun isRunning() = !window.shouldClose()
-
-    abstract fun tick()
-
-    open fun onKeyEvent(event: KeyEvent) {
-        director.onKeyEvent(event)
-    }
-
-    fun run() {
-        Resources.instance = resources
-        initialise()
-        loop()
-        cleanUp()
-    }
-
-
-    open fun preCleanup() {
-    }
-
     fun cleanUp() {
-        preCleanup()
-
         renderer.delete()
         window.delete()
 
@@ -97,10 +83,26 @@ abstract class Game(
         GLFW.glfwTerminate()
         GLFW.glfwSetErrorCallback(null).free()
 
-        postCleanup()
+        producer.end()
     }
 
-    open fun postCleanup() {
+    fun isRunning() = !window.shouldClose()
+
+    fun tick() {
+
+        producer.preTick()
+        director.preTick()
+
+
+
+        director.postTick()
+        producer.postTick()
+
+    }
+
+    fun onKeyEvent(event: KeyEvent) {
+        producer.onKeyEvent(event)
+        director.onKeyEvent(event)
     }
 
     companion object {
@@ -118,11 +120,4 @@ abstract class Game(
 
     }
 
-}
-
-class DefaultGame(window: Window, resources: Resources) : Game(window, resources) {
-
-    override fun tick() {
-
-    }
 }

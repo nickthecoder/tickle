@@ -4,9 +4,9 @@ import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
-import uk.co.nickthecoder.tickle.DefaultGame
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.demo.NoProducer
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.events.KeyEventType
@@ -56,9 +56,9 @@ class JsonResources {
             width = jinfo.getInt("width", 800)
             height = jinfo.getInt("height", 600)
             resizable = jinfo.getBoolean("resizable", true)
-            gameClassString = jinfo.getString("gameClass", DefaultGame::javaClass.name)
+            producerString = jinfo.getString("producer", NoProducer::javaClass.name)
 
-            println("Loaded info : $title : $width x $height Resize? $resizable. Game=$gameClassString")
+            println("Loaded info : $title : $width x $height Resize? $resizable. Game=$producerString")
         }
     }
 
@@ -150,7 +150,7 @@ class JsonResources {
         jinfo.add("width", resources.gameInfo.width)
         jinfo.add("height", resources.gameInfo.height)
         jinfo.add("resizable", resources.gameInfo.resizable)
-        jinfo.add("gameClass", resources.gameInfo.gameClassString)
+        jinfo.add("producer", resources.gameInfo.producerString)
         return jinfo
     }
 

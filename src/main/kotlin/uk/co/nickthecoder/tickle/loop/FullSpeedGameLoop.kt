@@ -12,7 +12,6 @@ class FullSpeedGameLoop(game: Game) : AbstractGameLoop(game) {
         tickCount++
         game.tick()
         game.window.swap()
-
     }
 
 }

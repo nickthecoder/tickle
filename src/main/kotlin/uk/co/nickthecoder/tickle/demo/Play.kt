@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.PoseAppearance
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.action.Action
@@ -14,7 +15,7 @@ import uk.co.nickthecoder.tickle.util.Recti
 class Play : AbstractDirector() {
 
     val stage = GameStage("main")
-    val stageView = ZOrderStageView(Recti(0, 0, Demo.instance.window.width, Demo.instance.window.height), stage)
+    val stageView = ZOrderStageView(Recti(0, 0, Game.instance.window.width, Game.instance.window.height), stage)
 
 
     var degrees = 0.0
@@ -35,7 +36,8 @@ class Play : AbstractDirector() {
         }
 
     override fun begin() {
-        super.begin()
+        println("Play begin")
+
         // TODO Only here until loading scenes from a file is implemented.
         val bee = Bee()
         val hand = Hand()
@@ -78,6 +80,7 @@ class Play : AbstractDirector() {
         stage.add(coinA1, false)
         stage.add(coinA2, false)
 
+        println("Play Stage begin ${stage.actors.size}")
         stage.begin()
         activeControllable = tagManager.findARole(Tags.CONTROLLABLE) as Controllable
         activeControllable?.hasInput = true
@@ -100,16 +103,15 @@ class Play : AbstractDirector() {
         activeControllable?.let { centerAction.act(it.actor) }
         stageView.degrees = degrees
 
-
-        with(Demo.instance.renderer) {
+        with(Game.instance.renderer) {
             beginFrame()
             clear()
             stageView.draw(this)
             endFrame()
         }
 
-        if (Demo.instance.gameLoop.tickCount % 100 == 0L) {
-            println("FPS = ${Demo.instance.gameLoop.actualFPS().toInt()} Actors : ${stage.actors.size}")
+        if (Game.instance.gameLoop.tickCount % 100 == 0L) {
+            println("FPS = ${Game.instance.gameLoop.actualFPS().toInt()} Actors : ${stage.actors.size}")
         }
 
     }

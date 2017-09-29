@@ -28,5 +28,11 @@ fun main(args: Array<String>) {
         window.change(title, width, height, resizable)
     }
 
-    Demo(window, resources).run()
+    println("Creating the Game")
+    val game = Game(window, resources)
+
+    // TODO Remove, and replace with code to start the first scene.
+    game.director = Play()
+    game.director.begin()
+    game.run()
 }
