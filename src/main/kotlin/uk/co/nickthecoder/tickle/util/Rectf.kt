@@ -9,7 +9,17 @@ data class Rectf(
         var right: Float,
         var top: Float) {
 
-    val width = right - left
-    val height = top - bottom
+    val width
+        get() = right - left
+    val height
+        get() = top - bottom
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is Rectf) {
+            return false
+        }
+        return other.left == left && other.bottom == bottom && other.right == right && other.top == top
+    }
+
+    override fun toString(): String = "($left , $bottom   ,   $right , $top)"
 }

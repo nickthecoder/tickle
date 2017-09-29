@@ -52,6 +52,7 @@ class Pose(
                     left, bottom, left + rect.width, bottom + rect.topDownHeight,
                     rectf,
                     color = actor.color)
+
         } else {
             renderer.drawTexture(
                     texture,
@@ -61,4 +62,14 @@ class Pose(
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is Pose) {
+            return false
+        }
+        return (rect == other.rect) && rectf == other.rectf && texture == other.texture && directionRadians == other.directionRadians
+    }
+
+    override fun toString(): String {
+        return "Pose rect=$rect offset=$offsetX,$offsetY direction=$directionDegrees rectf=$rectf"
+    }
 }

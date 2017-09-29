@@ -119,3 +119,10 @@ abstract class Game(
     }
 
 }
+
+class DefaultGame(window: Window, resources: Resources) : Game(window, resources) {
+
+    override fun tick() {
+
+    }
+}

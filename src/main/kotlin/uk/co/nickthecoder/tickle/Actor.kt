@@ -72,7 +72,7 @@ class Actor(val role: Role? = null) {
 
 
     fun getModelMatrix(): Matrix4f {
-        if (dirtyMatrix) {
+        if (dirtyMatrix  ) {
             modelMatrix.identity().translate(x, y, 0f)
             if (directionRadians != 0.0) {
                 modelMatrix.rotateZ((directionRadians - appearance.directionRadians).toFloat())

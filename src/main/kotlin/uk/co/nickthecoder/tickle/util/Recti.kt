@@ -9,7 +9,19 @@ data class Recti(
         var right: Int,
         var top: Int) {
 
-    val width = right - left
-    val height = top - bottom
-    val topDownHeight = bottom - top
+    val width
+        get() = right - left
+    val height
+        get() = top - bottom
+    val topDownHeight
+        get() = bottom - top
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is Recti) {
+            return false
+        }
+        return other.left == left && other.bottom == bottom && other.right == right && other.top == top
+    }
+
+    override fun toString(): String = "($left,$bottom , $right,$top)"
 }

@@ -1,16 +1,17 @@
 package uk.co.nickthecoder.tickle.util
 
+import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
+import uk.co.nickthecoder.tickle.DefaultGame
+import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
+import uk.co.nickthecoder.tickle.events.KeyEventType
 import uk.co.nickthecoder.tickle.events.KeyInput
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStreamWriter
+import java.io.*
 
 class JsonResources {
 
@@ -27,6 +28,92 @@ class JsonResources {
 
     fun load(file: File) {
         resources.file = file
+        val jroot = Json.parse(InputStreamReader(FileInputStream(file))).asObject()
+
+        val jinfo = jroot.get("info")
+        val jtextures = jroot.get("textures")
+        val jposes = jroot.get("poses")
+        val jinputs = jroot.get("inputs")
+
+        if (jinfo is JsonObject) {
+            loadInfo(jinfo)
+        }
+        if (jtextures is JsonArray) {
+            loadTextures(jtextures)
+        }
+        if (jposes is JsonArray) {
+            loadPoses(jposes)
+        }
+        if (jinputs is JsonArray) {
+            loadInputs(jinputs)
+        }
+
+    }
+
+    fun loadInfo(jinfo: JsonObject) {
+        with(resources.gameInfo) {
+            title = jinfo.getString("title", "Tickle Game")
+            width = jinfo.getInt("width", 800)
+            height = jinfo.getInt("height", 600)
+            resizable = jinfo.getBoolean("resizable", true)
+            gameClassString = jinfo.getString("gameClass", DefaultGame::javaClass.name)
+
+            println("Loaded info : $title : $width x $height Resize? $resizable. Game=$gameClassString")
+        }
+    }
+
+    fun loadTextures(jtextures: JsonArray) {
+        jtextures.forEach { jele ->
+            val jtexture = jele.asObject()
+            val name = jtexture.get("name").asString()
+            val file = fromPath(jtexture.get("file").asString())
+            resources.addTexture(name, file)
+
+            println("Loaded texture $name : $file")
+        }
+    }
+
+    fun loadPoses(jposes: JsonArray) {
+        jposes.forEach { jele ->
+            val jpose = jele.asObject()
+            val name = jpose.get("name").asString()
+            val textureName = jpose.get("texture").asString()
+            val pose = Pose(resources.texture(textureName))
+
+            pose.rect.left = jpose.get("left").asInt()
+            pose.rect.bottom = jpose.get("bottom").asInt()
+            pose.rect.right = jpose.get("right").asInt()
+            pose.rect.top = jpose.get("top").asInt()
+
+            pose.offsetX = jpose.get("offsetX").asFloat()
+            pose.offsetY = jpose.get("offsetY").asFloat()
+
+            pose.directionDegrees = jpose.get("direction").asDouble()
+            pose.updateRectf()
+
+            resources.addPose(name, pose)
+            println("Loaded pose $name : ${pose}")
+        }
+    }
+
+    fun loadInputs(jinputs: JsonArray) {
+        jinputs.forEach { jele ->
+            val jinput = jele.asObject()
+            val name = jinput.get("name").asString()
+            val input = CompoundInput()
+            jinput.get("keys")?.let {
+                val jkeys = it.asArray()
+                jkeys.forEach {
+                    val jkey = it.asObject()
+                    val key = jkey.get("key").asInt()
+                    val typeString = jkey.get("type").asString()
+                    val type = KeyEventType.valueOf(typeString)
+                    input.add(KeyInput(key, type))
+                }
+            }
+            resources.addInput(name, input)
+            println("Loaded input $name : $input")
+        }
     }
 
     fun save(file: File) {
@@ -86,12 +173,12 @@ class JsonResources {
                 jpose.add("name", name)
                 jpose.add("texture", textureName)
                 jpose.add("left", pose.rect.left)
-                jpose.add("top", pose.rect.bottom)
-                jpose.add("width", pose.rect.width)
-                jpose.add("height", pose.rect.topDownHeight)
+                jpose.add("bottom", pose.rect.bottom)
+                jpose.add("right", pose.rect.right)
+                jpose.add("top", pose.rect.top)
                 jpose.add("offsetX", pose.offsetX)
-                jpose.add("direction", pose.directionDegrees)
                 jpose.add("offsetY", pose.offsetY)
+                jpose.add("direction", pose.directionDegrees)
 
                 jposes.add(jpose)
             }

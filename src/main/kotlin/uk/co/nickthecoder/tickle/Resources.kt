@@ -34,7 +34,7 @@ class Resources {
 
     private val dummyInput = CompoundInput()
 
-    init {
+    fun addHardCoded() {
 
         val tr = TextureResource(File(imageDir, "sprites.png"))
         textures["sprites"] = tr
@@ -77,6 +77,10 @@ class Resources {
         inputs.put("clockwise", KeyInput(GLFW.GLFW_KEY_X))
         inputs.put("anti-clockwise", KeyInput(GLFW.GLFW_KEY_Z))
         inputs.put("toggle", KeyInput(GLFW.GLFW_KEY_TAB))
+
+        poses().forEach { name, pose ->
+            println("Created pose $name : $pose")
+        }
     }
 
     fun textures(): Map<String, TextureResource> = textures
@@ -101,6 +105,10 @@ class Resources {
         return textures.filter { entry -> entry.value.texture === texture }.map { it.key }.firstOrNull()
     }
 
+    fun addTexture(name: String, file: File) {
+        textures[name] = TextureResource(file)
+    }
+
 
     fun poses(): Map<String, Pose> = poses
 
@@ -110,6 +118,10 @@ class Resources {
 
     fun pose(name: String): Pose {
         return poses[name] ?: throw IllegalStateException("Pose $name not found")
+    }
+
+    fun addPose(name: String, pose: Pose) {
+        poses[name] = pose
     }
 
 
@@ -130,6 +142,10 @@ class Resources {
         } else {
             return input
         }
+    }
+
+    fun addInput(name: String, input: Input) {
+        inputs[name] = input
     }
 
 

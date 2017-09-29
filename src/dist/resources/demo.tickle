@@ -4,7 +4,7 @@
         "width": 600,
         "height": 400,
         "resizable": true,
-        "gameClass": ""
+        "gameClass": "uk.co.nickthecoder.tickle.DefaultGame"
     },
     "textures": [
         {
@@ -17,56 +17,56 @@
             "name": "bee",
             "texture": "sprites",
             "left": 0,
-            "top": 60,
-            "width": 75,
-            "height": 60,
+            "bottom": 60,
+            "right": 75,
+            "top": 0,
             "offsetX": 38,
-            "direction": 24,
-            "offsetY": 29
+            "offsetY": 29,
+            "direction": 24
         },
         {
             "name": "grenade",
             "texture": "sprites",
             "left": 0,
-            "top": 199,
-            "width": 44,
-            "height": 60,
+            "bottom": 199,
+            "right": 44,
+            "top": 139,
             "offsetX": 20,
-            "direction": 0,
-            "offsetY": 30
+            "offsetY": 30,
+            "direction": 0
         },
         {
             "name": "hand",
             "texture": "sprites",
             "left": 135,
-            "top": 60,
-            "width": 50,
-            "height": 60,
+            "bottom": 60,
+            "right": 185,
+            "top": 0,
             "offsetX": 17,
-            "direction": 0,
-            "offsetY": 27
+            "offsetY": 27,
+            "direction": 0
         },
         {
             "name": "coin",
             "texture": "sprites",
             "left": 75,
-            "top": 60,
-            "width": 60,
-            "height": 60,
+            "bottom": 60,
+            "right": 135,
+            "top": 0,
             "offsetX": 30,
-            "direction": 0,
-            "offsetY": 30
+            "offsetY": 30,
+            "direction": 0
         },
         {
             "name": "spark",
             "texture": "sprites",
             "left": 0,
-            "top": 100,
-            "width": 40,
-            "height": 40,
+            "bottom": 100,
+            "right": 40,
+            "top": 60,
             "offsetX": 20,
-            "direction": 0,
-            "offsetY": 20
+            "offsetY": 20,
+            "direction": 0
         }
     ],
     "inputs": [
