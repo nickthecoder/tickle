@@ -8,8 +8,8 @@ import uk.co.nickthecoder.tickle.action.animation.AnimationAction
 import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.stage.GameStage
-import uk.co.nickthecoder.tickle.util.Recti
 import uk.co.nickthecoder.tickle.stage.ZOrderStageView
+import uk.co.nickthecoder.tickle.util.Recti
 
 class Play : AbstractDirector() {
 
@@ -49,6 +49,8 @@ class Play : AbstractDirector() {
         handA.appearance = PoseAppearance(handA, Resources.instance.handPose)
         coinA1.appearance = PoseAppearance(coinA1, Resources.instance.coinPose)
         coinA2.appearance = PoseAppearance(coinA2, Resources.instance.coinPose)
+
+        beeA.directionRadians = beeA.appearance.directionRadians
 
         handA.x = -50f
         handA.y = 50f

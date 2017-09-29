@@ -38,6 +38,7 @@ class Resources {
 
         beePose.offsetX = 38f
         beePose.offsetY = 29f
+        beePose.directionRadians= Math.toRadians(24.0)
 
         handPose.offsetX = 17f
         handPose.offsetY = 27f

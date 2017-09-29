@@ -18,6 +18,12 @@ class Pose(
     var offsetX: Float = 0f
     var offsetY: Float = 0f
 
+    /**
+     * The natural direction. i.e. if the Actor moved "forward", which mathematical angle would that be?
+     * For the default value of 0, the image is pointing to the right.
+     */
+    var directionRadians: Double = 0.0
+
     private val rectf = Rectf(0f, 0f, 1f, 1f)
 
     init {

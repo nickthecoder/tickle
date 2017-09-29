@@ -68,14 +68,14 @@ class Actor(val role: Role? = null) {
      * Return false iff the actor requires special transformations to render it.
      */
     fun isSimpleImage() =
-            directionRadians == 0.0 && scale == 1f && !flipX && !flipY && customTransformation == null
+            directionRadians == appearance.directionRadians && scale == 1f && !flipX && !flipY && customTransformation == null
 
 
     fun getModelMatrix(): Matrix4f {
         if (dirtyMatrix) {
             modelMatrix.identity().translate(x, y, 0f)
             if (directionRadians != 0.0) {
-                modelMatrix.rotateZ(directionRadians.toFloat())
+                modelMatrix.rotateZ((directionRadians - appearance.directionRadians).toFloat())
             }
             if (scale != 1f) {
                 modelMatrix.scale(scale)

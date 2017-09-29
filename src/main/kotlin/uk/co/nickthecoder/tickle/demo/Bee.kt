@@ -23,7 +23,7 @@ class Bee : Controllable() {
             // "rem" can return positive and negative numbers, so adjust the negative numbers, so they become positive.
             angle = 360 + angle
         }
-        actor.customTransformation = if (angle > 90 - beeAngle && angle < 270 - beeAngle) flipMatrix else null
+        actor.customTransformation = if (angle > 90 && angle < 270) flipMatrix else null
     }
 
     companion object {
