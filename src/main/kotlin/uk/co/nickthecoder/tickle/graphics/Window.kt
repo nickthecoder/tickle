@@ -2,6 +2,8 @@ package uk.co.nickthecoder.tickle.graphics
 
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW
+import org.lwjgl.glfw.GLFWWindowSizeCallback
+import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.events.KeyEvent
@@ -9,11 +11,17 @@ import uk.co.nickthecoder.tickle.events.KeyEventType
 
 class Window(
         title: String,
-        val width: Int,
-        val height: Int,
+        private var _width: Int,
+        private var _height: Int,
         resizable: Boolean = false) {
 
     val handle: Long
+
+    val width: Int
+        get() = _width
+
+    val height: Int
+        get() = _height
 
     init {
 
@@ -21,26 +29,12 @@ class Window(
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE) // the window will stay hidden after creation
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, if (resizable) GLFW.GLFW_TRUE else GLFW.GLFW_FALSE)
 
-        handle = GLFW.glfwCreateWindow(width, height, title, MemoryUtil.NULL, MemoryUtil.NULL)
+        handle = GLFW.glfwCreateWindow(_width, _height, title, MemoryUtil.NULL, MemoryUtil.NULL)
         if (handle == MemoryUtil.NULL) {
             throw RuntimeException("Failed to create the GLFW window")
         }
     }
 
-    // TODO If the window is resizeable, then val width and val height will NOT be correct. Need sometimg like this :
-    /*
-        /* Get width and height of framebuffer */
-        var width: Int = 0
-        var height: Int = 0
-        MemoryStack.stackPush().use { stack ->
-            val widthBuffer = stack.mallocInt(1)
-            val heightBuffer = stack.mallocInt(1)
-            GLFW.glfwGetFramebufferSize(window.handle, widthBuffer, heightBuffer)
-            width = widthBuffer.get()
-            height = heightBuffer.get()
-        }
-
-     */
 
     fun keyboardEvents(keyHandler: (KeyEvent) -> Unit) {
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
@@ -83,6 +77,38 @@ class Window(
 
         // Make the window visible
         GLFW.glfwShowWindow(handle)
+
+        val resizeCallback = object : GLFWWindowSizeCallback() {
+            override fun invoke(window: Long, newWidth: Int, newHeight: Int) {
+                _width = newWidth
+                _height = newHeight
+                println("Resized to $width x $height")
+            }
+        }
+        GLFW.glfwSetWindowSizeCallback(handle, resizeCallback)
+    }
+
+
+    fun change(title: String, width: Int, height: Int, resizable: Boolean) {
+
+        MemoryStack.stackPush().use { stack ->
+            val titleEncoded = stack.UTF8(title)
+
+            GLFW.glfwSetWindowTitle(handle, titleEncoded)
+            GLFW.glfwSetWindowSize(handle, width, height)
+        }
+
+        _width = width
+        _height = height
+        // Center the window
+        val vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor())
+        GLFW.glfwSetWindowPos(handle, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2)
+
+        GLFW.glfwSetWindowAttrib(handle, GLFW.GLFW_RESIZABLE, if (resizable) GLFW.GLFW_TRUE else GLFW.GLFW_FALSE)
+    }
+
+    fun wholeViewport() {
+        GL11.glViewport(0, 0, width, height);
     }
 
     fun enableVSync(interval: Int = 1) {

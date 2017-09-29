@@ -1,6 +1,37 @@
 Current Work
 ============
 
+Load scenes from a file
+
+
+resources= {
+	info = {
+		title="Demo", width="640", height="400", gameClass="uk.co.nickthecoder.tickle.demo.Demo"
+	},
+	textures = [
+		{
+			name = "foo", filename="images/sprites.png"
+		},
+		...
+	],
+	poses = [
+		{
+			name = "bee", textture = "foo", rect = "0,0,60,60", direction="0"
+		},
+		...
+	],
+	inputs = [
+		{
+			name = "left", inputs = [
+				{ type="key", code="123", action="PRESSED" },
+				{ type="key", code="456", action="PRESSED" },
+				{ type="mouse", button="1" }
+			]
+		},
+		...
+	]
+}
+
 
 BUGS
 ====
@@ -8,30 +39,31 @@ BUGS
 New Features
 ============
 
-Allow a single texture to contain multiple images.
-	i.e. Pose has a SpriteSheet and a Rect, not a Texture
-
-View clipping.
-
 Add some "solid" objects, and use overlap detection to kill the sparks.
 
-Create the Costume class, and use it to pick a random Pose for each of the sparks.
 
 Fonts
 	Allow loading of multiple ranges of characters.
 
-Tags
+View clipping.
 
-Load scenes from a file
+Create the Costume class, and use it to pick a random Pose for each of the sparks.
+
+The Resources Editor
+
+
+Later
+=====
 
 Split the project into multiple modules
 	core
 	demo
 	editor
 
-The Resources Editor
-
 Scene Editor
+
+Much Later
+==========
 
 StageConstraint
 

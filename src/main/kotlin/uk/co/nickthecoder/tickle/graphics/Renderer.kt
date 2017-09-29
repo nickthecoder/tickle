@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.util.Rectf
+import uk.co.nickthecoder.tickle.util.Recti
 import java.io.File
 
 
@@ -99,20 +100,21 @@ class Renderer(val window: Window) {
         uniColor = program.getUniformLocation("color")
         program.setUniform(uniColor, Color.SEMI_TRANSPARENT)
 
-        centerView(0f, 0f)
+        // centerView(0f, 0f)
     }
 
 
     /**
      * Move the view, so that the bottom left is at position (x,y).
      */
-    fun centerView(centerX: Float, centerY: Float) {
-        rotateView(centerX, centerY, 0f)
+    fun centerView(rect: Recti, centerX: Float, centerY: Float) {
+        rotateView(rect, centerX, centerY, 0f)
     }
 
-    fun rotateView(centerX: Float, centerY: Float, radians: Float) {
-        val w = window.width.toFloat()
-        val h = window.height.toFloat()
+    fun rotateView(rect: Recti, centerX: Float, centerY: Float, radians: Float) {
+        val w = rect.width
+        val h = rect.height
+
         projection.identity()
         projection.ortho2D(
                 centerX - w / 2, centerX + w / 2,
@@ -137,6 +139,7 @@ class Renderer(val window: Window) {
     }
 
     fun beginFrame() {
+        window.wholeViewport()
         currentColor = null
         currentTexture = null
     }

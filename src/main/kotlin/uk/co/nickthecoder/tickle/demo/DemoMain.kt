@@ -3,9 +3,11 @@ package uk.co.nickthecoder.tickle.demo
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
-import uk.co.nickthecoder.tickle.GameInfo
+import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.graphics.Window
+import uk.co.nickthecoder.tickle.util.JsonResources
+import java.io.File
 
 
 fun main(args: Array<String>) {
@@ -17,14 +19,16 @@ fun main(args: Array<String>) {
         throw IllegalStateException("Unable to initialize GLFW")
     }
 
-    val gameInfo = GameInfo("Demo", 600, 400)
-    // Create the window
-    val window = Window(gameInfo.title, gameInfo.width, gameInfo.height)
+    val window = Window("Loading", 200, 100)
     window.show()
-
     GL.createCapabilities()
 
     val resources = Resources()
+    JsonResources(resources).save(File(Game.resourceDirectory, "demo.tickle"))
+
+    with(resources.gameInfo) {
+        window.change(title, width, height, resizable)
+    }
 
     Demo(window, resources).run()
 }

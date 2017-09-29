@@ -1,0 +1,146 @@
+{
+    "info": {
+        "title": "Tickle",
+        "width": 600,
+        "height": 400,
+        "resizable": true,
+        "gameClass": ""
+    },
+    "textures": [
+        {
+            "name": "sprites",
+            "file": "images/sprites.png"
+        }
+    ],
+    "poses": [
+        {
+            "name": "bee",
+            "texture": "sprites",
+            "left": 0,
+            "top": 60,
+            "width": 75,
+            "height": 60,
+            "offsetX": 38,
+            "direction": 24,
+            "offsetY": 29
+        },
+        {
+            "name": "grenade",
+            "texture": "sprites",
+            "left": 0,
+            "top": 199,
+            "width": 44,
+            "height": 60,
+            "offsetX": 20,
+            "direction": 0,
+            "offsetY": 30
+        },
+        {
+            "name": "hand",
+            "texture": "sprites",
+            "left": 135,
+            "top": 60,
+            "width": 50,
+            "height": 60,
+            "offsetX": 17,
+            "direction": 0,
+            "offsetY": 27
+        },
+        {
+            "name": "coin",
+            "texture": "sprites",
+            "left": 75,
+            "top": 60,
+            "width": 60,
+            "height": 60,
+            "offsetX": 30,
+            "direction": 0,
+            "offsetY": 30
+        },
+        {
+            "name": "spark",
+            "texture": "sprites",
+            "left": 0,
+            "top": 100,
+            "width": 40,
+            "height": 40,
+            "offsetX": 20,
+            "direction": 0,
+            "offsetY": 20
+        }
+    ],
+    "inputs": [
+        {
+            "name": "left",
+            "keys": [
+                {
+                    "key": 263,
+                    "type": "PRESS"
+                }
+            ]
+        },
+        {
+            "name": "right",
+            "keys": [
+                {
+                    "key": 262,
+                    "type": "PRESS"
+                }
+            ]
+        },
+        {
+            "name": "up",
+            "keys": [
+                {
+                    "key": 265,
+                    "type": "PRESS"
+                }
+            ]
+        },
+        {
+            "name": "down",
+            "keys": [
+                {
+                    "key": 264,
+                    "type": "PRESS"
+                }
+            ]
+        },
+        {
+            "name": "reset",
+            "keys": [
+                {
+                    "key": 79,
+                    "type": "PRESS"
+                }
+            ]
+        },
+        {
+            "name": "clockwise",
+            "keys": [
+                {
+                    "key": 88,
+                    "type": "PRESS"
+                }
+            ]
+        },
+        {
+            "name": "anti-clockwise",
+            "keys": [
+                {
+                    "key": 90,
+                    "type": "PRESS"
+                }
+            ]
+        },
+        {
+            "name": "toggle",
+            "keys": [
+                {
+                    "key": 258,
+                    "type": "PRESS"
+                }
+            ]
+        }
+    ]
+}

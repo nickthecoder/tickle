@@ -6,7 +6,6 @@ import uk.co.nickthecoder.tickle.util.Rectf
 import uk.co.nickthecoder.tickle.util.Recti
 
 class Pose(
-        val name: String,
         val texture: Texture,
         rect: Recti = Recti(0, texture.height, texture.width, 0)) {
 
@@ -24,6 +23,12 @@ class Pose(
      */
     var directionRadians: Double = 0.0
 
+    var directionDegrees: Double
+        get() = Math.toDegrees(directionRadians)
+        set(v) {
+            directionRadians = Math.toRadians(v)
+        }
+
     private val rectf = Rectf(0f, 0f, 1f, 1f)
 
     init {
@@ -35,8 +40,6 @@ class Pose(
         rectf.bottom = 1 - (rect.bottom.toFloat() / texture.height)
         rectf.right = rect.right.toFloat() / texture.width
         rectf.top = 1 - (rect.top.toFloat() / texture.height)
-
-        println("Pose $name rectangles $rect and $rectf")
     }
 
     fun draw(renderer: Renderer, actor: Actor) {
@@ -46,13 +49,13 @@ class Pose(
         if (actor.isSimpleImage()) {
             renderer.drawTexture(
                     texture,
-                    left, bottom, left + rect.width, bottom + rect.height,
+                    left, bottom, left + rect.width, bottom + rect.topDownHeight,
                     rectf,
                     color = actor.color)
         } else {
             renderer.drawTexture(
                     texture,
-                    left, bottom, left + rect.width, bottom + rect.height,
+                    left, bottom, left + rect.width, bottom + rect.topDownHeight,
                     rectf, color = actor.color,
                     modelMatrix = actor.getModelMatrix())
         }

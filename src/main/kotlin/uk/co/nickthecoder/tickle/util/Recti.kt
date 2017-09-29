@@ -10,5 +10,6 @@ data class Recti(
         var top: Int) {
 
     val width = right - left
-    val height = bottom - top
+    val height = top - bottom
+    val topDownHeight = bottom - top
 }

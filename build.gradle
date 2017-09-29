@@ -45,9 +45,12 @@ repositories {
 }
 
 dependencies {
+
+    compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+
     // See : https://www.lwjgl.org/customize
 
-    // compile project(':tickle-core')
     compile "org.lwjgl:lwjgl:$lwjglVersion"
     compile "org.lwjgl:lwjgl-glfw:$lwjglVersion"
     compile "org.lwjgl:lwjgl-jemalloc:$lwjglVersion"
@@ -62,7 +65,6 @@ dependencies {
     runtime "org.lwjgl:lwjgl-openal:$lwjglVersion:$lwjglNatives"
     runtime "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
     runtime "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 
     testCompile 'junit:junit:4.11'
 }

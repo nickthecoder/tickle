@@ -15,7 +15,7 @@ class ZOrderStageView(
 
     override fun draw(renderer: Renderer) {
         // TODO Use the view's size and position. Currently it uses the whole window.
-        renderer.rotateView(centerX, centerY, Math.toRadians(degrees).toFloat())
+        renderer.rotateView(rect, centerX, centerY, Math.toRadians(degrees).toFloat())
 
         stage.actors.sortedBy { it.z }.forEach { actor ->
             actor.appearance.draw(renderer)

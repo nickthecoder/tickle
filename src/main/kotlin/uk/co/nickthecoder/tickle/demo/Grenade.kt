@@ -37,7 +37,7 @@ class Grenade(val hue: Float) : AbstractRole() {
             x = actor.x
             y = actor.y
             z = actor.z - 1
-            changePose(Resources.instance.sparkPose)
+            changePose(Resources.instance.pose("spark"))
             color = newColor
         }
         actor.stage?.add(newActor)

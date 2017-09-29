@@ -45,10 +45,10 @@ class Play : AbstractDirector() {
         val coinA1 = Actor(Coin(3f, 30.0, 3.0))
         val coinA2 = Actor(Coin(4f, 60.0, 2.0))
 
-        beeA.appearance = PoseAppearance(beeA, Resources.instance.beePose)
-        handA.appearance = PoseAppearance(handA, Resources.instance.handPose)
-        coinA1.appearance = PoseAppearance(coinA1, Resources.instance.coinPose)
-        coinA2.appearance = PoseAppearance(coinA2, Resources.instance.coinPose)
+        beeA.appearance = PoseAppearance(beeA, Resources.instance.pose("bee"))
+        handA.appearance = PoseAppearance(handA, Resources.instance.pose("hand"))
+        coinA1.appearance = PoseAppearance(coinA1, Resources.instance.pose("coin"))
+        coinA2.appearance = PoseAppearance(coinA2, Resources.instance.pose("coin"))
 
         beeA.directionRadians = beeA.appearance.directionRadians
 
@@ -65,7 +65,7 @@ class Play : AbstractDirector() {
         for (i in 0..count - 1) {
             val grenadeA = Actor(Grenade(i.toFloat() / count))
             with(grenadeA) {
-                appearance = PoseAppearance(grenadeA, Resources.instance.grenadePose)
+                appearance = PoseAppearance(grenadeA, Resources.instance.pose("grenade"))
                 x = i * 150f - 200f
                 y = -120f
             }
