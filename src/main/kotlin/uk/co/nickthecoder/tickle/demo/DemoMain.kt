@@ -22,8 +22,6 @@ fun main(args: Array<String>) {
     window.show()
     GL.createCapabilities()
 
-    //    resources.addHardCoded()
-    //    JsonResources(resources).save(File(Game.resourceDirectory, "demo.tickle"))
     val resources = JsonResources(File(Game.resourceDirectory, "demo.tickle")).resources
 
     with(resources.gameInfo) {

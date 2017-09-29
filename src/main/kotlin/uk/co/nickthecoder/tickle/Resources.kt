@@ -1,11 +1,8 @@
 package uk.co.nickthecoder.tickle
 
-import org.lwjgl.glfw.GLFW
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
-import uk.co.nickthecoder.tickle.events.KeyInput
 import uk.co.nickthecoder.tickle.graphics.Texture
-import uk.co.nickthecoder.tickle.util.Recti
 import java.io.File
 
 /**
@@ -18,11 +15,7 @@ class Resources {
 
     val resourceDirectory: File
         get() = file.parentFile ?: File(".").absoluteFile
-
-    // TODO Remove this when loading is written.
-    private val imageDir
-        get() = File(Game.resourceDirectory, "images")
-
+    
 
     val gameInfo = GameInfo("Tickle", 600, 400, true)
 
@@ -34,54 +27,6 @@ class Resources {
 
     private val dummyInput = CompoundInput()
 
-    fun addHardCoded() {
-
-        val tr = TextureResource(File(imageDir, "sprites.png"))
-        textures["sprites"] = tr
-        val spritesTexture = tr.texture
-
-        val grenadePose = Pose(spritesTexture, Recti(0, 199, 44, 139))
-        val beePose = Pose(spritesTexture, Recti(0, 60, 75, 0))
-        val handPose = Pose(spritesTexture, Recti(135, 60, 185, 0))
-        val coinPose = Pose(spritesTexture, Recti(75, 60, 135, 0))
-        val sparkPose = Pose(spritesTexture, Recti(0, 100, 40, 60))
-
-        sparkPose.offsetX = 20f
-        sparkPose.offsetY = 20f
-
-        grenadePose.offsetX = 20f
-        grenadePose.offsetY = 30f
-
-        beePose.offsetX = 38f
-        beePose.offsetY = 29f
-        beePose.directionRadians = Math.toRadians(24.0)
-
-        handPose.offsetX = 17f
-        handPose.offsetY = 27f
-
-        coinPose.offsetX = 30f
-        coinPose.offsetY = 30f
-
-        poses["bee"] = beePose
-        poses["grenade"] = grenadePose
-        poses["hand"] = handPose
-        poses["coin"] = coinPose
-        poses["spark"] = sparkPose
-
-
-        inputs.put("left", KeyInput(GLFW.GLFW_KEY_LEFT))
-        inputs.put("right", KeyInput(GLFW.GLFW_KEY_RIGHT))
-        inputs.put("up", KeyInput(GLFW.GLFW_KEY_UP))
-        inputs.put("down", KeyInput(GLFW.GLFW_KEY_DOWN))
-        inputs.put("reset", KeyInput(GLFW.GLFW_KEY_O))
-        inputs.put("clockwise", KeyInput(GLFW.GLFW_KEY_X))
-        inputs.put("anti-clockwise", KeyInput(GLFW.GLFW_KEY_Z))
-        inputs.put("toggle", KeyInput(GLFW.GLFW_KEY_TAB))
-
-        poses().forEach { name, pose ->
-            println("Created pose $name : $pose")
-        }
-    }
 
     fun textures(): Map<String, TextureResource> = textures
 
