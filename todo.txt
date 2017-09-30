@@ -9,6 +9,9 @@ Not loading the background color from a .scene file.
 New Features
 ============
 
+Costumes to inherit?
+	Just the events?
+
 Cannot yet describe a scene with two views of the same stage (used for 2 player split screen)
 	Nor can a view be positioned in the middle of a resizable window.
 
@@ -38,6 +41,10 @@ SceneResource to have a set of "includes", so that merging multiple .scene files
 
 Later
 =====
+
+JBox2d integration
+
+Auto detection of a grid to aid splitting a texture into Pose's rectangles.
 
 Split the project into multiple modules
 	core
