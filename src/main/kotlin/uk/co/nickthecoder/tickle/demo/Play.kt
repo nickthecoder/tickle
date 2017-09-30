@@ -36,13 +36,11 @@ class Play : AbstractDirector() {
     override fun begin() {
         stage = Game.instance.scene.findStage("main")!!
         stageView = Game.instance.scene.findStageView("main")!! as ZOrderStageView
-        println("Play begin")
     }
 
     override fun activated() {
         activeControllable = tagManager.findARole(Tags.CONTROLLABLE) as Controllable?
         activeControllable?.hasInput = true
-        println("Play activated")
     }
 
     override fun postTick() {

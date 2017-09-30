@@ -82,7 +82,6 @@ class Window(
             override fun invoke(window: Long, newWidth: Int, newHeight: Int) {
                 _width = newWidth
                 _height = newHeight
-                println("Resized to $width x $height")
             }
         }
         GLFW.glfwSetWindowSizeCallback(handle, resizeCallback)

@@ -46,7 +46,6 @@ class Game(
         // At the moment this needs to be here, because Demo creates the actors in it's constructor.
 
         seconds = System.nanoTime() / 1_000_000_000f
-        println("Set initial start time to $seconds")
     }
 
     fun run() {
@@ -86,7 +85,6 @@ class Game(
     fun startScene(sceneResource: SceneResource) {
         director = Director.createDirector(sceneResource.directorString)
         scene = sceneResource.createScene()
-        println("Game created scene with ${scene.stages.size} stages and ${scene.views().size} views")
 
         director.begin()
         scene.begin()

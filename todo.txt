@@ -1,9 +1,6 @@
 Current Work
 ============
 
-Add Role properties, and use them to change the hue of the grenade's sparks.
-	Use annotation?
-
 BUGS
 ====
 

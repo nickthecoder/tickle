@@ -23,7 +23,6 @@ class Coin() : ActionRole() {
     var value: Int = 1
 
     override fun activated() {
-        println("Coin activated value=$value")
 
         action = HeadingMovement(speed, heading, speedDegrees = rotationSpeed)
                 .and(

@@ -17,7 +17,6 @@ class Costume() {
         events["default"]?.choosePose()?.let { pose ->
             actor.changePose(pose)
         }
-        println("Costume created $actor")
         return actor
     }
 

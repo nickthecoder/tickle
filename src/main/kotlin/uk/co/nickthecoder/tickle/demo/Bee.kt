@@ -12,16 +12,6 @@ class Bee : Controllable() {
             maxRotationSpeed = 5.0,
             rotationDrag = 0.07)
 
-    override fun begin() {
-        super.begin()
-        println("Bee begin")
-    }
-
-    override fun activated() {
-        super.activated()
-        println("Bee activated")
-    }
-
     override fun tick() {
         super.tick()
 
