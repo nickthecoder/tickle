@@ -317,6 +317,8 @@ class JsonResources {
                     }
                 }
             }
+            JsonUtil.saveAttributes(jcostume, costume.attributes)
+
             jcostumes.add(jcostume)
         }
 
@@ -343,6 +345,8 @@ class JsonResources {
                     costume.events[eventName] = event
                 }
             }
+
+            JsonUtil.loadAttributes(jcostume, costume.attributes)
 
             resources.addCostume(name, costume)
             // println("Loaded costume $name : ${costume}")

@@ -4,6 +4,8 @@ class Costume() {
 
     var roleString: String = ""
 
+    val attributes = mutableMapOf<String,String>()
+
     val events = mutableMapOf<String, CostumeEvent>()
 
     // TODO Will have relatedCostumes later. And we can then use that to create bullets, explosions, etc.

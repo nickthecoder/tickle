@@ -93,14 +93,31 @@ abstract class AbstractRole : Role {
  * A Role that only has a single Action, and does nothing in the tick method itself.
  * If 'die' is true, then the Actor will be automatically killed when the Action ends.
  */
-class ActionRole(action: Action<Actor>, die: Boolean = true) : Role {
+open class ActionRole() : Role {
 
-    val action = if (die) action else action.then(NoAction())
+    private var activated: Boolean = false
+
+    var action: Action<Actor> = NoAction()
+        set(v) {
+            field = v
+            if (activated) {
+                v.begin(actor)
+            }
+        }
+
+    constructor(action: Action<Actor>, die: Boolean = true) : this() {
+        if (die) {
+            this.action = action
+        } else {
+            this.action = action.then(NoAction())
+        }
+    }
 
     override lateinit var actor: Actor
 
     override fun activated() {
         super.activated()
+        activated = true
         action.begin(actor)
     }
 

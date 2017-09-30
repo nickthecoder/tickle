@@ -72,12 +72,13 @@ class SceneActor {
         actor.y = y
         actor.directionDegrees = direction
 
-        updateAttributes(actor.role)
+        updateAttributes(costume.attributes, actor.role)
+        updateAttributes(attributes, actor.role)
 
         return actor
     }
 
-    fun updateAttributes(role: Role?) {
+    fun updateAttributes(attributes : Map<String,String>, role: Role?) {
         if (role == null) return
         val klass = role.javaClass
 
@@ -108,6 +109,7 @@ class SceneActor {
 
     fun fromString(value: String, type: Class<*>): Any {
         return when (type) {
+            Double::class.java -> value.toDouble()
             Float::class.java -> value.toFloat()
             Int::class.java -> value.toInt()
             String::class.java -> value

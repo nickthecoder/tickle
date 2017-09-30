@@ -130,7 +130,40 @@
                     "pose": "coin"
                 }
             ]
-        },        {
+        },
+        {
+            "name" : "coin10",
+            "role" : "uk.co.nickthecoder.tickle.demo.Coin",
+            "events" : [
+                {
+                    "name": "default",
+                    "pose": "coin"
+                }
+            ],
+            "attributes" : [
+                {
+                    "name": "value",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "name" : "coin100",
+            "role" : "uk.co.nickthecoder.tickle.demo.Coin",
+            "events" : [
+                {
+                    "name": "default",
+                    "pose": "coin"
+                }
+            ],
+            "attributes" : [
+                {
+                    "name": "value",
+                    "value": "100"
+                }
+            ]
+        },
+        {
             "name" : "spark",
             "events" : [
                 {
