@@ -1,9 +1,8 @@
 Current Work
 ============
 
-Create a Scene object, which has a set of stages and views.
-	Load scenes from a .scene file.
-	Remove cruft from Play
+Add Role properties, and use them to change the hue of the grenade's sparks.
+	Use annotation?
 
 BUGS
 ====

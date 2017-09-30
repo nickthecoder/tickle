@@ -58,6 +58,15 @@ class JsonScene {
         sceneActor.y = jactor.getFloat("y", 0f)
         sceneActor.direction = jactor.getDouble("direction", 0.0)
 
+        jactor.get("attributes")?.let {
+            it.asArray().forEach {
+                val jattribute = it.asObject()
+                val attributeName = jattribute.get("name").asString()
+                val attributeValue = jattribute.get("value").asString()
+                sceneActor.attributes[attributeName] = attributeValue
+            }
+        }
+
         sceneStage.sceneActors.add(sceneActor)
     }
 

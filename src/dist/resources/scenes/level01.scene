@@ -18,12 +18,24 @@
                 {
                     "costume": "grenade",
                     "x": 0,
-                    "y": 0
+                    "y": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.2"
+                        }
+                    ]
                 },
                 {
                     "costume": "grenade",
                     "x": 100,
-                    "y": 0
+                    "y": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.4"
+                        }
+                    ]
                 }
             ]
         }

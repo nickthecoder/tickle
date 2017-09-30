@@ -7,13 +7,15 @@ import uk.co.nickthecoder.tickle.action.Die
 import uk.co.nickthecoder.tickle.action.PeriodicFactory
 import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.action.animation.Fade
+import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.graphics.Color
 
 val gravity = -0.1f
 
 class Grenade() : AbstractRole() {
 
-    val hue: Float = 1.0f
+    @Attribute
+    var hue: Float = 1.0f
 
     val action = PeriodicFactory<Actor>(10f) {
 
@@ -45,11 +47,6 @@ class Grenade() : AbstractRole() {
         actor.stage?.add(newActor)
 
 
-    }
-
-    override fun begin() {
-        super.begin()
-        println("Grenade begin. appearance=${actor.appearance} color=${actor.color}")
     }
 
     override fun activated() {

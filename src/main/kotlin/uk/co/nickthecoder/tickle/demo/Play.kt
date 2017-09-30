@@ -58,7 +58,7 @@ class Play : AbstractDirector() {
 
         activeControllable?.let { centerAction.act(it.actor) }
         stageView.degrees = degrees
-        
+
         if (Game.instance.gameLoop.tickCount % 100 == 0L) {
             println("FPS = ${Game.instance.gameLoop.actualFPS().toInt()} Actors : ${stage.actors.size}")
         }

@@ -59,11 +59,12 @@ class SceneActor {
     var x: Float = 0f
     var y: Float = 0f
     var direction: Double = 0.0
+    val attributes = mutableMapOf<String, String>()
 
     fun createActor(): Actor? {
         val costume = Resources.instance.optionalCostume(costumeName)
         if (costume == null) {
-            System.err.println("ERROR. Cosume $costumeName not found in resources.")
+            System.err.println("ERROR. Costume $costumeName not found in resources.")
             return null
         }
         val actor = costume.createActor()
@@ -71,6 +72,46 @@ class SceneActor {
         actor.y = y
         actor.directionDegrees = direction
 
+        updateAttributes(actor.role)
+
         return actor
+    }
+
+    fun updateAttributes(role: Role?) {
+        if (role == null) return
+        val klass = role.javaClass
+
+        attributes.forEach { name, value ->
+            updateAttribute(role, klass, name, value)
+        }
+    }
+
+    fun updateAttribute(role: Role, klass: Class<Role>, name: String, value: String) {
+        try {
+            try {
+                val field = klass.getField(name)
+                field.set(role, fromString(value, field.type))
+            } catch (e: NoSuchFieldException) {
+                val setterName = "set" + name.capitalize()
+                val setter = klass.methods.filter { it.name == setterName && it.parameterCount == 1 }.firstOrNull()
+                if (setter == null) {
+                    System.err.println("ERROR. Could not find attribute $name in $role")
+                } else {
+                    val type = setter.parameterTypes[0]
+                    setter.invoke(role, fromString(value, type))
+                }
+            }
+        } catch (e: Exception) {
+            System.err.println("Failed to set attribute $name on $role : $e")
+        }
+    }
+
+    fun fromString(value: String, type: Class<*>): Any {
+        return when (type) {
+            Float::class.java -> value.toFloat()
+            Int::class.java -> value.toInt()
+            String::class.java -> value
+            else -> throw IllegalArgumentException("Cannot convert from type $type")
+        }
     }
 }
