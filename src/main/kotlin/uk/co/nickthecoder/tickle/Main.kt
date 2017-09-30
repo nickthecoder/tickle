@@ -10,23 +10,15 @@ import java.io.File
 
 /**
  * The main entry point to run a game.
- * With no arguments, the resources files is found by looking for any ".tickle" file in
+ * With no arguments, the resources files is found by looking for a ".tickle" file in
  * "./src/dist/resources/" or "./resources/"
  *
- * However, if you do not want this automatic behaviour, you can specify a file as the first argument.
+ * However, if you do not want this automatic behaviour, you can pass the filename as an argument.
  */
 fun main(args: Array<String>) {
     val file: File?
     if (args.isEmpty()) {
-        // When running from dev environment, the resources are in src/dist/resources, but will be in resources
-        // when running from an install application.
-        val srcDist = File(File("src"), "dist")
-        val resourceDir = if (srcDist.exists()) {
-            File(srcDist, "resources")
-        } else {
-            File("resources")
-        }
-        file = resourceDir.listFiles().filter { it.extension == "tickle" }.firstOrNull()
+        file = guessTickleFile()
     } else {
         file = File(args[0]).absoluteFile
         if (file == null) {
@@ -36,6 +28,18 @@ fun main(args: Array<String>) {
     }
 
     file?.let { startGame(it) }
+}
+
+fun guessTickleFile(): File? {
+    // When running from dev environment, the resources are in src/dist/resources, but will be in resources
+    // when running from an install application.
+    val srcDist = File(File("src"), "dist")
+    val resourceDir = if (srcDist.exists()) {
+        File(srcDist, "resources")
+    } else {
+        File("resources")
+    }
+    return resourceDir.listFiles().filter { it.extension == "tickle" }.sortedBy { it.lastModified() }.lastOrNull()
 }
 
 private fun startGame(file: File) {
@@ -59,5 +63,3 @@ private fun startGame(file: File) {
 
     Game(window, resources).run()
 }
-
-
