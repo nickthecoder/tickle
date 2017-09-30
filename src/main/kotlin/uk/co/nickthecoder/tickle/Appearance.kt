@@ -22,6 +22,7 @@ class InvisibleAppearance : Appearance {
         // Do nothing
     }
 
+    override fun toString() = "InvisibleAppearance"
 }
 
 class PoseAppearance(val actor: Actor, var pose: Pose) : Appearance {
@@ -32,4 +33,6 @@ class PoseAppearance(val actor: Actor, var pose: Pose) : Appearance {
     override fun draw(renderer: Renderer) {
         pose.draw(renderer, actor)
     }
+
+    override fun toString() = "PoseAppearance pose=$pose"
 }

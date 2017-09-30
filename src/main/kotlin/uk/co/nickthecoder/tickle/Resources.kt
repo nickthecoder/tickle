@@ -19,6 +19,8 @@ class Resources {
 
     private val poses = mutableMapOf<String, Pose>()
 
+    private val costumes = mutableMapOf<String, Costume>()
+
     private val inputs = mutableMapOf<String, Input>()
 
     private val layouts = mutableMapOf<String, Layout>()
@@ -63,8 +65,25 @@ class Resources {
         return poses[name] ?: throw IllegalStateException("Pose $name not found")
     }
 
+    fun findPoseName(pose: Pose): String? {
+        return poses.filter { entry -> entry.value === pose }.map { it.key }.firstOrNull()
+    }
+
     fun addPose(name: String, pose: Pose) {
         poses[name] = pose
+    }
+
+
+    fun costumes(): Map<String, Costume> = costumes
+
+    fun optionalCostume(name: String) = costumes[name]
+
+    fun costume(name: String): Costume {
+        return costumes[name] ?: throw IllegalArgumentException("Costume $name not found")
+    }
+
+    fun addCostume(name: String, costume: Costume) {
+        costumes[name] = costume
     }
 
 

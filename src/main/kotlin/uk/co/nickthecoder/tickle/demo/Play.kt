@@ -2,20 +2,15 @@ package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.PoseAppearance
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.animation.AnimationAction
 import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.events.KeyEvent
-import uk.co.nickthecoder.tickle.stage.GameStage
+import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.stage.ZOrderStageView
-import uk.co.nickthecoder.tickle.util.Recti
 
 class Play : AbstractDirector() {
-
-    val stage = GameStage()
-    val stageView = ZOrderStageView()
 
     var degrees = 0.0
 
@@ -34,63 +29,23 @@ class Play : AbstractDirector() {
             field = v
         }
 
+
+    lateinit var stage: Stage
+    lateinit var stageView: ZOrderStageView
+
     override fun begin() {
+        stage = Game.instance.scene.findStage("main")!!
+        stageView = Game.instance.scene.findStageView("main")!! as ZOrderStageView
         println("Play begin")
-        stageView.rect = Recti(0, 0, Game.instance.window.width, Game.instance.window.height)
-        stageView.stage = stage
+    }
 
-        // TODO Only here until loading scenes from a file is implemented.
-        val bee = Bee()
-        val hand = Hand()
-
-        val handA = Actor(hand)
-        val beeA = Actor(bee)
-        val coinA1 = Actor(Coin(3f, 30.0, 3.0))
-        val coinA2 = Actor(Coin(4f, 60.0, 2.0))
-
-        beeA.appearance = PoseAppearance(beeA, Resources.instance.pose("bee"))
-        handA.appearance = PoseAppearance(handA, Resources.instance.pose("hand"))
-        coinA1.appearance = PoseAppearance(coinA1, Resources.instance.pose("coin"))
-        coinA2.appearance = PoseAppearance(coinA2, Resources.instance.pose("coin"))
-
-        beeA.directionRadians = beeA.appearance.directionRadians
-
-        handA.x = -50f
-        handA.y = 50f
-
-        coinA1.x = -10f
-        coinA1.y = 30f
-
-        coinA2.x = 30f
-        coinA2.y = -50f
-
-        val count = 10
-        for (i in 0..count - 1) {
-            val grenadeA = Actor(Grenade(i.toFloat() / count))
-            with(grenadeA) {
-                appearance = PoseAppearance(grenadeA, Resources.instance.pose("grenade"))
-                x = i * 150f - 200f
-                y = -120f
-            }
-            stage.add(grenadeA, false)
-        }
-
-
-        stage.add(beeA, false)
-        stage.add(handA, false)
-        stage.add(coinA1, false)
-        stage.add(coinA2, false)
-
-        println("Play Stage begin ${stage.actors.size}")
-        stage.begin()
-        activeControllable = tagManager.findARole(Tags.CONTROLLABLE) as Controllable
+    override fun activated() {
+        activeControllable = tagManager.findARole(Tags.CONTROLLABLE) as Controllable?
         activeControllable?.hasInput = true
-
+        println("Play activated")
     }
 
     override fun postTick() {
-        stage.tick()
-
         if (reset.isPressed()) {
             degrees = 0.0
         }
@@ -103,14 +58,7 @@ class Play : AbstractDirector() {
 
         activeControllable?.let { centerAction.act(it.actor) }
         stageView.degrees = degrees
-
-        with(Game.instance.renderer) {
-            beginFrame()
-            clear()
-            stageView.draw(this)
-            endFrame()
-        }
-
+        
         if (Game.instance.gameLoop.tickCount % 100 == 0L) {
             println("FPS = ${Game.instance.gameLoop.actualFPS().toInt()} Actors : ${stage.actors.size}")
         }

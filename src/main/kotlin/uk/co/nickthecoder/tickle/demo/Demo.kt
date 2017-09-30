@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.graphics.Color
 
 class Demo : Producer {
 
@@ -10,16 +9,8 @@ class Demo : Producer {
     }
 
     override fun begin() {
-        println("Demo being")
+        println("Demo begin")
         Game.instance.window.enableVSync(1)
-    }
-
-    override fun startScene(sceneName: String) {
-        println("Demo startScene")
-        // TODO Remove when scene loading is implemented
-        Game.instance.director = Play()
-        Game.instance.renderer.clearColor(Color.BLACK)
-        Game.instance.director.begin()
     }
 
     companion object {

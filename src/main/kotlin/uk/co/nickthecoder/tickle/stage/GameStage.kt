@@ -9,6 +9,12 @@ class GameStage() : Stage {
 
     override fun begin() {
         actors.map { it.role }.filterNotNull().forEach { role ->
+            role.begin()
+        }
+    }
+
+    override fun activated() {
+        actors.map { it.role }.filterNotNull().forEach { role ->
             role.activated()
         }
     }

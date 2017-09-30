@@ -69,6 +69,7 @@ interface Role {
                     System.err.println("'$roleString' is not a type of Role")
                 }
             } catch (e: Exception) {
+                System.err.println(e)
                 System.err.println("Failed to create a Role from : '$roleString'")
             }
             return null

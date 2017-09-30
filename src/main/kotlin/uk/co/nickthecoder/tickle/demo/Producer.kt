@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.demo
 
+import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.events.KeyEvent
 
 /**
@@ -21,7 +22,11 @@ interface Producer {
 
     fun begin() {}
 
-    fun startScene(sceneName: String) {}
+    fun startScene(sceneName: String) {
+        Game.instance.endScene()
+        val scene = Game.instance.loadScene(sceneName)
+        Game.instance.startScene(scene)
+    }
 
     fun preTick() {}
 

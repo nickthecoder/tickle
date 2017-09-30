@@ -10,13 +10,16 @@ class Costume() {
     // RelatedCostumes should also store info about position and direction relative to the parent actor.
 
     fun createActor(): Actor {
-        val role = Role.create(roleString)
+        val role = if (roleString.isBlank()) null else Role.create(roleString)
         val actor = Actor(role)
         events["default"]?.choosePose()?.let { pose ->
             actor.changePose(pose)
         }
+        println("Costume created $actor")
         return actor
     }
+
+    override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }
 
 class CostumeEvent {
@@ -25,4 +28,6 @@ class CostumeEvent {
     var pose: Pose? = null
 
     fun choosePose(): Pose? = pose
+
+    override fun toString() = "pose=$pose"
 }

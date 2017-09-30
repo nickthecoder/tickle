@@ -10,6 +10,7 @@ import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.loop.FullSpeedGameLoop
 import uk.co.nickthecoder.tickle.loop.GameLoop
+import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 
 class Game(
@@ -20,6 +21,7 @@ class Game(
 
     var producer: Producer = NoProducer()
     var director: Director = NoDirector()
+    var scene: Scene = Scene()
 
     lateinit var gameLoop: GameLoop
 
@@ -61,9 +63,7 @@ class Game(
         window.keyboardEvents { onKeyEvent(it) }
         gameLoop = FullSpeedGameLoop(this)
 
-        producer.begin()
         gameLoop.resetStats()
-
     }
 
     fun loop() {
@@ -76,6 +76,27 @@ class Game(
             tickDuration = now - seconds
             seconds = now
         }
+    }
+
+    fun loadScene(sceneName: String): SceneResource {
+        val file = File(File(resourceDirectory, "scenes"), "$sceneName.scene")
+        return JsonScene(file).sceneResource
+    }
+
+    fun startScene(sceneResource: SceneResource) {
+        director = Director.createDirector(sceneResource.directorString)
+        scene = sceneResource.createScene()
+        println("Game created scene with ${scene.stages.size} stages and ${scene.views().size} views")
+
+        director.begin()
+        scene.begin()
+        scene.activated()
+        director.activated()
+    }
+
+    fun endScene() {
+        scene.end()
+        director.end()
     }
 
     fun cleanUp() {
@@ -96,11 +117,12 @@ class Game(
         producer.preTick()
         director.preTick()
 
-
+        director.tick()
 
         director.postTick()
         producer.postTick()
 
+        scene.draw(renderer)
     }
 
     fun onKeyEvent(event: KeyEvent) {

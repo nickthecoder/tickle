@@ -8,6 +8,8 @@ interface Stage {
 
     fun begin()
 
+    fun activated()
+
     fun end()
 
     fun tick()

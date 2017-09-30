@@ -16,11 +16,11 @@ class Layout() {
         views.forEach { name, layoutView ->
             val view = createView(layoutView.viewString)
             if (view is StageView) {
-                val stage = stages[name]
+                val stage = scene.stages[name]
                 if (stage == null) {
                     throw IllegalArgumentException("Stage $name not found - cannot create the view")
                 } else {
-                    view.stage
+                    view.stage = stage
                 }
             }
             scene.addView(name, view, layoutView.position)

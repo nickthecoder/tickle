@@ -1,28 +1,29 @@
 {
-    director: "uk.co.nickthecoder.tickle.demo.Play",
-    layout: "default",
-    stages: [
+    "director": "uk.co.nickthecoder.tickle.demo.Play",
+    "layout": "default",
+    "stages": [
         {
-            name: "main",
-            actors: [
+            "name": "main",
+            "actors": [
                 {
-                    costume: "bee",
-                    x: 0,
-                    y: 100
+                    "costume": "bee",
+                    "x": 0,
+                    "y": 100
                 },
                 {
-                    costume: "grenade",
-                    x: -100,
-                    y: 0
-                },
-                    costume: "genade",
-                    x: 0,
-                    y: 0
+                    "costume": "grenade",
+                    "x": -100,
+                    "y": 0
                 },
                 {
-                    costume: "genade",
-                    x: 100,
-                    y: 0
+                    "costume": "grenade",
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "costume": "grenade",
+                    "x": 100,
+                    "y": 0
                 }
             ]
         }

@@ -35,6 +35,7 @@ class JsonResources {
         addArray(jroot, "layouts", saveLayouts())
         addArray(jroot, "textures", saveTextures())
         addArray(jroot, "poses", savePoses())
+        addArray(jroot, "costumes", saveCostumes())
         addArray(jroot, "inputs", saveInputs())
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
@@ -56,6 +57,7 @@ class JsonResources {
         val jlayouts = jroot.get("layouts")
         val jtextures = jroot.get("textures")
         val jposes = jroot.get("poses")
+        val jcostumes = jroot.get("costumes")
         val jinputs = jroot.get("inputs")
 
         if (jinfo is JsonObject) {
@@ -69,6 +71,9 @@ class JsonResources {
         }
         if (jposes is JsonArray) {
             loadPoses(jposes)
+        }
+        if (jcostumes is JsonArray) {
+            loadCostumes(jcostumes)
         }
         if (jinputs is JsonArray) {
             loadInputs(jinputs)
@@ -132,7 +137,7 @@ class JsonResources {
                     jview.add("stage", layoutView.stageName)
                 }
 
-                with (layoutView.position) {
+                with(layoutView.position) {
                     jview.add(if (leftAligned) "left" else "right", leftRightMargin)
                     width?.let { jview.add("width", it) }
                     widthRatio?.let { jview.add("widthRatio", it) }
@@ -291,7 +296,56 @@ class JsonResources {
             pose.updateRectf()
 
             resources.addPose(name, pose)
-            // println("Loaded pose $name : ${pose}")
+            //println("Loaded pose $name : ${pose}")
+        }
+    }
+    // COSTUMES
+
+    fun saveCostumes(): JsonArray {
+        val jcostumes = JsonArray()
+        resources.costumes().forEach { name, costume ->
+            val jcostume = JsonObject()
+            jcostume.add("name", name)
+            val jevents = JsonArray()
+            jcostume.add("events", jevents)
+            costume.events.forEach { eventName, event ->
+                val jevent = JsonObject()
+                jevent.add("name", eventName)
+                event.pose?.let { pose ->
+                    resources.findPoseName(pose)?.let { poseName ->
+                        jevent.add("pose", poseName)
+                    }
+                }
+            }
+            jcostumes.add(jcostume)
+        }
+
+        return jcostumes
+    }
+
+    fun loadCostumes(jcostumes: JsonArray) {
+        jcostumes.forEach {
+            val jcostume = it.asObject()
+            val name = jcostume.get("name").asString()
+            val costume = Costume()
+            costume.roleString = jcostume.getString("role", "")
+
+            jcostume.get("events")?.let {
+                val jevents = it.asArray()
+                jevents.forEach {
+                    val jevent = it.asObject()
+                    val eventName = jevent.get("name").asString()
+                    val event = CostumeEvent()
+                    jevent?.get("pose")?.let {
+                        val pose = resources.optionalPose(it.asString())
+                        event.pose = pose
+                    }
+                    costume.events[eventName] = event
+                }
+            }
+
+            resources.addCostume(name, costume)
+            // println("Loaded costume $name : ${costume}")
         }
     }
 

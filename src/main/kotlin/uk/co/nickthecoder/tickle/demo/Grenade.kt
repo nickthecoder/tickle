@@ -11,7 +11,9 @@ import uk.co.nickthecoder.tickle.graphics.Color
 
 val gravity = -0.1f
 
-class Grenade(val hue: Float) : AbstractRole() {
+class Grenade() : AbstractRole() {
+
+    val hue: Float = 1.0f
 
     val action = PeriodicFactory<Actor>(10f) {
 
@@ -43,6 +45,11 @@ class Grenade(val hue: Float) : AbstractRole() {
         actor.stage?.add(newActor)
 
 
+    }
+
+    override fun begin() {
+        super.begin()
+        println("Grenade begin. appearance=${actor.appearance} color=${actor.color}")
     }
 
     override fun activated() {

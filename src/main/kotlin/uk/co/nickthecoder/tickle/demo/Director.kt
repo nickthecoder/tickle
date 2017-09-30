@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.demo
 
+import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.util.TagManager
 
@@ -26,7 +27,13 @@ interface Director {
 
     fun begin() {}
 
+    fun activated() {}
+
     fun preTick() {}
+
+    fun tick() {
+        Game.instance.scene.tick()
+    }
 
     fun postTick() {}
 
@@ -34,6 +41,22 @@ interface Director {
 
     fun onKeyEvent(event: KeyEvent) {}
 
+    companion object {
+        fun createDirector(directorString: String): Director {
+            try {
+                val klass = Class.forName(directorString)
+                val newDirector = klass.newInstance()
+                if (newDirector is Director) {
+                    return newDirector
+                } else {
+                    System.err.println("'$directorString' is not a type of Director")
+                }
+            } catch (e: Exception) {
+                System.err.println("Failed to create a Role from : '$directorString'")
+            }
+            return NoDirector()
+        }
+    }
 }
 
 open class AbstractDirector : Director {

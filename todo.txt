@@ -8,6 +8,7 @@ Create a Scene object, which has a set of stages and views.
 BUGS
 ====
 
+Not loading the background color from a .scene file.
 
 New Features
 ============
@@ -23,6 +24,8 @@ Fonts
 
 View clipping.
 
+Merge scenes from two or more scene files
+
 The Resources Editor
 
 Tags
@@ -35,6 +38,7 @@ Tags
 		N=0 when it will be used for collision detection.
 		Create a new TaggedRole interface.
 
+SceneResource to have a set of "includes", so that merging multiple .scene files is done automatically.
 
 Later
 =====

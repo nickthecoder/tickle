@@ -92,6 +92,54 @@
             "direction": 0
         }
     ],
+    "costumes" : [
+        {
+            "name" : "bee",
+            "role" : "uk.co.nickthecoder.tickle.demo.Bee",
+            "events" : [
+                {
+                    "name": "default",
+                    "pose": "bee"
+                }
+            ]
+        },
+        {
+            "name" : "grenade",
+            "role" : "uk.co.nickthecoder.tickle.demo.Grenade",
+            "events" : [
+                {
+                    "name": "default",
+                    "pose": "grenade"
+                }
+            ]
+        },        {
+            "name" : "hand",
+            "role" : "uk.co.nickthecoder.tickle.demo.Hand",
+            "events" : [
+                {
+                    "name": "default",
+                    "pose": "hand"
+                }
+            ]
+        },        {
+            "name" : "coin",
+            "role" : "uk.co.nickthecoder.tickle.demo.Coin",
+            "events" : [
+                {
+                    "name": "default",
+                    "pose": "coin"
+                }
+            ]
+        },        {
+            "name" : "spark",
+            "events" : [
+                {
+                    "name": "default",
+                    "pose": "spark"
+                }
+            ]
+        }
+    ],
     "inputs": [
         {
             "name": "left",
