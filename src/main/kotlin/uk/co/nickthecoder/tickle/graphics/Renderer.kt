@@ -7,7 +7,6 @@ import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.util.Rectf
 import uk.co.nickthecoder.tickle.util.Recti
-import java.io.File
 
 
 /**
@@ -37,8 +36,6 @@ class Renderer(val window: Window) {
 
 
     init {
-        println("Creating renderer")
-
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
@@ -58,12 +55,8 @@ class Renderer(val window: Window) {
         drawing = false
 
         /* Load shaders */
-        val vertexShader: Shader
-        val fragmentShader: Shader
-        println("Loading shaders")
-        val shadersDir = File(Game.resourceDirectory, "shaders")
-        vertexShader = Shader.load(ShaderType.VERTEX_SHADER, File(shadersDir, "legacy.vert"))
-        fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, File(shadersDir, "legacy.frag"))
+        val vertexShader = Shader.load(ShaderType.VERTEX_SHADER, Game::class.java.getResourceAsStream("shaders/legacy.vert"))
+        val fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, Game::class.java.getResourceAsStream("shaders/legacy.frag"))
 
         program.attachShaders(vertexShader, fragmentShader)
         program.link()

@@ -78,7 +78,7 @@ class Game(
     }
 
     fun loadScene(sceneName: String): SceneResource {
-        val file = File(File(resourceDirectory, "scenes"), "$sceneName.scene")
+        val file = File(File(resources.file.parentFile, "scenes"), "$sceneName.scene")
         return JsonScene(file).sceneResource
     }
 
@@ -131,15 +131,6 @@ class Game(
     companion object {
 
         lateinit var instance: Game
-
-        val resourceDirectory: File by lazy {
-            val srcDist = File(File("src"), "dist")
-            if (srcDist.exists()) {
-                File(srcDist, "resources")
-            } else {
-                File("resources")
-            }
-        }
 
     }
 

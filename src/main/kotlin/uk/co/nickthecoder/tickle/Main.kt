@@ -8,11 +8,25 @@ import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
 
+/**
+ * The main entry point to run a game.
+ * With no arguments, the resources files is found by looking for any ".tickle" file in
+ * "./src/dist/resources/" or "./resources/"
+ *
+ * However, if you do not want this automatic behaviour, you can specify a file as the first argument.
+ */
 fun main(args: Array<String>) {
     val file: File?
     if (args.isEmpty()) {
-        val dir = Game.resourceDirectory
-        file = dir.listFiles().filter { it.extension == "tickle" }.firstOrNull()
+        // When running from dev environment, the resources are in src/dist/resources, but will be in resources
+        // when running from an install application.
+        val srcDist = File(File("src"), "dist")
+        val resourceDir = if (srcDist.exists()) {
+            File(srcDist, "resources")
+        } else {
+            File("resources")
+        }
+        file = resourceDir.listFiles().filter { it.extension == "tickle" }.firstOrNull()
     } else {
         file = File(args[0]).absoluteFile
         if (file == null) {
@@ -43,7 +57,6 @@ private fun startGame(file: File) {
         window.change(title, width, height, resizable)
     }
 
-    println("Creating the Game")
     Game(window, resources).run()
 }
 

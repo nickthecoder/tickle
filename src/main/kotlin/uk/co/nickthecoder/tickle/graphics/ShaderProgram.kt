@@ -24,7 +24,7 @@ public class ShaderProgram() {
     fun link() {
         glLinkProgram(handle)
         checkStatus();
-        println("Shader Program Linked OK")
+        //println("Shader Program Linked OK")
     }
 
 

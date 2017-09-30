@@ -9,7 +9,6 @@ class Demo : Producer {
     }
 
     override fun begin() {
-        println("Demo begin")
         Game.instance.window.enableVSync(1)
     }
 
