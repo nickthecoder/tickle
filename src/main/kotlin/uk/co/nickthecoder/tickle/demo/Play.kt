@@ -14,9 +14,8 @@ import uk.co.nickthecoder.tickle.util.Recti
 
 class Play : AbstractDirector() {
 
-    val stage = GameStage("main")
-    val stageView = ZOrderStageView(Recti(0, 0, Game.instance.window.width, Game.instance.window.height), stage)
-
+    val stage = GameStage()
+    val stageView = ZOrderStageView()
 
     var degrees = 0.0
 
@@ -37,6 +36,8 @@ class Play : AbstractDirector() {
 
     override fun begin() {
         println("Play begin")
+        stageView.rect = Recti(0, 0, Game.instance.window.width, Game.instance.window.height)
+        stageView.stage = stage
 
         // TODO Only here until loading scenes from a file is implemented.
         val bee = Bee()

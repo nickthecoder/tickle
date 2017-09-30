@@ -13,11 +13,11 @@ The target audience for Tickle are people who are already familiar with programm
 The Aim
 -------
 
-# Fun : The primary aim is to make writing games as enjoyable as possible.
-# Quick : No need for boiler plate code, such as loading resources. That is all done automatically.
-# Easy : No knowledge of OpenGL required, and in fact most games won't need ANY drawing routines.
-# Flexible : There should be very few limits on the type of 2D game. Horizontal / Vertical Scrollers, Isometric, Platform games are all covered.
-# High Performance : I want to create good games that run well on my crappy and very out-of-date laptop! So redrawing should be QUICK.
+- Fun : The primary aim is to make writing games as enjoyable as possible.
+- Quick : No need for boiler plate code, such as loading resources. That is all done automatically.
+- Easy : No knowledge of OpenGL required, and in fact most games won't need ANY drawing routines.
+- Flexible : There should be very few limits on the type of 2D game. Horizontal / Vertical Scrollers, Isometric, Platform games are all covered.
+- High Performance : I want to create good games that run well on my crappy and very out-of-date laptop! So redrawing should be QUICK.
 
 I've not decided on the language for the game scripts yet. Given that I really like statically typed languages, I may use Kotlin
 for the game scripts, but I may support Groovy too.

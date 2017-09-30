@@ -8,7 +8,7 @@ class GameInfo(
         var width: Int,
         var height: Int,
         var resizable: Boolean,
-        var startScene: String = "menu",
+        var startScene: String = "splash",
         var producerString: String = NoProducer::class.java.name) {
 
     fun createProducer(): Producer {

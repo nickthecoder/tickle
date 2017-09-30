@@ -4,15 +4,23 @@
         "width": 600,
         "height": 400,
         "resizable": true,
+        "startScene": "level01",
         "producer": "uk.co.nickthecoder.tickle.demo.Demo"
     },
     "layouts" : [
         {
             "name": "default",
+            "stages" : [
+                {
+                    "name": "main",
+                    "stage": "uk.co.nickthecoder.tickle.stage.GameStage"
+                }
+            ],
             "views": [
                 {
                     "name": "main",
                     "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView",
+                    "stage": "main",
                     "left": 0,
                     "bottom": 0,
                     "widthRatio": 1.0,

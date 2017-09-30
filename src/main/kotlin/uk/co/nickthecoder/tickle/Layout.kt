@@ -1,36 +1,80 @@
 package uk.co.nickthecoder.tickle
 
-import uk.co.nickthecoder.tickle.stage.ZOrderStageView
-import uk.co.nickthecoder.tickle.util.Recti
+import uk.co.nickthecoder.tickle.stage.*
 
 class Layout() {
 
+    val stages = mutableMapOf<String, LayoutStage>()
     val views = mutableMapOf<String, LayoutView>()
+
+    fun createScene(): Scene {
+        val scene = Scene()
+        stages.forEach { name, layoutStage ->
+            scene.stages[name] = createStage(layoutStage.stageString)
+        }
+
+        views.forEach { name, layoutView ->
+            val view = createView(layoutView.viewString)
+            if (view is StageView) {
+                val stage = stages[name]
+                if (stage == null) {
+                    throw IllegalArgumentException("Stage $name not found - cannot create the view")
+                } else {
+                    view.stage
+                }
+            }
+            scene.addView(name, view, layoutView.position)
+        }
+
+        return scene
+    }
+
+
+    fun createStage(stageString: String): Stage {
+
+        try {
+            val klass = Class.forName(stageString)
+            val newStage = klass.newInstance()
+            if (newStage is Stage) {
+                return newStage
+            } else {
+                System.err.println("'$newStage' is not a type of Stage")
+            }
+        } catch (e: Exception) {
+            System.err.println("Failed to create a Role from : '$stageString'")
+        }
+        return GameStage()
+
+    }
+
+
+    fun createView(viewString: String): View {
+
+        try {
+            val klass = Class.forName(viewString)
+            val newView = klass.newInstance()
+            if (newView is View) {
+                return newView
+            } else {
+                System.err.println("'$newView' is not a type of Stage")
+            }
+        } catch (e: Exception) {
+            System.err.println("Failed to create a Role from : '$viewString'")
+        }
+        return ZOrderStageView()
+
+    }
+}
+
+class LayoutStage() {
+    var stageString: String = GameStage::class.java.name
 
 }
 
 class LayoutView() {
 
     var viewString: String = ZOrderStageView::class.java.name
-
-    var leftAligned: Boolean = true
-    var leftRightMargin: Int = 0
-    var width: Int? = null
-    var widthRatio: Float? = 1f
-
-    var bottomAligned: Boolean = true
-    var topBottomMargin: Int = 0
-    var height: Int? = null
-    var heightRatio: Float? = 1f
-
-    fun left(totalWidth: Int): Int = if (leftAligned) leftRightMargin else right(totalWidth) - width(totalWidth)
-    fun right(totalWidth: Int): Int = if (!leftAligned) totalWidth - leftRightMargin else totalWidth - left(totalWidth)
-    fun width(totalWidth: Int): Int = width ?: widthRatio?.let { (totalWidth / it).toInt() } ?: totalWidth - leftRightMargin
-
-    fun bottom(totalHeight: Int): Int = if (bottomAligned) topBottomMargin else top(totalHeight) - height(totalHeight)
-    fun top(totalHeight: Int): Int = if (!bottomAligned) totalHeight - topBottomMargin else totalHeight - bottom(totalHeight)
-    fun height(totalHeight: Int): Int = height ?: heightRatio?.let { (totalHeight / it).toInt() } ?: totalHeight - topBottomMargin
-
-    fun rect(totalWidth: Int, totalHeight: Int) = Recti(left(totalWidth), bottom(totalHeight), right(totalWidth), top(totalHeight))
+    var stageName: String = ""
+    val position = AutoPosition()
 
 }

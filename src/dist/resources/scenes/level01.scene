@@ -1,6 +1,6 @@
 {
     director: "uk.co.nickthecoder.tickle.demo.Play",
-    layout: "normal",
+    layout: "default",
     stages: [
         {
             name: "main",

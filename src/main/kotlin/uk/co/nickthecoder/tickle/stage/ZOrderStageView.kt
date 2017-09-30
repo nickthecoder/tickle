@@ -3,11 +3,12 @@ package uk.co.nickthecoder.tickle.stage
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.util.Recti
 
-class ZOrderStageView(
-
-        override var rect: Recti,
-        override val stage: Stage)
+class ZOrderStageView()
     : StageView {
+
+    override var rect = Recti(0, 0, 10, 10) //
+
+    override lateinit var stage: Stage
 
     var centerX = 0f;
     var centerY = 0f;

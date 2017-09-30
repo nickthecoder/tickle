@@ -8,8 +8,12 @@ Create a Scene object, which has a set of stages and views.
 BUGS
 ====
 
+
 New Features
 ============
+
+Cannot yet describe a scene with two views of the same stage (used for 2 player split screen)
+	Nor can a view be positioned in the middle of a resizable window.
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 

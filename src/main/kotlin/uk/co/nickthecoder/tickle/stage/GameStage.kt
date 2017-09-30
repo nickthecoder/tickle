@@ -3,7 +3,7 @@ package uk.co.nickthecoder.tickle.stage
 import uk.co.nickthecoder.tickle.Actor
 
 
-class GameStage(override val name: String) : Stage {
+class GameStage() : Stage {
 
     override val actors = mutableSetOf<Actor>()
 

@@ -4,8 +4,6 @@ import uk.co.nickthecoder.tickle.Actor
 
 interface Stage {
 
-    val name: String
-
     val actors: Set<Actor>
 
     fun begin()
@@ -17,4 +15,5 @@ interface Stage {
     fun add(actor: Actor, activate: Boolean = true)
 
     fun remove(actor: Actor)
+
 }
