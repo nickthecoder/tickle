@@ -1,16 +1,13 @@
 package uk.co.nickthecoder.tickle.editor
 
 import javafx.event.EventHandler
-import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
 import uk.co.nickthecoder.paratask.Task
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 
-open class TaskTab(val task: Task, text: String, data: Any, graphic: Node? = null)
-
-    : EditorTab(text, data, graphic) {
+open class TaskPane(val tab: EditorTab, val task: Task) {
 
     val borderPane = BorderPane()
 
@@ -54,11 +51,10 @@ open class TaskTab(val task: Task, text: String, data: Any, graphic: Node? = nul
         }
 
         taskForm.build()
-        content = borderPane
     }
 
     private fun onCancel() {
-        tabPane?.remove(this)
+        tab.tabPane?.remove(tab)
     }
 
     private fun onApply() {
@@ -71,7 +67,7 @@ open class TaskTab(val task: Task, text: String, data: Any, graphic: Node? = nul
         if (taskForm.check()) {
             task.run()
         }
-        tabPane?.remove(this)
+        tab.tabPane?.remove(tab)
     }
 
 }

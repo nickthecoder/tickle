@@ -10,6 +10,8 @@ import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.events.KeyEventType
 import uk.co.nickthecoder.tickle.events.KeyInput
+import uk.co.nickthecoder.tickle.stage.FlexHAlignment
+import uk.co.nickthecoder.tickle.stage.FlexVAlignment
 import java.io.*
 
 class JsonResources {
@@ -150,11 +152,21 @@ class JsonResources {
                 }
 
                 with(layoutView.position) {
-                    jview.add(if (leftAligned) "left" else "right", leftRightMargin)
+                    jview.add("hAlignment", hAlignment.name)
+                    if (hAlignment == FlexHAlignment.MIDDLE) {
+                        jview.add("hPosition", hPosition)
+                    } else {
+                        jview.add("leftRightMargin", leftRightMargin)
+                    }
                     width?.let { jview.add("width", it) }
                     widthRatio?.let { jview.add("widthRatio", it) }
 
-                    jview.add(if (bottomAligned) "bottom" else "top", topBottomMargin)
+                    jview.add("vAlignment", vAlignment.name)
+                    if (vAlignment == FlexVAlignment.MIDDLE) {
+                        jview.add("vPosition", vPosition)
+                    } else {
+                        jview.add("topBottomMargin", topBottomMargin)
+                    }
                     height?.let { jview.add("height", it) }
                     heightRatio?.let { jview.add("heightRatio", it) }
                 }
@@ -189,50 +201,28 @@ class JsonResources {
                     layoutView.viewString = jview.get("view").asString()
                     layoutView.stageName = jview.getString("stage", "")
 
-
-                    val left = jview.getInt("left", -1)
-                    if (left >= 0) {
-                        layoutView.position.leftRightMargin = left
-                        layoutView.position.leftAligned = true
+                    // X
+                    val hAlignmentString = jview.getString("hAlignment", FlexHAlignment.LEFT.name)
+                    layoutView.position.hAlignment = FlexHAlignment.valueOf(hAlignmentString)
+                    if (layoutView.position.hAlignment == FlexHAlignment.MIDDLE) {
+                        layoutView.position.hPosition = jview.get("hPosition").asFloat()
                     } else {
-                        var right = jview.getInt("right", -1)
-                        if (right < 0) {
-                            System.err.println("ERROR. Neither left nor right specified for view $viewName in layout $name")
-                            right = 0
-                        }
-                        layoutView.position.leftRightMargin = right
-                        layoutView.position.leftAligned = false
+                        layoutView.position.leftRightMargin = jview.getInt("leftRightMargin", 0)
                     }
+                    layoutView.position.width = jview.get("width")?.asInt()
+                    layoutView.position.widthRatio = jview.get("widthRatio")?.asFloat()
 
-                    val bottom = jview.getInt("bottom", -1)
-                    if (bottom >= 0) {
-                        layoutView.position.topBottomMargin = bottom
-                        layoutView.position.bottomAligned = true
+                    // Y
+                    val vAlignmentString = jview.getString("vAlignment", FlexVAlignment.BOTTOM.name)
+                    layoutView.position.vAlignment = FlexVAlignment.valueOf(vAlignmentString)
+                    if (layoutView.position.vAlignment == FlexVAlignment.MIDDLE) {
+                        layoutView.position.vPosition = jview.get("vPosition").asFloat()
                     } else {
-                        var top = jview.getInt("top", -1)
-                        if (top < 0) {
-                            System.err.println("ERROR. Neither top nor bottom specified for view $viewName in layout $name")
-                            top = 0
-                        }
-                        layoutView.position.topBottomMargin = top
-                        layoutView.position.bottomAligned = false
+                        layoutView.position.topBottomMargin = jview.getInt("topBottomMargin", 0)
                     }
+                    layoutView.position.height = jview.get("height")?.asInt()
+                    layoutView.position.heightRatio = jview.get("heightRatio")?.asFloat()
 
-                    val width = jview.getInt("width", -1)
-                    if (width > 0) {
-                        layoutView.position.width = width
-                    } else {
-                        val widthRatio = jview.getFloat("widthRatio", -1f)
-                        layoutView.position.widthRatio = if (widthRatio > 0) widthRatio else null
-                    }
-
-                    val height = jview.getInt("height", -1)
-                    if (height > 0) {
-                        layoutView.position.height = height
-                    } else {
-                        val heightRatio = jview.getFloat("heightRatio", -1f)
-                        layoutView.position.heightRatio = if (heightRatio > 0) heightRatio else null
-                    }
                     layout.views[viewName] = layoutView
                 }
             }
@@ -241,7 +231,7 @@ class JsonResources {
         }
     }
 
-    // TEXTURES
+// TEXTURES
 
     fun saveTextures(): JsonArray {
         val jtextures = JsonArray()
@@ -265,7 +255,7 @@ class JsonResources {
         }
     }
 
-    // POSES
+// POSES
 
     fun savePoses(): JsonArray {
         val jposes = JsonArray()
@@ -311,7 +301,7 @@ class JsonResources {
             //println("Loaded pose $name : ${pose}")
         }
     }
-    // COSTUMES
+// COSTUMES
 
     fun saveCostumes(): JsonArray {
         val jcostumes = JsonArray()
@@ -365,7 +355,7 @@ class JsonResources {
         }
     }
 
-    // INPUTS
+// INPUTS
 
     fun saveInputs(): JsonArray {
         val jinputs = JsonArray()
@@ -415,7 +405,7 @@ class JsonResources {
         }
     }
 
-    // Utility methods
+// Utility methods
 
     fun toPath(file: File): String {
         try {

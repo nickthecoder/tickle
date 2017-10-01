@@ -213,6 +213,7 @@ class ResourcesTree(val mainWindow: MainWindow)
 
         init {
             isExpanded = true
+            rebuildChildren()
         }
 
         override fun rebuildChildren() {

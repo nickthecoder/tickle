@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.graphics.Texture
+import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
 class Resources {
@@ -156,12 +157,7 @@ class Resources {
 
     fun inputs(): Map<String, Input> = inputs
 
-    fun optionalInput(name: String?): Input {
-        name?.let {
-            return input(it)
-        }
-        return dummyInput
-    }
+    fun optionalInput(name: String?) = inputs[name] ?: dummyInput
 
     fun input(name: String): Input {
         val input = inputs[name]
@@ -190,6 +186,8 @@ class Resources {
 
     fun layouts(): Map<String, Layout> = layouts
 
+    fun optionalLayout(name: String): Layout? = layouts[name]
+
     fun layout(name: String): Layout {
         val layout = layouts[name]
         if (layout == null)
@@ -215,6 +213,9 @@ class Resources {
         }
     }
 
+    fun save() {
+        JsonResources(this).save(this.file)
+    }
 
     companion object {
         /**

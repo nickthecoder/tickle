@@ -8,8 +8,12 @@ import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.demo.NoProducer
 import uk.co.nickthecoder.tickle.demo.Producer
 
-class GameInfoTab()
-    : TaskTab(GameInfoTask(Resources.instance.gameInfo), "Game Info", Resources.instance.gameInfo) {
+class GameInfoTab() : EditorTab("Game Info", data = Resources.instance.gameInfo) {
+
+    init {
+        val taskPane = TaskPane(this, GameInfoTask(Resources.instance.gameInfo))
+        content = taskPane.borderPane
+    }
 
 }
 

@@ -2,7 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
-import uk.co.nickthecoder.tickle.stage.AutoPosition
+import uk.co.nickthecoder.tickle.stage.FlexPosition
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.stage.StageView
 import uk.co.nickthecoder.tickle.stage.View
@@ -15,7 +15,7 @@ class Scene {
 
     private val views = mutableMapOf<String, View>()
 
-    private val autoPositions = mutableMapOf<String, AutoPosition>()
+    private val autoPositions = mutableMapOf<String, FlexPosition>()
 
     fun stages() = stages.values
 
@@ -42,7 +42,7 @@ class Scene {
         }
     }
 
-    fun addView(name: String, view: View, position: AutoPosition? = null) {
+    fun addView(name: String, view: View, position: FlexPosition? = null) {
         views[name] = view
         position?.let {
             autoPositions[name] = it

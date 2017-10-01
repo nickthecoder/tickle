@@ -10,11 +10,11 @@ class Layout() {
     fun createScene(): Scene {
         val scene = Scene()
         stages.forEach { name, layoutStage ->
-            scene.stages[name] = createStage(layoutStage.stageString)
+            scene.stages[name] = layoutStage.createStage()
         }
 
         views.forEach { name, layoutView ->
-            val view = createView(layoutView.viewString)
+            val view = layoutView.createView()
             if (view is StageView) {
                 val stage = scene.stages[name]
                 if (stage == null) {
@@ -29,8 +29,12 @@ class Layout() {
         return scene
     }
 
+}
 
-    fun createStage(stageString: String): Stage {
+class LayoutStage() {
+    var stageString: String = GameStage::class.java.name
+
+    fun createStage(): Stage {
 
         try {
             val klass = Class.forName(stageString)
@@ -47,8 +51,15 @@ class Layout() {
 
     }
 
+}
 
-    fun createView(viewString: String): View {
+class LayoutView() {
+
+    var viewString: String = ZOrderStageView::class.java.name
+    var stageName: String = ""
+    val position = FlexPosition()
+
+    fun createView(): View {
 
         try {
             val klass = Class.forName(viewString)
@@ -64,17 +75,4 @@ class Layout() {
         return ZOrderStageView()
 
     }
-}
-
-class LayoutStage() {
-    var stageString: String = GameStage::class.java.name
-
-}
-
-class LayoutView() {
-
-    var viewString: String = ZOrderStageView::class.java.name
-    var stageName: String = ""
-    val position = AutoPosition()
-
 }

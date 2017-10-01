@@ -7,9 +7,11 @@ import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 
-class PoseTab(name: String, pose: Pose)
-
-    : TaskTab(PoseTask(name, pose), "Pose $name", pose) {
+class PoseTab(name: String, pose: Pose) : EditorTab("Pose $name", pose) {
+    init {
+        val taskPane = TaskPane(this, PoseTask(name, pose))
+        content = taskPane.borderPane
+    }
 
 }
 

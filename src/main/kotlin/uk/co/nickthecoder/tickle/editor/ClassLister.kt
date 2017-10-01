@@ -42,7 +42,7 @@ object ClassLister {
         val value = choiceParameter.value
         choiceParameter.clear()
         subTypes(type).forEach { klass ->
-            choiceParameter.addChoice(klass.name, klass, klass.name)
+            choiceParameter.addChoice(klass.name, klass, klass.simpleName)
         }
         choiceParameter.value = value
     }

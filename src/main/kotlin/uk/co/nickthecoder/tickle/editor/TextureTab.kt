@@ -10,10 +10,12 @@ import uk.co.nickthecoder.paratask.util.process.Exec
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.TextureResource
 
-class TextureTab(name: String, texture: TextureResource)
+class TextureTab(name: String, textureResource: TextureResource) : EditorTab("Texture $name", textureResource) {
 
-    : TaskTab(TextureTask(name, texture), "Texture $name", texture) {
-
+    init {
+        val taskPane = TaskPane(this, TextureTask(name, textureResource))
+        content = taskPane.borderPane
+    }
 }
 
 class TextureTask(val name: String, val textureResource: TextureResource) : AbstractTask() {
@@ -24,10 +26,10 @@ class TextureTask(val name: String, val textureResource: TextureResource) : Abst
     val renameP = ButtonParameter("rename", buttonText = "Rename") { onRename() }
     val viewP = ButtonParameter("view", buttonText = "View") { onView() }
     val editP = ButtonParameter("edit", buttonText = "Edit") { onEdit() }
-    val buttonsP = SimpleGroupParameter("buttons", label="")
+    val buttonsP = SimpleGroupParameter("buttons", label = "")
             .addParameters(renameP, viewP, editP).asGrid(labelPosition = LabelPosition.NONE)
 
-    override val taskD = TaskDescription("editPose")
+    override val taskD = TaskDescription("editTexture")
             .addParameters(nameP, filenameP, buttonsP)
 
     init {
@@ -49,9 +51,16 @@ class TextureTask(val name: String, val textureResource: TextureResource) : Abst
 
     fun onRename() {
         val renameTask = RenameTask(textureResource.file)
+        try {
+            check()
+        } catch (e: Exception) {
+            return
+        }
         renameTask.taskRunner.listen { cancelled ->
             if (!cancelled) {
                 renameTask.newNameP.value?.path?.let { filenameP.value = it }
+                run()
+                Resources.instance.save()
             }
         }
         val tp = TaskPrompter(renameTask)
