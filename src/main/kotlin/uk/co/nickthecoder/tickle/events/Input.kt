@@ -9,17 +9,25 @@ interface Input {
     fun isPressed(): Boolean
 
     fun matches(event: KeyEvent): Boolean
+
+    companion object {
+
+        val dummyInput = CompoundInput()
+
+    }
 }
 
-class KeyInput(val key: Int, val type: KeyEventType = KeyEventType.PRESS) : Input {
+class KeyInput(val key: Key, val type: KeyEventType = KeyEventType.PRESS) : Input {
 
     override fun isPressed(): Boolean {
-        return glfwGetKey(Window.current?.handle ?: 0, key) == GLFW_PRESS
+        return glfwGetKey(Window.current?.handle ?: 0, key.code) == GLFW_PRESS
     }
 
     override fun matches(event: KeyEvent): Boolean {
         return event.type == type && key == event.key
     }
+
+    override fun toString() = "KeyInput key=$key type=$type"
 }
 
 class CompoundInput() : Input {

@@ -174,7 +174,7 @@
             "name": "left",
             "keys": [
                 {
-                    "key": 263,
+                    "key": "Left",
                     "type": "PRESS"
                 }
             ]
@@ -183,7 +183,7 @@
             "name": "right",
             "keys": [
                 {
-                    "key": 262,
+                    "key": "Right",
                     "type": "PRESS"
                 }
             ]
@@ -192,7 +192,7 @@
             "name": "up",
             "keys": [
                 {
-                    "key": 265,
+                    "key": "Up",
                     "type": "PRESS"
                 }
             ]
@@ -201,7 +201,7 @@
             "name": "down",
             "keys": [
                 {
-                    "key": 264,
+                    "key": "Down",
                     "type": "PRESS"
                 }
             ]
@@ -210,7 +210,7 @@
             "name": "reset",
             "keys": [
                 {
-                    "key": 79,
+                    "key": "O",
                     "type": "PRESS"
                 }
             ]
@@ -219,7 +219,7 @@
             "name": "clockwise",
             "keys": [
                 {
-                    "key": 88,
+                    "key": "X",
                     "type": "PRESS"
                 }
             ]
@@ -228,7 +228,7 @@
             "name": "anti-clockwise",
             "keys": [
                 {
-                    "key": 90,
+                    "key": "Z",
                     "type": "PRESS"
                 }
             ]
@@ -237,7 +237,7 @@
             "name": "toggle",
             "keys": [
                 {
-                    "key": 258,
+                    "key": "Tab",
                     "type": "PRESS"
                 }
             ]

@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
+import uk.co.nickthecoder.tickle.events.Key
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.events.KeyEventType
 
@@ -38,8 +39,8 @@ class Window(
 
     fun keyboardEvents(keyHandler: (KeyEvent) -> Unit) {
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        GLFW.glfwSetKeyCallback(handle) { _, key, scanCode, action, mods ->
-            keyHandler(KeyEvent(this, key, scanCode, KeyEventType.of(action), mods))
+        GLFW.glfwSetKeyCallback(handle) { _, keyCode, scanCode, action, mods ->
+            keyHandler(KeyEvent(this, Key.forCode(keyCode), scanCode, KeyEventType.of(action), mods))
         }
     }
 

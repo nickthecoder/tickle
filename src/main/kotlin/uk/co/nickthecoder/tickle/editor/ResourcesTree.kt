@@ -7,6 +7,7 @@ import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
 import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
 
 class ResourcesTree(val mainWindow: MainWindow)
@@ -80,7 +81,11 @@ class ResourcesTree(val mainWindow: MainWindow)
 
         } else if (data is Layout) {
             return LayoutTab(name, data)
+
+        } else if (data is CompoundInput) {
+            return InputTab(name, data)
         }
+
         return null
     }
 

@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.action
 
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.events.Input
 
 class XYControls(
         var speed: Float,
@@ -12,10 +13,10 @@ class XYControls(
 
     : Action<Actor> {
 
-    val left = Resources.instance.optionalInput(left)
-    val right = Resources.instance.optionalInput(right)
-    val up = Resources.instance.optionalInput(up)
-    val down = Resources.instance.optionalInput(down)
+    val left = Resources.instance.optionalInput(left) ?: Input.dummyInput
+    val right = Resources.instance.optionalInput(right) ?: Input.dummyInput
+    val up = Resources.instance.optionalInput(up) ?: Input.dummyInput
+    val down = Resources.instance.optionalInput(down) ?: Input.dummyInput
 
     var xSpeed: Float = speed
 

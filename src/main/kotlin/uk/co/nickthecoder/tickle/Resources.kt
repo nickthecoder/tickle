@@ -22,11 +22,9 @@ class Resources {
 
     private val costumes = mutableMapOf<String, Costume>()
 
-    private val inputs = mutableMapOf<String, Input>()
+    private val inputs = mutableMapOf<String, CompoundInput>()
 
     private val layouts = mutableMapOf<String, Layout>()
-
-    private val dummyInput = CompoundInput()
 
 
     val sceneDirectory: File
@@ -155,21 +153,21 @@ class Resources {
 
     // INPUTS
 
-    fun inputs(): Map<String, Input> = inputs
+    fun inputs(): Map<String, CompoundInput> = inputs
 
-    fun optionalInput(name: String?) = inputs[name] ?: dummyInput
+    fun optionalInput(name: String?) = inputs[name]
 
-    fun input(name: String): Input {
+    fun input(name: String): CompoundInput {
         val input = inputs[name]
         if (input == null) {
             System.err.println("Warning. Input $name not found.")
-            return dummyInput
+            return Input.dummyInput
         } else {
             return input
         }
     }
 
-    fun addInput(name: String, input: Input) {
+    fun addInput(name: String, input: CompoundInput) {
         inputs[name] = input
         fireAdded(input, name)
     }

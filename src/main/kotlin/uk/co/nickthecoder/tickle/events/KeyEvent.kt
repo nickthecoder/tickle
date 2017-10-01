@@ -4,7 +4,7 @@ import uk.co.nickthecoder.tickle.graphics.Window
 
 class KeyEvent(
         val window: Window,
-        val key: Int,
+        val key: Key,
         val scanCode: Int,
         val type: KeyEventType,
         val mods: Int) {

@@ -6,10 +6,7 @@ import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.demo.NoProducer
-import uk.co.nickthecoder.tickle.events.CompoundInput
-import uk.co.nickthecoder.tickle.events.Input
-import uk.co.nickthecoder.tickle.events.KeyEventType
-import uk.co.nickthecoder.tickle.events.KeyInput
+import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
 import uk.co.nickthecoder.tickle.stage.FlexVAlignment
 import java.io.*
@@ -374,7 +371,7 @@ class JsonResources {
     fun addKeyInputs(input: Input, toArray: JsonArray) {
         if (input is KeyInput) {
             val jkey = JsonObject()
-            jkey.add("key", input.key)
+            jkey.add("key", input.key.label)
             jkey.add("type", input.type.name)
             toArray.add(jkey)
 
@@ -394,10 +391,10 @@ class JsonResources {
                 val jkeys = it.asArray()
                 jkeys.forEach {
                     val jkey = it.asObject()
-                    val key = jkey.get("key").asInt()
+                    val key = jkey.get("key").asString()
                     val typeString = jkey.get("type").asString()
                     val type = KeyEventType.valueOf(typeString)
-                    input.add(KeyInput(key, type))
+                    input.add(KeyInput(Key.forLabel(key), type))
                 }
             }
             resources.addInput(name, input)
@@ -405,7 +402,7 @@ class JsonResources {
         }
     }
 
-// Utility methods
+    // Utility methods
 
     fun toPath(file: File): String {
         try {
