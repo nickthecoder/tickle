@@ -157,6 +157,11 @@ class LayoutViewParameter() : MultipleGroupParameter("view") {
             hPositionP.hidden = !leftRightMarginP.hidden
         }
 
+        vAlignmentP.listen {
+            topBottomMarginP.hidden = vAlignmentP.value == FlexVAlignment.MIDDLE
+            vPositionP.hidden = !topBottomMarginP.hidden
+        }
+
         addParameters(viewNameP, stageNameP, viewClassP, xGroup, yGroup)
         ClassLister.setChoices(viewClassP, View::class.java)
     }

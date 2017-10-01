@@ -10,7 +10,7 @@ New Features
 ============
 
 Editor
-	Rename a costume, input, layout or scene.
+	Rename a costume, or scene.
 	Delete texture, pose, costume, input, layout or scene.
 	Add resources of all types.
 
