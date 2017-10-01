@@ -35,10 +35,39 @@ class Resources {
         get() = File(file.parentFile, "textures")
 
 
+    val listeners = mutableListOf<ResourcesListener>()
+
+
+    private fun fireAdded(resource: Any, name: String) {
+        listeners.forEach {
+            it.added(resource, name)
+        }
+    }
+
+    private fun fireRemoved(resource: Any, name: String) {
+        listeners.forEach {
+            it.removed(resource, name)
+        }
+    }
+
+    private fun fireRenamed(resource: Any, oldName: String, newName: String) {
+        listeners.forEach {
+            it.renamed(resource, oldName, newName)
+        }
+    }
+
+    fun fireChanged(resource: Any) {
+        listeners.forEach {
+            it.changed(resource)
+        }
+    }
+
+    // TEXTURES
+
     fun textures(): Map<String, TextureResource> = textures
 
-    fun optionalTexture(name: String): Texture? {
-        return textures[name]?.texture
+    fun optionalTextureResource(name: String): TextureResource? {
+        return textures[name]
     }
 
     fun textureResource(name: String): TextureResource {
@@ -58,9 +87,20 @@ class Resources {
     }
 
     fun addTexture(name: String, file: File) {
-        textures[name] = TextureResource(file)
+        val textureResource = TextureResource(file)
+        textures[name] = textureResource
+        fireAdded(textureResource, name)
     }
 
+    fun renameTexture(oldName: String, newName: String) {
+        textures[oldName]?.let { textureResource ->
+            textures.remove(oldName)
+            textures[newName] = textureResource
+            fireRenamed(textureResource, oldName, newName)
+        }
+    }
+
+    // POSES
 
     fun poses(): Map<String, Pose> = poses
 
@@ -78,8 +118,18 @@ class Resources {
 
     fun addPose(name: String, pose: Pose) {
         poses[name] = pose
+        fireAdded(pose, name)
     }
 
+    fun renamePose(oldName: String, newName: String) {
+        poses[oldName]?.let { pose ->
+            poses.remove(oldName)
+            poses[newName] = pose
+            fireRenamed(pose, oldName, newName)
+        }
+    }
+
+    // COSTUMES
 
     fun costumes(): Map<String, Costume> = costumes
 
@@ -91,8 +141,18 @@ class Resources {
 
     fun addCostume(name: String, costume: Costume) {
         costumes[name] = costume
+        fireAdded(costume, name)
     }
 
+    fun renameCostume(oldName: String, newName: String) {
+        costumes[oldName]?.let { costume ->
+            costumes.remove(oldName)
+            costumes[newName] = costume
+            fireRenamed(costume, oldName, newName)
+        }
+    }
+
+    // INPUTS
 
     fun inputs(): Map<String, Input> = inputs
 
@@ -115,8 +175,18 @@ class Resources {
 
     fun addInput(name: String, input: Input) {
         inputs[name] = input
+        fireAdded(input, name)
     }
 
+    fun renameInput(oldName: String, newName: String) {
+        inputs[oldName]?.let { input ->
+            inputs.remove(oldName)
+            inputs[newName] = input
+            fireRenamed(input, oldName, newName)
+        }
+    }
+
+    // LAYOUT
 
     fun layouts(): Map<String, Layout> = layouts
 
@@ -134,6 +204,15 @@ class Resources {
 
     fun addLayout(name: String, layout: Layout) {
         layouts[name] = layout
+        fireAdded(layout, name)
+    }
+
+    fun renameLayout(oldName: String, newName: String) {
+        layouts[oldName]?.let { layout ->
+            layouts.remove(oldName)
+            layouts[newName] = layout
+            fireRenamed(layout, oldName, newName)
+        }
     }
 
 

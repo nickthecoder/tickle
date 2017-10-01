@@ -10,10 +10,16 @@ New Features
 ============
 
 Editor
-	Rename a texture, pose, costume, input, layout or scene.
+	Rename a costume, input, layout or scene.
+	Delete texture, pose, costume, input, layout or scene.
+	Add resources of all types.
+
+	When renaming an item, who's name is used in a scene, we need to keep track of renamed items,
+		and update all scenes when the resource file is saved.
+		Costume and Font only?
 
 	Texture
-		Change "View" button to view in a new tab
+		Change "View" button to open a new tab (instead of launching gwenview)
 		Show the texture, with rectangles for each of the Poses using that texture.
 			Maybe just bottom left and top right corner to show the rectangle.
 			Click to show rect figures as Parameters
@@ -24,17 +30,28 @@ Editor
 		Drag a rectangle shown in a different colour.
 			Double Click to create a NEW pose
 
+		Can use a regular canvas for this (load the texture's image again).
+		Replace the main window's left pane with a list of Poses using that texture.
+			Accordian?
+
 		Edit : If there is an svg or xcf of the same name, edit that instead of the png.
 
+	Ctrl+F to search for resources matching the name (glob?)
+		Another TreeView using Accordian?
+
+	Exapand/Contract All buttons above the accordian
 
 	Pose tab to have a list of costumes using it
+		In a "minor tab"?
 		Also a button to create a new Costume from that pose
 
 	Preferences (saved in resources?)
 		Image view
 		Image editors (one value per extension)
 
+	Custom lauchers (saved in prefernces) - Use it to open the game's paratask project.
 
+Ensure Textures are deleted when removed from resources (Use finialise?).
 
 
 Costumes to inherit?

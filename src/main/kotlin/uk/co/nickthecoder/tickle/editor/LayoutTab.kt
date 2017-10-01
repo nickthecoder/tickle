@@ -4,9 +4,8 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.Layout
-import uk.co.nickthecoder.tickle.Resources
 
-class LayoutTab(val resources: Resources, name: String, layout: Layout)
+class LayoutTab(name: String, layout: Layout)
 
     : TaskTab(LayoutTask(name, layout), "Layout $name", layout) {
 

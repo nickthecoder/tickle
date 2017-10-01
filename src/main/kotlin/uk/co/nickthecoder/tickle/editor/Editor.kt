@@ -18,9 +18,10 @@ class Editor() : Application() {
         AutoExit.disable()
         windowlessContext = WindowlessContext()
         val resources = if (resourceFile == null) Resources() else JsonResources(resourceFile!!).resources
+        Resources.instance = resources
 
         println("Loaded resource, creating main window")
-        MainWindow(primaryStage, resources)
+        MainWindow(primaryStage)
     }
 
     override fun stop() {

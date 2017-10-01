@@ -8,8 +8,8 @@ import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.demo.NoProducer
 import uk.co.nickthecoder.tickle.demo.Producer
 
-class GameInfoTab(val resources: Resources)
-    : TaskTab(GameInfoTask(resources.gameInfo), "Game Info", resources.gameInfo) {
+class GameInfoTab()
+    : TaskTab(GameInfoTask(Resources.instance.gameInfo), "Game Info", Resources.instance.gameInfo) {
 
 }
 

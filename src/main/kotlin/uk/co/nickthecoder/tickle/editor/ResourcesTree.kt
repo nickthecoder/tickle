@@ -8,11 +8,12 @@ import javafx.scene.input.MouseEvent
 import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.Input
-import java.io.File
 
-class ResourcesTree(val mainWindow: MainWindow, val resources: Resources)
+class ResourcesTree(val mainWindow: MainWindow)
 
     : TreeView<String>() {
+
+    val resources = Resources.instance
 
     init {
         isEditable = false
@@ -69,23 +70,28 @@ class ResourcesTree(val mainWindow: MainWindow, val resources: Resources)
     fun createTab(name: String, data: Any): EditorTab? {
 
         if (data is GameInfo) {
-            return GameInfoTab(resources)
+            return GameInfoTab()
 
         } else if (data is TextureResource) {
-            return TextureTab(resources, name, data)
+            return TextureTab(name, data)
 
         } else if (data is Pose) {
-            return PoseTab(resources, name, data)
+            return PoseTab(name, data)
 
         } else if (data is Layout) {
-            return LayoutTab(resources, name, data)
+            return LayoutTab(name, data)
         }
         return null
     }
 
     abstract inner class ResourceItem(label: String) : TreeItem<String>(label) {
         open fun data(): Any? = null
+
+        override fun isLeaf() = true
+
+        open fun removed() {}
     }
+
 
     inner class RootItem() : ResourceItem("Resources") {
 
@@ -100,124 +106,151 @@ class ResourcesTree(val mainWindow: MainWindow, val resources: Resources)
 
         init {
             resources.poses().forEach { name, pose ->
-                children.add(PoseItem(name, pose))
+                children.add(DataItem(name, pose))
             }
         }
 
         override fun data(): GameInfo = resources.gameInfo
-        override fun isLeaf() = true
     }
 
-
-    inner class TexturesItem() : ResourceItem("Textures") {
+    inner class DataItem(val name: String, val data: Any) : ResourceItem(name), ResourcesListener {
 
         init {
-            resources.textures().forEach { name, texture ->
-                children.add(TextureItem(name, texture))
+            Resources.instance.listeners.add(this)
+        }
+
+        override fun data() = data
+
+        override fun renamed(resource: Any, oldName: String, newName: String) {
+            if (resource === data) {
+                value = newName
             }
+        }
+
+        override fun removed() {
+            Resources.instance.listeners.remove(this)
+        }
+    }
+
+    abstract inner class TopLevelItem(label: String, val type: Class<*>) : ResourceItem(label), ResourcesListener {
+        init {
+            Resources.instance.listeners.add(this)
+        }
+
+        override fun isLeaf() = false
+
+        fun maybeRebuild(resource: Any) {
+            if (type.isInstance(resource)) {
+                rebuildChildren()
+            }
+        }
+
+        override fun removed(resource: Any, name: String) {
+            maybeRebuild(resource)
+        }
+
+        override fun added(resource: Any, name: String) {
+            maybeRebuild(resource)
+        }
+
+        open fun rebuildChildren() {
+            children.forEach { child ->
+                (child as ResourceItem).removed()
+            }
+            children.clear()
+        }
+
+        override fun removed() {
+            Resources.instance.listeners.remove(this)
+        }
+    }
+
+    inner class TexturesItem() : TopLevelItem("Textures", TextureResource::class.java) {
+
+        init {
+            rebuildChildren()
             isExpanded = true
         }
 
-        override fun isLeaf() = false
-    }
-
-    inner class TextureItem(val name: String, val textureResource: TextureResource) : ResourceItem(name) {
-
-        override fun data() = textureResource
-        override fun isLeaf() = true
-    }
-
-
-    inner class PosesItem() : ResourceItem("Poses") {
-
-        init {
-            resources.poses().forEach { name, pose ->
-                children.add(PoseItem(name, pose))
+        override fun rebuildChildren() {
+            resources.textures().map { it }.sortedBy { it.key }.forEach { (name, texture) ->
+                children.add(DataItem(name, texture))
             }
         }
-
-        override fun isLeaf() = false
-    }
-
-    inner class PoseItem(val name: String, val pose: Pose) : ResourceItem(name) {
-
-        override fun data() = pose
-        override fun isLeaf() = true
     }
 
 
-    inner class CostumesItem() : ResourceItem("Costumes") {
+    inner class PosesItem() : TopLevelItem("Poses", Pose::class.java) {
 
         init {
-            resources.costumes().forEach { name, costume ->
-                children.add(CostumeItem(name, costume))
-            }
+            rebuildChildren()
         }
 
-        override fun isLeaf() = false
+        override fun rebuildChildren() {
+            super.rebuildChildren()
+            resources.poses().map { it }.sortedBy { it.key }.forEach { (name, pose) ->
+                children.add(DataItem(name, pose))
+            }
+        }
     }
 
 
-    inner class CostumeItem(val name: String, val costume: Costume) : ResourceItem(name) {
-
-        override fun data() = costume
-        override fun isLeaf() = true
-    }
-
-    inner class LayoutsItem() : ResourceItem("Layouts") {
+    inner class CostumesItem() : TopLevelItem("Costumes", Costume::class.java) {
 
         init {
-            resources.layouts().forEach { name, layout ->
-                children.add(LayoutItem(name, layout))
+            rebuildChildren()
+        }
+
+        override fun rebuildChildren() {
+            super.rebuildChildren()
+            resources.costumes().map { it }.sortedBy { it.key }.forEach { (name, costume) ->
+                children.add(DataItem(name, costume))
             }
+        }
+    }
+
+    inner class LayoutsItem() : TopLevelItem("Layouts", Layout::class.java) {
+
+        init {
             isExpanded = true
         }
 
-        override fun isLeaf() = false
-    }
-
-
-    inner class LayoutItem(val name: String, val layout: Layout) : ResourceItem(name) {
-
-        override fun data() = layout
-        override fun isLeaf() = true
-    }
-
-    inner class InputsItem() : ResourceItem("Inputs") {
-
-        init {
-            resources.inputs().forEach { name, input ->
-                children.add(InputItem(name, input))
+        override fun rebuildChildren() {
+            super.rebuildChildren()
+            resources.layouts().map { it }.sortedBy { it.key }.forEach { (name, layout) ->
+                children.add(DataItem(name, layout))
             }
         }
-
-        override fun isLeaf() = false
     }
 
 
-    inner class InputItem(val name: String, val input: Input) : ResourceItem(name) {
+    inner class InputsItem() : TopLevelItem("Inputs", Input::class.java) {
 
-        override fun data() = input
-        override fun isLeaf() = true
+        init {
+            rebuildChildren()
+        }
+
+        override fun rebuildChildren() {
+            super.rebuildChildren()
+            resources.inputs().map { it }.sortedBy { it.key }.forEach { (name, input) ->
+                children.add(DataItem(name, input))
+            }
+        }
     }
+
 
     inner class ScenesItem() : ResourceItem("Scenes") {
 
         init {
+            // TODO Create a hierarchy of directories and scene files
+            // Could use Resources listeners to update the tree, even though scenes aren't in Resources.
             val lister = FileLister(depth = 3, extensions = listOf("scene"))
             lister.listFiles(resources.sceneDirectory).forEach { file ->
-                children.add(SceneItem(file))
+                children.add(DataItem(file.name, file))
             }
         }
 
         override fun isLeaf() = false
-    }
-
-
-    inner class SceneItem(val file: File) : ResourceItem(file.nameWithoutExtension) {
-
-        override fun data() = file
-        override fun isLeaf() = true
     }
 
 }

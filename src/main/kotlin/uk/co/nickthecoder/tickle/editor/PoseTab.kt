@@ -1,12 +1,13 @@
 package uk.co.nickthecoder.tickle.editor
 
 import uk.co.nickthecoder.paratask.AbstractTask
+import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 
-class PoseTab(val resources: Resources, name: String, pose: Pose)
+class PoseTab(name: String, pose: Pose)
 
     : TaskTab(PoseTask(name, pose), "Pose $name", pose) {
 
@@ -34,10 +35,17 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
 
     }
 
+    override fun customCheck() {
+        val p = Resources.instance.optionalPose(nameP.value)
+        if (p != null && p != pose) {
+            throw ParameterException(nameP, "This name is already used.")
+        }
+    }
+
     override fun run() {
         //println("Run LTRB : ${positionP.left},${positionP.top}, ${positionP.right}, ${positionP.bottom}  size : ${positionP.width}, ${positionP.height}")
         if (nameP.value != name) {
-            // TODO Rename!
+            Resources.instance.renamePose(name, nameP.value)
         }
         pose.rect.left = positionP.left!!
         pose.rect.bottom = positionP.bottom!!

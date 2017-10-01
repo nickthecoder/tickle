@@ -7,11 +7,11 @@ import uk.co.nickthecoder.paratask.ParaTask
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.tickle.Resources
 
-class MainWindow(val stage: Stage, val resources: Resources) {
+class MainWindow(val stage: Stage) {
 
     val borderPane = BorderPane()
 
-    val resourcesTree = ResourcesTree(this, resources)
+    val resourcesTree = ResourcesTree(this)
 
     val tabPane = MyTabPane<EditorTab>()
 
@@ -27,7 +27,7 @@ class MainWindow(val stage: Stage, val resources: Resources) {
         borderPane.center = tabPane
         stage.show()
 
-        tabPane.add(GameInfoTab(resources))
+        tabPane.add(GameInfoTab())
     }
 
     fun findTab(data: Any): EditorTab? {

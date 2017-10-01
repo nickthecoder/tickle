@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.editor
 
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
+import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
@@ -9,7 +10,7 @@ import uk.co.nickthecoder.paratask.util.process.Exec
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.TextureResource
 
-class TextureTab(val resources: Resources, name: String, texture: TextureResource)
+class TextureTab(name: String, texture: TextureResource)
 
     : TaskTab(TextureTask(name, texture), "Texture $name", texture) {
 
@@ -33,9 +34,16 @@ class TextureTask(val name: String, val textureResource: TextureResource) : Abst
         filenameP.enabled = false
     }
 
+    override fun customCheck() {
+        val tr = Resources.instance.optionalTextureResource(nameP.value)
+        if (tr != null && tr != textureResource) {
+            throw ParameterException(nameP, "This name is already used.")
+        }
+    }
+
     override fun run() {
         if (nameP.value != name) {
-            // TODO Rename!
+            Resources.instance.renameTexture(name, nameP.value)
         }
     }
 
