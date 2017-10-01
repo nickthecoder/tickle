@@ -426,7 +426,7 @@ class JsonResources {
     }
 
     fun fromPath(path: String): File {
-        return resources.resourceDirectory.resolve(path)
+        return resources.resourceDirectory.resolve(path).absoluteFile
     }
 
 

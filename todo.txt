@@ -1,22 +1,6 @@
 Current Work
 ============
 
-RectParameter to use width  and height (calculate right and top/bottom automatically)
-
-Pose tab to have a list of costumes using it
-	Also a button to create a new Costume from that pose
-
-TextureTab
-	Show the texture, with rectangles for each of the Poses using that texture.
-		Maybe just bottom left and top right corner to show the rectangle.
-		Click to show rect figures as Parameters
-		Double Click to edit the pose
-		Cross hairs at the offset point of each pose
-		Buttons to change the outline and cross hair colour.
-
-	Drag a rectangle shown in a different colour.
-		Double Click to create a NEW pose
-
 BUGS
 ====
 
@@ -24,6 +8,34 @@ Not loading the background color from a .scene file.
 
 New Features
 ============
+
+Editor
+	Rename a texture, pose, costume, input, layout or scene.
+
+	Texture
+		Change "View" button to view in a new tab
+		Show the texture, with rectangles for each of the Poses using that texture.
+			Maybe just bottom left and top right corner to show the rectangle.
+			Click to show rect figures as Parameters
+			Double Click to edit the pose
+			Cross hairs at the offset point of each pose
+			Buttons to change the outline and cross hair colour.
+
+		Drag a rectangle shown in a different colour.
+			Double Click to create a NEW pose
+
+		Edit : If there is an svg or xcf of the same name, edit that instead of the png.
+
+
+	Pose tab to have a list of costumes using it
+		Also a button to create a new Costume from that pose
+
+	Preferences (saved in resources?)
+		Image view
+		Image editors (one value per extension)
+
+
+
 
 Costumes to inherit?
 	Just the events?

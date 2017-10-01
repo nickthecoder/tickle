@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.editor
 
 import javafx.application.Application
 import javafx.stage.Stage
+import uk.co.nickthecoder.paratask.util.AutoExit
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.graphics.WindowlessContext
 import uk.co.nickthecoder.tickle.guessTickleFile
@@ -14,6 +15,7 @@ class Editor() : Application() {
 
     override fun start(primaryStage: Stage) {
 
+        AutoExit.disable()
         windowlessContext = WindowlessContext()
         val resources = if (resourceFile == null) Resources() else JsonResources(resourceFile!!).resources
 
