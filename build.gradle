@@ -42,6 +42,7 @@ switch ( OperatingSystem.current() ) {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -67,6 +68,10 @@ dependencies {
     runtime "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
 
     testCompile 'junit:junit:4.11'
+
+    // Only needed for the editor
+    compile 'uk.co.nickthecoder:paratask-core:0.1'
+    compile 'org.reflections:reflections:0.9.11'
 }
 
 compileKotlin {

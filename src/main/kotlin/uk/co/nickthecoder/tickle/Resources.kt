@@ -28,6 +28,13 @@ class Resources {
     private val dummyInput = CompoundInput()
 
 
+    val sceneDirectory: File
+        get() = File(file.parentFile, "scenes")
+
+    val texturesDirectory: File
+        get() = File(file.parentFile, "textures")
+
+
     fun textures(): Map<String, TextureResource> = textures
 
     fun optionalTexture(name: String): Texture? {

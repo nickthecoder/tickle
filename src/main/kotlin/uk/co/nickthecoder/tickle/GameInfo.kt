@@ -9,7 +9,8 @@ class GameInfo(
         var height: Int,
         var resizable: Boolean,
         var startScene: String = "splash",
-        var producerString: String = NoProducer::class.java.name) {
+        var producerString: String = NoProducer::class.java.name,
+        val packages: MutableList<String> = mutableListOf("uk.co.nickthecoder.tickle")) {
 
     fun createProducer(): Producer {
         try {

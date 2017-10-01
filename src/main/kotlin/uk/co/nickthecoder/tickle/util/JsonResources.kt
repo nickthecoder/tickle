@@ -92,6 +92,11 @@ class JsonResources {
             jinfo.add("resizable", resizable)
             jinfo.add("startScene", startScene)
             jinfo.add("producer", producerString)
+            val jpackages = JsonArray()
+            packages.forEach {
+                jpackages.add(it)
+            }
+            jinfo.add("packages", jpackages)
             return jinfo
         }
     }
@@ -104,6 +109,13 @@ class JsonResources {
             resizable = jinfo.getBoolean("resizable", true)
             startScene = jinfo.getString("startScene", "splash")
             producerString = jinfo.getString("producer", NoProducer::javaClass.name)
+            jinfo.get("packages")?.let {
+                val newPackages = it.asArray()
+                packages.clear()
+                newPackages.forEach {
+                    packages.add(it.asString())
+                }
+            }
 
             // println("Loaded info : $title : $width x $height Resize? $resizable. Game=$producerString")
         }
