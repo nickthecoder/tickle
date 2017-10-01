@@ -15,7 +15,7 @@ class PoseTab(val resources: Resources, name: String, pose: Pose)
 class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
 
     val nameP = StringParameter("name", value = name)
-    val positionP = RectParameter("position", bottomUp = false)
+    val positionP = RectiParameter("position", bottomUp = false)
     val offsetP = XYParameter("offset")
 
     override val taskD = TaskDescription("editPose")
@@ -26,12 +26,16 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         offsetP.y = pose.offsetY.toDouble()
 
         positionP.left = pose.rect.left
-        positionP.bottom = pose.rect.bottom
         positionP.right = pose.rect.right
         positionP.top = pose.rect.top
+        positionP.bottom = pose.rect.bottom
+
+        // println("Init LTRB : ${positionP.left},${positionP.top}, ${positionP.right}, ${positionP.bottom}  size : ${positionP.width}, ${positionP.height}")
+
     }
 
     override fun run() {
+        //println("Run LTRB : ${positionP.left},${positionP.top}, ${positionP.right}, ${positionP.bottom}  size : ${positionP.width}, ${positionP.height}")
         if (nameP.value != name) {
             // TODO Rename!
         }
