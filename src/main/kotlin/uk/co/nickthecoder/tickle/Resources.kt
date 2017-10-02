@@ -85,13 +85,14 @@ class Resources {
         return textures.filter { entry -> entry.value.texture === texture }.map { it.key }.firstOrNull()
     }
 
-    fun addTexture(name: String, file: File) {
+    fun addTexture(name: String, file: File): TextureResource {
         val textureResource = TextureResource(file)
         textures[name] = textureResource
         fireAdded(textureResource, name)
+        return textureResource
     }
 
-    fun deleteTexture(name : String) {
+    fun deleteTexture(name: String) {
         textures[name]?.let {
             textures.remove(name)
             fireRemoved(it, name)
@@ -127,7 +128,7 @@ class Resources {
         fireAdded(pose, name)
     }
 
-    fun deletePose(name : String) {
+    fun deletePose(name: String) {
         poses[name]?.let {
             poses.remove(name)
             fireRemoved(it, name)
@@ -157,7 +158,7 @@ class Resources {
         fireAdded(costume, name)
     }
 
-    fun deleteCostume(name : String) {
+    fun deleteCostume(name: String) {
         costumes[name]?.let {
             costumes.remove(name)
             fireRemoved(it, name)
@@ -193,7 +194,7 @@ class Resources {
         fireAdded(input, name)
     }
 
-    fun deleteInput(name : String) {
+    fun deleteInput(name: String) {
         inputs[name]?.let {
             inputs.remove(name)
             fireRemoved(it, name)
@@ -231,7 +232,7 @@ class Resources {
         fireAdded(layout, name)
     }
 
-    fun deleteLayout(name : String) {
+    fun deleteLayout(name: String) {
         layouts[name]?.let {
             layouts.remove(name)
             fireRemoved(it, name)

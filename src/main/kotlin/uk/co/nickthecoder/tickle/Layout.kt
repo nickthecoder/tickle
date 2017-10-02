@@ -53,11 +53,12 @@ class LayoutStage() {
 
 }
 
-class LayoutView() {
+class LayoutView(
+        var viewString: String = ZOrderStageView::class.java.name,
+        var stageName: String = "") {
 
-    var viewString: String = ZOrderStageView::class.java.name
-    var stageName: String = ""
     val position = FlexPosition()
+
 
     fun createView(): View {
 

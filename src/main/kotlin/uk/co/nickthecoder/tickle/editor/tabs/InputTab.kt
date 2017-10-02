@@ -31,7 +31,7 @@ class InputTask(val name: String, val compoundInput: CompoundInput) : AbstractTa
             .addParameters(nameP, inputsP)
 
     init {
-        inputsP.asListDetail { it.toString() }
+        inputsP.asListDetail(allowReordering = false) { it.toString() }
 
         compoundInput.inputs.forEach { input ->
             val inner = inputsP.newValue()

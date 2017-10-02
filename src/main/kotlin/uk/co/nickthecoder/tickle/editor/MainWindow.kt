@@ -8,6 +8,7 @@ import uk.co.nickthecoder.paratask.ParaTask
 import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
+import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.tabs.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
@@ -47,6 +48,7 @@ class MainWindow(val stage: Stage) {
 
         with(toolBar.items) {
             add(EditorActions.RESOURCES_SAVE.createButton(shortcuts) { save() })
+            add(EditorActions.NEW.createButton(shortcuts) { newResource() })
         }
 
         stage.show()
@@ -61,7 +63,11 @@ class MainWindow(val stage: Stage) {
         JsonResources(Resources.instance).save(Resources.instance.file)
     }
 
-    fun openTab( dataName : String, data : Any ) {
+    fun newResource() {
+        TaskPrompter(NewResourceTask()).placeOnStage(Stage())
+    }
+
+    fun openTab(dataName: String, data: Any) {
 
         val tab = findTab(data)
         if (tab == null) {

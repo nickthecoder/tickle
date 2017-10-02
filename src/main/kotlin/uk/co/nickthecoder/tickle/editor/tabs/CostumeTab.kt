@@ -9,6 +9,7 @@ import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.editor.createPoseParameter
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
 
@@ -190,14 +191,4 @@ class CostumeTab(val name: String, val costume: Costume)
         }
     }
 
-}
-
-private fun createPoseParameter(parameterName: String = "pose"): ChoiceParameter<Pose?> {
-
-    val choice = ChoiceParameter<Pose?>(parameterName, required = true, value = null)
-
-    Resources.instance.poses().forEach { poseName, pose ->
-        choice.addChoice(poseName, pose, poseName)
-    }
-    return choice
 }
