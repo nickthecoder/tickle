@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.util
 
 import org.reflections.Reflections
 import uk.co.nickthecoder.paratask.parameters.ChoiceParameter

@@ -5,7 +5,8 @@ import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.ParaTask
 import uk.co.nickthecoder.paratask.gui.MyTabPane
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.editor.tabs.EditorTab
+import uk.co.nickthecoder.tickle.editor.tabs.GameInfoTab
 
 class MainWindow(val stage: Stage) {
 

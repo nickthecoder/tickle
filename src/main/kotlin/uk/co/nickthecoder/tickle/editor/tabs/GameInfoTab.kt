@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.tabs
 
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
@@ -7,13 +7,11 @@ import uk.co.nickthecoder.tickle.GameInfo
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.demo.NoProducer
 import uk.co.nickthecoder.tickle.demo.Producer
+import uk.co.nickthecoder.tickle.editor.util.ClassLister
+import uk.co.nickthecoder.tickle.editor.util.XYiParameter
 
-class GameInfoTab() : EditorTab("Game Info", data = Resources.instance.gameInfo) {
-
-    init {
-        val taskPane = TaskPane(this, GameInfoTask(Resources.instance.gameInfo))
-        content = taskPane.borderPane
-    }
+class GameInfoTab()
+    : EditTaskTab(GameInfoTask(Resources.instance.gameInfo), "Game Info", data = Resources.instance.gameInfo) {
 
 }
 

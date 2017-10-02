@@ -1,10 +1,10 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.util
 
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.util.uncamel
 
 
-class XYParameter(
+class XYiParameter(
         name: String,
         override val label: String = name.uncamel(),
         val required: Boolean = true,
@@ -15,12 +15,12 @@ class XYParameter(
         label = label,
         description = description) {
 
-    val xP = DoubleParameter(name + "_x", label = "X", required = required)
+    val xP = IntParameter(name + "_x", label = "X", required = required)
     var x by xP
 
     val commaP = InformationParameter(name + "_comma", information = ",")
 
-    val yP = DoubleParameter(name + "_y", label = "Y", required = required)
+    val yP = IntParameter(name + "_y", label = "Y", required = required)
     var y by yP
 
     init {
@@ -37,8 +37,8 @@ class XYParameter(
         return null
     }
 
-    override fun copy(): XYParameter {
-        val copy = XYParameter(name = name,
+    override fun copy(): XYiParameter {
+        val copy = XYiParameter(name = name,
                 label = label,
                 description = description,
                 required = required)

@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.util
 
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription

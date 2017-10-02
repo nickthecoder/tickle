@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.event.EventHandler
 import javafx.scene.input.KeyCode
@@ -11,12 +11,9 @@ import uk.co.nickthecoder.paratask.parameters.fields.ButtonField
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.events.*
 
-class InputTab(name: String, input: CompoundInput) : EditorTab("Input $name", input) {
+class InputTab(name: String, input: CompoundInput)
+    : EditTaskTab(InputTask(name, input), "Input $name", input) {
 
-    init {
-        val taskPane = TaskPane(this, InputTask(name, input))
-        content = taskPane.borderPane
-    }
 }
 
 class InputTask(val name: String, val compoundInput: CompoundInput) : AbstractTask() {

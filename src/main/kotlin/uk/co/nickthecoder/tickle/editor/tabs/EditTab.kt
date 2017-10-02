@@ -1,13 +1,13 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.event.EventHandler
 import javafx.scene.control.Button
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
-import uk.co.nickthecoder.paratask.Task
-import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 
-open class TaskPane(val tab: EditorTab, val task: Task) {
+abstract class EditTab(name: String, data: Any)
+
+    : EditorTab(name, data) {
 
     val borderPane = BorderPane()
 
@@ -19,13 +19,12 @@ open class TaskPane(val tab: EditorTab, val task: Task) {
 
     val cancelButton = Button("Cancel")
 
-    val taskForm = TaskForm(task)
 
     init {
+        content = borderPane
 
         with(borderPane) {
             styleClass.add("prompt")
-            center = taskForm.scrollPane
             bottom = buttons
         }
 
@@ -49,25 +48,21 @@ open class TaskPane(val tab: EditorTab, val task: Task) {
             children.addAll(okButton, applyButton, cancelButton)
             styleClass.add("buttons")
         }
-
-        taskForm.build()
     }
 
-    private fun onCancel() {
-        tab.tabPane?.remove(tab)
+    abstract fun save(): Boolean
+
+    protected fun onCancel() {
+        close()
     }
 
-    private fun onApply() {
-        if (taskForm.check()) {
-            task.run()
-        }
+    protected fun onApply() {
+        save()
     }
 
     protected fun onOk() {
-        if (taskForm.check()) {
-            task.run()
+        if (save()) {
+            close()
         }
-        tab.tabPane?.remove(tab)
     }
-
 }

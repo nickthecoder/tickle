@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.tabs
 
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
@@ -6,12 +6,11 @@ import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.editor.util.RectiParameter
+import uk.co.nickthecoder.tickle.editor.util.XYParameter
 
-class PoseTab(name: String, pose: Pose) : EditorTab("Pose $name", pose) {
-    init {
-        val taskPane = TaskPane(this, PoseTask(name, pose))
-        content = taskPane.borderPane
-    }
+class PoseTab(name: String, pose: Pose)
+    : EditTaskTab(PoseTask(name, pose), "Pose $name", pose) {
 
 }
 

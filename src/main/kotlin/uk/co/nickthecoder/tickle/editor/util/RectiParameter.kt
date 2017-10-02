@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.util
 
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.util.uncamel

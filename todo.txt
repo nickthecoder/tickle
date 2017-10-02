@@ -11,6 +11,7 @@ New Features
 
 Editor
 	Rename a costume, or scene.
+	Edit Costume
 	Delete texture, pose, costume, input, layout or scene.
 	Add resources of all types.
 
@@ -29,6 +30,13 @@ Editor
 
 		Drag a rectangle shown in a different colour.
 			Double Click to create a NEW pose
+			Show non-transparent pixels by drawing the outline in a different color at those places.
+
+		Or click on a point, and look for a transparent rectangular outline which encloses that point to
+			define the pose's rect.
+			Start with a small square
+			Extend along X until both edges are transparent, then switch to Y
+			Extend along Y until both edges are transparent, check left/right again and repeat till done.
 
 		Can use a regular canvas for this (load the texture's image again).
 		Replace the main window's left pane with a list of Poses using that texture.
@@ -51,14 +59,19 @@ Editor
 
 	Custom lauchers (saved in prefernces) - Use it to open the game's paratask project.
 
+MouseInput
+	MouseButtonInput
+	Hide the mouse, so it can be replaced by an actor
+	Action(s) to follow the mouse
+		Follow immediately or with "inertia".
+	Find Actors at a point
+		Overlapping, or using pixel data
+
 Ensure Textures are deleted when removed from resources (Use finialise?).
 
 
 Costumes to inherit?
 	Just the events?
-
-Cannot yet describe a scene with two views of the same stage (used for 2 player split screen)
-	Nor can a view be positioned in the middle of a resizable window.
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 
@@ -69,8 +82,7 @@ Fonts
 View clipping.
 
 Merge scenes from two or more scene files
-
-The Resources Editor
+	SceneResource to have a set of "includes", so that merging multiple .scene files is done automatically.
 
 Tags
 	Consider special methods on Tagged and TagManager to use inline reified typed methods to return Roles of the
@@ -81,8 +93,6 @@ Tags
 	Nearby - Only return those in a the surrounding N blocks.
 		N=0 when it will be used for collision detection.
 		Create a new TaggedRole interface.
-
-SceneResource to have a set of "includes", so that merging multiple .scene files is done automatically.
 
 Later
 =====

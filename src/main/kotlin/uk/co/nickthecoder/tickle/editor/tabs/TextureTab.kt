@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
@@ -9,13 +9,11 @@ import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.util.process.Exec
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.TextureResource
+import uk.co.nickthecoder.tickle.editor.util.RenameTask
 
-class TextureTab(name: String, textureResource: TextureResource) : EditorTab("Texture $name", textureResource) {
+class TextureTab(name: String, textureResource: TextureResource)
+    : EditTaskTab(TextureTask(name, textureResource),"Texture $name", textureResource) {
 
-    init {
-        val taskPane = TaskPane(this, TextureTask(name, textureResource))
-        content = taskPane.borderPane
-    }
 }
 
 class TextureTask(val name: String, val textureResource: TextureResource) : AbstractTask() {
