@@ -4,8 +4,7 @@ class Costume() {
 
     var roleString: String = ""
 
-    val attributes = mutableMapOf<String,String>()
-
+    val attributes = Attributes()
     val events = mutableMapOf<String, CostumeEvent>()
 
     // TODO Will have relatedCostumes later. And we can then use that to create bullets, explosions, etc.
@@ -13,6 +12,8 @@ class Costume() {
 
     fun createActor(): Actor {
         val role = if (roleString.isBlank()) null else Role.create(roleString)
+        role?.let { attributes.updateRole(it) }
+
         val actor = Actor(role)
         events["default"]?.choosePose()?.let { pose ->
             actor.changePose(pose)

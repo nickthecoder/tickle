@@ -72,6 +72,7 @@ dependencies {
     // Only needed for the editor
     compile 'uk.co.nickthecoder:paratask-core:0.1'
     compile 'org.reflections:reflections:0.9.11'
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 
 compileKotlin {

@@ -85,6 +85,9 @@ class ResourcesTree(val mainWindow: MainWindow)
 
         } else if (data is CompoundInput) {
             return InputTab(name, data)
+
+        } else if (data is Costume) {
+            return CostumeTab(name, data)
         }
 
         return null

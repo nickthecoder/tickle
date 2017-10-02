@@ -46,6 +46,16 @@ object ClassLister {
         }
         choiceParameter.value = value
     }
+
+    fun setNullableChoices(choiceParameter: ChoiceParameter<Class<*>?>, type: Class<*>) {
+        val value = choiceParameter.value
+        choiceParameter.clear()
+        choiceParameter.addChoice("", null, "<none>")
+        subTypes(type).forEach { klass ->
+            choiceParameter.addChoice(klass.name, klass, klass.simpleName)
+        }
+        choiceParameter.value = value
+    }
 }
 
 
