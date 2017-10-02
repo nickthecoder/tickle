@@ -118,7 +118,7 @@ class Resources {
         return poses[name] ?: throw IllegalStateException("Pose $name not found")
     }
 
-    fun findPoseName(pose: Pose): String? {
+    fun findPoseName(pose: Pose?): String? {
         return poses.filter { entry -> entry.value === pose }.map { it.key }.firstOrNull()
     }
 

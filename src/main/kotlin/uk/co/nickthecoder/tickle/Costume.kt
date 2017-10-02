@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.tickle
 
+import java.util.*
+
 class Costume() {
 
     var roleString: String = ""
@@ -26,10 +28,9 @@ class Costume() {
 
 class CostumeEvent {
 
-    // TODO Will become a set of Poses later
-    var pose: Pose? = null
+    var poses = mutableListOf<Pose>()
 
-    fun choosePose(): Pose? = pose
+    fun choosePose(): Pose? = if (poses.isEmpty()) null else poses[Random().nextInt(poses.size)]
 
-    override fun toString() = "pose=$pose"
+    override fun toString() = "poses=$poses"
 }

@@ -310,10 +310,15 @@ class JsonResources {
             costume.events.forEach { eventName, event ->
                 val jevent = JsonObject()
                 jevent.add("name", eventName)
-                event.pose?.let { pose ->
-                    resources.findPoseName(pose)?.let { poseName ->
-                        jevent.add("pose", poseName)
+
+                if (event.poses.isNotEmpty()) {
+                    val jposes = JsonArray()
+                    event.poses.forEach { pose ->
+                        resources.findPoseName(pose)?.let { poseName ->
+                            jposes.add("pose")
+                        }
                     }
+                    jevent.add("poses", jposes)
                 }
             }
             JsonUtil.saveAttributes(jcostume, costume.attributes)
@@ -337,9 +342,13 @@ class JsonResources {
                     val jevent = it.asObject()
                     val eventName = jevent.get("name").asString()
                     val event = CostumeEvent()
-                    jevent?.get("pose")?.let {
-                        val pose = resources.optionalPose(it.asString())
-                        event.pose = pose
+                    jevent.get("poses")?.let {
+                        val jposes = it.asArray()
+                        jposes.forEach {
+                            val poseName = it.asString()
+                            val pose = resources.optionalPose(poseName)
+                            pose?.let { event.poses.add(it) }
+                        }
                     }
                     costume.events[eventName] = event
                 }

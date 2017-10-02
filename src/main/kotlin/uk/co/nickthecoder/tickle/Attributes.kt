@@ -115,11 +115,11 @@ class Attributes {
 
         fun fromString(value: String, klass: KClass<*>): Any {
             return when (klass) {
-                Boolean::class.java -> value.toBoolean()
-                Int::class.java -> value.toInt()
-                Float::class.java -> value.toFloat()
-                Double::class.java -> value.toDouble()
-                String::class.java -> value
+                Boolean::class -> value.toBoolean()
+                Int::class -> value.toInt()
+                Float::class -> value.toFloat()
+                Double::class -> value.toDouble()
+                String::class -> value
                 else -> throw IllegalArgumentException("Type $klass is not currently supported.")
             }
         }

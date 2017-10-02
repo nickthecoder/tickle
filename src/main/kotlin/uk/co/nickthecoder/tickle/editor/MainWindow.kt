@@ -8,7 +8,6 @@ import uk.co.nickthecoder.paratask.ParaTask
 import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.tickle.editor.tabs.EditorTab
-import uk.co.nickthecoder.tickle.editor.tabs.GameInfoTab
 
 class MainWindow(val stage: Stage) {
 
@@ -43,7 +42,6 @@ class MainWindow(val stage: Stage) {
 
         stage.show()
 
-        tabPane.add(GameInfoTab())
         instance = this
     }
 

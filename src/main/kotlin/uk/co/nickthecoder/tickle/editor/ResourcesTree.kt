@@ -44,7 +44,10 @@ class ResourcesTree(val mainWindow: MainWindow)
     }
 
     fun editItem() {
-        val item = selectionModel.selectedItem as ResourceItem
+        val i = selectionModel.selectedItem
+        if (i == null) return
+
+        val item = i as ResourceItem
 
         if (item.isLeaf) {
 

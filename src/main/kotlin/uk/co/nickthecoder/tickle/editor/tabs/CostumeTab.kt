@@ -8,10 +8,7 @@ import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
-import uk.co.nickthecoder.tickle.Attributes
-import uk.co.nickthecoder.tickle.Costume
-import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.Role
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
 
@@ -22,15 +19,21 @@ class CostumeTab(val name: String, val costume: Costume)
     val detailsTask = CostumeDetailsTask()
     val detailsForm = TaskForm(detailsTask)
 
+    val eventsTask = CostumeEventsTask()
+    val eventsForm = TaskForm(eventsTask)
+
     val minorTabs = MyTabPane<MyTab>()
 
     val detailsTab = MyTab("Details", detailsForm.build())
+    val eventsTab = MyTab("Events", eventsForm.build())
 
     init {
         minorTabs.side = Side.BOTTOM
         minorTabs.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
 
         minorTabs.add(detailsTab)
+        minorTabs.add(eventsTab)
+
         borderPane.center = minorTabs
 
         addDeleteButton { Resources.instance.deleteCostume(name) }
@@ -38,8 +41,15 @@ class CostumeTab(val name: String, val costume: Costume)
 
     override fun save(): Boolean {
         if (detailsForm.check()) {
-            detailsTask.run()
-            return true
+            if (eventsForm.check()) {
+                detailsTask.run()
+                eventsTask.run()
+                return true
+            } else {
+                eventsTab.isSelected = true
+            }
+        } else {
+            detailsTab.isSelected = true
         }
         return false
     }
@@ -116,4 +126,78 @@ class CostumeTab(val name: String, val costume: Costume)
         }
 
     }
+
+    inner class CostumeEventsTask() : AbstractTask() {
+
+        val eventsP = MultipleParameter("events") {
+            EventParameter()
+        }.asListDetail(allowReordering = false) { it.toString() }
+
+        override val taskD = TaskDescription("costumeEvents")
+                .addParameters(eventsP)
+
+        init {
+            costume.events.forEach { eventName, event ->
+                event.poses.forEach { pose ->
+                    val inner = eventsP.newValue()
+                    inner.eventNameP.value = eventName
+                    inner.poseP.value = pose
+                    inner.typeP.value = inner.poseP
+                }
+            }
+        }
+
+        override fun run() {
+            costume.events.clear()
+            eventsP.innerParameters.forEach { inner ->
+                if (inner.typeP.value == inner.poseP) {
+                    addPose(inner.eventNameP.value, inner.poseP.value!!)
+                }
+            }
+        }
+
+        fun addPose(eventName: String, pose: Pose) {
+            var event = costume.events[eventName]
+            if (event == null) {
+                event = CostumeEvent()
+                costume.events[eventName] = event
+            }
+            event.poses.add(pose)
+        }
+    }
+
+    inner class EventParameter() : MultipleGroupParameter("event") {
+
+        val eventNameP = StringParameter("eventName")
+
+        val poseP = createPoseParameter()
+
+        val typeP = OneOfParameter("type", value = poseP, choiceLabel = "Type")
+                .addParameters(poseP)
+
+        init {
+            addParameters(eventNameP, typeP)
+        }
+
+        override fun toString(): String {
+            val eventName = if (eventNameP.value.isBlank()) "<no name>" else eventNameP.value
+            val type = typeP.value?.label ?: ""
+            val dataName = when (typeP.value) {
+                poseP -> Resources.instance.findPoseName(poseP.value)
+                else -> ""
+            }
+            return "$eventName ($type) $dataName"
+        }
+    }
+
+}
+
+private fun createPoseParameter(parameterName: String = "pose"): ChoiceParameter<Pose?> {
+
+    val choice = ChoiceParameter<Pose?>(parameterName, required = true, value = null)
+
+    Resources.instance.poses().forEach { poseName, pose ->
+        choice.addChoice(poseName, pose, poseName)
+    }
+    return choice
 }
