@@ -7,7 +7,10 @@ import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.ParaTask
 import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.MyTabPane
+import uk.co.nickthecoder.paratask.gui.ShortcutHelper
+import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.editor.tabs.EditorTab
+import uk.co.nickthecoder.tickle.util.JsonResources
 
 class MainWindow(val stage: Stage) {
 
@@ -23,9 +26,10 @@ class MainWindow(val stage: Stage) {
 
     val scene = Scene(borderPane, 1000.0, 600.0)
 
+    private val shortcuts = ShortcutHelper("MainWindow", borderPane)
 
     init {
-        stage.title = "ParaTask"
+        stage.title = "Tickle Resources Editor"
         stage.scene = scene
         ParaTask.style(scene)
 
@@ -40,13 +44,20 @@ class MainWindow(val stage: Stage) {
             right = tabPane
         }
 
-        stage.show()
+        with(toolBar.items) {
+            add(EditorActions.RESOURCES_SAVE.createButton(shortcuts) { save() })
+        }
 
+        stage.show()
         instance = this
     }
 
     fun findTab(data: Any): EditorTab? {
         return tabPane.tabs.firstOrNull { it.data === data }
+    }
+
+    fun save() {
+        JsonResources(Resources.instance).save(Resources.instance.file)
     }
 
     companion object {

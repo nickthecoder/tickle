@@ -123,9 +123,11 @@ class JsonResources {
     // LAYOUTS
 
     fun saveLayouts(): JsonArray {
+        println("Saving layouts ${resources.layouts()}")
         val jlayouts = JsonArray()
         resources.layouts().forEach { name, layout ->
             val jlayout = JsonObject()
+            jlayouts.add(jlayout)
             jlayout.add("name", name)
 
             val jstages = JsonArray()
@@ -133,6 +135,8 @@ class JsonResources {
 
             layout.stages.forEach { stageName, layoutStage ->
                 val jstage = JsonObject()
+                jstages.add(jstage)
+
                 jstage.add("name", stageName)
                 jstage.add("stage", layoutStage.stageString)
             }
@@ -142,6 +146,8 @@ class JsonResources {
 
             layout.views.forEach { viewName, layoutView ->
                 val jview = JsonObject()
+                jviews.add(jview)
+
                 jview.add("name", viewName)
                 jview.add("view", layoutView.viewString)
                 if (layoutView.stageName.isNotBlank()) {
@@ -169,6 +175,7 @@ class JsonResources {
                 }
             }
         }
+        println("Created jlayouts $jlayouts")
         return jlayouts
     }
 
@@ -305,17 +312,20 @@ class JsonResources {
         resources.costumes().forEach { name, costume ->
             val jcostume = JsonObject()
             jcostume.add("name", name)
+            jcostume.add("role", costume.roleString)
+
             val jevents = JsonArray()
             jcostume.add("events", jevents)
             costume.events.forEach { eventName, event ->
                 val jevent = JsonObject()
+                jevents.add(jevent)
                 jevent.add("name", eventName)
 
                 if (event.poses.isNotEmpty()) {
                     val jposes = JsonArray()
                     event.poses.forEach { pose ->
                         resources.findPoseName(pose)?.let { poseName ->
-                            jposes.add("pose")
+                            jposes.add(poseName)
                         }
                     }
                     jevent.add("poses", jposes)

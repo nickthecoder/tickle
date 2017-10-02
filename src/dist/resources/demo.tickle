@@ -5,12 +5,15 @@
         "height": 400,
         "resizable": true,
         "startScene": "level01",
-        "producer": "uk.co.nickthecoder.tickle.demo.Demo"
+        "producer": "uk.co.nickthecoder.tickle.demo.Demo",
+        "packages": [
+            "uk.co.nickthecoder.tickle"
+        ]
     },
-    "layouts" : [
+    "layouts": [
         {
             "name": "default",
-            "stages" : [
+            "stages": [
                 {
                     "name": "main",
                     "stage": "uk.co.nickthecoder.tickle.stage.GameStage"
@@ -20,7 +23,11 @@
                 {
                     "name": "main",
                     "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView",
-                    "stage": "main"
+                    "stage": "main",
+                    "hAlignment": "LEFT",
+                    "leftRightMargin": 0,
+                    "vAlignment": "BOTTOM",
+                    "topBottomMargin": 0
                 }
             ]
         }
@@ -88,55 +95,67 @@
             "direction": 0
         }
     ],
-    "costumes" : [
+    "costumes": [
         {
-            "name" : "bee",
-            "role" : "uk.co.nickthecoder.tickle.demo.Bee",
-            "events" : [
+            "name": "bee",
+            "role": "uk.co.nickthecoder.tickle.demo.Bee",
+            "events": [
                 {
                     "name": "default",
-                    "poses": ["bee"]
+                    "poses": [
+                        "bee"
+                    ]
                 }
             ]
         },
         {
-            "name" : "grenade",
-            "role" : "uk.co.nickthecoder.tickle.demo.Grenade",
-            "events" : [
+            "name": "grenade",
+            "role": "uk.co.nickthecoder.tickle.demo.Grenade",
+            "events": [
                 {
                     "name": "default",
-                    "poses": ["grenade"]
-                }
-            ]
-        },        {
-            "name" : "hand",
-            "role" : "uk.co.nickthecoder.tickle.demo.Hand",
-            "events" : [
-                {
-                    "name": "default",
-                    "poses": ["hand"]
-                }
-            ]
-        },        {
-            "name" : "coin",
-            "role" : "uk.co.nickthecoder.tickle.demo.Coin",
-            "events" : [
-                {
-                    "name": "default",
-                    "poses": ["coin"]
+                    "poses": [
+                        "grenade"
+                    ]
                 }
             ]
         },
         {
-            "name" : "coin10",
-            "role" : "uk.co.nickthecoder.tickle.demo.Coin",
-            "events" : [
+            "name": "hand",
+            "role": "uk.co.nickthecoder.tickle.demo.Hand",
+            "events": [
                 {
                     "name": "default",
-                    "poses": ["coin"]
+                    "poses": [
+                        "hand"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "coin",
+            "role": "uk.co.nickthecoder.tickle.demo.Coin",
+            "events": [
+                {
+                    "name": "default",
+                    "poses": [
+                        "coin"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "coin10",
+            "role": "uk.co.nickthecoder.tickle.demo.Coin",
+            "events": [
+                {
+                    "name": "default",
+                    "poses": [
+                        "coin"
+                    ]
                 }
             ],
-            "attributes" : [
+            "attributes": [
                 {
                     "name": "value",
                     "value": "10"
@@ -144,15 +163,17 @@
             ]
         },
         {
-            "name" : "coin100",
-            "role" : "uk.co.nickthecoder.tickle.demo.Coin",
-            "events" : [
+            "name": "coin100",
+            "role": "uk.co.nickthecoder.tickle.demo.Coin",
+            "events": [
                 {
                     "name": "default",
-                    "poses": ["coin"]
+                    "poses": [
+                        "coin"
+                    ]
                 }
             ],
-            "attributes" : [
+            "attributes": [
                 {
                     "name": "value",
                     "value": "100"
@@ -160,11 +181,14 @@
             ]
         },
         {
-            "name" : "spark",
-            "events" : [
+            "name": "spark",
+            "role": "",
+            "events": [
                 {
                     "name": "default",
-                    "poses": ["spark"]
+                    "poses": [
+                        "spark"
+                    ]
                 }
             ]
         }
