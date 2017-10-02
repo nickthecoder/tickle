@@ -22,7 +22,7 @@ class MainWindow(val stage: Stage) {
 
     val splitPane = MySplitPane()
 
-    val resourcesTree = ResourcesTree(this)
+    val resourcesTree = ResourcesTree()
 
     val tabPane = MyTabPane<EditorTab>()
 
