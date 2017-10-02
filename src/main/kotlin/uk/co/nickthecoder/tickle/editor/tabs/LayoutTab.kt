@@ -18,7 +18,7 @@ import uk.co.nickthecoder.tickle.stage.*
 
 class LayoutTab(val name: String, val layout: Layout)
 
-    : EditTab("Layout $name", layout) {
+    : EditTab("Layout", name, layout) {
 
     val stagesTask = StagesTask()
     val viewsTask = ViewsTask()
@@ -38,6 +38,8 @@ class LayoutTab(val name: String, val layout: Layout)
         minorTabs.add(stagesTab)
         minorTabs.add(viewsTab)
         borderPane.center = minorTabs
+
+        addDeleteButton { Resources.instance.deleteLayout(name) }
     }
 
     override fun save(): Boolean {

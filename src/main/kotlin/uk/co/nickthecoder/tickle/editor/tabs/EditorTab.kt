@@ -5,11 +5,12 @@ import javafx.scene.control.Label
 import uk.co.nickthecoder.paratask.gui.MyTab
 
 open class EditorTab(
-        text: String = "",
-        val data : Any,
+        val dataType: String,
+        val dataName: String,
+        val data: Any,
         graphic: Node? = null)
 
-    : MyTab(text, Label("Empty"), graphic) {
+    : MyTab("$dataType $dataName", Label("Empty"), graphic) {
 
 
 }

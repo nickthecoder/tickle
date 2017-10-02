@@ -10,7 +10,11 @@ import uk.co.nickthecoder.tickle.editor.util.RectiParameter
 import uk.co.nickthecoder.tickle.editor.util.XYParameter
 
 class PoseTab(name: String, pose: Pose)
-    : EditTaskTab(PoseTask(name, pose), "Pose $name", pose) {
+    : EditTaskTab(PoseTask(name, pose), "Pose", name, pose) {
+
+    init {
+        addDeleteButton { Resources.instance.deletePose(name) }
+    }
 
 }
 

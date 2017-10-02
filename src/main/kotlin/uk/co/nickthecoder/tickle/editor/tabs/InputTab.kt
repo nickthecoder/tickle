@@ -12,8 +12,11 @@ import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.events.*
 
 class InputTab(name: String, input: CompoundInput)
-    : EditTaskTab(InputTask(name, input), "Input $name", input) {
+    : EditTaskTab(InputTask(name, input), "Input", name, input) {
 
+    init {
+        addDeleteButton { Resources.instance.deleteInput(name) }
+    }
 }
 
 class InputTask(val name: String, val compoundInput: CompoundInput) : AbstractTask() {

@@ -12,7 +12,11 @@ import uk.co.nickthecoder.tickle.TextureResource
 import uk.co.nickthecoder.tickle.editor.util.RenameTask
 
 class TextureTab(name: String, textureResource: TextureResource)
-    : EditTaskTab(TextureTask(name, textureResource),"Texture $name", textureResource) {
+    : EditTaskTab(TextureTask(name, textureResource), "Texture", name, textureResource) {
+
+    init {
+        addDeleteButton { Resources.instance.deleteTexture(name) }
+    }
 
 }
 

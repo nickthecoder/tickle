@@ -2,12 +2,12 @@ package uk.co.nickthecoder.tickle
 
 interface ResourcesListener {
 
-    fun changed(resource: Any) {}
+    fun resourceChanged(resource: Any) {}
 
-    fun added(resource: Any, name: String) {}
+    fun resourceAdded(resource: Any, name: String) {}
 
-    fun removed(resource: Any, name: String) {}
+    fun resourceRemoved(resource: Any, name: String) {}
 
-    fun renamed(resource: Any, oldName: String, newName: String) {}
+    fun resourceRenamed(resource: Any, oldName: String, newName: String) {}
 
 }

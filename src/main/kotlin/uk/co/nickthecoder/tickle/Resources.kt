@@ -38,26 +38,26 @@ class Resources {
 
 
     private fun fireAdded(resource: Any, name: String) {
-        listeners.forEach {
-            it.added(resource, name)
+        listeners.toList().forEach {
+            it.resourceAdded(resource, name)
         }
     }
 
     private fun fireRemoved(resource: Any, name: String) {
-        listeners.forEach {
-            it.removed(resource, name)
+        listeners.toList().forEach {
+            it.resourceRemoved(resource, name)
         }
     }
 
     private fun fireRenamed(resource: Any, oldName: String, newName: String) {
-        listeners.forEach {
-            it.renamed(resource, oldName, newName)
+        listeners.toList().forEach {
+            it.resourceRenamed(resource, oldName, newName)
         }
     }
 
     fun fireChanged(resource: Any) {
-        listeners.forEach {
-            it.changed(resource)
+        listeners.toList().forEach {
+            it.resourceChanged(resource)
         }
     }
 
@@ -91,6 +91,13 @@ class Resources {
         fireAdded(textureResource, name)
     }
 
+    fun deleteTexture(name : String) {
+        textures[name]?.let {
+            textures.remove(name)
+            fireRemoved(it, name)
+        }
+    }
+
     fun renameTexture(oldName: String, newName: String) {
         textures[oldName]?.let { textureResource ->
             textures.remove(oldName)
@@ -120,6 +127,13 @@ class Resources {
         fireAdded(pose, name)
     }
 
+    fun deletePose(name : String) {
+        poses[name]?.let {
+            poses.remove(name)
+            fireRemoved(it, name)
+        }
+    }
+
     fun renamePose(oldName: String, newName: String) {
         poses[oldName]?.let { pose ->
             poses.remove(oldName)
@@ -141,6 +155,13 @@ class Resources {
     fun addCostume(name: String, costume: Costume) {
         costumes[name] = costume
         fireAdded(costume, name)
+    }
+
+    fun deleteCostume(name : String) {
+        costumes[name]?.let {
+            costumes.remove(name)
+            fireRemoved(it, name)
+        }
     }
 
     fun renameCostume(oldName: String, newName: String) {
@@ -172,6 +193,13 @@ class Resources {
         fireAdded(input, name)
     }
 
+    fun deleteInput(name : String) {
+        inputs[name]?.let {
+            inputs.remove(name)
+            fireRemoved(it, name)
+        }
+    }
+
     fun renameInput(oldName: String, newName: String) {
         inputs[oldName]?.let { input ->
             inputs.remove(oldName)
@@ -201,6 +229,13 @@ class Resources {
     fun addLayout(name: String, layout: Layout) {
         layouts[name] = layout
         fireAdded(layout, name)
+    }
+
+    fun deleteLayout(name : String) {
+        layouts[name]?.let {
+            layouts.remove(name)
+            fireRemoved(it, name)
+        }
     }
 
     fun renameLayout(oldName: String, newName: String) {

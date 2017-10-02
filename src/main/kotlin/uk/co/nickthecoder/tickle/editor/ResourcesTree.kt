@@ -90,7 +90,7 @@ class ResourcesTree(val mainWindow: MainWindow)
         return null
     }
 
-    abstract inner class ResourceItem(label: String) : TreeItem<String>(label) {
+    abstract inner class ResourceItem(label: String = "") : TreeItem<String>(label) {
         open fun data(): Any? = null
 
         override fun isLeaf() = true
@@ -127,7 +127,7 @@ class ResourcesTree(val mainWindow: MainWindow)
 
         override fun data() = data
 
-        override fun renamed(resource: Any, oldName: String, newName: String) {
+        override fun resourceRenamed(resource: Any, oldName: String, newName: String) {
             if (resource === data) {
                 value = newName
             }
@@ -138,7 +138,7 @@ class ResourcesTree(val mainWindow: MainWindow)
         }
     }
 
-    abstract inner class TopLevelItem(label: String, val type: Class<*>) : ResourceItem(label), ResourcesListener {
+    abstract inner class TopLevelItem(val type: Class<*>) : ResourceItem(), ResourcesListener {
         init {
             Resources.instance.listeners.add(this)
         }
@@ -151,11 +151,11 @@ class ResourcesTree(val mainWindow: MainWindow)
             }
         }
 
-        override fun removed(resource: Any, name: String) {
+        override fun resourceRemoved(resource: Any, name: String) {
             maybeRebuild(resource)
         }
 
-        override fun added(resource: Any, name: String) {
+        override fun resourceAdded(resource: Any, name: String) {
             maybeRebuild(resource)
         }
 
@@ -171,7 +171,7 @@ class ResourcesTree(val mainWindow: MainWindow)
         }
     }
 
-    inner class TexturesItem() : TopLevelItem("Textures", TextureResource::class.java) {
+    inner class TexturesItem() : TopLevelItem(TextureResource::class.java) {
 
         init {
             rebuildChildren()
@@ -179,14 +179,18 @@ class ResourcesTree(val mainWindow: MainWindow)
         }
 
         override fun rebuildChildren() {
+            super.rebuildChildren()
             resources.textures().map { it }.sortedBy { it.key }.forEach { (name, texture) ->
                 children.add(DataItem(name, texture))
             }
+            value = toString()
         }
+
+        override fun toString() = "Textures (${children.size})"
     }
 
 
-    inner class PosesItem() : TopLevelItem("Poses", Pose::class.java) {
+    inner class PosesItem() : TopLevelItem(Pose::class.java) {
 
         init {
             rebuildChildren()
@@ -197,11 +201,14 @@ class ResourcesTree(val mainWindow: MainWindow)
             resources.poses().map { it }.sortedBy { it.key }.forEach { (name, pose) ->
                 children.add(DataItem(name, pose))
             }
+            value = toString()
         }
+
+        override fun toString() = "Poses (${children.size})"
     }
 
 
-    inner class CostumesItem() : TopLevelItem("Costumes", Costume::class.java) {
+    inner class CostumesItem() : TopLevelItem(Costume::class.java) {
 
         init {
             rebuildChildren()
@@ -212,10 +219,14 @@ class ResourcesTree(val mainWindow: MainWindow)
             resources.costumes().map { it }.sortedBy { it.key }.forEach { (name, costume) ->
                 children.add(DataItem(name, costume))
             }
+            value = toString()
         }
+
+        override fun toString() = "Costumes (${children.size})"
+
     }
 
-    inner class LayoutsItem() : TopLevelItem("Layouts", Layout::class.java) {
+    inner class LayoutsItem() : TopLevelItem(Layout::class.java) {
 
         init {
             isExpanded = true
@@ -227,11 +238,15 @@ class ResourcesTree(val mainWindow: MainWindow)
             resources.layouts().map { it }.sortedBy { it.key }.forEach { (name, layout) ->
                 children.add(DataItem(name, layout))
             }
+            value = toString()
         }
+
+        override fun toString() = "Layouts (${children.size})"
+
     }
 
 
-    inner class InputsItem() : TopLevelItem("Inputs", Input::class.java) {
+    inner class InputsItem() : TopLevelItem(Input::class.java) {
 
         init {
             rebuildChildren()
@@ -242,7 +257,11 @@ class ResourcesTree(val mainWindow: MainWindow)
             resources.inputs().map { it }.sortedBy { it.key }.forEach { (name, input) ->
                 children.add(DataItem(name, input))
             }
+            value = toString()
         }
+
+        override fun toString() = "Inputs (${children.size})"
+
     }
 
 
