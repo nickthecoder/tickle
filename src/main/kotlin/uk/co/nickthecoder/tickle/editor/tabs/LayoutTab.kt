@@ -10,6 +10,8 @@ import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.Layout
+import uk.co.nickthecoder.tickle.LayoutStage
+import uk.co.nickthecoder.tickle.LayoutView
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.stage.*
@@ -88,6 +90,17 @@ class LayoutTab(val name: String, val layout: Layout)
             if (nameP.value != name) {
                 Resources.instance.renameLayout(name, nameP.value)
             }
+
+            layout.stages.clear()
+
+            stagesP.innerParameters.forEach { inner ->
+                val layoutStage = LayoutStage()
+                layout.stages[inner.stageNameP.value] = layoutStage
+
+                with(layoutStage) {
+                    layoutStage.stageString = inner.stageClassP.value!!.name
+                }
+            }
         }
     }
 
@@ -136,7 +149,6 @@ class LayoutTab(val name: String, val layout: Layout)
                         inner.vOneOfP.value = inner.remainingHeightP
                     }
                 }
-                println("FlexPosition = ${layoutView.position}")
             }
         }
 
@@ -153,6 +165,40 @@ class LayoutTab(val name: String, val layout: Layout)
 
         override fun run() {
 
+            layout.views.clear()
+
+            viewsP.innerParameters.forEach { inner ->
+                val layoutView = LayoutView()
+                layout.views[inner.viewNameP.value] = layoutView
+
+                with(layoutView) {
+                    stageName = inner.stageNameP.value
+                    viewString = inner.viewClassP.value!!.name
+                }
+
+                with(layoutView.position) {
+
+                    // X
+                    hAlignment = inner.hAlignmentP.value!!
+                    if (hAlignment == FlexHAlignment.MIDDLE) {
+                        hPosition = inner.hPositionP.value!!.toFloat()
+                    } else {
+                        leftRightMargin = inner.leftRightMarginP.value!!
+                    }
+                    width = if (inner.hOneOfP.value == inner.widthP) inner.widthP.value!! else null
+                    widthRatio = if (inner.hOneOfP.value == inner.widthRatioP) inner.widthRatioP.value!!.toFloat() else null
+
+                    // Y
+                    vAlignment = inner.vAlignmentP.value!!
+                    if (vAlignment == FlexVAlignment.MIDDLE) {
+                        vPosition = inner.vPositionP.value!!.toFloat()
+                    } else {
+                        topBottomMargin = inner.topBottomMarginP.value!!
+                    }
+                    height = if (inner.vOneOfP.value == inner.heightP) inner.heightP.value!! else null
+                    heightRatio = if (inner.vOneOfP.value == inner.heightRatioP) inner.heightRatioP.value!!.toFloat() else null
+                }
+            }
         }
     }
 
