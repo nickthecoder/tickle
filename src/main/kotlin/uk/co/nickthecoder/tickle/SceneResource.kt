@@ -72,7 +72,7 @@ class SceneActor {
         actor.y = y
         actor.directionDegrees = direction
 
-        actor.role?.let { attributes.updateRole(it) }
+        actor.role?.let { attributes.applyToObject(it) }
 
         return actor
     }

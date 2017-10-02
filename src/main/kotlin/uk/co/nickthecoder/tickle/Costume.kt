@@ -12,7 +12,7 @@ class Costume() {
 
     fun createActor(): Actor {
         val role = if (roleString.isBlank()) null else Role.create(roleString)
-        role?.let { attributes.updateRole(it) }
+        role?.let { attributes.applyToObject(it) }
 
         val actor = Actor(role)
         events["default"]?.choosePose()?.let { pose ->
