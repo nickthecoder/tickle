@@ -90,7 +90,7 @@ class ResourcesTree(val mainWindow: MainWindow)
         override fun data(): GameInfo = resources.gameInfo
     }
 
-    inner class DataItem(val name: String, val data: Any) : ResourceItem(name), ResourcesListener {
+    open inner class DataItem(val name: String, val data: Any) : ResourceItem(name), ResourcesListener {
 
         init {
             Resources.instance.listeners.add(this)
@@ -152,7 +152,7 @@ class ResourcesTree(val mainWindow: MainWindow)
         override fun rebuildChildren() {
             super.rebuildChildren()
             resources.textures().map { it }.sortedBy { it.key }.forEach { (name, texture) ->
-                children.add(DataItem(name, texture))
+                children.add(TextureItem(name, texture))
             }
             value = toString()
         }
@@ -160,6 +160,39 @@ class ResourcesTree(val mainWindow: MainWindow)
         override fun toString() = "Textures (${children.size})"
     }
 
+    inner class TextureItem(name: String, val textureResource: TextureResource)
+
+        : DataItem(name, textureResource), ResourcesListener {
+
+        init {
+            resources.poses().filter { it.value.texture === textureResource.texture }.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
+                children.add(DataItem(name, pose))
+            }
+            resources.listeners.add(this)
+        }
+
+        override fun removed() {
+            resources.listeners.remove(this)
+        }
+
+        override fun resourceRemoved(resource: Any, name: String) {
+            if (resource is Pose && resource.texture === textureResource.texture) {
+                children.filterIsInstance<DataItem>().firstOrNull { it.data === resource }?.let {
+                    children.remove(it)
+                }
+            }
+        }
+
+        override fun resourceAdded(resource: Any, name: String) {
+            if (resource is Pose) {
+                if (resource.texture === textureResource.texture) {
+                    children.add(DataItem(name, resource))
+                }
+            }
+        }
+
+        override fun isLeaf() = false
+    }
 
     inner class PosesItem() : TopLevelItem(Pose::class.java) {
 
@@ -175,7 +208,7 @@ class ResourcesTree(val mainWindow: MainWindow)
             value = toString()
         }
 
-        override fun toString() = "Poses (${children.size})"
+        override fun toString() = "All Poses (${children.size})"
     }
 
 

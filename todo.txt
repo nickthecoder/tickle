@@ -11,8 +11,6 @@ New Features
 
 Editor
 
-	Add resources of all types.
-
 	Poses should be child tree items under their texture (as well as a top-level)
 
 	Texture
