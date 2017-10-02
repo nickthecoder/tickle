@@ -8,8 +8,9 @@ import uk.co.nickthecoder.paratask.ParaTask
 import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
-import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.editor.tabs.EditorTab
+import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.editor.tabs.*
+import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.util.JsonResources
 
 class MainWindow(val stage: Stage) {
@@ -58,6 +59,44 @@ class MainWindow(val stage: Stage) {
 
     fun save() {
         JsonResources(Resources.instance).save(Resources.instance.file)
+    }
+
+    fun openTab( dataName : String, data : Any ) {
+
+        val tab = findTab(data)
+        if (tab == null) {
+            val newTab = createTab(dataName, data)
+            if (newTab != null) {
+                tabPane.add(newTab)
+                newTab.isSelected = true
+            }
+        } else {
+            tab.isSelected = true
+        }
+    }
+
+    fun createTab(name: String, data: Any): EditorTab? {
+
+        if (data is GameInfo) {
+            return GameInfoTab()
+
+        } else if (data is TextureResource) {
+            return TextureTab(name, data)
+
+        } else if (data is Pose) {
+            return PoseTab(name, data)
+
+        } else if (data is Layout) {
+            return LayoutTab(name, data)
+
+        } else if (data is CompoundInput) {
+            return InputTab(name, data)
+
+        } else if (data is Costume) {
+            return CostumeTab(name, data)
+        }
+
+        return null
     }
 
     companion object {

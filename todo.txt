@@ -11,7 +11,6 @@ New Features
 
 Editor
 
-	Edit Costume events
 	Add resources of all types.
 
 	Poses should be child tree items under their texture (as well as a top-level)
@@ -75,7 +74,7 @@ Costumes to inherit?
 	Just the events?
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
-
+	Just as a prelude to pixel collision detection.
 
 Fonts
 	Allow loading of multiple ranges of characters.
@@ -87,7 +86,7 @@ Merge scenes from two or more scene files
 
 Tags
 	Consider special methods on Tagged and TagManager to use inline reified typed methods to return Roles of the
-		specified type.
+		specified type. Hmm, can't do that - It will still need a cast, so reified isn't helpful.
 	Maybe also using a Class as the tag.
 	How about finding roles with tag x AND tag y. Tag x OR tag y?
 		Or should this be done by the client?

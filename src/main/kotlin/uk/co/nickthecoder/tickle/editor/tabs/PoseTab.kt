@@ -1,10 +1,12 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
+import javafx.scene.control.Alert
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.ButtonParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.editor.MainWindow
@@ -30,8 +32,10 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
     val positionP = RectiParameter("position", bottomUp = false)
     val offsetP = XYParameter("offset")
 
+    val createCostumeP = ButtonParameter("createCostume", buttonText = "Create") { createCostume() }
+
     override val taskD = TaskDescription("editPose")
-            .addParameters(nameP, textureNameP, positionP, offsetP)
+            .addParameters(nameP, textureNameP, positionP, offsetP, createCostumeP)
 
     init {
         offsetP.x = pose.offsetX.toDouble()
@@ -75,5 +79,22 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
             MainWindow.instance?.tabPane?.add(tab)
             tab.isSelected = true
         }
+    }
+
+    fun createCostume() {
+        val poseName = Resources.instance.findPoseName(pose)
+        if ( poseName == null) {
+            return
+        }
+
+        if (Resources.instance.optionalCostume(poseName) != null) {
+            Alert(Alert.AlertType.INFORMATION, "A Costume called ${name} already exists.").showAndWait()
+            return
+        }
+
+        val costume = Costume()
+        costume.addPose("default", pose)
+        Resources.instance.addCostume( poseName, costume )
+        MainWindow.instance?.openTab(poseName, costume)
     }
 }

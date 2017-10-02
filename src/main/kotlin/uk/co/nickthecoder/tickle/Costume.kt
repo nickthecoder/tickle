@@ -23,6 +23,19 @@ class Costume() {
         return actor
     }
 
+    fun addPose(eventName: String, pose: Pose) {
+        getOrCreateEvent(eventName).poses.add(pose)
+    }
+
+    fun getOrCreateEvent(eventName: String): CostumeEvent {
+        var event = events[eventName]
+        if (event == null) {
+            event = CostumeEvent()
+            events[eventName] = event
+        }
+        return event
+    }
+
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }
 

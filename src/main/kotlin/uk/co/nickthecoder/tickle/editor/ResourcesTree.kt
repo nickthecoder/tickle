@@ -7,8 +7,6 @@ import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
 import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.editor.tabs.*
-import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
 
 class ResourcesTree(val mainWindow: MainWindow)
@@ -54,46 +52,13 @@ class ResourcesTree(val mainWindow: MainWindow)
             val data = item.data()
 
             if (data != null) {
-                val tab = mainWindow.findTab(data)
-                if (tab == null) {
-                    val newTab = createTab(item.value, data)
-                    if (newTab != null) {
-                        mainWindow.tabPane.add(newTab)
-                        newTab.isSelected = true
-                    }
-                } else {
-                    tab.isSelected = true
-                }
+                mainWindow.openTab(item.value, data)
             }
         } else {
 
             item.isExpanded = !item.isExpanded
 
         }
-    }
-
-    fun createTab(name: String, data: Any): EditorTab? {
-
-        if (data is GameInfo) {
-            return GameInfoTab()
-
-        } else if (data is TextureResource) {
-            return TextureTab(name, data)
-
-        } else if (data is Pose) {
-            return PoseTab(name, data)
-
-        } else if (data is Layout) {
-            return LayoutTab(name, data)
-
-        } else if (data is CompoundInput) {
-            return InputTab(name, data)
-
-        } else if (data is Costume) {
-            return CostumeTab(name, data)
-        }
-
-        return null
     }
 
     abstract inner class ResourceItem(label: String = "") : TreeItem<String>(label) {
