@@ -7,6 +7,7 @@ import javafx.scene.control.ButtonType
 import javafx.scene.control.Label
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
+import javafx.scene.layout.HBox
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.ResourcesListener
 
@@ -24,7 +25,7 @@ abstract class EditTab(
 
     val rightButtons = FlowPane()
 
-    private val buttons = BorderPane()
+    private val buttons = HBox()
 
     val okButton = Button("Ok")
 
@@ -68,8 +69,7 @@ abstract class EditTab(
         }
 
         with(buttons) {
-            left = leftButtons
-            right = rightButtons
+            children.addAll(leftButtons, rightButtons)
         }
 
         Resources.instance.listeners.add(this)
