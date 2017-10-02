@@ -10,16 +10,11 @@ New Features
 ============
 
 Editor
-	Poses should be child tree items under their texture (as well as a top-level)
 
-	Edit Costume
-	Delete texture, pose, costume, input, layout or scene.
-	Rename a costume, or scene.
+	Edit Costume events
 	Add resources of all types.
 
-	When renaming an item, who's name is used in a scene, we need to keep track of renamed items,
-		and update all scenes when the resource file is saved.
-		Costume and Font only?
+	Poses should be child tree items under their texture (as well as a top-level)
 
 	Texture
 		Change "View" button to open a new tab (instead of launching gwenview)
@@ -49,7 +44,7 @@ Editor
 	Ctrl+F to search for resources matching the name (glob?)
 		Another TreeView using Accordian?
 
-	Exapand/Contract All rightButtons above the accordian
+	Exapand/Contract All buttons above the accordian
 
 	Pose tab to have a list of costumes using it
 		In a "minor tab"?
@@ -60,6 +55,10 @@ Editor
 		Image editors (one value per extension)
 
 	Custom lauchers (saved in prefernces) - Use it to open the game's paratask project.
+
+When renaming an item, who's name is used in a scene, we need to keep track of renamed items,
+	and update all scenes when the resource file is saved.
+	Costume and Font only?
 
 MouseInput
 	MouseButtonInput

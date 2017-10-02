@@ -30,12 +30,12 @@ class MainWindow(val stage: Stage) {
         stage.scene = scene
         ParaTask.style(scene)
 
-        with (borderPane) {
+        with(borderPane) {
             top = toolBar
             center = splitPane
         }
 
-        with (splitPane) {
+        with(splitPane) {
             dividerRatio = 0.2
             left = resourcesTree
             right = tabPane
@@ -44,10 +44,15 @@ class MainWindow(val stage: Stage) {
         stage.show()
 
         tabPane.add(GameInfoTab())
+        instance = this
     }
 
     fun findTab(data: Any): EditorTab? {
         return tabPane.tabs.firstOrNull { it.data === data }
+    }
+
+    companion object {
+        var instance: MainWindow? = null
     }
 
 }

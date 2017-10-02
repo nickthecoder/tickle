@@ -3,9 +3,11 @@ package uk.co.nickthecoder.tickle.editor.tabs
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
+import uk.co.nickthecoder.paratask.parameters.ButtonParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.RectiParameter
 import uk.co.nickthecoder.tickle.editor.util.XYParameter
 
@@ -21,11 +23,15 @@ class PoseTab(name: String, pose: Pose)
 class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
 
     val nameP = StringParameter("name", value = name)
+    val textureNameP = ButtonParameter("texture", buttonText = Resources.instance.findTextureName(pose.texture) ?: "<none>") {
+        editTexture()
+    }
+
     val positionP = RectiParameter("position", bottomUp = false)
     val offsetP = XYParameter("offset")
 
     override val taskD = TaskDescription("editPose")
-            .addParameters(nameP, positionP, offsetP)
+            .addParameters(nameP, textureNameP, positionP, offsetP)
 
     init {
         offsetP.x = pose.offsetX.toDouble()
@@ -59,5 +65,15 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
 
         pose.offsetX = offsetP.x!!.toFloat()
         pose.offsetY = offsetP.y!!.toFloat()
+    }
+
+    fun editTexture() {
+        val trName = Resources.instance.findTextureName(pose.texture)
+        val tr = Resources.instance.findTextureResource(pose.texture)
+        if (trName != null && tr != null) {
+            val tab = TextureTab(trName, tr)
+            MainWindow.instance?.tabPane?.add(tab)
+            tab.isSelected = true
+        }
     }
 }
