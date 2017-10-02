@@ -26,7 +26,7 @@ class MainWindow(val stage: Stage) {
 
     val tabPane = MyTabPane<EditorTab>()
 
-    val scene = Scene(borderPane, 1000.0, 600.0)
+    val scene = Scene(borderPane, 1000.0, 650.0)
 
     private val shortcuts = ShortcutHelper("MainWindow", borderPane)
 

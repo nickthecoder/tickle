@@ -70,7 +70,7 @@ class LayoutTab(val name: String, val layout: Layout)
                 .addParameters(nameP, stagesP)
 
         init {
-            stagesP.asListDetail(height = 200, width = 180) { if (it.stageNameP.value.isBlank()) "<new>" else it.stageNameP.value }
+            stagesP.asListDetail(width = 200, height = 200) { if (it.stageNameP.value.isBlank()) "<new>" else it.stageNameP.value }
 
             layout.stages.forEach { name, layoutStage ->
                 val inner = stagesP.newValue()
@@ -116,7 +116,7 @@ class LayoutTab(val name: String, val layout: Layout)
                 .addParameters(viewsP)
 
         init {
-            viewsP.asListDetail(height = 400, width = 180) { if (it.viewNameP.value.isBlank()) "<new>" else it.viewNameP.value }
+            viewsP.asListDetail(width = 200, height = 350) { if (it.viewNameP.value.isBlank()) "<new>" else it.viewNameP.value }
 
             layout.views.forEach { name, layoutView ->
                 val inner = viewsP.newValue()
