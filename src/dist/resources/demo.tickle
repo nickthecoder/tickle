@@ -1,8 +1,8 @@
 {
     "info": {
         "title": "Tickle",
-        "width": 600,
-        "height": 400,
+        "width": 1024,
+        "height": 600,
         "resizable": true,
         "startScene": "level01",
         "producer": "uk.co.nickthecoder.tickle.demo.Demo",

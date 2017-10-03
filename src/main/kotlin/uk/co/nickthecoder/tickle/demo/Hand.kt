@@ -1,9 +1,14 @@
 package uk.co.nickthecoder.tickle.demo
 
-import uk.co.nickthecoder.tickle.action.XYControls
+import uk.co.nickthecoder.tickle.ActionRole
+import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.action.FollowMouse
 
-class Hand : Controllable() {
+class Hand : ActionRole() {
 
-    override val movement = XYControls(5f)
+    override fun activated() {
+        action = FollowMouse(Game.instance.scene.findStageView("main")!!)
+        super.activated()
+    }
 
 }

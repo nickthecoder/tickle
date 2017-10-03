@@ -10,32 +10,15 @@ New Features
 ============
 
 Editor
-	Texture
-		Show the texture, with rectangles for each of the Poses using that texture.
-			Maybe just bottom left and top right corner to show the rectangle.
-			Click to show rect figures as Parameters
-			Double Click to edit the pose
-			Cross hairs at the offset point of each pose
-			Buttons to change the outline and cross hair colour.
-
-		Drag a rectangle shown in a different colour.
-			Double Click to create a NEW pose
-			Show non-transparent pixels by drawing the outline in a different color at those places.
-
-		Or click on a point, and look for a transparent rectangular outline which encloses that point to
-			define the pose's rect.
-			Start with a small square
-			Extend along X until both edges are transparent, then switch to Y
-			Extend along Y until both edges are transparent, check left/right again and repeat till done.
-
-		Can use a regular canvas for this (load the texture's image again).
-		Replace the main window's left pane with a list of Poses using that texture.
-			Accordian?
 
 	Ctrl+F to search for resources matching the name (glob?)
 		Another TreeView using Accordian?
 
 	Exapand/Contract All buttons above the accordian
+
+	Prevent deletion of textures used by a pose
+
+	Prevent deletion of poses used by a costume
 
 	Pose tab to have a list of costumes using it
 		In a "minor tab"?

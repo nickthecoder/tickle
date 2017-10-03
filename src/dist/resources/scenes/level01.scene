@@ -53,7 +53,12 @@
                 {
                     "costume": "bee",
                     "x": 0,
-                    "y": 100
+                    "y": 0
+                },
+                {
+                    "costume": "hand",
+                    "x": 0,
+                    "y": 0
                 },
                 {
                     "costume": "grenade",

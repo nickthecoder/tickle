@@ -9,21 +9,21 @@ class Layout() {
 
     fun createScene(): Scene {
         val scene = Scene()
-        stages.forEach { name, layoutStage ->
-            scene.stages[name] = layoutStage.createStage()
+        stages.forEach { stageName, layoutStage ->
+            scene.stages[stageName] = layoutStage.createStage()
         }
 
-        views.forEach { name, layoutView ->
+        views.forEach { viewName, layoutView ->
             val view = layoutView.createView()
             if (view is StageView) {
-                val stage = scene.stages[name]
+                val stage = scene.stages[layoutView.stageName]
                 if (stage == null) {
-                    throw IllegalArgumentException("Stage $name not found - cannot create the view")
+                    throw IllegalArgumentException("Stage ${layoutView.stageName} not found - cannot create the view")
                 } else {
                     view.stage = stage
                 }
             }
-            scene.addView(name, view, layoutView.position)
+            scene.addView(viewName, view, layoutView.position)
         }
 
         return scene

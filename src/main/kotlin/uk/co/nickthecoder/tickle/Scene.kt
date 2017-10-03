@@ -58,7 +58,12 @@ class Scene {
         stages.values.forEach { stage ->
             stage.begin()
         }
-        Game.instance.renderer.clearColor(background)
+
+        with(Game.instance.renderer) {
+            clearColor(background)
+            layout(window.width, window.height)
+        }
+
     }
 
     fun activated() {
@@ -81,14 +86,13 @@ class Scene {
 
     fun draw(renderer: Renderer) {
         // println("Rendering scene rects=${views.values.map { it.rect }} #actors=${views.values.filterIsInstance<StageView>().map { it.stage.actors.size }}")
-        layout(renderer.window.width, renderer.window.height)
-        renderer.beginFrame()
         renderer.clear()
 
         // TODO How should these be ordered?
         views.values.forEach { view ->
+            renderer.beginView()
             view.draw(renderer)
+            renderer.endView()
         }
-        renderer.endFrame()
     }
 }

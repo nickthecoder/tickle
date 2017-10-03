@@ -6,11 +6,15 @@ import uk.co.nickthecoder.tickle.action.DirectionControls
 
 class Bee : Controllable() {
 
-    override val movement = DirectionControls(
-            maxSpeed = 10f,
-            speedChange = 0.2f,
-            maxRotationSpeed = 5.0,
-            rotationDrag = 0.07)
+
+    override fun activated() {
+        movement = DirectionControls(
+                maxSpeed = 10f,
+                speedChange = 0.2f,
+                maxRotationSpeed = 5.0,
+                rotationDrag = 0.07)
+        super.activated()
+    }
 
     override fun tick() {
         super.tick()

@@ -6,8 +6,6 @@ import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.util.Rectf
-import uk.co.nickthecoder.tickle.util.Recti
-import uk.co.nickthecoder.tickle.util.YDownRect
 
 
 /**
@@ -98,28 +96,7 @@ class Renderer(val window: Window) {
     }
 
 
-    /**
-     * Move the view, so that the bottom left is at position (x,y).
-     */
-    fun centerView(rect: Recti, centerX: Float, centerY: Float) {
-        rotateView(rect, centerX, centerY, 0f)
-    }
-
-    fun rotateView(rect: Recti, centerX: Float, centerY: Float, radians: Float) {
-        val w = rect.width
-        val h = rect.height
-
-        projection.identity()
-        projection.ortho2D(
-                centerX - w / 2, centerX + w / 2,
-                centerY - h / 2, centerY + h / 2)
-        if (radians != 0f) {
-            projection.translate(centerX, centerY, 0f).rotateZ(radians).translate(-centerX, -centerY, 0f)
-        }
-        changedProjection()
-    }
-
-    private fun changedProjection() {
+    fun changeProjection( projection: Matrix4f) {
         val uniProjection = program.getUniformLocation("projection")
         program.setUniform(uniProjection, projection)
     }
@@ -132,13 +109,12 @@ class Renderer(val window: Window) {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
     }
 
-    fun beginFrame() {
-        window.wholeViewport()
+    fun beginView() {
         currentColor = null
         currentTexture = null
     }
 
-    fun endFrame() {
+    fun endView() {
         if (drawing) {
             end()
         }

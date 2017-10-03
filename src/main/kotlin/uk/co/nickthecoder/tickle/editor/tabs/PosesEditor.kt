@@ -219,7 +219,7 @@ class NewPoseTask(
     }
 }
 
-class PixelScanner(val image: Image, x: Int, y: Int, val threshold: Double = 0.05, val maxIterations: Int = 10000) {
+private class PixelScanner(val image: Image, x: Int, y: Int, val threshold: Double = 0.05, val maxIterations: Int = 10000) {
 
     val rect = YDownRect(Math.max(0, x - 2), Math.max(0, y - 2), Math.min(image.width.toInt() - 1, x + 2), Math.min(image.height.toInt(), y + 2))
 
@@ -236,7 +236,7 @@ class PixelScanner(val image: Image, x: Int, y: Int, val threshold: Double = 0.0
                 return rect
             }
         }
-        println("Failed after $maxIterations iterations")
+        println("Failed after reaching the limit of $maxIterations iterations")
         return rect
     }
 

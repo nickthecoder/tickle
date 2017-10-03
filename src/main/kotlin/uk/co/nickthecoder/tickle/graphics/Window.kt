@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.tickle.graphics
 
+import org.joml.Vector2f
+import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWWindowSizeCallback
@@ -116,6 +118,20 @@ class Window(
     }
 
     fun shouldClose(): Boolean = GLFW.glfwWindowShouldClose(handle)
+
+    private val mouseVector = Vector2f()
+
+    private val xBuffer = BufferUtils.createDoubleBuffer(1)
+    private val yBuffer = BufferUtils.createDoubleBuffer(1)
+
+    fun mousePosition(): Vector2f {
+        GLFW.glfwGetCursorPos(handle, xBuffer, yBuffer)
+
+        mouseVector.x = xBuffer.get(0).toFloat()
+        mouseVector.y = yBuffer.get(0).toFloat()
+
+        return mouseVector
+    }
 
     fun swap() {
         GLFW.glfwSwapBuffers(handle)
