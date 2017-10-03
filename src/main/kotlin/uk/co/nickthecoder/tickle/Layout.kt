@@ -4,16 +4,16 @@ import uk.co.nickthecoder.tickle.stage.*
 
 class Layout() {
 
-    val stages = mutableMapOf<String, LayoutStage>()
-    val views = mutableMapOf<String, LayoutView>()
+    val layoutStages = mutableMapOf<String, LayoutStage>()
+    val layoutViews = mutableMapOf<String, LayoutView>()
 
     fun createScene(): Scene {
         val scene = Scene()
-        stages.forEach { stageName, layoutStage ->
+        layoutStages.forEach { stageName, layoutStage ->
             scene.stages[stageName] = layoutStage.createStage()
         }
 
-        views.forEach { viewName, layoutView ->
+        layoutViews.forEach { viewName, layoutView ->
             val view = layoutView.createView()
             if (view is StageView) {
                 val stage = scene.stages[layoutView.stageName]
@@ -21,6 +21,7 @@ class Layout() {
                     throw IllegalArgumentException("Stage ${layoutView.stageName} not found - cannot create the view")
                 } else {
                     view.stage = stage
+                    stage.addView(view)
                 }
             }
             scene.addView(viewName, view, layoutView.position)

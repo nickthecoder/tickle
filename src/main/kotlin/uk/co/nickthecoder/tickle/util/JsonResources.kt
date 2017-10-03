@@ -133,7 +133,7 @@ class JsonResources {
             val jstages = JsonArray()
             jlayout.add("stages", jstages)
 
-            layout.stages.forEach { stageName, layoutStage ->
+            layout.layoutStages.forEach { stageName, layoutStage ->
                 val jstage = JsonObject()
                 jstages.add(jstage)
 
@@ -144,7 +144,7 @@ class JsonResources {
             val jviews = JsonArray()
             jlayout.add("views", jviews)
 
-            layout.views.forEach { viewName, layoutView ->
+            layout.layoutViews.forEach { viewName, layoutView ->
                 val jview = JsonObject()
                 jviews.add(jview)
 
@@ -192,7 +192,7 @@ class JsonResources {
                     val layoutStage = LayoutStage()
                     val stageName = jstage.get("name").asString()
                     layoutStage.stageString = jstage.get("stage").asString()
-                    layout.stages[stageName] = layoutStage
+                    layout.layoutStages[stageName] = layoutStage
                 }
             }
 
@@ -227,7 +227,7 @@ class JsonResources {
                     layoutView.position.height = jview.get("height")?.asInt()
                     layoutView.position.heightRatio = jview.get("heightRatio")?.asFloat()
 
-                    layout.views[viewName] = layoutView
+                    layout.layoutViews[viewName] = layoutView
                 }
             }
             resources.addLayout(name, layout)

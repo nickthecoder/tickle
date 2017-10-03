@@ -22,6 +22,9 @@ class SceneResource {
      */
     val sceneStages = mutableMapOf<String, SceneStage>()
 
+    /**
+     * Gets the Layout to create the scene, and then populates the Stages with Actors.
+     */
     fun createScene(): Scene {
         val layout = Resources.instance.layout(layoutName)
         val scene = layout.createScene()

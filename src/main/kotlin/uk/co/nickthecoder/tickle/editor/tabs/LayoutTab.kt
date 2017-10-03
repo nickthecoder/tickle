@@ -72,7 +72,7 @@ class LayoutTab(val name: String, val layout: Layout)
         init {
             stagesP.asListDetail(width = 200, height = 200) { if (it.stageNameP.value.isBlank()) "<new>" else it.stageNameP.value }
 
-            layout.stages.forEach { name, layoutStage ->
+            layout.layoutStages.forEach { name, layoutStage ->
                 val inner = stagesP.newValue()
                 inner.stageNameP.value = name
                 inner.stageClassP.value = Class.forName(layoutStage.stageString)
@@ -93,11 +93,11 @@ class LayoutTab(val name: String, val layout: Layout)
                 Resources.instance.renameLayout(name, nameP.value)
             }
 
-            layout.stages.clear()
+            layout.layoutStages.clear()
 
             stagesP.innerParameters.forEach { inner ->
                 val layoutStage = LayoutStage()
-                layout.stages[inner.stageNameP.value] = layoutStage
+                layout.layoutStages[inner.stageNameP.value] = layoutStage
 
                 with(layoutStage) {
                     layoutStage.stageString = inner.stageClassP.value!!.name
@@ -118,7 +118,7 @@ class LayoutTab(val name: String, val layout: Layout)
         init {
             viewsP.asListDetail(width = 200, height = 350) { if (it.viewNameP.value.isBlank()) "<new>" else it.viewNameP.value }
 
-            layout.views.forEach { name, layoutView ->
+            layout.layoutViews.forEach { name, layoutView ->
                 val inner = viewsP.newValue()
                 inner.viewNameP.value = name
                 inner.stageNameP.value = layoutView.stageName
@@ -167,11 +167,11 @@ class LayoutTab(val name: String, val layout: Layout)
 
         override fun run() {
 
-            layout.views.clear()
+            layout.layoutViews.clear()
 
             viewsP.innerParameters.forEach { inner ->
                 val layoutView = LayoutView()
-                layout.views[inner.viewNameP.value] = layoutView
+                layout.layoutViews[inner.viewNameP.value] = layoutView
 
                 with(layoutView) {
                     stageName = inner.stageNameP.value

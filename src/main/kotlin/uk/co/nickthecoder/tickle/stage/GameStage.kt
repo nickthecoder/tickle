@@ -5,7 +5,13 @@ import uk.co.nickthecoder.tickle.Actor
 
 class GameStage() : Stage {
 
-    override val actors = mutableSetOf<Actor>()
+    private val mutableViews = mutableListOf<StageView>()
+
+    override val views: List<StageView> = mutableViews
+
+    private val mutableActors = mutableSetOf<Actor>()
+
+    override val actors: Set<Actor> = mutableActors
 
     override fun begin() {
         actors.map { it.role }.filterNotNull().forEach { role ->
@@ -23,7 +29,7 @@ class GameStage() : Stage {
         actors.map { it.role }.filterNotNull().forEach { role ->
             role.end()
         }
-        actors.clear()
+        mutableActors.clear()
     }
 
     override fun tick() {
@@ -33,7 +39,7 @@ class GameStage() : Stage {
     }
 
     override fun add(actor: Actor, activate: Boolean) {
-        actors.add(actor)
+        mutableActors.add(actor)
         actor.stage = this
         actor.role?.begin()
         if (activate) {
@@ -42,8 +48,11 @@ class GameStage() : Stage {
     }
 
     override fun remove(actor: Actor) {
-        actors.remove(actor)
+        mutableActors.remove(actor)
         actor.role?.end()
     }
 
+    override fun addView(view: StageView) {
+        mutableViews.add(view)
+    }
 }

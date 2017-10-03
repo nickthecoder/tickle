@@ -57,8 +57,8 @@ class NewResourceTask : AbstractTask() {
             }
             layoutP -> {
                 val layout = Layout()
-                layout.stages["main"] = LayoutStage()
-                layout.views["main"] = LayoutView(stageName = "main")
+                layout.layoutStages["main"] = LayoutStage()
+                layout.layoutViews["main"] = LayoutView(stageName = "main")
                 Resources.instance.addLayout(name, layout)
                 data = layout
             }

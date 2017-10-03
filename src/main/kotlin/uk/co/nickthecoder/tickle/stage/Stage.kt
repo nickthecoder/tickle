@@ -4,6 +4,8 @@ import uk.co.nickthecoder.tickle.Actor
 
 interface Stage {
 
+    val views : List<StageView>
+
     val actors: Set<Actor>
 
     fun begin()
@@ -18,4 +20,7 @@ interface Stage {
 
     fun remove(actor: Actor)
 
+    fun addView( view : StageView)
+
+    fun firstView() : StageView? = views.firstOrNull()
 }
