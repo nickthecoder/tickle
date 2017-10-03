@@ -60,20 +60,32 @@ class InputTask(val name: String, val compoundInput: CompoundInput) : AbstractTa
 
 class InputParameter : MultipleGroupParameter("input") {
 
+    // KEY
+
     val chooseKeyP = ButtonParameter("keyPress", label = "", buttonText = "Click then type to pick a key") { onChooseKey(it) }
 
     val keyP = ChoiceParameter<Key?>("key", required = true, value = null).nullableEnumChoices(mixCase = true)
 
     val keyInfoP = InformationParameter("keyInfo", information = "The following field is only used when using KeyEvents, not when checking if a key is currently down.")
 
-    val keyStateP = ChoiceParameter<ButtonState>("state", value = ButtonState.PRESSED).enumChoices(mixCase = true)
+    val keyStateP = ChoiceParameter<ButtonState>("keyState", label = "State", value = ButtonState.PRESSED).enumChoices(mixCase = true)
 
     val keyInputP = SimpleGroupParameter("keyInput", label = "Keyboard")
             .addParameters(keyP, chooseKeyP, keyInfoP, keyStateP)
 
+    // MOUSE
+
+    val mouseButtonP = IntParameter("mouseButton", minValue = 0, value = 0)
+
+    val mouseStateP = ChoiceParameter<ButtonState>("mouseState", label = "State", value = ButtonState.PRESSED).enumChoices(mixCase = true)
+
+    val mouseInputP = SimpleGroupParameter("mouseInput", label = "Mouse")
+            .addParameters(mouseButtonP, mouseStateP)
+
+    // One Of ...
 
     val inputTypeP = OneOfParameter("inputType", label = " ", value = keyInputP, choiceLabel = "Input Type")
-            .addParameters(keyInputP).asPlain()
+            .addParameters(keyInputP, mouseInputP).asPlain()
 
     private var keyPressHandler: EventHandler<KeyEvent>? = null
 
@@ -82,20 +94,27 @@ class InputParameter : MultipleGroupParameter("input") {
     }
 
     fun from(input: Input) {
+
         println("Input = ${input}")
+
         if (input is KeyInput) {
             inputTypeP.value = keyInputP
             keyP.value = input.key
             keyStateP.value = input.state
+
+        } else if (input is MouseInput) {
+            inputTypeP.value = mouseInputP
+            mouseButtonP.value = input.mouseButton
+            mouseStateP.value = input.state
         }
-        // TODO Add MouseInput when that is implemented.
     }
 
     fun toInput(): Input? {
         if (inputTypeP.value == keyInputP) {
             return KeyInput(keyP.value!!, keyStateP.value!!)
+        } else if (inputTypeP.value == mouseInputP) {
+            return MouseInput(mouseButtonP.value!!, mouseStateP.value!!)
         }
-        // TODO Add MouseInput when that is implemented.
         return null
     }
 
@@ -115,6 +134,8 @@ class InputParameter : MultipleGroupParameter("input") {
     override fun toString(): String {
         return if (inputTypeP.value == keyInputP) {
             "Key ${keyP.value ?: "<unknown>"}"
+        } else if (inputTypeP.value == mouseInputP) {
+            "Mouse button ${mouseButtonP.value ?: "<unknown>"}"
         } else {
             "<new>"
         }
@@ -124,5 +145,3 @@ class InputParameter : MultipleGroupParameter("input") {
         return Key.forLabel(keyCode.getName())
     }
 }
-
-

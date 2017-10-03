@@ -380,9 +380,18 @@ class JsonResources {
         resources.inputs().forEach { name, input ->
             val jinput = JsonObject()
             jinput.add("name", name)
+
             val jkeys = JsonArray()
             addKeyInputs(input, jkeys)
-            jinput.add("keys", jkeys)
+            if (!jkeys.isEmpty) {
+                jinput.add("keys", jkeys)
+            }
+
+            val jmouseButtons = JsonArray()
+            addMouseInputs(input, jmouseButtons)
+            if (!jmouseButtons.isEmpty) {
+                jinput.add("mouse", jmouseButtons)
+            }
 
             jinputs.add(jinput)
         }
@@ -390,6 +399,7 @@ class JsonResources {
     }
 
     fun addKeyInputs(input: Input, toArray: JsonArray) {
+
         if (input is KeyInput) {
             val jkey = JsonObject()
             jkey.add("key", input.key.label)
@@ -403,11 +413,27 @@ class JsonResources {
         }
     }
 
+    fun addMouseInputs(input: Input, toArray: JsonArray) {
+
+        if (input is MouseInput) {
+            val jmouse = JsonObject()
+            jmouse.add("button", input.mouseButton)
+            jmouse.add("state", input.state.name)
+            toArray.add(jmouse)
+
+        } else if (input is CompoundInput) {
+            input.inputs.forEach {
+                addMouseInputs(it, toArray)
+            }
+        }
+    }
+
     fun loadInputs(jinputs: JsonArray) {
         jinputs.forEach { jele ->
             val jinput = jele.asObject()
             val name = jinput.get("name").asString()
             val input = CompoundInput()
+
             jinput.get("keys")?.let {
                 val jkeys = it.asArray()
                 jkeys.forEach {
@@ -418,6 +444,18 @@ class JsonResources {
                     input.add(KeyInput(Key.forLabel(key), state))
                 }
             }
+
+            jinput.get("mouse")?.let {
+                val jmice = it.asArray()
+                jmice.forEach {
+                    val jmouse = it.asObject()
+                    val button = jmouse.getInt("button", 1)
+                    val stateString = jmouse.getString("state", "PRESSED")
+                    val state = ButtonState.valueOf(stateString)
+                    input.add(MouseInput(button, state))
+                }
+            }
+
             resources.addInput(name, input)
             // println("Loaded input $name : $input")
         }

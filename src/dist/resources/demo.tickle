@@ -199,7 +199,7 @@
             "keys": [
                 {
                     "key": "Left",
-                    "type": "PRESS"
+                    "state": "PRESSED"
                 }
             ]
         },
@@ -208,7 +208,7 @@
             "keys": [
                 {
                     "key": "Right",
-                    "type": "PRESS"
+                    "state": "PRESSED"
                 }
             ]
         },
@@ -217,7 +217,13 @@
             "keys": [
                 {
                     "key": "Up",
-                    "type": "PRESS"
+                    "state": "PRESSED"
+                }
+            ],
+            "mouse": [
+                {
+                    "button": 0,
+                    "state": "PRESSED"
                 }
             ]
         },
@@ -226,7 +232,7 @@
             "keys": [
                 {
                     "key": "Down",
-                    "type": "PRESS"
+                    "state": "PRESSED"
                 }
             ]
         },
@@ -235,7 +241,7 @@
             "keys": [
                 {
                     "key": "O",
-                    "type": "PRESS"
+                    "state": "PRESSED"
                 }
             ]
         },
@@ -244,7 +250,7 @@
             "keys": [
                 {
                     "key": "X",
-                    "type": "PRESS"
+                    "state": "PRESSED"
                 }
             ]
         },
@@ -253,7 +259,7 @@
             "keys": [
                 {
                     "key": "Z",
-                    "type": "PRESS"
+                    "state": "PRESSED"
                 }
             ]
         },
@@ -262,7 +268,7 @@
             "keys": [
                 {
                     "key": "Tab",
-                    "type": "PRESS"
+                    "state": "PRESSED"
                 }
             ]
         }
