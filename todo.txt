@@ -10,9 +10,6 @@ New Features
 ============
 
 Editor
-
-	Poses should be child tree items under their texture (as well as a top-level)
-
 	Texture
 		Change "View" button to open a new tab (instead of launching gwenview)
 		Show the texture, with rectangles for each of the Poses using that texture.
