@@ -60,11 +60,17 @@ class InputTask(val name: String, val compoundInput: CompoundInput) : AbstractTa
 
 class InputParameter : MultipleGroupParameter("input") {
 
-    val keyP = ChoiceParameter<Key?>("key", required = true, value = null).nullableEnumChoices(mixCase = true)
-    val keyEventTypeP = ChoiceParameter<KeyEventType>("type", value = KeyEventType.PRESS).enumChoices(mixCase = true)
     val chooseKeyP = ButtonParameter("keyPress", label = "", buttonText = "Click then type to pick a key") { onChooseKey(it) }
+
+    val keyP = ChoiceParameter<Key?>("key", required = true, value = null).nullableEnumChoices(mixCase = true)
+
+    val keyInfoP = InformationParameter("keyInfo", information = "The following field is only used when using KeyEvents, not when checking if a key is currently down.")
+
+    val keyStateP = ChoiceParameter<ButtonState>("state", value = ButtonState.PRESSED).enumChoices(mixCase = true)
+
     val keyInputP = SimpleGroupParameter("keyInput", label = "Keyboard")
-            .addParameters(keyP, keyEventTypeP, chooseKeyP)
+            .addParameters(keyP, chooseKeyP, keyInfoP, keyStateP)
+
 
     val inputTypeP = OneOfParameter("inputType", label = " ", value = keyInputP, choiceLabel = "Input Type")
             .addParameters(keyInputP).asPlain()
@@ -80,14 +86,14 @@ class InputParameter : MultipleGroupParameter("input") {
         if (input is KeyInput) {
             inputTypeP.value = keyInputP
             keyP.value = input.key
-            keyEventTypeP.value = input.type
+            keyStateP.value = input.state
         }
         // TODO Add MouseInput when that is implemented.
     }
 
     fun toInput(): Input? {
         if (inputTypeP.value == keyInputP) {
-            return KeyInput(keyP.value!!, keyEventTypeP.value!!)
+            return KeyInput(keyP.value!!, keyStateP.value!!)
         }
         // TODO Add MouseInput when that is implemented.
         return null

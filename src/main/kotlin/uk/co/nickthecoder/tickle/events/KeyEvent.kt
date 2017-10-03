@@ -6,7 +6,7 @@ class KeyEvent(
         val window: Window,
         val key: Key,
         val scanCode: Int,
-        val type: KeyEventType,
+        val state: ButtonState,
         val mods: Int) {
 
     var consumed: Boolean = false

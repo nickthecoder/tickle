@@ -37,8 +37,6 @@ When renaming an item, who's name is used in a scene, we need to keep track of r
 MouseInput
 	MouseButtonInput
 	Hide the mouse, so it can be replaced by an actor
-	Action(s) to follow the mouse
-		Follow immediately or with "inertia".
 	Find Actors at a point
 		Overlapping, or using pixel data
 

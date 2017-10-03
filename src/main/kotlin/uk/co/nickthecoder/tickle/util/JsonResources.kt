@@ -393,7 +393,7 @@ class JsonResources {
         if (input is KeyInput) {
             val jkey = JsonObject()
             jkey.add("key", input.key.label)
-            jkey.add("type", input.type.name)
+            jkey.add("state", input.state.name)
             toArray.add(jkey)
 
         } else if (input is CompoundInput) {
@@ -413,9 +413,9 @@ class JsonResources {
                 jkeys.forEach {
                     val jkey = it.asObject()
                     val key = jkey.get("key").asString()
-                    val typeString = jkey.get("type").asString()
-                    val type = KeyEventType.valueOf(typeString)
-                    input.add(KeyInput(Key.forLabel(key), type))
+                    val stateString = jkey.getString("state", "PRESSED")
+                    val state = ButtonState.valueOf(stateString)
+                    input.add(KeyInput(Key.forLabel(key), state))
                 }
             }
             resources.addInput(name, input)

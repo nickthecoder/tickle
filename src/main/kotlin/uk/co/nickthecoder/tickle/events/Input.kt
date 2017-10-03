@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle.events
 
-import org.lwjgl.glfw.GLFW.GLFW_PRESS
-import org.lwjgl.glfw.GLFW.glfwGetKey
+import org.lwjgl.glfw.GLFW.*
 import uk.co.nickthecoder.tickle.graphics.Window
 
 interface Input {
@@ -17,17 +16,30 @@ interface Input {
     }
 }
 
-class KeyInput(val key: Key, val type: KeyEventType = KeyEventType.PRESS) : Input {
+class KeyInput(val key: Key, val state: ButtonState = ButtonState.PRESSED) : Input {
 
     override fun isPressed(): Boolean {
         return glfwGetKey(Window.current?.handle ?: 0, key.code) == GLFW_PRESS
     }
 
     override fun matches(event: KeyEvent): Boolean {
-        return event.type == type && key == event.key
+        return event.state == state && key == event.key
     }
 
-    override fun toString() = "KeyInput key=$key type=$type"
+    override fun toString() = "KeyInput key=$key state=$state"
+}
+
+class MouseInput(val mouseButton: Int, val state: ButtonState) : Input {
+
+    override fun isPressed(): Boolean {
+        return glfwGetMouseButton(Window.current?.handle ?: 0, mouseButton) == GLFW_PRESS
+    }
+
+    override fun matches(event: KeyEvent): Boolean {
+        return false
+    }
+
+    override fun toString() = "MouseInput key=$mouseButton state=$state"
 }
 
 class CompoundInput() : Input {
