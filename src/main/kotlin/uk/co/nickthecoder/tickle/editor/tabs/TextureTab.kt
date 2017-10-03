@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
+import javafx.scene.control.Button
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
@@ -12,12 +13,32 @@ import uk.co.nickthecoder.tickle.editor.ImageCache
 import uk.co.nickthecoder.tickle.editor.util.ImageParameter
 import uk.co.nickthecoder.tickle.editor.util.RenameTask
 import uk.co.nickthecoder.tickle.graphics.Texture
+import java.io.File
 
-class TextureTab(name: String, texture: Texture)
+class TextureTab(name: String, val texture: Texture)
     : EditTaskTab(TextureTask(name, texture), "Texture", name, texture) {
 
     init {
         addDeleteButton { Resources.instance.deleteTexture(name) }
+        val editButton = Button("Edit")
+        editButton.setOnAction { edit() }
+        leftButtons.children.add(editButton)
+    }
+
+    fun edit() {
+        texture.file?.absoluteFile?.let { file ->
+            val xcf = File(file.parentFile, file.nameWithoutExtension + ".xcf")
+            if (xcf.exists()) {
+                Exec("gimp", xcf).start()
+            } else {
+                val svg = File(file.parentFile, file.nameWithoutExtension + ".svg")
+                if (svg.exists()) {
+                    Exec("inkscape", svg).start()
+                } else {
+                    Exec("gimp", file).start()
+                }
+            }
+        }
     }
 
 }
@@ -26,19 +47,19 @@ class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
 
     val nameP = StringParameter("name", value = name)
 
-    val filenameP = StringParameter("filename", value = texture.file?.path ?: "")
+
+    val fileP = StringParameter("file", value = texture.file?.path ?: "")
     val renameP = ButtonParameter("rename", buttonText = "Rename") { onRename() }
-    val editP = ButtonParameter("edit", buttonText = "Edit") { onEdit() }
-    val buttonsP = SimpleGroupParameter("buttons", label = "")
-            .addParameters(renameP, editP).asGrid(labelPosition = LabelPosition.NONE)
+    val fileAndRenameP = SimpleGroupParameter("fileAndRename", label = "Filename")
+            .addParameters(fileP, renameP).asHorizontal(labelPosition = LabelPosition.NONE)
 
     val imageP = ImageParameter("image", image = ImageCache.image(texture.file!!))
 
     override val taskD = TaskDescription("editTexture")
-            .addParameters(nameP, filenameP, buttonsP, imageP)
+            .addParameters(nameP, fileAndRenameP, imageP)
 
     init {
-        filenameP.enabled = false
+        fileP.enabled = false
     }
 
     override fun customCheck() {
@@ -64,7 +85,7 @@ class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
             }
             renameTask.taskRunner.listen { cancelled ->
                 if (!cancelled) {
-                    renameTask.newNameP.value?.path?.let { filenameP.value = it }
+                    renameTask.newNameP.value?.path?.let { fileP.value = it }
                     run()
                     Resources.instance.save()
                 }
@@ -74,8 +95,4 @@ class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
         }
     }
 
-    fun onEdit() {
-        val exec = Exec("gimp", texture.file)
-        exec.start()
-    }
 }
