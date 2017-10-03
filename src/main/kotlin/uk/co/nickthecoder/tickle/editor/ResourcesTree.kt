@@ -9,6 +9,7 @@ import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
+import java.io.File
 
 class ResourcesTree()
 
@@ -88,7 +89,14 @@ class ResourcesTree()
     inner class RootItem() : ResourceItem("Resources") {
 
         init {
-            children.addAll(GameInfoItem(), TexturesItem(), PosesItem(), CostumesItem(), InputsItem(), LayoutsItem(), ScenesItem())
+            children.addAll(
+                    GameInfoItem(),
+                    TexturesItem(),
+                    PosesItem(),
+                    CostumesItem(),
+                    InputsItem(),
+                    LayoutsItem(),
+                    ScenesDirectoryItem("Scenes", resources.sceneDirectory))
         }
 
         override fun isLeaf() = false
@@ -132,7 +140,7 @@ class ResourcesTree()
         }
     }
 
-    abstract inner class TopLevelItem() : ResourceItem(), ResourcesListener {
+    abstract inner class TopLevelItem(label: String = "") : ResourceItem(label), ResourcesListener {
         init {
             Resources.instance.listeners.add(this)
         }
@@ -169,7 +177,7 @@ class ResourcesTree()
         : DataItem(name, texture) {
 
         init {
-            resources.poses().filter { it.value.texture === texture}.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
+            resources.poses().filter { it.value.texture === texture }.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
                 children.add(DataItem(name, pose))
             }
         }
@@ -276,19 +284,34 @@ class ResourcesTree()
 
     }
 
-
-    inner class ScenesItem() : ResourceItem("Scenes") {
+    inner class ScenesDirectoryItem(label: String, val directory: File)
+        : TopLevelItem(label) {
 
         init {
-            // TODO Create a hierarchy of directories and scene files
-            // Could use Resources listeners to update the tree, even though scenes aren't in Resources.
-            val lister = FileLister(depth = 3, extensions = listOf("scene"))
-            lister.listFiles(resources.sceneDirectory).forEach { file ->
-                children.add(DataItem(file.name, file))
+            val directoryLister = FileLister(onlyFiles = false)
+            directoryLister.listFiles(directory).forEach { file ->
+                children.add(ScenesDirectoryItem(file.name, file))
+            }
+            val sceneLister = FileLister(extensions = listOf("scene"))
+            sceneLister.listFiles(directory).forEach { file ->
+                children.add(DataItem(file.name, SceneStub(file)))
             }
         }
 
+        override fun resourceAdded(resource: Any, name: String) {
+            if (resource is File && resource.parentFile == directory) {
+                if (resource.isDirectory) {
+                    children.add(ScenesDirectoryItem(resource.name, resource))
+                } else if (resource.extension == "scene") {
+                    children.add(DataItem(resource.name, SceneStub(resource)))
+                }
+            }
+        }
+        
         override fun isLeaf() = false
+
     }
 
 }
+
+class SceneStub(val file: File)

@@ -25,8 +25,14 @@ class NewResourceTask : AbstractTask() {
 
     val inputP = InformationParameter("input", label = "Input", information = "")
 
+    val sceneDirectoryP = InformationParameter("sceneDirectory", label = "Scene Directory", information = "")
+
+    val sceneP = InformationParameter("sceneDirectory", label = "Scene", information = "")
+
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
-            .addParameters("Texture" to textureP, "Pose" to poseP, "Costume" to costumeP, "Layout" to layoutP, "Input" to inputP)
+            .addParameters(
+                    "Texture" to textureP, "Pose" to poseP, "Costume" to costumeP, "Layout" to layoutP,
+                    "Input" to inputP, "Scene Directory" to sceneDirectoryP, "Scene" to sceneP)
 
 
     override val taskD = TaskDescription("newResource", height = 200)
@@ -66,6 +72,14 @@ class NewResourceTask : AbstractTask() {
                 val input = CompoundInput()
                 Resources.instance.addInput(name, input)
                 data = input
+            }
+            sceneDirectoryP -> {
+                val dir = File(Resources.instance.sceneDirectory, nameP.value)
+                dir.mkdir()
+                Resources.instance.fireAdded(dir, nameP.value)
+            }
+            sceneP -> {
+                println("Not implemented yet!")
             }
         }
 

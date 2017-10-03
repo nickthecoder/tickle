@@ -37,19 +37,19 @@ class Resources {
     val listeners = mutableListOf<ResourcesListener>()
 
 
-    private fun fireAdded(resource: Any, name: String) {
+    fun fireAdded(resource: Any, name: String) {
         listeners.toList().forEach {
             it.resourceAdded(resource, name)
         }
     }
 
-    private fun fireRemoved(resource: Any, name: String) {
+    fun fireRemoved(resource: Any, name: String) {
         listeners.toList().forEach {
             it.resourceRemoved(resource, name)
         }
     }
 
-    private fun fireRenamed(resource: Any, oldName: String, newName: String) {
+    fun fireRenamed(resource: Any, oldName: String, newName: String) {
         listeners.toList().forEach {
             it.resourceRenamed(resource, oldName, newName)
         }

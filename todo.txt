@@ -1,6 +1,11 @@
 Current Work
 ============
 
+Pixel Overlap
+	Find the intersection of their world rectangles
+	Render the two object one in red, the other blue
+	http://wiki.lwjgl.org/wiki/Render_to_Texture_with_Frame_Buffer_Objects_(FBO).html
+
 BUGS
 ====
 

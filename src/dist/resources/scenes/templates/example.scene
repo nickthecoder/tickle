@@ -1,0 +1,95 @@
+{
+    "director": "uk.co.nickthecoder.tickle.demo.Play",
+    "layout": "default",
+    "stages": [
+        {
+            "name": "main",
+            "actors": [
+                {
+                    "costume": "coin",
+                    "x": -100,
+                    "y": 200,
+                    "attributes": [
+                        {
+                            "name": "speed",
+                            "value": "2"
+                        },
+                        {
+                            "name": "rotationSpeed",
+                            "value": "2"
+                        }
+                    ]
+                },
+                {
+                    "costume": "coin10",
+                    "x": 0,
+                    "y": 200,
+                    "attributes": [
+                        {
+                            "name": "speed",
+                            "value": "3"
+                        },
+                        {
+                            "name": "rotationSpeed",
+                            "value": "-2"
+                        }
+                    ]
+                },
+                {
+                    "costume": "coin100",
+                    "x": 100,
+                    "y": 200,
+                    "attributes": [
+                        {
+                            "name": "speed",
+                            "value": "4"
+                        },
+                        {
+                            "name": "rotationSpeed",
+                            "value": "5"
+                        }
+                    ]
+                },
+                {
+                    "costume": "bee",
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "costume": "hand",
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "costume": "grenade",
+                    "x": -100,
+                    "y": 0
+                },
+                {
+                    "costume": "grenade",
+                    "x": 0,
+                    "y": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.2"
+                        }
+                    ]
+                },
+                {
+                    "costume": "grenade",
+                    "x": 100,
+                    "y": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.4"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+    
