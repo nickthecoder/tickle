@@ -11,7 +11,6 @@ New Features
 
 Editor
 	Texture
-		Change "View" button to open a new tab (instead of launching gwenview)
 		Show the texture, with rectangles for each of the Poses using that texture.
 			Maybe just bottom left and top right corner to show the rectangle.
 			Click to show rect figures as Parameters
@@ -32,8 +31,6 @@ Editor
 		Can use a regular canvas for this (load the texture's image again).
 		Replace the main window's left pane with a list of Poses using that texture.
 			Accordian?
-
-		Edit : If there is an svg or xcf of the same name, edit that instead of the png.
 
 	Ctrl+F to search for resources matching the name (glob?)
 		Another TreeView using Accordian?

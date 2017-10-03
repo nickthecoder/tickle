@@ -1,12 +1,18 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
+import javafx.geometry.Side
 import javafx.scene.control.Button
+import javafx.scene.control.Label
+import javafx.scene.control.TabPane
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
+import uk.co.nickthecoder.paratask.gui.MyTab
+import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.paratask.util.process.Exec
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.editor.ImageCache
@@ -16,13 +22,39 @@ import uk.co.nickthecoder.tickle.graphics.Texture
 import java.io.File
 
 class TextureTab(name: String, val texture: Texture)
-    : EditTaskTab(TextureTask(name, texture), "Texture", name, texture) {
+
+    : EditTab("Texture", name, texture) {
+
+    val task = TextureTask(name, texture)
+    val taskForm = TaskForm(task)
+
+    val posesEditor = PosesEditor(texture)
+
+    val minorTabs = MyTabPane<MyTab>()
+
+    val detailsTab = MyTab("Details", taskForm.build())
+    val posesTab = MyTab("Poses", posesEditor.build())
 
     init {
+        minorTabs.side = Side.BOTTOM
+        minorTabs.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
+
+        minorTabs.add(detailsTab)
+        minorTabs.add(posesTab)
+        borderPane.center = minorTabs
+
         addDeleteButton { Resources.instance.deleteTexture(name) }
         val editButton = Button("Edit")
         editButton.setOnAction { edit() }
         leftButtons.children.add(editButton)
+    }
+
+    override fun save(): Boolean {
+        val result = taskForm.check()
+        if (result) {
+            task.run()
+        }
+        return result
     }
 
     fun edit() {

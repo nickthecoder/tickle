@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.stage
 
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.util.Recti
+import uk.co.nickthecoder.tickle.util.YDownRect
 
 class ZOrderStageView()
     : StageView {

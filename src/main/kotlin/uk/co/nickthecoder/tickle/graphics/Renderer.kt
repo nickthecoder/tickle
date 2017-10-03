@@ -7,6 +7,7 @@ import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.util.Rectf
 import uk.co.nickthecoder.tickle.util.Recti
+import uk.co.nickthecoder.tickle.util.YDownRect
 
 
 /**

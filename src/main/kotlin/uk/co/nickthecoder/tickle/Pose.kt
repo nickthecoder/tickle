@@ -3,13 +3,13 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.Rectf
-import uk.co.nickthecoder.tickle.util.Recti
+import uk.co.nickthecoder.tickle.util.YDownRect
 
 class Pose(
         val texture: Texture,
-        rect: Recti = Recti(0, texture.height, texture.width, 0)) {
+        rect: YDownRect = YDownRect(0, texture.height, texture.width, 0)) {
 
-    var rect: Recti = rect
+    var rect: YDownRect = rect
         set(v) {
             updateRectf()
         }
@@ -49,14 +49,14 @@ class Pose(
         if (actor.isSimpleImage()) {
             renderer.drawTexture(
                     texture,
-                    left, bottom, left + rect.width, bottom + rect.topDownHeight,
+                    left, bottom, left + rect.width, bottom + rect.height,
                     rectf,
                     color = actor.color)
 
         } else {
             renderer.drawTexture(
                     texture,
-                    left, bottom, left + rect.width, bottom + rect.topDownHeight,
+                    left, bottom, left + rect.width, bottom + rect.height,
                     rectf, color = actor.color,
                     modelMatrix = actor.getModelMatrix())
         }
