@@ -10,8 +10,8 @@ fun createTextureParameter(parameterName: String = "texture"): ChoiceParameter<T
 
     val parameter = ChoiceParameter<Texture?>(name = parameterName, required = true, value = null)
 
-    Resources.instance.textures().forEach { name, textureResource ->
-        parameter.addChoice(name, textureResource.texture, name)
+    Resources.instance.textures().forEach { name, texture ->
+        parameter.addChoice(name, texture, name)
     }
     return parameter
 }

@@ -12,6 +12,7 @@ import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.tabs.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
+import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.JsonResources
 
 class MainWindow(val stage: Stage) {
@@ -86,7 +87,7 @@ class MainWindow(val stage: Stage) {
         if (data is GameInfo) {
             return GameInfoTab()
 
-        } else if (data is TextureResource) {
+        } else if (data is Texture) {
             return TextureTab(name, data)
 
         } else if (data is Pose) {

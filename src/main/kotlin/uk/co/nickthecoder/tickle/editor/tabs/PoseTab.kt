@@ -73,9 +73,8 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
 
     fun editTexture() {
         val trName = Resources.instance.findTextureName(pose.texture)
-        val tr = Resources.instance.findTextureResource(pose.texture)
-        if (trName != null && tr != null) {
-            val tab = TextureTab(trName, tr)
+        if (trName != null) {
+            val tab = TextureTab(trName, pose.texture)
             MainWindow.instance?.tabPane?.add(tab)
             tab.isSelected = true
         }

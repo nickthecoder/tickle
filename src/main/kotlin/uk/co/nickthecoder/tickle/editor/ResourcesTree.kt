@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent
 import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
+import uk.co.nickthecoder.tickle.graphics.Texture
 
 class ResourcesTree()
 
@@ -154,26 +155,28 @@ class ResourcesTree()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
-            if (resource is TextureResource) {
+            if (resource is Texture) {
                 children.add(TextureItem(name, resource))
+                updateLabel()
             }
         }
 
         override fun toString() = "Textures (${children.size})"
     }
 
-    inner class TextureItem(name: String, val textureResource: TextureResource)
+    inner class TextureItem(name: String, val texture: Texture)
 
-        : DataItem(name, textureResource) {
+        : DataItem(name, texture) {
 
         init {
-            resources.poses().filter { it.value.texture === textureResource.texture }.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
+            resources.poses().filter { it.value.texture === texture}.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
                 children.add(DataItem(name, pose))
             }
         }
 
         override fun resourceRemoved(resource: Any, name: String) {
-            if (resource is Pose && resource.texture === textureResource.texture) {
+            super.resourceRemoved(resource, name)
+            if (resource is Pose && resource.texture === texture) {
                 children.filterIsInstance<DataItem>().firstOrNull { it.data === resource }?.let {
                     remove(it)
                 }
@@ -182,7 +185,7 @@ class ResourcesTree()
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Pose) {
-                if (resource.texture === textureResource.texture) {
+                if (resource.texture === texture) {
                     children.add(DataItem(name, resource))
                     updateLabel()
                 }

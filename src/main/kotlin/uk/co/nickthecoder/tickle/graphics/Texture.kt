@@ -51,7 +51,7 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
 
         private var boundHandle: Int? = null
 
-        fun createTexture(file: File): Texture {
+        fun create(file: File): Texture {
 
             MemoryStack.stackPush().use { stack ->
 

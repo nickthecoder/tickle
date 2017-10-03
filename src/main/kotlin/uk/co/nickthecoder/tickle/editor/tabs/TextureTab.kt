@@ -8,11 +8,11 @@ import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.util.process.Exec
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.TextureResource
 import uk.co.nickthecoder.tickle.editor.util.RenameTask
+import uk.co.nickthecoder.tickle.graphics.Texture
 
-class TextureTab(name: String, textureResource: TextureResource)
-    : EditTaskTab(TextureTask(name, textureResource), "Texture", name, textureResource) {
+class TextureTab(name: String, texture: Texture)
+    : EditTaskTab(TextureTask(name, texture), "Texture", name, texture) {
 
     init {
         addDeleteButton { Resources.instance.deleteTexture(name) }
@@ -20,11 +20,11 @@ class TextureTab(name: String, textureResource: TextureResource)
 
 }
 
-class TextureTask(val name: String, val textureResource: TextureResource) : AbstractTask() {
+class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
 
     val nameP = StringParameter("name", value = name)
 
-    val filenameP = StringParameter("filename", value = textureResource.file.path)
+    val filenameP = StringParameter("filename", value = texture.file?.path ?: "")
     val renameP = ButtonParameter("rename", buttonText = "Rename") { onRename() }
     val viewP = ButtonParameter("view", buttonText = "View") { onView() }
     val editP = ButtonParameter("edit", buttonText = "Edit") { onEdit() }
@@ -39,8 +39,8 @@ class TextureTask(val name: String, val textureResource: TextureResource) : Abst
     }
 
     override fun customCheck() {
-        val tr = Resources.instance.optionalTextureResource(nameP.value)
-        if (tr != null && tr != textureResource) {
+        val t = Resources.instance.optionalTexture(nameP.value)
+        if (t != null && t != texture) {
             throw ParameterException(nameP, "This name is already used.")
         }
     }
@@ -52,30 +52,32 @@ class TextureTask(val name: String, val textureResource: TextureResource) : Abst
     }
 
     fun onRename() {
-        val renameTask = RenameTask(textureResource.file)
-        try {
-            check()
-        } catch (e: Exception) {
-            return
-        }
-        renameTask.taskRunner.listen { cancelled ->
-            if (!cancelled) {
-                renameTask.newNameP.value?.path?.let { filenameP.value = it }
-                run()
-                Resources.instance.save()
+        texture.file?.let { file ->
+            val renameTask = RenameTask(file)
+            try {
+                check()
+            } catch (e: Exception) {
+                return
             }
+            renameTask.taskRunner.listen { cancelled ->
+                if (!cancelled) {
+                    renameTask.newNameP.value?.path?.let { filenameP.value = it }
+                    run()
+                    Resources.instance.save()
+                }
+            }
+            val tp = TaskPrompter(renameTask)
+            tp.placeOnStage(Stage())
         }
-        val tp = TaskPrompter(renameTask)
-        tp.placeOnStage(Stage())
     }
 
     fun onView() {
-        val exec = Exec("gwenview", textureResource.file)
+        val exec = Exec("gwenview", texture.file)
         exec.start()
     }
 
     fun onEdit() {
-        val exec = Exec("gimp", textureResource.file)
+        val exec = Exec("gimp", texture.file)
         exec.start()
     }
 }

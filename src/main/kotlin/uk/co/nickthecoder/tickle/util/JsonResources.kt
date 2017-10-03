@@ -239,11 +239,13 @@ class JsonResources {
 
     fun saveTextures(): JsonArray {
         val jtextures = JsonArray()
-        resources.textures().forEach { name, textureResource ->
-            val jtexture = JsonObject()
-            jtexture.add("name", name)
-            jtexture.add("file", toPath(textureResource.file))
-            jtextures.add(jtexture)
+        resources.textures().forEach { name, texture ->
+            texture.file?.let { file ->
+                val jtexture = JsonObject()
+                jtexture.add("name", name)
+                jtexture.add("file", toPath(file))
+                jtextures.add(jtexture)
+            }
         }
         return jtextures
     }

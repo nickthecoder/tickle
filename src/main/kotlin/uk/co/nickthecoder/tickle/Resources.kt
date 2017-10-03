@@ -16,7 +16,7 @@ class Resources {
 
     val gameInfo = GameInfo("Tickle", 600, 400, true)
 
-    private val textures = mutableMapOf<String, TextureResource>()
+    private val textures = mutableMapOf<String, Texture>()
 
     private val poses = mutableMapOf<String, Pose>()
 
@@ -63,30 +63,22 @@ class Resources {
 
     // TEXTURES
 
-    fun textures(): Map<String, TextureResource> = textures
+    fun textures(): Map<String, Texture> = textures
 
-    fun optionalTextureResource(name: String): TextureResource? {
+    fun optionalTexture(name: String): Texture? {
         return textures[name]
     }
 
-    fun textureResource(name: String): TextureResource {
+    fun texture(name: String): Texture{
         return textures[name] ?: throw IllegalStateException("Texture $name not found")
     }
 
-    fun texture(name: String): Texture {
-        return textureResource(name).texture
-    }
-
-    fun findTextureResource(texture: Texture): TextureResource? {
-        return textures.values.firstOrNull { it.texture === texture }
-    }
-
     fun findTextureName(texture: Texture): String? {
-        return textures.filter { entry -> entry.value.texture === texture }.map { it.key }.firstOrNull()
+        return textures.filter { entry -> entry.value === texture }.map { it.key }.firstOrNull()
     }
 
-    fun addTexture(name: String, file: File): TextureResource {
-        val textureResource = TextureResource(file)
+    fun addTexture(name: String, file: File): Texture{
+        val textureResource = Texture.create(file)
         textures[name] = textureResource
         fireAdded(textureResource, name)
         return textureResource
@@ -257,9 +249,4 @@ class Resources {
          */
         var instance = Resources()
     }
-}
-
-class TextureResource(val file: File) {
-
-    val texture = Texture.createTexture(file)
 }
