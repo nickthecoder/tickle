@@ -42,7 +42,7 @@ fun guessTickleFile(): File? {
     return resourceDir.listFiles().filter { it.extension == "tickle" }.sortedBy { it.lastModified() }.lastOrNull()
 }
 
-private fun startGame(file: File) {
+fun startGame(file: File) {
 
     // Setup an error callback.
     GLFWErrorCallback.createPrint(System.err).set()

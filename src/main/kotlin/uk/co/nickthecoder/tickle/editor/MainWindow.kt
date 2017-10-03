@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.editor
 
 import javafx.scene.Scene
+import javafx.scene.control.Alert
 import javafx.scene.control.ToolBar
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
@@ -50,6 +51,7 @@ class MainWindow(val stage: Stage) {
         with(toolBar.items) {
             add(EditorActions.RESOURCES_SAVE.createButton(shortcuts) { save() })
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
+            add(EditorActions.RUN.createButton(shortcuts) { runGame() })
         }
 
         stage.show()
@@ -66,6 +68,21 @@ class MainWindow(val stage: Stage) {
 
     fun newResource() {
         TaskPrompter(NewResourceTask()).placeOnStage(Stage())
+    }
+
+    var running: Boolean = false
+    fun runGame() {
+        if (running) {
+            Alert(Alert.AlertType.INFORMATION, "It seems that a game is already running.\nYou can only run one instance!").showAndWait()
+        } else {
+            Thread {
+                running = true
+                println("Game test started")
+                startGame(Resources.instance.file)
+                println("Game test ended")
+                running = false
+            }.start()
+        }
     }
 
     fun openTab(dataName: String, data: Any) {

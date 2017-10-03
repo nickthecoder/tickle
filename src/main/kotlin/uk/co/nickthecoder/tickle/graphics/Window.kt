@@ -8,9 +8,9 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
+import uk.co.nickthecoder.tickle.events.ButtonState
 import uk.co.nickthecoder.tickle.events.Key
 import uk.co.nickthecoder.tickle.events.KeyEvent
-import uk.co.nickthecoder.tickle.events.ButtonState
 
 class Window(
         title: String,
@@ -124,6 +124,10 @@ class Window(
     private val xBuffer = BufferUtils.createDoubleBuffer(1)
     private val yBuffer = BufferUtils.createDoubleBuffer(1)
 
+    /**
+     * Returns the position of the mouse pointer relative to the top left of the window.
+     * This is very rarely useful, and instead, you should use [StageView].mousePosition]
+     */
     fun mousePosition(): Vector2f {
         GLFW.glfwGetCursorPos(handle, xBuffer, yBuffer)
 

@@ -34,8 +34,7 @@ When renaming an item, who's name is used in a scene, we need to keep track of r
 	and update all scenes when the resource file is saved.
 	Costume and Font only?
 
-MouseInput
-	MouseButtonInput
+Mouse
 	Hide the mouse, so it can be replaced by an actor
 	Find Actors at a point
 		Overlapping, or using pixel data
