@@ -219,7 +219,7 @@ class NewPoseTask(
     }
 }
 
-class PixelScanner(val image: Image, x: Int, y: Int, val threshold: Double = 0.1, val maxIterations: Int = 10000) {
+class PixelScanner(val image: Image, x: Int, y: Int, val threshold: Double = 0.05, val maxIterations: Int = 10000) {
 
     val rect = YDownRect(Math.max(0, x - 2), Math.max(0, y - 2), Math.min(image.width.toInt() - 1, x + 2), Math.min(image.height.toInt(), y + 2))
 
@@ -241,7 +241,7 @@ class PixelScanner(val image: Image, x: Int, y: Int, val threshold: Double = 0.1
     }
 
     fun isTranspanret(x: Int, y: Int): Boolean {
-        return reader.getColor(x, y).opacity < threshold
+        return reader.getColor(x, y).opacity <= threshold
     }
 
     fun scanLeft(): Boolean {
