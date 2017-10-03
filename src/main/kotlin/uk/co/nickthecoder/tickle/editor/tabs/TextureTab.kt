@@ -8,6 +8,8 @@ import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.util.process.Exec
 import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.editor.ImageCache
+import uk.co.nickthecoder.tickle.editor.util.ImageParameter
 import uk.co.nickthecoder.tickle.editor.util.RenameTask
 import uk.co.nickthecoder.tickle.graphics.Texture
 
@@ -26,13 +28,14 @@ class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
 
     val filenameP = StringParameter("filename", value = texture.file?.path ?: "")
     val renameP = ButtonParameter("rename", buttonText = "Rename") { onRename() }
-    val viewP = ButtonParameter("view", buttonText = "View") { onView() }
     val editP = ButtonParameter("edit", buttonText = "Edit") { onEdit() }
     val buttonsP = SimpleGroupParameter("buttons", label = "")
-            .addParameters(renameP, viewP, editP).asGrid(labelPosition = LabelPosition.NONE)
+            .addParameters(renameP, editP).asGrid(labelPosition = LabelPosition.NONE)
+
+    val imageP = ImageParameter("image", image = ImageCache.image(texture.file!!))
 
     override val taskD = TaskDescription("editTexture")
-            .addParameters(nameP, filenameP, buttonsP)
+            .addParameters(nameP, filenameP, buttonsP, imageP)
 
     init {
         filenameP.enabled = false
@@ -69,11 +72,6 @@ class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
             val tp = TaskPrompter(renameTask)
             tp.placeOnStage(Stage())
         }
-    }
-
-    fun onView() {
-        val exec = Exec("gwenview", texture.file)
-        exec.start()
     }
 
     fun onEdit() {
