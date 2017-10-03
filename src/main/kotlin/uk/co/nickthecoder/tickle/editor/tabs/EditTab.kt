@@ -106,11 +106,14 @@ abstract class EditTab(
     }
 
     protected fun onApply() {
-        save()
+        if (save()) {
+            Resources.instance.fireChanged(data)
+        }
     }
 
     protected fun onOk() {
         if (save()) {
+            Resources.instance.fireChanged(data)
             close()
         }
     }

@@ -7,10 +7,11 @@ import uk.co.nickthecoder.tickle.util.YDownRect
 
 class Pose(
         val texture: Texture,
-        rect: YDownRect = YDownRect(0, texture.height, texture.width, 0)) {
+        rect: YDownRect = YDownRect(0, 0, texture.width, texture.height)) {
 
     var rect: YDownRect = rect
         set(v) {
+            field = v
             updateRectf()
         }
 

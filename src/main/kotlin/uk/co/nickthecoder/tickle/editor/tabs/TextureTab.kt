@@ -2,7 +2,6 @@ package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.geometry.Side
 import javafx.scene.control.Button
-import javafx.scene.control.Label
 import javafx.scene.control.TabPane
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
@@ -47,6 +46,10 @@ class TextureTab(name: String, val texture: Texture)
         val editButton = Button("Edit")
         editButton.setOnAction { edit() }
         leftButtons.children.add(editButton)
+    }
+
+    override fun removed() {
+        posesEditor.closed()
     }
 
     override fun save(): Boolean {

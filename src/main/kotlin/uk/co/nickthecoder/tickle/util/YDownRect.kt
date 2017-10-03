@@ -11,9 +11,9 @@ package uk.co.nickthecoder.tickle.util
  */
 data class YDownRect(
         var left: Int,
-        var bottom: Int,
+        var top: Int,
         var right: Int,
-        var top: Int) {
+        var bottom: Int) {
 
     val width
         get() = right - left
