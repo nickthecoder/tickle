@@ -79,4 +79,6 @@ class SceneActor {
 
         return actor
     }
+
+    override fun toString() = "SceneActor $costumeName @ $x , $y direction=$direction ${attributes.map.size} attributes"
 }
