@@ -8,6 +8,7 @@ import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
+import uk.co.nickthecoder.paratask.parameters.ColorParameter
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneResource
@@ -17,7 +18,7 @@ import uk.co.nickthecoder.tickle.editor.SceneStub
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.util.JsonScene
 
-class SceneTab(name: String, val sceneStub: SceneStub)
+class SceneTab(name: String, sceneStub: SceneStub)
 
     : EditTab("Texture", name, sceneStub) {
 
@@ -60,15 +61,14 @@ class SceneTab(name: String, val sceneStub: SceneStub)
 
 class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : AbstractTask() {
 
-
     val directorP = ChoiceParameter<Class<*>>("director", required = false, value = NoDirector::class.java)
 
-    //val colorP = ColorParameter( "backgroundColor")
+    val backgroundColorP = ColorParameter("backgroundColor")
 
     val layoutP = ChoiceParameter<String>("layout", value = "")
 
     override val taskD = TaskDescription("sceneDetails")
-            .addParameters(directorP, layoutP)
+            .addParameters(directorP, backgroundColorP, layoutP)
 
     init {
         ClassLister.setChoices(directorP, Director::class.java)
@@ -81,6 +81,8 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
         } catch (e: Exception) {
             //
         }
+        val c = sceneResource.background
+        backgroundColorP.value = javafx.scene.paint.Color(c.red.toDouble(), c.green.toDouble(), c.blue.toDouble(), 1.0)
         layoutP.value = sceneResource.layoutName
     }
 
@@ -88,6 +90,8 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
     override fun run() {
         sceneResource.directorString = directorP.value!!.name
         sceneResource.layoutName = layoutP.value!!
+        val c = backgroundColorP.value
+        sceneResource.background = uk.co.nickthecoder.tickle.graphics.Color(c.red.toFloat(), c.green.toFloat(), c.blue.toFloat())
     }
 }
 

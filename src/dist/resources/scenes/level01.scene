@@ -1,5 +1,6 @@
 {
     "director": "uk.co.nickthecoder.tickle.demo.Play",
+    "background": "#FFFF00",
     "layout": "default",
     "stages": [
         {

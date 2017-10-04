@@ -6,6 +6,7 @@ import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.SceneStage
 import uk.co.nickthecoder.tickle.demo.NoDirector
+import uk.co.nickthecoder.tickle.graphics.Color
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
@@ -29,6 +30,7 @@ class JsonScene {
 
         sceneResource.directorString = jroot.getString("director", NoDirector::class.java.name)
         sceneResource.layoutName = jroot.getString("layout", "default")
+        sceneResource.background = Color.fromString(jroot.getString("background", "#FFFFFF"))
 
         jroot.get("stages")?.let {
             val jstages = it.asArray()
@@ -58,7 +60,7 @@ class JsonScene {
         sceneActor.y = jactor.getFloat("y", 0f)
         sceneActor.direction = jactor.getDouble("direction", 0.0)
 
-        JsonUtil.loadAttributes( jactor, sceneActor.attributes)
+        JsonUtil.loadAttributes(jactor, sceneActor.attributes)
 
         sceneStage.sceneActors.add(sceneActor)
     }
