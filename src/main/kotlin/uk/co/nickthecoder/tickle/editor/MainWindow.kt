@@ -118,6 +118,9 @@ class MainWindow(val stage: Stage) {
 
         } else if (data is Costume) {
             return CostumeTab(name, data)
+
+        } else if (data is SceneStub) {
+            return SceneTab(name, data)
         }
 
         return null

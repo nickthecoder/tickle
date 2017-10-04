@@ -307,7 +307,7 @@ class ResourcesTree()
                 }
             }
         }
-        
+
         override fun isLeaf() = false
 
     }
