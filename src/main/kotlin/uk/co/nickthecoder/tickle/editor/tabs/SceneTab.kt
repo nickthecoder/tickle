@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.geometry.Side
-import javafx.scene.control.Label
 import javafx.scene.control.TabPane
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
@@ -27,12 +26,12 @@ class SceneTab(name: String, sceneStub: SceneStub)
     val task = SceneDetailsTask(name, sceneResource)
     val taskForm = TaskForm(task)
 
-    val sceneEditor = Label("Hello World")
+    val sceneEditor = SceneEditor(sceneResource)
 
     val minorTabs = MyTabPane<MyTab>()
 
     val detailsTab = MyTab("Details", taskForm.build())
-    val editorTab = MyTab("Scene Editor", sceneEditor)
+    val editorTab = MyTab("Scene Editor", sceneEditor.build())
 
     init {
         minorTabs.side = Side.BOTTOM
@@ -46,6 +45,8 @@ class SceneTab(name: String, sceneStub: SceneStub)
         // addDeleteButton { Resources.instance.deleteTexture(name) }
         // TODO Add a RENAME button.
         // fire Add and remove events
+
+        editorTab.isSelected = true
     }
 
     override fun save(): Boolean {

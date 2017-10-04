@@ -296,6 +296,7 @@ class ResourcesTree()
             sceneLister.listFiles(directory).forEach { file ->
                 children.add(DataItem(file.name, SceneStub(file)))
             }
+            isExpanded = true
         }
 
         override fun resourceAdded(resource: Any, name: String) {

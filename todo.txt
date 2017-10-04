@@ -1,6 +1,9 @@
 Current Work
 ============
 
+Add some "solid" objects, and use overlap detection to kill the sparks.
+	Just as a prelude to pixel collision detection.
+
 Pixel Overlap
 	Find the intersection of their world rectangles
 	Render the two object one in red, the other blue
@@ -9,31 +12,17 @@ Pixel Overlap
 BUGS
 ====
 
-Not loading the background color from a .scene file.
-
 New Features
 ============
 
 Editor
 
-	Ctrl+F to search for resources matching the name (glob?)
-		Another TreeView using Accordian?
-
-	Exapand/Contract All buttons above the accordian
-
 	Prevent deletion of textures used by a pose
-
 	Prevent deletion of poses used by a costume
 
 	Pose tab to have a list of costumes using it
 		In a "minor tab"?
-		Also a button to create a new Costume from that pose
-
-	Preferences (saved in resources?)
-		Image view
-		Image editors (one value per extension)
-
-	Custom lauchers (saved in prefernces) - Use it to open the game's paratask project.
+		Or just a button which opens all costumes using that pose.
 
 When renaming an item, who's name is used in a scene, we need to keep track of renamed items,
 	and update all scenes when the resource file is saved.
@@ -49,9 +38,6 @@ Ensure Textures are deleted when removed from resources (Use finialise?).
 
 Costumes to inherit?
 	Just the events?
-
-Add some "solid" objects, and use overlap detection to kill the sparks.
-	Just as a prelude to pixel collision detection.
 
 Fonts
 	Allow loading of multiple ranges of characters.
