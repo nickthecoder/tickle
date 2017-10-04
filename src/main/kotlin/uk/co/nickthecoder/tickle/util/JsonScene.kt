@@ -1,15 +1,15 @@
 package uk.co.nickthecoder.tickle.util
 
 import com.eclipsesource.json.Json
+import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
+import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.SceneStage
 import uk.co.nickthecoder.tickle.demo.NoDirector
 import uk.co.nickthecoder.tickle.graphics.Color
-import java.io.File
-import java.io.FileInputStream
-import java.io.InputStreamReader
+import java.io.*
 
 class JsonScene {
 
@@ -22,6 +22,24 @@ class JsonScene {
 
     constructor(sceneResource: SceneResource) {
         this.sceneResource = sceneResource
+    }
+
+    fun save(file: File) {
+        sceneResource.file = file.absoluteFile
+
+        val jroot = JsonObject()
+        jroot.add("director", sceneResource.directorString)
+        jroot.add("background", sceneResource.background.toHashRGB())
+        jroot.add("layout", sceneResource.layoutName)
+        val jstages = JsonArray()
+        jroot.add("stages", jstages)
+        sceneResource.sceneStages.forEach { stageName, sceneStage ->
+            jstages.add(saveStage(stageName, sceneStage))
+        }
+
+        BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
+            jroot.writeTo(it, PrettyPrint.indentWithSpaces(4))
+        }
     }
 
     fun load(file: File) {
@@ -38,6 +56,35 @@ class JsonScene {
                 loadStage(it.asObject())
             }
         }
+    }
+
+
+    fun saveStage(stageName: String, sceneStage: SceneStage): JsonObject {
+        val jstage = JsonObject()
+        jstage.add("name", stageName)
+        val jactors = JsonArray()
+        jstage.add("actors", jactors)
+
+        sceneStage.sceneActors.forEach { sceneActor ->
+            val jactor = JsonObject()
+            jactors.add(jactor)
+            jactor.add("costume", sceneActor.costumeName)
+            jactor.add("x", sceneActor.x)
+            jactor.add("y", sceneActor.y)
+            jactor.add("direction", sceneActor.direction)
+
+            if (sceneActor.attributes.map.isNotEmpty()) {
+                val jattributes = JsonArray()
+                jactor.add("attributes", jattributes)
+                sceneActor.attributes.map.forEach { attributeName, attributeValue ->
+                    val jattribute = JsonObject()
+                    jattributes.add(jattribute)
+                    jattribute.add("name", attributeName)
+                    jattribute.add("value", attributeValue)
+                }
+            }
+        }
+        return jstage
     }
 
     fun loadStage(jstage: JsonObject) {

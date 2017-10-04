@@ -1,6 +1,6 @@
 {
     "director": "uk.co.nickthecoder.tickle.demo.Play",
-    "background": "#FFFF00",
+    "background": "#1a0068",
     "layout": "default",
     "stages": [
         {
@@ -10,6 +10,7 @@
                     "costume": "coin",
                     "x": -100,
                     "y": 200,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "speed",
@@ -25,6 +26,7 @@
                     "costume": "coin10",
                     "x": 0,
                     "y": 200,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "speed",
@@ -40,6 +42,7 @@
                     "costume": "coin100",
                     "x": 100,
                     "y": 200,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "speed",
@@ -54,22 +57,26 @@
                 {
                     "costume": "bee",
                     "x": 0,
-                    "y": 0
+                    "y": 0,
+                    "direction": 0
                 },
                 {
                     "costume": "hand",
                     "x": 0,
-                    "y": 0
+                    "y": 0,
+                    "direction": 0
                 },
                 {
                     "costume": "grenade",
                     "x": -100,
-                    "y": 0
+                    "y": 0,
+                    "direction": 0
                 },
                 {
                     "costume": "grenade",
                     "x": 0,
                     "y": 0,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "hue",
@@ -81,6 +88,7 @@
                     "costume": "grenade",
                     "x": 100,
                     "y": 0,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "hue",
@@ -92,5 +100,3 @@
         }
     ]
 }
-
-    

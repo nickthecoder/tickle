@@ -51,7 +51,7 @@ class SceneTab(name: String, sceneStub: SceneStub)
     override fun save(): Boolean {
         if (taskForm.check()) {
             task.run()
-            // TODO Now save the SceneResource
+            JsonScene(sceneResource).save(sceneResource.file!!)
             return true
         }
         return false

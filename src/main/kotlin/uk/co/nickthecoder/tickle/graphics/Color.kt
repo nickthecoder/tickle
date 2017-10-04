@@ -23,6 +23,10 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
                 alpha * s + other.alpha * t)
     }
 
+    fun toHashRGB() = String.format("#%02x%02x%02x", (red * 255).toInt(), (green * 255).toInt(), (blue * 255).toInt())
+
+    fun toHashRGBA() = String.format("#%02x%02x%02x%02x", (red * 255).toInt(), (green * 255).toInt(), (blue * 255).toInt(), (alpha * 255).toInt())
+
     override fun toString() = "r=$red g=$green b=$blue a=$alpha"
 
     companion object {
