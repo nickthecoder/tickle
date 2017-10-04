@@ -22,23 +22,6 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, buffer)
     }
 
-    private var pixels: ByteArray? = null
-
-    private fun ensurePixelData() {
-        pixels = ByteArray(width * height * 4)
-        val buffer = ByteBuffer.allocateDirect(width * height * 4)
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer)
-        buffer.get(pixels)
-    }
-
-    fun alphaAt(x: Int, y: Int): Int {
-        ensurePixelData()
-        if (x < 0 || x >= height || y < 0 || y >= height) return -1
-        // Hmm, it seems my texture is upside down. so i do "height-y-1" rather than "y"
-        val index = (x + (height-y-1) * width) * 4 + 3
-        return pixels?.get(index)?.toInt()?.and(0xFF) ?: -2
-    }
-
     fun bind() {
         glBindTexture(GL_TEXTURE_2D, handle!!)
         boundHandle = handle
