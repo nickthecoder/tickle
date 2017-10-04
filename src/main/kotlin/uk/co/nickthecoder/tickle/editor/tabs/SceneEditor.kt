@@ -125,12 +125,14 @@ class SceneEditor(val sceneResource: SceneResource) {
     /**
      * x,y are relative to the "offset point" of the pose, with the y axis pointing upwards
      */
-    fun isPixelIsOpaque(pose: Pose?, x: Float, y: Float, threshold: Int = 0): Boolean {
+    fun isPixelIsOpaque(pose: Pose?, x: Float, y: Float, threshold: Double = 0.05): Boolean {
         pose ?: return false
         val px = pose.rect.left + x + pose.offsetX
         val py = pose.rect.top + pose.rect.height - (y + pose.offsetY)
-        println("From $x, $y : Pixel position = $px , $py alpha = ${pose.texture.alphaAt(px.toInt(), py.toInt())}")
-        return pose.texture.alphaAt(px.toInt(), py.toInt()) > threshold
+        pose.texture.file?.let { file ->
+            return ImageCache.image(file).pixelReader.getColor(px.toInt(), py.toInt()).opacity > threshold
+        }
+        return false
     }
 
     fun isSceneActorAt(sceneActor: SceneActor, x: Float, y: Float): Boolean {
