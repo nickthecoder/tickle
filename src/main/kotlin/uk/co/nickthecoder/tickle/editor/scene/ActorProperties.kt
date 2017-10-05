@@ -2,14 +2,13 @@ package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.application.Platform
 import javafx.scene.Node
-import uk.co.nickthecoder.paratask.parameters.DoubleParameter
-import uk.co.nickthecoder.paratask.parameters.SimpleGroupParameter
-import uk.co.nickthecoder.paratask.parameters.addParameters
-import uk.co.nickthecoder.paratask.parameters.asVertical
+import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.tickle.Attributes
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.SceneListerner
 import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.editor.PropertiesPaneContent
+import uk.co.nickthecoder.tickle.util.Attribute
 
 
 class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResource)
@@ -24,8 +23,10 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
 
     val directionP = DoubleParameter("direction", value = sceneActor.directionDegrees)
 
+    val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
+
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(xP, yP, directionP)
+            .addParameters(xP, yP, directionP, attributesP)
             .asVertical()
 
     var dirty = false
@@ -39,8 +40,32 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
                 }
             }
         }
+
+        try {
+            sceneActor.costume()?.let { costume ->
+                val roleClass = Class.forName(costume.roleString)
+
+                Attributes.createParameters(roleClass, Attribute::class).forEach { parameter ->
+                    attributesP.add(parameter)
+                    val attributeName = Attributes.attributeName(parameter)
+                    sceneActor.attributes.map[attributeName]?.let { value ->
+                        try {
+                            parameter.stringValue = value
+                        } catch (e: Exception) {
+                            // Do nothing
+                        }
+                    }
+                }
+            }
+
+        } catch (e: Exception) {
+            System.err.println("Problem creating attribute parameters for ${sceneActor.costumeName}")
+            Thread.dumpStack()
+        }
+
         sceneResource.listeners.add(this)
     }
+
 
     override fun cleanUp() {
         sceneResource.listeners.remove(this)
@@ -55,6 +80,20 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
         xP.value?.let { sceneActor.x = it.toFloat() }
         yP.value?.let { sceneActor.y = it.toFloat() }
         directionP.value?.let { sceneActor.directionDegrees = it }
+
+
+        with(sceneActor.attributes)
+        {
+            map.clear()
+            attributesP.children.forEach { child ->
+                if (child is ValueParameter<*>) {
+                    if (child.value != null) {
+                        map[uk.co.nickthecoder.tickle.Attributes.attributeName(child)] = child.stringValue
+                    }
+                }
+            }
+        }
+
         sceneResource.fireChange()
         dirty = false
     }

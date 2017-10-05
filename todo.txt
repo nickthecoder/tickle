@@ -34,8 +34,6 @@ SceneEditor
 
 	Delete selected actors
 
-	When multiple actors selected, and latest is rotated using the mouse, then rotate ALL
-
 	Box of all costumes. Click to select on, then click on the stage to add it.
 		Should be semi-transparent before being placed.
 		Shortcut key (A for add?) to stamp with the previously selected costume.
@@ -44,9 +42,7 @@ SceneEditor
 		rotation hadle is displayed. The annotation can have a color and a length.
 		Similarly, have annotations for a POSITION relative to the Actor's X,Y.
 			Display as an outlined box
-	Have a "canRotate" boolean on Costume, which prevents the rotation arrow appearing when false.
 		
-
 
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).
