@@ -6,6 +6,8 @@ class Costume() {
 
     var roleString: String = ""
 
+    var canRotate: Boolean = false
+
     val attributes = Attributes()
     val events = mutableMapOf<String, CostumeEvent>()
 

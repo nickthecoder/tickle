@@ -77,21 +77,25 @@ class GlassLayer(val selection: Selection)
         with(gc) {
             save()
             selection.latest()?.let { sceneActor ->
-                save()
-                translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
-                rotate(sceneActor.directionDegrees)
-                stroke = Color.BLACK
-                gc.lineCap = StrokeLineCap.ROUND
-                lineWidth = 4.0
-                drawArrow()
-                if (highlightRotation) {
-                    stroke = hightlightColor
-                } else {
-                    stroke = latestColor
+
+                if (sceneActor.costume()?.canRotate == true) {
+                    save()
+                    translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
+                    rotate(sceneActor.directionDegrees)
+                    stroke = Color.BLACK
+                    gc.lineCap = StrokeLineCap.ROUND
+                    lineWidth = 4.0
+                    drawArrow()
+                    if (highlightRotation) {
+                        stroke = hightlightColor
+                    } else {
+                        stroke = latestColor
+                    }
+                    lineWidth = 3.0
+                    drawArrow()
+                    restore()
                 }
-                lineWidth = 3.0
-                drawArrow()
-                restore()
+
             }
             restore()
         }
@@ -126,6 +130,9 @@ class GlassLayer(val selection: Selection)
 
     fun isNearRotationHandle(x: Float, y: Float): Boolean {
         selection.latest()?.let { sceneActor ->
+            if (sceneActor.costume()?.canRotate != true) {
+                return false
+            }
             val hx = sceneActor.x + directionLength * Math.cos(sceneActor.directionRadians)
             val hy = sceneActor.y + directionLength * Math.sin(sceneActor.directionRadians)
             val dist2 = (x - hx) * (x - hx) + (y - hy) * (y - hy)

@@ -99,6 +99,7 @@
         {
             "name": "bee",
             "role": "uk.co.nickthecoder.tickle.demo.Bee",
+            "canRotate": true,
             "events": [
                 {
                     "name": "default",
@@ -111,6 +112,7 @@
         {
             "name": "grenade",
             "role": "uk.co.nickthecoder.tickle.demo.Grenade",
+            "canRotate": true,
             "events": [
                 {
                     "name": "default",
@@ -123,6 +125,7 @@
         {
             "name": "hand",
             "role": "uk.co.nickthecoder.tickle.demo.Hand",
+            "canRotate": false,
             "events": [
                 {
                     "name": "default",
@@ -135,6 +138,7 @@
         {
             "name": "coin",
             "role": "uk.co.nickthecoder.tickle.demo.Coin",
+            "canRotate": true,
             "events": [
                 {
                     "name": "default",
@@ -147,6 +151,7 @@
         {
             "name": "coin10",
             "role": "uk.co.nickthecoder.tickle.demo.Coin",
+            "canRotate": true,
             "events": [
                 {
                     "name": "default",
@@ -165,6 +170,7 @@
         {
             "name": "coin100",
             "role": "uk.co.nickthecoder.tickle.demo.Coin",
+            "canRotate": true,
             "events": [
                 {
                     "name": "default",
@@ -183,6 +189,7 @@
         {
             "name": "spark",
             "role": "",
+            "canRotate": false,
             "events": [
                 {
                     "name": "default",

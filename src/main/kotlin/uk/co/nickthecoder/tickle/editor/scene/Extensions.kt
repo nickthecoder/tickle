@@ -5,8 +5,9 @@ import javafx.scene.image.Image
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.CornerRadii
-import javafx.scene.paint.Color
+import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.editor.ImageCache
 
@@ -57,6 +58,8 @@ fun isSceneActorAt(sceneActor: SceneActor, x: Float, y: Float): Boolean {
         return false
     }
 }
+
+fun SceneActor.costume(): Costume? = Resources.instance.optionalCostume(costumeName)
 
 fun uk.co.nickthecoder.tickle.graphics.Color.toJavaFX(): javafx.scene.paint.Color {
     return javafx.scene.paint.Color(red.toDouble(), green.toDouble(), blue.toDouble(), alpha.toDouble())

@@ -61,18 +61,21 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val roleClassP = ChoiceParameter<Class<*>?>("class", required = false, value = null)
 
+        val canRotateP = BooleanParameter("canRotate")
+
         val infoP = InformationParameter("info",
                 information = "The role has no fields with the '@CostumeAttribute' annotation, and therefore, this costume has no attributes.")
         val attributesP = SimpleGroupParameter("attributes")
 
         override val taskD = TaskDescription("costumeDetails")
-                .addParameters(nameP, roleClassP, attributesP)
+                .addParameters(nameP, roleClassP, canRotateP, attributesP)
 
         init {
             ClassLister.setNullableChoices(roleClassP, Role::class.java)
 
             nameP.value = name
             roleClassP.value = if (costume.roleString.isBlank()) null else Class.forName(costume.roleString)
+            canRotateP.value = costume.canRotate
 
             updateAttributes()
             roleClassP.listen {
@@ -87,6 +90,7 @@ class CostumeTab(val name: String, val costume: Costume)
             }
 
             costume.roleString = if (roleClassP.value == null) "" else roleClassP.value!!.name
+            costume.canRotate = canRotateP.value == true
 
             with(costume.attributes) {
                 map.clear()
