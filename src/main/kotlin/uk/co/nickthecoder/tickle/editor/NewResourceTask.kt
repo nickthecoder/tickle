@@ -21,13 +21,13 @@ class NewResourceTask : AbstractTask() {
 
     val costumeP = createPoseParameter()
 
-    val layoutP = InformationParameter("layout", label = "Layout", information = "")
+    val layoutP = InformationParameter("layout", information = "")
 
-    val inputP = InformationParameter("input", label = "Input", information = "")
+    val inputP = InformationParameter("input", information = "")
 
-    val sceneDirectoryP = InformationParameter("sceneDirectory", label = "Scene Directory", information = "")
+    val sceneDirectoryP = InformationParameter("sceneDirectory", information = "")
 
-    val sceneP = InformationParameter("sceneDirectory", label = "Scene", information = "")
+    val sceneP = InformationParameter("scene", information = "")
 
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
             .addParameters(
