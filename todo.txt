@@ -6,7 +6,16 @@ Add some "solid" objects, and use overlap detection to kill the sparks.
 
 Pixel Overlap
 	Find the intersection of their world rectangles
-	Render the two object one in red, the other blue
+	Onto an additional buffer A
+	Can we render the first using just the alpha channel (ignore RGB)
+	and then multiply by the 2nd's alpha channel
+
+	Non ovelapping would then be close to 0
+	So that we don't have to copy large data arrays...
+		Render the four quarters of A onto B (regular rendering)
+		If any pixels are not near zero, we have overlap (but in 1/4 the number of pixels).
+		Repeat this operation (this time each quarter of B onto C) and keep going, till we have just one pixel.
+		Now read the entire pixel buffer (of one pixel!!!)
 	http://wiki.lwjgl.org/wiki/Render_to_Texture_with_Frame_Buffer_Objects_(FBO).html
 
 BUGS
@@ -16,7 +25,8 @@ New Features
 ============
 
 Editor
-
+	Allow a texture to be reloaded (Texture and ImageCache).
+	
 	Prevent deletion of textures used by a pose
 	Prevent deletion of poses used by a costume
 

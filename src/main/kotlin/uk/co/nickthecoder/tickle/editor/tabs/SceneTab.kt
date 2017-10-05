@@ -14,6 +14,7 @@ import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.demo.Director
 import uk.co.nickthecoder.tickle.demo.NoDirector
 import uk.co.nickthecoder.tickle.editor.SceneStub
+import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.util.JsonScene
 

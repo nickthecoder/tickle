@@ -64,6 +64,8 @@ class SceneActor {
     var direction: Double = 0.0
     val attributes = Attributes()
 
+    val pose: Pose? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.choosePose() }
+
     fun createActor(): Actor? {
         val costume = Resources.instance.optionalCostume(costumeName)
         if (costume == null) {
