@@ -96,7 +96,7 @@ class ResourcesTree()
                     CostumesItem(),
                     InputsItem(),
                     LayoutsItem(),
-                    ScenesDirectoryItem("Scenes", resources.sceneDirectory))
+                    ScenesDirectoryItem("Scenes", resources.sceneDirectory.absoluteFile))
         }
 
         override fun isLeaf() = false
@@ -294,7 +294,7 @@ class ResourcesTree()
             }
             val sceneLister = FileLister(extensions = listOf("scene"))
             sceneLister.listFiles(directory).forEach { file ->
-                children.add(DataItem(file.name, SceneStub(file)))
+                children.add(DataItem(file.nameWithoutExtension, SceneStub(file)))
             }
             isExpanded = true
         }
@@ -304,7 +304,7 @@ class ResourcesTree()
                 if (resource.isDirectory) {
                     children.add(ScenesDirectoryItem(resource.name, resource))
                 } else if (resource.extension == "scene") {
-                    children.add(DataItem(resource.name, SceneStub(resource)))
+                    children.add(DataItem(resource.nameWithoutExtension, SceneStub(resource)))
                 }
             }
         }

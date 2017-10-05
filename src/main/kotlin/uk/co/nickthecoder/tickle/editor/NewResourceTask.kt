@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.editor
 
 import uk.co.nickthecoder.paratask.AbstractTask
+import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.UnthreadedTaskRunner
 import uk.co.nickthecoder.paratask.parameters.FileParameter
@@ -9,6 +10,7 @@ import uk.co.nickthecoder.paratask.parameters.OneOfParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
+import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 
 class NewResourceTask : AbstractTask() {
@@ -27,7 +29,7 @@ class NewResourceTask : AbstractTask() {
 
     val sceneDirectoryP = InformationParameter("sceneDirectory", information = "")
 
-    val sceneP = InformationParameter("scene", information = "")
+    val sceneP = FileParameter("scene", label = "Directory", expectFile = false, value = Resources.instance.sceneDirectory.absoluteFile)
 
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
             .addParameters(
@@ -79,7 +81,19 @@ class NewResourceTask : AbstractTask() {
                 Resources.instance.fireAdded(dir, nameP.value)
             }
             sceneP -> {
-                println("Not implemented yet!")
+                val dir = sceneP.value!!
+                val file = File(dir, "${name}.scene")
+                val newScene = SceneResource()
+                var layoutName: String? = "default"
+                if (Resources.instance.optionalLayout(layoutName!!) == null) {
+                    layoutName = Resources.instance.layouts().keys.firstOrNull()
+                    if (layoutName == null) {
+                        throw ParameterException(sceneP, "The resources have no layouts. Create a Layout before creating a Scene.")
+                    }
+                }
+                newScene.layoutName = layoutName
+                val save = JsonScene(newScene).save(file)
+                Resources.instance.fireAdded(file, nameP.value)
             }
         }
 
