@@ -8,32 +8,32 @@
             "actors": [
                 {
                     "costume": "coin",
-                    "x": 300,
-                    "y": 413,
-                    "direction": 0
+                    "x": 289,
+                    "y": 411,
+                    "direction": 133
                 },
                 {
                     "costume": "coin10",
-                    "x": 575,
-                    "y": 402,
+                    "x": 576,
+                    "y": 359,
                     "direction": 0
                 },
                 {
                     "costume": "coin100",
-                    "x": 457,
-                    "y": 405,
+                    "x": 447,
+                    "y": 416,
                     "direction": 0
                 },
                 {
                     "costume": "bee",
-                    "x": 400,
-                    "y": 300,
+                    "x": 361,
+                    "y": 358,
                     "direction": 0
                 },
                 {
                     "costume": "hand",
-                    "x": 400,
-                    "y": 200,
+                    "x": 148,
+                    "y": 481,
                     "direction": 0
                 },
                 {

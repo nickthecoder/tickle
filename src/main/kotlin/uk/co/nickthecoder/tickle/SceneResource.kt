@@ -22,6 +22,9 @@ class SceneResource {
      */
     val sceneStages = mutableMapOf<String, SceneStage>()
 
+    val listeners = mutableSetOf<SceneListerner>()
+
+
     /**
      * Gets the Layout to create the scene, and then populates the Stages with Actors.
      */
@@ -46,6 +49,18 @@ class SceneResource {
 
         return scene
     }
+
+    fun fireChange() {
+        listeners.forEach {
+            it.sceneChanged(this)
+        }
+    }
+}
+
+interface SceneListerner {
+
+    fun sceneChanged(sceneResource: SceneResource)
+
 }
 
 /**

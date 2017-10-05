@@ -1,16 +1,22 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
+import javafx.application.Platform
 import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
+import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.SceneListerner
 import uk.co.nickthecoder.tickle.SceneResource
+import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 
 
-class SceneEditor(val sceneResource: SceneResource) {
+class SceneEditor(val sceneResource: SceneResource)
+
+    : SceneListerner {
 
     val scrollPane = ScrollPane()
 
@@ -21,6 +27,14 @@ class SceneEditor(val sceneResource: SceneResource) {
     val selection = Selection()
 
     val layers = Layers(sceneResource, selection)
+
+    var dirty = true
+
+    val shortcuts = ShortcutHelper("SceneEditor", scrollPane)
+
+    init {
+        sceneResource.listeners.add(this)
+    }
 
     fun build(): Node {
 
@@ -42,12 +56,32 @@ class SceneEditor(val sceneResource: SceneResource) {
 
         layers.stack.background = sceneResource.background.toJavaFX().background()
 
+        shortcuts.add(EditorActions.ESCAPE) {
+            selection.clear()
+            updateAttributesBox()
+        }
+
         draw()
         return borderPane
     }
 
+    fun cleanUp() {
+        selection.clear() // Will clear the "Properties" box.
+        sceneResource.listeners.remove(this)
+    }
+
+    override fun sceneChanged(sceneResource: SceneResource) {
+        dirty = true
+        Platform.runLater {
+            if (dirty) {
+                draw()
+            }
+        }
+    }
+
     fun draw() {
         layers.draw()
+        dirty = false
     }
 
     fun findActorsAt(x: Float, y: Float): List<SceneActor> {
@@ -66,10 +100,9 @@ class SceneEditor(val sceneResource: SceneResource) {
         MainWindow.instance?.let { mainWindow ->
             val latest = selection.latest()
             if (latest == null) {
-                mainWindow.propertiesBox.clear()
+                mainWindow.propertiesPane.clear()
             } else {
-                mainWindow.propertiesBox.show(latest)
-                mainWindow.accordion.expandedPane = mainWindow.propertiesPane
+                mainWindow.propertiesPane.show(ActorProperties(latest, sceneResource))
             }
         }
     }
@@ -97,11 +130,11 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     var dragging = false
     var dragDeltaX: Double = 0.0
-    var dragDeltaY: Double = 0.0
+    var dragDeltaY: Double = 0.0 // In the same coordinate system as event (i.e. y axis points down).
 
     fun onMouseDragged(event: MouseEvent) {
         dragDeltaX = event.x - dragPreviousX
-        dragDeltaY = -(event.y - dragPreviousY)
+        dragDeltaY = event.y - dragPreviousY
 
         // Prevent dragging unless the drag amount is more than a few pixels. This prevents accidental tiny movements
         if (!dragging) {
@@ -219,10 +252,10 @@ class SceneEditor(val sceneResource: SceneResource) {
             if (event.button == MouseButton.PRIMARY) {
                 selection.selected().forEach { sceneActor ->
                     sceneActor.x += dragDeltaX.toFloat()
-                    sceneActor.y += dragDeltaY.toFloat()
+                    sceneActor.y -= dragDeltaY.toFloat()
                 }
                 if (selection.isNotEmpty()) {
-                    layers.draw()
+                    sceneResource.fireChange()
                 }
             }
         }
@@ -231,7 +264,7 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     inner class Pan : MouseHandler {
         override fun onMouseDragged(event: MouseEvent) {
-            layers.panBy(dragDeltaX, dragDeltaY)
+            layers.panBy(dragDeltaX, -dragDeltaY)
         }
 
         override fun onMouseReleased(event: MouseEvent) {
@@ -252,7 +285,7 @@ class SceneEditor(val sceneResource: SceneResource) {
             selection.forEach {
                 it.directionRadians += rotateBy
             }
-            draw()
+            sceneResource.fireChange()
         }
 
         override fun onMouseReleased(event: MouseEvent) {

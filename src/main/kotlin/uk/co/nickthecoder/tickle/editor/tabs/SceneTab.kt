@@ -59,6 +59,11 @@ class SceneTab(name: String, sceneStub: SceneStub)
         }
         return false
     }
+
+    override fun removed() {
+        super.removed()
+        sceneEditor.cleanUp()
+    }
 }
 
 

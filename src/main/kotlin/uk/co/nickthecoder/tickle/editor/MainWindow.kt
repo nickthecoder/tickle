@@ -33,8 +33,7 @@ class MainWindow(val stage: Stage) {
     val resourcesPane = TitledPane("Resources", resourcesTree)
     val costumeBox = CostumesBox()
     val costumesPane = TitledPane("Costumes", costumeBox.build())
-    val propertiesBox = PropertiesBox()
-    val propertiesPane = TitledPane("Properties", propertiesBox.build())
+    val propertiesPane = PropertiesPane()
 
     val tabPane = MyTabPane<EditorTab>()
 
