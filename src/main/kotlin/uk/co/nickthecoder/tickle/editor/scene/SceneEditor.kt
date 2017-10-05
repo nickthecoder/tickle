@@ -56,9 +56,9 @@ class SceneEditor(val sceneResource: SceneResource)
 
         layers.stack.background = sceneResource.background.toJavaFX().background()
 
-        shortcuts.add(EditorActions.ESCAPE) {
-            selection.clear()
-            updateAttributesBox()
+        with(shortcuts) {
+            add(EditorActions.ESCAPE) { selection.clear(); updateAttributesBox() }
+            add(EditorActions.DELETE) { onDelete() }
         }
 
         draw()
@@ -105,6 +105,17 @@ class SceneEditor(val sceneResource: SceneResource)
                 mainWindow.propertiesPane.show(ActorProperties(latest, sceneResource))
             }
         }
+    }
+
+    fun onDelete() {
+        selection.selected().forEach { sceneActor ->
+            sceneResource.sceneStages.values.forEach { sceneStage ->
+                sceneStage.sceneActors.remove(sceneActor)
+            }
+        }
+        selection.clear()
+        updateAttributesBox()
+        sceneResource.fireChange()
     }
 
     var dragPreviousX: Double = 0.0

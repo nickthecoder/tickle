@@ -30,7 +30,6 @@ New Features
 ============
 
 SceneEditor
-	Undo/Redo
 
 	Delete selected actors
 
@@ -92,6 +91,8 @@ Tags
 
 Later
 =====
+
+Undo/Redo in scene editor
 
 JBox2d integration
 

@@ -17,6 +17,7 @@ object EditorActions {
     val ACCORDION_PROPERTIES = EditorAction("accordion.properties", KeyCode.F4)
 
     val ESCAPE = EditorAction("escape", KeyCode.ESCAPE)
+    val DELETE = EditorAction("delete", KeyCode.DELETE)
 
     val TAB_CLOSE = EditorAction("tab.close", KeyCode.W, control = true, label = "Close Tab")
 
