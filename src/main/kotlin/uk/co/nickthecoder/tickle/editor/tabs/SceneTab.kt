@@ -9,6 +9,7 @@ import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
 import uk.co.nickthecoder.paratask.parameters.ColorParameter
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
+import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.demo.Director
@@ -64,6 +65,10 @@ class SceneTab(name: String, sceneStub: SceneStub)
         super.removed()
         sceneEditor.cleanUp()
     }
+
+    fun selectCostume(costume: Costume) {
+        sceneEditor.selectCostume(costume)
+    }
 }
 
 
@@ -102,4 +107,3 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
         sceneResource.background = uk.co.nickthecoder.tickle.graphics.Color(c.red.toFloat(), c.green.toFloat(), c.blue.toFloat())
     }
 }
-

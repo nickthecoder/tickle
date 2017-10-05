@@ -7,9 +7,7 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
-import uk.co.nickthecoder.tickle.SceneActor
-import uk.co.nickthecoder.tickle.SceneListerner
-import uk.co.nickthecoder.tickle.SceneResource
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 
@@ -34,6 +32,7 @@ class SceneEditor(val sceneResource: SceneResource)
 
     init {
         sceneResource.listeners.add(this)
+
     }
 
     fun build(): Node {
@@ -57,7 +56,7 @@ class SceneEditor(val sceneResource: SceneResource)
         layers.stack.background = sceneResource.background.toJavaFX().background()
 
         with(shortcuts) {
-            add(EditorActions.ESCAPE) { selection.clear(); updateAttributesBox() }
+            add(EditorActions.ESCAPE) { onEscape() }
             add(EditorActions.DELETE) { onDelete() }
         }
 
@@ -107,6 +106,14 @@ class SceneEditor(val sceneResource: SceneResource)
         }
     }
 
+    fun onEscape() {
+        mouseHandler?.escape()
+        selection.clear()
+        mouseHandler = Select()
+        updateAttributesBox()
+        draw()
+    }
+
     fun onDelete() {
         selection.selected().forEach { sceneActor ->
             sceneResource.sceneStages.values.forEach { sceneStage ->
@@ -116,6 +123,11 @@ class SceneEditor(val sceneResource: SceneResource)
         selection.clear()
         updateAttributesBox()
         sceneResource.fireChange()
+    }
+
+    fun selectCostume(costume: Costume) {
+        println("Selected costume $costume")
+        mouseHandler = Stamp(costume)
     }
 
     var dragPreviousX: Double = 0.0
@@ -186,6 +198,8 @@ class SceneEditor(val sceneResource: SceneResource)
         fun onMouseReleased(event: MouseEvent) {
             event.consume()
         }
+
+        fun escape() {}
     }
 
     fun worldX(event: MouseEvent) = layers.worldX(event)
@@ -302,6 +316,40 @@ class SceneEditor(val sceneResource: SceneResource)
         override fun onMouseReleased(event: MouseEvent) {
             mouseHandler = Select()
         }
+    }
+
+    inner class Stamp(val costume: Costume) : MouseHandler {
+
+        var newActor = SceneActor()
+
+        init {
+            newActor.costumeName = Resources.instance.findCostumeName(costume)!!
+            layers.glass.newActor = newActor
+        }
+
+        override fun onMouseMoved(event: MouseEvent) {
+            newActor.x = worldX(event)
+            newActor.y = worldY(event)
+            layers.glass.dirty = true
+        }
+
+        override fun onMousePressed(event: MouseEvent) {
+            layers.currentLayer()?.sceneStage?.sceneActors?.add(newActor)
+
+            if (event.isShiftDown) {
+
+                newActor = SceneActor()
+                newActor.costumeName = Resources.instance.findCostumeName(costume)!!
+                layers.glass.newActor = newActor
+
+            } else {
+                layers.glass.newActor = null
+                selection.clearAndSelect(newActor)
+                mouseHandler = Select()
+            }
+            sceneResource.fireChange()
+        }
+
     }
 }
 

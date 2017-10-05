@@ -10,7 +10,7 @@
                     "costume": "coin10",
                     "x": 576,
                     "y": 359,
-                    "direction": 0
+                    "direction": 90
                 },
                 {
                     "costume": "coin100",
@@ -34,7 +34,13 @@
                     "costume": "grenade",
                     "x": 300,
                     "y": 200,
-                    "direction": 0
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.2"
+                        }
+                    ]
                 },
                 {
                     "costume": "grenade",
@@ -44,7 +50,7 @@
                     "attributes": [
                         {
                             "name": "hue",
-                            "value": "0.2"
+                            "value": "0.3"
                         }
                     ]
                 },
@@ -56,7 +62,49 @@
                     "attributes": [
                         {
                             "name": "hue",
-                            "value": "0.8"
+                            "value": "0.4"
+                        }
+                    ]
+                },
+                {
+                    "costume": "coin",
+                    "x": 133,
+                    "y": 378,
+                    "direction": 0
+                },
+                {
+                    "costume": "grenade",
+                    "x": 184,
+                    "y": 207,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.1"
+                        }
+                    ]
+                },
+                {
+                    "costume": "grenade",
+                    "x": 79,
+                    "y": 209,
+                    "direction": 1,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0"
+                        }
+                    ]
+                },
+                {
+                    "costume": "grenade",
+                    "x": 598,
+                    "y": 201,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.5"
                         }
                     ]
                 }

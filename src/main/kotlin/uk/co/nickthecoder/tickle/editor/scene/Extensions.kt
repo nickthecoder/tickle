@@ -1,7 +1,9 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.geometry.Insets
+import javafx.geometry.Rectangle2D
 import javafx.scene.image.Image
+import javafx.scene.image.ImageView
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.CornerRadii
@@ -57,6 +59,32 @@ fun isSceneActorAt(sceneActor: SceneActor, x: Float, y: Float): Boolean {
     } else {
         return false
     }
+}
+
+fun Costume.pose() = events["default"]?.choosePose()
+
+fun Costume.imageView(): ImageView? {
+    pose()?.let { pose ->
+        pose.texture.file?.let { file ->
+            val iv = ImageView(ImageCache.image(file))
+            iv.viewport = Rectangle2D(pose.rect.left.toDouble(), pose.rect.top.toDouble(), pose.rect.width.toDouble(), pose.rect.height.toDouble())
+            return iv
+        }
+    }
+    return null
+}
+
+fun Costume.thumbnail(size: Double): ImageView? {
+    val iv = imageView()
+    if (iv != null) {
+        iv.isPreserveRatio = true
+        if (iv.viewport.width > iv.viewport.height) {
+            iv.fitWidth = size
+        } else {
+            iv.fitHeight = size
+        }
+    }
+    return iv
 }
 
 fun SceneActor.costume(): Costume? = Resources.instance.optionalCostume(costumeName)

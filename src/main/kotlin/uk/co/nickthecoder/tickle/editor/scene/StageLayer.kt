@@ -1,7 +1,5 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
-import javafx.scene.canvas.GraphicsContext
-import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.SceneStage
 
@@ -31,22 +29,8 @@ class StageLayer(
         val gc = canvas.graphicsContext2D
 
         sceneStage.sceneActors.forEach { sceneActor ->
-            sceneActor.pose?.let { pose ->
-                gc.save()
-                gc.translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
-                gc.rotate(sceneActor.directionDegrees - pose.directionDegrees)
-                drawPose(gc, pose)
-                gc.restore()
-            }
+            drawActor( sceneActor )
         }
-    }
-
-    fun drawPose(gc: GraphicsContext, pose: Pose) {
-        val image = pose.image()
-        gc.drawImage(
-                image,
-                pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(),
-                -pose.offsetX.toDouble(), -pose.offsetY.toDouble(), pose.rect.width.toDouble(), pose.rect.height.toDouble())
     }
 
 }

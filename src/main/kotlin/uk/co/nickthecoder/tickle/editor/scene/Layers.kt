@@ -14,6 +14,7 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
 
     private val stageLayers = mutableListOf<StageLayer>()
 
+
     val glass = GlassLayer(selection)
 
     init {
@@ -48,4 +49,9 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
     fun draw() {
         allLayers.forEach { it.draw() }
     }
+
+    fun currentLayer(): StageLayer? {
+        return stageLayers.lastOrNull()
+    }
+
 }

@@ -165,7 +165,6 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
 
                     stack.background = Background(BackgroundFill(colors[colorIndex], CornerRadii(0.0), Insets(0.0)))
                 } else {
-                    println("Click at y=${event.y}")
                     positionP.height?.let {
                         offsetP.x = event.x
                         offsetP.y = it - event.y

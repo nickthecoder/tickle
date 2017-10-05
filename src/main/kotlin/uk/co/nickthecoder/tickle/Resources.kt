@@ -69,7 +69,7 @@ class Resources {
         return textures[name]
     }
 
-    fun texture(name: String): Texture{
+    fun texture(name: String): Texture {
         return textures[name] ?: throw IllegalStateException("Texture $name not found")
     }
 
@@ -77,7 +77,7 @@ class Resources {
         return textures.filter { entry -> entry.value === texture }.map { it.key }.firstOrNull()
     }
 
-    fun addTexture(name: String, file: File): Texture{
+    fun addTexture(name: String, file: File): Texture {
         val textureResource = Texture.create(file)
         textures[name] = textureResource
         fireAdded(textureResource, name)
@@ -143,6 +143,10 @@ class Resources {
 
     fun costume(name: String): Costume {
         return costumes[name] ?: throw IllegalArgumentException("Costume $name not found")
+    }
+
+    fun findCostumeName(costume: Costume?): String? {
+        return costumes.filter { entry -> entry.value === costume }.map { it.key }.firstOrNull()
     }
 
     fun addCostume(name: String, costume: Costume) {

@@ -4,6 +4,7 @@ import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
 import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.SceneActor
 
 class GlassLayer(val selection: Selection)
 
@@ -26,6 +27,8 @@ class GlassLayer(val selection: Selection)
                 dirty = true
             }
         }
+
+    var newActor: SceneActor? = null
 
     init {
         selection.listeners.add(this)
@@ -98,6 +101,12 @@ class GlassLayer(val selection: Selection)
 
             }
             restore()
+        }
+
+        newActor?.let {
+            canvas.graphicsContext2D.globalAlpha = 0.5
+            drawActor(it)
+            canvas.graphicsContext2D.globalAlpha = 1.0
         }
 
         dirty = false

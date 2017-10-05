@@ -1,7 +1,9 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.scene.canvas.Canvas
+import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.SceneActor
 
 abstract class Layer {
 
@@ -30,5 +32,25 @@ abstract class Layer {
     }
 
     abstract fun drawContent()
+
+    fun drawActor(sceneActor: SceneActor) {
+        with(canvas.graphicsContext2D) {
+            sceneActor.pose?.let { pose ->
+                save()
+                translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
+                rotate(sceneActor.directionDegrees - pose.directionDegrees)
+                drawPose(pose)
+                restore()
+            }
+        }
+    }
+
+    fun drawPose(pose: Pose) {
+        val image = pose.image()
+        canvas.graphicsContext2D.drawImage(
+                image,
+                pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(),
+                -pose.offsetX.toDouble(), -pose.offsetY.toDouble(), pose.rect.width.toDouble(), pose.rect.height.toDouble())
+    }
 
 }
