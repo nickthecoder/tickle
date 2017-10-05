@@ -6,7 +6,7 @@ import uk.co.nickthecoder.tickle.SceneResource
 
 /**
  */
-class Layers(sceneResource: SceneResource) {
+class Layers(sceneResource: SceneResource, selection: Selection) {
 
     val stack = StackPane()
 
@@ -14,7 +14,7 @@ class Layers(sceneResource: SceneResource) {
 
     private val stageLayers = mutableListOf<StageLayer>()
 
-    val glass = GlassLayer()
+    val glass = GlassLayer(selection)
 
     init {
 
@@ -31,14 +31,13 @@ class Layers(sceneResource: SceneResource) {
         stack.children.add(layer.canvas)
     }
 
-    fun eventToWorldX(event: MouseEvent): Float {
-        // TODO Update this when panning is implemented
-        return event.x.toFloat()
+    fun worldX(event: MouseEvent): Float {
+        return (event.x - glass.panX).toFloat()
     }
 
-    fun eventToWorldY(event: MouseEvent): Float {
+    fun worldY(event: MouseEvent): Float {
         // TODO Update this when panning is implemented
-        return (glass.canvas.height - event.y).toFloat()
+        return (glass.canvas.height - event.y - glass.panY).toFloat()
     }
 
     fun panBy(dx: Double, dy: Double) {

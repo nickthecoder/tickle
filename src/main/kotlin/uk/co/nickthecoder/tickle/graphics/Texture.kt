@@ -11,10 +11,10 @@ import java.nio.ByteBuffer
 
 class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuffer, val file: File? = null) {
 
-    private var handle: Int? = glGenTextures()
+    private val handle: Int = glGenTextures()
 
     init {
-        glBindTexture(GL_TEXTURE_2D, handle!!)
+        glBindTexture(GL_TEXTURE_2D, handle)
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
@@ -23,7 +23,7 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
     }
 
     fun bind() {
-        glBindTexture(GL_TEXTURE_2D, handle!!)
+        glBindTexture(GL_TEXTURE_2D, handle)
         boundHandle = handle
     }
 
@@ -35,15 +35,9 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
     }
 
     fun cleanUp() {
-        handle?.let {
-            unbind()
-            glDeleteTextures(it)
-            handle = null
-        }
-    }
+        unbind()
+        glDeleteTextures(handle)
 
-    fun finalize() {
-        cleanUp()
     }
 
     override fun toString() = "Texture $width x $height"
