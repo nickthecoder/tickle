@@ -1,7 +1,9 @@
 package uk.co.nickthecoder.tickle.editor
 
 import javafx.scene.Scene
+import javafx.scene.control.Accordion
 import javafx.scene.control.Alert
+import javafx.scene.control.TitledPane
 import javafx.scene.control.ToolBar
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
@@ -26,6 +28,14 @@ class MainWindow(val stage: Stage) {
 
     val resourcesTree = ResourcesTree()
 
+    val accordion = Accordion()
+
+    val resourcesPane = TitledPane("Resources", resourcesTree)
+    val costumeBox = CostumesBox()
+    val costumesPane = TitledPane("Costumes", costumeBox.build())
+    val propertiesBox = PropertiesBox()
+    val propertiesPane = TitledPane("Properties", propertiesBox.build())
+
     val tabPane = MyTabPane<EditorTab>()
 
     val scene = Scene(borderPane, 1000.0, 650.0)
@@ -44,8 +54,18 @@ class MainWindow(val stage: Stage) {
 
         with(splitPane) {
             dividerRatio = 0.2
-            left = resourcesTree
+            left = accordion
             right = tabPane
+        }
+
+        // I like the animation, but it's too slow, and there is no API to change the speed. Turn it off. Grr.
+        resourcesPane.isAnimated = false
+        costumesPane.isAnimated = false
+        propertiesPane.isAnimated = false
+
+        with(accordion) {
+            panes.addAll(resourcesPane, costumesPane, propertiesPane)
+            expandedPane = resourcesPane
         }
 
         with(toolBar.items) {
@@ -54,8 +74,15 @@ class MainWindow(val stage: Stage) {
             add(EditorActions.RUN.createButton(shortcuts) { runGame() })
         }
 
+        with(shortcuts) {
+            add(EditorActions.ACCORDION_RESOURCES) { accordion.expandedPane = resourcesPane }
+            add(EditorActions.ACCORDION_COSTUME) { accordion.expandedPane = costumesPane }
+            add(EditorActions.ACCORDION_PROPERTIES) { accordion.expandedPane = propertiesPane }
+        }
+
         stage.show()
         instance = this
+
     }
 
     fun findTab(data: Any): EditorTab? {

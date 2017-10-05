@@ -48,6 +48,7 @@ class SceneTab(name: String, sceneStub: SceneStub)
         // fire Add and remove events
 
         editorTab.isSelected = true
+
     }
 
     override fun save(): Boolean {

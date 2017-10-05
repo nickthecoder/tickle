@@ -9,29 +9,20 @@
                 {
                     "costume": "coin",
                     "x": 300,
-                    "y": 400,
-                    "direction": 45,
-                    "attributes": [
-                        
-                    ]
+                    "y": 413,
+                    "direction": 0
                 },
                 {
                     "costume": "coin10",
-                    "x": 400,
-                    "y": 400,
-                    "direction": 0,
-                    "attributes": [
-                        
-                    ]
+                    "x": 575,
+                    "y": 402,
+                    "direction": 0
                 },
                 {
                     "costume": "coin100",
-                    "x": 500,
-                    "y": 400,
-                    "direction": 0,
-                    "attributes": [
-                        
-                    ]
+                    "x": 457,
+                    "y": 405,
+                    "direction": 0
                 },
                 {
                     "costume": "bee",
@@ -71,7 +62,7 @@
                     "attributes": [
                         {
                             "name": "hue",
-                            "value": "0.4"                        
+                            "value": "0.4"
                         }
                     ]
                 }

@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.SceneResource
+import uk.co.nickthecoder.tickle.editor.MainWindow
 
 
 class SceneEditor(val sceneResource: SceneResource) {
@@ -20,7 +21,6 @@ class SceneEditor(val sceneResource: SceneResource) {
     val selection = Selection()
 
     val layers = Layers(sceneResource, selection)
-
 
     fun build(): Node {
 
@@ -62,6 +62,17 @@ class SceneEditor(val sceneResource: SceneResource) {
         return list
     }
 
+    fun updateAttributesBox() {
+        MainWindow.instance?.let { mainWindow ->
+            val latest = selection.latest()
+            if (latest == null) {
+                mainWindow.propertiesBox.clear()
+            } else {
+                mainWindow.propertiesBox.show(latest)
+                mainWindow.accordion.expandedPane = mainWindow.propertiesPane
+            }
+        }
+    }
 
     var dragPreviousX: Double = 0.0
     var dragPreviousY: Double = 0.0
@@ -159,6 +170,7 @@ class SceneEditor(val sceneResource: SceneResource) {
                         } else {
                             selection.add(highestActor)
                         }
+                        updateAttributesBox()
 
                     } else if (event.isShiftDown) {
                         if (actors.contains(selection.latest())) {
@@ -174,6 +186,7 @@ class SceneEditor(val sceneResource: SceneResource) {
                         } else {
                             selection.clearAndSelect(highestActor)
                         }
+                        updateAttributesBox()
 
                     } else {
                         if (actors.contains(selection.latest())) {
@@ -188,6 +201,7 @@ class SceneEditor(val sceneResource: SceneResource) {
                         } else {
                             selection.clearAndSelect(highestActor)
                         }
+                        updateAttributesBox()
 
                     }
                 }
@@ -232,10 +246,7 @@ class SceneEditor(val sceneResource: SceneResource) {
             val atan = Math.atan2(dy.toDouble(), dx.toDouble())
             var angle = if (atan < 0) atan + Math.PI * 2 else atan
 
-            if (event.isShiftDown) {
-                val angleStep = Math.toRadians(15.0)
-                angle -= angle.rem(angleStep)
-            }
+            angle -= angle.rem(Math.toRadians(if (event.isShiftDown) 15.0 else 1.0))
             val rotateBy = angle - sceneActor.directionRadians
 
             selection.forEach {
