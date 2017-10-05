@@ -35,9 +35,9 @@ class GlassLayer(val selection: Selection)
 
         fun drawArrow() {
             with(canvas.graphicsContext2D) {
-                strokeLine(0.0, 0.0, directionLength-3, 0.0)
-                strokeLine(directionLength, 0.0, directionLength - arrowSize, -arrowSize/2)
-                strokeLine(directionLength, 0.0, directionLength - arrowSize, +arrowSize/2)
+                strokeLine(0.0, 0.0, directionLength - 3, 0.0)
+                strokeLine(directionLength, 0.0, directionLength - arrowSize, -arrowSize / 2)
+                strokeLine(directionLength, 0.0, directionLength - arrowSize, +arrowSize / 2)
             }
         }
 
@@ -71,7 +71,7 @@ class GlassLayer(val selection: Selection)
             selection.latest()?.let { sceneActor ->
                 save()
                 translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
-                // TODO Rotation
+                rotate(sceneActor.directionDegrees)
                 stroke = Color.BLACK
                 gc.lineCap = StrokeLineCap.ROUND
                 lineWidth = 4.0
@@ -85,6 +85,16 @@ class GlassLayer(val selection: Selection)
         }
 
         dirty = false
+    }
+
+    fun isNearRotationHandle(x: Float, y: Float): Boolean {
+        selection.latest()?.let { sceneActor ->
+            val hx = sceneActor.x + directionLength * Math.cos(sceneActor.directionRadians)
+            val hy = sceneActor.y + directionLength * Math.sin(sceneActor.directionRadians)
+            val dist2 = (x - hx) * (x - hx) + (y - hy) * (y - hy)
+            return dist2 < 10.0
+        }
+        return false
     }
 
     override fun selectionChanged() {

@@ -71,7 +71,7 @@ class JsonScene {
             jactor.add("costume", sceneActor.costumeName)
             jactor.add("x", sceneActor.x)
             jactor.add("y", sceneActor.y)
-            jactor.add("direction", sceneActor.direction)
+            jactor.add("direction", sceneActor.directionDegrees)
 
             if (sceneActor.attributes.map.isNotEmpty()) {
                 val jattributes = JsonArray()
@@ -105,7 +105,7 @@ class JsonScene {
         sceneActor.costumeName = jactor.get("costume").asString()
         sceneActor.x = jactor.getFloat("x", 0f)
         sceneActor.y = jactor.getFloat("y", 0f)
-        sceneActor.direction = jactor.getDouble("direction", 0.0)
+        sceneActor.directionDegrees = jactor.getDouble("direction", 0.0)
 
         JsonUtil.loadAttributes(jactor, sceneActor.attributes)
 

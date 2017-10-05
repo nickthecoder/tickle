@@ -61,7 +61,13 @@ class SceneActor {
     var costumeName: String = ""
     var x: Float = 0f
     var y: Float = 0f
-    var direction: Double = 0.0
+    var directionDegrees: Double = 0.0
+    var directionRadians: Double
+        get() = Math.toRadians(directionDegrees)
+        set(v) {
+            directionDegrees = Math.toDegrees(v)
+        }
+
     val attributes = Attributes()
 
     val pose: Pose? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.choosePose() }
@@ -75,12 +81,12 @@ class SceneActor {
         val actor = costume.createActor()
         actor.x = x
         actor.y = y
-        actor.directionDegrees = direction
+        actor.directionDegrees = directionDegrees
 
         actor.role?.let { attributes.applyToObject(it) }
 
         return actor
     }
 
-    override fun toString() = "SceneActor $costumeName @ $x , $y direction=$direction ${attributes.map.size} attributes"
+    override fun toString() = "SceneActor $costumeName @ $x , $y direction=$directionDegrees ${attributes.map.size} attributes"
 }

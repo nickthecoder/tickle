@@ -6,7 +6,7 @@ class Selection : Iterable<SceneActor> {
 
     private val items = mutableSetOf<SceneActor>()
 
-    private var latest : SceneActor? = null
+    private var latest: SceneActor? = null
 
     val listeners = mutableListOf<SelectionListener>()
     val size
@@ -23,13 +23,15 @@ class Selection : Iterable<SceneActor> {
         fireChange()
     }
 
-    fun add(obj: SceneActor) {
+    fun add(obj: SceneActor?) {
+        obj ?: return
         items.add(obj)
         latest = obj
         fireChange()
     }
 
-    fun remove(obj: SceneActor) {
+    fun remove(obj: SceneActor?) {
+        obj ?: return
         items.remove(obj)
         if (obj === latest) {
             latest = null
@@ -39,7 +41,7 @@ class Selection : Iterable<SceneActor> {
 
     fun selected(): Set<SceneActor> = items
 
-    fun latest() : SceneActor? = latest
+    fun latest(): SceneActor? = latest
 
     fun clearAndSelect(obj: SceneActor?) {
         clear()
@@ -47,7 +49,7 @@ class Selection : Iterable<SceneActor> {
         fireChange()
     }
 
-    private fun fireChange() {
+    fun fireChange() {
         listeners.forEach { it.selectionChanged() }
     }
 

@@ -36,7 +36,6 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
     }
 
     fun worldY(event: MouseEvent): Float {
-        // TODO Update this when panning is implemented
         return (glass.canvas.height - event.y - glass.panY).toFloat()
     }
 

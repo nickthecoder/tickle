@@ -137,9 +137,57 @@ class SceneEditor(val sceneResource: SceneResource) {
     inner class Select : MouseHandler {
 
         override fun onMousePressed(event: MouseEvent) {
+            val wx = worldX(event)
+            val wy = worldY(event)
+            val latest = selection.latest()
+
             if (event.button == MouseButton.PRIMARY) {
-                val actors = findActorsAt(worldX(event), worldY(event))
-                selection.clearAndSelect(actors.firstOrNull())
+
+                if (latest != null && layers.glass.isNearRotationHandle(wx, wy)) {
+                    mouseHandler = Rotate(latest)
+
+                } else {
+                    val actors = findActorsAt(wx, wy)
+                    val highestActor = actors.lastOrNull()
+
+                    if (event.isControlDown) {
+                        // Add or remove the top-most actor to/from the selection
+                        if (selection.contains(highestActor)) {
+                            selection.remove(highestActor)
+                        } else {
+                            selection.add(highestActor)
+                        }
+
+                    } else if (event.isShiftDown) {
+                        if (actors.contains(selection.latest())) {
+                            // Select the actor below the currently selected actor. This is useful when there are many
+                            // actors on top of each other. We can get to any of them, by repeatedly shift-clicking
+                            val i = actors.indexOf(selection.latest())
+                            if (i == 0) {
+                                selection.clearAndSelect(highestActor)
+                            } else {
+                                selection.clearAndSelect(actors[i - 1])
+                            }
+
+                        } else {
+                            selection.clearAndSelect(highestActor)
+                        }
+
+                    } else {
+                        if (actors.contains(selection.latest())) {
+
+                            // Do nothing
+
+                        } else if (selection.contains(highestActor)) {
+                            // Already in the selection, but this makes it the "latest" one
+                            // So it is shown in the details dialog, and you can see/edit its direction arrow.
+                            selection.add(highestActor)
+                        } else {
+                            selection.clearAndSelect(highestActor)
+                        }
+
+                    }
+                }
 
             } else if (event.button == MouseButton.MIDDLE || event.isAltDown) {
                 mouseHandler = Pan()
@@ -163,6 +211,19 @@ class SceneEditor(val sceneResource: SceneResource) {
     inner class Pan : MouseHandler {
         override fun onMouseDragged(event: MouseEvent) {
             layers.panBy(dragDeltaX, dragDeltaY)
+        }
+
+        override fun onMouseReleased(event: MouseEvent) {
+            mouseHandler = Select()
+        }
+    }
+
+    inner class Rotate(val sceneActor: SceneActor) : MouseHandler {
+        override fun onMouseDragged(event: MouseEvent) {
+            val dx = worldX(event) - sceneActor.x
+            val dy = worldY(event) - sceneActor.y
+            sceneActor.directionRadians = Math.atan2(dy.toDouble(), dx.toDouble())
+            draw()
         }
 
         override fun onMouseReleased(event: MouseEvent) {

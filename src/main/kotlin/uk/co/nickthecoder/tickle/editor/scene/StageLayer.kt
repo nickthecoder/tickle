@@ -34,6 +34,7 @@ class StageLayer(
             sceneActor.pose?.let { pose ->
                 gc.save()
                 gc.translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
+                gc.rotate(sceneActor.directionDegrees - pose.directionDegrees)
                 drawPose(gc, pose)
                 gc.restore()
             }
@@ -42,7 +43,6 @@ class StageLayer(
 
     fun drawPose(gc: GraphicsContext, pose: Pose) {
         val image = pose.image()
-        // TODO Rotation.
         gc.drawImage(
                 image,
                 pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(),
