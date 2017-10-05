@@ -18,11 +18,35 @@ Pixel Overlap
 		Now read the entire pixel buffer (of one pixel!!!)
 	http://wiki.lwjgl.org/wiki/Render_to_Texture_with_Frame_Buffer_Objects_(FBO).html
 
+https://www.khronos.org/opengl/wiki/Pixel_Transfer
+https://www.khronos.org/opengl/wiki/Fragment_Shader
+https://www.khronos.org/opengl/wiki/Logical_Operation
+
 BUGS
 ====
 
+
 New Features
 ============
+
+SceneEditor
+	Undo/Redo
+
+	Delete selected actors
+
+	When multiple actors selected, and latest is rotated using the mouse, then rotate ALL
+
+	Box of all costumes. Click to select on, then click on the stage to add it.
+		Should be semi-transparent before being placed.
+		Shortcut key (A for add?) to stamp with the previously selected costume.
+
+	Allow a Role to have an @Direction annotation (or a field of @Attribute), which indicates that another
+		rotation hadle is displayed. The annotation can have a color and a length.
+		Similarly, have annotations for a POSITION relative to the Actor's X,Y.
+			Display as an outlined box
+	Have a "canRotate" boolean on Costume, which prevents the rotation arrow appearing when false.
+		
+
 
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).
@@ -45,11 +69,14 @@ Mouse
 
 Ensure Textures are deleted when removed from resources (Use finialise?).
 
+Add my own "runLater", which will call the code at the end of a tick.
+	I could use this to delete textures (i.e. put the runLater call in Texture.finalize).
 
 Costumes to inherit?
 	Just the events?
 
 Fonts
+	https://github.com/SilverTiger/lwjgl3-tutorial/wiki/Fonts
 	Allow loading of multiple ranges of characters.
 
 View clipping.

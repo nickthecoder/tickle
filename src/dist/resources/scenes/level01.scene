@@ -10,24 +10,33 @@
                     "costume": "coin",
                     "x": 300,
                     "y": 400,
-                    "direction": 45
+                    "direction": 45,
+                    "attributes": [
+                        
+                    ]
                 },
                 {
                     "costume": "coin10",
                     "x": 400,
                     "y": 400,
-                    "direction": 0
+                    "direction": 0,
+                    "attributes": [
+                        
+                    ]
                 },
                 {
                     "costume": "coin100",
                     "x": 500,
                     "y": 400,
-                    "direction": 0
+                    "direction": 0,
+                    "attributes": [
+                        
+                    ]
                 },
                 {
                     "costume": "bee",
-                    "x": 410,
-                    "y": 196,
+                    "x": 400,
+                    "y": 300,
                     "direction": 0
                 },
                 {
@@ -46,13 +55,25 @@
                     "costume": "grenade",
                     "x": 400,
                     "y": 200,
-                    "direction": 0
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.2"
+                        }
+                    ]
                 },
                 {
                     "costume": "grenade",
                     "x": 500,
                     "y": 200,
-                    "direction": 0
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.4"                        
+                        }
+                    ]
                 }
             ]
         }

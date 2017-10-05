@@ -40,6 +40,8 @@ class SceneEditor(val sceneResource: SceneResource) {
             addEventHandler(MouseEvent.MOUSE_RELEASED) { onMouseReleased(it) }
         }
 
+        layers.stack.background = sceneResource.background.toJavaFX().background()
+
         draw()
         return borderPane
     }
@@ -178,6 +180,7 @@ class SceneEditor(val sceneResource: SceneResource) {
 
                             // Do nothing
 
+
                         } else if (selection.contains(highestActor)) {
                             // Already in the selection, but this makes it the "latest" one
                             // So it is shown in the details dialog, and you can see/edit its direction arrow.
@@ -192,6 +195,10 @@ class SceneEditor(val sceneResource: SceneResource) {
             } else if (event.button == MouseButton.MIDDLE || event.isAltDown) {
                 mouseHandler = Pan()
             }
+        }
+
+        override fun onMouseMoved(event: MouseEvent) {
+            layers.glass.highlightHandle(worldX(event), worldY(event))
         }
 
         override fun onMouseDragged(event: MouseEvent) {
@@ -222,7 +229,18 @@ class SceneEditor(val sceneResource: SceneResource) {
         override fun onMouseDragged(event: MouseEvent) {
             val dx = worldX(event) - sceneActor.x
             val dy = worldY(event) - sceneActor.y
-            sceneActor.directionRadians = Math.atan2(dy.toDouble(), dx.toDouble())
+            val atan = Math.atan2(dy.toDouble(), dx.toDouble())
+            var angle = if (atan < 0) atan + Math.PI * 2 else atan
+
+            if (event.isShiftDown) {
+                val angleStep = Math.toRadians(15.0)
+                angle -= angle.rem(angleStep)
+            }
+            val rotateBy = angle - sceneActor.directionRadians
+
+            selection.forEach {
+                it.directionRadians += rotateBy
+            }
             draw()
         }
 

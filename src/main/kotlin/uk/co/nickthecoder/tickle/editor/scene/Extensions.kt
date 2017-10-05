@@ -1,6 +1,11 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
+import javafx.geometry.Insets
 import javafx.scene.image.Image
+import javafx.scene.layout.Background
+import javafx.scene.layout.BackgroundFill
+import javafx.scene.layout.CornerRadii
+import javafx.scene.paint.Color
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.editor.ImageCache
@@ -52,3 +57,13 @@ fun isSceneActorAt(sceneActor: SceneActor, x: Float, y: Float): Boolean {
         return false
     }
 }
+
+fun uk.co.nickthecoder.tickle.graphics.Color.toJavaFX(): javafx.scene.paint.Color {
+    return javafx.scene.paint.Color(red.toDouble(), green.toDouble(), blue.toDouble(), alpha.toDouble())
+}
+
+fun javafx.scene.paint.Color.toTickle(): uk.co.nickthecoder.tickle.graphics.Color {
+    return uk.co.nickthecoder.tickle.graphics.Color(red.toFloat(), green.toFloat(), blue.toFloat(), opacity.toFloat())
+}
+
+fun javafx.scene.paint.Color.background() = Background(BackgroundFill(this, CornerRadii(0.0), Insets(0.0)))
