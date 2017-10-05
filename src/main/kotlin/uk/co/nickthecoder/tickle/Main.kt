@@ -16,7 +16,9 @@ import java.io.File
  * However, if you do not want this automatic behaviour, you can pass the filename as an argument.
  */
 fun main(args: Array<String>) {
+
     val file: File?
+
     if (args.isEmpty()) {
         file = guessTickleFile()
     } else {
@@ -42,7 +44,7 @@ fun guessTickleFile(): File? {
     return resourceDir.listFiles().filter { it.extension == "tickle" }.sortedBy { it.lastModified() }.lastOrNull()
 }
 
-fun startGame(file: File) {
+fun startGame(resourcesFile: File, sceneFile: File? = null) {
 
     // Setup an error callback.
     GLFWErrorCallback.createPrint(System.err).set()
@@ -55,11 +57,11 @@ fun startGame(file: File) {
     window.show()
     GL.createCapabilities()
 
-    val resources = JsonResources(file).resources
+    val resources = JsonResources(resourcesFile).resources
 
     with(resources.gameInfo) {
         window.change(title, width, height, resizable)
     }
 
-    Game(window, resources).run()
+    Game(window, resources).run(sceneFile ?: resources.initialSceneFile)
 }

@@ -48,10 +48,10 @@ class Game(
         seconds = System.nanoTime() / 1_000_000_000f
     }
 
-    fun run() {
+    fun run(sceneFile: File) {
         initialise()
         producer.begin()
-        producer.startScene(resources.gameInfo.startScene)
+        producer.startScene(sceneFile)
         loop()
         cleanUp()
     }
@@ -77,9 +77,8 @@ class Game(
         }
     }
 
-    fun loadScene(sceneName: String): SceneResource {
-        val file = File(File(resources.file.parentFile, "scenes"), "$sceneName.scene")
-        return JsonScene(file).sceneResource
+    fun loadScene(sceneFile: File): SceneResource {
+        return JsonScene(sceneFile).sceneResource
     }
 
     fun startScene(sceneResource: SceneResource) {

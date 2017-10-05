@@ -8,7 +8,7 @@ class GameInfo(
         var width: Int,
         var height: Int,
         var resizable: Boolean,
-        var startScene: String = "splash",
+        var initialSceneName: String = "splash",
         var producerString: String = NoProducer::class.java.name,
         val packages: MutableList<String> = mutableListOf("uk.co.nickthecoder.tickle")) {
 

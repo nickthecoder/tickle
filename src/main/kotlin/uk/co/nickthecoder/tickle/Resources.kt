@@ -30,6 +30,9 @@ class Resources {
     val sceneDirectory: File
         get() = File(file.parentFile, "scenes")
 
+    val initialSceneFile: File
+        get() = File(sceneDirectory, "${gameInfo.initialSceneName}.scene")
+
     val texturesDirectory: File
         get() = File(file.parentFile, "textures")
 

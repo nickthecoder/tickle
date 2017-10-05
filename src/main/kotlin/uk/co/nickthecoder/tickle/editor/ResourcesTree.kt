@@ -102,7 +102,7 @@ class ResourcesTree()
         override fun isLeaf() = false
     }
 
-    inner class GameInfoItem() : ResourceItem("Game Info") {
+    inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo) {
 
         init {
             resources.poses().forEach { name, pose ->

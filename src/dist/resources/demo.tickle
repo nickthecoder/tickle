@@ -4,7 +4,7 @@
         "width": 1024,
         "height": 600,
         "resizable": true,
-        "startScene": "level01",
+        "initialScene": "level01",
         "producer": "uk.co.nickthecoder.tickle.demo.Demo",
         "packages": [
             "uk.co.nickthecoder.tickle"
@@ -138,7 +138,7 @@
         {
             "name": "coin",
             "role": "uk.co.nickthecoder.tickle.demo.Coin",
-            "canRotate": true,
+            "canRotate": false,
             "events": [
                 {
                     "name": "default",

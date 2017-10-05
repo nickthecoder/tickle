@@ -1,6 +1,8 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
+import javafx.event.EventHandler
 import javafx.geometry.Side
+import javafx.scene.control.Button
 import javafx.scene.control.TabPane
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
@@ -14,18 +16,19 @@ import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.demo.Director
 import uk.co.nickthecoder.tickle.demo.NoDirector
+import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.SceneStub
 import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.util.JsonScene
 
-class SceneTab(name: String, sceneStub: SceneStub)
+class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
-    : EditTab("Texture", name, sceneStub) {
+    : EditTab("Texture", sceneName, sceneStub) {
 
     val sceneResource = JsonScene(sceneStub.file).sceneResource
 
-    val task = SceneDetailsTask(name, sceneResource)
+    val task = SceneDetailsTask(sceneName, sceneResource)
     val taskForm = TaskForm(task)
 
     val sceneEditor = SceneEditor(sceneResource)
@@ -34,6 +37,10 @@ class SceneTab(name: String, sceneStub: SceneStub)
 
     val detailsTab = MyTab("Details", taskForm.build())
     val editorTab = MyTab("Scene Editor", sceneEditor.build())
+
+    val testButton = Button("Test")
+
+    val sceneFile = sceneStub.file
 
     init {
         minorTabs.side = Side.BOTTOM
@@ -50,6 +57,10 @@ class SceneTab(name: String, sceneStub: SceneStub)
 
         editorTab.isSelected = true
 
+        applyButton.text = "Save"
+        rightButtons.children.remove(okButton)
+        rightButtons.children.add(0, testButton)
+        testButton.onAction = EventHandler { test() }
     }
 
     override fun save(): Boolean {
@@ -59,6 +70,10 @@ class SceneTab(name: String, sceneStub: SceneStub)
             return true
         }
         return false
+    }
+
+    fun test() {
+        MainWindow.instance?.startGame(sceneFile)
     }
 
     override fun removed() {

@@ -19,19 +19,19 @@ abstract class EditTab(
 
     : EditorTab(dataType, dataName, data), ResourcesListener {
 
-    val borderPane = BorderPane()
+    protected val borderPane = BorderPane()
 
-    val leftButtons = FlowPane()
+    protected val leftButtons = FlowPane()
 
-    val rightButtons = FlowPane()
+    protected val rightButtons = FlowPane()
 
-    private val buttons = HBox()
+    protected val buttons = HBox()
 
-    val okButton = Button("Ok")
+    protected val okButton = Button("Ok")
 
-    val applyButton = Button("Apply")
+    protected val applyButton = Button("Apply")
 
-    val cancelButton = Button("Cancel")
+    protected val cancelButton = Button("Cancel")
 
     init {
 

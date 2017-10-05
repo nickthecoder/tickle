@@ -17,6 +17,7 @@ import uk.co.nickthecoder.tickle.editor.tabs.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.JsonResources
+import java.io.File
 
 class MainWindow(val stage: Stage) {
 
@@ -70,7 +71,7 @@ class MainWindow(val stage: Stage) {
         with(toolBar.items) {
             add(EditorActions.RESOURCES_SAVE.createButton(shortcuts) { save() })
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
-            add(EditorActions.RUN.createButton(shortcuts) { runGame() })
+            add(EditorActions.RUN.createButton(shortcuts) { startGame() })
         }
 
         with(shortcuts) {
@@ -97,14 +98,15 @@ class MainWindow(val stage: Stage) {
     }
 
     var running: Boolean = false
-    fun runGame() {
+
+    fun startGame(sceneFile: File = Resources.instance.initialSceneFile) {
         if (running) {
             Alert(Alert.AlertType.INFORMATION, "It seems that a game is already running.\nYou can only run one instance!").showAndWait()
         } else {
             Thread {
                 running = true
                 println("Game test started")
-                startGame(Resources.instance.file)
+                startGame(Resources.instance.file, sceneFile)
                 println("Game test ended")
                 running = false
             }.start()

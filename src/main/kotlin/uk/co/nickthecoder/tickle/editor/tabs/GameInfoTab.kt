@@ -19,6 +19,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
 
     val titleP = StringParameter("title", value = gameInfo.title)
     val windowSizeP = XYiParameter("windowSize")
+    val initialSceneP = StringParameter("initialScene", value = gameInfo.initialSceneName)
     val resizableP = BooleanParameter("resizable", value = gameInfo.resizable)
     val producerP = ChoiceParameter<Class<*>>("producer", value = NoProducer::class.java)
 
@@ -32,7 +33,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
 
 
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(titleP, windowSizeP, resizableP, producerP, packagesGroupP)
+            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, producerP, packagesGroupP)
 
     init {
         windowSizeP.x = gameInfo.width
@@ -54,6 +55,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
         gameInfo.title = titleP.value
         gameInfo.width = windowSizeP.x!!
         gameInfo.height = windowSizeP.y!!
+        gameInfo.initialSceneName = initialSceneP.value
         gameInfo.resizable = resizableP.value!!
         gameInfo.producerString = producerP.value!!.name
     }

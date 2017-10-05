@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.events.KeyEvent
+import java.io.File
 
 /**
  * Looks at the big picture, and shouldn't be involved in the minor details.
@@ -22,9 +23,9 @@ interface Producer {
 
     fun begin() {}
 
-    fun startScene(sceneName: String) {
+    fun startScene(sceneFile: File) {
         Game.instance.endScene()
-        val scene = Game.instance.loadScene(sceneName)
+        val scene = Game.instance.loadScene(sceneFile)
         Game.instance.startScene(scene)
     }
 

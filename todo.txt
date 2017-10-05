@@ -29,6 +29,11 @@ BUGS
 New Features
 ============
 
+Change Ok, Apply, Cancel to Save, Cancel
+Duplicate Scene
+Delete Scene
+Rename Scene
+
 SceneEditor
 
 	Delete selected actors
