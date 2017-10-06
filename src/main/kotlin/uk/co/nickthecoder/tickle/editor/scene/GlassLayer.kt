@@ -3,10 +3,9 @@ package uk.co.nickthecoder.tickle.editor.scene
 import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
-import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.*
 
-class GlassLayer(val selection: Selection)
+class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
     : Layer(), SelectionListener {
 
@@ -17,14 +16,6 @@ class GlassLayer(val selection: Selection)
                 if (dirty) {
                     draw()
                 }
-            }
-        }
-
-    var highlightRotation = true
-        set(v) {
-            if (v != field) {
-                field = v
-                dirty = true
             }
         }
 
@@ -77,34 +68,8 @@ class GlassLayer(val selection: Selection)
             restore()
         }
 
-        with(gc) {
-            save()
-            selection.latest()?.let { sceneActor ->
-
-                if (sceneActor.costume()?.canRotate == true) {
-                    save()
-                    translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
-                    rotate(sceneActor.directionDegrees)
-                    stroke = Color.BLACK
-                    gc.lineCap = StrokeLineCap.ROUND
-                    lineWidth = 4.0
-                    drawArrow(0)
-                    if (highlightRotation) {
-                        stroke = hightlightColor
-                    } else {
-                        stroke = latestColor
-                    }
-                    lineWidth = 3.0
-                    drawArrow(0)
-                    restore()
-                }
-
-                sceneActor.attributes.data().forEach {
-                    // TODO Draw control points for each special attribute
-                }
-
-            }
-            restore()
+        dragHandle.forEach {
+            it.draw()
         }
 
         newActor?.let {
@@ -129,36 +94,32 @@ class GlassLayer(val selection: Selection)
         }
     }
 
-    fun drawArrow(order: Int) {
-        with(canvas.graphicsContext2D) {
-            save()
-            translate(order * (directionLength + directionSpacing), 0.0)
-            strokeLine(0.0, 0.0, directionLength - 3, 0.0)
-            strokeLine(directionLength, 0.0, directionLength - arrowSize, -arrowSize / 2)
-            strokeLine(directionLength, 0.0, directionLength - arrowSize, +arrowSize / 2)
-            restore()
+    fun hover(x: Double, y: Double) {
+        dragHandle.forEach {
+            it.hover(x, y)
         }
-    }
-
-    fun highlightHandle(x: Float, y: Float) {
-        highlightRotation = isNearRotationHandle(x, y)
-    }
-
-    fun isNearRotationHandle(x: Float, y: Float): Boolean {
-        selection.latest()?.let { sceneActor ->
-            if (sceneActor.costume()?.canRotate != true) {
-                return false
-            }
-            val hx = sceneActor.x + directionLength * Math.cos(sceneActor.directionRadians)
-            val hy = sceneActor.y + directionLength * Math.sin(sceneActor.directionRadians)
-            val dist2 = (x - hx) * (x - hx) + (y - hy) * (y - hy)
-            return dist2 < 36.0 // 6 pixels
-        }
-        return false
     }
 
     override fun selectionChanged() {
-        highlightRotation = false
+        dragHandle.clear()
+        val latest = selection.latest()
+        if (latest != null) {
+            if (latest.costume()?.canRotate == true) {
+                dragHandle.add(RotateArrow(latest))
+            }
+
+
+            latest.attributes.data().forEach { data ->
+                when (data.attributeType) {
+                    AttributeType.DIRECTION -> {
+                        dragHandle.add(DirectionArrow(latest, data, data.order))
+                    }
+                    AttributeType.NORMAL -> {
+                    }
+                }
+            }
+        }
+
         dirty = true
     }
 
@@ -173,8 +134,142 @@ class GlassLayer(val selection: Selection)
         var hightlightColor = Color.web("#80ff00")
 
         var directionLength = 40.0
-        var directionSpacing = 6.0
+        var directionExtra = 25.0
         var arrowSize = 10.0
+    }
+
+    private val dragHandle = mutableListOf<DragHandle>()
+
+    fun findDragHandle(x: Double, y: Double): DragHandle? {
+        return dragHandle.firstOrNull { it.isNear(x, y) }
+    }
+
+    interface DragHandle {
+
+        fun draw()
+
+        fun isNear(x: Double, y: Double): Boolean
+
+        fun hover(x: Double, y: Double)
+
+        fun moveTo(x: Double, y: Double, snap: Boolean)
+    }
+
+    abstract inner class AbstractDragHandle : DragHandle {
+
+        var hovering: Boolean = false
+            set(v) {
+                if (v != field) {
+                    field = v
+                    dirty = true
+                }
+            }
+
+        abstract fun x(): Double
+
+        abstract fun y(): Double
+
+        override fun hover(x: Double, y: Double) {
+            hovering = isNear(x, y)
+        }
+
+        override fun isNear(x: Double, y: Double): Boolean {
+            val dx = x - x()
+            val dy = y - y()
+            return dx * dx + dy * dy < 36 // 6 pixels
+        }
+    }
+
+    abstract inner class Arrow(val sceneActor: SceneActor, val distance: Int) : AbstractDragHandle() {
+
+        abstract fun set(degrees: Double)
+
+        abstract fun get(): Double
+
+        override fun x() = sceneActor.x + (directionLength + distance * directionExtra) * Math.cos(Math.toRadians(get()))
+
+        override fun y() = sceneActor.y + (directionLength + distance * directionExtra) * Math.sin(Math.toRadians(get()))
+
+        override fun draw() {
+
+            with(canvas.graphicsContext2D) {
+                save()
+                translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
+                val length = directionLength + distance * directionExtra
+
+                rotate(get())
+                stroke = Color.BLACK
+                lineCap = StrokeLineCap.ROUND
+                lineWidth = 4.0
+                drawSimpleArrow(length)
+                if (hovering) {
+                    stroke = hightlightColor
+                } else {
+                    stroke = latestColor
+                }
+                lineWidth = 3.0
+                drawSimpleArrow(length)
+                restore()
+            }
+        }
+
+        fun drawSimpleArrow(length: Double) {
+            with(canvas.graphicsContext2D) {
+                strokeLine(0.0, 0.0, length - 3, 0.0)
+                strokeLine(length, 0.0, length - arrowSize, -arrowSize / 2)
+                strokeLine(length, 0.0, length - arrowSize, +arrowSize / 2)
+            }
+        }
+
+    }
+
+    inner class RotateArrow(sceneActor: SceneActor) : Arrow(sceneActor, 0) {
+        override fun get() = sceneActor.directionDegrees
+        override fun set(degrees: Double) {
+            sceneActor.directionDegrees = degrees
+        }
+
+        override fun moveTo(x: Double, y: Double, snap: Boolean) {
+
+            val dx = x - sceneActor.x
+            val dy = y - sceneActor.y
+
+            val atan = Math.atan2(dy, dx)
+            var angle = if (atan < 0) atan + Math.PI * 2 else atan
+
+            angle -= angle.rem(Math.toRadians(if (snap) 15.0 else 1.0))
+
+            val degrees = angle - sceneActor.directionRadians
+
+            selection.forEach {
+                it.directionRadians += degrees
+            }
+        }
+
+    }
+
+    inner class DirectionArrow(sceneActor: SceneActor, val data: Attributes.AttributeData, distance: Int)
+
+        : Arrow(sceneActor, distance) {
+
+        override fun get() = data.value?.toDouble() ?: 0.0
+
+        override fun set(degrees: Double) {
+            data.value = degrees.toString()
+        }
+
+        override fun moveTo(x: Double, y: Double, snap: Boolean) {
+
+            val dx = x - sceneActor.x
+            val dy = y - sceneActor.y
+
+            val atan = Math.atan2(dy, dx)
+            var angle = if (atan < 0) atan + Math.PI * 2 else atan
+
+            angle -= angle.rem(Math.toRadians(if (snap) 15.0 else 1.0))
+            set(Math.toDegrees(angle))
+        }
+
     }
 
 }

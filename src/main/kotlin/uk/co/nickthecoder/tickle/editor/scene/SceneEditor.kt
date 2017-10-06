@@ -228,12 +228,12 @@ class SceneEditor(val sceneResource: SceneResource)
         override fun onMousePressed(event: MouseEvent) {
             val wx = worldX(event)
             val wy = worldY(event)
-            val latest = selection.latest()
 
             if (event.button == MouseButton.PRIMARY) {
 
-                if (latest != null && layers.glass.isNearRotationHandle(wx, wy)) {
-                    mouseHandler = Rotate(latest)
+                val handle = layers.glass.findDragHandle(wx.toDouble(), wy.toDouble())
+                if (handle != null) {
+                    mouseHandler = AdjustDragHandle(handle)
 
                 } else {
                     val actors = findActorsAt(wx, wy)
@@ -288,7 +288,7 @@ class SceneEditor(val sceneResource: SceneResource)
         }
 
         override fun onMouseMoved(event: MouseEvent) {
-            layers.glass.highlightHandle(worldX(event), worldY(event))
+            layers.glass.hover(worldX(event).toDouble(), worldY(event).toDouble())
         }
 
         override fun onMouseDragged(event: MouseEvent) {
@@ -315,19 +315,9 @@ class SceneEditor(val sceneResource: SceneResource)
         }
     }
 
-    inner class Rotate(val sceneActor: SceneActor) : MouseHandler {
+    inner class AdjustDragHandle(val dragHandle: GlassLayer.DragHandle) : MouseHandler {
         override fun onMouseDragged(event: MouseEvent) {
-            val dx = worldX(event) - sceneActor.x
-            val dy = worldY(event) - sceneActor.y
-            val atan = Math.atan2(dy.toDouble(), dx.toDouble())
-            var angle = if (atan < 0) atan + Math.PI * 2 else atan
-
-            angle -= angle.rem(Math.toRadians(if (event.isShiftDown) 15.0 else 1.0))
-            val rotateBy = angle - sceneActor.directionRadians
-
-            selection.forEach {
-                it.directionRadians += rotateBy
-            }
+            dragHandle.moveTo(worldX(event).toDouble(), worldY(event).toDouble(), event.isShiftDown)
             sceneResource.fireChange()
         }
 

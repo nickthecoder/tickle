@@ -47,6 +47,13 @@ class Attributes {
 
     fun data(): Collection<AttributeData> = map.values
 
+    fun getOrCreateData(name: String): AttributeData {
+        map[name]?.let { return it }
+        val data = AttributeData()
+        map[name] = data
+        return data
+    }
+
     /**
      * Updates the object's property fields with the stored attribute values.
      */
@@ -88,13 +95,6 @@ class Attributes {
             return
         }
         updateAttributeTypes(kclass)
-    }
-
-    fun getOrCreateData(name: String): AttributeData {
-        map[name]?.let { return it }
-        val data = AttributeData()
-        map[name] = data
-        return data
     }
 
     fun updateAttributeTypes(kClass: KClass<*>) {

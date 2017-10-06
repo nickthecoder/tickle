@@ -10,8 +10,12 @@
                     "costume": "coin10",
                     "x": 576,
                     "y": 359,
-                    "direction": 90,
+                    "direction": 0,
                     "attributes": [
+                        {
+                            "name": "heading",
+                            "value": "122.0"
+                        },
                         {
                             "name": "rotationSpeed",
                             "value": "4"
@@ -26,7 +30,7 @@
                     "attributes": [
                         {
                             "name": "heading",
-                            "value": "180"
+                            "value": "153.0"
                         },
                         {
                             "name": "rotationSpeed",
@@ -86,7 +90,13 @@
                     "costume": "coin",
                     "x": 133,
                     "y": 378,
-                    "direction": 0
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "heading",
+                            "value": "319.0"
+                        }
+                    ]
                 },
                 {
                     "costume": "grenade",

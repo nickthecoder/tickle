@@ -15,7 +15,7 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
     private val stageLayers = mutableListOf<StageLayer>()
 
 
-    val glass = GlassLayer(selection)
+    val glass = GlassLayer(sceneResource, selection)
 
     init {
 

@@ -64,9 +64,9 @@
         {
             "name": "hand",
             "texture": "sprites",
-            "left": 135,
+            "left": 138,
             "bottom": 60,
-            "right": 185,
+            "right": 188,
             "top": 0,
             "offsetX": 17,
             "offsetY": 27,

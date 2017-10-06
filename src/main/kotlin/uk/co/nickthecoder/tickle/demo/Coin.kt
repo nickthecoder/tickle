@@ -14,7 +14,7 @@ class Coin() : ActionRole() {
     @Attribute
     var speed: Float = 1f
 
-    @Attribute(AttributeType.DIRECTION)
+    @Attribute(AttributeType.DIRECTION, 1)
     var heading: Double = 0.0
 
     @Attribute

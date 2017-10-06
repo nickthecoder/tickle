@@ -86,7 +86,6 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
 
         with(sceneActor.attributes)
         {
-            clear()
             attributesP.children.forEach { child ->
                 if (child is ValueParameter<*>) {
                     if (child.value != null) {
