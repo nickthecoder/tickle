@@ -19,6 +19,9 @@ object EditorActions {
     val ESCAPE = EditorAction("escape", KeyCode.ESCAPE)
     val DELETE = EditorAction("delete", KeyCode.DELETE)
 
+    val STAMPS = listOf(KeyCode.DIGIT1, KeyCode.DIGIT2, KeyCode.DIGIT3, KeyCode.DIGIT4, KeyCode.DIGIT5, KeyCode.DIGIT6, KeyCode.DIGIT7, KeyCode.DIGIT8, KeyCode.DIGIT9)
+            .mapIndexed { index, keyCode -> EditorAction("stamp$index", keyCode) }
+
     val TAB_CLOSE = EditorAction("tab.close", KeyCode.W, control = true, label = "Close Tab")
 
 }

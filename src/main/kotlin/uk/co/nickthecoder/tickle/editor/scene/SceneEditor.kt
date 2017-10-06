@@ -61,6 +61,9 @@ class SceneEditor(val sceneResource: SceneResource)
             add(EditorActions.ESCAPE) { onEscape() }
             add(EditorActions.DELETE) { onDelete() }
         }
+        EditorActions.STAMPS.forEachIndexed { index, action ->
+            shortcuts.add(action) { selectCostumeFromHistory(index) }
+        }
 
         draw()
         return borderPane
@@ -127,8 +130,22 @@ class SceneEditor(val sceneResource: SceneResource)
         sceneResource.fireChange()
     }
 
+    val costumeHistory = mutableListOf<String>()
+
     fun selectCostumeName(costumeName: String) {
         mouseHandler = Stamp(costumeName)
+        if (costumeHistory.isEmpty() || costumeHistory[0] != costumeName) {
+            costumeHistory.add(0, costumeName)
+            if (costumeHistory.size > 10) {
+                costumeHistory.removeAt(costumeHistory.size - 1)
+            }
+        }
+    }
+
+    fun selectCostumeFromHistory(index: Int) {
+        if (index >= 0 && index < costumeHistory.size) {
+            mouseHandler = Stamp(costumeHistory[index])
+        }
     }
 
     var dragPreviousX: Double = 0.0
