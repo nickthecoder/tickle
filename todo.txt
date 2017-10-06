@@ -25,6 +25,10 @@ https://www.khronos.org/opengl/wiki/Logical_Operation
 BUGS
 ====
 
+InputPicker :
+	Java FX key code name "Number Sign" does not map to anything in enum class Key
+	"Windows" is this meta?
+	Shift, Control, alt etc don't work either.
 
 New Features
 ============

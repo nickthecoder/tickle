@@ -8,7 +8,7 @@ private val codeMap = mutableMapOf<Int, Key>()
 enum class Key(val label: String, val code: Int) {
 
     SPACE("Space", GLFW_KEY_SPACE),
-    APOSTROPHE("Apostrophe", GLFW_KEY_APOSTROPHE),
+    QUOTE("Quote", GLFW_KEY_APOSTROPHE), // Note, I've renamed this in keeping with JavaFX!
     COMMA("Comma", GLFW_KEY_COMMA),
     MINUS("Minus", GLFW_KEY_MINUS),
     PERIOD("Period", GLFW_KEY_PERIOD),
@@ -58,11 +58,11 @@ enum class Key(val label: String, val code: Int) {
     LEFT_BRACKET("Open Bracket", GLFW_KEY_LEFT_BRACKET),
     BACKSLASH("Back Slash", GLFW_KEY_BACKSLASH),
     RIGHT_BRACKET("Close Bracket", GLFW_KEY_RIGHT_BRACKET),
-    GRAVE_ACCENT("Grave Accent", GLFW_KEY_GRAVE_ACCENT),
+    BACK_QUOTE("Back Quote", GLFW_KEY_GRAVE_ACCENT), // NOTE, I've renamed this in keeping with JavaFX
     WORLD_1("World 1", GLFW_KEY_WORLD_1),
     WORLD_2("World 2", GLFW_KEY_WORLD_2),
 
-    ESCAPE("Escape", GLFW_KEY_ESCAPE),
+    ESCAPE("Esc", GLFW_KEY_ESCAPE),
     ENTER("Enter", GLFW_KEY_ENTER),
     TAB("Tab", GLFW_KEY_TAB),
     BACKSPACE("Backspace", GLFW_KEY_BACKSPACE),
@@ -128,14 +128,13 @@ enum class Key(val label: String, val code: Int) {
     KP_EQUAL("KP Equals", GLFW_KEY_KP_EQUAL),
     LEFT_SHIFT("Left Shift", GLFW_KEY_LEFT_SHIFT),
     LEFT_CONTROL("Left Control", GLFW_KEY_LEFT_CONTROL),
-    LEFT_ALT("Left Alt", GLFW_KEY_LEFT_ALT),
+    ALT("Alt", GLFW_KEY_LEFT_ALT), // NOTE, I've renamed this in keeping with JavaFX
     LEFT_SUPER("Left Super", GLFW_KEY_LEFT_SUPER),
     RIGHT_SHIFT("Right Shift", GLFW_KEY_RIGHT_SHIFT),
     RIGHT_CONTROL("Right Control", GLFW_KEY_RIGHT_CONTROL),
-    RIGHT_ALT("Right Alt", GLFW_KEY_RIGHT_ALT),
+    ALT_GRAPH("Alt Graph", GLFW_KEY_RIGHT_ALT), // NOTE, I've renamed this in keeping with JavaFX
     RIGHT_SUPER("Right Super", GLFW_KEY_RIGHT_SUPER),
     MENU("Menu", GLFW_KEY_MENU),
-    LAST("Last", GLFW_KEY_LAST),
 
     UNKNOWN("Unknown", -1);
 

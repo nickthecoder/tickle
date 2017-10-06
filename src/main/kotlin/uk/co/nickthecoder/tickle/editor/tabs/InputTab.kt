@@ -1,13 +1,11 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.event.EventHandler
-import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.paratask.parameters.fields.ButtonField
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.events.*
 
@@ -16,7 +14,6 @@ class InputTab(name: String, input: CompoundInput)
 
     init {
         addDeleteButton { Resources.instance.deleteInput(name) }
-        Joystick.debug()
     }
 }
 
@@ -61,9 +58,11 @@ class InputTask(val name: String, val compoundInput: CompoundInput) : AbstractTa
 
 class InputParameter : MultipleGroupParameter("input") {
 
-    // KEY
+    val pickInputP = ButtonParameter("pickInput", label = "", buttonText = "Click to Pick") { onPick() }
 
-    val chooseKeyP = ButtonParameter("keyPress", label = "", buttonText = "Click then type to pick a key") { onChooseKey(it) }
+    val infoP = InformationParameter("info", information = "Or choose the input manually below...")
+
+    // KEY
 
     val keyP = ChoiceParameter<Key?>("key", required = true, value = null).nullableEnumChoices(mixCase = true)
 
@@ -72,7 +71,7 @@ class InputParameter : MultipleGroupParameter("input") {
     val keyStateP = ChoiceParameter<ButtonState>("keyState", label = "State", value = ButtonState.PRESSED).enumChoices(mixCase = true)
 
     val keyInputP = SimpleGroupParameter("keyInput", label = "Keyboard")
-            .addParameters(keyP, chooseKeyP, keyInfoP, keyStateP)
+            .addParameters(keyP, keyInfoP, keyStateP)
 
     // MOUSE
 
@@ -113,7 +112,7 @@ class InputParameter : MultipleGroupParameter("input") {
     private var keyPressHandler: EventHandler<KeyEvent>? = null
 
     init {
-        addParameters(inputTypeP)
+        addParameters(pickInputP, infoP, inputTypeP)
     }
 
     fun from(input: Input) {
@@ -161,18 +160,6 @@ class InputParameter : MultipleGroupParameter("input") {
     }
 
 
-    private fun onChooseKey(buttonField: ButtonField) {
-
-        keyPressHandler = EventHandler { event ->
-            if (event.code != KeyCode.SHIFT && event.code != KeyCode.CONTROL && event.code != KeyCode.ALT) {
-                keyP.value = guessKey(event.code)
-                buttonField.button?.removeEventFilter(KeyEvent.KEY_PRESSED, keyPressHandler)
-            }
-        }
-        buttonField.button?.addEventFilter(KeyEvent.KEY_PRESSED, keyPressHandler)
-
-    }
-
     override fun toString(): String {
         return if (inputTypeP.value == keyInputP) {
             "Key ${keyP.value ?: "<unknown>"}"
@@ -192,7 +179,10 @@ class InputParameter : MultipleGroupParameter("input") {
         }
     }
 
-    fun guessKey(keyCode: KeyCode): Key? {
-        return Key.forLabel(keyCode.getName())
+    fun onPick() {
+        InputPicker { input ->
+            from(input)
+        }.show()
     }
+
 }
