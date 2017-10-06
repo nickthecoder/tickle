@@ -123,7 +123,6 @@ class JsonResources {
     // LAYOUTS
 
     fun saveLayouts(): JsonArray {
-        println("Saving layouts ${resources.layouts()}")
         val jlayouts = JsonArray()
         resources.layouts().forEach { name, layout ->
             val jlayout = JsonObject()
@@ -175,7 +174,7 @@ class JsonResources {
                 }
             }
         }
-        println("Created jlayouts $jlayouts")
+        // println("Created jlayouts $jlayouts")
         return jlayouts
     }
 
@@ -449,7 +448,6 @@ class JsonResources {
             jjoystick.add("joystickID", input.joystickID)
             jjoystick.add("button", input.button.name)
             toArray.add(jjoystick)
-            println("Created joybutton json object $jjoystick")
 
         } else if (input is CompoundInput) {
             input.inputs.forEach {

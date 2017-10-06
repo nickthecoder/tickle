@@ -138,7 +138,7 @@
         {
             "name": "coin",
             "role": "uk.co.nickthecoder.tickle.demo.Coin",
-            "canRotate": false,
+            "canRotate": true,
             "events": [
                 {
                     "name": "default",

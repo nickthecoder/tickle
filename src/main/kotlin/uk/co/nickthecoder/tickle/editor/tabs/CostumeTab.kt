@@ -93,11 +93,11 @@ class CostumeTab(val name: String, val costume: Costume)
             costume.canRotate = canRotateP.value == true
 
             with(costume.attributes) {
-                map.clear()
+                clear()
                 attributesP.children.forEach { child ->
                     if (child is ValueParameter<*>) {
                         if (child.value != null) {
-                            map[Attributes.attributeName(child)] = child.stringValue
+                            setValue(Attributes.attributeName(child), child.stringValue)
                         }
                     }
                 }
@@ -115,7 +115,7 @@ class CostumeTab(val name: String, val costume: Costume)
                 Attributes.createParameters(roleClass, CostumeAttribute::class).forEach { parameter ->
                     attributesP.add(parameter)
                     val attributeName = Attributes.attributeName(parameter)
-                    costume.attributes.map[attributeName]?.let { value ->
+                    costume.attributes.getValue(attributeName)?.let { value ->
                         try {
                             parameter.stringValue = value
                         } catch (e: Exception) {

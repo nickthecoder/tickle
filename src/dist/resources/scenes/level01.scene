@@ -10,18 +10,34 @@
                     "costume": "coin10",
                     "x": 576,
                     "y": 359,
-                    "direction": 90
+                    "direction": 90,
+                    "attributes": [
+                        {
+                            "name": "rotationSpeed",
+                            "value": "4"
+                        }
+                    ]
                 },
                 {
                     "costume": "coin100",
                     "x": 447,
                     "y": 416,
-                    "direction": 0
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "heading",
+                            "value": "180"
+                        },
+                        {
+                            "name": "rotationSpeed",
+                            "value": "1"
+                        }
+                    ]
                 },
                 {
                     "costume": "bee",
-                    "x": 361,
-                    "y": 358,
+                    "x": 327,
+                    "y": 334,
                     "direction": 0
                 },
                 {

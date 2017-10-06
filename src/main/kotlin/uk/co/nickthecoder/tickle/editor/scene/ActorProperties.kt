@@ -49,7 +49,7 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
                     Attributes.createParameters(roleClass, Attribute::class).forEach { parameter ->
                         attributesP.add(parameter)
                         val attributeName = Attributes.attributeName(parameter)
-                        sceneActor.attributes.map[attributeName]?.let { value ->
+                        sceneActor.attributes.getValue(attributeName)?.let { value ->
                             try {
                                 parameter.stringValue = value
                             } catch (e: Exception) {
@@ -86,11 +86,11 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
 
         with(sceneActor.attributes)
         {
-            map.clear()
+            clear()
             attributesP.children.forEach { child ->
                 if (child is ValueParameter<*>) {
                     if (child.value != null) {
-                        map[uk.co.nickthecoder.tickle.Attributes.attributeName(child)] = child.stringValue
+                        setValue(Attributes.attributeName(child), child.stringValue)
                     }
                 }
             }

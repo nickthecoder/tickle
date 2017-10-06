@@ -73,16 +73,7 @@ class JsonScene {
             jactor.add("y", sceneActor.y)
             jactor.add("direction", sceneActor.directionDegrees)
 
-            if (sceneActor.attributes.map.isNotEmpty()) {
-                val jattributes = JsonArray()
-                jactor.add("attributes", jattributes)
-                sceneActor.attributes.map.forEach { attributeName, attributeValue ->
-                    val jattribute = JsonObject()
-                    jattributes.add(jattribute)
-                    jattribute.add("name", attributeName)
-                    jattribute.add("value", attributeValue)
-                }
-            }
+            JsonUtil.saveAttributes(jactor, sceneActor.attributes)
         }
         return jstage
     }

@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.ActionRole
+import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.action.HeadingMovement
 import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.action.animation.Grow
@@ -13,7 +14,7 @@ class Coin() : ActionRole() {
     @Attribute
     var speed: Float = 1f
 
-    @Attribute
+    @Attribute(AttributeType.DIRECTION)
     var heading: Double = 0.0
 
     @Attribute

@@ -73,7 +73,13 @@ class SceneStage {
 }
 
 class SceneActor {
+
     var costumeName: String = ""
+        set(v) {
+            field = v
+            initialiseAttributeTypes()
+        }
+
     var x: Float = 0f
     var y: Float = 0f
     var directionDegrees: Double = 0.0
@@ -103,5 +109,12 @@ class SceneActor {
         return actor
     }
 
-    override fun toString() = "SceneActor $costumeName @ $x , $y direction=$directionDegrees ${attributes.map.size} attributes"
+    private fun initialiseAttributeTypes() {
+        Resources.instance.optionalCostume(costumeName)?.roleString?.let { roleString ->
+            attributes.updateAttributeTypes(roleString)
+        }
+    }
+
+
+    override fun toString() = "SceneActor $costumeName @ $x , $y direction=$directionDegrees"
 }

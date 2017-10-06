@@ -31,7 +31,21 @@ import kotlin.reflect.jvm.jvmErasure
  */
 class Attributes {
 
-    val map = mutableMapOf<String, String>()
+    private val map = mutableMapOf<String, AttributeData>()
+
+    fun clear() {
+        map.clear()
+    }
+
+    fun getValue(name: String) = map[name]?.value
+
+    fun setValue(name: String, value: String) {
+        getOrCreateData(name).value = value
+    }
+
+    fun map(): Map<String, AttributeData> = map
+
+    fun data(): Collection<AttributeData> = map.values
 
     /**
      * Updates the object's property fields with the stored attribute values.
@@ -39,12 +53,13 @@ class Attributes {
     fun applyToObject(obj: Any) {
         val klass = obj.javaClass
 
-        map.forEach { name, value ->
-            updateAttribute(obj, klass, name, value)
+        map.forEach { name, data ->
+            updateAttribute(obj, klass, name, data.value)
         }
     }
 
-    private fun updateAttribute(obj: Any, klass: Class<*>, name: String, value: String) {
+    private fun updateAttribute(obj: Any, klass: Class<*>, name: String, value: String?) {
+        if (value == null) return
         try {
             try {
                 val field = klass.getField(name)
@@ -64,6 +79,33 @@ class Attributes {
         }
     }
 
+    fun updateAttributeTypes(className: String) {
+        val kclass: KClass<*>
+        try {
+            kclass = Class.forName(className).kotlin
+        } catch (e: Exception) {
+            // Do nothing
+            return
+        }
+        updateAttributeTypes(kclass)
+    }
+
+    fun getOrCreateData(name: String): AttributeData {
+        map[name]?.let { return it }
+        val data = AttributeData()
+        map[name] = data
+        return data
+    }
+
+    fun updateAttributeTypes(kClass: KClass<*>) {
+        kClass.members.forEach { property ->
+            property.annotations.filterIsInstance<Attribute>().firstOrNull()?.let { annotation ->
+                val data = getOrCreateData(property.name)
+                data.attributeType = annotation.attributeType
+                data.order = annotation.order
+            }
+        }
+    }
 
     companion object {
 
@@ -91,16 +133,16 @@ class Attributes {
             return when (klass) {
 
                 Boolean::class -> {
-                    BooleanParameter("attribute_" + name, required = false, label = name)
+                    BooleanParameter("attribute_$name", required = false, label = name)
                 }
                 Int::class -> {
-                    IntParameter("attribute_" + name, required = false, label = name)
+                    IntParameter("attribute_$name", required = false, label = name)
                 }
                 Float::class, Double::class -> {
-                    DoubleParameter("attribute_" + name, required = false, label = name)
+                    DoubleParameter("attribute_$name", required = false, label = name)
                 }
                 String::class -> {
-                    StringParameter("attribute_" + name, required = false, label = name)
+                    StringParameter("attribute_$name", required = false, label = name)
                 }
                 else -> {
                     System.err.println("Type $klass (for attribute $name) is not currently supported.")
@@ -127,4 +169,8 @@ class Attributes {
         fun attributeName(parameter: Parameter) = parameter.name.substring("attribute_".length)
     }
 
+    data class AttributeData(
+            var value: String? = null,
+            var attributeType: AttributeType = AttributeType.NORMAL,
+            var order: Int = 0)
 }

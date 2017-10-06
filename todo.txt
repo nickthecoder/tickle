@@ -39,6 +39,12 @@ SceneEditor
 		rotation hadle is displayed. The annotation can have a color and a length.
 		Similarly, have annotations for a POSITION relative to the Actor's X,Y.
 			Display as an outlined box
+	Hmm, position on it's own isn't very useful, but a direction and speed are!
+	So, we need :
+		Direction for a float field : @Attribute( AttributeType.DIRECTION )
+		Position for a Vector2f : @Attribute( AttributeType.RELATIVE_POSITION )
+		Velocity for a Velocity field (new!) @Attribute( AttributeType.VELOCITY )
+
 		
 
 Editor

@@ -88,15 +88,19 @@ class GlassLayer(val selection: Selection)
                     stroke = Color.BLACK
                     gc.lineCap = StrokeLineCap.ROUND
                     lineWidth = 4.0
-                    drawArrow()
+                    drawArrow(0)
                     if (highlightRotation) {
                         stroke = hightlightColor
                     } else {
                         stroke = latestColor
                     }
                     lineWidth = 3.0
-                    drawArrow()
+                    drawArrow(0)
                     restore()
+                }
+
+                sceneActor.attributes.data().forEach {
+                    // TODO Draw control points for each special attribute
                 }
 
             }
@@ -125,11 +129,14 @@ class GlassLayer(val selection: Selection)
         }
     }
 
-    fun drawArrow() {
+    fun drawArrow(order: Int) {
         with(canvas.graphicsContext2D) {
+            save()
+            translate(order * (directionLength + directionSpacing), 0.0)
             strokeLine(0.0, 0.0, directionLength - 3, 0.0)
             strokeLine(directionLength, 0.0, directionLength - arrowSize, -arrowSize / 2)
             strokeLine(directionLength, 0.0, directionLength - arrowSize, +arrowSize / 2)
+            restore()
         }
     }
 
@@ -166,6 +173,7 @@ class GlassLayer(val selection: Selection)
         var hightlightColor = Color.web("#80ff00")
 
         var directionLength = 40.0
+        var directionSpacing = 6.0
         var arrowSize = 10.0
     }
 

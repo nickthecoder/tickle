@@ -12,21 +12,26 @@ object JsonUtil {
                 val jattribute = it.asObject()
                 val attributeName = jattribute.get("name").asString()
                 val attributeValue = jattribute.get("value").asString()
-                attributes.map[attributeName] = attributeValue
+                attributes.setValue(attributeName, attributeValue)
             }
         }
     }
 
     fun saveAttributes(jparent: JsonObject, attributes: Attributes) {
-        if (attributes.map.isNotEmpty()) {
+        val map = attributes.map()
+        if (map.isNotEmpty()) {
             val jattributes = JsonArray()
-            jparent.add("attributes", jattributes)
 
-            attributes.map.forEach { name, value ->
-                val jattribute = JsonObject()
-                jattribute.add("name", name)
-                jattribute.add("value", value)
-                jattributes.add(jattribute)
+            map.forEach { name, data ->
+                if (data.value != null) {
+                    val jattribute = JsonObject()
+                    jattribute.add("name", name)
+                    jattribute.add("value", data.value)
+                    jattributes.add(jattribute)
+                }
+            }
+            if (!jattributes.isEmpty) {
+                jparent.add("attributes", jattributes)
             }
         }
     }
