@@ -154,10 +154,10 @@ class MainWindow(val stage: Stage) {
         return null
     }
 
-    fun selectCostume(costume: Costume) {
+    fun selectCostumeName(costumeName: String) {
         tabPane.selectionModel.selectedItem?.let { tab ->
             if (tab is SceneTab) {
-                tab.selectCostume(costume)
+                tab.selectCostumeName(costumeName)
             }
         }
     }

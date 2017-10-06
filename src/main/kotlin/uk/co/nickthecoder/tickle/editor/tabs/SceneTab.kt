@@ -16,7 +16,6 @@ import uk.co.nickthecoder.paratask.parameters.ColorParameter
 import uk.co.nickthecoder.paratask.parameters.FileParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
-import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.demo.Director
@@ -111,8 +110,8 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
         sceneEditor.cleanUp()
     }
 
-    fun selectCostume(costume: Costume) {
-        sceneEditor.selectCostume(costume)
+    fun selectCostumeName(costumeName: String) {
+        sceneEditor.selectCostumeName(costumeName)
     }
 
 

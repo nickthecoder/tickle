@@ -7,7 +7,9 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.SceneListerner
+import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 
@@ -125,9 +127,8 @@ class SceneEditor(val sceneResource: SceneResource)
         sceneResource.fireChange()
     }
 
-    fun selectCostume(costume: Costume) {
-        println("Selected costume $costume")
-        mouseHandler = Stamp(costume)
+    fun selectCostumeName(costumeName: String) {
+        mouseHandler = Stamp(costumeName)
     }
 
     var dragPreviousX: Double = 0.0
@@ -318,12 +319,12 @@ class SceneEditor(val sceneResource: SceneResource)
         }
     }
 
-    inner class Stamp(val costume: Costume) : MouseHandler {
+    inner class Stamp(val costumeName: String) : MouseHandler {
 
         var newActor = SceneActor()
 
         init {
-            newActor.costumeName = Resources.instance.findCostumeName(costume)!!
+            newActor.costumeName = costumeName
             layers.glass.newActor = newActor
         }
 
@@ -339,7 +340,7 @@ class SceneEditor(val sceneResource: SceneResource)
             if (event.isShiftDown) {
 
                 newActor = SceneActor()
-                newActor.costumeName = Resources.instance.findCostumeName(costume)!!
+                newActor.costumeName = costumeName
                 layers.glass.newActor = newActor
 
             } else {

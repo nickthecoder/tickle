@@ -33,17 +33,7 @@ InputPicker :
 New Features
 ============
 
-Copy Scene
-Delete Scene
-Rename Scene
-
 SceneEditor
-
-	Delete selected actors
-
-	Box of all costumes. Click to select on, then click on the stage to add it.
-		Should be semi-transparent before being placed.
-		Shortcut key (A for add?) to stamp with the previously selected costume.
 
 	Allow a Role to have an @Direction annotation (or a field of @Attribute), which indicates that another
 		rotation hadle is displayed. The annotation can have a color and a length.

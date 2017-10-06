@@ -19,7 +19,7 @@ class CostumesBox {
 
         scrollPane.isFitToWidth = true
 
-        Resources.instance.costumes().forEach { name, costume ->
+        Resources.instance.costumes().forEach { costumeName, costume ->
             costume.thumbnail(40.0)?.let { iv ->
                 val button = Button()
                 val roleName = costume.roleString.split(".").lastOrNull()
@@ -28,12 +28,12 @@ class CostumesBox {
                     prefWidth = 44.0
                     prefHeight = 44.0
                     padding = Insets(2.0)
-                    if (roleName != null && roleName.isNotBlank() && roleName.toLowerCase() != name.toLowerCase()) {
-                        tooltip = Tooltip("$name ($roleName)")
+                    if (roleName != null && roleName.isNotBlank() && roleName.toLowerCase() != costumeName.toLowerCase()) {
+                        tooltip = Tooltip("$costumeName ($roleName)")
                     } else {
-                        tooltip = Tooltip(name)
+                        tooltip = Tooltip(costumeName)
                     }
-                    setOnAction { MainWindow.instance?.selectCostume(costume) }
+                    setOnAction { MainWindow.instance?.selectCostumeName(costumeName) }
                 }
 
                 flowPane.children.add(button)
