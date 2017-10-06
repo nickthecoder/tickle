@@ -18,7 +18,7 @@ import uk.co.nickthecoder.tickle.stage.*
 
 class LayoutTab(val name: String, val layout: Layout)
 
-    : EditTab("Layout", name, layout) {
+    : EditTab("Layout", name, layout, graphicName = "layout.png") {
 
     val stagesTask = StagesTask()
     val viewsTask = ViewsTask()

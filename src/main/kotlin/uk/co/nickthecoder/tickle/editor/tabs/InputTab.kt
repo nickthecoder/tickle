@@ -12,7 +12,7 @@ import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.events.*
 
 class InputTab(name: String, input: CompoundInput)
-    : EditTaskTab(InputTask(name, input), "Input", name, input) {
+    : EditTaskTab(InputTask(name, input), "Input", name, input, graphicName = "input.png") {
 
     init {
         addDeleteButton { Resources.instance.deleteInput(name) }

@@ -3,9 +3,14 @@ package uk.co.nickthecoder.tickle.editor.tabs
 import uk.co.nickthecoder.paratask.Task
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 
-open class EditTaskTab(val task: Task, dataType: String, dataName: String, data: Any)
+open class EditTaskTab(
+        val task: Task,
+        dataType: String,
+        dataName: String,
+        data: Any,
+        graphicName : String? = null)
 
-    : EditTab(dataType, dataName, data) {
+    : EditTab(dataType, dataName, data, graphicName=graphicName) {
 
     val taskForm = TaskForm(task)
 

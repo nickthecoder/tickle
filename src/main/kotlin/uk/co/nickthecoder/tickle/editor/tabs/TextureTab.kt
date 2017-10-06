@@ -22,7 +22,7 @@ import java.io.File
 
 class TextureTab(name: String, val texture: Texture)
 
-    : EditTab("Texture", name, texture) {
+    : EditTab("Texture", name, texture, graphicName = "texture.png") {
 
     val task = TextureTask(name, texture)
     val taskForm = TaskForm(task)

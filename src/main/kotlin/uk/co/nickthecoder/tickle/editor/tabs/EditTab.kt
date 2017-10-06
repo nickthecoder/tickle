@@ -4,18 +4,21 @@ import javafx.event.EventHandler
 import javafx.scene.control.Alert
 import javafx.scene.control.Button
 import javafx.scene.control.ButtonType
+import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.gui.defaultWhileFocusWithin
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.ResourcesListener
+import uk.co.nickthecoder.tickle.editor.EditorAction
 
 
 abstract class EditTab(
         dataType: String,
         dataName: String,
-        data: Any)
+        data: Any,
+        graphicName: String? = null)
 
     : EditorTab(dataType, dataName, data), ResourcesListener {
 
@@ -34,6 +37,8 @@ abstract class EditTab(
     protected val cancelButton = Button("Cancel")
 
     init {
+
+        graphicName?.let { graphic = ImageView(EditorAction.imageResource(graphicName)) }
 
         content = borderPane
 

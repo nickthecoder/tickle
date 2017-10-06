@@ -30,7 +30,7 @@ import java.io.File
 
 class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
-    : EditTab("Scene", sceneName, sceneStub) {
+    : EditTab("Scene", sceneName, sceneStub, graphicName = "scene.png") {
 
     val sceneResource = JsonScene(sceneStub.file).sceneResource
 
