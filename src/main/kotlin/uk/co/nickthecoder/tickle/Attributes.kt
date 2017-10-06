@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.util.Attribute
+import uk.co.nickthecoder.tickle.util.CostumeAttribute
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmErasure
 
@@ -86,7 +87,7 @@ class Attributes {
         }
     }
 
-    fun updateAttributeTypes(className: String) {
+    fun updateAttributeMetaData(className: String) {
         val kclass: KClass<*>
         try {
             kclass = Class.forName(className).kotlin
@@ -94,83 +95,81 @@ class Attributes {
             // Do nothing
             return
         }
-        updateAttributeTypes(kclass)
+        updateAttributeMetaData(kclass)
     }
 
-    fun updateAttributeTypes(kClass: KClass<*>) {
+    fun updateAttributeMetaData(kClass: KClass<*>) {
+
         kClass.members.forEach { property ->
             property.annotations.filterIsInstance<Attribute>().firstOrNull()?.let { annotation ->
                 val data = getOrCreateData(property.name)
                 data.attributeType = annotation.attributeType
                 data.order = annotation.order
+                createParameter(property.name, property.returnType.jvmErasure)?.let { parameter ->
+                    data.parameter = parameter
+                    parameter.listen { data.value = parameter.stringValue }
+                }
+            }
+            property.annotations.filterIsInstance<CostumeAttribute>().firstOrNull()?.let { annotation ->
+                val data = getOrCreateData(property.name)
+                createParameter(property.name, property.returnType.jvmErasure)?.let { parameter ->
+                    data.costumeParameter = parameter
+                    parameter.listen { data.value = parameter.stringValue }
+                }
             }
         }
     }
 
-    companion object {
-
-        fun createParameters(jClass: Class<*>, annotation: KClass<*> = Attribute::class): List<ValueParameter<*>> {
-            val parameters = mutableListOf<ValueParameter<*>>()
-
-            val kClass = jClass.kotlin
-            kClass.members.filter {
-                it.annotations.filter { it.annotationClass == annotation }.isNotEmpty()
-            }.forEach { property ->
-                createParameter(property.name, property.returnType.jvmErasure)?.let {
-                    parameters.add(it)
-                }
-            }
-
-            return parameters
-        }
-
-        fun createParameter(name: String, klass: Class<*>): ValueParameter<*>? {
-            return createParameter(name, klass.kotlin)
-        }
-
-        fun createParameter(name: String, klass: KClass<*>): ValueParameter<*>? {
-
-            return when (klass) {
-
-                Boolean::class -> {
-                    BooleanParameter("attribute_$name", required = false, label = name)
-                }
-                Int::class -> {
-                    IntParameter("attribute_$name", required = false, label = name)
-                }
-                Float::class, Double::class -> {
-                    DoubleParameter("attribute_$name", required = false, label = name)
-                }
-                String::class -> {
-                    StringParameter("attribute_$name", required = false, label = name)
-                }
-                else -> {
-                    System.err.println("Type $klass (for attribute $name) is not currently supported.")
-                    null
-                }
-            }
-        }
-
-        fun fromString(value: String, klass: Class<*>): Any {
-            return fromString(value, klass.kotlin)
-        }
-
-        fun fromString(value: String, klass: KClass<*>): Any {
-            return when (klass) {
-                Boolean::class -> value.toBoolean()
-                Int::class -> value.toInt()
-                Float::class -> value.toFloat()
-                Double::class -> value.toDouble()
-                String::class -> value
-                else -> throw IllegalArgumentException("Type $klass is not currently supported.")
-            }
-        }
-
-        fun attributeName(parameter: Parameter) = parameter.name.substring("attribute_".length)
+    private fun createParameter(name: String, klass: Class<*>): ValueParameter<*>? {
+        return createParameter(name, klass.kotlin)
     }
 
-    data class AttributeData(
-            var value: String? = null,
-            var attributeType: AttributeType = AttributeType.NORMAL,
-            var order: Int = 0)
+    private fun createParameter(name: String, klass: KClass<*>): ValueParameter<*>? {
+
+        return when (klass) {
+
+            Boolean::class -> {
+                BooleanParameter("attribute_$name", required = false, label = name)
+            }
+            Int::class -> {
+                IntParameter("attribute_$name", required = false, label = name)
+            }
+            Float::class, Double::class -> {
+                DoubleParameter("attribute_$name", required = false, label = name)
+            }
+            String::class -> {
+                StringParameter("attribute_$name", required = false, label = name)
+            }
+            else -> {
+                System.err.println("Type $klass (for attribute $name) is not currently supported.")
+                null
+            }
+        }
+    }
+
+
+    fun fromString(value: String, klass: Class<*>): Any {
+        return fromString(value, klass.kotlin)
+    }
+
+    fun fromString(value: String, klass: KClass<*>): Any {
+        return when (klass) {
+            Boolean::class -> value.toBoolean()
+            Int::class -> value.toInt()
+            Float::class -> value.toFloat()
+            Double::class -> value.toDouble()
+            String::class -> value
+            else -> throw IllegalArgumentException("Type $klass is not currently supported.")
+        }
+    }
+
+    fun attributeName(parameter: Parameter) = parameter.name.substring("attribute_".length)
 }
+
+data class AttributeData(
+        var value: String? = null,
+        var attributeType: AttributeType = AttributeType.NORMAL,
+        var order: Int = 0,
+        var parameter: ValueParameter<*>? = null,
+        var costumeParameter: ValueParameter<*>? = null)
+

@@ -77,7 +77,7 @@ class SceneActor {
     var costumeName: String = ""
         set(v) {
             field = v
-            initialiseAttributeTypes()
+            updateAttributeMetaData()
         }
 
     var x: Float = 0f
@@ -109,9 +109,9 @@ class SceneActor {
         return actor
     }
 
-    private fun initialiseAttributeTypes() {
+    private fun updateAttributeMetaData() {
         Resources.instance.optionalCostume(costumeName)?.roleString?.let { roleString ->
-            attributes.updateAttributeTypes(roleString)
+            attributes.updateAttributeMetaData(roleString)
         }
     }
 

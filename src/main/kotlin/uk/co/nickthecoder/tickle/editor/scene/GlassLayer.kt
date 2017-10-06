@@ -3,9 +3,13 @@ package uk.co.nickthecoder.tickle.editor.scene
 import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.paratask.parameters.DoubleParameter
+import uk.co.nickthecoder.tickle.AttributeData
+import uk.co.nickthecoder.tickle.AttributeType
+import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.SceneActor
 
-class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
+class GlassLayer(val selection: Selection)
 
     : Layer(), SelectionListener {
 
@@ -68,7 +72,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             restore()
         }
 
-        dragHandle.forEach {
+        dragHandles.forEach {
             it.draw()
         }
 
@@ -95,24 +99,24 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
     }
 
     fun hover(x: Double, y: Double) {
-        dragHandle.forEach {
+        dragHandles.forEach {
             it.hover(x, y)
         }
     }
 
     override fun selectionChanged() {
-        dragHandle.clear()
+        dragHandles.clear()
         val latest = selection.latest()
         if (latest != null) {
             if (latest.costume()?.canRotate == true) {
-                dragHandle.add(RotateArrow(latest))
+                dragHandles.add(RotateArrow(latest))
             }
 
 
             latest.attributes.data().forEach { data ->
                 when (data.attributeType) {
                     AttributeType.DIRECTION -> {
-                        dragHandle.add(DirectionArrow(latest, data, data.order))
+                        dragHandles.add(DirectionArrow(latest, data, data.order))
                     }
                     AttributeType.NORMAL -> {
                     }
@@ -138,10 +142,10 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         var arrowSize = 10.0
     }
 
-    private val dragHandle = mutableListOf<DragHandle>()
+    private val dragHandles = mutableListOf<DragHandle>()
 
     fun findDragHandle(x: Double, y: Double): DragHandle? {
-        return dragHandle.firstOrNull { it.isNear(x, y) }
+        return dragHandles.firstOrNull { it.isNear(x, y) }
     }
 
     interface DragHandle {
@@ -248,14 +252,14 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
     }
 
-    inner class DirectionArrow(sceneActor: SceneActor, val data: Attributes.AttributeData, distance: Int)
+    inner class DirectionArrow(sceneActor: SceneActor, val data: AttributeData, distance: Int)
 
         : Arrow(sceneActor, distance) {
 
         override fun get() = data.value?.toDouble() ?: 0.0
 
         override fun set(degrees: Double) {
-            data.value = degrees.toString()
+            (data.parameter as DoubleParameter).value = degrees
         }
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {

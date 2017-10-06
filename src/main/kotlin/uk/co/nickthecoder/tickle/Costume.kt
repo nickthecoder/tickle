@@ -5,6 +5,12 @@ import java.util.*
 class Costume() {
 
     var roleString: String = ""
+        set(v) {
+            if (field != v) {
+                field = v
+                attributes.updateAttributeMetaData(v)
+            }
+        }
 
     var canRotate: Boolean = false
 
@@ -37,6 +43,7 @@ class Costume() {
         }
         return event
     }
+
 
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }

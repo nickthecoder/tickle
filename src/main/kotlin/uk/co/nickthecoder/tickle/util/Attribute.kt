@@ -11,4 +11,4 @@ annotation class Attribute(
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class CostumeAttribute()
+annotation class CostumeAttribute

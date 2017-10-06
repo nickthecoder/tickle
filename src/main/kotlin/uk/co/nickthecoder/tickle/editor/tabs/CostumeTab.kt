@@ -11,7 +11,6 @@ import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.createPoseParameter
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
-import uk.co.nickthecoder.tickle.util.CostumeAttribute
 
 class CostumeTab(val name: String, val costume: Costume)
 
@@ -91,36 +90,22 @@ class CostumeTab(val name: String, val costume: Costume)
 
             costume.roleString = if (roleClassP.value == null) "" else roleClassP.value!!.name
             costume.canRotate = canRotateP.value == true
-
-            with(costume.attributes) {
-                clear()
-                attributesP.children.forEach { child ->
-                    if (child is ValueParameter<*>) {
-                        if (child.value != null) {
-                            setValue(Attributes.attributeName(child), child.stringValue)
-                        }
-                    }
-                }
-            }
         }
 
         fun updateAttributes() {
-            // Scan the Role class for annotations, and generate parameters for them.
             attributesP.children.toList().forEach {
                 attributesP.remove(it)
             }
             attributesP.hidden = roleClassP.value == null
 
-            roleClassP.value?.let { roleClass ->
-                Attributes.createParameters(roleClass, CostumeAttribute::class).forEach { parameter ->
+            costume.attributes.data().forEach{ data ->
+                data.costumeParameter?.let { it ->
+                    val parameter = it.copyBounded()
                     attributesP.add(parameter)
-                    val attributeName = Attributes.attributeName(parameter)
-                    costume.attributes.getValue(attributeName)?.let { value ->
-                        try {
-                            parameter.stringValue = value
-                        } catch (e: Exception) {
-                            // Do nothing
-                        }
+                    try {
+                        parameter.stringValue = data.value ?: ""
+                    } catch (e: Exception) {
+                        // Do nothing
                     }
                 }
             }
