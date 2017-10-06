@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.editor
 
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
+import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
@@ -86,7 +87,7 @@ class ResourcesTree()
     }
 
 
-    inner class RootItem() : ResourceItem("Resources") {
+    inner class RootItem() : ResourceItem(resources.file.nameWithoutExtension) {
 
         init {
             children.addAll(
@@ -102,7 +103,7 @@ class ResourcesTree()
         override fun isLeaf() = false
     }
 
-    inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo) {
+    inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo, "gameInfo.png") {
 
         init {
             resources.poses().forEach { name, pose ->
@@ -113,10 +114,11 @@ class ResourcesTree()
         override fun data(): GameInfo = resources.gameInfo
     }
 
-    open inner class DataItem(val name: String, val data: Any) : ResourceItem(name), ResourcesListener {
+    open inner class DataItem(val name: String, val data: Any, val graphicName: String = "unknown.png") : ResourceItem(name), ResourcesListener {
 
         init {
             Resources.instance.listeners.add(this)
+            graphic = ImageView(EditorAction.imageResource(graphicName))
         }
 
         override fun data() = data
@@ -140,9 +142,10 @@ class ResourcesTree()
         }
     }
 
-    abstract inner class TopLevelItem(label: String = "") : ResourceItem(label), ResourcesListener {
+    abstract inner class TopLevelItem(label: String = "", graphicName: String = "folder2.png") : ResourceItem(label), ResourcesListener {
         init {
             Resources.instance.listeners.add(this)
+            graphic = ImageView(EditorAction.imageResource(graphicName))
         }
 
         override fun isLeaf() = false
@@ -174,11 +177,11 @@ class ResourcesTree()
 
     inner class TextureItem(name: String, val texture: Texture)
 
-        : DataItem(name, texture) {
+        : DataItem(name, texture, "texture.png") {
 
         init {
             resources.poses().filter { it.value.texture === texture }.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
-                children.add(DataItem(name, pose))
+                children.add(DataItem(name, pose, "pose.png"))
             }
         }
 
@@ -194,7 +197,7 @@ class ResourcesTree()
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Pose) {
                 if (resource.texture === texture) {
-                    children.add(DataItem(name, resource))
+                    children.add(DataItem(name, resource, "pose.png"))
                     updateLabel()
                 }
             }
@@ -207,14 +210,14 @@ class ResourcesTree()
 
         init {
             resources.poses().map { it }.sortedBy { it.key }.forEach { (name, pose) ->
-                children.add(DataItem(name, pose))
+                children.add(DataItem(name, pose, "pose.png"))
             }
             updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Pose) {
-                children.add(DataItem(name, resource))
+                children.add(DataItem(name, resource, "pose.png"))
                 updateLabel()
             }
         }
@@ -227,14 +230,14 @@ class ResourcesTree()
 
         init {
             resources.costumes().map { it }.sortedBy { it.key }.forEach { (name, costume) ->
-                children.add(DataItem(name, costume))
+                children.add(DataItem(name, costume, "costume.png"))
             }
             value = toString()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Costume) {
-                children.add(DataItem(name, resource))
+                children.add(DataItem(name, resource, "costume.png"))
                 updateLabel()
             }
         }
@@ -247,14 +250,14 @@ class ResourcesTree()
 
         init {
             resources.layouts().map { it }.sortedBy { it.key }.forEach { (name, layout) ->
-                children.add(DataItem(name, layout))
+                children.add(DataItem(name, layout, "layout.png"))
             }
             updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Layout) {
-                children.add(DataItem(name, resource))
+                children.add(DataItem(name, resource, "layout.png"))
                 updateLabel()
             }
         }
@@ -268,14 +271,14 @@ class ResourcesTree()
 
         init {
             resources.inputs().map { it }.sortedBy { it.key }.forEach { (name, input) ->
-                children.add(DataItem(name, input))
+                children.add(DataItem(name, input, "input.png"))
             }
             updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is CompoundInput) {
-                children.add(DataItem(name, resource))
+                children.add(DataItem(name, resource, "input.png"))
                 updateLabel()
             }
         }
@@ -285,7 +288,7 @@ class ResourcesTree()
     }
 
     inner class ScenesDirectoryItem(label: String, val directory: File)
-        : TopLevelItem(label) {
+        : TopLevelItem(label, "folder.png") {
 
         init {
             val directoryLister = FileLister(onlyFiles = false)
@@ -313,7 +316,7 @@ class ResourcesTree()
 
     }
 
-    inner class SceneItem(val file: File) : DataItem(file.nameWithoutExtension, SceneStub(file)) {
+    inner class SceneItem(val file: File) : DataItem(file.nameWithoutExtension, SceneStub(file), "scene.png") {
         override fun resourceRemoved(resource: Any, name: String) {
             if (resource is File && resource == file) {
                 parent?.let {
