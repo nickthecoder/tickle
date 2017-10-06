@@ -12,7 +12,7 @@ import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.events.*
 
 class InputTab(name: String, input: CompoundInput)
-    : EditTaskTab(InputTask(name, input), "Input", name, input, graphicName = "input.png") {
+    : EditTaskTab(InputTask(name, input), name, input, graphicName = "input.png") {
 
     init {
         addDeleteButton { Resources.instance.deleteInput(name) }
@@ -94,9 +94,7 @@ class InputParameter : MultipleGroupParameter("input") {
     }
 
     fun from(input: Input) {
-
-        println("Input = ${input}")
-
+        
         if (input is KeyInput) {
             inputTypeP.value = keyInputP
             keyP.value = input.key

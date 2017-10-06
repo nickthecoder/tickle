@@ -15,12 +15,11 @@ import uk.co.nickthecoder.tickle.editor.EditorAction
 
 
 abstract class EditTab(
-        dataType: String,
         dataName: String,
         data: Any,
         graphicName: String? = null)
 
-    : EditorTab(dataType, dataName, data), ResourcesListener {
+    : EditorTab(dataName, data), ResourcesListener {
 
     protected val borderPane = BorderPane()
 
@@ -93,7 +92,7 @@ abstract class EditTab(
         val button = Button("Delete")
 
         button.setOnAction {
-            val alert = Alert(Alert.AlertType.CONFIRMATION, "Delete $dataType '$dataName' ?", ButtonType.YES, ButtonType.NO)
+            val alert = Alert(Alert.AlertType.CONFIRMATION, "Delete '$dataName' ?", ButtonType.YES, ButtonType.NO)
             alert.showAndWait()
 
             if (alert.result == ButtonType.YES) {

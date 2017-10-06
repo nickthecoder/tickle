@@ -15,7 +15,7 @@ import uk.co.nickthecoder.tickle.util.CostumeAttribute
 
 class CostumeTab(val name: String, val costume: Costume)
 
-    : EditTab("Costume", name, costume, graphicName = "costume.png") {
+    : EditTab(name, costume, graphicName = "costume.png") {
 
     val detailsTask = CostumeDetailsTask()
     val detailsForm = TaskForm(detailsTask)

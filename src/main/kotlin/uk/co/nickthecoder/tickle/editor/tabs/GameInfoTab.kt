@@ -13,8 +13,7 @@ import uk.co.nickthecoder.tickle.editor.util.XYiParameter
 class GameInfoTab()
     : EditTaskTab(
         GameInfoTask(Resources.instance.gameInfo),
-        "Game Info",
-        dataName = "",
+        dataName = "Game Info",
         data = Resources.instance.gameInfo,
         graphicName = "gameInfo.png") {
 
