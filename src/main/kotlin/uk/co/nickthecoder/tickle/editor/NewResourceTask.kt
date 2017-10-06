@@ -92,7 +92,7 @@ class NewResourceTask : AbstractTask() {
                     }
                 }
                 newScene.layoutName = layoutName
-                val save = JsonScene(newScene).save(file)
+                JsonScene(newScene).save(file)
                 Resources.instance.fireAdded(file, nameP.value)
             }
         }

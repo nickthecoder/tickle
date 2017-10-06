@@ -72,6 +72,7 @@ class Game(
             GLFW.glfwPollEvents()
 
             val now = System.nanoTime() / 1_000_000_000f
+            tickCount++
             tickDuration = now - seconds
             seconds = now
         }
@@ -130,6 +131,11 @@ class Game(
     companion object {
 
         lateinit var instance: Game
+
+        /**
+         * Increments by one for each frame.
+         */
+        var tickCount: Int = 0
 
     }
 

@@ -395,6 +395,18 @@ class JsonResources {
                 jinput.add("mouse", jmouseButtons)
             }
 
+            val jjoystickButtons = JsonArray()
+            addJoystickButtonInputs(input, jjoystickButtons)
+            if (!jjoystickButtons.isEmpty) {
+                jinput.add("joystick", jjoystickButtons)
+            }
+
+            val jjoystickAxis = JsonArray()
+            addJoystickAxisInputs(input, jjoystickAxis)
+            if (!jjoystickAxis.isEmpty) {
+                jinput.add("joystickAxis", jjoystickAxis)
+            }
+
             jinputs.add(jinput)
         }
         return jinputs
@@ -430,6 +442,39 @@ class JsonResources {
         }
     }
 
+    fun addJoystickButtonInputs(input: Input, toArray: JsonArray) {
+
+        if (input is JoystickButtonInput) {
+            val jjoystick = JsonObject()
+            jjoystick.add("joystickID", input.joystickID)
+            jjoystick.add("button", input.button.name)
+            toArray.add(jjoystick)
+            println("Created joybutton json object $jjoystick")
+
+        } else if (input is CompoundInput) {
+            input.inputs.forEach {
+                addJoystickButtonInputs(it, toArray)
+            }
+        }
+    }
+
+    fun addJoystickAxisInputs(input: Input, toArray: JsonArray) {
+
+        if (input is JoystickAxisInput) {
+            val jjoystick = JsonObject()
+            jjoystick.add("joystickID", input.joystickID)
+            jjoystick.add("axis", input.axis.name)
+            jjoystick.add("positive", input.positive)
+            jjoystick.add("threshold", input.threshold)
+            toArray.add(jjoystick)
+
+        } else if (input is CompoundInput) {
+            input.inputs.forEach {
+                addJoystickAxisInputs(it, toArray)
+            }
+        }
+    }
+
     fun loadInputs(jinputs: JsonArray) {
         jinputs.forEach { jele ->
             val jinput = jele.asObject()
@@ -455,6 +500,30 @@ class JsonResources {
                     val stateString = jmouse.getString("state", "PRESSED")
                     val state = ButtonState.valueOf(stateString)
                     input.add(MouseInput(button, state))
+                }
+            }
+
+            jinput.get("joystick")?.let {
+                val jbuttons = it.asArray()
+                jbuttons.forEach {
+                    val jbutton = it.asObject()
+                    val joystickID = jbutton.getInt("joystickID", 0)
+                    val buttonString = jbutton.getString("button", JoystickButton.A.name)
+                    val button = JoystickButton.valueOf(buttonString)
+                    input.add(JoystickButtonInput(joystickID, button))
+                }
+            }
+
+            jinput.get("joystickAxis")?.let {
+                val jaxes = it.asArray()
+                jaxes.forEach {
+                    val jaxis = it.asObject()
+                    val joystickID = jaxis.getInt("joystickID", 0)
+                    val axisString = jaxis.getString("axis", JoystickAxis.LEFT_X.name)
+                    val positive = jaxis.getBoolean("positive", true)
+                    val threshold = jaxis.getFloat("threshold", 0.5f)
+                    val axis = JoystickAxis.valueOf(axisString)
+                    input.add(JoystickAxisInput(joystickID, axis, positive, threshold))
                 }
             }
 

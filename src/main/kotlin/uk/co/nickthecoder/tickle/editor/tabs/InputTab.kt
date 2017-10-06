@@ -16,6 +16,7 @@ class InputTab(name: String, input: CompoundInput)
 
     init {
         addDeleteButton { Resources.instance.deleteInput(name) }
+        Joystick.debug()
     }
 }
 
@@ -82,10 +83,32 @@ class InputParameter : MultipleGroupParameter("input") {
     val mouseInputP = SimpleGroupParameter("mouseInput", label = "Mouse")
             .addParameters(mouseButtonP, mouseStateP)
 
+    // JOYSTICK BUTTON
+
+    val buttonJoystickIDP = IntParameter("button_joystickID", label = "JoystickID", minValue = 0, maxValue = Joystick.count - 1, value = 0)
+
+    val joystickButtonP = ChoiceParameter<JoystickButton>("joystickButton", value = JoystickButton.A).enumChoices(mixCase = true)
+
+    val joystickButtonInputP = SimpleGroupParameter("joystickButton")
+            .addParameters(buttonJoystickIDP, joystickButtonP)
+
+    // JOYSTICK AXIS
+
+    val axisJoystickIDP = IntParameter("axis_joystickID", label = "JoystickID", minValue = 0, maxValue = Joystick.count - 1, value = 0)
+
+    val joystickAxisP = ChoiceParameter<JoystickAxis>("joystickAxis", value = JoystickAxis.LEFT_X).enumChoices(mixCase = true)
+
+    val positiveP = BooleanParameter("positive", value = true)
+
+    val thresholdP = DoubleParameter("threshold", value = 0.5, minValue = 0.0, maxValue = 1.0)
+
+    val joystickAxisInputP = SimpleGroupParameter("joystickAxis")
+            .addParameters(axisJoystickIDP, joystickAxisP, positiveP, thresholdP)
+
     // One Of ...
 
     val inputTypeP = OneOfParameter("inputType", label = " ", value = keyInputP, choiceLabel = "Input Type")
-            .addParameters(keyInputP, mouseInputP).asPlain()
+            .addParameters(keyInputP, mouseInputP, joystickButtonInputP, joystickAxisInputP).asPlain()
 
     private var keyPressHandler: EventHandler<KeyEvent>? = null
 
@@ -94,7 +117,7 @@ class InputParameter : MultipleGroupParameter("input") {
     }
 
     fun from(input: Input) {
-        
+
         if (input is KeyInput) {
             inputTypeP.value = keyInputP
             keyP.value = input.key
@@ -104,15 +127,36 @@ class InputParameter : MultipleGroupParameter("input") {
             inputTypeP.value = mouseInputP
             mouseButtonP.value = input.mouseButton
             mouseStateP.value = input.state
+
+        } else if (input is JoystickButtonInput) {
+            inputTypeP.value = joystickButtonInputP
+            buttonJoystickIDP.value = input.joystickID
+            joystickButtonP.value = input.button
+
+        } else if (input is JoystickAxisInput) {
+            inputTypeP.value = joystickAxisInputP
+            axisJoystickIDP.value = input.joystickID
+            positiveP.value = input.positive
+            thresholdP.value = input.threshold.toDouble()
+
         }
     }
 
     fun toInput(): Input? {
+
         if (inputTypeP.value == keyInputP) {
             return KeyInput(keyP.value!!, keyStateP.value!!)
+
         } else if (inputTypeP.value == mouseInputP) {
             return MouseInput(mouseButtonP.value!!, mouseStateP.value!!)
+
+        } else if (inputTypeP.value == joystickButtonInputP) {
+            return JoystickButtonInput(buttonJoystickIDP.value!!, joystickButtonP.value!!)
+
+        } else if (inputTypeP.value == joystickAxisInputP) {
+            return JoystickAxisInput(axisJoystickIDP.value!!, joystickAxisP.value!!, positiveP.value!!, thresholdP.value!!.toFloat())
         }
+
         return null
     }
 
@@ -132,8 +176,17 @@ class InputParameter : MultipleGroupParameter("input") {
     override fun toString(): String {
         return if (inputTypeP.value == keyInputP) {
             "Key ${keyP.value ?: "<unknown>"}"
+
         } else if (inputTypeP.value == mouseInputP) {
             "Mouse button ${mouseButtonP.value ?: "<unknown>"}"
+
+        } else if (inputTypeP.value == joystickButtonInputP) {
+            "Joystick #${buttonJoystickIDP.value ?: "?"} ${joystickButtonP.value ?: "<unknown>"}"
+
+        } else if (inputTypeP.value == joystickAxisInputP) {
+            val plusMinus = if (positiveP.value == true) "+" else "-"
+            "Axis #${buttonJoystickIDP.value ?: "?"} $plusMinus ${joystickAxisP.value ?: "<unknown>"}"
+
         } else {
             "<new>"
         }

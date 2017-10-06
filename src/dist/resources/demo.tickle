@@ -208,6 +208,14 @@
                     "key": "Left",
                     "state": "PRESSED"
                 }
+            ],
+            "joystickAxis": [
+                {
+                    "joystickID": 0,
+                    "axis": "LEFT_X",
+                    "positive": false,
+                    "threshold": 0.5
+                }
             ]
         },
         {
@@ -216,6 +224,14 @@
                 {
                     "key": "Right",
                     "state": "PRESSED"
+                }
+            ],
+            "joystickAxis": [
+                {
+                    "joystickID": 0,
+                    "axis": "LEFT_X",
+                    "positive": true,
+                    "threshold": 0.5
                 }
             ]
         },
@@ -232,6 +248,12 @@
                     "button": 0,
                     "state": "PRESSED"
                 }
+            ],
+            "joystick": [
+                {
+                    "joystickID": 0,
+                    "button": "A"
+                }
             ]
         },
         {
@@ -240,6 +262,12 @@
                 {
                     "key": "Down",
                     "state": "PRESSED"
+                }
+            ],
+            "joystick": [
+                {
+                    "joystickID": 0,
+                    "button": "X"
                 }
             ]
         },
