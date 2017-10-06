@@ -4,12 +4,17 @@ import javafx.event.EventHandler
 import javafx.geometry.Side
 import javafx.scene.control.Button
 import javafx.scene.control.TabPane
+import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
+import uk.co.nickthecoder.paratask.gui.TaskPrompter
+import uk.co.nickthecoder.paratask.gui.defaultWhileFocusWithin
 import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
 import uk.co.nickthecoder.paratask.parameters.ColorParameter
+import uk.co.nickthecoder.paratask.parameters.FileParameter
+import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Resources
@@ -21,10 +26,11 @@ import uk.co.nickthecoder.tickle.editor.SceneStub
 import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.util.JsonScene
+import java.io.File
 
 class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
-    : EditTab("Texture", sceneName, sceneStub) {
+    : EditTab("Scene", sceneName, sceneStub) {
 
     val sceneResource = JsonScene(sceneStub.file).sceneResource
 
@@ -40,6 +46,12 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
     val testButton = Button("Test")
 
+    val copyButton = Button("Copy")
+
+    val renameButton = Button("Rename")
+
+    val deleteButton = Button("Delete")
+
     val sceneFile = sceneStub.file
 
     init {
@@ -50,17 +62,21 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
         minorTabs.add(editorTab)
         borderPane.center = minorTabs
 
-        // TODO Add a delete button (the following won't work!
-        // addDeleteButton { Resources.instance.deleteTexture(name) }
-        // TODO Add a RENAME button.
-        // fire Add and remove events
-
         editorTab.isSelected = true
 
         applyButton.text = "Save"
+        applyButton.defaultWhileFocusWithin(borderPane)
+        cancelButton.text = "Close"
+
         rightButtons.children.remove(okButton)
         rightButtons.children.add(0, testButton)
-        testButton.onAction = EventHandler { test() }
+        testButton.onAction = EventHandler { onTest() }
+
+        leftButtons.children.addAll(copyButton, renameButton, deleteButton)
+
+        copyButton.onAction = EventHandler { onCopy() }
+        deleteButton.onAction = EventHandler { onDelete() }
+        renameButton.onAction = EventHandler { onRename() }
     }
 
     override fun save(): Boolean {
@@ -72,8 +88,22 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
         return false
     }
 
-    fun test() {
-        MainWindow.instance?.startGame(sceneFile)
+    fun onTest() {
+        if (save()) {
+            MainWindow.instance?.startGame(sceneFile)
+        }
+    }
+
+    fun onCopy() {
+        TaskPrompter(CopySceneTask()).placeOnStage(Stage())
+    }
+
+    fun onDelete() {
+        TaskPrompter(DeleteSceneTask()).placeOnStage(Stage())
+    }
+
+    fun onRename() {
+        TaskPrompter(RenameSceneTask()).placeOnStage(Stage())
     }
 
     override fun removed() {
@@ -84,6 +114,55 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
     fun selectCostume(costume: Costume) {
         sceneEditor.selectCostume(costume)
     }
+
+
+    inner class CopySceneTask : AbstractTask(threaded = false) {
+
+        val newNameP = StringParameter("newName")
+        val directoryP = FileParameter("directory", mustExist = true, expectFile = false, value = sceneResource.file?.parentFile)
+
+        override val taskD = TaskDescription("copyScene")
+                .addParameters(newNameP, directoryP)
+
+        override fun run() {
+            val newFile = File(directoryP.value!!, "${newNameP.value}.scene")
+            sceneResource.file!!.copyTo(newFile)
+            Resources.instance.fireAdded(newFile, newFile.nameWithoutExtension)
+        }
+    }
+
+    inner class DeleteSceneTask : AbstractTask(threaded = false) {
+
+        override val taskD = TaskDescription("deleteScene", description = "Delete scene ${sceneName}. Are you sure?")
+
+        override fun run() {
+            val oldFile = sceneResource.file!!
+            oldFile.delete()
+            Resources.instance.fireRemoved(oldFile, oldFile.nameWithoutExtension)
+            close()
+        }
+    }
+
+    inner class RenameSceneTask() : AbstractTask(threaded = false) {
+        val newNameP = StringParameter("newName")
+        val directoryP = FileParameter("directory", mustExist = true, expectFile = false, value = sceneResource.file?.parentFile)
+
+        override val taskD = TaskDescription("renameScene")
+                .addParameters(newNameP, directoryP)
+
+        override fun run() {
+            val oldFile = sceneResource.file!!
+            val newFile = File(directoryP.value!!, "${newNameP.value}.scene")
+
+            oldFile.renameTo(newFile)
+            Resources.instance.fireRemoved(oldFile, oldFile.nameWithoutExtension)
+            Resources.instance.fireAdded(newFile, newFile.nameWithoutExtension)
+            sceneResource.file = newFile
+            MainWindow.instance?.openTab(newFile.nameWithoutExtension, SceneStub(newFile))
+            close()
+        }
+    }
+
 }
 
 

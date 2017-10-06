@@ -43,24 +43,26 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
 
         try {
             sceneActor.costume()?.let { costume ->
-                val roleClass = Class.forName(costume.roleString)
+                if (costume.roleString.isNotBlank()) {
+                    val roleClass = Class.forName(costume.roleString)
 
-                Attributes.createParameters(roleClass, Attribute::class).forEach { parameter ->
-                    attributesP.add(parameter)
-                    val attributeName = Attributes.attributeName(parameter)
-                    sceneActor.attributes.map[attributeName]?.let { value ->
-                        try {
-                            parameter.stringValue = value
-                        } catch (e: Exception) {
-                            // Do nothing
+                    Attributes.createParameters(roleClass, Attribute::class).forEach { parameter ->
+                        attributesP.add(parameter)
+                        val attributeName = Attributes.attributeName(parameter)
+                        sceneActor.attributes.map[attributeName]?.let { value ->
+                            try {
+                                parameter.stringValue = value
+                            } catch (e: Exception) {
+                                // Do nothing
+                            }
                         }
                     }
                 }
             }
 
         } catch (e: Exception) {
-            System.err.println("Problem creating attribute parameters for ${sceneActor.costumeName}")
-            Thread.dumpStack()
+            System.err.println("Problem creating attribute parameters for ${sceneActor.costumeName}.")
+            e.printStackTrace()
         }
 
         sceneResource.listeners.add(this)

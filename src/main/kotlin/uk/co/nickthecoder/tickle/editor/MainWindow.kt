@@ -86,7 +86,7 @@ class MainWindow(val stage: Stage) {
     }
 
     fun findTab(data: Any): EditorTab? {
-        return tabPane.tabs.firstOrNull { it.data === data }
+        return tabPane.tabs.firstOrNull { it.data == data }
     }
 
     fun save() {

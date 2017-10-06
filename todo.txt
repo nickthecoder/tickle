@@ -29,8 +29,7 @@ BUGS
 New Features
 ============
 
-Change Ok, Apply, Cancel to Save, Cancel
-Duplicate Scene
+Copy Scene
 Delete Scene
 Rename Scene
 

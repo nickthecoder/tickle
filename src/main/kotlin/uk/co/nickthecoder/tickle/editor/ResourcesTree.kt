@@ -294,7 +294,7 @@ class ResourcesTree()
             }
             val sceneLister = FileLister(extensions = listOf("scene"))
             sceneLister.listFiles(directory).forEach { file ->
-                children.add(DataItem(file.nameWithoutExtension, SceneStub(file)))
+                children.add(SceneItem(file))
             }
             isExpanded = true
         }
@@ -304,7 +304,7 @@ class ResourcesTree()
                 if (resource.isDirectory) {
                     children.add(ScenesDirectoryItem(resource.name, resource))
                 } else if (resource.extension == "scene") {
-                    children.add(DataItem(resource.nameWithoutExtension, SceneStub(resource)))
+                    children.add(SceneItem(resource))
                 }
             }
         }
@@ -313,6 +313,24 @@ class ResourcesTree()
 
     }
 
+    inner class SceneItem(val file: File) : DataItem(file.nameWithoutExtension, SceneStub(file)) {
+        override fun resourceRemoved(resource: Any, name: String) {
+            if (resource is File && resource == file) {
+                parent?.let {
+                    (it as ResourceItem).remove(this)
+                }
+            } else {
+                super.resourceRemoved(resource, name)
+            }
+        }
+    }
 }
 
-class SceneStub(val file: File)
+class SceneStub(val file: File) {
+    override fun equals(other: Any?): Boolean {
+        if (other is SceneStub) {
+            return file == other.file
+        }
+        return false
+    }
+}

@@ -4,10 +4,10 @@ import javafx.event.EventHandler
 import javafx.scene.control.Alert
 import javafx.scene.control.Button
 import javafx.scene.control.ButtonType
-import javafx.scene.control.Label
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
 import javafx.scene.layout.HBox
+import uk.co.nickthecoder.paratask.gui.defaultWhileFocusWithin
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.ResourcesListener
 
@@ -54,12 +54,11 @@ abstract class EditTab(
 
         with(okButton) {
             onAction = EventHandler { onOk() }
-            isDefaultButton = true
+            defaultWhileFocusWithin(borderPane)
         }
 
 
         with(leftButtons) {
-            children.addAll(Label("$dataType : '$dataName'"))
             styleClass.addAll("buttons", "left")
         }
 
