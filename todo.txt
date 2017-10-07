@@ -45,15 +45,17 @@ SceneEditor
 		Position Vector2f : @Attribute( AttributeType.RELATIVE_POSITION )
 		Position Vector2f : @Attribute( AttributeType.ABSOLUTE_POSITION )
 
-		Velocity   Polar (new!) @Attribute( AttributeType.POLAR, scale = xxx )
-		VelocityXY Vector2f     @Attribute( AttributeType.RELATIVE_POSITION, scale = xxx)
+		Velocity Polar        @Attribute( AttributeType.POLAR, scale = xxx )
+		Velocity Vector2f     @Attribute( AttributeType.RELATIVE_POSITION, scale = xxx)
 			Or should these be combined, backed by X,Y, but with degrees and speed getters?
 
 		Note. Angle has the "vector" method, so: Polar.vector() = angle.vector().mul(magnitude)
 			to get to a Vector2f
 
-		When used for projectile factory, I want two different spreads - either a "box" shape (XY), or a
-			cone (angle, magniture)
+	It would also be nice to have an angle, which is centered about another drag point
+		Can then use that as the position and angle of generated objects.
+
+	Add "tooltip" to drag handles when mouse is over them.
 
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).

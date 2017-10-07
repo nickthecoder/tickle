@@ -156,8 +156,6 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
             val colors = listOf(Color.LIGHTGRAY, Color.DARKGRAY, Color.BLACK, Color.WHITE)
             var colorIndex = 0
 
-            var isLight = true
-
             stack.addEventHandler(MouseEvent.MOUSE_PRESSED) { event ->
                 if (event.button == MouseButton.SECONDARY) {
                     colorIndex++

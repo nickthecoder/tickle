@@ -10,7 +10,7 @@ class TurnInput<T>(
         left: String = "left",
         right: String = "right")
 
-    : Turn<T>(heading, 0.0) {
+    : Turn(heading, Angle()) {
 
     val ts = turningSpeed
 
@@ -20,9 +20,9 @@ class TurnInput<T>(
     override fun act(): Boolean {
 
         if (left.isPressed()) {
-            turningSpeedDegrees = ts
+            turningSpeed.degrees = ts
         } else if (right.isPressed()) {
-            turningSpeedDegrees = -ts
+            turningSpeed.degrees = -ts
         }
 
         return super.act()

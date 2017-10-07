@@ -1,21 +1,21 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
 import uk.co.nickthecoder.tickle.action.Action
-import uk.co.nickthecoder.tickle.util.Scalar
+import uk.co.nickthecoder.tickle.util.Polar2f
 
 open class LimitSpeed(
-        val speed: Scalar,
+        val velocity: Polar2f,
         var maxSpeed: Float = 10f,
         var minSpeed: Float = 0f)
 
     : Action {
 
     override fun act(): Boolean {
-        if (speed.value < minSpeed) {
-            speed.value = minSpeed
+        if (velocity.magnitude < minSpeed) {
+            velocity.magnitude = minSpeed
         }
-        if (speed.value > maxSpeed) {
-            speed.value = maxSpeed
+        if (velocity.magnitude > maxSpeed) {
+            velocity.magnitude = maxSpeed
         }
         return false
     }

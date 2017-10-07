@@ -26,8 +26,6 @@ class StageLayer(
 
     override fun drawContent() {
 
-        val gc = canvas.graphicsContext2D
-
         sceneStage.sceneActors.forEach { sceneActor ->
             drawActor( sceneActor )
         }

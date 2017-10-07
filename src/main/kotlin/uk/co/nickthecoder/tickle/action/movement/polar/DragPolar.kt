@@ -1,10 +1,10 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
 import uk.co.nickthecoder.tickle.action.Action
-import uk.co.nickthecoder.tickle.util.Scalar
+import uk.co.nickthecoder.tickle.util.Polar2f
 
 open class DragPolar(
-        val speed: Scalar,
+        val velocity: Polar2f,
         drag: Float)
 
     : Action {
@@ -18,7 +18,7 @@ open class DragPolar(
         }
 
     override fun act(): Boolean {
-        speed.value *= oneMinusDrag
+        velocity.magnitude *= oneMinusDrag
         return false
     }
 

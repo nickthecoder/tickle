@@ -3,10 +3,10 @@ package uk.co.nickthecoder.tickle.action.movement.polar
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.events.Input
-import uk.co.nickthecoder.tickle.util.Scalar
+import uk.co.nickthecoder.tickle.util.Polar2f
 
 open class AcceleratePolarInput(
-        val speed: Scalar,
+        val velocatiry: Polar2f,
         var acceleration: Float,
         var deceleration: Float = -acceleration,
         var autoSlow: Float = 0f,
@@ -20,12 +20,12 @@ open class AcceleratePolarInput(
 
     override fun act(): Boolean {
         if (accelerate.isPressed()) {
-            speed.value += acceleration
+            velocatiry.magnitude += acceleration
         } else if (decelerate.isPressed()) {
-            speed.value += deceleration
+            velocatiry.magnitude += deceleration
         } else {
             // Automatically slow down (gradually), when no keys are pressed
-            speed.value -= autoSlow
+            velocatiry.magnitude -= autoSlow
         }
         return false
     }
