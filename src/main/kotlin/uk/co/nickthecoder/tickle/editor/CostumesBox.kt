@@ -33,7 +33,7 @@ class CostumesBox {
                     } else {
                         tooltip = Tooltip(costumeName)
                     }
-                    setOnAction { MainWindow.instance?.selectCostumeName(costumeName) }
+                    setOnAction { MainWindow.instance.selectCostumeName(costumeName) }
                 }
 
                 flowPane.children.add(button)

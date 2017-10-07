@@ -98,7 +98,7 @@ class NewResourceTask : AbstractTask() {
         }
 
         if (data != null) {
-            MainWindow.instance?.openTab(nameP.value, data)
+            MainWindow.instance.openTab(nameP.value, data)
         }
     }
 }

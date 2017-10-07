@@ -101,7 +101,7 @@ class SceneEditor(val sceneResource: SceneResource)
     }
 
     fun updateAttributesBox() {
-        MainWindow.instance?.let { mainWindow ->
+        MainWindow.instance.let { mainWindow ->
             val latest = selection.latest()
             if (latest == null) {
                 mainWindow.propertiesPane.clear()

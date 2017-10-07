@@ -18,7 +18,7 @@ class Grow(
 
 
     override fun update(t: Float) {
-        actor.scale = initialScale * (1 - t) + finalScale * t
+        actor.scale = lerp(initialScale, finalScale, t)
     }
 
 }

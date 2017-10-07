@@ -23,7 +23,10 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
 
     val titleP = StringParameter("title", value = gameInfo.title)
     val windowSizeP = XYiParameter("windowSize")
-    val initialSceneP = StringParameter("initialScene", value = gameInfo.initialSceneName)
+
+    val initialSceneP = StringParameter("initialScene", value = Resources.instance.scenePathToString(gameInfo.initialScenePath))
+    val testSceneP = StringParameter("testScene", value = Resources.instance.scenePathToString(gameInfo.testScenePath))
+
     val resizableP = BooleanParameter("resizable", value = gameInfo.resizable)
     val producerP = ChoiceParameter<Class<*>>("producer", value = NoProducer::class.java)
 
@@ -37,7 +40,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
 
 
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, producerP, packagesGroupP)
+            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, packagesGroupP)
 
     init {
         windowSizeP.x = gameInfo.width
@@ -59,7 +62,8 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
         gameInfo.title = titleP.value
         gameInfo.width = windowSizeP.x!!
         gameInfo.height = windowSizeP.y!!
-        gameInfo.initialSceneName = initialSceneP.value
+        gameInfo.initialScenePath = Resources.instance.scenePathFromString(initialSceneP.value)
+        gameInfo.testScenePath = Resources.instance.scenePathFromString(testSceneP.value)
         gameInfo.resizable = resizableP.value!!
         gameInfo.producerString = producerP.value!!.name
     }

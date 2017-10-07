@@ -24,4 +24,8 @@ interface Action {
         return ForeverAction(this)
     }
 
+    fun repeat(times: Int): RepeatAction {
+        return RepeatAction(this, times)
+    }
+
 }

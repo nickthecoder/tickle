@@ -28,17 +28,29 @@ class Resources {
 
 
     val sceneDirectory: File
-        get() = File(file.parentFile, "scenes")
-
-    val initialSceneFile: File
-        get() = File(sceneDirectory, "${gameInfo.initialSceneName}.scene")
+        get() = File(file.parentFile, "scenes").absoluteFile
 
     val texturesDirectory: File
-        get() = File(file.parentFile, "textures")
-
+        get() = File(file.parentFile, "textures").absoluteFile
 
     val listeners = mutableListOf<ResourcesListener>()
 
+    fun scenePathFromString(path: String): File {
+        return sceneDirectory.resolve(path + ".scene")
+    }
+
+    fun scenePathToString(file: File): String {
+        val path = if (file.isAbsolute) {
+            file.relativeToOrSelf(sceneDirectory).path
+        } else {
+            file.path
+        }
+        if (path.endsWith(".scene")) {
+            return path.substring(0, path.length - 6)
+        } else {
+            return path
+        }
+    }
 
     fun fireAdded(resource: Any, name: String) {
         listeners.toList().forEach {
@@ -252,8 +264,8 @@ class Resources {
 
     companion object {
         /**
-         * A convience, so that game scripts can easily get access to the resources.
+         * A convenience, so that game scripts can easily get access to the resources.
          */
-        var instance = Resources()
+        lateinit var instance: Resources
     }
 }

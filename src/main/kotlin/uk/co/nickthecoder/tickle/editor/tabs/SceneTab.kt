@@ -10,7 +10,6 @@ import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
-import uk.co.nickthecoder.paratask.gui.defaultWhileFocusWithin
 import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
 import uk.co.nickthecoder.paratask.parameters.ColorParameter
 import uk.co.nickthecoder.paratask.parameters.FileParameter
@@ -63,11 +62,9 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
         editorTab.isSelected = true
 
-        applyButton.text = "Save"
-        applyButton.defaultWhileFocusWithin(borderPane)
         cancelButton.text = "Close"
-
         rightButtons.children.remove(okButton)
+        rightButtons.children.remove(applyButton)
         rightButtons.children.add(0, testButton)
         testButton.onAction = EventHandler { onTest() }
 
@@ -88,8 +85,9 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
     }
 
     fun onTest() {
+        Resources.instance.gameInfo.testScenePath = sceneResource.file!!
         if (save()) {
-            MainWindow.instance?.startGame(sceneFile)
+            MainWindow.instance.startGame(sceneFile)
         }
     }
 
@@ -157,7 +155,7 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
             Resources.instance.fireRemoved(oldFile, oldFile.nameWithoutExtension)
             Resources.instance.fireAdded(newFile, newFile.nameWithoutExtension)
             sceneResource.file = newFile
-            MainWindow.instance?.openTab(newFile.nameWithoutExtension, SceneStub(newFile))
+            MainWindow.instance.openTab(newFile.nameWithoutExtension, SceneStub(newFile))
             close()
         }
     }

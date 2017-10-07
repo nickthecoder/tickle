@@ -44,6 +44,7 @@ fun guessTickleFile(): File? {
     return resourceDir.listFiles().filter { it.extension == "tickle" }.sortedBy { it.lastModified() }.lastOrNull()
 }
 
+
 fun startGame(resourcesFile: File, sceneFile: File? = null) {
 
     // Setup an error callback.
@@ -63,5 +64,5 @@ fun startGame(resourcesFile: File, sceneFile: File? = null) {
         window.change(title, width, height, resizable)
     }
 
-    Game(window, resources).run(sceneFile ?: resources.initialSceneFile)
+    Game(window, resources).run(sceneFile ?: resources.gameInfo.initialScenePath)
 }

@@ -61,7 +61,7 @@ class Attributes {
     fun applyToObject(obj: Any) {
         val klass = obj.javaClass
 
-        map.forEach { name, data ->
+        map.toMap().forEach { name, data ->
             updateAttribute(obj, klass, name, data.value)
         }
     }
@@ -76,7 +76,8 @@ class Attributes {
                 val setterName = "set" + name.capitalize()
                 val setter = klass.methods.filter { it.name == setterName && it.parameterCount == 1 }.firstOrNull()
                 if (setter == null) {
-                    System.err.println("ERROR. Could not find attribute $name in $obj")
+                    System.err.println("Warning. Could not find attribute $name in $obj. Removed.")
+                    map.remove(name)
                 } else {
                     val type = setter.parameterTypes[0]
                     setter.invoke(obj, fromString(value, type))

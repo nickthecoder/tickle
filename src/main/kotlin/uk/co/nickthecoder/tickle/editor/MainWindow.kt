@@ -72,6 +72,7 @@ class MainWindow(val stage: Stage) {
             add(EditorActions.RESOURCES_SAVE.createButton(shortcuts) { save() })
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
             add(EditorActions.RUN.createButton(shortcuts) { startGame() })
+            add(EditorActions.TEST.createButton(shortcuts) { testGame() })
         }
 
         with(shortcuts) {
@@ -82,7 +83,6 @@ class MainWindow(val stage: Stage) {
 
         stage.show()
         instance = this
-
     }
 
     fun findTab(data: Any): EditorTab? {
@@ -90,6 +90,13 @@ class MainWindow(val stage: Stage) {
     }
 
     fun save() {
+        tabPane.tabs.forEach { tab ->
+            if (tab is EditTab) {
+                if (!tab.save()) {
+                    tab.isSelected = true
+                }
+            }
+        }
         JsonResources(Resources.instance).save(Resources.instance.file)
     }
 
@@ -99,7 +106,7 @@ class MainWindow(val stage: Stage) {
 
     var running: Boolean = false
 
-    fun startGame(sceneFile: File = Resources.instance.initialSceneFile) {
+    fun startGame(sceneFile: File = Resources.instance.gameInfo.initialScenePath) {
         if (running) {
             Alert(Alert.AlertType.INFORMATION, "It seems that a game is already running.\nYou can only run one instance!").showAndWait()
         } else {
@@ -111,6 +118,10 @@ class MainWindow(val stage: Stage) {
                 running = false
             }.start()
         }
+    }
+
+    fun testGame() {
+        startGame(Resources.instance.gameInfo.testScenePath)
     }
 
     fun openTab(dataName: String, data: Any) {
@@ -163,7 +174,7 @@ class MainWindow(val stage: Stage) {
     }
 
     companion object {
-        var instance: MainWindow? = null
+        lateinit var instance: MainWindow
     }
 
 }

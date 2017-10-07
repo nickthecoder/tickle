@@ -3,13 +3,6 @@ package uk.co.nickthecoder.tickle.editor
 import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.control.TitledPane
-import uk.co.nickthecoder.paratask.parameters.DoubleParameter
-import uk.co.nickthecoder.paratask.parameters.SimpleGroupParameter
-import uk.co.nickthecoder.paratask.parameters.addParameters
-import uk.co.nickthecoder.paratask.parameters.asVertical
-import uk.co.nickthecoder.tickle.SceneActor
-import uk.co.nickthecoder.tickle.SceneListerner
-import uk.co.nickthecoder.tickle.SceneResource
 
 class PropertiesPane : TitledPane() {
 
@@ -21,7 +14,7 @@ class PropertiesPane : TitledPane() {
         text = "<none>"
         content = noContent
 
-        MainWindow.instance?.accordion?.expandedPane = MainWindow.instance?.costumesPane
+        MainWindow.instance.accordion.expandedPane = MainWindow.instance.costumesPane
     }
 
     fun show(ppc: PropertiesPaneContent) {
@@ -32,7 +25,7 @@ class PropertiesPane : TitledPane() {
         propertiesPaneContent = ppc
         content = ppc.build()
 
-        MainWindow.instance?.accordion?.expandedPane = this
+        MainWindow.instance.accordion.expandedPane = this
     }
 }
 

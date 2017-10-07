@@ -44,6 +44,16 @@ class Costume() {
         return event
     }
 
+    fun roleClass(): Class<*>? {
+        if (roleString.isBlank()) return null
+
+        try {
+            return Class.forName(roleString)
+        } catch (e: Exception) {
+            System.err.println("Warning. Costume '${Resources.instance.findCostumeName(this)}' couldn't create role '$roleString'. $e")
+            return null
+        }
+    }
 
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }

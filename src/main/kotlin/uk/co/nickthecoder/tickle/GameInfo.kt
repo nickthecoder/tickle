@@ -2,13 +2,15 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.demo.NoProducer
 import uk.co.nickthecoder.tickle.demo.Producer
+import java.io.File
 
 class GameInfo(
         var title: String,
         var width: Int,
         var height: Int,
         var resizable: Boolean,
-        var initialSceneName: String = "splash",
+        var initialScenePath: File = File("splash"),
+        var testScenePath: File = File(""),
         var producerString: String = NoProducer::class.java.name,
         val packages: MutableList<String> = mutableListOf("uk.co.nickthecoder.tickle")) {
 

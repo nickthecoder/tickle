@@ -4,6 +4,7 @@ import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
+import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.SceneStage
@@ -25,7 +26,7 @@ class JsonScene {
     }
 
     fun save(file: File) {
-        sceneResource.file = file.absoluteFile
+        sceneResource.file = Resources.instance.sceneDirectory.resolve(file)
 
         val jroot = JsonObject()
         jroot.add("director", sceneResource.directorString)
@@ -43,13 +44,15 @@ class JsonScene {
     }
 
     fun load(file: File) {
-        sceneResource.file = file
+        sceneResource.file = Resources.instance.sceneDirectory.resolve(file)
+
         val jroot = Json.parse(InputStreamReader(FileInputStream(file))).asObject()
 
         sceneResource.directorString = jroot.getString("director", NoDirector::class.java.name)
         sceneResource.layoutName = jroot.getString("layout", "default")
         sceneResource.background = Color.fromString(jroot.getString("background", "#FFFFFF"))
 
+        sceneResource.layoutName
         jroot.get("stages")?.let {
             val jstages = it.asArray()
             jstages.forEach {

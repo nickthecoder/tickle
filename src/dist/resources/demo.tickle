@@ -5,6 +5,7 @@
         "height": 600,
         "resizable": true,
         "initialScene": "level01",
+        "testScene": "none",
         "producer": "uk.co.nickthecoder.tickle.demo.Demo",
         "packages": [
             "uk.co.nickthecoder.tickle"
@@ -159,12 +160,6 @@
                         "coin"
                     ]
                 }
-            ],
-            "attributes": [
-                {
-                    "name": "value",
-                    "value": "10"
-                }
             ]
         },
         {
@@ -189,6 +184,19 @@
         {
             "name": "spark",
             "role": "",
+            "canRotate": false,
+            "events": [
+                {
+                    "name": "default",
+                    "poses": [
+                        "spark"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "shootingStar",
+            "role": "uk.co.nickthecoder.tickle.demo.ShootingStar",
             "canRotate": false,
             "events": [
                 {

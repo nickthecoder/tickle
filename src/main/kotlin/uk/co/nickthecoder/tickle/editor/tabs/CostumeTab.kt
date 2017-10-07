@@ -73,7 +73,7 @@ class CostumeTab(val name: String, val costume: Costume)
             ClassLister.setNullableChoices(roleClassP, Role::class.java)
 
             nameP.value = name
-            roleClassP.value = if (costume.roleString.isBlank()) null else Class.forName(costume.roleString)
+            roleClassP.value = costume.roleClass()
             canRotateP.value = costume.canRotate
 
             updateAttributes()
@@ -98,7 +98,7 @@ class CostumeTab(val name: String, val costume: Costume)
             }
             attributesP.hidden = roleClassP.value == null
 
-            costume.attributes.data().forEach{ data ->
+            costume.attributes.data().forEach { data ->
                 data.costumeParameter?.let { it ->
                     val parameter = it.copyBounded()
                     attributesP.add(parameter)
@@ -131,7 +131,9 @@ class CostumeTab(val name: String, val costume: Costume)
                 event.poses.forEach { pose ->
                     val inner = eventsP.newValue()
                     inner.eventNameP.value = eventName
+                    println("Setting ${inner.poseP} to ${pose}")
                     inner.poseP.value = pose
+                    println("Setting ${inner.poseP}.value")
                     inner.typeP.value = inner.poseP
                 }
             }

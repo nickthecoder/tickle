@@ -10,24 +10,42 @@ abstract class AnimationAction(
     : Action {
 
     protected var startTime: Float = -1f
+    protected var previousT: Float = 0f
 
     override fun begin(): Boolean {
+        previousT = 0f
         startTime = Game.instance.seconds
         storeInitialValue()
-        return seconds <= 0f
+
+        if (seconds <= 0f) {
+            update(1f)
+            ended()
+            return true
+        }
+
+        return false
     }
 
     override fun act(): Boolean {
         val now = Game.instance.seconds
-        val t = Math.min(1.0f, (now - startTime) / seconds)
+        val s = Math.min(1.0f, (now - startTime) / seconds)
 
-        update(ease.ease(t))
+        val t = ease.ease(s)
+        update(t)
+        previousT = t
 
-        if (t == 1f) {
+        if (s == 1f) {
             ended()
+            return true
         }
-        return t == 1f
+        return false
     }
+
+    fun delta(t: Float) = t - previousT
+
+    fun interval(t: Float) = delta(t) * seconds
+
+    fun elapsed(t: Float) = t * seconds
 
     abstract protected fun storeInitialValue()
 
@@ -37,6 +55,7 @@ abstract class AnimationAction(
 
     companion object {
         fun lerp(from: Float, to: Float, t: Float) = (1 - t) * from + t * to
+        fun lerp(from: Double, to: Double, t: Float) = (1 - t) * from + t * to
     }
 
 }

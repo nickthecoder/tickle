@@ -1,0 +1,24 @@
+{
+    "director": "uk.co.nickthecoder.tickle.demo.Play",
+    "background": "#ff6666",
+    "layout": "default",
+    "stages": [
+        {
+            "name": "main",
+            "actors": [
+                {
+                    "costume": "bee",
+                    "x": 423,
+                    "y": 382,
+                    "direction": 0
+                },
+                {
+                    "costume": "shootingStar",
+                    "x": 228,
+                    "y": 260,
+                    "direction": 0
+                }
+            ]
+        }
+    ]
+}

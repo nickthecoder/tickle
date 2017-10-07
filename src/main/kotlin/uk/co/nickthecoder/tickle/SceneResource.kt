@@ -14,7 +14,13 @@ class SceneResource {
 
     var directorString: String = NoDirector::class.java.name
 
-    var layoutName: String = "default"
+    var layoutName: String = ""
+        set(v) {
+            if (field != v) {
+                field = v
+                updateLayout()
+            }
+        }
 
     var background: Color = Color.BLACK
 
@@ -49,6 +55,36 @@ class SceneResource {
         }
 
         return scene
+    }
+
+    /**
+     * Called when the layout has changed. Attempt to move all of the actors from like-names stages, but any
+     * unmatches stage names will result in actors being put in a "random" stage.
+     */
+    private fun updateLayout() {
+        println("Updating the stages for a sceneResource")
+
+        val oldStages = sceneStages.toMap()
+        sceneStages.clear()
+
+        val layout = Resources.instance.layout(layoutName)
+        layout.layoutStages.keys.forEach { stageName ->
+            sceneStages[stageName] = SceneStage()
+            println("Created stage ${stageName}")
+        }
+
+        oldStages.forEach { stageName, oldStage ->
+            if (sceneStages.containsKey(stageName)) {
+                sceneStages[stageName]!!.sceneActors.addAll(oldStage.sceneActors)
+            } else {
+                if (oldStage.sceneActors.isNotEmpty()) {
+                    System.err.println("Warning. Layout ${layoutName} doesn't have a stage called '${stageName}'. Placing actors in another stage.")
+                    sceneStages.values.firstOrNull()?.let { firstStage ->
+                        firstStage.sceneActors.addAll(oldStage.sceneActors)
+                    }
+                }
+            }
+        }
     }
 
     fun fireChange() {

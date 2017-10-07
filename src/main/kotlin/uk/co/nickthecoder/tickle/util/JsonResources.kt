@@ -89,7 +89,10 @@ class JsonResources {
             jinfo.add("width", width)
             jinfo.add("height", height)
             jinfo.add("resizable", resizable)
-            jinfo.add("initialScene", initialSceneName)
+
+            jinfo.add("initialScene", resources.scenePathToString(initialScenePath))
+            jinfo.add("testScene", resources.scenePathToString(testScenePath))
+
             jinfo.add("producer", producerString)
             val jpackages = JsonArray()
             packages.forEach {
@@ -106,7 +109,10 @@ class JsonResources {
             width = jinfo.getInt("width", 800)
             height = jinfo.getInt("height", 600)
             resizable = jinfo.getBoolean("resizable", true)
-            initialSceneName = jinfo.getString("initialScene", "splash")
+
+            initialScenePath = resources.scenePathFromString(jinfo.getString("initialScene", "splash"))
+            testScenePath = resources.scenePathFromString(jinfo.getString("testScene", "splash"))
+
             producerString = jinfo.getString("producer", NoProducer::javaClass.name)
             jinfo.get("packages")?.let {
                 val newPackages = it.asArray()
@@ -543,6 +549,5 @@ class JsonResources {
     fun fromPath(path: String): File {
         return resources.resourceDirectory.resolve(path).absoluteFile
     }
-
 
 }

@@ -110,7 +110,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         val trName = Resources.instance.findTextureName(pose.texture)
         if (trName != null) {
             val tab = TextureTab(trName, pose.texture)
-            MainWindow.instance?.tabPane?.add(tab)
+            MainWindow.instance.tabPane.add(tab)
             tab.isSelected = true
         }
     }
@@ -129,7 +129,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         val costume = Costume()
         costume.addPose("default", pose)
         Resources.instance.addCostume(poseName, costume)
-        MainWindow.instance?.openTab(poseName, costume)
+        MainWindow.instance.openTab(poseName, costume)
     }
 
 

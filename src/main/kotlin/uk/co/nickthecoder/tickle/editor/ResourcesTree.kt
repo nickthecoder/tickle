@@ -52,7 +52,7 @@ class ResourcesTree()
 
             val data = item.data()
 
-            MainWindow.instance?.openTab(item.value, data)
+            MainWindow.instance.openTab(item.value, data)
 
         } else {
             item.isExpanded = !item.isExpanded
@@ -117,7 +117,7 @@ class ResourcesTree()
     open inner class DataItem(val name: String, val data: Any, val graphicName: String = "unknown.png") : ResourceItem(name), ResourcesListener {
 
         init {
-            Resources.instance.listeners.add(this)
+            resources.listeners.add(this)
             graphic = ImageView(EditorAction.imageResource(graphicName))
         }
 
@@ -138,20 +138,20 @@ class ResourcesTree()
         }
 
         override fun removed() {
-            Resources.instance.listeners.remove(this)
+            resources.listeners.remove(this)
         }
     }
 
     abstract inner class TopLevelItem(label: String = "", graphicName: String = "folder2.png") : ResourceItem(label), ResourcesListener {
         init {
-            Resources.instance.listeners.add(this)
+            resources.listeners.add(this)
             graphic = ImageView(EditorAction.imageResource(graphicName))
         }
 
         override fun isLeaf() = false
 
         override fun removed() {
-            Resources.instance.listeners.remove(this)
+            resources.listeners.remove(this)
         }
     }
 
