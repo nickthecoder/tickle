@@ -4,7 +4,7 @@ import uk.co.nickthecoder.tickle.ActionRole
 import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.action.animation.Grow
 import uk.co.nickthecoder.tickle.action.movement.polar.MovePolar
-import uk.co.nickthecoder.tickle.action.movement.polar.Turn
+import uk.co.nickthecoder.tickle.action.movement.polar.Circle
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Attribute
@@ -37,7 +37,7 @@ class Coin() : ActionRole() {
         heading.degrees = initialHeading
 
         val growShrink = (Grow(actor, 1f, 2f).then(Grow(actor, 1f, 1f)).forever())
-        val circle = Turn(heading, turningSpeed).and(MovePolar(actor.position, velocity))
+        val circle = Circle(heading, turningSpeed).and(MovePolar(actor.position, velocity))
         action = growShrink.and(circle)
 
         if (value < 10) {

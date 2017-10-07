@@ -1,18 +1,21 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
 import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.util.Angle
 
 class GradualTurnInput(
-        heading: Angle,
-        var accelerationDegrees: Double,
-        var maxTurningSpeedDegrees: Double,
+        val heading: Angle,
+        var acceleration: Angle,
+        var maxSpeed: Angle,
         var drag: Double = 0.0,
         left: String = "left",
         right: String = "right")
 
-    : Turn(heading, Angle()) {
+    : Action {
+
+    val turningSpeed = Angle()
 
     val left = Resources.instance.optionalInput(left) ?: Input.dummyInput
     val right = Resources.instance.optionalInput(right) ?: Input.dummyInput
@@ -20,14 +23,16 @@ class GradualTurnInput(
     override fun act(): Boolean {
 
         if (left.isPressed()) {
-            turningSpeed.degrees += accelerationDegrees
+            turningSpeed.radians += acceleration.radians
         } else if (right.isPressed()) {
-            turningSpeed.degrees -= accelerationDegrees
+            turningSpeed.radians -= acceleration.radians
         }
-        turningSpeed.degrees *= (1 - drag)
-        turningSpeed.degrees = Math.max(Math.min(turningSpeed.degrees, maxTurningSpeedDegrees), -maxTurningSpeedDegrees)
+        turningSpeed.radians *= (1 - drag)
+        turningSpeed.radians = Math.max(Math.min(turningSpeed.radians, maxSpeed.radians), -maxSpeed.radians)
 
-        return super.act()
+        heading.radians += turningSpeed.radians
+
+        return false
     }
 
 }

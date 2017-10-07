@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle.demo
 
 import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.action.movement.polar.*
+import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Polar2f
 
 class Bee : Controllable() {
@@ -11,7 +12,7 @@ class Bee : Controllable() {
 
     override fun activated() {
 
-        val turn = GradualTurnInput(velocity.angle, 1.0, 5.0, drag = 0.07)
+        val turn = GradualTurnInput(velocity.angle, Angle.degrees(1.0), Angle.degrees(5.0), drag = 0.07)
                 .and(ChangeDirection(actor, velocity.angle))
 
         val forwards = AcceleratePolarInput(velocity, 0.2f)

@@ -1,18 +1,20 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
 import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.util.Angle
 
-class TurnInput<T>(
-        heading: Angle,
-        turningSpeed : Double,
+/**
+ * Changes a heading by fixed amount when keys are pressed. For a more natural turn, see [GradualTurnInput].
+ */
+class TurnInput(
+        val heading: Angle,
+        val turningSpeed: Angle,
         left: String = "left",
         right: String = "right")
 
-    : Turn(heading, Angle()) {
-
-    val ts = turningSpeed
+    : Action {
 
     val left = Resources.instance.optionalInput(left) ?: Input.dummyInput
     val right = Resources.instance.optionalInput(right) ?: Input.dummyInput
@@ -20,12 +22,12 @@ class TurnInput<T>(
     override fun act(): Boolean {
 
         if (left.isPressed()) {
-            turningSpeed.degrees = ts
+            heading.radians += turningSpeed.radians
         } else if (right.isPressed()) {
-            turningSpeed.degrees = -ts
+            heading.radians -= turningSpeed.radians
         }
 
-        return super.act()
+        return false
     }
 
 }
