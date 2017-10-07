@@ -28,7 +28,17 @@
                     "costume": "coin",
                     "x": 254,
                     "y": 433,
-                    "direction": 0
+                    "direction": 20,
+                    "attributes": [
+                        {
+                            "name": "initialHeading",
+                            "value": "297"
+                        },
+                        {
+                            "name": "initialSpeed",
+                            "value": "6"
+                        }
+                    ]
                 },
                 {
                     "costume": "coin10",

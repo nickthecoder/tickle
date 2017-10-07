@@ -2,7 +2,7 @@ package uk.co.nickthecoder.tickle.util
 
 import org.joml.Vector2f
 
-open class Heading {
+open class Angle {
 
     open var radians: Double = 0.0
 

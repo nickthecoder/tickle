@@ -2,7 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.demo.NoDirector
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.util.Heading
+import uk.co.nickthecoder.tickle.util.Angle
 import java.io.File
 
 /**
@@ -83,7 +83,7 @@ class SceneActor {
 
     var x: Float = 0f
     var y: Float = 0f
-    val direction = Heading()
+    val direction = Angle()
 
     val attributes = Attributes()
 

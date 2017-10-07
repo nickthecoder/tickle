@@ -1,11 +1,11 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.util.Heading
+import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.events.Input
 
 class GradualTurnInput<T>(
-        heading: Heading,
+        heading: Angle,
         var accelerationDegrees: Double,
         var maxTurningSpeedDegrees: Double,
         var drag: Double = 0.0,

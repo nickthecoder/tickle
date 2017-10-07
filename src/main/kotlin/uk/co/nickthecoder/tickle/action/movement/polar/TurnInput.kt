@@ -2,10 +2,10 @@ package uk.co.nickthecoder.tickle.action.movement.polar
 
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.events.Input
-import uk.co.nickthecoder.tickle.util.Heading
+import uk.co.nickthecoder.tickle.util.Angle
 
 class TurnInput<T>(
-        heading: Heading,
+        heading: Angle,
         turningSpeed : Double,
         left: String = "left",
         right: String = "right")

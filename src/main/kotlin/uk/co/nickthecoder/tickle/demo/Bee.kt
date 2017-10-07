@@ -4,14 +4,14 @@ package uk.co.nickthecoder.tickle.demo
 import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.action.movement.polar.*
-import uk.co.nickthecoder.tickle.util.Heading
+import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Scalar
 
 class Bee : Controllable() {
 
     val speed = Scalar()
 
-    val heading = Heading()
+    val heading = Angle()
 
     override fun activated() {
         val turn = GradualTurnInput<Actor>(heading, 1.0, 5.0, drag = 0.07)

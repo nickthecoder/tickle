@@ -9,7 +9,7 @@ import uk.co.nickthecoder.tickle.action.movement.polar.Turn
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
-import uk.co.nickthecoder.tickle.util.Heading
+import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Scalar
 
 class Coin() : ActionRole() {
@@ -22,7 +22,7 @@ class Coin() : ActionRole() {
     @Attribute(AttributeType.DIRECTION, 1)
     var initialHeading: Double = 0.0
 
-    var heading = Heading()
+    var heading = Angle()
 
     @Attribute
     var turningSpeed: Double = 3.0

@@ -1,10 +1,10 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
 import uk.co.nickthecoder.tickle.action.Action
-import uk.co.nickthecoder.tickle.util.Heading
+import uk.co.nickthecoder.tickle.util.Angle
 
 open class Turn<T>(
-        val heading: Heading,
+        val heading: Angle,
         var turningSpeedDegrees: Double)
 
     : Action {

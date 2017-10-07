@@ -6,7 +6,7 @@ import org.joml.Vector4f
 import org.lwjgl.opengl.GL11
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
-import uk.co.nickthecoder.tickle.util.Heading
+import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Recti
 
 
@@ -39,7 +39,7 @@ abstract class AbstractStageView
             }
         }
 
-    val direction = object : Heading() {
+    val direction = object : Angle() {
         override var radians = 0.0
             set(v) {
                 if (field != v) {

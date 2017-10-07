@@ -4,7 +4,7 @@ import org.joml.Matrix4f
 import org.joml.Vector2f
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.stage.Stage
-import uk.co.nickthecoder.tickle.util.Heading
+import uk.co.nickthecoder.tickle.util.Angle
 
 private var nextId: Int = 0
 
@@ -33,7 +33,7 @@ class Actor(val role: Role? = null) {
 
     var z: Float = 0f
 
-    val direction: Heading = object : Heading() {
+    val direction: Angle = object : Angle() {
         override var radians = 0.0
             set(v) {
                 if (field != v) {
