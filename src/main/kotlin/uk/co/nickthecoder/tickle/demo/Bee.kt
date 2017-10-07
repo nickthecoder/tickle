@@ -4,21 +4,21 @@ package uk.co.nickthecoder.tickle.demo
 import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.action.movement.polar.*
-import uk.co.nickthecoder.tickle.util.Angle
-import uk.co.nickthecoder.tickle.util.Scalar
+import uk.co.nickthecoder.tickle.util.Polar2f
 
 class Bee : Controllable() {
 
-    val speed = Scalar()
-
-    val heading = Angle()
+    val velocity = Polar2f()
 
     override fun activated() {
-        val turn = GradualTurnInput<Actor>(heading, 1.0, 5.0, drag = 0.07)
-                .and(ApplyHeading(actor, heading))
-        val forwards = AcceleratePolarInput(speed, 0.2f)
-                .and(LimitSpeed(speed, 10f))
-                .and(MovePolar(actor.position, heading, speed))
+
+        val turn = GradualTurnInput<Actor>(velocity.angle, 1.0, 5.0, drag = 0.07)
+                .and(ChangeDirection(actor, velocity.angle))
+
+        val forwards = AcceleratePolarInput(velocity.magnitude, 0.2f)
+                .and(LimitSpeed(velocity.magnitude, 10f))
+                .and(MovePolar(actor.position, velocity))
+
         movement = turn.and(forwards)
         super.activated()
     }

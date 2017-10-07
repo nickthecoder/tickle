@@ -40,35 +40,20 @@ InputPicker :
 New Features
 ============
 
-Movements
-
-Use the Heading class wherever there is xxxDegress and xxxRadians being converted.
-
 SceneEditor
 	Other attribute types :
 		Position Vector2f : @Attribute( AttributeType.RELATIVE_POSITION )
 		Position Vector2f : @Attribute( AttributeType.ABSOLUTE_POSITION )
 
-		Velocity field (new!) @Attribute( AttributeType.VELOCITY )
-		VelocityXY field (new!) @Attribute( AttributeType.VELOCITY_XY )
+		Velocity   Polar (new!) @Attribute( AttributeType.POLAR, scale = xxx )
+		VelocityXY Vector2f     @Attribute( AttributeType.RELATIVE_POSITION, scale = xxx)
 			Or should these be combined, backed by X,Y, but with degrees and speed getters?
-			Or backed by either
+
+		Note. Angle has the "vector" method, so: Polar.vector() = angle.vector().mul(magnitude)
+			to get to a Vector2f
 
 		When used for projectile factory, I want two different spreads - either a "box" shape (XY), or a
 			cone (angle, magniture)
-		VelocityXY is clearly a Vector2f !
-		Velocity is AngleAndMagnitude
-
-	Need to split HeadingMovement into two.
-		One half changes the heading.
-		The other half moves at a given speed (in a particular heading).
-		So, we have a IntputHeadingAction (used by Bee)
-
-		and a TurningAction (used by coin)
-		Both are wrapped by a SpeedAction
-		InputSpeed (used by Bee) and ConstantSpeed (used by Coin)
-		We can then have a RotateAction, which wraps a Heading action, to rotate in the direction of travel.
-			(Used by Bee).
 
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).
