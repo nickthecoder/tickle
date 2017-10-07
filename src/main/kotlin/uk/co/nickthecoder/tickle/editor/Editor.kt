@@ -2,32 +2,37 @@ package uk.co.nickthecoder.tickle.editor
 
 import javafx.application.Application
 import javafx.stage.Stage
+import org.lwjgl.glfw.GLFW
 import uk.co.nickthecoder.paratask.util.AutoExit
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.graphics.WindowlessContext
+import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.guessTickleFile
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
 class Editor() : Application() {
 
-    var windowlessContext: WindowlessContext? = null
+    var window: Window? = null
 
     override fun start(primaryStage: Stage) {
 
         AutoExit.disable()
-        windowlessContext = WindowlessContext()
+        window = Window("Tickle Editor Hidden Window", 100, 100)
         val resources = if (resourceFile == null) Resources() else JsonResources(resourceFile!!).resources
         Resources.instance = resources
 
         println("Loaded resource, creating main window")
-        MainWindow(primaryStage)
+        MainWindow(primaryStage, window!!)
     }
 
     override fun stop() {
         println("Stopping JavaFX Application, deleting GL context")
-        windowlessContext?.delete()
-        windowlessContext = null
+        window?.delete()
+        window = null
+
+        // Terminate GLFW and free the error callback
+        GLFW.glfwTerminate()
+        GLFW.glfwSetErrorCallback(null).free()
     }
 
     companion object {

@@ -21,7 +21,7 @@ class WindowlessContext {
             throw IllegalStateException("Unable to initialize GLFW")
         }
 
-        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE) // the window will stay hidden after creation
+        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE)
         handle = GLFW.glfwCreateWindow(10, 10, "Tickle Dummy Window", MemoryUtil.NULL, MemoryUtil.NULL)
         GLFW.glfwMakeContextCurrent(handle)
 

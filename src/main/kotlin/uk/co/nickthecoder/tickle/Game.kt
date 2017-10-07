@@ -99,12 +99,6 @@ class Game(
 
     fun cleanUp() {
         renderer.delete()
-        window.delete()
-
-        // Terminate GLFW and free the error callback
-        GLFW.glfwTerminate()
-        GLFW.glfwSetErrorCallback(null).free()
-
         producer.end()
     }
 

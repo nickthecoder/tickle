@@ -1,8 +1,8 @@
 package uk.co.nickthecoder.tickle.editor
 
+import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.scene.control.Accordion
-import javafx.scene.control.Alert
 import javafx.scene.control.TitledPane
 import javafx.scene.control.ToolBar
 import javafx.scene.layout.BorderPane
@@ -16,10 +16,11 @@ import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.tabs.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
+import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
-class MainWindow(val stage: Stage) {
+class MainWindow(val stage: Stage, val glWindow: Window) {
 
     val borderPane = BorderPane()
 
@@ -104,21 +105,25 @@ class MainWindow(val stage: Stage) {
         TaskPrompter(NewResourceTask()).placeOnStage(Stage())
     }
 
-    var running: Boolean = false
-
     fun startGame(sceneFile: File = Resources.instance.gameInfo.initialScenePath) {
-        if (running) {
-            Alert(Alert.AlertType.INFORMATION, "It seems that a game is already running.\nYou can only run one instance!").showAndWait()
-        } else {
-            Thread {
-                running = true
-                println("Game test started")
-                startGame(Resources.instance.file, sceneFile)
-                println("Game test ended")
-                running = false
-            }.start()
+        stage.hide()
+
+        Platform.runLater { // Give this window the oppotunity to hide before the UI hangs
+            println("Game test started")
+            with(Resources.instance.gameInfo) {
+                glWindow.change(title, width, height, resizable)
+            }
+            glWindow.show()
+
+            Game(glWindow, Resources.instance).run(sceneFile)
+
+            println("Game test ended")
+            glWindow.hide()
+
+            stage.show()
         }
     }
+
 
     fun testGame() {
         startGame(Resources.instance.gameInfo.testScenePath)

@@ -65,4 +65,11 @@ fun startGame(resourcesFile: File, sceneFile: File? = null) {
     }
 
     Game(window, resources).run(sceneFile ?: resources.gameInfo.initialScenePath)
+
+    window.delete()
+
+    // Terminate GLFW and free the error callback
+    GLFW.glfwTerminate()
+    GLFW.glfwSetErrorCallback(null).free()
+
 }

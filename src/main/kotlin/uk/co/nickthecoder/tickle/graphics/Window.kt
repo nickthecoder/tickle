@@ -4,7 +4,9 @@ import org.joml.Vector2f
 import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW
+import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.glfw.GLFWWindowSizeCallback
+import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
@@ -28,14 +30,20 @@ class Window(
 
     init {
 
-        GLFW.glfwDefaultWindowHints()
-        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE) // the window will stay hidden after creation
-        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, if (resizable) GLFW.GLFW_TRUE else GLFW.GLFW_FALSE)
+        GLFWErrorCallback.createPrint(System.err).set()
+
+        if (!GLFW.glfwInit()) {
+            throw IllegalStateException("Unable to initialize GLFW")
+        }
+
+        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE)
 
         handle = GLFW.glfwCreateWindow(_width, _height, title, MemoryUtil.NULL, MemoryUtil.NULL)
         if (handle == MemoryUtil.NULL) {
             throw RuntimeException("Failed to create the GLFW window")
         }
+        GLFW.glfwMakeContextCurrent(handle)
+        GL.createCapabilities()
     }
 
 
@@ -56,7 +64,8 @@ class Window(
     fun show() {
         current = this
 
-        // Get the thread stack and push a new frame
+        GLFW.glfwSetWindowShouldClose(handle, false)
+
         MemoryStack.stackPush().use { stack ->
             val pWidth = stack.mallocInt(1)
             val pHeight = stack.mallocInt(1)
@@ -90,6 +99,9 @@ class Window(
         GLFW.glfwSetWindowSizeCallback(handle, resizeCallback)
     }
 
+    fun hide() {
+        GLFW.glfwHideWindow(handle)
+    }
 
     fun change(title: String, width: Int, height: Int, resizable: Boolean) {
 

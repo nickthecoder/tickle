@@ -5,7 +5,7 @@
         "height": 600,
         "resizable": true,
         "initialScene": "level01",
-        "testScene": "none",
+        "testScene": "test",
         "producer": "uk.co.nickthecoder.tickle.demo.Demo",
         "packages": [
             "uk.co.nickthecoder.tickle"
