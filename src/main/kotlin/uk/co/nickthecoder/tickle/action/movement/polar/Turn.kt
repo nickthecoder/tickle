@@ -7,9 +7,9 @@ open class Turn<T>(
         val heading: Heading,
         var turningSpeedDegrees: Double)
 
-    : Action<T> {
+    : Action {
 
-    override fun act(target: T): Boolean {
+    override fun act(): Boolean {
         heading.degrees += turningSpeedDegrees
         return false
     }

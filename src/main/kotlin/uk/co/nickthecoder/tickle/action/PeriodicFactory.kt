@@ -5,15 +5,15 @@ class PeriodicFactory<T>(
         var amount: Int? = null,
         val factory: (PeriodicFactory<T>) -> Unit)
 
-    : Action<T> {
+    : Action {
 
     var remainder: Float = 0f
 
-    override fun begin(target: T): Boolean {
+    override fun begin(): Boolean {
         return amount ?: 1 <= 0
     }
 
-    override fun act(target: T): Boolean {
+    override fun act(): Boolean {
         remainder += 1
         while (remainder >= period) {
             remainder -= period

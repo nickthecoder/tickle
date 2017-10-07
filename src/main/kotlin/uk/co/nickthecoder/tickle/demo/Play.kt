@@ -1,11 +1,10 @@
 package uk.co.nickthecoder.tickle.demo
 
-import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.action.Action
-import uk.co.nickthecoder.tickle.action.animation.AnimationAction
-import uk.co.nickthecoder.tickle.action.animation.Eases
+import uk.co.nickthecoder.tickle.action.CenterView
+import uk.co.nickthecoder.tickle.action.CenterViewBetween
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.stage.ZOrderStageView
@@ -19,13 +18,11 @@ class Play : AbstractDirector() {
     val reset = Resources.instance.input("reset") // O : Reset the rotation to 0°
     val toggle = Resources.instance.input("toggle") // TAB : Toggles between Controllable roles.
 
-    val centerOnControllable = CenterOnControllable()
-
     var activeControllable: Controllable? = null
 
-    var centerAction: Action<Actor> = centerOnControllable
+    var centerAction: Action? = null
         set(v) {
-            activeControllable?.let { v.begin(it.actor) }
+            v?.begin()
             field = v
         }
 
@@ -39,8 +36,12 @@ class Play : AbstractDirector() {
     }
 
     override fun activated() {
-        activeControllable = tagManager.findARole(Tags.CONTROLLABLE) as Controllable?
-        activeControllable?.hasInput = true
+        tagManager.findARole(Tags.CONTROLLABLE)?.let {
+            val con = it as Controllable
+            con.hasInput = true
+            activeControllable = con
+            centerAction = CenterView(stageView, con.actor.position)
+        }
     }
 
     override fun postTick() {
@@ -53,8 +54,7 @@ class Play : AbstractDirector() {
         if (antiClockwise.isPressed()) {
             degrees += 2
         }
-
-        activeControllable?.let { centerAction.act(it.actor) }
+        centerAction?.act()
         stageView.degrees = degrees
 
         if (Game.instance.gameLoop.tickCount % 100 == 0L) {
@@ -71,9 +71,9 @@ class Play : AbstractDirector() {
             tagManager.closest(activeControllable!!, Tags.CONTROLLABLE)?.let {
 
                 if (it is Controllable) {
-                    centerAction = WhizzToNextController(activeControllable!!)
-                    activeControllable!!.hasInput = false
-                    activeControllable = it
+                    centerAction = CenterViewBetween(stageView, activeControllable!!.actor.position, it.actor.position)
+                            .then(ChangeControllable(it))
+                    activeControllable?.hasInput = false
                 } else {
                     System.err.println("ERROR. ${it} found to be CONTROLLABLE, but is not of type Controllable")
                 }
@@ -81,35 +81,15 @@ class Play : AbstractDirector() {
         }
     }
 
-    inner class CenterOnControllable : Action<Actor> {
-        override fun act(target: Actor): Boolean {
-            stageView.centerX = target.x
-            stageView.centerY = target.y
+    inner class ChangeControllable(
+            val newControllable: Controllable
+    ) : Action {
 
-            return false
-        }
-    }
-
-    inner class WhizzToNextController(oldControllable: Controllable) : AnimationAction<Actor>(0.5f, Eases.easeInOut) {
-
-        var initialX = oldControllable.actor.x
-        var initialY = oldControllable.actor.y
-
-        override fun storeInitialValue(target: Actor) {
-        }
-
-        override fun act(target: Actor): Boolean {
-            return super.act(target)
-        }
-
-        override fun update(target: Actor, t: Float) {
-            stageView.centerX = lerp(initialX, target.x, t)
-            stageView.centerY = lerp(initialY, target.y, t)
-        }
-
-        override fun ended() {
-            centerAction = CenterOnControllable()
-            activeControllable!!.hasInput = true
+        override fun act(): Boolean {
+            centerAction = CenterView(stageView, newControllable.actor.position)
+            newControllable.hasInput = true
+            activeControllable = newControllable
+            return true
         }
     }
 

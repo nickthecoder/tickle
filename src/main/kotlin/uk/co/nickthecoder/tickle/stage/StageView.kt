@@ -6,6 +6,10 @@ interface StageView : View {
 
     var stage: Stage
 
+    var centerX : Float
+
+    var centerY : Float
+
     fun mousePosition(): Vector2f
 
 }

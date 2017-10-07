@@ -1,17 +1,19 @@
 package uk.co.nickthecoder.tickle.action.movement
 
-import uk.co.nickthecoder.tickle.Actor
+import org.joml.Vector2f
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.stage.StageView
 
-class FollowMouse(val view: StageView)
+class FollowMouse(
+        val position: Vector2f,
+        val view: StageView)
 
-    : Action<Actor> {
+    : Action {
 
-    override fun act(target: Actor): Boolean {
+    override fun act(): Boolean {
         val mp = view.mousePosition()
-        target.x = mp.x
-        target.y = mp.y
+        position.x = mp.x
+        position.y = mp.y
         return false
     }
 

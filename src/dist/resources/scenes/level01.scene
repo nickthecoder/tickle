@@ -7,81 +7,15 @@
             "name": "main",
             "actors": [
                 {
-                    "costume": "coin10",
-                    "x": 576,
-                    "y": 359,
-                    "direction": 0
-                },
-                {
-                    "costume": "coin100",
-                    "x": 447,
-                    "y": 416,
-                    "direction": 0
-                },
-                {
                     "costume": "bee",
-                    "x": 327,
-                    "y": 334,
-                    "direction": 0
-                },
-                {
-                    "costume": "hand",
-                    "x": 228,
-                    "y": 479,
+                    "x": -114,
+                    "y": 59,
                     "direction": 0
                 },
                 {
                     "costume": "grenade",
-                    "x": 300,
-                    "y": 200,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0.2"
-                        }
-                    ]
-                },
-                {
-                    "costume": "grenade",
-                    "x": 400,
-                    "y": 200,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0.3"
-                        }
-                    ]
-                },
-                {
-                    "costume": "grenade",
-                    "x": 500,
-                    "y": 200,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0.4"
-                        }
-                    ]
-                },
-                {
-                    "costume": "coin",
-                    "x": 133,
-                    "y": 378,
-                    "direction": 0
-                },
-                {
-                    "costume": "grenade",
-                    "x": 184,
-                    "y": 207,
-                    "direction": 0
-                },
-                {
-                    "costume": "grenade",
-                    "x": 79,
-                    "y": 209,
+                    "x": -14,
+                    "y": 1,
                     "direction": 1,
                     "attributes": [
                         {
@@ -91,69 +25,27 @@
                     ]
                 },
                 {
-                    "costume": "grenade",
-                    "x": 598,
-                    "y": 201,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0.5"
-                        }
-                    ]
-                },
-                {
-                    "costume": "spark",
-                    "x": 91,
-                    "y": 879,
+                    "costume": "coin",
+                    "x": -89,
+                    "y": 185,
                     "direction": 0
                 },
                 {
-                    "costume": "spark",
-                    "x": 218,
-                    "y": 843,
+                    "costume": "coin10",
+                    "x": 74,
+                    "y": 184,
                     "direction": 0
                 },
                 {
-                    "costume": "spark",
-                    "x": 496,
-                    "y": 950,
+                    "costume": "coin100",
+                    "x": 268,
+                    "y": 182,
                     "direction": 0
                 },
                 {
-                    "costume": "spark",
-                    "x": 700,
-                    "y": 760,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 482,
-                    "y": 821,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 319,
-                    "y": 969,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 773,
-                    "y": 891,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 652,
-                    "y": 1036,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 135,
-                    "y": 998,
+                    "costume": "bee",
+                    "x": 215,
+                    "y": 137,
                     "direction": 0
                 }
             ]

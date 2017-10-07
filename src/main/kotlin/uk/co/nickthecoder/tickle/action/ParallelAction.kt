@@ -1,22 +1,21 @@
 package uk.co.nickthecoder.tickle.action
 
-import uk.co.nickthecoder.tickle.Actor
 import java.util.concurrent.CopyOnWriteArrayList
 
-class ParallelAction<T>(vararg child: Action<T>) : CompoundAction<T>() {
+class ParallelAction(vararg child: Action) : CompoundAction() {
 
-    override val children = CopyOnWriteArrayList<Action<T>>()
+    override val children = CopyOnWriteArrayList<Action>()
 
-    private val unstartedChildren = mutableListOf<Action<T>>()
+    private val unstartedChildren = mutableListOf<Action>()
 
-    private val finishedChildren = mutableListOf<Action<T>>()
+    private val finishedChildren = mutableListOf<Action>()
 
     init {
         children.addAll(child)
     }
 
-    override fun begin(target: T): Boolean {
-        super.begin(target)
+    override fun begin(): Boolean {
+        super.begin()
 
         // If we are being restarted (from a ForeverAction, or a RepeatAction), then
         // add the finished children back to the active list
@@ -27,7 +26,7 @@ class ParallelAction<T>(vararg child: Action<T>) : CompoundAction<T>() {
 
         var finished = true
         children.forEach { child ->
-            if (!child.begin(target)) {
+            if (!child.begin()) {
                 finished = false // One child isn't finished, so we aren't finished.
             }
         }
@@ -36,27 +35,27 @@ class ParallelAction<T>(vararg child: Action<T>) : CompoundAction<T>() {
         return finished
     }
 
-    override fun add(action: Action<T>) {
+    override fun add(action: Action) {
         unstartedChildren.add(action)
         super.add(action)
     }
 
-    override fun remove(action: Action<T>) {
+    override fun remove(action: Action) {
         unstartedChildren.remove(action)
         super.add(action)
     }
 
-    override fun act(target: T): Boolean {
+    override fun act(): Boolean {
 
         if (unstartedChildren.isNotEmpty()) {
             unstartedChildren.forEach {
-                it.begin(target)
+                it.begin()
             }
             unstartedChildren.clear()
         }
 
         children.forEach { child ->
-            if (child.act(target)) {
+            if (child.act()) {
                 children.remove(child)
                 // Remember this child, so that if we are restarted, then the child can be added back to the
                 // "children" list again.
@@ -66,7 +65,7 @@ class ParallelAction<T>(vararg child: Action<T>) : CompoundAction<T>() {
         return children.isEmpty()
     }
 
-    override fun and(other: Action<T>): ParallelAction<T> {
+    override fun and(other: Action): ParallelAction {
         add(other)
         return this
     }

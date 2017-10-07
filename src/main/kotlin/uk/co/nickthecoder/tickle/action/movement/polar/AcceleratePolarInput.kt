@@ -1,6 +1,5 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
-import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.events.Input
@@ -14,12 +13,12 @@ open class AcceleratePolarInput(
         accelerate: String = "up",
         decelerate: String = "down")
 
-    : Action<Actor> {
+    : Action {
 
     val accelerate = Resources.instance.optionalInput(accelerate) ?: Input.dummyInput
     val decelerate = Resources.instance.optionalInput(decelerate) ?: Input.dummyInput
 
-    override fun act(target: Actor): Boolean {
+    override fun act(): Boolean {
         if (accelerate.isPressed()) {
             speed.value += acceleration
         } else if (decelerate.isPressed()) {

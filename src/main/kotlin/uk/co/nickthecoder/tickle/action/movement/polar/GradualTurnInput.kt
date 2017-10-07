@@ -17,7 +17,7 @@ class GradualTurnInput<T>(
     val left = Resources.instance.optionalInput(left) ?: Input.dummyInput
     val right = Resources.instance.optionalInput(right) ?: Input.dummyInput
 
-    override fun act(target: T): Boolean {
+    override fun act(): Boolean {
 
         if (left.isPressed()) {
             turningSpeedDegrees += accelerationDegrees
@@ -27,7 +27,7 @@ class GradualTurnInput<T>(
         turningSpeedDegrees *= (1 - drag)
         turningSpeedDegrees = Math.max(Math.min(turningSpeedDegrees, maxTurningSpeedDegrees), -maxTurningSpeedDegrees)
 
-        return super.act(target)
+        return super.act()
     }
 
 }

@@ -1,8 +1,11 @@
 package uk.co.nickthecoder.tickle.demo
 
 import org.joml.Vector2f
-import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.action.Die
+import uk.co.nickthecoder.tickle.AbstractRole
+import uk.co.nickthecoder.tickle.ActionRole
+import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.action.Kill
 import uk.co.nickthecoder.tickle.action.PeriodicFactory
 import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.action.animation.Fade
@@ -40,17 +43,17 @@ class Grenade() : AbstractRole() {
         actor.stage?.add(newActor)
 
         val velocity = Vector2f(dx * 20, Rand.between(2f, 12f, Eases.easeInOutExpo))
-        val movement = Move(velocity).and(Accelerate(velocity, gravity)).and(Drag(velocity, 0.01f))
-        newRole.action = movement.and(Fade(3f, transparent).then(Die()))
+        val movement = Move(newActor.position, velocity).and(Accelerate(velocity, gravity)).and(Drag(velocity, 0.01f))
+        newRole.action = movement.and(Fade(newActor, 3f, transparent).then(Kill(newActor)))
 
     }
 
     override fun activated() {
-        action.begin(actor)
+        action.begin()
     }
 
     override fun tick() {
-        action.act(actor)
+        action.act()
     }
 
 }

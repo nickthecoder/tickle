@@ -7,7 +7,7 @@ class Hand : ActionRole() {
 
     override fun activated() {
         actor.stage?.firstView()?.let { view ->
-            action = FollowMouse(view)
+            action = FollowMouse(actor.position, view)
         }
         super.activated()
     }

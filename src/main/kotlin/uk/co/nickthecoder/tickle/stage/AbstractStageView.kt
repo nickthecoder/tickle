@@ -23,7 +23,7 @@ abstract class AbstractStageView
 
     override lateinit var stage: Stage
 
-    var centerX = 0f
+    override var centerX = 0f
         set(v) {
             if (field != v) {
                 field = v
@@ -31,7 +31,7 @@ abstract class AbstractStageView
             }
         }
 
-    var centerY = 0f
+    override var centerY = 0f
         set(v) {
             if (field != v) {
                 field = v

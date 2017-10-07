@@ -97,15 +97,15 @@ open class ActionRole() : Role {
 
     private var activated: Boolean = false
 
-    var action: Action<Actor> = NoAction()
+    var action: Action = NoAction()
         set(v) {
             field = v
             if (activated) {
-                v.begin(actor)
+                v.begin()
             }
         }
 
-    constructor(action: Action<Actor>, die: Boolean = true) : this() {
+    constructor(action: Action, die: Boolean = true) : this() {
         if (die) {
             this.action = action
         } else {
@@ -118,11 +118,11 @@ open class ActionRole() : Role {
     override fun activated() {
         super.activated()
         activated = true
-        action.begin(actor)
+        action.begin()
     }
 
     override fun tick() {
-        if (action.act(actor)) {
+        if (action.act()) {
             actor.die()
         }
     }

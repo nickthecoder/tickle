@@ -1,6 +1,5 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
-import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.util.Scalar
 
@@ -9,9 +8,9 @@ open class LimitSpeed(
         var maxSpeed: Float = 10f,
         var minSpeed: Float = 0f)
 
-    : Action<Actor> {
+    : Action {
 
-    override fun act(target: Actor): Boolean {
+    override fun act(): Boolean {
         if (speed.value < minSpeed) {
             speed.value = minSpeed
         }

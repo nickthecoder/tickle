@@ -3,9 +3,9 @@ package uk.co.nickthecoder.tickle.demo
 
 import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.action.movement.polar.*
 import uk.co.nickthecoder.tickle.util.Heading
 import uk.co.nickthecoder.tickle.util.Scalar
-import uk.co.nickthecoder.tickle.action.movement.polar.*
 
 class Bee : Controllable() {
 
@@ -15,16 +15,11 @@ class Bee : Controllable() {
 
     override fun activated() {
         val turn = GradualTurnInput<Actor>(heading, 1.0, 5.0, drag = 0.07)
-                .and(ApplyHeading(heading))
-        val forwards = AcceleratePolarInput(speed, 0.2f).and(LimitSpeed(speed, 10f)).and(MovePolar(heading, speed))
+                .and(ApplyHeading(actor, heading))
+        val forwards = AcceleratePolarInput(speed, 0.2f)
+                .and(LimitSpeed(speed, 10f))
+                .and(MovePolar(actor.position, heading, speed))
         movement = turn.and(forwards)
-        /*
-        movement = DirectionControls(
-                maxSpeed = 10f,
-                speedChange = 0.2f,
-                maxRotationSpeed = 5.0,
-                rotationDrag = 0.07)
-                */
         super.activated()
     }
 

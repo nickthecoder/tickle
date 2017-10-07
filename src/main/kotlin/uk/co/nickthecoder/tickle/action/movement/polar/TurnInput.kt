@@ -1,8 +1,8 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.util.Heading
 import uk.co.nickthecoder.tickle.events.Input
+import uk.co.nickthecoder.tickle.util.Heading
 
 class TurnInput<T>(
         heading: Heading,
@@ -17,7 +17,7 @@ class TurnInput<T>(
     val left = Resources.instance.optionalInput(left) ?: Input.dummyInput
     val right = Resources.instance.optionalInput(right) ?: Input.dummyInput
 
-    override fun act(target: T): Boolean {
+    override fun act(): Boolean {
 
         if (left.isPressed()) {
             turningSpeedDegrees = ts
@@ -25,7 +25,7 @@ class TurnInput<T>(
             turningSpeedDegrees = -ts
         }
 
-        return super.act(target)
+        return super.act()
     }
 
 }

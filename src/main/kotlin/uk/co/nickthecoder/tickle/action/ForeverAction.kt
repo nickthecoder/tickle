@@ -1,15 +1,15 @@
 package uk.co.nickthecoder.tickle.action
 
-class ForeverAction<T>(val child: Action<T>) : Action<T> {
+class ForeverAction(val child: Action) : Action {
 
-    override fun begin(target: T): Boolean {
-        child.begin(target)
+    override fun begin(): Boolean {
+        child.begin()
         return false
     }
 
-    override fun act(target: T): Boolean {
-        if (child.act(target)) {
-            child.begin(target)
+    override fun act(): Boolean {
+        if (child.act()) {
+            child.begin()
         }
         return false
     }

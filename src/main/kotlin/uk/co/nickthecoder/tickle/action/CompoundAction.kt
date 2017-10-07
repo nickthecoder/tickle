@@ -1,15 +1,15 @@
 package uk.co.nickthecoder.tickle.action
 
-abstract class CompoundAction<T> : Action<T> {
+abstract class CompoundAction : Action {
 
-    protected abstract val children : MutableList<Action<T>>
+    protected abstract val children : MutableList<Action>
 
 
-    open fun add(action: Action<T>) {
+    open fun add(action: Action) {
         children.add(action)
     }
 
-    open fun remove(action: Action<T>) {
+    open fun remove(action: Action) {
         children.remove(action)
     }
 

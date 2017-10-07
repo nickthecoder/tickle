@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.AbstractRole
-import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.TaggedRole
 import uk.co.nickthecoder.tickle.action.Action
@@ -14,19 +13,19 @@ abstract class Controllable : AbstractRole(), TaggedRole {
 
     override val tagged = Tagged(Game.instance.director.tagManager, this)
 
-    var movement: Action<Actor> = NoAction()
+    var movement: Action = NoAction()
 
     override fun begin() {
         tagged.add(Tags.CONTROLLABLE)
     }
 
     override fun activated() {
-        movement.begin(actor)
+        movement.begin()
     }
 
     override fun tick() {
         if (hasInput) {
-            movement.act(actor)
+            movement.act()
         }
     }
 
