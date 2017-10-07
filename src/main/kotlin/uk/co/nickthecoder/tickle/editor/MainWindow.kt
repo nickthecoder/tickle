@@ -80,6 +80,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             add(EditorActions.ACCORDION_RESOURCES) { accordion.expandedPane = resourcesPane }
             add(EditorActions.ACCORDION_COSTUME) { accordion.expandedPane = costumesPane }
             add(EditorActions.ACCORDION_PROPERTIES) { accordion.expandedPane = propertiesPane }
+            add(EditorActions.TAB_CLOSE) { tabPane.selectedTab?.close() }
         }
 
         stage.show()
@@ -108,7 +109,8 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     fun startGame(sceneFile: File = Resources.instance.gameInfo.initialScenePath) {
         stage.hide()
 
-        Platform.runLater { // Give this window the oppotunity to hide before the UI hangs
+        Platform.runLater {
+            // Give this window the oppotunity to hide before the UI hangs
             println("Game test started")
             with(Resources.instance.gameInfo) {
                 glWindow.change(title, width, height, resizable)

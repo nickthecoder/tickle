@@ -62,9 +62,8 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
         editorTab.isSelected = true
 
-        cancelButton.text = "Close"
+        applyButton.text = "Save"
         rightButtons.children.remove(okButton)
-        rightButtons.children.remove(applyButton)
         rightButtons.children.add(0, testButton)
         testButton.onAction = EventHandler { onTest() }
 
