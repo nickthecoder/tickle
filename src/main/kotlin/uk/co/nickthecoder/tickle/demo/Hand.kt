@@ -1,7 +1,7 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.ActionRole
-import uk.co.nickthecoder.tickle.action.FollowMouse
+import uk.co.nickthecoder.tickle.action.movement.FollowMouse
 
 class Hand : ActionRole() {
 

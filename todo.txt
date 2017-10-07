@@ -25,6 +25,13 @@ https://www.khronos.org/opengl/wiki/Logical_Operation
 BUGS
 ====
 
+Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
+	I only want the EDITOR to depend on paratask-core.
+	Have a factory method for Attributes, which checks Class.forName( "uk...paratask...Parameter" )
+		It either returns Attributes (which has no parameter stuff) of DesignAttributes
+		Then cast wherever they are used in the editor.
+		Add an extension function : SceneActor.designAttributes() which does the cast. Ditto for Costume
+
 InputPicker :
 	Java FX key code name "Number Sign" does not map to anything in enum class Key
 	"Windows" is this meta?
@@ -33,19 +40,47 @@ InputPicker :
 New Features
 ============
 
-SceneEditor
+Movements
 
-	Allow a Role to have an @Direction annotation (or a field of @Attribute), which indicates that another
-		rotation hadle is displayed. The annotation can have a color and a length.
-		Similarly, have annotations for a POSITION relative to the Actor's X,Y.
-			Display as an outlined box
-	Hmm, position on it's own isn't very useful, but a direction and speed are!
-	So, we need :
-		Direction for a float field : @Attribute( AttributeType.DIRECTION )
-		Position for a Vector2f : @Attribute( AttributeType.RELATIVE_POSITION )
-		Velocity for a Velocity field (new!) @Attribute( AttributeType.VELOCITY )
+	HeadingSpeed has a Heading and a speed (float)
 
+	We can apply that to an actor, using HeadingSpeedAction???
+	Now we want to apply a DRAG
+		So DragAction adjusts the HeadingSpeed
+	Now we want to set a LIMIT on the speed
+		So apply that action AFTER the drag
+	Now we want to control the heading by Inputs
+		So apply that before the drag and limits
+	Or we want to turn the (coin)
+		So apply that before the drag and limits
 		
+Use the Heading class wherever there is xxxDegress and xxxRadians being converted.
+
+SceneEditor
+	Other attribute types :
+		Position Vector2f : @Attribute( AttributeType.RELATIVE_POSITION )
+		Position Vector2f : @Attribute( AttributeType.ABSOLUTE_POSITION )
+
+		Velocity field (new!) @Attribute( AttributeType.VELOCITY )
+		VelocityXY field (new!) @Attribute( AttributeType.VELOCITY_XY )
+			Or should these be combined, backed by X,Y, but with degrees and speed getters?
+			Or backed by either
+
+		When used for projectile factory, I want two different spreads - either a "box" shape (XY), or a
+			cone (angle, magniture)
+		VelocityXY is clearly a Vector2f !
+		Velocity is AngleAndMagnitude
+
+	Need to split HeadingMovement into two.
+		One half changes the heading.
+		The other half moves at a given speed (in a particular heading).
+		So, we have a IntputHeadingAction (used by Bee)
+
+		and a TurningAction (used by coin)
+		Both are wrapped by a SpeedAction
+		InputSpeed (used by Bee) and ConstantSpeed (used by Coin)
+		We can then have a RotateAction, which wraps a Heading action, to rotate in the direction of travel.
+			(Used by Bee).
 
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).

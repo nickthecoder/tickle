@@ -10,33 +10,13 @@
                     "costume": "coin10",
                     "x": 576,
                     "y": 359,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "heading",
-                            "value": "122.0"
-                        },
-                        {
-                            "name": "rotationSpeed",
-                            "value": "4"
-                        }
-                    ]
+                    "direction": 0
                 },
                 {
                     "costume": "coin100",
                     "x": 447,
                     "y": 416,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "heading",
-                            "value": "153.0"
-                        },
-                        {
-                            "name": "rotationSpeed",
-                            "value": "1"
-                        }
-                    ]
+                    "direction": 0
                 },
                 {
                     "costume": "bee",
@@ -90,25 +70,13 @@
                     "costume": "coin",
                     "x": 133,
                     "y": 378,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "heading",
-                            "value": "319.0"
-                        }
-                    ]
+                    "direction": 0
                 },
                 {
                     "costume": "grenade",
                     "x": 184,
                     "y": 207,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0.1"
-                        }
-                    ]
+                    "direction": 0
                 },
                 {
                     "costume": "grenade",

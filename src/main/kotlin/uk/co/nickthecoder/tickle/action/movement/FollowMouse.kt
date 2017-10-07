@@ -1,6 +1,7 @@
-package uk.co.nickthecoder.tickle.action
+package uk.co.nickthecoder.tickle.action.movement
 
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.stage.StageView
 
 class FollowMouse(val view: StageView)

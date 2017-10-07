@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.util
 
 import org.joml.Vector2f
 import org.joml.Vector3f
@@ -43,9 +43,9 @@ class RandomFactory(seed: Long? = null) {
 object Rand {
     fun plusMinus(limit: Float, ease: Ease = LinearEase.instance) = RandomFactory.instance.plusMinus(limit, ease)
 
-    fun between(from: Float, to: Float, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to)
-    fun between(from: Color, to: Color, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to)
-    fun between(from: Vector2f, to: Vector2f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to)
-    fun between(from: Vector3f, to: Vector3f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to)
-    fun between(from: Vector4f, to: Vector4f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to)
+    fun between(from: Float, to: Float, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
+    fun between(from: Color, to: Color, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
+    fun between(from: Vector2f, to: Vector2f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
+    fun between(from: Vector3f, to: Vector3f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
+    fun between(from: Vector4f, to: Vector4f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
 }

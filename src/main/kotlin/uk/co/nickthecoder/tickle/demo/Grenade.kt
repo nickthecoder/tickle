@@ -2,15 +2,18 @@ package uk.co.nickthecoder.tickle.demo
 
 import org.joml.Vector2f
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.action.AcceleratedXYMovement
 import uk.co.nickthecoder.tickle.action.Die
 import uk.co.nickthecoder.tickle.action.PeriodicFactory
 import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.action.animation.Fade
-import uk.co.nickthecoder.tickle.util.Attribute
+import uk.co.nickthecoder.tickle.action.movement.Accelerate
+import uk.co.nickthecoder.tickle.action.movement.Drag
+import uk.co.nickthecoder.tickle.action.movement.Move
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.util.Attribute
+import uk.co.nickthecoder.tickle.util.Rand
 
-val gravity = -0.1f
+val gravity = Vector2f(0f, -0.1f)
 
 class Grenade() : AbstractRole() {
 
@@ -23,18 +26,8 @@ class Grenade() : AbstractRole() {
         val dx = Rand.plusMinus(0.03f, Eases.easeInOut)
         val newColor = Color.createFromHSB(hue + dx, 1f, 1f)
         val transparent = Color(newColor.red, newColor.green, newColor.blue, 0f)
-        val newRole = ActionRole(
-                AcceleratedXYMovement(
-                        // Note. By using an in-out ease, fewer intermediate speed sparks.
-                        velocity = (Vector2f(dx * 20, Rand.between(2f, 12f, Eases.easeInOutExpo))),
-                        drag = 0.01f,
-                        acceleration = Vector2f(0f, gravity)
-                ).and(
-                        Fade(3f, transparent)
-                                .then(Die()
-                                )
-                )
-        )
+        val newRole = ActionRole()
+
         val newActor = Actor(newRole)
 
         with(newActor) {
@@ -46,6 +39,9 @@ class Grenade() : AbstractRole() {
         }
         actor.stage?.add(newActor)
 
+        val velocity = Vector2f(dx * 20, Rand.between(2f, 12f, Eases.easeInOutExpo))
+        val movement = Move(velocity).and(Accelerate(velocity, gravity)).and(Drag(velocity, 0.01f))
+        newRole.action = movement.and(Fade(3f, transparent).then(Die()))
 
     }
 
