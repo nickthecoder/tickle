@@ -42,18 +42,6 @@ New Features
 
 Movements
 
-	HeadingSpeed has a Heading and a speed (float)
-
-	We can apply that to an actor, using HeadingSpeedAction???
-	Now we want to apply a DRAG
-		So DragAction adjusts the HeadingSpeed
-	Now we want to set a LIMIT on the speed
-		So apply that action AFTER the drag
-	Now we want to control the heading by Inputs
-		So apply that before the drag and limits
-	Or we want to turn the (coin)
-		So apply that before the drag and limits
-		
 Use the Heading class wherever there is xxxDegress and xxxRadians being converted.
 
 SceneEditor

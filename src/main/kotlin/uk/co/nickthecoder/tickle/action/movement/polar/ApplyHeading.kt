@@ -11,7 +11,7 @@ class ApplyHeading(
     : Action {
 
     override fun act(): Boolean {
-        actor.directionRadians = heading.radians
+        actor.direction.radians = heading.radians
         return false
     }
 

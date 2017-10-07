@@ -30,7 +30,7 @@ class Bee : Controllable() {
         // The bee image is tilted upwards (by about 24 degrees), so we can't use Actor.flipX().
         // Instead, we need to use a custom transformation, which reflect the image
         // along the plane through the middle of the bee's body.
-        var angle = actor.directionDegrees.rem(360.0)
+        var angle = actor.direction.degrees.rem(360.0)
         if (angle < 0) {
             // "rem" can return positive and negative numbers, so adjust the negative numbers, so they become positive.
             angle = 360 + angle

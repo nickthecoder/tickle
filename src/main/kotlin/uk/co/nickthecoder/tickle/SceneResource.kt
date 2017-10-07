@@ -102,7 +102,7 @@ class SceneActor {
         val actor = costume.createActor()
         actor.x = x
         actor.y = y
-        actor.directionDegrees = directionDegrees
+        actor.direction.degrees = directionDegrees
 
         actor.role?.let { attributes.applyToObject(it) }
 

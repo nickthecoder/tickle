@@ -4,6 +4,7 @@ import org.joml.Matrix4f
 import org.joml.Vector2f
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.stage.Stage
+import uk.co.nickthecoder.tickle.util.Heading
 
 private var nextId: Int = 0
 
@@ -32,18 +33,15 @@ class Actor(val role: Role? = null) {
 
     var z: Float = 0f
 
-    var directionRadians: Double = 0.0
-        set(v) {
-            field = v
-            dirtyMatrix = true
-        }
-
-    var directionDegrees: Double
-        get() = Math.toDegrees(directionRadians)
-        set(v) {
-            directionRadians = Math.toRadians(v)
-        }
-
+    val direction: Heading = object : Heading() {
+        override var radians = 0.0
+            set(v) {
+                if (field != v) {
+                    field = v
+                    dirtyMatrix = true
+                }
+            }
+    }
 
     var scale: Float = 1f
         set(v) {
@@ -67,15 +65,15 @@ class Actor(val role: Role? = null) {
     /**
      * Return false iff the actor requires special transformations to render it.
      */
-    fun isSimpleImage() =
-            directionRadians == appearance.directionRadians && scale == 1f && !flipX && !flipY && customTransformation == null
+    fun isSimpleImage(): Boolean =
+            direction.radians == appearance.directionRadians && scale == 1f && !flipX && !flipY && customTransformation == null
 
 
     fun getModelMatrix(): Matrix4f {
-        if (dirtyMatrix  ) {
+        if (dirtyMatrix) {
             modelMatrix.identity().translate(x, y, 0f)
-            if (directionRadians != 0.0) {
-                modelMatrix.rotateZ((directionRadians - appearance.directionRadians).toFloat())
+            if (direction.radians != 0.0) {
+                modelMatrix.rotateZ((direction.radians - appearance.directionRadians).toFloat())
             }
             if (scale != 1f) {
                 modelMatrix.scale(scale)
