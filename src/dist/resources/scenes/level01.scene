@@ -8,14 +8,14 @@
             "actors": [
                 {
                     "costume": "bee",
-                    "x": -114,
-                    "y": 59,
+                    "x": 207,
+                    "y": 325,
                     "direction": 0
                 },
                 {
                     "costume": "grenade",
-                    "x": -14,
-                    "y": 1,
+                    "x": 226,
+                    "y": 83,
                     "direction": 1,
                     "attributes": [
                         {
@@ -26,27 +26,87 @@
                 },
                 {
                     "costume": "coin",
-                    "x": -89,
-                    "y": 185,
+                    "x": 254,
+                    "y": 433,
                     "direction": 0
                 },
                 {
                     "costume": "coin10",
-                    "x": 74,
-                    "y": 184,
-                    "direction": 0
+                    "x": 419,
+                    "y": 423,
+                    "direction": 37,
+                    "attributes": [
+                        {
+                            "name": "initialHeading",
+                            "value": "8"
+                        }
+                    ]
                 },
                 {
                     "costume": "coin100",
-                    "x": 268,
-                    "y": 182,
-                    "direction": 0
+                    "x": 532,
+                    "y": 408,
+                    "direction": 329,
+                    "attributes": [
+                        {
+                            "name": "initialHeading",
+                            "value": "18"
+                        }
+                    ]
                 },
                 {
                     "costume": "bee",
-                    "x": 215,
-                    "y": 137,
+                    "x": 598,
+                    "y": 501,
                     "direction": 0
+                },
+                {
+                    "costume": "grenade",
+                    "x": 418,
+                    "y": 82,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.2"
+                        }
+                    ]
+                },
+                {
+                    "costume": "grenade",
+                    "x": 578,
+                    "y": 81,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.4"
+                        }
+                    ]
+                },
+                {
+                    "costume": "grenade",
+                    "x": 739,
+                    "y": 82,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.6"
+                        }
+                    ]
+                },
+                {
+                    "costume": "grenade",
+                    "x": 920,
+                    "y": 85,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "hue",
+                            "value": "0.8"
+                        }
+                    ]
                 }
             ]
         }

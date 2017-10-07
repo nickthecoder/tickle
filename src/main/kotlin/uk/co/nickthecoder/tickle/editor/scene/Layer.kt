@@ -38,7 +38,7 @@ abstract class Layer {
             sceneActor.pose?.let { pose ->
                 save()
                 translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
-                rotate(sceneActor.directionDegrees - pose.directionDegrees)
+                rotate(sceneActor.direction.degrees - pose.direction.degrees)
                 drawPose(pose)
                 restore()
             }

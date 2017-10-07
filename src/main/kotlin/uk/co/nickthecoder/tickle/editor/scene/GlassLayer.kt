@@ -56,7 +56,7 @@ class GlassLayer(val selection: Selection)
                 save()
 
                 translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
-                rotate(sceneActor.directionDegrees - (sceneActor.pose?.directionDegrees ?: 0.0))
+                rotate(sceneActor.direction.degrees - (sceneActor.pose?.direction?.degrees ?: 0.0))
 
                 sceneActor.pose?.let { pose ->
                     lineWidth = selectionWidth + 2
@@ -228,9 +228,9 @@ class GlassLayer(val selection: Selection)
     }
 
     inner class RotateArrow(sceneActor: SceneActor) : Arrow(sceneActor, 0) {
-        override fun get() = sceneActor.directionDegrees
+        override fun get() = sceneActor.direction.degrees
         override fun set(degrees: Double) {
-            sceneActor.directionDegrees = degrees
+            sceneActor.direction.degrees = degrees
         }
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
@@ -243,10 +243,10 @@ class GlassLayer(val selection: Selection)
 
             angle -= angle.rem(Math.toRadians(if (snap) 15.0 else 1.0))
 
-            val degrees = angle - sceneActor.directionRadians
+            val degrees = angle - sceneActor.direction.radians
 
             selection.forEach {
-                it.directionRadians += degrees
+                it.direction.radians += degrees
             }
         }
 

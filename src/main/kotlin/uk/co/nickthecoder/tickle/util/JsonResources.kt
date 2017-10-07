@@ -275,7 +275,7 @@ class JsonResources {
                 jpose.add("top", pose.rect.top)
                 jpose.add("offsetX", pose.offsetX)
                 jpose.add("offsetY", pose.offsetY)
-                jpose.add("direction", pose.directionDegrees)
+                jpose.add("direction", pose.direction.degrees)
 
                 jposes.add(jpose)
             }
@@ -299,7 +299,7 @@ class JsonResources {
             pose.offsetX = jpose.get("offsetX").asFloat()
             pose.offsetY = jpose.get("offsetY").asFloat()
 
-            pose.directionDegrees = jpose.get("direction").asDouble()
+            pose.direction.degrees = jpose.get("direction").asDouble()
             pose.updateRectf()
 
             resources.addPose(name, pose)

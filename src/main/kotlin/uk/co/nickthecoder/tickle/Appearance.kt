@@ -28,7 +28,7 @@ class InvisibleAppearance : Appearance {
 class PoseAppearance(val actor: Actor, var pose: Pose) : Appearance {
 
     override val directionRadians
-        get() = pose.directionRadians
+        get() = pose.direction.radians
 
     override fun draw(renderer: Renderer) {
         pose.draw(renderer, actor)

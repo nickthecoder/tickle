@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Texture
+import uk.co.nickthecoder.tickle.util.Heading
 import uk.co.nickthecoder.tickle.util.Rectf
 import uk.co.nickthecoder.tickle.util.YDownRect
 
@@ -22,13 +23,8 @@ class Pose(
      * The natural direction. i.e. if the Actor moved "forward", which mathematical angle would that be?
      * For the default value of 0, the image is pointing to the right.
      */
-    var directionRadians: Double = 0.0
+    val direction = Heading()
 
-    var directionDegrees: Double
-        get() = Math.toDegrees(directionRadians)
-        set(v) {
-            directionRadians = Math.toRadians(v)
-        }
 
     private val rectf = Rectf(0f, 0f, 1f, 1f)
 
@@ -67,10 +63,10 @@ class Pose(
         if (other !is Pose) {
             return false
         }
-        return (rect == other.rect) && rectf == other.rectf && texture == other.texture && directionRadians == other.directionRadians
+        return (rect == other.rect) && rectf == other.rectf && texture == other.texture && direction.radians == other.direction.radians
     }
 
     override fun toString(): String {
-        return "Pose rect=$rect offset=$offsetX,$offsetY direction=$directionDegrees rectf=$rectf"
+        return "Pose rect=$rect offset=$offsetX,$offsetY direction=$direction.degrees rectf=$rectf"
     }
 }

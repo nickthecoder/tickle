@@ -22,7 +22,7 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
 
     val yP = DoubleParameter("y", value = sceneActor.y.toDouble())
 
-    val directionP = DoubleParameter("direction", value = sceneActor.directionDegrees)
+    val directionP = DoubleParameter("direction", value = sceneActor.direction.degrees)
 
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
@@ -70,7 +70,7 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
     fun updateSceneActor() {
         xP.value?.let { sceneActor.x = it.toFloat() }
         yP.value?.let { sceneActor.y = it.toFloat() }
-        directionP.value?.let { sceneActor.directionDegrees = it }
+        directionP.value?.let { sceneActor.direction.degrees = it }
 
         sceneResource.fireChange()
         dirty = false
@@ -79,7 +79,7 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
     fun updateParameters() {
         yP.value = sceneActor.y.toDouble()
         xP.value = sceneActor.x.toDouble()
-        directionP.value = sceneActor.directionDegrees
+        directionP.value = sceneActor.direction.degrees
     }
 
     override fun sceneChanged(sceneResource: SceneResource) {

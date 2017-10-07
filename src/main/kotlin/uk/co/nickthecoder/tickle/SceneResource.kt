@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.demo.NoDirector
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.util.Heading
 import java.io.File
 
 /**
@@ -82,12 +83,7 @@ class SceneActor {
 
     var x: Float = 0f
     var y: Float = 0f
-    var directionDegrees: Double = 0.0
-    var directionRadians: Double
-        get() = Math.toRadians(directionDegrees)
-        set(v) {
-            directionDegrees = Math.toDegrees(v)
-        }
+    val direction = Heading()
 
     val attributes = Attributes()
 
@@ -102,7 +98,7 @@ class SceneActor {
         val actor = costume.createActor()
         actor.x = x
         actor.y = y
-        actor.direction.degrees = directionDegrees
+        actor.direction.degrees = direction.degrees
 
         actor.role?.let { attributes.applyToObject(it) }
 
@@ -116,5 +112,5 @@ class SceneActor {
     }
 
 
-    override fun toString() = "SceneActor $costumeName @ $x , $y direction=$directionDegrees"
+    override fun toString() = "SceneActor $costumeName @ $x , $y direction=$direction.degrees"
 }

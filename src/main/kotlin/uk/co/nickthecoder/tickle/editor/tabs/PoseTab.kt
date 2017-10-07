@@ -73,7 +73,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         positionP.top = pose.rect.top
         positionP.bottom = pose.rect.bottom
 
-        directionP.value = pose.directionDegrees
+        directionP.value = pose.direction.degrees
 
         updateViewport()
 
@@ -103,7 +103,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         pose.offsetX = offsetP.x!!.toFloat()
         pose.offsetY = offsetP.y!!.toFloat()
 
-        pose.directionDegrees = directionP.value!!
+        pose.direction.degrees = directionP.value!!
     }
 
     fun editTexture() {

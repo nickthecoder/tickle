@@ -1,12 +1,12 @@
 package uk.co.nickthecoder.tickle.stage
 
-import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Vector2f
 import org.joml.Vector4f
 import org.lwjgl.opengl.GL11
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
+import uk.co.nickthecoder.tickle.util.Heading
 import uk.co.nickthecoder.tickle.util.Recti
 
 
@@ -39,13 +39,15 @@ abstract class AbstractStageView
             }
         }
 
-    var degrees = 0.0
-        set(v) {
-            if (field != v) {
-                field = v
-                projectionDirty = true
+    val direction = object : Heading() {
+        override var radians = 0.0
+            set(v) {
+                if (field != v) {
+                    field = v
+                    projectionDirty = true
+                }
             }
-        }
+    }
 
     private var projectionDirty: Boolean = true
     private val cachedProjection = Matrix4f()
@@ -79,14 +81,13 @@ abstract class AbstractStageView
                 centerY - h / 2, centerY + h / 2)
 
 
-        if (degrees != 0.0) {
-            val radians = Math.toRadians(degrees)
-            cachedProjection.translate(centerX, centerY, 0f).rotateZ(radians.toFloat()).translate(-centerX, -centerY, 0f)
+        if (direction.degrees != 0.0) {
+            cachedProjection.translate(centerX, centerY, 0f).rotateZ(direction.radians.toFloat()).translate(-centerX, -centerY, 0f)
         }
 
         cachedWindowToWorld
                 .translate(centerX, centerY, 0f)
-                .rotateZ(Math.toRadians(-degrees).toFloat())
+                .rotateZ(-direction.radians.toFloat())
                 .translate(-rect.left - rect.width.toFloat() / 2f, -rect.bottom - rect.height.toFloat() / 2f, 0f)
 
         projectionDirty = false
