@@ -16,11 +16,19 @@
                     "costume": "grenade",
                     "x": 226,
                     "y": 83,
-                    "direction": 1,
+                    "direction": 87.99999999999999,
                     "attributes": [
                         {
                             "name": "hue",
                             "value": "0"
+                        },
+                        {
+                            "name": "maxVelocity",
+                            "value": "105.0:3.4205263"
+                        },
+                        {
+                            "name": "minVelocity",
+                            "value": "62.0:7.694154"
                         }
                     ]
                 },
@@ -74,11 +82,19 @@
                     "costume": "grenade",
                     "x": 418,
                     "y": 82,
-                    "direction": 0,
+                    "direction": 87.99999999999999,
                     "attributes": [
                         {
                             "name": "hue",
                             "value": "0.2"
+                        },
+                        {
+                            "name": "maxVelocity",
+                            "value": "123.00000000000003:3.6472592"
+                        },
+                        {
+                            "name": "minVelocity",
+                            "value": "85.0:10.530432"
                         }
                     ]
                 },
@@ -86,11 +102,19 @@
                     "costume": "grenade",
                     "x": 578,
                     "y": 81,
-                    "direction": 0,
+                    "direction": 91,
                     "attributes": [
                         {
                             "name": "hue",
                             "value": "0.4"
+                        },
+                        {
+                            "name": "maxVelocity",
+                            "value": "119.99999999999999:3.696282"
+                        },
+                        {
+                            "name": "minVelocity",
+                            "value": "84.0:10.34843"
                         }
                     ]
                 },
@@ -98,11 +122,19 @@
                     "costume": "grenade",
                     "x": 739,
                     "y": 82,
-                    "direction": 0,
+                    "direction": 91,
                     "attributes": [
                         {
                             "name": "hue",
                             "value": "0.6"
+                        },
+                        {
+                            "name": "maxVelocity",
+                            "value": "105.0:5.4465585"
+                        },
+                        {
+                            "name": "minVelocity",
+                            "value": "126.0:10.300486"
                         }
                     ]
                 },
@@ -110,11 +142,19 @@
                     "costume": "grenade",
                     "x": 920,
                     "y": 85,
-                    "direction": 0,
+                    "direction": 95,
                     "attributes": [
                         {
                             "name": "hue",
                             "value": "0.8"
+                        },
+                        {
+                            "name": "maxVelocity",
+                            "value": "123.00000000000003:6.101844"
+                        },
+                        {
+                            "name": "minVelocity",
+                            "value": "146.0:13.923002"
                         }
                     ]
                 },

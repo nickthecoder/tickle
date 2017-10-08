@@ -18,6 +18,6 @@ class Fade(
     }
 
     override fun update(t: Float) {
-        actor.color = initialColor.linearInterpolation(finalColor, t)
+        actor.color = initialColor.lerp(finalColor, t)
     }
 }

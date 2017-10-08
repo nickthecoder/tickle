@@ -6,7 +6,8 @@ import uk.co.nickthecoder.tickle.AttributeType
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Attribute(
         val attributeType: AttributeType = AttributeType.NORMAL,
-        val order : Int = 0
+        val order : Int = 0,
+        val scale : Float = 1f
 )
 
 @Target(AnnotationTarget.PROPERTY)

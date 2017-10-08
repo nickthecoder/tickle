@@ -6,7 +6,7 @@ import uk.co.nickthecoder.paratask.util.uncamel
 
 class XYParameter(
         name: String,
-        override val label: String = name.uncamel(),
+        label: String = name.uncamel(),
         val required: Boolean = true,
         description: String = "")
 

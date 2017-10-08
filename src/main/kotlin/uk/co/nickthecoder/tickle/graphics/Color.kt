@@ -14,7 +14,7 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
         buffer.flip()
     }
 
-    fun linearInterpolation(other: Color, t: Float): Color {
+    fun lerp(other: Color, t: Float): Color {
         val s = 1 - t
         return Color(
                 red * s + other.red * t,

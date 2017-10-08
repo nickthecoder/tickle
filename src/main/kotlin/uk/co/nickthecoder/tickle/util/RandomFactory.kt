@@ -18,7 +18,9 @@ class RandomFactory(seed: Long? = null) {
 
     fun between(from: Float, to: Float, ease: Ease = LinearEase.instance) = nextFloat(ease) * (to - from) + from
 
-    fun between(from: Color, to: Color, ease: Ease = LinearEase.instance) = from.linearInterpolation(to, nextFloat(ease))
+    fun between(from: Color, to: Color, ease: Ease = LinearEase.instance) = from.lerp(to, nextFloat(ease))
+
+    fun between(from: Polar2f, to: Polar2f, ease: Ease = LinearEase.instance) = Polar2f(from).lerp(to, nextFloat(ease))
 
     fun between(from: Vector2f, to: Vector2f, ease: Ease = LinearEase.instance) = Vector2f(from).lerp(to, nextFloat(ease))
 
@@ -45,6 +47,7 @@ object Rand {
 
     fun between(from: Float, to: Float, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
     fun between(from: Color, to: Color, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
+    fun between(from: Polar2f, to: Polar2f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
     fun between(from: Vector2f, to: Vector2f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
     fun between(from: Vector3f, to: Vector3f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
     fun between(from: Vector4f, to: Vector4f, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)

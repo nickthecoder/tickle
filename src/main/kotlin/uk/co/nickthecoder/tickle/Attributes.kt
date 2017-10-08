@@ -1,8 +1,12 @@
 package uk.co.nickthecoder.tickle
 
+import org.joml.Vector2f
 import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.tickle.editor.util.PolarParameter
+import uk.co.nickthecoder.tickle.editor.util.Vector2Parameter
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
+import uk.co.nickthecoder.tickle.util.Polar2f
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmErasure
 
@@ -106,6 +110,7 @@ class Attributes {
                 val data = getOrCreateData(property.name)
                 data.attributeType = annotation.attributeType
                 data.order = annotation.order
+                data.scale = annotation.scale
                 createParameter(property.name, property.returnType.jvmErasure)?.let { parameter ->
                     data.parameter = parameter
                     parameter.listen { data.value = parameter.stringValue }
@@ -141,6 +146,12 @@ class Attributes {
             String::class -> {
                 StringParameter("attribute_$name", required = false, label = name)
             }
+            Polar2f::class -> {
+                PolarParameter("attribute_$name", label = name)
+            }
+            Vector2f::class -> {
+                Vector2Parameter("attribute_$name", label = name)
+            }
             else -> {
                 System.err.println("Type $klass (for attribute $name) is not currently supported.")
                 null
@@ -160,6 +171,8 @@ class Attributes {
             Float::class -> value.toFloat()
             Double::class -> value.toDouble()
             String::class -> value
+            Polar2f::class -> Polar2f.fromString(value)
+            Vector2f::class -> vector2fFromString(value)
             else -> throw IllegalArgumentException("Type $klass is not currently supported.")
         }
     }
@@ -171,6 +184,13 @@ data class AttributeData(
         var value: String? = null,
         var attributeType: AttributeType = AttributeType.NORMAL,
         var order: Int = 0,
+        var scale: Float = 1f,
         var parameter: ValueParameter<*>? = null,
         var costumeParameter: ValueParameter<*>? = null)
 
+
+fun vector2fToString(vector: Vector2f) = "${vector.x}x${vector.y}"
+fun vector2fFromString(string: String): Vector2f {
+    val split = string.split("x")
+    return Vector2f(split[0].toFloat(), split[1].toFloat())
+}

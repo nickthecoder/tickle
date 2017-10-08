@@ -1,26 +1,8 @@
 Current Work
 ============
 
-Add some "solid" objects, and use overlap detection to kill the sparks.
-	Just as a prelude to pixel collision detection.
-
-Pixel Overlap
-	Find the intersection of their world rectangles
-	Onto an additional buffer A
-	Can we render the first using just the alpha channel (ignore RGB)
-	and then multiply by the 2nd's alpha channel
-
-	Non ovelapping would then be close to 0
-	So that we don't have to copy large data arrays...
-		Render the four quarters of A onto B (regular rendering)
-		If any pixels are not near zero, we have overlap (but in 1/4 the number of pixels).
-		Repeat this operation (this time each quarter of B onto C) and keep going, till we have just one pixel.
-		Now read the entire pixel buffer (of one pixel!!!)
-	http://wiki.lwjgl.org/wiki/Render_to_Texture_with_Frame_Buffer_Objects_(FBO).html
-
-https://www.khronos.org/opengl/wiki/Pixel_Transfer
-https://www.khronos.org/opengl/wiki/Fragment_Shader
-https://www.khronos.org/opengl/wiki/Logical_Operation
+Use KClass and properties to get/set values instead of the Java stuff.
+Get default values for attributes.
 
 BUGS
 ====
@@ -49,13 +31,36 @@ SceneEditor
 		Velocity Vector2f     @Attribute( AttributeType.RELATIVE_POSITION, scale = xxx)
 			Or should these be combined, backed by X,Y, but with degrees and speed getters?
 
-		Note. Angle has the "vector" method, so: Polar.vector() = angle.vector().mul(magnitude)
-			to get to a Vector2f
+		For Ints and doubles allow it specify "slider" and min/max and step.
+
 
 	It would also be nice to have an angle, which is centered about another drag point
 		Can then use that as the position and angle of generated objects.
 
 	Add "tooltip" to drag handles when mouse is over them.
+
+
+Add some "solid" objects, and use overlap detection to kill the sparks.
+	Just as a prelude to pixel collision detection.
+
+Pixel Overlap
+	Find the intersection of their world rectangles
+	Onto an additional buffer A
+	Can we render the first using just the alpha channel (ignore RGB)
+	and then multiply by the 2nd's alpha channel
+
+	Non ovelapping would then be close to 0
+	So that we don't have to copy large data arrays...
+		Render the four quarters of A onto B (regular rendering)
+		If any pixels are not near zero, we have overlap (but in 1/4 the number of pixels).
+		Repeat this operation (this time each quarter of B onto C) and keep going, till we have just one pixel.
+		Now read the entire pixel buffer (of one pixel!!!)
+	http://wiki.lwjgl.org/wiki/Render_to_Texture_with_Frame_Buffer_Objects_(FBO).html
+
+https://www.khronos.org/opengl/wiki/Pixel_Transfer
+https://www.khronos.org/opengl/wiki/Fragment_Shader
+https://www.khronos.org/opengl/wiki/Logical_Operation
+
 
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).
