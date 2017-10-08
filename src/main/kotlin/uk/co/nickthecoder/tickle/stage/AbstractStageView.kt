@@ -101,27 +101,27 @@ abstract class AbstractStageView
         renderer.changeProjection(projection)
     }
 
-    private val dummyVector2F = Vector2d()
+    private val dummyVector2d = Vector2d()
 
     private val mousePosition4f = Vector4f()
 
-    private val mousePosition2f = Vector2d()
+    private val mousePosition2d = Vector2d()
 
     override fun mousePosition(): Vector2d {
         Window.current?.let { window ->
 
             val pos = window.mousePosition()
-            mousePosition4f.x = pos.x
-            mousePosition4f.y = window.height - pos.y
+            mousePosition4f.x = pos.x.toFloat()
+            mousePosition4f.y = (window.height - pos.y).toFloat()
             mousePosition4f.z = 1f
             mousePosition4f.w = 1f
 
             windowToWorld.transform(mousePosition4f)
-            mousePosition2f.x = mousePosition4f.x.toDouble()
-            mousePosition2f.y = mousePosition4f.y.toDouble()
-            return mousePosition2f
+            mousePosition2d.x = mousePosition4f.x.toDouble()
+            mousePosition2d.y = mousePosition4f.y.toDouble()
+            return mousePosition2d
         }
-        return dummyVector2F
+        return dummyVector2d
     }
 
 }

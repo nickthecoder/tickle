@@ -39,6 +39,10 @@
                     "direction": 20,
                     "attributes": [
                         {
+                            "name": "velocity",
+                            "value": "86.00000000000001:6.11310068623117"
+                        },
+                        {
                             "name": "initialHeading",
                             "value": "297"
                         },
@@ -55,6 +59,10 @@
                     "direction": 37,
                     "attributes": [
                         {
+                            "name": "velocity",
+                            "value": "327.0:8.045495634204272"
+                        },
+                        {
                             "name": "initialHeading",
                             "value": "8"
                         }
@@ -66,6 +74,10 @@
                     "y": 432,
                     "direction": 329,
                     "attributes": [
+                        {
+                            "name": "velocity",
+                            "value": "344.00000000000006:6.648308055437864"
+                        },
                         {
                             "name": "initialHeading",
                             "value": "18"

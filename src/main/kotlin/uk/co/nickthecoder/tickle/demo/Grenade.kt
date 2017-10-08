@@ -27,7 +27,7 @@ class Grenade() : AbstractRole() {
     @Attribute
     var hue: Float = 1.0f
 
-    val action = PeriodicFactory<Actor>(10f) {
+    val action = PeriodicFactory<Actor>(10.0) {
 
         val randomHue = Rand.plusMinus(0.06f)
         val newColor = Color.createFromHSB(hue + randomHue, 1f, 1f)
@@ -46,7 +46,7 @@ class Grenade() : AbstractRole() {
         actor.stage?.add(newActor)
 
         val velocity = Rand.between(minVelocity, maxVelocity)
-        val movement = MovePolar(newActor.position, velocity).and(DragPolar(velocity, 0.015f))
+        val movement = MovePolar(newActor.position, velocity).and(DragPolar(velocity, 0.015))
         newRole.action = movement.and(Fade(newActor, 3.0, transparent).then(Kill(newActor)))
 
     }
