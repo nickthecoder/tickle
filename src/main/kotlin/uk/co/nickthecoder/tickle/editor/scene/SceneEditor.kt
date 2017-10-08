@@ -294,8 +294,8 @@ class SceneEditor(val sceneResource: SceneResource)
         override fun onMouseDragged(event: MouseEvent) {
             if (event.button == MouseButton.PRIMARY) {
                 selection.selected().forEach { sceneActor ->
-                    sceneActor.x += dragDeltaX.toFloat()
-                    sceneActor.y -= dragDeltaY.toFloat()
+                    sceneActor.x += dragDeltaX
+                    sceneActor.y -= dragDeltaY
                 }
                 if (selection.isNotEmpty()) {
                     sceneResource.fireChange()
@@ -316,6 +316,7 @@ class SceneEditor(val sceneResource: SceneResource)
     }
 
     inner class AdjustDragHandle(val dragHandle: GlassLayer.DragHandle) : MouseHandler {
+
         override fun onMouseDragged(event: MouseEvent) {
             dragHandle.moveTo(worldX(event).toDouble(), worldY(event).toDouble(), event.isShiftDown)
             sceneResource.fireChange()

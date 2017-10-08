@@ -3,14 +3,12 @@ package uk.co.nickthecoder.tickle.editor.scene
 import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
-import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
-import uk.co.nickthecoder.tickle.util.Polar2d
 
-class GlassLayer(val selection: Selection)
+class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
     : Layer(), SelectionListener {
 
@@ -275,7 +273,9 @@ class GlassLayer(val selection: Selection)
     }
 
     inner class RotateArrow(sceneActor: SceneActor) : Arrow(sceneActor, 0) {
+
         override fun get() = sceneActor.direction.degrees
+
         override fun set(degrees: Double) {
             sceneActor.direction.degrees = degrees
         }
@@ -303,10 +303,12 @@ class GlassLayer(val selection: Selection)
 
         : Arrow(sceneActor, distance) {
 
-        override fun get() = data.value?.toDouble() ?: 0.0
+        val parameter = data.parameter!! as DoubleParameter
+
+        override fun get() = parameter.value ?: 0.0
 
         override fun set(degrees: Double) {
-            (data.parameter as DoubleParameter).value = degrees
+            parameter.value = degrees
         }
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
@@ -327,20 +329,15 @@ class GlassLayer(val selection: Selection)
 
         : AbstractDragHandle() {
 
-        private val value = data.value?.let { Polar2d.fromString(it) } ?: Polar2d()
+        val parameter = data.parameter!! as PolarParameter
 
         fun set(angleRadians: Double, magnitude: Double) {
-            val pp = data.parameter as PolarParameter
-
-            pp.angleP.value = Math.toDegrees(angleRadians)
-            pp.magnitudeP.value = magnitude
-
-            value.angle.radians = angleRadians
-            value.magnitude = magnitude
+            parameter.angle = Math.toDegrees(angleRadians)
+            parameter.magnitude = magnitude
         }
 
-        override fun x() = sceneActor.x + value.vector().x.toDouble() * data.scale
-        override fun y() = sceneActor.y + value.vector().y.toDouble() * data.scale
+        override fun x() = sceneActor.x + parameter.value.vector().x.toDouble() * data.scale
+        override fun y() = sceneActor.y + parameter.value.vector().y.toDouble() * data.scale
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
 
@@ -365,9 +362,9 @@ class GlassLayer(val selection: Selection)
             with(canvas.graphicsContext2D) {
                 save()
                 translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
-                val length = value.magnitude.toDouble() * data.scale
+                val length = parameter.magnitude!! * data.scale
 
-                rotate(value.angle.degrees)
+                rotate(parameter.value.angle.degrees)
                 drawOutlinesArrow(length, hovering)
                 restore()
             }
@@ -379,21 +376,16 @@ class GlassLayer(val selection: Selection)
 
         : AbstractDragHandle() {
 
-        protected val value = data.value?.let { vector2dFromString(it) } ?: Vector2d()
+        val parameter = data.parameter!! as Vector2dParameter
 
         fun set(x: Double, y: Double) {
-            val pp = data.parameter as Vector2dParameter
-
-            value.x = x
-            value.y = y
-
-            pp.xP.value = x
-            pp.yP.value = y
+            parameter.x = x
+            parameter.y = y
 
         }
 
-        override fun x() = value.x
-        override fun y() = value.y
+        override fun x() = parameter.x!!
+        override fun y() = parameter.y!!
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
             set(x, y)
@@ -403,7 +395,7 @@ class GlassLayer(val selection: Selection)
 
             with(canvas.graphicsContext2D) {
                 save()
-                translate(value.x, value.y)
+                translate(parameter.x!!, parameter.y!!)
                 drawOutlinesHandle(hovering)
                 restore()
             }
@@ -436,7 +428,7 @@ class GlassLayer(val selection: Selection)
 
             with(canvas.graphicsContext2D) {
                 save()
-                translate(sceneActor.x + value.x * data.scale, sceneActor.y + value.y * data.scale)
+                translate(sceneActor.x + parameter.x!! * data.scale, sceneActor.y + parameter.y!! * data.scale)
                 drawOutlinesHandle(hovering)
                 restore()
             }

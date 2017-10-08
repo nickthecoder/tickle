@@ -24,11 +24,15 @@
                         },
                         {
                             "name": "maxVelocity",
-                            "value": "105.0:3.4205263"
+                            "value": "103.99999999999999:3.0"
                         },
                         {
                             "name": "minVelocity",
                             "value": "62.0:7.694154"
+                        },
+                        {
+                            "name": "exit",
+                            "value": "4.0x46.0"
                         }
                     ]
                 },
@@ -46,13 +50,13 @@
                 },
                 {
                     "costume": "coin10",
-                    "x": 83,
-                    "y": 329,
-                    "direction": 37,
+                    "x": 85,
+                    "y": 310,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "velocity",
-                            "value": "327.0:8.045495634204272"
+                            "value": "327.0:7.2401657439591816"
                         }
                     ]
                 },
@@ -91,6 +95,10 @@
                         {
                             "name": "minVelocity",
                             "value": "85.0:10.530432"
+                        },
+                        {
+                            "name": "exit",
+                            "value": "4.0x47.0"
                         }
                     ]
                 },
@@ -111,6 +119,10 @@
                         {
                             "name": "minVelocity",
                             "value": "84.0:10.34843"
+                        },
+                        {
+                            "name": "exit",
+                            "value": "3.0x41.0"
                         }
                     ]
                 },
@@ -131,6 +143,10 @@
                         {
                             "name": "minVelocity",
                             "value": "126.0:10.300486"
+                        },
+                        {
+                            "name": "exit",
+                            "value": "2.0x41.0"
                         }
                     ]
                 },
@@ -151,6 +167,10 @@
                         {
                             "name": "minVelocity",
                             "value": "146.0:13.923002"
+                        },
+                        {
+                            "name": "exit",
+                            "value": "3.0x34.0"
                         }
                     ]
                 },

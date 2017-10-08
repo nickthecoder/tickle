@@ -18,8 +18,10 @@ class Vector2dParameter(
         name, label, description) {
 
     val xP = DoubleParameter("${name}_x", label = "X", minValue = -Double.MAX_VALUE)
+    var x by xP
 
     val yP = DoubleParameter("${name}_y", label = "Y", minValue = -Double.MAX_VALUE)
+    var y by yP
 
     override val converter = object : StringConverter<Vector2d>() {
         override fun fromString(string: String): Vector2d {

@@ -16,8 +16,10 @@ class PolarParameter(
         name, label, description) {
 
     val angleP = DoubleParameter("${name}_angle", label = "Angle")
+    var angle by angleP
 
     val magnitudeP = DoubleParameter("${name}_magnitude", label = "Magnitude")
+    var magnitude by magnitudeP
 
     override val converter = object : StringConverter<Polar2d>() {
         override fun fromString(string: String): Polar2d {

@@ -4,10 +4,7 @@ import javafx.application.Platform
 import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
-import uk.co.nickthecoder.paratask.parameters.DoubleParameter
-import uk.co.nickthecoder.paratask.parameters.SimpleGroupParameter
-import uk.co.nickthecoder.paratask.parameters.addParameters
-import uk.co.nickthecoder.paratask.parameters.asVertical
+import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.SceneListerner
 import uk.co.nickthecoder.tickle.SceneResource
@@ -16,7 +13,7 @@ import uk.co.nickthecoder.tickle.editor.PropertiesPaneContent
 
 class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResource)
 
-    : PropertiesPaneContent, SceneListerner {
+    : PropertiesPaneContent, SceneListerner, ParameterListener {
 
     override val title = sceneActor.costumeName
 
@@ -35,14 +32,6 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
     var dirty = false
 
     init {
-        groupP.listen {
-            dirty = true
-            Platform.runLater {
-                if (dirty) {
-                    updateSceneActor()
-                }
-            }
-        }
 
         sceneActor.attributes.data().forEach { data ->
             data.parameter?.let { it ->
@@ -56,12 +45,31 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
             }
         }
 
+        groupP.parameterListeners.add(this)
         sceneResource.listeners.add(this)
     }
 
-
     override fun cleanUp() {
         sceneResource.listeners.remove(this)
+        groupP.parameterListeners.remove(this)
+    }
+
+    override fun parameterChanged(event: ParameterEvent) {
+        dirty = true
+        Platform.runLater {
+            if (dirty) {
+                updateSceneActor()
+            }
+        }
+    }
+
+    override fun sceneChanged(sceneResource: SceneResource) {
+        dirty = true
+        Platform.runLater {
+            if (dirty) {
+                updateParameters()
+            }
+        }
     }
 
     override fun build(): Node {
@@ -78,6 +86,9 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
         yP.value?.let { sceneActor.y = it }
         directionP.value?.let { sceneActor.direction.degrees = it }
 
+        // Note. We are not updating the dynamic "attributes", because they should ONLY be updated via their
+        // Parameters, The scene editor should NOT be changing the string value directly.
+
         sceneResource.fireChange()
         dirty = false
     }
@@ -86,10 +97,11 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
         yP.value = sceneActor.y
         xP.value = sceneActor.x
         directionP.value = sceneActor.direction.degrees
+
+        // Note. We do not update the dynamic "attributes", because they should ONLY be updated via their
+        // Parameters, The scene editor should NOT be changing the string value directly.
+        dirty = false
     }
 
-    override fun sceneChanged(sceneResource: SceneResource) {
-        updateParameters()
-    }
 
 }

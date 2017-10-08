@@ -119,6 +119,14 @@ class SceneActor {
 
     var x: Double = 0.0
     var y: Double = 0.0
+        set(v) {
+            field = v
+            if (v == 100.0) {
+                Thread.dumpStack()
+            }
+
+        }
+
     val direction = Angle()
 
     val attributes = Attributes()
