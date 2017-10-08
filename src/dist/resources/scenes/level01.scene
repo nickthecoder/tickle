@@ -16,7 +16,7 @@
                     "costume": "grenade",
                     "x": 226,
                     "y": 83,
-                    "direction": 87.99999999999999,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "hue",
@@ -82,7 +82,7 @@
                     "costume": "grenade",
                     "x": 418,
                     "y": 82,
-                    "direction": 87.99999999999999,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "hue",
@@ -102,7 +102,7 @@
                     "costume": "grenade",
                     "x": 578,
                     "y": 81,
-                    "direction": 91,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "hue",
@@ -122,7 +122,7 @@
                     "costume": "grenade",
                     "x": 739,
                     "y": 82,
-                    "direction": 91,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "hue",
@@ -142,7 +142,7 @@
                     "costume": "grenade",
                     "x": 920,
                     "y": 85,
-                    "direction": 95,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "hue",

@@ -3,12 +3,12 @@ package uk.co.nickthecoder.tickle.editor.scene
 import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
-import org.joml.Vector2f
+import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
-import uk.co.nickthecoder.tickle.editor.util.Vector2Parameter
-import uk.co.nickthecoder.tickle.util.Polar2f
+import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
+import uk.co.nickthecoder.tickle.util.Polar2d
 
 class GlassLayer(val selection: Selection)
 
@@ -327,7 +327,7 @@ class GlassLayer(val selection: Selection)
 
         : AbstractDragHandle() {
 
-        private val value = data.value?.let { Polar2f.fromString(it) } ?: Polar2f()
+        private val value = data.value?.let { Polar2d.fromString(it) } ?: Polar2d()
 
         fun set(angleRadians: Double, magnitude: Double) {
             val pp = data.parameter as PolarParameter
@@ -336,7 +336,7 @@ class GlassLayer(val selection: Selection)
             pp.magnitudeP.value = magnitude
 
             value.angle.radians = angleRadians
-            value.magnitude = magnitude.toFloat()
+            value.magnitude = magnitude
         }
 
         override fun x() = sceneActor.x + value.vector().x.toDouble() * data.scale
@@ -379,21 +379,21 @@ class GlassLayer(val selection: Selection)
 
         : AbstractDragHandle() {
 
-        protected val value = data.value?.let { vector2fFromString(it) } ?: Vector2f()
+        protected val value = data.value?.let { vector2dFromString(it) } ?: Vector2d()
 
         fun set(x: Double, y: Double) {
-            val pp = data.parameter as Vector2Parameter
+            val pp = data.parameter as Vector2dParameter
 
-            value.x = x.toFloat()
-            value.y = y.toFloat()
+            value.x = x
+            value.y = y
 
             pp.xP.value = x
             pp.yP.value = y
 
         }
 
-        override fun x() = value.x.toDouble()
-        override fun y() = value.y.toDouble()
+        override fun x() = value.x
+        override fun y() = value.y
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
             set(x, y)
@@ -403,7 +403,7 @@ class GlassLayer(val selection: Selection)
 
             with(canvas.graphicsContext2D) {
                 save()
-                translate(value.x.toDouble(), value.y.toDouble())
+                translate(value.x, value.y)
                 drawOutlinesHandle(hovering)
                 restore()
             }
@@ -436,7 +436,7 @@ class GlassLayer(val selection: Selection)
 
             with(canvas.graphicsContext2D) {
                 save()
-                translate(sceneActor.x.toDouble() + value.x * data.scale, sceneActor.y.toDouble() + value.y * data.scale)
+                translate(sceneActor.x + value.x * data.scale, sceneActor.y + value.y * data.scale)
                 drawOutlinesHandle(hovering)
                 restore()
             }

@@ -22,11 +22,11 @@
                     "costume": "coin10",
                     "x": 143,
                     "y": 440,
-                    "direction": 0,
+                    "direction": 14.999999999999998,
                     "attributes": [
                         {
                             "name": "velocity",
-                            "value": "90.0:12.0"
+                            "value": "75.00000000000001:11.132385189167683"
                         }
                     ]
                 },

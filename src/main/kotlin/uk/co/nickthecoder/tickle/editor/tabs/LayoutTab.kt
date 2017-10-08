@@ -183,22 +183,22 @@ class LayoutTab(val name: String, val layout: Layout)
                     // X
                     hAlignment = inner.hAlignmentP.value!!
                     if (hAlignment == FlexHAlignment.MIDDLE) {
-                        hPosition = inner.hPositionP.value!!.toFloat()
+                        hPosition = inner.hPositionP.value!!
                     } else {
                         leftRightMargin = inner.leftRightMarginP.value!!
                     }
                     width = if (inner.hOneOfP.value == inner.widthP) inner.widthP.value!! else null
-                    widthRatio = if (inner.hOneOfP.value == inner.widthRatioP) inner.widthRatioP.value!!.toFloat() else null
+                    widthRatio = if (inner.hOneOfP.value == inner.widthRatioP) inner.widthRatioP.value!! else null
 
                     // Y
                     vAlignment = inner.vAlignmentP.value!!
                     if (vAlignment == FlexVAlignment.MIDDLE) {
-                        vPosition = inner.vPositionP.value!!.toFloat()
+                        vPosition = inner.vPositionP.value!!
                     } else {
                         topBottomMargin = inner.topBottomMarginP.value!!
                     }
                     height = if (inner.vOneOfP.value == inner.heightP) inner.heightP.value!! else null
-                    heightRatio = if (inner.vOneOfP.value == inner.heightRatioP) inner.heightRatioP.value!!.toFloat() else null
+                    heightRatio = if (inner.vOneOfP.value == inner.heightRatioP) inner.heightRatioP.value!! else null
                 }
             }
         }

@@ -153,7 +153,7 @@ class InputParameter : MultipleGroupParameter("input") {
             return JoystickButtonInput(buttonJoystickIDP.value!!, joystickButtonP.value!!)
 
         } else if (inputTypeP.value == joystickAxisInputP) {
-            return JoystickAxisInput(axisJoystickIDP.value!!, joystickAxisP.value!!, positiveP.value!!, thresholdP.value!!.toFloat())
+            return JoystickAxisInput(axisJoystickIDP.value!!, joystickAxisP.value!!, positiveP.value!!, thresholdP.value!!)
         }
 
         return null

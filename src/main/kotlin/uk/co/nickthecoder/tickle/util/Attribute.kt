@@ -7,7 +7,7 @@ import uk.co.nickthecoder.tickle.AttributeType
 annotation class Attribute(
         val attributeType: AttributeType = AttributeType.NORMAL,
         val order : Int = 0,
-        val scale : Float = 1f
+        val scale : Double = 1.0
 )
 
 @Target(AnnotationTarget.PROPERTY)

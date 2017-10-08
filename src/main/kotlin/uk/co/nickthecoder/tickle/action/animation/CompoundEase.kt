@@ -13,14 +13,9 @@ import java.util.*
  */
 class CompoundEase : Ease {
 
-    private val sections: MutableList<Section>
+    private val sections: MutableList<Section> = ArrayList<Section>()
 
-    private var totalWidth: Float = 0.toFloat()
-
-    init {
-        this.sections = ArrayList<Section>()
-        this.totalWidth = 0f
-    }
+    private var totalWidth: Double = 0.0
 
     /**
      * Note, the last ease to be added should always have a destination of 1.
@@ -32,18 +27,18 @@ class CompoundEase : Ease {
      * *
      * @param destination
      */
-    fun addEase(ease: Ease, width: Float, destination: Float): CompoundEase {
+    fun addEase(ease: Ease, width: Double, destination: Double): CompoundEase {
         this.totalWidth += width
-        val prevY: Float
+        val prevY: Double
         if (this.sections.isEmpty()) {
-            prevY = 0f
+            prevY = 0.0
         } else {
             val prevSection = this.sections[this.sections.size - 1]
             prevY = prevSection.y0 + prevSection.actualHeight
         }
         this.sections.add(Section(ease, width, prevY, destination))
 
-        var accumulatedWidth = 0f
+        var accumulatedWidth = 0.0
         sections.forEach { section ->
             section.actualWidth = section.width / this.totalWidth
             section.x0 = accumulatedWidth
@@ -52,13 +47,13 @@ class CompoundEase : Ease {
         return this
     }
 
-    override fun ease(t: Float): Float {
+    override fun ease(t: Double): Double {
         for (section in this.sections) {
             if (section.x0 + section.actualWidth >= t) {
                 return section.amount(t)
             }
         }
-        return 1f
+        return 1.0
     }
 
     override fun toString(): String {
@@ -76,19 +71,19 @@ class CompoundEase : Ease {
         return buffer.toString()
     }
 
-    private inner class Section(internal var ease: Ease, internal var width: Float, internal var y0: Float, y1: Float) {
+    private inner class Section(internal var ease: Ease, internal var width: Double, internal var y0: Double, y1: Double) {
 
-        internal var actualWidth: Float = 0.toFloat()
-        internal var actualHeight: Float = 0.toFloat()
+        internal var actualWidth: Double = 0.0
+        internal var actualHeight: Double = 0.0
 
-        internal var x0: Float = 0.toFloat()
+        internal var x0: Double = 0.0
 
         init {
             this.actualHeight = y1 - y0
             // x0 and actualWidth are calculated by parent class every time a section is added.
         }
 
-        fun amount(t: Float): Float {
+        fun amount(t: Double): Double {
             val amount = (t - this.x0) / this.actualWidth
 
             val result = this.ease.ease(amount)

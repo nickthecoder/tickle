@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.util.Rectf
+import uk.co.nickthecoder.tickle.util.Rectd
 
 
 /**
@@ -22,7 +22,6 @@ class Renderer(val window: Window) {
     private var vertices = MemoryUtil.memAllocFloat(4096)
     private var numVertices: Int = 0
     private var drawing: Boolean = false
-
 
     val identityMatrix = Matrix4f()
 
@@ -156,11 +155,11 @@ class Renderer(val window: Window) {
         }
     }
 
-    fun drawTexture(texture: Texture, left: Float, bottom: Float, right: Float, top: Float, textureRect: Rectf, color: Color = Color.WHITE) {
+    fun drawTexture(texture: Texture, left: Double, bottom: Double, right: Double, top: Double, textureRect: Rectd, color: Color = Color.WHITE) {
         drawTexture(texture, left, bottom, right, top, textureRect, color, identityMatrix)
     }
 
-    fun drawTexture(texture: Texture, left: Float, bottom: Float, right: Float, top: Float, textureRect: Rectf, color: Color = Color.WHITE, modelMatrix: Matrix4f) {
+    fun drawTexture(texture: Texture, left: Double, bottom: Double, right: Double, top: Double, textureRect: Rectd, color: Color = Color.WHITE, modelMatrix: Matrix4f) {
         if (modelMatrix !== currentModelMatrix) {
             flush()
             program.setUniform(uniModel, modelMatrix)
@@ -169,7 +168,8 @@ class Renderer(val window: Window) {
 
         drawTextureRegion(
                 texture,
-                left, bottom, right, top, textureRect.left, textureRect.bottom, textureRect.right, textureRect.top, color)
+                left.toFloat(), bottom.toFloat(), right.toFloat(), top.toFloat(),
+                textureRect.left.toFloat(), textureRect.bottom.toFloat(), textureRect.right.toFloat(), textureRect.top.toFloat(), color)
     }
 
     fun drawTextureRegion(

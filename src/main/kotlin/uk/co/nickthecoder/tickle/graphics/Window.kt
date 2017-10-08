@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.graphics
 
-import org.joml.Vector2f
+import org.joml.Vector2d
 import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW
@@ -131,7 +131,7 @@ class Window(
 
     fun shouldClose(): Boolean = GLFW.glfwWindowShouldClose(handle)
 
-    private val mouseVector = Vector2f()
+    private val mouseVector = Vector2d()
 
     private val xBuffer = BufferUtils.createDoubleBuffer(1)
     private val yBuffer = BufferUtils.createDoubleBuffer(1)
@@ -140,11 +140,11 @@ class Window(
      * Returns the position of the mouse pointer relative to the top left of the window.
      * This is very rarely useful, and instead, you should use [StageView].mousePosition]
      */
-    fun mousePosition(): Vector2f {
+    fun mousePosition(): Vector2d {
         GLFW.glfwGetCursorPos(handle, xBuffer, yBuffer)
 
-        mouseVector.x = xBuffer.get(0).toFloat()
-        mouseVector.y = yBuffer.get(0).toFloat()
+        mouseVector.x = xBuffer.get(0)
+        mouseVector.y = yBuffer.get(0)
 
         return mouseVector
     }

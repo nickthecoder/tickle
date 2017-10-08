@@ -1,13 +1,13 @@
 package uk.co.nickthecoder.tickle.util
 
 /**
- * A rectangle using floats
+ * A rectangle using Double
  */
-data class Rectf(
-        var left: Float,
-        var bottom: Float,
-        var right: Float,
-        var top: Float) {
+data class Rectd(
+        var left: Double,
+        var bottom: Double,
+        var right: Double,
+        var top: Double) {
 
     val width
         get() = right - left
@@ -15,7 +15,7 @@ data class Rectf(
         get() = top - bottom
 
     override fun equals(other: Any?): Boolean {
-        if (other !is Rectf) {
+        if (other !is Rectd) {
             return false
         }
         return other.left == left && other.bottom == bottom && other.right == right && other.top == top

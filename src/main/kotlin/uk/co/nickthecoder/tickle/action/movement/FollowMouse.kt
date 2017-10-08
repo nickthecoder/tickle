@@ -1,11 +1,12 @@
 package uk.co.nickthecoder.tickle.action.movement
 
+import org.joml.Vector2d
 import org.joml.Vector2f
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.stage.StageView
 
 class FollowMouse(
-        val position: Vector2f,
+        val position: Vector2d,
         val view: StageView)
 
     : Action {

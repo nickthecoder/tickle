@@ -25,12 +25,12 @@ fun Pose.image(): Image? {
     return null
 }
 
-fun Pose.isOverlapping(x: Float, y: Float): Boolean {
+fun Pose.isOverlapping(x: Double, y: Double): Boolean {
     return x > -offsetX && x < rect.width - offsetX &&
             y > -offsetY && y < rect.height - offsetY
 }
 
-fun SceneActor.isOverlapping(x: Float, y: Float): Boolean {
+fun SceneActor.isOverlapping(x: Double, y: Double): Boolean {
     val tx = x - this.x
     val ty = y - this.y
     return pose?.isOverlapping(tx, ty) ?: false
@@ -39,7 +39,7 @@ fun SceneActor.isOverlapping(x: Float, y: Float): Boolean {
 /**
  * x,y are relative to the "offset point" of the pose, with the y axis pointing upwards
  */
-fun isPixelIsOpaque(pose: Pose?, x: Float, y: Float, threshold: Double = 0.05): Boolean {
+fun isPixelIsOpaque(pose: Pose?, x: Double, y: Double, threshold: Double = 0.05): Boolean {
     pose ?: return false
     val px = pose.rect.left + x + pose.offsetX
     val py = pose.rect.top + pose.rect.height - (y + pose.offsetY)
@@ -49,7 +49,7 @@ fun isPixelIsOpaque(pose: Pose?, x: Float, y: Float, threshold: Double = 0.05): 
     return false
 }
 
-fun isSceneActorAt(sceneActor: SceneActor, x: Float, y: Float): Boolean {
+fun isSceneActorAt(sceneActor: SceneActor, x: Double, y: Double): Boolean {
     val tx = x - sceneActor.x
     val ty = y - sceneActor.y
     val pose = sceneActor.pose

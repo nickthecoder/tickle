@@ -88,7 +88,7 @@ class SceneEditor(val sceneResource: SceneResource)
         dirty = false
     }
 
-    fun findActorsAt(x: Float, y: Float): List<SceneActor> {
+    fun findActorsAt(x: Double, y: Double): List<SceneActor> {
         val list = mutableListOf<SceneActor>()
         sceneResource.sceneStages.forEach { _, sceneStage ->
             sceneStage.sceneActors.forEach { sceneActor ->

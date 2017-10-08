@@ -97,8 +97,8 @@ class JsonScene {
     fun loadActor(sceneStage: SceneStage, jactor: JsonObject) {
         val sceneActor = SceneActor()
         sceneActor.costumeName = jactor.get("costume").asString()
-        sceneActor.x = jactor.getFloat("x", 0f)
-        sceneActor.y = jactor.getFloat("y", 0f)
+        sceneActor.x = jactor.getDouble("x", 0.0)
+        sceneActor.y = jactor.getDouble("y", 0.0)
         sceneActor.direction.degrees = jactor.getDouble("direction", 0.0)
 
         JsonUtil.loadAttributes(jactor, sceneActor.attributes)

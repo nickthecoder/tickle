@@ -5,7 +5,7 @@ import uk.co.nickthecoder.tickle.graphics.Color
 
 class Fade(
         val actor: Actor,
-        seconds: Float,
+        seconds: Double,
         val finalColor: Color,
         ease: Ease = LinearEase.instance)
 
@@ -17,7 +17,7 @@ class Fade(
         initialColor = actor.color
     }
 
-    override fun update(t: Float) {
-        actor.color = initialColor.lerp(finalColor, t)
+    override fun update(t: Double) {
+        actor.color = initialColor.lerp(finalColor, t.toFloat())
     }
 }

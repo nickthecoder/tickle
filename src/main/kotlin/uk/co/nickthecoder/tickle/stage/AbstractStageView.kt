@@ -1,7 +1,7 @@
 package uk.co.nickthecoder.tickle.stage
 
 import org.joml.Matrix4f
-import org.joml.Vector2f
+import org.joml.Vector2d
 import org.joml.Vector4f
 import org.lwjgl.opengl.GL11
 import uk.co.nickthecoder.tickle.graphics.Renderer
@@ -23,7 +23,7 @@ abstract class AbstractStageView
 
     override lateinit var stage: Stage
 
-    override var centerX = 0f
+    override var centerX = 0.0
         set(v) {
             if (field != v) {
                 field = v
@@ -31,7 +31,7 @@ abstract class AbstractStageView
             }
         }
 
-    override var centerY = 0f
+    override var centerY = 0.0
         set(v) {
             if (field != v) {
                 field = v
@@ -77,16 +77,19 @@ abstract class AbstractStageView
         cachedWindowToWorld.identity()
 
         cachedProjection.ortho2D(
-                centerX - w / 2, centerX + w / 2,
-                centerY - h / 2, centerY + h / 2)
+                (centerX - w / 2).toFloat(), (centerX + w / 2).toFloat(),
+                (centerY - h / 2).toFloat(), (centerY + h / 2).toFloat())
 
 
         if (direction.degrees != 0.0) {
-            cachedProjection.translate(centerX, centerY, 0f).rotateZ(direction.radians.toFloat()).translate(-centerX, -centerY, 0f)
+            cachedProjection
+                    .translate(centerX.toFloat(), centerY.toFloat(), 0f)
+                    .rotateZ(direction.radians.toFloat())
+                    .translate(-centerX.toFloat(), -centerY.toFloat(), 0f)
         }
 
         cachedWindowToWorld
-                .translate(centerX, centerY, 0f)
+                .translate(centerX.toFloat(), centerY.toFloat(), 0f)
                 .rotateZ(-direction.radians.toFloat())
                 .translate(-rect.left - rect.width.toFloat() / 2f, -rect.bottom - rect.height.toFloat() / 2f, 0f)
 
@@ -98,13 +101,13 @@ abstract class AbstractStageView
         renderer.changeProjection(projection)
     }
 
-    private val dummyVector2F = Vector2f()
+    private val dummyVector2F = Vector2d()
 
     private val mousePosition4f = Vector4f()
 
-    private val mousePosition2f = Vector2f()
+    private val mousePosition2f = Vector2d()
 
-    override fun mousePosition(): Vector2f {
+    override fun mousePosition(): Vector2d {
         Window.current?.let { window ->
 
             val pos = window.mousePosition()
@@ -114,8 +117,8 @@ abstract class AbstractStageView
             mousePosition4f.w = 1f
 
             windowToWorld.transform(mousePosition4f)
-            mousePosition2f.x = mousePosition4f.x
-            mousePosition2f.y = mousePosition4f.y
+            mousePosition2f.x = mousePosition4f.x.toDouble()
+            mousePosition2f.y = mousePosition4f.y.toDouble()
             return mousePosition2f
         }
         return dummyVector2F

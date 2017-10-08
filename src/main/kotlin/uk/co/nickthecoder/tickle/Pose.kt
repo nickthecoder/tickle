@@ -3,7 +3,7 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.Angle
-import uk.co.nickthecoder.tickle.util.Rectf
+import uk.co.nickthecoder.tickle.util.Rectd
 import uk.co.nickthecoder.tickle.util.YDownRect
 
 class Pose(
@@ -13,11 +13,11 @@ class Pose(
     var rect: YDownRect = rect
         set(v) {
             field = v
-            updateRectf()
+            updateRectd()
         }
 
-    var offsetX: Float = 0f
-    var offsetY: Float = 0f
+    var offsetX: Double = 0.0
+    var offsetY: Double = 0.0
 
     /**
      * The natural direction. i.e. if the Actor moved "forward", which mathematical angle would that be?
@@ -26,17 +26,17 @@ class Pose(
     val direction = Angle()
 
 
-    private val rectf = Rectf(0f, 0f, 1f, 1f)
+    private val rectd = Rectd(0.0, 0.0, 1.0, 1.0)
 
     init {
-        updateRectf()
+        updateRectd()
     }
 
-    fun updateRectf() {
-        rectf.left = rect.left.toFloat() / texture.width
-        rectf.bottom = 1 - (rect.bottom.toFloat() / texture.height)
-        rectf.right = rect.right.toFloat() / texture.width
-        rectf.top = 1 - (rect.top.toFloat() / texture.height)
+    fun updateRectd() {
+        rectd.left = rect.left.toDouble() / texture.width
+        rectd.bottom = 1 - (rect.bottom.toDouble() / texture.height)
+        rectd.right = rect.right.toDouble() / texture.width
+        rectd.top = 1 - (rect.top.toDouble() / texture.height)
     }
 
     fun draw(renderer: Renderer, actor: Actor) {
@@ -47,14 +47,14 @@ class Pose(
             renderer.drawTexture(
                     texture,
                     left, bottom, left + rect.width, bottom + rect.height,
-                    rectf,
+                    rectd,
                     color = actor.color)
 
         } else {
             renderer.drawTexture(
                     texture,
                     left, bottom, left + rect.width, bottom + rect.height,
-                    rectf, color = actor.color,
+                    rectd, color = actor.color,
                     modelMatrix = actor.getModelMatrix())
         }
     }
@@ -63,10 +63,10 @@ class Pose(
         if (other !is Pose) {
             return false
         }
-        return (rect == other.rect) && rectf == other.rectf && texture == other.texture && direction.radians == other.direction.radians
+        return (rect == other.rect) && rectd == other.rectd && texture == other.texture && direction.radians == other.direction.radians
     }
 
     override fun toString(): String {
-        return "Pose rect=$rect offset=$offsetX,$offsetY direction=$direction.degrees rectf=$rectf"
+        return "Pose rect=$rect offset=$offsetX,$offsetY direction=$direction.degrees rectd=$rectd"
     }
 }

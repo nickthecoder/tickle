@@ -9,12 +9,12 @@ import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
-import uk.co.nickthecoder.tickle.util.Polar2f
+import uk.co.nickthecoder.tickle.util.Polar2d
 
 class Coin() : ActionRole() {
 
-    @Attribute(AttributeType.POLAR, scale = 10f)
-    var velocity = Polar2f(Angle(), 2f)
+    @Attribute(AttributeType.POLAR, scale = 10.0)
+    var velocity = Polar2d(Angle(), 2.0)
 
     var turningSpeed = Angle.degrees(3.0)
 
@@ -24,7 +24,7 @@ class Coin() : ActionRole() {
     override fun activated() {
 
 
-        val growShrink = (Grow(actor, 1f, 2f).then(Grow(actor, 1f, 1f)).forever())
+        val growShrink = (Grow(actor, 1.0, 2.0).then(Grow(actor, 1.0, 1.0)).forever())
         val circle = Circle(velocity.angle, turningSpeed).and(MovePolar(actor.position, velocity))
         action = growShrink.and(circle)
 

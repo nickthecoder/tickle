@@ -29,12 +29,12 @@ class Game(
      * A measure of time in seconds. Updated once per frame, It is actually just System.nano converted to
      * seconds (as a float).
      */
-    var seconds: Float = 0f
+    var seconds: Double = 0.0
 
     /**
      * The time between two "ticks" in seconds.
      */
-    var tickDuration: Float = 1f / 60f
+    var tickDuration: Double = 1.0 / 60.0
 
 
     init {
@@ -45,7 +45,7 @@ class Game(
         // TODO Move later in the Game lifecycle when scene loading is implemented.
         // At the moment this needs to be here, because Demo creates the actors in it's constructor.
 
-        seconds = System.nanoTime() / 1_000_000_000f
+        seconds = System.nanoTime() / 1_000_000_000.0
     }
 
     fun run(sceneFile: File) {
@@ -71,7 +71,7 @@ class Game(
 
             GLFW.glfwPollEvents()
 
-            val now = System.nanoTime() / 1_000_000_000f
+            val now = System.nanoTime() / 1_000_000_000.0
             tickCount++
             tickDuration = now - seconds
             seconds = now

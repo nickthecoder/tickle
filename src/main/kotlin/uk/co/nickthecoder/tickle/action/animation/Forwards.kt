@@ -1,13 +1,13 @@
 package uk.co.nickthecoder.tickle.action.animation
 
-import org.joml.Vector2f
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.util.Angle
 
 class Forwards(
-        val position: Vector2f,
-        val by: Float,
+        val position: Vector2d,
+        val by: Double,
         val heading: Angle,
-        seconds: Float,
+        seconds: Double,
         ease: Ease = Eases.linear)
 
     : AnimationAction(seconds, ease) {
@@ -15,7 +15,7 @@ class Forwards(
     override fun storeInitialValue() {
     }
 
-    override fun update(t: Float) {
+    override fun update(t: Double) {
         position.add(heading.vector().mul(by * delta(t)))
     }
 }

@@ -32,12 +32,12 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
         stack.children.add(layer.canvas)
     }
 
-    fun worldX(event: MouseEvent): Float {
-        return (event.x - glass.panX).toFloat()
+    fun worldX(event: MouseEvent): Double {
+        return event.x - glass.panX
     }
 
-    fun worldY(event: MouseEvent): Float {
-        return (glass.canvas.height - event.y - glass.panY).toFloat()
+    fun worldY(event: MouseEvent): Double {
+        return glass.canvas.height - event.y - glass.panY
     }
 
     fun panBy(dx: Double, dy: Double) {

@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.demo
 
-import org.joml.Vector2f
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.action.Kill
 import uk.co.nickthecoder.tickle.action.PeriodicFactory
@@ -10,19 +10,19 @@ import uk.co.nickthecoder.tickle.action.movement.polar.MovePolar
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Attribute
-import uk.co.nickthecoder.tickle.util.Polar2f
+import uk.co.nickthecoder.tickle.util.Polar2d
 import uk.co.nickthecoder.tickle.util.Rand
 
 class Grenade() : AbstractRole() {
 
-    @Attribute(AttributeType.POLAR, scale = 10f)
-    var minVelocity = Polar2f(Angle.degrees(-20.0), 2f)
+    @Attribute(AttributeType.POLAR, scale = 10.0)
+    var minVelocity = Polar2d(Angle.degrees(-20.0), 2.0)
 
-    @Attribute(AttributeType.POLAR, scale = 20f)
-    var maxVelocity = Polar2f(Angle.degrees(20.0), 12f)
+    @Attribute(AttributeType.POLAR, scale = 20.0)
+    var maxVelocity = Polar2d(Angle.degrees(20.0), 12.0)
 
     @Attribute(AttributeType.RELATIVE_POSITION)
-    var exit = Vector2f(0f, 50f)
+    var exit = Vector2d(0.0, 50.0)
 
     @Attribute
     var hue: Float = 1.0f
@@ -47,7 +47,7 @@ class Grenade() : AbstractRole() {
 
         val velocity = Rand.between(minVelocity, maxVelocity)
         val movement = MovePolar(newActor.position, velocity).and(DragPolar(velocity, 0.015f))
-        newRole.action = movement.and(Fade(newActor, 3f, transparent).then(Kill(newActor)))
+        newRole.action = movement.and(Fade(newActor, 3.0, transparent).then(Kill(newActor)))
 
     }
 

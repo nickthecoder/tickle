@@ -4,21 +4,21 @@ import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.action.Action
 
 abstract class AnimationAction(
-        val seconds: Float,
+        val seconds: Double,
         val ease: Ease)
 
     : Action {
 
-    protected var startTime: Float = -1f
-    protected var previousT: Float = 0f
+    protected var startTime: Double = -1.0
+    protected var previousT: Double = 0.0
 
     override fun begin(): Boolean {
-        previousT = 0f
+        previousT = 0.0
         startTime = Game.instance.seconds
         storeInitialValue()
 
-        if (seconds <= 0f) {
-            update(1f)
+        if (seconds <= 0.0) {
+            update(1.0)
             ended()
             return true
         }
@@ -28,34 +28,33 @@ abstract class AnimationAction(
 
     override fun act(): Boolean {
         val now = Game.instance.seconds
-        val s = Math.min(1.0f, (now - startTime) / seconds)
+        val s = Math.min(1.0, (now - startTime) / seconds)
 
         val t = ease.ease(s)
         update(t)
         previousT = t
 
-        if (s == 1f) {
+        if (s == 1.0) {
             ended()
             return true
         }
         return false
     }
 
-    fun delta(t: Float) = t - previousT
+    fun delta(t: Double) = t - previousT
 
-    fun interval(t: Float) = delta(t) * seconds
+    fun interval(t: Double) = delta(t) * seconds
 
-    fun elapsed(t: Float) = t * seconds
+    fun elapsed(t: Double) = t * seconds
 
     abstract protected fun storeInitialValue()
 
-    abstract protected fun update(t: Float)
+    abstract protected fun update(t: Double)
 
     open protected fun ended() {}
 
     companion object {
-        fun lerp(from: Float, to: Float, t: Float) = (1 - t) * from + t * to
-        fun lerp(from: Double, to: Double, t: Float) = (1 - t) * from + t * to
+        fun lerp(from: Double, to: Double, t: Double) = (1 - t) * from + t * to
     }
 
 }

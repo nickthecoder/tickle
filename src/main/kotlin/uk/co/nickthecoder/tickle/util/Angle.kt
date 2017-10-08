@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.util
 
-import org.joml.Vector2f
+import org.joml.Vector2d
 
 open class Angle() {
 
@@ -14,11 +14,11 @@ open class Angle() {
             radians = Math.toRadians(v)
         }
 
-    private val vector = Vector2f()
+    private val vector = Vector2d()
 
-    fun vector(): Vector2f {
-        vector.x = Math.cos(radians).toFloat()
-        vector.y = Math.sin(radians).toFloat()
+    fun vector(): Vector2d {
+        vector.x = Math.cos(radians)
+        vector.y = Math.sin(radians)
         return vector
     }
 

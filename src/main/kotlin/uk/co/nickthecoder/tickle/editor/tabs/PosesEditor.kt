@@ -212,8 +212,8 @@ class NewPoseTask(
 
     override fun run() {
         val pose = Pose(texture, rect)
-        pose.offsetX = (offsetX ?: rect.width / 2).toFloat()
-        pose.offsetY = (offsetY ?: rect.height / 2).toFloat()
+        pose.offsetX = (offsetX ?: rect.width / 2).toDouble()
+        pose.offsetY = (offsetY ?: rect.height / 2).toDouble()
 
         Resources.instance.addPose(nameP.value, pose)
     }

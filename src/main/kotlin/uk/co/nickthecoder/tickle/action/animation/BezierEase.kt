@@ -22,28 +22,28 @@
 package uk.co.nickthecoder.tickle.action.animation
 
 class BezierEase(
-        private val mX1: Float,
-        private val mY1: Float,
-        private val mX2: Float,
-        private val mY2: Float)
+        private val mX1: Double,
+        private val mY1: Double,
+        private val mX2: Double,
+        private val mY2: Double)
 
     : Ease {
 
-    internal var mSampleValues: FloatArray
+    internal var mSampleValues: DoubleArray
 
     init {
-        this.mSampleValues = FloatArray(kSplineTableSize)
+        this.mSampleValues = DoubleArray(kSplineTableSize)
         if (this.mX1 != this.mY1 || this.mX2 != this.mY2) {
             calcSampleValues()
         }
 
     }
 
-    override fun ease(t: Float): Float {
+    override fun ease(t: Double): Double {
         return getSplineValue(t)
     }
 
-    private fun getSplineValue(aX: Float): Float {
+    private fun getSplineValue(aX: Double): Double {
         if (this.mX1 == this.mY1 && this.mX2 == this.mY2) {
             return aX
         }
@@ -57,15 +57,15 @@ class BezierEase(
         }
     }
 
-    internal fun calcBezier(aT: Float, aA1: Float, aA2: Float): Float {
+    internal fun calcBezier(aT: Double, aA1: Double, aA2: Double): Double {
         // use Horner's scheme to evaluate the Bezier polynomial
         return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT
     }
 
-    private fun getTForX(aX: Float): Float {
+    private fun getTForX(aX: Double): Double {
 
         // Find interval where t lies
-        var intervalStart = 0f
+        var intervalStart = 0.0
         var currentSampleIndex = 1
         val lastSampleIndex = kSplineTableSize - 1
         while (currentSampleIndex != lastSampleIndex && this.mSampleValues[currentSampleIndex] <= aX) {
@@ -85,14 +85,14 @@ class BezierEase(
         val initialSlope = getSlope(guessForT, this.mX1, this.mX2)
         if (initialSlope >= NEWTON_MIN_SLOPE) {
             return newtonRaphsonIterate(aX, guessForT)
-        } else if (initialSlope == 0f) {
+        } else if (initialSlope == 0.0) {
             return guessForT
         } else {
             return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize)
         }
     }
 
-    private fun newtonRaphsonIterate(aX: Float, aGuessT: Float): Float {
+    private fun newtonRaphsonIterate(aX: Double, aGuessT: Double): Double {
         var aGuessTvar = aGuessT
         // Refine guess with Newton-Raphson iteration
         for (i in 0..NEWTON_ITERATIONS - 1) {
@@ -101,7 +101,7 @@ class BezierEase(
             val currentX = calcBezier(aGuessTvar, this.mX1, this.mX2) - aX
             val currentSlope = getSlope(aGuessTvar, this.mX1, this.mX2)
 
-            if (currentSlope == 0f) {
+            if (currentSlope == 0.0) {
                 return aGuessTvar
             }
 
@@ -111,11 +111,11 @@ class BezierEase(
         return aGuessTvar
     }
 
-    private fun binarySubdivide(aX: Float, aA: Float, aB: Float): Float {
+    private fun binarySubdivide(aX: Double, aA: Double, aB: Double): Double {
         var aAvar = aA
         var aBvar = aB
-        var currentX: Float
-        var currentT = 0f
+        var currentX: Double
+        var currentT = 0.0
         var i = 0
 
         while (i < SUBDIVISION_MAX_ITERATIONS) {
@@ -143,21 +143,21 @@ class BezierEase(
         private val SUBDIVISION_MAX_ITERATIONS = 10
 
         private val kSplineTableSize = 11
-        private val kSampleStepSize = 1f / (kSplineTableSize - 1)
+        private val kSampleStepSize = 1.0 / (kSplineTableSize - 1)
 
-        private fun A(aA1: Float, aA2: Float): Float {
+        private fun A(aA1: Double, aA2: Double): Double {
             return 1f - 3f * aA2 + 3f * aA1
         }
 
-        private fun B(aA1: Float, aA2: Float): Float {
+        private fun B(aA1: Double, aA2: Double): Double {
             return 3f * aA2 - 6f * aA1
         }
 
-        private fun C(aA1: Float): Float {
+        private fun C(aA1: Double): Double {
             return 3f * aA1
         }
 
-        private fun getSlope(aT: Float, aA1: Float, aA2: Float): Float {
+        private fun getSlope(aT: Double, aA1: Double, aA2: Double): Double {
             return 3f * A(aA1, aA2) * aT * aT + 2f * B(aA1, aA2) * aT + C(aA1)
         }
     }

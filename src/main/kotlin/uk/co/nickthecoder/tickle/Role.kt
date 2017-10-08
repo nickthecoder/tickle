@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.NoAction
 import uk.co.nickthecoder.tickle.util.Tagged
+import uk.co.nickthecoder.tickle.util.distanceSquared
 
 interface Role {
 
@@ -44,7 +45,7 @@ interface Role {
      */
     fun closest(roles: Iterable<Role>): Role? {
         var closest: Role? = null
-        var closestD2 = Float.MAX_VALUE
+        var closestD2 = Double.MAX_VALUE
         roles.forEach { other ->
             if (this !== other) {
                 val d2 = actor.position.distanceSquared(other.actor.position)

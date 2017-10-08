@@ -5,16 +5,16 @@ import uk.co.nickthecoder.tickle.util.Recti
 class FlexPosition {
 
     var hAlignment: FlexHAlignment = FlexHAlignment.LEFT
-    var hPosition: Float = 0.5f
+    var hPosition: Double = 0.5
     var leftRightMargin: Int = 0
     var width: Int? = null
-    var widthRatio: Float? = null
+    var widthRatio: Double? = null
 
     var vAlignment: FlexVAlignment = FlexVAlignment.TOP
-    var vPosition: Float = 0.5f
+    var vPosition: Double = 0.5
     var topBottomMargin: Int = 0
     var height: Int? = null
-    var heightRatio: Float? = null
+    var heightRatio: Double? = null
 
     fun width(totalWidth: Int): Int {
         return width ?: widthRatio?.let {

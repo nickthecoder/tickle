@@ -117,8 +117,8 @@ class SceneActor {
             updateAttributeMetaData()
         }
 
-    var x: Float = 0f
-    var y: Float = 0f
+    var x: Double = 0.0
+    var y: Double = 0.0
     val direction = Angle()
 
     val attributes = Attributes()

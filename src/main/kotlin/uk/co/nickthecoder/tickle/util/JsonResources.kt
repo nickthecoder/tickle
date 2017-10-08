@@ -214,23 +214,23 @@ class JsonResources {
                     val hAlignmentString = jview.getString("hAlignment", FlexHAlignment.LEFT.name)
                     layoutView.position.hAlignment = FlexHAlignment.valueOf(hAlignmentString)
                     if (layoutView.position.hAlignment == FlexHAlignment.MIDDLE) {
-                        layoutView.position.hPosition = jview.get("hPosition").asFloat()
+                        layoutView.position.hPosition = jview.get("hPosition").asDouble()
                     } else {
                         layoutView.position.leftRightMargin = jview.getInt("leftRightMargin", 0)
                     }
                     layoutView.position.width = jview.get("width")?.asInt()
-                    layoutView.position.widthRatio = jview.get("widthRatio")?.asFloat()
+                    layoutView.position.widthRatio = jview.get("widthRatio")?.asDouble()
 
                     // Y
                     val vAlignmentString = jview.getString("vAlignment", FlexVAlignment.BOTTOM.name)
                     layoutView.position.vAlignment = FlexVAlignment.valueOf(vAlignmentString)
                     if (layoutView.position.vAlignment == FlexVAlignment.MIDDLE) {
-                        layoutView.position.vPosition = jview.get("vPosition").asFloat()
+                        layoutView.position.vPosition = jview.get("vPosition").asDouble()
                     } else {
                         layoutView.position.topBottomMargin = jview.getInt("topBottomMargin", 0)
                     }
                     layoutView.position.height = jview.get("height")?.asInt()
-                    layoutView.position.heightRatio = jview.get("heightRatio")?.asFloat()
+                    layoutView.position.heightRatio = jview.get("heightRatio")?.asDouble()
 
                     layout.layoutViews[viewName] = layoutView
                 }
@@ -302,11 +302,11 @@ class JsonResources {
             pose.rect.right = jpose.get("right").asInt()
             pose.rect.top = jpose.get("top").asInt()
 
-            pose.offsetX = jpose.get("offsetX").asFloat()
-            pose.offsetY = jpose.get("offsetY").asFloat()
+            pose.offsetX = jpose.get("offsetX").asDouble()
+            pose.offsetY = jpose.get("offsetY").asDouble()
 
             pose.direction.degrees = jpose.get("direction").asDouble()
-            pose.updateRectf()
+            pose.updateRectd()
 
             resources.addPose(name, pose)
             //println("Loaded pose $name : ${pose}")
@@ -525,7 +525,7 @@ class JsonResources {
                     val joystickID = jaxis.getInt("joystickID", 0)
                     val axisString = jaxis.getString("axis", JoystickAxis.LEFT_X.name)
                     val positive = jaxis.getBoolean("positive", true)
-                    val threshold = jaxis.getFloat("threshold", 0.5f)
+                    val threshold = jaxis.getDouble("threshold", 0.5)
                     val axis = JoystickAxis.valueOf(axisString)
                     input.add(JoystickAxisInput(joystickID, axis, positive, threshold))
                 }

@@ -1,13 +1,13 @@
 package uk.co.nickthecoder.tickle.action
 
 class PeriodicFactory<T>(
-        val period: Float = 1f,
+        val period: Double = 1.0,
         var amount: Int? = null,
         val factory: (PeriodicFactory<T>) -> Unit)
 
     : Action {
 
-    var remainder: Float = 0f
+    var remainder: Double = 0.0
 
     override fun begin(): Boolean {
         return amount ?: 1 <= 0

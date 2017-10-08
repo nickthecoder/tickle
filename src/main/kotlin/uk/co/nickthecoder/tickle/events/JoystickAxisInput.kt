@@ -4,13 +4,13 @@ import org.lwjgl.glfw.GLFW
 import uk.co.nickthecoder.tickle.Game
 import java.nio.FloatBuffer
 
-class JoystickAxisInput(val joystickID: Int, val axis: JoystickAxis, val positive: Boolean = true, val threshold: Float = 0.5f)
+class JoystickAxisInput(val joystickID: Int, val axis: JoystickAxis, val positive: Boolean = true, val threshold: Double = 0.5)
 
     : Input {
 
     var optimise = false
 
-    constructor(axis: JoystickAxis, positive: Boolean, threshold: Float = 0.5f)
+    constructor(axis: JoystickAxis, positive: Boolean, threshold: Double = 0.5)
             : this(Joystick.findFirst(), axis, positive, threshold)
 
     override fun isPressed(): Boolean {

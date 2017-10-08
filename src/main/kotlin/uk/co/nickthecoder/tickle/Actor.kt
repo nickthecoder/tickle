@@ -1,7 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import org.joml.Matrix4f
-import org.joml.Vector2f
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.util.Angle
@@ -14,24 +14,24 @@ class Actor(val role: Role? = null) {
 
     internal var stage: Stage? = null
 
-    val position = Vector2f(0f, 0f)
+    val position = Vector2d(0.0, 0.0)
 
     /**
      * Gets or sets the x value of position
      */
-    var x: Float
+    var x: Double
         get() = position.x
         set(v) {
             position.x = v
         }
 
-    var y: Float
+    var y: Double
         get() = position.y
         set(v) {
             position.y = v
         }
 
-    var z: Float = 0f
+    var z: Double = 0.0
 
     val direction: Angle = object : Angle() {
         override var radians = 0.0
@@ -43,7 +43,7 @@ class Actor(val role: Role? = null) {
             }
     }
 
-    var scale: Float = 1f
+    var scale: Double = 1.0
         set(v) {
             field = v
             dirtyMatrix = true
@@ -66,17 +66,17 @@ class Actor(val role: Role? = null) {
      * Return false iff the actor requires special transformations to render it.
      */
     fun isSimpleImage(): Boolean =
-            direction.radians == appearance.directionRadians && scale == 1f && !flipX && !flipY && customTransformation == null
+            direction.radians == appearance.directionRadians && scale == 1.0 && !flipX && !flipY && customTransformation == null
 
 
     fun getModelMatrix(): Matrix4f {
         if (dirtyMatrix) {
-            modelMatrix.identity().translate(x, y, 0f)
+            modelMatrix.identity().translate(x.toFloat(), y.toFloat(), 0f)
             if (direction.radians != 0.0) {
                 modelMatrix.rotateZ((direction.radians - appearance.directionRadians).toFloat())
             }
-            if (scale != 1f) {
-                modelMatrix.scale(scale)
+            if (scale != 1.0) {
+                modelMatrix.scale(scale.toFloat())
             }
             if (flipX) {
                 modelMatrix.reflect(1f, 0f, 0f, 0f)
@@ -87,7 +87,7 @@ class Actor(val role: Role? = null) {
             customTransformation?.let {
                 modelMatrix.mul(it)
             }
-            modelMatrix.translate(-x, -y, 0f)
+            modelMatrix.translate(-x.toFloat(), -y.toFloat(), 0f)
         }
         return modelMatrix
     }

@@ -68,8 +68,8 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
     }
 
     fun updateSceneActor() {
-        xP.value?.let { sceneActor.x = it.toFloat() }
-        yP.value?.let { sceneActor.y = it.toFloat() }
+        xP.value?.let { sceneActor.x = it }
+        yP.value?.let { sceneActor.y = it }
         directionP.value?.let { sceneActor.direction.degrees = it }
 
         sceneResource.fireChange()
@@ -77,8 +77,8 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
     }
 
     fun updateParameters() {
-        yP.value = sceneActor.y.toDouble()
-        xP.value = sceneActor.x.toDouble()
+        yP.value = sceneActor.y
+        xP.value = sceneActor.x
         directionP.value = sceneActor.direction.degrees
     }
 

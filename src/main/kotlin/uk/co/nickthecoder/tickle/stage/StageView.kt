@@ -1,15 +1,15 @@
 package uk.co.nickthecoder.tickle.stage
 
-import org.joml.Vector2f
+import org.joml.Vector2d
 
 interface StageView : View {
 
     var stage: Stage
 
-    var centerX : Float
+    var centerX : Double
 
-    var centerY : Float
+    var centerY : Double
 
-    fun mousePosition(): Vector2f
+    fun mousePosition(): Vector2d
 
 }

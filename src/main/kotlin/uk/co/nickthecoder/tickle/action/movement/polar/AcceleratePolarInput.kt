@@ -3,13 +3,13 @@ package uk.co.nickthecoder.tickle.action.movement.polar
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.events.Input
-import uk.co.nickthecoder.tickle.util.Polar2f
+import uk.co.nickthecoder.tickle.util.Polar2d
 
 open class AcceleratePolarInput(
-        val velocatiry: Polar2f,
-        var acceleration: Float,
-        var deceleration: Float = -acceleration,
-        var autoSlow: Float = 0f,
+        val velocatiry: Polar2d,
+        var acceleration: Double,
+        var deceleration: Double = -acceleration,
+        var autoSlow: Double = 0.0,
         accelerate: String = "up",
         decelerate: String = "down")
 

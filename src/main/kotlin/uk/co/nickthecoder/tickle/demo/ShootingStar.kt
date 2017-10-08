@@ -15,20 +15,20 @@ class ShootingStar() : ActionRole() {
 
     var initialHeading: Double = 0.0
 
-    var sideLength: Float = 400f
+    var sideLength: Double = 400.0
 
-    var sideDuration: Float = 1f
+    var sideDuration: Double = 1.0
 
     val heading = Angle.degrees(initialHeading)
 
     override fun activated() {
 
-        val growShrink = (Grow(actor, 1f, 2f).then(Grow(actor, 1f, 1f)).forever())
+        val growShrink = (Grow(actor, 1.0, 2.0).then(Grow(actor, 1.0, 1.0)).forever())
 
         val edge = (Forwards(actor.position, sideLength, heading, sideDuration, Eases.easeInOutExpo)
                 .and(Turn(heading, curveAngle, sideDuration, Eases.easeInOutExpo)))
 
-                .then(Turn(heading, turnAngle, 0f))
+                .then(Turn(heading, turnAngle, 0.0))
 
         action = growShrink.and(edge.forever())
 

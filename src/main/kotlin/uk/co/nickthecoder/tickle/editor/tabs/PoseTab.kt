@@ -100,8 +100,8 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         pose.rect.right = positionP.right!!
         pose.rect.top = positionP.top!!
 
-        pose.offsetX = offsetP.x!!.toFloat()
-        pose.offsetY = offsetP.y!!.toFloat()
+        pose.offsetX = offsetP.x!!
+        pose.offsetY = offsetP.y!!
 
         pose.direction.degrees = directionP.value!!
     }
@@ -129,7 +129,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         val costume = Costume()
         costume.addPose("default", pose)
         Resources.instance.addCostume(poseName, costume)
-        MainWindow.instance.openTab(poseName, costume)
+        MainWindow.instance?.openTab(poseName, costume)
     }
 
 

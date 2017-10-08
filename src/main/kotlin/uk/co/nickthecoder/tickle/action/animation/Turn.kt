@@ -5,7 +5,7 @@ import uk.co.nickthecoder.tickle.util.Angle
 class Turn(
         val heading: Angle,
         val angle: Angle,
-        seconds: Float,
+        seconds: Double,
         ease: Ease = Eases.linear)
 
     : AnimationAction(seconds, ease) {
@@ -19,7 +19,7 @@ class Turn(
         finalRadians = initialRadians + angle.radians
     }
 
-    override fun update(t: Float) {
+    override fun update(t: Double) {
         heading.radians = lerp(initialRadians, finalRadians, t)
     }
 }
