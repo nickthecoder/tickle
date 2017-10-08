@@ -196,6 +196,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         if (tab is HasSidePanes) {
             extraSidePanels = tab.sidePanes()
             extraSidePanels.forEach {
+                it.isAnimated = false
                 accordion.panes.add(it)
             }
         }

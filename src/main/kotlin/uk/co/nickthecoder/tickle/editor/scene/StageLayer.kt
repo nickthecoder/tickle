@@ -17,11 +17,10 @@ class StageLayer(
             canvas.isVisible = v
         }
 
-    var isEditable: Boolean = true
+    var isLocked: Boolean = false
         set(v) {
             field = v
-            // Non-editable layers are semi-transparent.
-            canvas.opacity = if (v) 1.0 else 0.5
+            canvas.opacity = if (v) 0.5 else 1.0
         }
 
     override fun drawContent() {

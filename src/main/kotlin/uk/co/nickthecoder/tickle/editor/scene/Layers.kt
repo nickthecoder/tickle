@@ -14,8 +14,9 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
 
     private val stageLayers = mutableListOf<StageLayer>()
 
-
     val glass = GlassLayer(selection)
+
+    private val map = mutableMapOf<String, StageLayer>()
 
     init {
 
@@ -23,9 +24,16 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
             val layer = StageLayer(sceneResource, stageName, sceneStage)
             add(layer)
             stageLayers.add(layer)
+            map[stageName] = layer
         }
         add(glass)
     }
+
+    fun names(): Collection<String> = map.keys
+
+    fun stageLayer(name: String): StageLayer? = map[name]
+
+    fun editableLayers() = stageLayers.filter { it.isVisible && !it.isLocked }
 
     fun add(layer: Layer) {
         allLayers.add(layer)

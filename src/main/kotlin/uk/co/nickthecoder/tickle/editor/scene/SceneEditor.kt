@@ -34,16 +34,15 @@ class SceneEditor(val sceneResource: SceneResource)
     val shortcuts = ShortcutHelper("SceneEditor", scrollPane)
 
     val costumeBox = CostumesBox()
+    val layersBox = LayersBox(layers)
+
     val costumesPane = TitledPane("Costumes", costumeBox.build())
     val propertiesPane = PropertiesPane()
+    val layersPane = TitledPane("Layers", layersBox.build())
 
-    val sidePanes = listOf(costumesPane, propertiesPane)
+    val sidePanes = listOf(costumesPane, propertiesPane, layersPane)
 
     init {
-
-        costumesPane.isAnimated = false
-        propertiesPane.isAnimated = false
-
         sceneResource.listeners.add(this)
     }
 
@@ -100,8 +99,8 @@ class SceneEditor(val sceneResource: SceneResource)
 
     fun findActorsAt(x: Double, y: Double): List<SceneActor> {
         val list = mutableListOf<SceneActor>()
-        sceneResource.sceneStages.forEach { _, sceneStage ->
-            sceneStage.sceneActors.forEach { sceneActor ->
+        layers.editableLayers().forEach { stageLayer ->
+            stageLayer.sceneStage.sceneActors.forEach { sceneActor ->
                 if (isSceneActorAt(sceneActor, x, y)) {
                     list.add(sceneActor)
                 }
