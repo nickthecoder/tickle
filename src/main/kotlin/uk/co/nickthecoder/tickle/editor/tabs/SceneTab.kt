@@ -31,7 +31,7 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
     : EditTab(sceneName, sceneStub, graphicName = "scene.png"),
         HasSidePanes {
 
-    val sceneResource = JsonScene(sceneStub.file).sceneResource
+    val sceneResource = JsonScene(sceneStub.file, isDesigning = true).sceneResource
 
     private val task = SceneDetailsTask(sceneName, sceneResource)
     private val taskForm = TaskForm(task)

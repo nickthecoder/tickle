@@ -32,7 +32,7 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
 
     init {
 
-        sceneActor.attributes.data().forEach { data ->
+        sceneActor.attributes.map().keys.sorted().map { sceneActor.attributes.getOrCreateData(it) }.forEach { data ->
             data.parameter?.let { it ->
                 val parameter = it.copyBounded()
                 attributesP.add(parameter)

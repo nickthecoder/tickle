@@ -10,6 +10,9 @@ import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
 import uk.co.nickthecoder.tickle.util.Polar2d
 import kotlin.reflect.KClass
+import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.jvmErasure
 
 /**
@@ -65,40 +68,37 @@ class Attributes {
      * Updates the object's property fields with the stored attribute values.
      */
     fun applyToObject(obj: Any) {
-        val klass = obj.javaClass
+        val klass = obj.javaClass.kotlin
 
         map.toMap().forEach { name, data ->
             updateAttribute(obj, klass, name, data.value)
         }
     }
 
-    private fun updateAttribute(obj: Any, klass: Class<*>, name: String, value: String?) {
+    private fun updateAttribute(obj: Any, klass: KClass<*>, name: String, value: String?) {
         if (value == null) return
         try {
-            try {
-                val field = klass.getField(name)
-                field.set(obj, fromString(value, field.type))
-            } catch (e: NoSuchFieldException) {
-                val setterName = "set" + name.capitalize()
-                val setter = klass.methods.filter { it.name == setterName && it.parameterCount == 1 }.firstOrNull()
-                if (setter == null) {
-                    System.err.println("Warning. Could not find attribute '$name'. Make sure it's a var of class : $obj")
-                    map.remove(name)
-                } else {
-                    val type = setter.parameterTypes[0]
-                    setter.invoke(obj, fromString(value, type))
-                }
+            val property = klass.memberProperties.filterIsInstance<KMutableProperty1<Any?, Any?>>().firstOrNull { it.name == name }
+            if (property == null) {
+                System.err.println("Could not find a mutable property (var) called '$name' on class '${klass.qualifiedName}'")
+            } else {
+                property.set(obj, fromString(value, property.returnType.jvmErasure))
             }
+
         } catch (e: Exception) {
-            System.err.println("Failed to set attribute $name on $obj : $e")
+            System.err.println("Failed to set property '$name' on class '$klass'. Reason : $e")
         }
     }
 
-    fun updateAttributeMetaData(className: String) {
+    fun updateAttributesMetaData(className: String, isDesigning: Boolean) {
 
         val kClass: KClass<*>
+        var instance: Any = 0
         try {
             kClass = Class.forName(className).kotlin
+            if (isDesigning) {
+                instance = kClass.java.newInstance()
+            }
         } catch (e: Exception) {
             // Do nothing
             return
@@ -106,8 +106,10 @@ class Attributes {
 
         val toDiscard = map.keys.toMutableSet()
 
+        // TODO SHould this be memberProperties rathter than members?
         kClass.members.forEach { property ->
             property.annotations.filterIsInstance<Attribute>().firstOrNull()?.let { annotation ->
+                val hasExistingValue = map.contains(property.name)
                 val data = getOrCreateData(property.name)
                 data.attributeType = annotation.attributeType
                 data.order = annotation.order
@@ -115,6 +117,15 @@ class Attributes {
                 createParameter(property.name, property.returnType.jvmErasure)?.let { parameter ->
                     data.parameter = parameter
                     parameter.listen { data.value = parameter.stringValue }
+
+                    if (!hasExistingValue && instance != 0) {
+                        // I believe this is safe, because this class creates the parameters based on the return type
+                        // of the property. So this is safe as long as createParameter is correct.
+                        @Suppress("UNCHECKED_CAST")
+                        val theValue = (property as KProperty1<Any, Any>).get(instance)
+                        @Suppress("UNCHECKED_CAST")
+                        (data.parameter as ValueParameter<Any>).value = theValue
+                    }
                 }
                 toDiscard.remove(property.name)
             }

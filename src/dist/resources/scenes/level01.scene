@@ -4,6 +4,12 @@
     "layout": "default",
     "stages": [
         {
+            "name": "background",
+            "actors": [
+                
+            ]
+        },
+        {
             "name": "main",
             "actors": [
                 {

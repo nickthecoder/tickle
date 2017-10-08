@@ -337,7 +337,7 @@ class SceneEditor(val sceneResource: SceneResource)
 
     inner class Stamp(val costumeName: String) : MouseHandler {
 
-        var newActor = SceneActor()
+        var newActor = SceneActor(true)
 
         init {
             newActor.costumeName = costumeName

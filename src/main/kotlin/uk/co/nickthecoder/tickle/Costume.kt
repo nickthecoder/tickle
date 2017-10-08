@@ -8,7 +8,7 @@ class Costume() {
         set(v) {
             if (field != v) {
                 field = v
-                attributes.updateAttributeMetaData(v)
+                attributes.updateAttributesMetaData(v, false)
             }
         }
 

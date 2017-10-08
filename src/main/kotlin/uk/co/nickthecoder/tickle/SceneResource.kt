@@ -62,7 +62,6 @@ class SceneResource {
      * unmatches stage names will result in actors being put in a "random" stage.
      */
     private fun updateLayout() {
-        println("Updating the stages for a sceneResource")
 
         val oldStages = sceneStages.toMap()
         sceneStages.clear()
@@ -70,7 +69,6 @@ class SceneResource {
         val layout = Resources.instance.layout(layoutName)
         layout.layoutStages.keys.forEach { stageName ->
             sceneStages[stageName] = SceneStage()
-            println("Created stage ${stageName}")
         }
 
         oldStages.forEach { stageName, oldStage ->
@@ -109,12 +107,12 @@ class SceneStage {
 
 }
 
-class SceneActor {
+class SceneActor(val isDesigning: Boolean = false) {
 
     var costumeName: String = ""
         set(v) {
             field = v
-            updateAttributeMetaData()
+            updateAttributesMetaData()
         }
 
     var x: Double = 0.0
@@ -149,12 +147,12 @@ class SceneActor {
         return actor
     }
 
-    private fun updateAttributeMetaData() {
-        Resources.instance.optionalCostume(costumeName)?.roleString?.let { roleString ->
-            attributes.updateAttributeMetaData(roleString)
+    private fun updateAttributesMetaData() {
+        val roleString = Resources.instance.optionalCostume(costumeName)?.roleString
+        if (roleString != null && roleString.isNotBlank()) {
+            attributes.updateAttributesMetaData(roleString, isDesigning)
         }
     }
-
 
     override fun toString() = "SceneActor $costumeName @ $x , $y direction=$direction.degrees"
 }

@@ -16,12 +16,21 @@ class JsonScene {
 
     val sceneResource: SceneResource
 
-    constructor(file: File) {
+    /**
+     * When creating SceneActors, when designing, an instance of Role will be created, so that default values
+     * for its attributes can be established. When loading a scene during real play, there is no need for this,
+     * and therefore it is skipped.
+     */
+    private val isDesigning: Boolean
+
+    constructor(file: File, isDesigning: Boolean = false) {
         sceneResource = SceneResource()
         load(file)
+        this.isDesigning = isDesigning
     }
 
     constructor(sceneResource: SceneResource) {
+        isDesigning = false
         this.sceneResource = sceneResource
     }
 
@@ -95,7 +104,7 @@ class JsonScene {
     }
 
     fun loadActor(sceneStage: SceneStage, jactor: JsonObject) {
-        val sceneActor = SceneActor()
+        val sceneActor = SceneActor(isDesigning)
         // NOTE. load the attributes FIRST, then change the costume, as that gives Attributes the chance to remove
         // attributes unsupported by the Role class.
         JsonUtil.loadAttributes(jactor, sceneActor.attributes)

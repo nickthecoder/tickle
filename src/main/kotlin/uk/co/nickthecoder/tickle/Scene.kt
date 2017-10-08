@@ -38,7 +38,6 @@ class Scene {
         autoPositions.forEach { name, position ->
             views[name]?.let { view ->
                 view.rect = position.rect(width, height)
-                println( "Stage View $name positioned at ${view.rect}")
             }
         }
     }

@@ -1,11 +1,6 @@
 Current Work
 ============
 
-Add a "Layers" panel to the accordian.
-	List all layers, with check boxes for Visible/Invisible/Semi, Locked/Edited
-
-Use KClass and properties to get/set values instead of the Java stuff.
-Get default values for attributes.
 
 BUGS
 ====
