@@ -4,11 +4,14 @@ import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.AttributeData
+import uk.co.nickthecoder.tickle.AttributeType
+import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 
-class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
+class GlassLayer(val selection: Selection)
 
     : Layer(), SelectionListener {
 
@@ -54,11 +57,11 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             selection.selected().forEach { sceneActor ->
                 save()
 
-                translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
+                translate(sceneActor.x, sceneActor.y)
                 rotate(sceneActor.direction.degrees - (sceneActor.pose?.direction?.degrees ?: 0.0))
 
                 sceneActor.pose?.let { pose ->
-                    drawOutlinedBoundingBox(pose, sceneActor === selection.latest())
+                    drawOutlined(selectionColor(sceneActor === selection.latest())) { drawBoundingBox(pose) }
                 }
 
                 restore()
@@ -66,8 +69,22 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             restore()
         }
 
-        dragHandles.forEach {
-            it.draw()
+        dragHandles.forEach { handle ->
+            handle.draw()
+        }
+
+        dragHandles.firstOrNull{ it.hovering }?.let { handle ->
+            with(canvas.graphicsContext2D) {
+                save()
+                translate(handle.x(), handle.y())
+                scale(1.0, -1.0)
+                lineWidth = 3.0
+                stroke = Color.BLACK
+                strokeText(handle.name, 20.0, 0.0)
+                fill = latestColor
+                fillText(handle.name, 20.0, 0.0)
+                restore()
+            }
         }
 
         newActor?.let {
@@ -81,8 +98,11 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
 
     fun hover(x: Double, y: Double) {
-        dragHandles.forEach {
-            it.hover(x, y)
+        dragHandles.forEach { handle ->
+            if (handle.hover(x, y)) {
+                dragHandles.filter { it !== handle }.forEach { it.hover(Double.MAX_VALUE, 0.0) } // Turn the others off!
+                return
+            }
         }
     }
 
@@ -91,22 +111,22 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         val latest = selection.latest()
         if (latest != null) {
             if (latest.costume()?.canRotate == true) {
-                dragHandles.add(RotateArrow(latest))
+                dragHandles.add(RotateArrow("Direction", latest))
             }
 
-            latest.attributes.data().forEach { data ->
+            latest.attributes.map().forEach { name, data ->
                 when (data.attributeType) {
                     AttributeType.DIRECTION -> {
-                        dragHandles.add(DirectionArrow(latest, data, data.order))
+                        dragHandles.add(DirectionArrow(name, latest, data, data.order))
                     }
                     AttributeType.POLAR -> {
-                        dragHandles.add(PolarArrow(latest, data))
+                        dragHandles.add(PolarArrow(name, latest, data))
                     }
                     AttributeType.ABSOLUTE_POSITION -> {
-                        dragHandles.add(AbsoluteHandle(latest, data))
+                        dragHandles.add(AbsoluteHandle(name, latest, data))
                     }
                     AttributeType.RELATIVE_POSITION -> {
-                        dragHandles.add(RelativeHandle(latest, data))
+                        dragHandles.add(RelativeHandle(name, latest, data))
                     }
                     AttributeType.NORMAL -> {
                     }
@@ -117,91 +137,85 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         dirty = true
     }
 
-
-    fun drawOutlinedBoundingBox(pose: Pose, highlight: Boolean) {
-
-        with(canvas.graphicsContext2D) {
-            lineWidth = 4.0
-            stroke = Color.BLACK
-            drawSimpleBoundingBox(pose)
-            lineWidth = 2.5
-            stroke = if (highlight) latestColor else selectionColor
-            drawSimpleBoundingBox(pose)
-        }
-    }
-
-    fun drawSimpleBoundingBox(pose: Pose) {
+    fun drawBoundingBox(pose: Pose) {
         val margin = 2.0
 
         with(canvas.graphicsContext2D) {
 
             strokeRect(
-                    -pose.offsetX.toDouble() - margin,
-                    -pose.offsetY.toDouble() - margin,
+                    -pose.offsetX - margin,
+                    -pose.offsetY - margin,
                     pose.rect.width.toDouble() + margin * 2,
                     pose.rect.height.toDouble() + margin * 2)
         }
     }
 
-
-    fun drawOutlinesArrow(length: Double, hovering: Boolean) {
+    fun lineWithHandle(length: Double, handleShape: () -> Unit = { drawArrowHead() }) {
         with(canvas.graphicsContext2D) {
-            stroke = Color.BLACK
-            lineCap = StrokeLineCap.ROUND
-            lineWidth = 4.0
-            drawSimpleArrow(length)
-            if (hovering) {
-                stroke = hightlightColor
-            } else {
-                stroke = latestColor
-            }
-            lineWidth = 2.5
-            drawSimpleArrow(length)
-        }
-    }
-
-    fun drawSimpleArrow(length: Double) {
-        with(canvas.graphicsContext2D) {
+            save()
             strokeLine(0.0, 0.0, length - 3, 0.0)
-            strokeLine(length, 0.0, length - uk.co.nickthecoder.tickle.editor.scene.GlassLayer.Companion.arrowSize, -uk.co.nickthecoder.tickle.editor.scene.GlassLayer.Companion.arrowSize / 2)
-            strokeLine(length, 0.0, length - uk.co.nickthecoder.tickle.editor.scene.GlassLayer.Companion.arrowSize, +uk.co.nickthecoder.tickle.editor.scene.GlassLayer.Companion.arrowSize / 2)
+            translate(length, 0.0)
+            handleShape()
+            restore()
         }
     }
 
-    fun drawOutlinesHandle(hovering: Boolean) {
+    fun drawArrowHead() {
+        with(canvas.graphicsContext2D) {
+            strokeLine(0.0, 0.0, -arrowSize, -arrowSize / 2)
+            strokeLine(0.0, 0.0, -arrowSize, arrowSize / 2)
+        }
+    }
+
+    fun drawRoundHandle() {
+        with(canvas.graphicsContext2D) {
+            strokeOval(-3.0, -3.0, 6.0, 6.0)
+        }
+    }
+
+    fun drawDiamondHandle() {
+        with(canvas.graphicsContext2D) {
+            save()
+            rotate(45.0)
+            drawSquareHandle()
+            restore()
+        }
+    }
+
+    fun drawSquareHandle() {
+        with(canvas.graphicsContext2D) {
+            strokeRect(-2.5, -2.5, 5.0, 5.0)
+        }
+    }
+
+    fun drawOutlined(color: Color, shape: () -> Unit) {
         with(canvas.graphicsContext2D) {
             stroke = Color.BLACK
             lineCap = StrokeLineCap.ROUND
             lineWidth = 4.0
-            drawSimpleHandle()
-            if (hovering) {
-                stroke = hightlightColor
-            } else {
-                stroke = latestColor
-            }
+            shape()
+            stroke = color
             lineWidth = 2.5
-            drawSimpleHandle()
-        }
-    }
-
-    fun drawSimpleHandle() {
-        with(canvas.graphicsContext2D) {
-            strokeRect(0.0, 0.0, 4.0, 4.0)
+            shape()
         }
     }
 
     companion object {
-        var borderColor = Color.LIGHTCORAL
+        var borderColor: Color = Color.LIGHTCORAL
         var borderWidth = 1.0
 
-        var selectionColor = Color.web("#0000c0")
-        var latestColor = Color.web("#8000ff")
+        var selectionColor: Color = Color.web("#0000c0")
+        var latestColor: Color = Color.web("#8000ff")
 
-        var hightlightColor = Color.web("#80ff00")
+        var hightlightColor: Color = Color.web("#80ff00")
 
         var directionLength = 40.0
-        var directionExtra = 25.0
+        var directionExtra = 15.0
         var arrowSize = 10.0
+
+        fun handleColor(hovering: Boolean) = if (hovering) hightlightColor else latestColor
+
+        fun selectionColor(latest: Boolean) = if (latest) latestColor else selectionColor
 
     }
 
@@ -213,18 +227,26 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
     interface DragHandle {
 
+        val hovering: Boolean
+
+        val name: String
+
         fun draw()
+
+        fun x(): Double
+
+        fun y(): Double
 
         fun isNear(x: Double, y: Double): Boolean
 
-        fun hover(x: Double, y: Double)
+        fun hover(x: Double, y: Double): Boolean
 
         fun moveTo(x: Double, y: Double, snap: Boolean)
     }
 
-    abstract inner class AbstractDragHandle : DragHandle {
+    abstract inner class AbstractDragHandle(override val name: String) : DragHandle {
 
-        var hovering: Boolean = false
+        override var hovering: Boolean = false
             set(v) {
                 if (v != field) {
                     field = v
@@ -232,12 +254,9 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
                 }
             }
 
-        abstract fun x(): Double
-
-        abstract fun y(): Double
-
-        override fun hover(x: Double, y: Double) {
+        override fun hover(x: Double, y: Double): Boolean {
             hovering = isNear(x, y)
+            return hovering
         }
 
         override fun isNear(x: Double, y: Double): Boolean {
@@ -245,9 +264,12 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             val dy = y - y()
             return dx * dx + dy * dy < 36 // 6 pixels
         }
+
     }
 
-    abstract inner class Arrow(val sceneActor: SceneActor, val distance: Int) : AbstractDragHandle() {
+    abstract inner class Arrow(name: String, val sceneActor: SceneActor, val distance: Int)
+
+        : AbstractDragHandle(name) {
 
         abstract fun set(degrees: Double)
 
@@ -261,18 +283,24 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
             with(canvas.graphicsContext2D) {
                 save()
-                translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
+                translate(sceneActor.x, sceneActor.y)
                 val length = directionLength + distance * directionExtra
 
                 rotate(get())
-                drawOutlinesArrow(length, hovering)
+                drawOutlined(handleColor(hovering)) { drawArrowHandle(length) }
                 restore()
             }
         }
 
+        open fun drawArrowHandle(length: Double) {
+            lineWithHandle(length)
+        }
+
     }
 
-    inner class RotateArrow(sceneActor: SceneActor) : Arrow(sceneActor, 0) {
+    inner class RotateArrow(name: String, sceneActor: SceneActor)
+
+        : Arrow(name, sceneActor, 0) {
 
         override fun get() = sceneActor.direction.degrees
 
@@ -297,11 +325,15 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             }
         }
 
+        override fun drawArrowHandle(length: Double) {
+            lineWithHandle(length) { drawRoundHandle() }
+        }
+
     }
 
-    inner class DirectionArrow(sceneActor: SceneActor, val data: AttributeData, distance: Int)
+    inner class DirectionArrow(name: String, sceneActor: SceneActor, val data: AttributeData, distance: Int)
 
-        : Arrow(sceneActor, distance) {
+        : Arrow(name, sceneActor, distance) {
 
         val parameter = data.parameter!! as DoubleParameter
 
@@ -323,11 +355,15 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             set(Math.toDegrees(angle))
         }
 
+
+        override fun drawArrowHandle(length: Double) {
+            lineWithHandle(length) { drawDiamondHandle() }
+        }
     }
 
-    inner class PolarArrow(val sceneActor: SceneActor, val data: AttributeData)
+    inner class PolarArrow(name: String, val sceneActor: SceneActor, val data: AttributeData)
 
-        : AbstractDragHandle() {
+        : AbstractDragHandle(name) {
 
         val parameter = data.parameter!! as PolarParameter
 
@@ -336,8 +372,8 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             parameter.magnitude = magnitude
         }
 
-        override fun x() = sceneActor.x + parameter.value.vector().x.toDouble() * data.scale
-        override fun y() = sceneActor.y + parameter.value.vector().y.toDouble() * data.scale
+        override fun x() = sceneActor.x + parameter.value.vector().x * data.scale
+        override fun y() = sceneActor.y + parameter.value.vector().y * data.scale
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
 
@@ -361,20 +397,20 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
             with(canvas.graphicsContext2D) {
                 save()
-                translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
+                translate(sceneActor.x, sceneActor.y)
                 val length = parameter.magnitude!! * data.scale
 
                 rotate(parameter.value.angle.degrees)
-                drawOutlinesArrow(length, hovering)
+                drawOutlined(handleColor(hovering)) { lineWithHandle(length) }
                 restore()
             }
         }
 
     }
 
-    open inner class AbsoluteHandle(val sceneActor: SceneActor, val data: AttributeData)
+    open inner class AbsoluteHandle(name: String, val sceneActor: SceneActor, val data: AttributeData)
 
-        : AbstractDragHandle() {
+        : AbstractDragHandle(name) {
 
         val parameter = data.parameter!! as Vector2dParameter
 
@@ -396,16 +432,16 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             with(canvas.graphicsContext2D) {
                 save()
                 translate(parameter.x!!, parameter.y!!)
-                drawOutlinesHandle(hovering)
+                drawOutlined(handleColor(hovering)) { drawSquareHandle() }
                 restore()
             }
         }
 
     }
 
-    inner class RelativeHandle(sceneActor: SceneActor, data: AttributeData)
+    inner class RelativeHandle(name: String, sceneActor: SceneActor, data: AttributeData)
 
-        : AbsoluteHandle(sceneActor, data) {
+        : AbsoluteHandle(name, sceneActor, data) {
 
         override fun x() = sceneActor.x + super.x() * data.scale
         override fun y() = sceneActor.y + super.y() * data.scale
@@ -429,7 +465,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             with(canvas.graphicsContext2D) {
                 save()
                 translate(sceneActor.x + parameter.x!! * data.scale, sceneActor.y + parameter.y!! * data.scale)
-                drawOutlinesHandle(hovering)
+                drawOutlined(handleColor(hovering)) { drawDiamondHandle() }
                 restore()
             }
         }

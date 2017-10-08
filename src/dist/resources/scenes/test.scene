@@ -10,7 +10,7 @@
                     "costume": "bee",
                     "x": 423,
                     "y": 382,
-                    "direction": 0
+                    "direction": 10.999999999999998
                 },
                 {
                     "costume": "shootingStar",
@@ -22,11 +22,11 @@
                     "costume": "coin10",
                     "x": 143,
                     "y": 440,
-                    "direction": 14.999999999999998,
+                    "direction": 0,
                     "attributes": [
                         {
                             "name": "velocity",
-                            "value": "75.00000000000001:11.132385189167683"
+                            "value": "119.99999999999999:8.386298349093002"
                         }
                     ]
                 },
@@ -71,6 +71,30 @@
                         {
                             "name": "minVelocity",
                             "value": "123.00000000000003:12.287392"
+                        }
+                    ]
+                },
+                {
+                    "costume": "hand",
+                    "x": 281,
+                    "y": 480,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "myDirection",
+                            "value": "105"
+                        },
+                        {
+                            "name": "myOtherDirection",
+                            "value": "63"
+                        },
+                        {
+                            "name": "myRelative",
+                            "value": "54.0x-24.0"
+                        },
+                        {
+                            "name": "myAbsolute",
+                            "value": "233.0x430.0"
                         }
                     ]
                 }
