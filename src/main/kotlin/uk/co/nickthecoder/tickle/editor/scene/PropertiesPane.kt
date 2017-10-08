@@ -1,8 +1,9 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.control.TitledPane
+import uk.co.nickthecoder.tickle.editor.MainWindow
 
 class PropertiesPane : TitledPane() {
 
@@ -13,8 +14,6 @@ class PropertiesPane : TitledPane() {
     fun clear() {
         text = "<none>"
         content = noContent
-
-        MainWindow.instance.accordion.expandedPane = MainWindow.instance.costumesPane
     }
 
     fun show(ppc: PropertiesPaneContent) {

@@ -1,6 +1,9 @@
 Current Work
 ============
 
+Add a "Layers" panel to the accordian.
+	List all layers, with check boxes for Visible/Invisible/Semi, Locked/Edited
+
 Use KClass and properties to get/set values instead of the Java stuff.
 Get default values for attributes.
 
@@ -21,24 +24,6 @@ InputPicker :
 
 New Features
 ============
-
-SceneEditor
-	Other attribute types :
-		Position Vector2f : @Attribute( AttributeType.RELATIVE_POSITION )
-		Position Vector2f : @Attribute( AttributeType.ABSOLUTE_POSITION )
-
-		Velocity Polar        @Attribute( AttributeType.POLAR, scale = xxx )
-		Velocity Vector2f     @Attribute( AttributeType.RELATIVE_POSITION, scale = xxx)
-			Or should these be combined, backed by X,Y, but with degrees and speed getters?
-
-		For Ints and doubles allow it specify "slider" and min/max and step.
-
-
-	It would also be nice to have an angle, which is centered about another drag point
-		Can then use that as the position and angle of generated objects.
-
-	Add "tooltip" to drag handles when mouse is over them.
-
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 	Just as a prelude to pixel collision detection.

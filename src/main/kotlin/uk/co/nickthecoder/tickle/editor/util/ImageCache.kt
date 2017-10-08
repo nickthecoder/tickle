@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.util
 
 import javafx.scene.image.Image
 import java.io.File

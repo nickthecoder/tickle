@@ -14,6 +14,7 @@ import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.tabs.*
+import uk.co.nickthecoder.tickle.editor.util.NewResourceTask
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.graphics.Window
@@ -33,13 +34,12 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     val accordion = Accordion()
 
     val resourcesPane = TitledPane("Resources", resourcesTree)
-    val costumeBox = CostumesBox()
-    val costumesPane = TitledPane("Costumes", costumeBox.build())
-    val propertiesPane = PropertiesPane()
 
     val tabPane = MyTabPane<EditorTab>()
 
     val scene = Scene(borderPane, 1000.0, 650.0)
+
+    private var extraSidePanels: Collection<TitledPane> = emptyList()
 
     private val shortcuts = ShortcutHelper("MainWindow", borderPane)
 
@@ -61,11 +61,9 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
         // I like the animation, but it's too slow, and there is no API to change the speed. Turn it off. Grr.
         resourcesPane.isAnimated = false
-        costumesPane.isAnimated = false
-        propertiesPane.isAnimated = false
 
         with(accordion) {
-            panes.addAll(resourcesPane, costumesPane, propertiesPane)
+            panes.addAll(resourcesPane)
             expandedPane = resourcesPane
         }
 
@@ -77,14 +75,24 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
 
         with(shortcuts) {
-            add(EditorActions.ACCORDION_RESOURCES) { accordion.expandedPane = resourcesPane }
-            add(EditorActions.ACCORDION_COSTUME) { accordion.expandedPane = costumesPane }
-            add(EditorActions.ACCORDION_PROPERTIES) { accordion.expandedPane = propertiesPane }
+            add(EditorActions.ACCORDION_RESOURCES) { accordionPane(0) }
+            add(EditorActions.ACCORDION_COSTUME) { accordionPane(1) }
+            add(EditorActions.ACCORDION_PROPERTIES) { accordionPane(2) }
             add(EditorActions.TAB_CLOSE) { tabPane.selectedTab?.close() }
+        }
+
+        tabPane.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
+            onTabChanged(newValue)
         }
 
         stage.show()
         instance = this
+    }
+
+    fun accordionPane(n: Int) {
+        if (n >= 0 && n < accordion.panes.count()) {
+            accordion.expandedPane = accordion.panes[n]
+        }
     }
 
     fun findTab(data: Any): EditorTab? {
@@ -178,6 +186,21 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
                 tab.selectCostumeName(costumeName)
             }
         }
+    }
+
+    fun onTabChanged(tab: EditorTab) {
+        extraSidePanels.forEach {
+            accordion.panes.remove(it)
+        }
+
+        if (tab is HasSidePanes) {
+            extraSidePanels = tab.sidePanes()
+            extraSidePanels.forEach {
+                accordion.panes.add(it)
+            }
+        }
+
+        accordion.expandedPane = resourcesPane
     }
 
     companion object {

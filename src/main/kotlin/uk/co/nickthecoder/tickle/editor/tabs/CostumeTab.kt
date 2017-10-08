@@ -9,7 +9,7 @@ import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.editor.createPoseParameter
+import uk.co.nickthecoder.tickle.editor.util.createPoseParameter
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 
 class CostumeTab(val name: String, val costume: Costume)

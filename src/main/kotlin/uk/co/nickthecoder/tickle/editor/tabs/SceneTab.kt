@@ -28,27 +28,28 @@ import java.io.File
 
 class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
-    : EditTab(sceneName, sceneStub, graphicName = "scene.png") {
+    : EditTab(sceneName, sceneStub, graphicName = "scene.png"),
+        HasSidePanes {
 
     val sceneResource = JsonScene(sceneStub.file).sceneResource
 
-    val task = SceneDetailsTask(sceneName, sceneResource)
-    val taskForm = TaskForm(task)
+    private val task = SceneDetailsTask(sceneName, sceneResource)
+    private val taskForm = TaskForm(task)
 
-    val sceneEditor = SceneEditor(sceneResource)
+    private val sceneEditor = SceneEditor(sceneResource)
 
-    val minorTabs = MyTabPane<MyTab>()
+    private val minorTabs = MyTabPane<MyTab>()
 
-    val detailsTab = MyTab("Details", taskForm.build())
-    val editorTab = MyTab("Scene Editor", sceneEditor.build())
+    private val detailsTab = MyTab("Details", taskForm.build())
+    private val editorTab = MyTab("Scene Editor", sceneEditor.build())
 
-    val testButton = Button("Test")
+    private val testButton = Button("Test")
 
-    val copyButton = Button("Copy")
+    private val copyButton = Button("Copy")
 
-    val renameButton = Button("Rename")
+    private val renameButton = Button("Rename")
 
-    val deleteButton = Button("Delete")
+    private val deleteButton = Button("Delete")
 
     val sceneFile = sceneStub.file
 
@@ -73,6 +74,8 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
         deleteButton.onAction = EventHandler { onDelete() }
         renameButton.onAction = EventHandler { onRename() }
     }
+
+    override fun sidePanes() = sceneEditor.sidePanes
 
     override fun save(): Boolean {
         if (taskForm.check()) {

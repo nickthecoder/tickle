@@ -8,7 +8,6 @@ import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.SceneListerner
 import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.editor.PropertiesPaneContent
 
 
 class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResource)

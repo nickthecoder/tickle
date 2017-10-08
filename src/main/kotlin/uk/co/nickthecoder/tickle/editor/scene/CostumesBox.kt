@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.geometry.Insets
 import javafx.scene.Node
@@ -7,7 +7,7 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.control.Tooltip
 import javafx.scene.layout.FlowPane
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.editor.scene.thumbnail
+import uk.co.nickthecoder.tickle.editor.MainWindow
 
 class CostumesBox {
 

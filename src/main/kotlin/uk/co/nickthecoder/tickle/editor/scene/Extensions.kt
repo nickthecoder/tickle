@@ -11,7 +11,7 @@ import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneActor
-import uk.co.nickthecoder.tickle.editor.ImageCache
+import uk.co.nickthecoder.tickle.editor.util.ImageCache
 
 /*
 Contains may extension functions, helpful for the SceneEditor, that I don't want on the actual objects.

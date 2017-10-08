@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle.editor.scene
 import javafx.application.Platform
 import javafx.scene.Node
 import javafx.scene.control.ScrollPane
+import javafx.scene.control.TitledPane
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
@@ -32,9 +33,18 @@ class SceneEditor(val sceneResource: SceneResource)
 
     val shortcuts = ShortcutHelper("SceneEditor", scrollPane)
 
-    init {
-        sceneResource.listeners.add(this)
+    val costumeBox = CostumesBox()
+    val costumesPane = TitledPane("Costumes", costumeBox.build())
+    val propertiesPane = PropertiesPane()
 
+    val sidePanes = listOf(costumesPane, propertiesPane)
+
+    init {
+
+        costumesPane.isAnimated = false
+        propertiesPane.isAnimated = false
+
+        sceneResource.listeners.add(this)
     }
 
     fun build(): Node {
@@ -101,13 +111,12 @@ class SceneEditor(val sceneResource: SceneResource)
     }
 
     fun updateAttributesBox() {
-        MainWindow.instance.let { mainWindow ->
-            val latest = selection.latest()
-            if (latest == null) {
-                mainWindow.propertiesPane.clear()
-            } else {
-                mainWindow.propertiesPane.show(ActorProperties(latest, sceneResource))
-            }
+        val latest = selection.latest()
+        if (latest == null) {
+            propertiesPane.clear()
+            MainWindow.instance.accordion.expandedPane = costumesPane
+        } else {
+            propertiesPane.show(ActorProperties(latest, sceneResource))
         }
     }
 
