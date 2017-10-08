@@ -16,6 +16,10 @@
             "name": "default",
             "stages": [
                 {
+                    "name": "background",
+                    "stage": "uk.co.nickthecoder.tickle.stage.GameStage"
+                },
+                {
                     "name": "main",
                     "stage": "uk.co.nickthecoder.tickle.stage.GameStage"
                 }
@@ -28,6 +32,15 @@
                     "hAlignment": "LEFT",
                     "leftRightMargin": 0,
                     "vAlignment": "BOTTOM",
+                    "topBottomMargin": 0
+                },
+                {
+                    "name": "background",
+                    "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView",
+                    "stage": "background",
+                    "hAlignment": "LEFT",
+                    "leftRightMargin": 0,
+                    "vAlignment": "TOP",
                     "topBottomMargin": 0
                 }
             ]

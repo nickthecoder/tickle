@@ -50,7 +50,7 @@ class PolarParameter(
     }
 
     override fun toString(): String {
-        return "Polar : $value"
+        return "PolarParameter : $value"
     }
 
     override fun copy(): PolarParameter {

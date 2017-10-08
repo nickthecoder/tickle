@@ -4,6 +4,41 @@
     "layout": "default",
     "stages": [
         {
+            "name": "background",
+            "actors": [
+                {
+                    "costume": "spark",
+                    "x": 80,
+                    "y": 533,
+                    "direction": 0
+                },
+                {
+                    "costume": "spark",
+                    "x": 196,
+                    "y": 525,
+                    "direction": 0
+                },
+                {
+                    "costume": "spark",
+                    "x": 358,
+                    "y": 541,
+                    "direction": 0
+                },
+                {
+                    "costume": "spark",
+                    "x": 507,
+                    "y": 519,
+                    "direction": 0
+                },
+                {
+                    "costume": "spark",
+                    "x": 627,
+                    "y": 539,
+                    "direction": 0
+                }
+            ]
+        },
+        {
             "name": "main",
             "actors": [
                 {
@@ -14,9 +49,27 @@
                 },
                 {
                     "costume": "shootingStar",
-                    "x": 228,
-                    "y": 260,
-                    "direction": 0
+                    "x": 361,
+                    "y": 109,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "heading",
+                            "value": "102.0"
+                        },
+                        {
+                            "name": "sideDuration",
+                            "value": "1.1"
+                        },
+                        {
+                            "name": "sideLength",
+                            "value": "500"
+                        },
+                        {
+                            "name": "curveAngle",
+                            "value": "59.99999999999999"
+                        }
+                    ]
                 },
                 {
                     "costume": "coin10",
@@ -95,6 +148,30 @@
                         {
                             "name": "myAbsolute",
                             "value": "233.0x430.0"
+                        }
+                    ]
+                },
+                {
+                    "costume": "shootingStar",
+                    "x": 392,
+                    "y": 303,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "sideDuration",
+                            "value": "0.5"
+                        },
+                        {
+                            "name": "sideLength",
+                            "value": "300"
+                        },
+                        {
+                            "name": "curveAngle",
+                            "value": "119.99999999999999"
+                        },
+                        {
+                            "name": "turnAngle",
+                            "value": "180.0"
                         }
                     ]
                 }

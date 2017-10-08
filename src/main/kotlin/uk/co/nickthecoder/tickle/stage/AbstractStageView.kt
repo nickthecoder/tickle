@@ -17,6 +17,9 @@ abstract class AbstractStageView
         set(v) {
             if (field != v) {
                 field = v
+                // The default is for a view to have (0,0) a the bottom left of its viewport.
+                centerX = (rect.width) / 2.0
+                centerY = (rect.height) / 2.0
                 projectionDirty = true
             }
         }

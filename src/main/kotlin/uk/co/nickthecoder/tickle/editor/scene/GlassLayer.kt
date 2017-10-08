@@ -8,6 +8,7 @@ import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.editor.util.AngleParameter
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 
@@ -73,7 +74,7 @@ class GlassLayer(val selection: Selection)
             handle.draw()
         }
 
-        dragHandles.firstOrNull{ it.hovering }?.let { handle ->
+        dragHandles.firstOrNull { it.hovering }?.let { handle ->
             with(canvas.graphicsContext2D) {
                 save()
                 translate(handle.x(), handle.y())
@@ -335,7 +336,10 @@ class GlassLayer(val selection: Selection)
 
         : Arrow(name, sceneActor, distance) {
 
-        val parameter = data.parameter!! as DoubleParameter
+        val parameter = if (data.parameter is AngleParameter)
+            (data.parameter as AngleParameter).degreesP
+        else
+            data.parameter as DoubleParameter
 
         override fun get() = parameter.value ?: 0.0
 

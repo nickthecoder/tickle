@@ -1,25 +1,30 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.ActionRole
+import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.action.animation.Forwards
 import uk.co.nickthecoder.tickle.action.animation.Grow
 import uk.co.nickthecoder.tickle.action.animation.Turn
 import uk.co.nickthecoder.tickle.util.Angle
+import uk.co.nickthecoder.tickle.util.Attribute
 
 class ShootingStar() : ActionRole() {
 
-    val curveAngle = Angle.degrees(60.0)
+    @Attribute
+    var curveAngle = Angle.degrees(60.0)
 
-    val turnAngle = Angle.degrees(190.0)
+    @Attribute
+    var turnAngle = Angle.degrees(190.0)
 
-    var initialHeading: Double = 0.0
-
+    @Attribute
     var sideLength: Double = 400.0
 
+    @Attribute
     var sideDuration: Double = 1.0
 
-    val heading = Angle.degrees(initialHeading)
+    @Attribute(AttributeType.DIRECTION)
+    var heading = Angle.degrees(0.0)
 
     override fun activated() {
 

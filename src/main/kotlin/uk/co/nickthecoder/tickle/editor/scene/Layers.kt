@@ -59,7 +59,7 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
     }
 
     fun currentLayer(): StageLayer? {
-        return stageLayers.lastOrNull()
+        return editableLayers().lastOrNull()
     }
 
 }

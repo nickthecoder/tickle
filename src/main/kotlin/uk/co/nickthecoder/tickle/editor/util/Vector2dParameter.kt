@@ -51,7 +51,7 @@ class Vector2dParameter(
     }
 
     override fun toString(): String {
-        return "Polar : $value"
+        return "Vector2dParameter : $value"
     }
 
     override fun copy(): Vector2dParameter {

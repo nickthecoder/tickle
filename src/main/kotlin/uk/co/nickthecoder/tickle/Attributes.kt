@@ -2,8 +2,10 @@ package uk.co.nickthecoder.tickle
 
 import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.tickle.editor.util.AngleParameter
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
+import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
 import uk.co.nickthecoder.tickle.util.Polar2d
@@ -80,7 +82,7 @@ class Attributes {
                 val setterName = "set" + name.capitalize()
                 val setter = klass.methods.filter { it.name == setterName && it.parameterCount == 1 }.firstOrNull()
                 if (setter == null) {
-                    System.err.println("Warning. Could not find attribute $name in $obj. Removed.")
+                    System.err.println("Warning. Could not find attribute '$name'. Make sure it's a var of class : $obj")
                     map.remove(name)
                 } else {
                     val type = setter.parameterTypes[0]
@@ -155,6 +157,9 @@ class Attributes {
             Vector2d::class -> {
                 Vector2dParameter("attribute_$name", label = name)
             }
+            Angle::class -> {
+                AngleParameter("attribute_$name", label = name)
+            }
             else -> {
                 System.err.println("Type $klass (for attribute $name) is not currently supported.")
                 null
@@ -176,6 +181,7 @@ class Attributes {
             String::class -> value
             Polar2d::class -> Polar2d.fromString(value)
             Vector2d::class -> vector2dFromString(value)
+            Angle::class -> Angle.degrees(value.toDouble())
             else -> throw IllegalArgumentException("Type $klass is not currently supported.")
         }
     }

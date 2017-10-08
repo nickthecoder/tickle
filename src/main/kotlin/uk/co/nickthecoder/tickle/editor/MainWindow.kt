@@ -188,7 +188,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
     }
 
-    fun onTabChanged(tab: EditorTab) {
+    fun onTabChanged(tab: EditorTab?) {
         extraSidePanels.forEach {
             accordion.panes.remove(it)
         }
