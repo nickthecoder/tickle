@@ -23,7 +23,6 @@ class Coin() : ActionRole() {
 
     override fun activated() {
 
-
         val growShrink = (Grow(actor, 1.0, 2.0).then(Grow(actor, 1.0, 1.0)).forever())
         val circle = Circle(velocity.angle, turningSpeed).and(MovePolar(actor.position, velocity))
         action = growShrink.and(circle)

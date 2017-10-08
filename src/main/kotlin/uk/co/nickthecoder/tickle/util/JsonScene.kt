@@ -96,12 +96,14 @@ class JsonScene {
 
     fun loadActor(sceneStage: SceneStage, jactor: JsonObject) {
         val sceneActor = SceneActor()
+        // NOTE. load the attributes FIRST, then change the costume, as that gives Attributes the chance to remove
+        // attributes unsupported by the Role class.
+        JsonUtil.loadAttributes(jactor, sceneActor.attributes)
         sceneActor.costumeName = jactor.get("costume").asString()
+
         sceneActor.x = jactor.getDouble("x", 0.0)
         sceneActor.y = jactor.getDouble("y", 0.0)
         sceneActor.direction.degrees = jactor.getDouble("direction", 0.0)
-
-        JsonUtil.loadAttributes(jactor, sceneActor.attributes)
 
         sceneStage.sceneActors.add(sceneActor)
     }

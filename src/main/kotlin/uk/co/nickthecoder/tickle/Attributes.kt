@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle
 
 import org.joml.Vector2d
-import org.joml.Vector2f
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
@@ -94,17 +93,16 @@ class Attributes {
     }
 
     fun updateAttributeMetaData(className: String) {
-        val kclass: KClass<*>
+
+        val kClass: KClass<*>
         try {
-            kclass = Class.forName(className).kotlin
+            kClass = Class.forName(className).kotlin
         } catch (e: Exception) {
             // Do nothing
             return
         }
-        updateAttributeMetaData(kclass)
-    }
 
-    fun updateAttributeMetaData(kClass: KClass<*>) {
+        val toDiscard = map.keys.toMutableSet()
 
         kClass.members.forEach { property ->
             property.annotations.filterIsInstance<Attribute>().firstOrNull()?.let { annotation ->
@@ -116,6 +114,7 @@ class Attributes {
                     data.parameter = parameter
                     parameter.listen { data.value = parameter.stringValue }
                 }
+                toDiscard.remove(property.name)
             }
             property.annotations.filterIsInstance<CostumeAttribute>().firstOrNull()?.let { annotation ->
                 val data = getOrCreateData(property.name)
@@ -123,12 +122,15 @@ class Attributes {
                     data.costumeParameter = parameter
                     parameter.listen { data.value = parameter.stringValue }
                 }
+                toDiscard.remove(property.name)
             }
         }
-    }
 
-    private fun createParameter(name: String, klass: Class<*>): ValueParameter<*>? {
-        return createParameter(name, klass.kotlin)
+        toDiscard.forEach { name ->
+            System.err.println("Warning. Removing attribute : $name. Not used by class '$className'.")
+            map.remove(name)
+        }
+
     }
 
     private fun createParameter(name: String, klass: KClass<*>): ValueParameter<*>? {
@@ -178,7 +180,6 @@ class Attributes {
         }
     }
 
-    fun attributeName(parameter: Parameter) = parameter.name.substring("attribute_".length)
 }
 
 data class AttributeData(
@@ -189,12 +190,6 @@ data class AttributeData(
         var parameter: ValueParameter<*>? = null,
         var costumeParameter: ValueParameter<*>? = null)
 
-
-fun vector2fToString(vector: Vector2f) = "${vector.x}x${vector.y}"
-fun vector2fFromString(string: String): Vector2f {
-    val split = string.split("x")
-    return Vector2f(split[0].toFloat(), split[1].toFloat())
-}
 
 fun vector2dToString(vector: Vector2d) = "${vector.x}x${vector.y}"
 fun vector2dFromString(string: String): Vector2d {
