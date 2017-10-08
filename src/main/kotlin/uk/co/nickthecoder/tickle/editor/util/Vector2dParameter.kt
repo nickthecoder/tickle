@@ -17,9 +17,9 @@ class Vector2dParameter(
     : CompoundParameter<Vector2d>(
         name, label, description) {
 
-    val xP = DoubleParameter("${name}_x", label = "X", minValue = Double.MIN_VALUE)
+    val xP = DoubleParameter("${name}_x", label = "X", minValue = -Double.MAX_VALUE)
 
-    val yP = DoubleParameter("${name}_y", label = "Y", minValue = Double.MIN_VALUE)
+    val yP = DoubleParameter("${name}_y", label = "Y", minValue = -Double.MAX_VALUE)
 
     override val converter = object : StringConverter<Vector2d>() {
         override fun fromString(string: String): Vector2d {

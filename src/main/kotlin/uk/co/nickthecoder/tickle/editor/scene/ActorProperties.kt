@@ -2,6 +2,8 @@ package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.application.Platform
 import javafx.scene.Node
+import javafx.scene.control.ScrollPane
+import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.paratask.parameters.SimpleGroupParameter
 import uk.co.nickthecoder.paratask.parameters.addParameters
@@ -64,7 +66,11 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
 
     override fun build(): Node {
         val field = groupP.createField()
-        return field.control!!
+        val box = HBox()
+        box.children.add(field.controlContainer)
+        box.style = "-fx-padding:10px;"
+        val scrollPane = ScrollPane(box)
+        return scrollPane
     }
 
     fun updateSceneActor() {
