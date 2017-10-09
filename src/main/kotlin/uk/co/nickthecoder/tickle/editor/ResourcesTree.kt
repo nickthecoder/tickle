@@ -59,7 +59,7 @@ class ResourcesTree()
         }
     }
 
-    abstract inner class ResourceItem(val label: String = "") : TreeItem<String>(label) {
+    abstract inner class ResourceItem(label: String = "") : TreeItem<String>(label) {
         open fun data(): Any? = null
 
         override fun isLeaf() = true
@@ -83,11 +83,11 @@ class ResourcesTree()
             value = toString()
         }
 
-        override fun toString() = label
+        override fun toString() = value
     }
 
 
-    inner class RootItem() : ResourceItem(resources.file.nameWithoutExtension) {
+    inner class RootItem : ResourceItem(resources.file.nameWithoutExtension) {
 
         init {
             children.addAll(
@@ -114,7 +114,9 @@ class ResourcesTree()
         override fun data(): GameInfo = resources.gameInfo
     }
 
-    open inner class DataItem(val name: String, val data: Any, val graphicName: String = "unknown.png") : ResourceItem(name), ResourcesListener {
+    open inner class DataItem(var name: String, val data: Any, val graphicName: String = "unknown.png")
+
+        : ResourceItem(name), ResourcesListener {
 
         init {
             resources.listeners.add(this)
@@ -125,7 +127,10 @@ class ResourcesTree()
 
         override fun resourceRenamed(resource: Any, oldName: String, newName: String) {
             if (resource === data) {
-                updateLabel()
+                if (name == oldName) {
+                    name = newName
+                    value = name
+                }
             }
         }
 
@@ -153,6 +158,7 @@ class ResourcesTree()
         override fun removed() {
             resources.listeners.remove(this)
         }
+
     }
 
     inner class TexturesItem() : TopLevelItem() {
@@ -198,7 +204,6 @@ class ResourcesTree()
             if (resource is Pose) {
                 if (resource.texture === texture) {
                     children.add(DataItem(name, resource, "pose.png"))
-                    updateLabel()
                 }
             }
         }
