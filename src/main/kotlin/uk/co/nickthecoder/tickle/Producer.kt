@@ -1,6 +1,5 @@
-package uk.co.nickthecoder.tickle.demo
+package uk.co.nickthecoder.tickle
 
-import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import java.io.File
 

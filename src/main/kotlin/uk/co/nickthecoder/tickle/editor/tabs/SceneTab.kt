@@ -17,8 +17,8 @@ import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.demo.Director
-import uk.co.nickthecoder.tickle.demo.NoDirector
+import uk.co.nickthecoder.tickle.Director
+import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.SceneStub
 import uk.co.nickthecoder.tickle.editor.scene.SceneEditor

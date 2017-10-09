@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.Producer
 
 class Demo : Producer {
 

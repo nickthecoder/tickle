@@ -8,7 +8,7 @@ import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.SceneStage
-import uk.co.nickthecoder.tickle.demo.NoDirector
+import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.graphics.Color
 import java.io.*
 

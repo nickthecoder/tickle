@@ -1,7 +1,5 @@
 package uk.co.nickthecoder.tickle
 
-import uk.co.nickthecoder.tickle.demo.NoProducer
-import uk.co.nickthecoder.tickle.demo.Producer
 import java.io.File
 
 class GameInfo(

@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.demo
 
+import uk.co.nickthecoder.tickle.AbstractDirector
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.action.Action
@@ -36,7 +37,7 @@ class Play : AbstractDirector() {
     }
 
     override fun activated() {
-        tagManager.findARole(Tags.CONTROLLABLE)?.let {
+        tagManager.findARole(DemoTags.CONTROLLABLE)?.let {
             val con = it as Controllable
             con.hasInput = true
             activeControllable = con
@@ -68,7 +69,7 @@ class Play : AbstractDirector() {
 
         if (toggle.matches(event)) {
 
-            tagManager.closest(activeControllable!!, Tags.CONTROLLABLE)?.let {
+            tagManager.closest(activeControllable!!, DemoTags.CONTROLLABLE)?.let {
 
                 if (it is Controllable) {
                     centerAction = CenterViewBetween(stageView, activeControllable!!.actor.position, it.actor.position)

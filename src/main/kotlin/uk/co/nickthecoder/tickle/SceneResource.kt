@@ -1,6 +1,5 @@
 package uk.co.nickthecoder.tickle
 
-import uk.co.nickthecoder.tickle.demo.NoDirector
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.util.Angle
 import java.io.File

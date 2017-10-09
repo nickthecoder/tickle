@@ -10,10 +10,6 @@ import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.Rectd
 import uk.co.nickthecoder.tickle.util.Tagged
 
-enum class DemoTags {
-    BOUNCY
-}
-
 val ROOM_WIDTH = 8000.0
 val ROOM_HEIGHT = 8000.0
 

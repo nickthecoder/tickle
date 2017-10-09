@@ -5,8 +5,8 @@ package uk.co.nickthecoder.tickle.demo
  *
  * See TagManager, and Tagged
  */
-enum class Tags {
+enum class DemoTags {
 
-    CONTROLLABLE
+    CONTROLLABLE, BOUNCY
 
 }

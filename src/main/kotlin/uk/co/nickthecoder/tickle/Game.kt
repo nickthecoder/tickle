@@ -1,10 +1,6 @@
 package uk.co.nickthecoder.tickle
 
 import org.lwjgl.glfw.GLFW
-import uk.co.nickthecoder.tickle.demo.Director
-import uk.co.nickthecoder.tickle.demo.NoDirector
-import uk.co.nickthecoder.tickle.demo.NoProducer
-import uk.co.nickthecoder.tickle.demo.Producer
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window

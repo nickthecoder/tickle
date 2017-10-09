@@ -5,8 +5,8 @@ import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.GameInfo
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.demo.NoProducer
-import uk.co.nickthecoder.tickle.demo.Producer
+import uk.co.nickthecoder.tickle.NoProducer
+import uk.co.nickthecoder.tickle.Producer
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.XYiParameter
 

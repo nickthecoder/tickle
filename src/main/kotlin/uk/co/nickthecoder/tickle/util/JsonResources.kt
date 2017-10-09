@@ -5,7 +5,7 @@ import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.demo.NoProducer
+import uk.co.nickthecoder.tickle.NoProducer
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
 import uk.co.nickthecoder.tickle.stage.FlexVAlignment

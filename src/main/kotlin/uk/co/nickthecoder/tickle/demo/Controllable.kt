@@ -16,7 +16,7 @@ abstract class Controllable : AbstractRole(), TaggedRole {
     var movement: Action = NoAction()
 
     override fun begin() {
-        tagged.add(Tags.CONTROLLABLE)
+        tagged.add(DemoTags.CONTROLLABLE)
     }
 
     override fun activated() {
