@@ -2,7 +2,9 @@ package uk.co.nickthecoder.tickle.editor.util
 
 import javafx.util.StringConverter
 import org.joml.Vector2d
-import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.paratask.parameters.CompoundParameter
+import uk.co.nickthecoder.paratask.parameters.DoubleParameter
+import uk.co.nickthecoder.paratask.parameters.addParameters
 import uk.co.nickthecoder.paratask.util.uncamel
 import uk.co.nickthecoder.tickle.vector2dFromString
 import uk.co.nickthecoder.tickle.vector2dToString
@@ -47,7 +49,6 @@ class Vector2dParameter(
         this.value = value
 
         addParameters(xP, yP)
-        asVertical(LabelPosition.TOP)
     }
 
     override fun toString(): String {

@@ -1,7 +1,9 @@
 package uk.co.nickthecoder.tickle.editor.util
 
 import javafx.util.StringConverter
-import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.paratask.parameters.CompoundParameter
+import uk.co.nickthecoder.paratask.parameters.DoubleParameter
+import uk.co.nickthecoder.paratask.parameters.addParameters
 import uk.co.nickthecoder.paratask.util.uncamel
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Polar2d
@@ -15,10 +17,10 @@ class PolarParameter(
     : CompoundParameter<Polar2d>(
         name, label, description) {
 
-    val angleP = DoubleParameter("${name}_angle", label = "Angle")
+    val angleP = DoubleParameter("${name}_angle", label = "∠")
     var angle by angleP
 
-    val magnitudeP = DoubleParameter("${name}_magnitude", label = "Magnitude")
+    val magnitudeP = DoubleParameter("${name}_magnitude", label = "ρ")
     var magnitude by magnitudeP
 
     override val converter = object : StringConverter<Polar2d>() {
@@ -46,7 +48,6 @@ class PolarParameter(
         this.value = value
 
         addParameters(angleP, magnitudeP)
-        asVertical(LabelPosition.TOP)
     }
 
     override fun toString(): String {

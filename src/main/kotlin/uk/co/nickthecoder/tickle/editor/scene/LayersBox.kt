@@ -59,7 +59,7 @@ class LayersBox(val layers: Layers) {
                     stageLayer.isLocked = locked.isSelected
                     locked.graphic = ImageView(if (stageLayer.isLocked) lockedImage else unlockedImage)
                 }
-                
+
                 grid.children.addAll(label, visibility, locked)
 
                 GridPane.setConstraints(visibility, 0, y)
