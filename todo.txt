@@ -1,6 +1,25 @@
 Current Work
 ============
 
+Select a view to work on from a pull down (button?).
+	New SceneActors will be added to this
+
+	Create a listener specifically for stage visibility and lock.
+
+	If it is made invisible, or locked, then switch to the first/last editable stage or <none>.
+	When a SceneActor is clicked, it's stage becomes the current stage.
+	Hold down Shift (or Ctrl+Shift), when clicking, and scan though all visibile stages
+
+	Allow SceneActors to be moved from one stage to another.
+		Right click for context menu :
+			Delete
+			Move to Stage > (List of stages) (Only visible if there is more than one stage).
+	
+SceneEditor, If layout changes, rebuild the layout pane (and the pulldown button)
+	If costume is added/removed, rebuild the costume pane
+	If a Costume or pose is changed :
+		Select nothing (saves worrying about the attributes pane).
+		Redraw - Maybe an image cache needs flushing too?
 
 BUGS
 ====

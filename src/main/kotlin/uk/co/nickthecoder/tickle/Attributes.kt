@@ -78,17 +78,22 @@ class Attributes {
     private fun updateAttribute(obj: Any, klass: KClass<*>, name: String, value: String?) {
         if (value == null) return
         try {
-            val property = klass.memberProperties.filterIsInstance<KMutableProperty1<Any?, Any?>>().firstOrNull { it.name == name }
+            val property = klass.memberProperties.filterIsInstance<KProperty1<Any?, Any?>>().firstOrNull { it.name == name }
             if (property == null) {
                 System.err.println("Could not find a mutable property (var) called '$name' on class '${klass.qualifiedName}'")
             } else {
-                property.set(obj, fromString(value, property.returnType.jvmErasure))
+                if (property is KMutableProperty1<Any?, Any?>) {
+                    property.set(obj, fromString(value, property.returnType.jvmErasure))
+                } else {
+                    changeAttribute(property.get(obj), value, property.returnType.jvmErasure)
+                }
             }
 
         } catch (e: Exception) {
             System.err.println("Failed to set property '$name' on class '$klass'. Reason : $e")
         }
     }
+
 
     fun updateAttributesMetaData(className: String, isDesigning: Boolean) {
 
@@ -197,6 +202,31 @@ class Attributes {
         }
     }
 
+
+    private fun changeAttribute(obj: Any?, value: String, klass: KClass<*>) {
+        if (obj is Polar2d) {
+            val v = Polar2d.fromString(value)
+            obj.angle.radians = v.angle.radians
+            obj.magnitude = v.magnitude
+            return
+
+        } else if (obj is Vector2d) {
+            val v = vector2dFromString(value)
+            obj.x = v.x
+            obj.y = v.y
+
+        } else if (obj is Angle) {
+            val v = Angle.degrees(value.toDouble())
+            obj.radians = v.radians
+
+        } else if (klass == Boolean::class || klass == Int::class || klass == Float::class || klass == Double::class || klass == String::class) {
+
+            throw IllegalArgumentException("Cannot change immutable type $klass.")
+
+        } else {
+            throw IllegalArgumentException("Type $klass is not currently supported.")
+        }
+    }
 }
 
 data class AttributeData(

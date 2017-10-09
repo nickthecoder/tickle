@@ -19,13 +19,13 @@ class ShootingStar() : ActionRole() {
     //var sideLength: Double = 400.0
 
     @Attribute(AttributeType.POLAR)
-    var headingAndLength = Polar2d(Angle.degrees(15.0), 400.0)
+    val headingAndLength = Polar2d(Angle.degrees(15.0), 400.0)
 
     @Attribute
-    var curveAngle = Angle.degrees(60.0)
+    val curveAngle = Angle.degrees(60.0)
 
     @Attribute
-    var turnAngle = Angle.degrees(190.0)
+    val turnAngle = Angle.degrees(190.0)
 
     @Attribute
     var sideDuration: Double = 1.0
