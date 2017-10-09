@@ -1,19 +1,10 @@
 Current Work
 ============
 
-Select a view to work on from a pull down (button?).
-	New SceneActors will be added to this
-
-	Create a listener specifically for stage visibility and lock.
-
-	If it is made invisible, or locked, then switch to the first/last editable stage or <none>.
-	When a SceneActor is clicked, it's stage becomes the current stage.
-	Hold down Shift (or Ctrl+Shift), when clicking, and scan though all visibile stages
-
-	Allow SceneActors to be moved from one stage to another.
-		Right click for context menu :
-			Delete
-			Move to Stage > (List of stages) (Only visible if there is more than one stage).
+Allow SceneActors to be moved from one stage to another.
+	Right click for context menu :
+		Delete
+		Move to Stage > (List of stages) (Only visible if there is more than one stage).
 	
 SceneEditor, If layout changes, rebuild the layout pane (and the pulldown button)
 	If costume is added/removed, rebuild the costume pane
@@ -56,6 +47,27 @@ Pixel Overlap
 		Now read the entire pixel buffer (of one pixel!!!)
 	http://wiki.lwjgl.org/wiki/Render_to_Texture_with_Frame_Buffer_Objects_(FBO).html
 
+
+If we only care about IF we've hit something, rather than who,
+	draw all objects we wish to test against in grey using logical OR
+	then draw my mask ADDING it
+	Any pixels that are lighter than grey are collisions. As this is just the highest bit,
+	we could OR the whole buffer!
+	
+So a "quick" game would look like :
+	Bullet.ifHit( any deadly ) kill me later
+	Player.ifHit( any deadly ) kill me later
+
+But when we want know know who's hit who :
+	Player.ifHit( any solids ) kill me
+	Player.listHits( any deadly ) ...
+
+	Buller.isHit( any solids ) kill me
+	(don't need to test for hitting player)
+
+The renderer can be reused. Center the "view" on the player, and rotate the view, so that the player is NOT rotated
+	i.e. has a normal rectangular shape.
+
 https://www.khronos.org/opengl/wiki/Pixel_Transfer
 https://www.khronos.org/opengl/wiki/Fragment_Shader
 https://www.khronos.org/opengl/wiki/Logical_Operation
@@ -74,6 +86,11 @@ Editor
 When renaming an item, who's name is used in a scene, we need to keep track of renamed items,
 	and update all scenes when the resource file is saved.
 	Costume and Font only?
+
+PoseTab should show the whole Texture, with a single shaded rectangle to show the position.
+	Double click to auto adjust the pose's rectangle and offset.
+	Make it a resuable copmonent, which can show one or many shaded rectangles.
+
 
 Mouse
 	Hide the mouse, so it can be replaced by an actor

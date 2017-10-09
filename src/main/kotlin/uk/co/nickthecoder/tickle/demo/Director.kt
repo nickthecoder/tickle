@@ -2,6 +2,8 @@ package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.neighbourhood.Neighbourhood
+import uk.co.nickthecoder.tickle.neighbourhood.StandardNeighbourhood
 import uk.co.nickthecoder.tickle.util.TagManager
 
 /**
@@ -24,6 +26,8 @@ import uk.co.nickthecoder.tickle.util.TagManager
 interface Director {
 
     val tagManager: TagManager
+
+    val neighbourhood: Neighbourhood
 
     fun begin() {}
 
@@ -62,6 +66,8 @@ interface Director {
 open class AbstractDirector : Director {
 
     override val tagManager = TagManager()
+
+    override val neighbourhood = StandardNeighbourhood(60.0)
 
 }
 

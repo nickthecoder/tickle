@@ -155,6 +155,10 @@ class Renderer(val window: Window) {
         }
     }
 
+    fun drawTexture(texture: Texture, worldRect: Rectd, textureRect: Rectd, color: Color = Color.WHITE) {
+        drawTexture(texture, worldRect.left, worldRect.bottom, worldRect.right, worldRect.top, textureRect, color, identityMatrix)
+    }
+
     fun drawTexture(texture: Texture, left: Double, bottom: Double, right: Double, top: Double, textureRect: Rectd, color: Color = Color.WHITE) {
         drawTexture(texture, left, bottom, right, top, textureRect, color, identityMatrix)
     }

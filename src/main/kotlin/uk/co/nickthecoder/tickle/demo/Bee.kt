@@ -2,6 +2,8 @@ package uk.co.nickthecoder.tickle.demo
 
 
 import org.joml.Matrix4f
+import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.action.movement.polar.*
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Polar2d
@@ -9,6 +11,9 @@ import uk.co.nickthecoder.tickle.util.Polar2d
 class Bee : Controllable() {
 
     val velocity = Polar2d()
+
+    val ejectSimple = Resources.instance.input("ejectSimple")
+    val ejectNeighbourhood = Resources.instance.input("ejectNeighbourhood")
 
     override fun activated() {
 
@@ -36,6 +41,27 @@ class Bee : Controllable() {
             angle = 360 + angle
         }
         actor.customTransformation = if (angle > 90 && angle < 270) flipMatrix else null
+
+        if (ejectSimple.isPressed()) {
+            val bouncy = SimpleBounce()
+            val bouncyA = Actor(bouncy)
+            bouncyA.changePose(Resources.instance.pose("coin"))
+            bouncyA.position.x = actor.x
+            bouncyA.position.y = actor.y
+            bouncy.velocity.x = Math.cos(actor.direction.radians) * 10.0
+            bouncy.velocity.y = Math.sin(actor.direction.radians) * 10.0
+            actor.stage?.add(bouncyA)
+        }
+        if (ejectNeighbourhood.isPressed()) {
+            val bouncy = NeighbourhoodBounce()
+            val bouncyA = Actor(bouncy)
+            bouncyA.changePose(Resources.instance.pose("coin"))
+            bouncyA.position.x = actor.x
+            bouncyA.position.y = actor.y
+            bouncy.velocity.x = Math.cos(actor.direction.radians) * 10.0
+            bouncy.velocity.y = Math.sin(actor.direction.radians) * 10.0
+            actor.stage?.add(bouncyA)
+        }
     }
 
     companion object {

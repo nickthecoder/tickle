@@ -5,7 +5,7 @@
         "height": 600,
         "resizable": true,
         "initialScene": "level01",
-        "testScene": "test",
+        "testScene": "simpleBounce",
         "producer": "uk.co.nickthecoder.tickle.demo.Demo",
         "packages": [
             "uk.co.nickthecoder.tickle"
@@ -219,6 +219,32 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "simpleBounce",
+            "role": "uk.co.nickthecoder.tickle.demo.SimpleBounce",
+            "canRotate": false,
+            "events": [
+                {
+                    "name": "default",
+                    "poses": [
+                        "coin"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "neighbourhoodBounce",
+            "role": "uk.co.nickthecoder.tickle.demo.NeighbourhoodBounce",
+            "canRotate": false,
+            "events": [
+                {
+                    "name": "default",
+                    "poses": [
+                        "coin"
+                    ]
+                }
+            ]
         }
     ],
     "inputs": [
@@ -324,6 +350,33 @@
             "keys": [
                 {
                     "key": "Tab",
+                    "state": "PRESSED"
+                }
+            ]
+        },
+        {
+            "name": "simpleBounce",
+            "keys": [
+                {
+                    "key": "S",
+                    "state": "PRESSED"
+                }
+            ]
+        },
+        {
+            "name": "ejectSimple",
+            "keys": [
+                {
+                    "key": "S",
+                    "state": "PRESSED"
+                }
+            ]
+        },
+        {
+            "name": "ejectNeighbourhood",
+            "keys": [
+                {
+                    "key": "N",
                     "state": "PRESSED"
                 }
             ]
