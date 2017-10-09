@@ -29,7 +29,7 @@ import java.io.File
 class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
     : EditTab(sceneName, sceneStub, graphicName = "scene.png"),
-        HasSidePanes {
+        HasExtras {
 
     val sceneResource = JsonScene(sceneStub.file, isDesigning = true).sceneResource
 
@@ -53,6 +53,7 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
     val sceneFile = sceneStub.file
 
+
     init {
         minorTabs.side = Side.BOTTOM
         minorTabs.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
@@ -75,7 +76,9 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
         renameButton.onAction = EventHandler { onRename() }
     }
 
-    override fun sidePanes() = sceneEditor.sidePanes
+    override fun extraSidePanes() = sceneEditor.sidePanes
+
+    override fun extraButtons() = listOf(sceneEditor.layers.stageButton)
 
     override fun save(): Boolean {
         if (taskForm.check()) {

@@ -32,7 +32,7 @@ class LayersBox(val layers: Layers) {
     fun update() {
 
         val visibleImage = EditorAction.imageResource("layer-visible.png")
-        val invisibleImage = EditorAction.imageResource("layer-invisible.png")
+        val invisibleImage = EditorAction.imageResource("layer-hidden.png")
 
         val lockedImage = EditorAction.imageResource("layer-locked.png")
         val unlockedImage = EditorAction.imageResource("layer-unlocked.png")
@@ -46,7 +46,7 @@ class LayersBox(val layers: Layers) {
 
                 val visibility = ToggleButton()
                 visibility.isSelected = stageLayer.isVisible
-                visibility.graphic = ImageView(visibleImage)
+                visibility.graphic = ImageView(if (stageLayer.isVisible) visibleImage else invisibleImage)
                 visibility.onAction = EventHandler {
                     stageLayer.isVisible = visibility.isSelected
                     visibility.graphic = ImageView(if (stageLayer.isVisible) visibleImage else invisibleImage)
@@ -54,13 +54,12 @@ class LayersBox(val layers: Layers) {
 
                 val locked = ToggleButton()
                 locked.isSelected = stageLayer.isLocked
+                locked.graphic = ImageView(if (stageLayer.isLocked) lockedImage else unlockedImage)
                 locked.onAction = EventHandler {
                     stageLayer.isLocked = locked.isSelected
                     locked.graphic = ImageView(if (stageLayer.isLocked) lockedImage else unlockedImage)
                 }
-
-                locked.graphic = ImageView(lockedImage)
-
+                
                 grid.children.addAll(label, visibility, locked)
 
                 GridPane.setConstraints(visibility, 0, y)

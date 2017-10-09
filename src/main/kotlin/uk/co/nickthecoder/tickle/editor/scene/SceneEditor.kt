@@ -40,7 +40,7 @@ class SceneEditor(val sceneResource: SceneResource)
     val propertiesPane = PropertiesPane()
     val layersPane = TitledPane("Layers", layersBox.build())
 
-    val sidePanes = listOf(costumesPane, propertiesPane, layersPane)
+    val sidePanes = listOf(costumesPane, layersPane, propertiesPane)
 
     init {
         sceneResource.listeners.add(this)

@@ -1,11 +1,14 @@
 package uk.co.nickthecoder.tickle.editor
 
 import javafx.application.Platform
+import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.control.Accordion
 import javafx.scene.control.TitledPane
 import javafx.scene.control.ToolBar
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.ParaTask
 import uk.co.nickthecoder.paratask.gui.MySplitPane
@@ -40,6 +43,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     val scene = Scene(borderPane, 1000.0, 650.0)
 
     private var extraSidePanels: Collection<TitledPane> = emptyList()
+    private var extraButtons: Collection<Node> = emptyList()
 
     private val shortcuts = ShortcutHelper("MainWindow", borderPane)
 
@@ -67,11 +71,14 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             expandedPane = resourcesPane
         }
 
+        val toolBarPadding = HBox()
+        HBox.setHgrow(toolBarPadding, Priority.ALWAYS);
         with(toolBar.items) {
             add(EditorActions.RESOURCES_SAVE.createButton(shortcuts) { save() })
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
             add(EditorActions.RUN.createButton(shortcuts) { startGame() })
             add(EditorActions.TEST.createButton(shortcuts) { testGame() })
+            add(toolBarPadding)
         }
 
         with(shortcuts) {
@@ -192,12 +199,19 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         extraSidePanels.forEach {
             accordion.panes.remove(it)
         }
+        extraButtons.forEach {
+            toolBar.items.remove(it)
+        }
 
-        if (tab is HasSidePanes) {
-            extraSidePanels = tab.sidePanes()
+        if (tab is HasExtras) {
+            extraSidePanels = tab.extraSidePanes()
             extraSidePanels.forEach {
                 it.isAnimated = false
                 accordion.panes.add(it)
+            }
+            extraButtons = tab.extraButtons()
+            extraButtons.forEach {
+                toolBar.items.add(it)
             }
         }
 
