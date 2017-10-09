@@ -68,6 +68,8 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
 
     fun editableLayers() = stageLayers.filter { it.isVisible && !it.isLocked }
 
+    fun visibleLayers() = stageLayers.filter { it.isVisible }
+
     fun add(layer: Layer) {
         allLayers.add(layer)
         stack.children.add(layer.canvas)

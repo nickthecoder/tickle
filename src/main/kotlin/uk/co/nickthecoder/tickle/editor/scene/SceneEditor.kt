@@ -97,9 +97,9 @@ class SceneEditor(val sceneResource: SceneResource)
         dirty = false
     }
 
-    fun findActorsAt(x: Double, y: Double): List<SceneActor> {
+    fun findActorsAt(x: Double, y: Double, ignoreStageLock: Boolean = false): List<SceneActor> {
         val list = mutableListOf<SceneActor>()
-        layers.editableLayers().forEach { stageLayer ->
+        layers.visibleLayers().filter { ignoreStageLock || it.isLocked == false }.forEach { stageLayer ->
             stageLayer.sceneStage.sceneActors.forEach { sceneActor ->
                 if (isSceneActorAt(sceneActor, x, y)) {
                     list.add(sceneActor)
@@ -244,7 +244,8 @@ class SceneEditor(val sceneResource: SceneResource)
                     mouseHandler = AdjustDragHandle(handle)
 
                 } else {
-                    val actors = findActorsAt(wx, wy)
+                    val ignoreLock = event.isAltDown // On my system Mouse + Alt moves a window, but Mouse + Alt + Shift works fine ;-)
+                    val actors = findActorsAt(wx, wy, ignoreLock)
                     val highestActor = actors.lastOrNull()
 
                     if (event.isControlDown) {
