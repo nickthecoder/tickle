@@ -94,6 +94,7 @@ class ResourcesTree()
                     GameInfoItem(),
                     TexturesItem(),
                     PosesItem(),
+                    FontResourcesItem(),
                     CostumesItem(),
                     InputsItem(),
                     LayoutsItem(),
@@ -228,6 +229,26 @@ class ResourcesTree()
         }
 
         override fun toString() = "All Poses (${children.size})"
+    }
+
+
+    inner class FontResourcesItem() : TopLevelItem() {
+
+        init {
+            resources.fontResources().map { it }.sortedBy { it.key }.forEach { (name, fontResource) ->
+                children.add(DataItem(name, fontResource, "font.png"))
+            }
+            updateLabel()
+        }
+
+        override fun resourceAdded(resource: Any, name: String) {
+            if (resource is FontResource) {
+                children.add(DataItem(name, resource, "font.png"))
+                updateLabel()
+            }
+        }
+
+        override fun toString() = "Fonts (${children.size})"
     }
 
 

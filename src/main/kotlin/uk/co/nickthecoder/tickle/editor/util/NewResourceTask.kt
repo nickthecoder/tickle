@@ -4,10 +4,7 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.UnthreadedTaskRunner
-import uk.co.nickthecoder.paratask.parameters.FileParameter
-import uk.co.nickthecoder.paratask.parameters.InformationParameter
-import uk.co.nickthecoder.paratask.parameters.OneOfParameter
-import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.events.CompoundInput
@@ -15,8 +12,6 @@ import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 
 class NewResourceTask : AbstractTask() {
-
-    val nameP = StringParameter("resourceName")
 
     val textureP = FileParameter("textureFile", label = "File", value = File(Resources.instance.file.parentFile, "images").absoluteFile)
 
@@ -26,6 +21,18 @@ class NewResourceTask : AbstractTask() {
 
     val layoutP = InformationParameter("layout", information = "")
 
+    val fontNameP = StringParameter("fontName", label = "", value = java.awt.Font.SANS_SERIF, columns = 20)
+    val fontStyleP = ChoiceParameter<NamedFontResource.FontStyle>("fontStyle", label = "", value = NamedFontResource.FontStyle.PLAIN).enumChoices(mixCase = true)
+    val fontNameAndStyleP = SimpleGroupParameter("fontNameAndStyle", label = "")
+            .addParameters(fontNameP, fontStyleP).asHorizontal()
+
+    val fontFileP = FileParameter("fontFile", label = "", extensions = listOf("ttf", "otf"))
+    val fontOneOfP = OneOfParameter("fontChoice", label = "Font", value = fontNameAndStyleP, choiceLabel = "")
+            .addParameters("Named" to fontNameAndStyleP, "From File" to fontFileP)
+            .asHorizontal()
+    val fontSizeP = DoubleParameter("fontSize", label = "Size", value = 22.0)
+
+
     val inputP = InformationParameter("input", information = "")
 
     val sceneDirectoryP = InformationParameter("sceneDirectory", information = "")
@@ -34,15 +41,23 @@ class NewResourceTask : AbstractTask() {
 
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
             .addParameters(
-                    "Texture" to textureP, "Pose" to poseP, "Costume" to costumeP, "Layout" to layoutP,
+                    "Texture" to textureP, "Pose" to poseP, "Font" to fontOneOfP, "Costume" to costumeP, "Layout" to layoutP,
                     "Input" to inputP, "Scene Directory" to sceneDirectoryP, "Scene" to sceneP)
 
 
-    override val taskD = TaskDescription("newResource", height = 200)
-            .addParameters(nameP, resourceTypeP)
+    val nameP = StringParameter("resourceName")
+
+    override val taskD = TaskDescription("newResource", height = 300)
+            .addParameters(resourceTypeP, fontSizeP, nameP)
 
     override val taskRunner = UnthreadedTaskRunner(this)
 
+    init {
+        fontSizeP.hidden = true
+        resourceTypeP.listen {
+            fontSizeP.hidden = resourceTypeP.value != fontOneOfP
+        }
+    }
 
     override fun run() {
 
@@ -96,6 +111,23 @@ class NewResourceTask : AbstractTask() {
                 JsonScene(newScene).save(file)
                 Resources.instance.fireAdded(file, nameP.value)
             }
+            fontOneOfP -> {
+                println("Create a new FontResource")
+                if (fontOneOfP.value == fontNameAndStyleP) {
+                    val fr = NamedFontResource(fontNameP.value)
+                    fr.style = fontStyleP.value!!
+                    fr.size = fontSizeP.value!!
+                    try {
+                        fr.fontTexture
+                    } catch(e: Exception) {
+                        throw ParameterException(fontNameP, "Not a valid font name")
+                    }
+                    Resources.instance.addFontResource(nameP.value, fr)
+                    data = fr
+                } else {
+                    println("TODO! Load fonts from a file.")
+                }
+            }
         }
 
         if (data != null) {
@@ -103,3 +135,4 @@ class NewResourceTask : AbstractTask() {
         }
     }
 }
+

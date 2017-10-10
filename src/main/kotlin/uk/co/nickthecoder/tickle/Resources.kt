@@ -26,6 +26,8 @@ class Resources {
 
     private val layouts = mutableMapOf<String, Layout>()
 
+    private val fontResources = mutableMapOf<String, FontResource>()
+
 
     val sceneDirectory: File
         get() = File(file.parentFile, "scenes").absoluteFile
@@ -257,6 +259,36 @@ class Resources {
             fireRenamed(layout, oldName, newName)
         }
     }
+
+
+    // FONTS
+
+    fun fontResources(): Map<String, FontResource> = fontResources
+
+    fun optionalFont(name: String): FontResource? = fontResources[name]
+
+    fun font(name: String): FontResource = optionalFont(name)!!
+
+    fun addFontResource(name: String, fontResource: FontResource) {
+        fontResources[name] = fontResource
+        fireAdded(fontResource, name)
+    }
+
+    fun deleteFontResources(name: String) {
+        fontResources[name]?.let {
+            fontResources.remove(name)
+            fireRemoved(it, name)
+        }
+    }
+
+    fun renameFontResources(oldName: String, newName: String) {
+        fontResources[oldName]?.let { fontResource ->
+            fontResources.remove(oldName)
+            fontResources[newName] = fontResource
+            fireRenamed(fontResource, oldName, newName)
+        }
+    }
+
 
     fun save() {
         JsonResources(this).save(this.file)
