@@ -1,8 +1,7 @@
 package uk.co.nickthecoder.tickle.graphics
 
+import uk.co.nickthecoder.tickle.Pose
+
 data class Glyph(
-        val width: Int,
-        val height: Int,
-        val x: Int,
-        val y: Int,
-        val advance: Float)
+        val pose : Pose,
+        val advance: Int)

@@ -45,7 +45,7 @@ class Bee : Controllable() {
         if (ejectSimple.isPressed()) {
             val bouncy = SimpleBounce()
             val bouncyA = Actor(bouncy)
-            bouncyA.changePose(Resources.instance.pose("coin"))
+            bouncyA.changeAppearance(Resources.instance.pose("coin"))
             bouncyA.position.x = actor.x
             bouncyA.position.y = actor.y
             bouncy.velocity.x = Math.cos(actor.direction.radians) * 10.0
@@ -55,7 +55,7 @@ class Bee : Controllable() {
         if (ejectNeighbourhood.isPressed()) {
             val bouncy = NeighbourhoodBounce()
             val bouncyA = Actor(bouncy)
-            bouncyA.changePose(Resources.instance.pose("coin"))
+            bouncyA.changeAppearance(Resources.instance.pose("coin"))
             bouncyA.position.x = actor.x
             bouncyA.position.y = actor.y
             bouncy.velocity.x = Math.cos(actor.direction.radians) * 10.0

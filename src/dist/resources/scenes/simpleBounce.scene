@@ -13,58 +13,10 @@
             "name": "main",
             "actors": [
                 {
-                    "costume": "bouncy",
-                    "x": 169,
-                    "y": 374,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "6.5x4.7"
-                        }
-                    ]
-                },
-                {
                     "costume": "bee",
                     "x": 390,
                     "y": 370,
                     "direction": 0
-                },
-                {
-                    "costume": "bouncy",
-                    "x": 371,
-                    "y": 270,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "9.1x6.5"
-                        }
-                    ]
-                },
-                {
-                    "costume": "bouncy",
-                    "x": 579,
-                    "y": 432,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "-7.2x-6.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "bouncy",
-                    "x": 340,
-                    "y": 516,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "-5.9x-4.9"
-                        }
-                    ]
                 }
             ]
         }

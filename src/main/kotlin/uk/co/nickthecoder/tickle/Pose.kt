@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle
 
+import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.Angle
@@ -37,6 +38,16 @@ class Pose(
         rectd.bottom = 1 - (rect.bottom.toDouble() / texture.height)
         rectd.right = rect.right.toDouble() / texture.width
         rectd.top = 1 - (rect.top.toDouble() / texture.height)
+    }
+
+    fun draw(renderer: Renderer, x: Double, y: Double, color: Color = Color.WHITE) {
+        val left = x - offsetX
+        val bottom = y - offsetY
+        renderer.drawTexture(
+                texture,
+                left, bottom, left + rect.width, bottom + rect.height,
+                rectd,
+                color)
     }
 
     fun draw(renderer: Renderer, actor: Actor) {

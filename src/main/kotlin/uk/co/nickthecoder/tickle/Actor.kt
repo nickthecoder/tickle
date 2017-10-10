@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle
 import org.joml.Matrix4f
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.graphics.FontTexture
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.util.Angle
 
@@ -52,7 +53,7 @@ class Actor(val role: Role? = null) {
     var color: Color = Color.WHITE
 
 
-    var appearance: Appearance = InvisibleAppearance()
+    internal var appearance: Appearance = InvisibleAppearance()
 
     private val modelMatrix = Matrix4f()
 
@@ -92,9 +93,24 @@ class Actor(val role: Role? = null) {
         return modelMatrix
     }
 
-    fun changePose(pose: Pose) {
-        appearance = PoseAppearance(this, pose)
+    fun changeAppearance(pose: Pose) {
+        val a = appearance
+        if (a is PoseAppearance) {
+            a.pose = pose
+        } else {
+            appearance = PoseAppearance(this, pose)
+        }
     }
+
+    fun changeAppearance(text: String, fontTexture: FontTexture) {
+        appearance = TextAppearance(this, text, fontTexture)
+    }
+
+    /*
+    fun changeAppearance(text : String, font : FontFile, size : Int) {
+        appearance = TextAppearance(this, font.fontTexture(size))
+    }
+    */
 
     var flipX: Boolean = false
         set(v) {
