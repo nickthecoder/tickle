@@ -2,8 +2,23 @@ Current Work
 ============
 
 Fonts
-	https://github.com/SilverTiger/lwjgl3-tutorial/wiki/Fonts
-	Allow loading of multiple ranges of characters.
+	Add to tree with icon
+	New tab to change font details
+	JSonResources
+	Load fonts from fft file.
+	Save and load fonts as png + json file.
+	Costume and SceneActor to support text appearance
+	Place FPS on test scenes
+		Make a reusable component, which updates every N ticks/seconds
+			Delay action
+			ChangeTextAction { text }
+
+	One-off font textures (e.g. for Menus)
+	Render string to an image, convert it to a texture and a single pose.
+		Then apply "makeup" before using it
+			Texturize (apply a texture to)
+			Drop shadow
+			Blur etc
 
 	
 SceneEditor, If layout changes, rebuild the layout pane (and the pulldown button)

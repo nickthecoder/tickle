@@ -12,6 +12,7 @@ class Bee : Controllable() {
 
     val velocity = Polar2d()
 
+    val ejectNoBounce = Resources.instance.input("ejectNoBounce")
     val ejectSimple = Resources.instance.input("ejectSimple")
     val ejectNeighbourhood = Resources.instance.input("ejectNeighbourhood")
 
@@ -42,26 +43,26 @@ class Bee : Controllable() {
         }
         actor.customTransformation = if (angle > 90 && angle < 270) flipMatrix else null
 
+        if (ejectNoBounce.isPressed()) {
+            eject(NoBounce())
+        }
         if (ejectSimple.isPressed()) {
-            val bouncy = SimpleBounce()
-            val bouncyA = Actor(bouncy)
-            bouncyA.changeAppearance(Resources.instance.pose("coin"))
-            bouncyA.position.x = actor.x
-            bouncyA.position.y = actor.y
-            bouncy.velocity.x = Math.cos(actor.direction.radians) * 10.0
-            bouncy.velocity.y = Math.sin(actor.direction.radians) * 10.0
-            actor.stage?.add(bouncyA)
+            eject(SimpleBounce())
         }
         if (ejectNeighbourhood.isPressed()) {
-            val bouncy = NeighbourhoodBounce()
-            val bouncyA = Actor(bouncy)
-            bouncyA.changeAppearance(Resources.instance.pose("coin"))
-            bouncyA.position.x = actor.x
-            bouncyA.position.y = actor.y
-            bouncy.velocity.x = Math.cos(actor.direction.radians) * 10.0
-            bouncy.velocity.y = Math.sin(actor.direction.radians) * 10.0
-            actor.stage?.add(bouncyA)
+            eject(NeighbourhoodBounce())
         }
+    }
+
+    fun eject(role: Bounce) {
+        val bouncyA = Actor(role)
+        bouncyA.changeAppearance(Resources.instance.pose("coin"))
+        bouncyA.position.x = actor.x
+        bouncyA.position.y = actor.y
+        role.velocity.x = Math.cos(actor.direction.radians) * 10.0
+        role.velocity.y = Math.sin(actor.direction.radians) * 10.0
+        actor.stage?.add(bouncyA)
+
     }
 
     companion object {

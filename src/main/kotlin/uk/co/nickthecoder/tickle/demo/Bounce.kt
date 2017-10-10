@@ -56,6 +56,14 @@ abstract class Bounce : AbstractRole(), TaggedRole {
 }
 
 
+class NoBounce : Bounce() {
+
+    override fun tick() {
+        super.tick()
+    }
+
+}
+
 class SimpleBounce : Bounce() {
 
     override fun tick() {

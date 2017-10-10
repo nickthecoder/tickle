@@ -380,6 +380,15 @@
                     "state": "PRESSED"
                 }
             ]
+        },
+        {
+            "name": "ejectNoBounce",
+            "keys": [
+                {
+                    "key": "C",
+                    "state": "PRESSED"
+                }
+            ]
         }
     ]
 }
