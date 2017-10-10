@@ -89,7 +89,7 @@ class Renderer(val window: Window) {
 
         /* Set color uniform */
         uniColor = program.getUniformLocation("color")
-        program.setUniform(uniColor, Color.SEMI_TRANSPARENT)
+        program.setUniform(uniColor, Color.SEMI_TRANSPARENT_WHITE)
 
         // centerView(0f, 0f)
     }

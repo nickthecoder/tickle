@@ -84,7 +84,9 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
         val RED = Color(1f, 0f, 0f)
         val GREEN = Color(0f, 1f, 0f)
         val BLUE = Color(0f, 0f, 1f)
-        val SEMI_TRANSPARENT = Color(1f, 1f, 1f, 0.5f)
+
+        val SEMI_TRANSPARENT_WHITE = Color(1f, 1f, 1f, 0.5f)
+        val SEMI_TRANSPARENT_BLACK = Color(0f, 0f, 0f, 0.5f)
 
         val TRANSPARENT_WHITE = Color(1f, 1f, 1f, 0.0f)
         val TRANSPARENT_BLACK = Color(0f, 0f, 0f, 0.0f)

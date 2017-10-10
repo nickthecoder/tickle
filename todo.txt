@@ -12,14 +12,12 @@ Fonts
 		Make a reusable component, which updates every N ticks/seconds
 			Delay action
 			ChangeTextAction { text }
+	VAlignment Top, Middle, Baseline, Bottom (will need extra data on FontTexture)
+	HAlign Left, Middle, Center
 
-	One-off font textures (e.g. for Menus)
-	Render string to an image, convert it to a texture and a single pose.
-		Then apply "makeup" before using it
-			Texturize (apply a texture to)
-			Drop shadow
-			Blur etc
-
+Create a pair of FontTextures, to outline a font
+	Alas, AWT doesn't allow fonts to be stroked and JavaFX doesn't allow access to the font metrics!!!
+	https://stackoverflow.com/questions/32237048/javafx-fontmetrics
 	
 SceneEditor, If layout changes, rebuild the layout pane (and the pulldown button)
 	If costume is added/removed, rebuild the costume pane
