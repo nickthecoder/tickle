@@ -1,10 +1,6 @@
 Current Work
 ============
 
-Allow SceneActors to be moved from one stage to another.
-	Right click for context menu :
-		Delete
-		Move to Stage > (List of stages) (Only visible if there is more than one stage).
 	
 SceneEditor, If layout changes, rebuild the layout pane (and the pulldown button)
 	If costume is added/removed, rebuild the costume pane
@@ -14,6 +10,8 @@ SceneEditor, If layout changes, rebuild the layout pane (and the pulldown button
 
 BUGS
 ====
+
+Cannot rename an input (or it doen't update the tree).
 
 Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
 	I only want the EDITOR to depend on paratask-core.

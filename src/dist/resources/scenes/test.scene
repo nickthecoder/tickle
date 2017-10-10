@@ -42,12 +42,6 @@
             "name": "main",
             "actors": [
                 {
-                    "costume": "bee",
-                    "x": 423,
-                    "y": 382,
-                    "direction": 10.999999999999998
-                },
-                {
                     "costume": "coin10",
                     "x": 143,
                     "y": 440,
@@ -163,11 +157,11 @@
                         },
                         {
                             "name": "headingAndLength",
-                            "value": "72.0:103.74005976477939"
+                            "value": "26.000000000000004:70.66116330771806"
                         },
                         {
                             "name": "sideDuration",
-                            "value": "1"
+                            "value": "1.1"
                         },
                         {
                             "name": "turnAngle",
@@ -191,13 +185,19 @@
                         },
                         {
                             "name": "sideDuration",
-                            "value": "1"
+                            "value": "0.9"
                         },
                         {
                             "name": "turnAngle",
                             "value": "190.0"
                         }
                     ]
+                },
+                {
+                    "costume": "bee",
+                    "x": 423,
+                    "y": 382,
+                    "direction": 10.999999999999998
                 }
             ]
         }

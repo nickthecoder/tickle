@@ -1,9 +1,9 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.application.Platform
+import javafx.event.EventHandler
 import javafx.scene.Node
-import javafx.scene.control.ScrollPane
-import javafx.scene.control.TitledPane
+import javafx.scene.control.*
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
@@ -11,6 +11,7 @@ import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.SceneListerner
 import uk.co.nickthecoder.tickle.SceneResource
+import uk.co.nickthecoder.tickle.SceneStage
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 
@@ -41,6 +42,8 @@ class SceneEditor(val sceneResource: SceneResource)
     val layersPane = TitledPane("Layers", layersBox.build())
 
     val sidePanes = listOf(costumesPane, layersPane, propertiesPane)
+
+    val costumeHistory = mutableListOf<String>()
 
     init {
         sceneResource.listeners.add(this)
@@ -119,6 +122,33 @@ class SceneEditor(val sceneResource: SceneResource)
         }
     }
 
+    fun buildContextMenu(): ContextMenu {
+        val menu = ContextMenu()
+        val delete = MenuItem("Delete")
+        delete.onAction = EventHandler { onDelete() }
+        menu.items.add(delete)
+
+        if (selection.isNotEmpty() && sceneResource.sceneStages.size > 1) {
+            val moveToStageMenu = Menu("Move to Stage")
+            sceneResource.sceneStages.forEach { stageName, stage ->
+                val stageItem = MenuItem(stageName)
+                stageItem.onAction = EventHandler { moveSelectTo(stage) }
+                moveToStageMenu.items.add(stageItem)
+            }
+            menu.items.add(moveToStageMenu)
+        }
+
+        return menu
+    }
+
+    fun moveSelectTo(sceneStage: SceneStage) {
+        selection.forEach { sceneActor ->
+            delete(sceneActor)
+            sceneStage.sceneActors.add(sceneActor)
+        }
+        sceneResource.fireChange()
+    }
+
     fun onEscape() {
         mouseHandler?.escape()
         selection.clear()
@@ -127,18 +157,21 @@ class SceneEditor(val sceneResource: SceneResource)
         draw()
     }
 
+    fun delete(sceneActor: SceneActor) {
+        sceneResource.sceneStages.values.forEach { sceneStage ->
+            sceneStage.sceneActors.remove(sceneActor)
+        }
+    }
+
     fun onDelete() {
         selection.selected().forEach { sceneActor ->
-            sceneResource.sceneStages.values.forEach { sceneStage ->
-                sceneStage.sceneActors.remove(sceneActor)
-            }
+            delete(sceneActor)
         }
         selection.clear()
         updateAttributesBox()
         sceneResource.fireChange()
     }
 
-    val costumeHistory = mutableListOf<String>()
 
     fun selectCostumeName(costumeName: String) {
         mouseHandler = Stamp(costumeName)
@@ -163,7 +196,14 @@ class SceneEditor(val sceneResource: SceneResource)
         dragPreviousX = event.x
         dragPreviousY = event.y
 
-        mouseHandler?.onMousePressed(event)
+        if (event.isPopupTrigger) {
+
+            val menu = buildContextMenu()
+            menu.show(MainWindow.instance.scene.window, event.screenX, event.screenY)
+
+        } else {
+            mouseHandler?.onMousePressed(event)
+        }
     }
 
     fun onDragDetected(event: MouseEvent) {
