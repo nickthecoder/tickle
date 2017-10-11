@@ -7,9 +7,8 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.control.Tooltip
 import javafx.scene.layout.FlowPane
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.editor.MainWindow
 
-class CostumesBox {
+class CostumesBox( val onSelect : (String)->Unit) {
 
     val flowPane = FlowPane()
 
@@ -33,7 +32,7 @@ class CostumesBox {
                     } else {
                         tooltip = Tooltip(costumeName)
                     }
-                    setOnAction { MainWindow.instance.selectCostumeName(costumeName) }
+                    setOnAction { onSelect(costumeName) }
                 }
 
                 flowPane.children.add(button)

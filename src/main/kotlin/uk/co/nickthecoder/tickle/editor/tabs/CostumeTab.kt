@@ -9,8 +9,9 @@ import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.editor.util.createPoseParameter
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
+import uk.co.nickthecoder.tickle.editor.util.createFontParameter
+import uk.co.nickthecoder.tickle.editor.util.createPoseParameter
 
 class CostumeTab(val name: String, val costume: Costume)
 
@@ -131,10 +132,20 @@ class CostumeTab(val name: String, val costume: Costume)
                 event.poses.forEach { pose ->
                     val inner = eventsP.newValue()
                     inner.eventNameP.value = eventName
-                    println("Setting ${inner.poseP} to ${pose}")
                     inner.poseP.value = pose
-                    println("Setting ${inner.poseP}.value")
                     inner.typeP.value = inner.poseP
+                }
+                event.fonts.forEach { fontResource ->
+                    val inner = eventsP.newValue()
+                    inner.eventNameP.value = eventName
+                    inner.fontP.value = fontResource
+                    inner.typeP.value = inner.fontP
+                }
+                event.strings.forEach { str ->
+                    val inner = eventsP.newValue()
+                    inner.eventNameP.value = eventName
+                    inner.stringP.value = str
+                    inner.typeP.value = inner.stringP
                 }
             }
         }
@@ -142,9 +153,12 @@ class CostumeTab(val name: String, val costume: Costume)
         override fun run() {
             costume.events.clear()
             eventsP.innerParameters.forEach { inner ->
-                if (inner.typeP.value == inner.poseP) {
-                    addPose(inner.eventNameP.value, inner.poseP.value!!)
+                when (inner.typeP.value) {
+                    inner.poseP -> addPose(inner.eventNameP.value, inner.poseP.value!!)
+                    inner.fontP -> addFontResource(inner.eventNameP.value, inner.fontP.value!!)
+                    inner.stringP -> addString(inner.eventNameP.value, inner.stringP.value)
                 }
+
             }
         }
 
@@ -156,6 +170,24 @@ class CostumeTab(val name: String, val costume: Costume)
             }
             event.poses.add(pose)
         }
+
+        fun addFontResource(eventName: String, fontResource: FontResource) {
+            var event = costume.events[eventName]
+            if (event == null) {
+                event = CostumeEvent()
+                costume.events[eventName] = event
+            }
+            event.fonts.add(fontResource)
+        }
+
+        fun addString(eventName: String, str: String) {
+            var event = costume.events[eventName]
+            if (event == null) {
+                event = CostumeEvent()
+                costume.events[eventName] = event
+            }
+            event.strings.add(str)
+        }
     }
 
     inner class EventParameter() : MultipleGroupParameter("event") {
@@ -163,9 +195,11 @@ class CostumeTab(val name: String, val costume: Costume)
         val eventNameP = StringParameter("eventName")
 
         val poseP = createPoseParameter()
+        val fontP = createFontParameter()
+        val stringP = StringParameter("string")
 
         val typeP = OneOfParameter("type", value = poseP, choiceLabel = "Type")
-                .addParameters(poseP)
+                .addParameters(poseP, fontP, stringP)
 
         init {
             addParameters(eventNameP, typeP)
@@ -176,6 +210,8 @@ class CostumeTab(val name: String, val costume: Costume)
             val type = typeP.value?.label ?: ""
             val dataName = when (typeP.value) {
                 poseP -> Resources.instance.findPoseName(poseP.value)
+                fontP -> Resources.instance.findFontResourceName(fontP.value)
+                stringP -> stringP.value
                 else -> ""
             }
             return "$eventName ($type) $dataName"

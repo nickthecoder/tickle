@@ -22,10 +22,12 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
 
     val directionP = DoubleParameter("direction", value = sceneActor.direction.degrees)
 
+    val textP = StringParameter("text", value = sceneActor.text)
+
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(xP, yP, directionP, attributesP)
+            .addParameters(xP, yP, directionP, textP, attributesP)
             .asVertical()
 
     var dirty = false
@@ -96,6 +98,7 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
         yP.value = sceneActor.y
         xP.value = sceneActor.x
         directionP.value = sceneActor.direction.degrees
+        textP.hidden = sceneActor.pose != null
 
         // Note. We do not update the dynamic "attributes", because they should ONLY be updated via their
         // Parameters, The scene editor should NOT be changing the string value directly.

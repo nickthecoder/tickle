@@ -121,10 +121,10 @@ open class FontTextureFactoryViaAWT(val font: Font, val maxTextureWidth: Int = f
             for (x in 0..requiredWidth - 1) {
                 /* Pixel format is : 0xAARRGGBB */
                 val pixel = pixels[y * requiredWidth + x]
-                buffer.put((pixel shr 16 and 0xFF).toByte())
-                buffer.put((pixel shr 8 and 0xFF).toByte())
-                buffer.put((pixel and 0xFF).toByte())
-                buffer.put((pixel shr 24 and 0xFF).toByte())
+                buffer.put((pixel shr 16 and 0xFF).toByte()) // R
+                buffer.put((pixel shr 8 and 0xFF).toByte())  // G
+                buffer.put((pixel and 0xFF).toByte())        // B
+                buffer.put((pixel shr 24 and 0xFF).toByte()) // A
             }
         }
 

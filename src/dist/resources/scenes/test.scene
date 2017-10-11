@@ -198,6 +198,13 @@
                     "x": 423,
                     "y": 382,
                     "direction": 10.999999999999998
+                },
+                {
+                    "costume": "plainText",
+                    "x": 105,
+                    "y": 330,
+                    "direction": 0,
+                    "text": ""
                 }
             ]
         }

@@ -2,22 +2,17 @@ Current Work
 ============
 
 Fonts
-	Add to tree with icon
-	New tab to change font details
-	JSonResources
-	Load fonts from fft file.
+	Costume/Actor and SceneActor to support text appearance
+
+
 	Save and load fonts as png + json file.
-	Costume and SceneActor to support text appearance
+
 	Place FPS on test scenes
 		Make a reusable component, which updates every N ticks/seconds
 			Delay action
 			ChangeTextAction { text }
 	VAlignment Top, Middle, Baseline, Bottom (will need extra data on FontTexture)
 	HAlign Left, Middle, Center
-
-Create a pair of FontTextures, to outline a font
-	Alas, AWT doesn't allow fonts to be stroked and JavaFX doesn't allow access to the font metrics!!!
-	https://stackoverflow.com/questions/32237048/javafx-fontmetrics
 	
 SceneEditor, If layout changes, rebuild the layout pane (and the pulldown button)
 	If costume is added/removed, rebuild the costume pane
@@ -42,6 +37,15 @@ InputPicker :
 
 New Features
 ============
+
+SceneEditor :
+	Tree structure of Stages and SceneActors
+
+Put the "padding" back into the AWT Font Factorory, and then allow it to be "blurred" in various ways, for outlined text
+	https://github.com/mattdesl/lwjgl-basics/wiki/ShaderLesson5
+	https://github.com/mattdesl/lwjgl-basics/wiki/OpenGL-ES-Blurs
+	Could make it generic for use for non-font textures. e.g. a drop shadow for people, trees, buildings etc.
+	
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 	Just as a prelude to pixel collision detection.

@@ -5,7 +5,6 @@ import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.NoProducer
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
 import uk.co.nickthecoder.tickle.stage.FlexVAlignment
@@ -33,6 +32,7 @@ class JsonResources {
         jroot.add("info", saveInfo())
         addArray(jroot, "layouts", saveLayouts())
         addArray(jroot, "textures", saveTextures())
+        addArray(jroot, "fonts", saveFonts())
         addArray(jroot, "poses", savePoses())
         addArray(jroot, "costumes", saveCostumes())
         addArray(jroot, "inputs", saveInputs())
@@ -55,6 +55,7 @@ class JsonResources {
         val jinfo = jroot.get("info")
         val jlayouts = jroot.get("layouts")
         val jtextures = jroot.get("textures")
+        val jfonts = jroot.get("fonts")
         val jposes = jroot.get("poses")
         val jcostumes = jroot.get("costumes")
         val jinputs = jroot.get("inputs")
@@ -62,11 +63,14 @@ class JsonResources {
         if (jinfo is JsonObject) {
             loadInfo(jinfo)
         }
+        if (jlayouts is JsonArray) {
+            loadLayouts(jlayouts)
+        }
         if (jtextures is JsonArray) {
             loadTextures(jtextures)
         }
-        if (jlayouts is JsonArray) {
-            loadLayouts(jlayouts)
+        if (jfonts is JsonArray) {
+            loadFonts(jfonts)
         }
         if (jposes is JsonArray) {
             loadPoses(jposes)
@@ -240,7 +244,7 @@ class JsonResources {
         }
     }
 
-// TEXTURES
+    // TEXTURES
 
     fun saveTextures(): JsonArray {
         val jtextures = JsonArray()
@@ -338,6 +342,22 @@ class JsonResources {
                     }
                     jevent.add("poses", jposes)
                 }
+                if (event.fonts.isNotEmpty()) {
+                    val jfonts = JsonArray()
+                    event.fonts.forEach { pose ->
+                        resources.findFontResourceName(pose)?.let { fontResourceName ->
+                            jfonts.add(fontResourceName)
+                        }
+                    }
+                    jevent.add("fonts", jfonts)
+                }
+                if (event.strings.isNotEmpty()) {
+                    val jstrings = JsonArray()
+                    event.strings.forEach { str ->
+                        jstrings.add(str)
+                    }
+                    jevent.add("strings", jstrings)
+                }
             }
             JsonUtil.saveAttributes(jcostume, costume.attributes)
 
@@ -361,14 +381,31 @@ class JsonResources {
                     val jevent = it.asObject()
                     val eventName = jevent.get("name").asString()
                     val event = CostumeEvent()
+
                     jevent.get("poses")?.let {
                         val jposes = it.asArray()
                         jposes.forEach {
                             val poseName = it.asString()
-                            val pose = resources.optionalPose(poseName)
-                            pose?.let { event.poses.add(it) }
+                            resources.optionalPose(poseName)?.let { event.poses.add(it) }
                         }
                     }
+
+                    jevent.get("fonts")?.let {
+                        val jfonts = it.asArray()
+                        jfonts.forEach {
+                            val fontResourceName = it.asString()
+                            println("Loading event $eventName font $fontResourceName => ${resources.optionalFontResource(fontResourceName)}")
+                            resources.optionalFontResource(fontResourceName)?.let { event.fonts.add(it) }
+                        }
+                    }
+
+                    jevent.get("strings")?.let {
+                        val jstrings = it.asArray()
+                        jstrings.forEach {
+                            event.strings.add(it.asString())
+                        }
+                    }
+
                     costume.events[eventName] = event
                 }
             }
@@ -536,7 +573,52 @@ class JsonResources {
         }
     }
 
-    // Utility methods
+
+// FONTS
+
+    fun saveFonts(): JsonArray {
+        val jfonts = JsonArray()
+        resources.fontResources().forEach { name, fontResource ->
+            val jfont = JsonObject()
+            jfont.add("name", name)
+            if (fontResource.file == null) {
+                jfont.add("fontName", fontResource.fontName)
+                jfont.add("style", fontResource.style.name)
+            } else {
+                jfont.add("file", toPath(fontResource.file!!))
+            }
+            jfont.add("size", fontResource.size)
+            jfonts.add(jfont)
+        }
+
+        return jfonts
+
+    }
+
+    fun loadFonts(jfonts: JsonArray) {
+        jfonts.forEach { jele ->
+            val jfont = jele.asObject()
+            val name = jfont.get("name").asString()
+            if (jfont.get("fontName") != null) {
+                val fontResource = FontResource()
+
+                val fontPath = jfont.getString("file", "")
+
+                if (fontPath.isBlank()) {
+                    fontResource.fontName = jfont.get("fontName").asString()
+                    val styleString = jfont.getString("style", "PLAIN")
+                    fontResource.style = FontResource.FontStyle.valueOf(styleString)
+                } else {
+                    fontResource.file = fromPath(fontPath)
+                }
+
+                fontResource.size = jfont.getDouble("size", 22.0)
+                resources.addFontResource(name, fontResource)
+            }
+            //println("Loaded pose $name : ${pose}")
+        }
+    }
+// Utility methods
 
     fun toPath(file: File): String {
         try {

@@ -2,6 +2,8 @@ package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.geometry.Insets
 import javafx.geometry.Rectangle2D
+import javafx.scene.Node
+import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Background
@@ -19,10 +21,10 @@ Contains may extension functions, helpful for the SceneEditor, that I don't want
 
 
 fun Pose.image(): Image? {
-    texture.file?.let {
-        return ImageCache.image(it)
-    }
-    return null
+    //texture.file?.let {
+    //    return ImageCache.image(it)
+    //}
+    return ImageCache.image(texture)
 }
 
 fun Pose.isOverlapping(x: Double, y: Double): Boolean {
@@ -62,29 +64,32 @@ fun isSceneActorAt(sceneActor: SceneActor, x: Double, y: Double): Boolean {
 }
 
 fun Costume.pose() = events["default"]?.choosePose()
+fun Costume.fontResource() = events["default"]?.chooseFontResource()
 
-fun Costume.imageView(): ImageView? {
-    pose()?.let { pose ->
-        pose.texture.file?.let { file ->
-            val iv = ImageView(ImageCache.image(file))
-            iv.viewport = Rectangle2D(pose.rect.left.toDouble(), pose.rect.top.toDouble(), pose.rect.width.toDouble(), pose.rect.height.toDouble())
-            return iv
-        }
+fun Pose.imageView(): ImageView? {
+    texture.file?.let { file ->
+        val iv = ImageView(ImageCache.image(file))
+        iv.viewport = Rectangle2D(rect.left.toDouble(), rect.top.toDouble(), rect.width.toDouble(), rect.height.toDouble())
+        return iv
     }
     return null
 }
 
-fun Costume.thumbnail(size: Double): ImageView? {
-    val iv = imageView()
-    if (iv != null) {
-        iv.isPreserveRatio = true
-        if (iv.viewport.width > iv.viewport.height) {
-            iv.fitWidth = size
-        } else {
-            iv.fitHeight = size
+fun Costume.thumbnail(size: Double): Node? {
+    val pose = pose()
+    if (pose != null) {
+        val iv = pose.imageView()
+        if (iv != null) {
+            iv.isPreserveRatio = true
+            if (iv.viewport.width > iv.viewport.height) {
+                iv.fitWidth = size
+            } else {
+                iv.fitHeight = size
+            }
         }
+        return iv
     }
-    return iv
+    return Label("?")
 }
 
 fun SceneActor.costume(): Costume? = Resources.instance.optionalCostume(costumeName)

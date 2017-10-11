@@ -182,17 +182,12 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
         } else if (data is SceneStub) {
             return SceneTab(name, data)
+
+        } else if (data is FontResource) {
+            return FontTab(name, data)
         }
 
         return null
-    }
-
-    fun selectCostumeName(costumeName: String) {
-        tabPane.selectionModel.selectedItem?.let { tab ->
-            if (tab is SceneTab) {
-                tab.selectCostumeName(costumeName)
-            }
-        }
     }
 
     fun onTabChanged(tab: EditorTab?) {

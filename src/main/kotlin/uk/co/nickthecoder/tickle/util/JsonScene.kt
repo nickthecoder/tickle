@@ -4,11 +4,7 @@ import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
-import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.SceneActor
-import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.SceneStage
-import uk.co.nickthecoder.tickle.NoDirector
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.graphics.Color
 import java.io.*
 
@@ -84,6 +80,9 @@ class JsonScene {
             jactor.add("x", sceneActor.x)
             jactor.add("y", sceneActor.y)
             jactor.add("direction", sceneActor.direction.degrees)
+            if (sceneActor.pose == null) {
+                jactor.add("text", sceneActor.text)
+            }
 
             JsonUtil.saveAttributes(jactor, sceneActor.attributes)
         }
@@ -113,6 +112,7 @@ class JsonScene {
         sceneActor.x = jactor.getDouble("x", 0.0)
         sceneActor.y = jactor.getDouble("y", 0.0)
         sceneActor.direction.degrees = jactor.getDouble("direction", 0.0)
+        sceneActor.text = jactor.getString("text", "")
 
         sceneStage.sceneActors.add(sceneActor)
     }

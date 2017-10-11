@@ -130,6 +130,11 @@ class SceneActor(val isDesigning: Boolean = false) {
 
     val pose: Pose? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.choosePose() }
 
+    val fontResource: FontResource? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.chooseFontResource() }
+
+    var text: String = ""
+
+
     fun createActor(): Actor? {
         val costume = Resources.instance.optionalCostume(costumeName)
         if (costume == null) {

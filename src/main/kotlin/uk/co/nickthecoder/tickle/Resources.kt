@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
+import uk.co.nickthecoder.tickle.graphics.FontTexture
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
@@ -265,23 +266,29 @@ class Resources {
 
     fun fontResources(): Map<String, FontResource> = fontResources
 
-    fun optionalFont(name: String): FontResource? = fontResources[name]
+    fun optionalFontResource(name: String): FontResource? = fontResources[name]
 
-    fun font(name: String): FontResource = optionalFont(name)!!
+    fun fontResource(name: String): FontResource = optionalFontResource(name)!!
+
+    fun font(name: String): FontTexture = fontResource(name).fontTexture
+
+    fun findFontResourceName(fontResource: FontResource?): String? {
+        return fontResources.filter { entry -> entry.value === fontResource }.map { it.key }.firstOrNull()
+    }
 
     fun addFontResource(name: String, fontResource: FontResource) {
         fontResources[name] = fontResource
         fireAdded(fontResource, name)
     }
 
-    fun deleteFontResources(name: String) {
+    fun deleteFontResource(name: String) {
         fontResources[name]?.let {
             fontResources.remove(name)
             fireRemoved(it, name)
         }
     }
 
-    fun renameFontResources(oldName: String, newName: String) {
+    fun renameFontResource(oldName: String, newName: String) {
         fontResources[oldName]?.let { fontResource ->
             fontResources.remove(oldName)
             fontResources[newName] = fontResource

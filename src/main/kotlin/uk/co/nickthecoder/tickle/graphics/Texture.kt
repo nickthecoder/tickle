@@ -11,7 +11,7 @@ import java.nio.ByteBuffer
 
 class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuffer, val file: File? = null) {
 
-    private val handle: Int = glGenTextures()
+    val handle: Int = glGenTextures()
 
     init {
         glBindTexture(GL_TEXTURE_2D, handle)

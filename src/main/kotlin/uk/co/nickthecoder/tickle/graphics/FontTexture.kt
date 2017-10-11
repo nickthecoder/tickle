@@ -48,7 +48,6 @@ class FontTexture(val texture: Texture, val glyphs: Map<Char, Glyph>, val lineHe
                 drawX += glyph.advance
             }
         }
-        renderer.end()
     }
 
     fun cleanUp() {

@@ -245,6 +245,19 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "plainText",
+            "role": "",
+            "canRotate": false,
+            "events": [
+                {
+                    "name": "default",
+                    "fonts": [
+                        "plain22"
+                    ]
+                }
+            ]
         }
     ],
     "inputs": [
@@ -389,6 +402,14 @@
                     "state": "PRESSED"
                 }
             ]
+        }
+    ],
+    "fonts": [
+        {
+            "name": "plain22",
+            "fontName": "SansSerif",
+            "style": "PLAIN",
+            "size": 22
         }
     ]
 }

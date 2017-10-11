@@ -2,46 +2,63 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.FontTexture
 import uk.co.nickthecoder.tickle.graphics.FontTextureFactoryViaAWT
+import java.awt.Font
+import java.io.File
 
-interface FontResource {
-
-    val fontTexture: FontTexture
-
-    val name: String
-
-    val size: Double
-
-}
-
-class NamedFontResource(override var name: String) : FontResource {
+class FontResource() {
 
     private var cached: FontTexture? = null
 
-    var fontName: String = name
+    var file: File? = null
         set(v) {
-            field = v
-            cached = null
+            if (field != v) {
+                field = v
+                cached = null
+            }
+        }
+
+    var fontName: String = java.awt.Font.SANS_SERIF
+        set(v) {
+            if (field != v) {
+                field = v
+                cached = null
+            }
         }
 
     var style: FontStyle = FontStyle.PLAIN
         set(v) {
-            field = v
-            cached = null
+            if (field != v) {
+                field = v
+                cached = null
+            }
         }
 
-    override var size: Double = 22.0
+    var size: Double = 22.0
         set(v) {
-            field = v
-            cached = null
+            if (field != v) {
+                field = v
+                cached = null
+            }
         }
 
-    override val fontTexture: FontTexture
+    val fontTexture: FontTexture
         get() {
             cached?.let { return it }
-            val c = FontTextureFactoryViaAWT(java.awt.Font(fontName, style.ordinal, size.toInt())).create()
+            val c = createFontTexture()
             cached = c
             return c
         }
+
+    fun createFontTexture(): FontTexture {
+        val font: Font
+        if (file == null) {
+            font = Font(fontName, style.ordinal, size.toInt())
+        } else {
+            val loadedFont = Font.createFont(java.awt.Font.TRUETYPE_FONT, file)
+            font = loadedFont.deriveFont(size.toFloat())
+        }
+        return FontTextureFactoryViaAWT(font).create()
+    }
 
     enum class FontStyle { PLAIN, BOLD, ITALIC, BOLD_ITALIC }
 

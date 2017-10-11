@@ -34,7 +34,8 @@ class SceneEditor(val sceneResource: SceneResource)
 
     val shortcuts = ShortcutHelper("SceneEditor", scrollPane)
 
-    val costumeBox = CostumesBox()
+    val costumeBox = CostumesBox { selectCostumeName(it) }
+
     val layersBox = LayersBox(layers)
 
     val costumesPane = TitledPane("Costumes", costumeBox.build())
@@ -279,7 +280,7 @@ class SceneEditor(val sceneResource: SceneResource)
 
             if (event.button == MouseButton.PRIMARY) {
 
-                val handle = layers.glass.findDragHandle(wx.toDouble(), wy.toDouble())
+                val handle = layers.glass.findDragHandle(wx, wy)
                 if (handle != null) {
                     mouseHandler = AdjustDragHandle(handle)
 
@@ -337,7 +338,7 @@ class SceneEditor(val sceneResource: SceneResource)
         }
 
         override fun onMouseMoved(event: MouseEvent) {
-            layers.glass.hover(worldX(event).toDouble(), worldY(event).toDouble())
+            layers.glass.hover(worldX(event), worldY(event))
         }
 
         override fun onMouseDragged(event: MouseEvent) {
@@ -367,7 +368,7 @@ class SceneEditor(val sceneResource: SceneResource)
     inner class AdjustDragHandle(val dragHandle: GlassLayer.DragHandle) : MouseHandler {
 
         override fun onMouseDragged(event: MouseEvent) {
-            dragHandle.moveTo(worldX(event).toDouble(), worldY(event).toDouble(), event.isShiftDown)
+            dragHandle.moveTo(worldX(event), worldY(event), event.isShiftDown)
             sceneResource.fireChange()
         }
 
