@@ -10,8 +10,10 @@ import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
+import uk.co.nickthecoder.tickle.editor.util.TextStyleParameter
 import uk.co.nickthecoder.tickle.editor.util.createFontParameter
 import uk.co.nickthecoder.tickle.editor.util.createPoseParameter
+import uk.co.nickthecoder.tickle.graphics.TextStyle
 
 class CostumeTab(val name: String, val costume: Costume)
 
@@ -135,11 +137,11 @@ class CostumeTab(val name: String, val costume: Costume)
                     inner.poseP.value = pose
                     inner.typeP.value = inner.poseP
                 }
-                event.fonts.forEach { fontResource ->
+                event.textStyles.forEach { textStyle ->
                     val inner = eventsP.newValue()
                     inner.eventNameP.value = eventName
-                    inner.fontP.value = fontResource
-                    inner.typeP.value = inner.fontP
+                    inner.textStyleP.from(textStyle)
+                    inner.typeP.value = inner.textStyleP
                 }
                 event.strings.forEach { str ->
                     val inner = eventsP.newValue()
@@ -155,7 +157,7 @@ class CostumeTab(val name: String, val costume: Costume)
             eventsP.innerParameters.forEach { inner ->
                 when (inner.typeP.value) {
                     inner.poseP -> addPose(inner.eventNameP.value, inner.poseP.value!!)
-                    inner.fontP -> addFontResource(inner.eventNameP.value, inner.fontP.value!!)
+                    inner.textStyleP -> addTextStyle(inner.eventNameP.value, inner.textStyleP.createTextStyle())
                     inner.stringP -> addString(inner.eventNameP.value, inner.stringP.value)
                 }
 
@@ -171,13 +173,13 @@ class CostumeTab(val name: String, val costume: Costume)
             event.poses.add(pose)
         }
 
-        fun addFontResource(eventName: String, fontResource: FontResource) {
+        fun addTextStyle(eventName: String, textStyle: TextStyle) {
             var event = costume.events[eventName]
             if (event == null) {
                 event = CostumeEvent()
                 costume.events[eventName] = event
             }
-            event.fonts.add(fontResource)
+            event.textStyles.add(textStyle)
         }
 
         fun addString(eventName: String, str: String) {
@@ -195,11 +197,11 @@ class CostumeTab(val name: String, val costume: Costume)
         val eventNameP = StringParameter("eventName")
 
         val poseP = createPoseParameter()
-        val fontP = createFontParameter()
+        val textStyleP = TextStyleParameter("style")
         val stringP = StringParameter("string")
 
         val typeP = OneOfParameter("type", value = poseP, choiceLabel = "Type")
-                .addParameters(poseP, fontP, stringP)
+                .addParameters(poseP, textStyleP, stringP)
 
         init {
             addParameters(eventNameP, typeP)
@@ -210,7 +212,7 @@ class CostumeTab(val name: String, val costume: Costume)
             val type = typeP.value?.label ?: ""
             val dataName = when (typeP.value) {
                 poseP -> Resources.instance.findPoseName(poseP.value)
-                fontP -> Resources.instance.findFontResourceName(fontP.value)
+                textStyleP -> Resources.instance.findFontResourceName(textStyleP.fontP.value)
                 stringP -> stringP.value
                 else -> ""
             }

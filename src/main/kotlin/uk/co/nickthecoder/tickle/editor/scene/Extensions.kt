@@ -64,7 +64,7 @@ fun isSceneActorAt(sceneActor: SceneActor, x: Double, y: Double): Boolean {
 }
 
 fun Costume.pose() = events["default"]?.choosePose()
-fun Costume.fontResource() = events["default"]?.chooseFontResource()
+fun Costume.textStyle() = events["default"]?.chooseTextStyle()
 
 fun Pose.imageView(): ImageView? {
     texture.file?.let { file ->

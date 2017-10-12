@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Angle
 import java.io.File
 
@@ -130,7 +131,7 @@ class SceneActor(val isDesigning: Boolean = false) {
 
     val pose: Pose? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.choosePose() }
 
-    val fontResource: FontResource? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.chooseFontResource() }
+    val textStyle: TextStyle? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.chooseTextStyle() }
 
     var text: String = ""
 

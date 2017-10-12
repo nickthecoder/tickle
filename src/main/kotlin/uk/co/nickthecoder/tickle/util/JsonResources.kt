@@ -6,6 +6,10 @@ import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.*
+import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.graphics.HAlignment
+import uk.co.nickthecoder.tickle.graphics.TextStyle
+import uk.co.nickthecoder.tickle.graphics.VAlignment
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
 import uk.co.nickthecoder.tickle.stage.FlexVAlignment
 import java.io.*
@@ -270,7 +274,7 @@ class JsonResources {
         }
     }
 
-// POSES
+    // POSES
 
     fun savePoses(): JsonArray {
         val jposes = JsonArray()
@@ -316,7 +320,8 @@ class JsonResources {
             //println("Loaded pose $name : ${pose}")
         }
     }
-// COSTUMES
+
+    // COSTUMES
 
     fun saveCostumes(): JsonArray {
         val jcostumes = JsonArray()
@@ -342,14 +347,17 @@ class JsonResources {
                     }
                     jevent.add("poses", jposes)
                 }
-                if (event.fonts.isNotEmpty()) {
-                    val jfonts = JsonArray()
-                    event.fonts.forEach { pose ->
-                        resources.findFontResourceName(pose)?.let { fontResourceName ->
-                            jfonts.add(fontResourceName)
-                        }
+                if (event.textStyles.isNotEmpty()) {
+                    val jtextStyles = JsonArray()
+                    event.textStyles.forEach { textStyle ->
+                        val jtextStyle = JsonObject()
+                        jtextStyles.add(jtextStyle)
+                        jtextStyle.add("font", resources.findFontResourceName(textStyle.fontResource))
+                        jtextStyle.add("halign", textStyle.halignment.name)
+                        jtextStyle.add("valign", textStyle.valignment.name)
+                        jtextStyle.add("color", textStyle.color.toHashRGBA())
                     }
-                    jevent.add("fonts", jfonts)
+                    jevent.add("textStyles", jtextStyles)
                 }
                 if (event.strings.isNotEmpty()) {
                     val jstrings = JsonArray()
@@ -390,12 +398,16 @@ class JsonResources {
                         }
                     }
 
-                    jevent.get("fonts")?.let {
-                        val jfonts = it.asArray()
-                        jfonts.forEach {
-                            val fontResourceName = it.asString()
-                            println("Loading event $eventName font $fontResourceName => ${resources.optionalFontResource(fontResourceName)}")
-                            resources.optionalFontResource(fontResourceName)?.let { event.fonts.add(it) }
+                    jevent.get("textStyles")?.let {
+                        val jtextStyles = it.asArray()
+                        jtextStyles.forEach {
+                            val jtextStyle = it.asObject()
+                            val fontResource = resources.fontResource(jtextStyle.get("font").asString())
+                            val halign = HAlignment.valueOf(jtextStyle.getString("halign", HAlignment.LEFT.name))
+                            val valign = VAlignment.valueOf(jtextStyle.getString("valign", VAlignment.BASELINE.name))
+                            val color = Color.fromString(jtextStyle.getString("color", "#FFFFFF"))
+                            val textStyle = TextStyle(fontResource, halign, valign, color)
+                            event.textStyles.add(textStyle)
                         }
                     }
 
@@ -417,7 +429,7 @@ class JsonResources {
         }
     }
 
-// INPUTS
+    // INPUTS
 
     fun saveInputs(): JsonArray {
         val jinputs = JsonArray()
@@ -574,7 +586,7 @@ class JsonResources {
     }
 
 
-// FONTS
+    // FONTS
 
     fun saveFonts(): JsonArray {
         val jfonts = JsonArray()
@@ -618,7 +630,8 @@ class JsonResources {
             //println("Loaded pose $name : ${pose}")
         }
     }
-// Utility methods
+
+    // Utility methods
 
     fun toPath(file: File): String {
         try {

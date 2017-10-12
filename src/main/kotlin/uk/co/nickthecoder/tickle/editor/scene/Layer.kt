@@ -1,10 +1,11 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.scene.canvas.Canvas
-import uk.co.nickthecoder.tickle.FontResource
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.graphics.TextStyle
 
 abstract class Layer {
 
@@ -43,7 +44,7 @@ abstract class Layer {
             translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
             rotate(sceneActor.direction.degrees - (pose?.direction?.degrees ?: 0.0))
             if (pose == null) {
-                sceneActor.fontResource?.let {
+                sceneActor.textStyle?.let {
                     val text = if (sceneActor.text.isBlank()) "<no text>" else sceneActor.text
                     drawText(it, text)
                 }
@@ -54,7 +55,7 @@ abstract class Layer {
         }
     }
 
-    fun drawPose(pose: Pose) {
+    fun drawPose(pose: Pose, color: Color = Color.WHITE) {
         val image = pose.image()
         canvas.graphicsContext2D.drawImage(
                 image,
@@ -62,15 +63,16 @@ abstract class Layer {
                 -pose.offsetX.toDouble(), -pose.offsetY.toDouble(), pose.rect.width.toDouble(), pose.rect.height.toDouble())
     }
 
-    fun drawText(fontResource: FontResource, text: String) {
+    fun drawText(textStyle: TextStyle, text: String) {
 
+        val fontTexture = textStyle.fontResource.fontTexture
         var dx = 0.0
         text.forEach { c ->
             if (c == '\n') {
-                canvas.graphicsContext2D.translate(-dx, fontResource.fontTexture.lineHeight.toDouble())
+                canvas.graphicsContext2D.translate(-dx, fontTexture.lineHeight.toDouble())
                 dx = 0.0
             } else {
-                fontResource.fontTexture.glyphs[c]?.let { glyph ->
+                fontTexture.glyphs[c]?.let { glyph ->
                     drawPose(glyph.pose)
                     canvas.graphicsContext2D.translate(glyph.advance.toDouble(), 0.0)
                     dx += glyph.advance.toDouble()
