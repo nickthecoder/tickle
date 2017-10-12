@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.FontTexture
 import uk.co.nickthecoder.tickle.graphics.Renderer
+import uk.co.nickthecoder.tickle.graphics.TextStyle
 
 interface Appearance {
 
@@ -38,12 +39,12 @@ class PoseAppearance(val actor: Actor, var pose: Pose) : Appearance {
     override fun toString() = "PoseAppearance pose=$pose"
 }
 
-class TextAppearance(val actor: Actor, var text: String, val fontTexture : FontTexture) : Appearance {
+class TextAppearance(val actor: Actor, var text: String, val textStyle: TextStyle) : Appearance {
 
     override val directionRadians = 0.0
 
     override fun draw(renderer: Renderer) {
-        fontTexture.draw(renderer, text, actor.x, actor.y)
+        textStyle.draw(renderer, text, actor.x, actor.y)
     }
 
     override fun toString() = "TextAppearance '$text'"

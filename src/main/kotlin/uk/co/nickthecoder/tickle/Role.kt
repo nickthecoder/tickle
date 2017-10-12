@@ -92,7 +92,6 @@ abstract class AbstractRole : Role {
 
 /**
  * A Role that only has a single Action, and does nothing in the tick method itself.
- * If 'die' is true, then the Actor will be automatically killed when the Action ends.
  */
 open class ActionRole() : Role {
 
@@ -106,6 +105,9 @@ open class ActionRole() : Role {
             }
         }
 
+    /**
+     * If 'die' is true, then the Actor will be automatically killed when the Action ends.
+     */
     constructor(action: Action, die: Boolean = true) : this() {
         if (die) {
             this.action = action

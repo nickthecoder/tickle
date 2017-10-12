@@ -35,6 +35,13 @@
                     "x": 627,
                     "y": 539,
                     "direction": 0
+                },
+                {
+                    "costume": "info",
+                    "x": 903,
+                    "y": 544,
+                    "direction": 0,
+                    "text": "? FPS"
                 }
             ]
         },
@@ -205,6 +212,13 @@
                     "y": 330,
                     "direction": 0,
                     "text": "Hello World"
+                },
+                {
+                    "costume": "plainText",
+                    "x": 649,
+                    "y": 523,
+                    "direction": 0,
+                    "text": "Test"
                 }
             ]
         }

@@ -3,7 +3,7 @@ package uk.co.nickthecoder.tickle
 import org.joml.Matrix4f
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.graphics.FontTexture
+import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.util.Angle
 
@@ -102,8 +102,15 @@ class Actor(val role: Role? = null) {
         }
     }
 
-    fun changeAppearance(text: String, fontTexture: FontTexture) {
-        appearance = TextAppearance(this, text, fontTexture)
+    fun changeAppearance(text: String, textStyle: TextStyle) {
+        appearance = TextAppearance(this, text, textStyle)
+    }
+
+    fun changeText(text: String) {
+        val app = appearance
+        if (app is TextAppearance) {
+            app.text = text
+        }
     }
 
     /*

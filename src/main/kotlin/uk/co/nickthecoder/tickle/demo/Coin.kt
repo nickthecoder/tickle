@@ -11,7 +11,7 @@ import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
 import uk.co.nickthecoder.tickle.util.Polar2d
 
-class Coin() : ActionRole() {
+class Coin : ActionRole() {
 
     @Attribute(AttributeType.POLAR, scale = 10.0)
     var velocity = Polar2d(Angle(), 2.0)

@@ -19,12 +19,18 @@ class Costume() {
     // TODO Will have relatedCostumes later. And we can then use that to create bullets, explosions, etc.
     // RelatedCostumes should also store info about position and direction relative to the parent actor.
 
-    fun createActor(): Actor {
+    fun createActor(text: String = ""): Actor {
         val role = if (roleString.isBlank()) null else Role.create(roleString)
         role?.let { attributes.applyToObject(it) }
 
         val actor = Actor(role)
-        events["default"]?.choosePose()?.let { pose ->
+        val pose = events["default"]?.choosePose()
+        if (pose == null) {
+            val textStyle = events["default"]?.chooseTextStyle()
+            if (textStyle != null) {
+                actor.changeAppearance(text, textStyle)
+            }
+        } else {
             actor.changeAppearance(pose)
         }
         return actor

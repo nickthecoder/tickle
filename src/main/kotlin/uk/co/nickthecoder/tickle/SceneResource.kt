@@ -144,7 +144,8 @@ class SceneActor(val isDesigning: Boolean = false) {
             System.err.println("ERROR. Costume $costumeName not found in resources.")
             return null
         }
-        val actor = costume.createActor()
+        val actor = costume.createActor(text)
+
         actor.x = x
         actor.y = y
         actor.direction.degrees = direction.degrees

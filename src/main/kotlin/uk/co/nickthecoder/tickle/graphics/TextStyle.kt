@@ -39,6 +39,10 @@ class TextStyle(
         val lineCount = text.filter { it == '\n' }.count() + 1
         return fontResource.fontTexture.lineHeight * lineCount
     }
+
+    fun draw(renderer: Renderer, text: CharSequence, x: Double, y: Double, color: Color = Color.WHITE) {
+        fontResource.fontTexture.draw(renderer, text, x, y, color)
+    }
 }
 
 enum class HAlignment { LEFT, CENTER, RIGHT }

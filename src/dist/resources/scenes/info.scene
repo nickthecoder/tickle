@@ -1,0 +1,61 @@
+{
+    "director": "uk.co.nickthecoder.tickle.demo.Play",
+    "background": "#4d3399",
+    "layout": "default",
+    "stages": [
+        {
+            "name": "background",
+            "actors": [
+                {
+                    "costume": "spark",
+                    "x": 80,
+                    "y": 533,
+                    "direction": 0
+                },
+                {
+                    "costume": "spark",
+                    "x": 196,
+                    "y": 525,
+                    "direction": 0
+                },
+                {
+                    "costume": "spark",
+                    "x": 358,
+                    "y": 541,
+                    "direction": 0
+                },
+                {
+                    "costume": "spark",
+                    "x": 507,
+                    "y": 519,
+                    "direction": 0
+                },
+                {
+                    "costume": "spark",
+                    "x": 627,
+                    "y": 539,
+                    "direction": 0
+                },
+                {
+                    "costume": "info",
+                    "x": 442,
+                    "y": 415,
+                    "direction": 0,
+                    "text": "? FPS"
+                }
+            ]
+        },
+        {
+            "name": "main",
+            "actors": [
+                {
+                    "costume": "plainText",
+                    "x": 649,
+                    "y": 523,
+                    "direction": 0,
+                    "text": "Test"
+                }
+            ]
+        }
+    ]
+}
