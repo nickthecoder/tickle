@@ -3,7 +3,7 @@ package uk.co.nickthecoder.tickle.graphics
 /**
  * Holds a texture, and the meta-data for a Font at a particular font-size.
  */
-class FontTexture(val texture: Texture, val glyphs: Map<Char, Glyph>, val lineHeight: Int) {
+class FontTexture(val texture: Texture, val glyphs: Map<Char, Glyph>, val lineHeight: Double) {
 
     fun drawOutlined(renderer: Renderer, text: CharSequence, x: Double, y: Double, fill: Color = Color.WHITE, outline: Color = Color.BLACK, thickness: Int) {
 

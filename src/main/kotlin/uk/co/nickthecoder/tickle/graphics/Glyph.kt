@@ -4,4 +4,4 @@ import uk.co.nickthecoder.tickle.Pose
 
 data class Glyph(
         val pose : Pose,
-        val advance: Int)
+        val advance: Double)

@@ -70,7 +70,7 @@ class FontTextureFactoryViaAWTAndJavaFX(awtFont: java.awt.Font, val javaFXFont: 
             // println("Created Glyph $c : ${rect} offset= ${pose.offsetX},${pose.offsetY} advance=${glyphData.advance}")
         }
 
-        return FontTexture(texture, glyphs, metrics.height)
+        return FontTexture(texture, glyphs, metrics.height.toDouble())
     }
 
 }

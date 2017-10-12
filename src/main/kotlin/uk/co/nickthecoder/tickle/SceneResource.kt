@@ -135,6 +135,8 @@ class SceneActor(val isDesigning: Boolean = false) {
 
     var text: String = ""
 
+    val displayText
+        get() = if (text.isBlank()) "<no text>" else text
 
     fun createActor(): Actor? {
         val costume = Resources.instance.optionalCostume(costumeName)

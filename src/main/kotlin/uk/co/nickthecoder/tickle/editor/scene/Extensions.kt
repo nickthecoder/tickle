@@ -14,57 +14,22 @@ import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
+import uk.co.nickthecoder.tickle.graphics.Color
 
 /*
-Contains may extension functions, helpful for the SceneEditor, that I don't want on the actual objects.
- */
+ Contains may extension functions, used from within the SceneEditor.
+ These are functions that I don't want on the actual objects, because I don't want them available
+ from a running Game, and some may have dependancies only available from the editor module, which will not
+ be in the class path during an actual game.
+ e.g. I may not want a dependancy on awt, or javafx during an actual game, which will make porting a game to
+ Android easier.
+*/
 
+// POSE
 
 fun Pose.image(): Image? {
-    //texture.file?.let {
-    //    return ImageCache.image(it)
-    //}
     return ImageCache.image(texture)
 }
-
-fun Pose.isOverlapping(x: Double, y: Double): Boolean {
-    return x > -offsetX && x < rect.width - offsetX &&
-            y > -offsetY && y < rect.height - offsetY
-}
-
-fun SceneActor.isOverlapping(x: Double, y: Double): Boolean {
-    val tx = x - this.x
-    val ty = y - this.y
-    return pose?.isOverlapping(tx, ty) ?: false
-}
-
-/**
- * x,y are relative to the "offset point" of the pose, with the y axis pointing upwards
- */
-fun isPixelIsOpaque(pose: Pose?, x: Double, y: Double, threshold: Double = 0.05): Boolean {
-    pose ?: return false
-    val px = pose.rect.left + x + pose.offsetX
-    val py = pose.rect.top + pose.rect.height - (y + pose.offsetY)
-    pose.texture.file?.let { file ->
-        return ImageCache.image(file).pixelReader.getColor(px.toInt(), py.toInt()).opacity > threshold
-    }
-    return false
-}
-
-fun isSceneActorAt(sceneActor: SceneActor, x: Double, y: Double): Boolean {
-    val tx = x - sceneActor.x
-    val ty = y - sceneActor.y
-    val pose = sceneActor.pose
-    if (pose?.isOverlapping(tx, ty) ?: false) {
-        // println("Pose rect = ${pose?.rect}")
-        return isPixelIsOpaque(pose, tx, ty)
-    } else {
-        return false
-    }
-}
-
-fun Costume.pose() = events["default"]?.choosePose()
-fun Costume.textStyle() = events["default"]?.chooseTextStyle()
 
 fun Pose.imageView(): ImageView? {
     texture.file?.let { file ->
@@ -74,6 +39,29 @@ fun Pose.imageView(): ImageView? {
     }
     return null
 }
+
+fun Pose.isOverlapping(x: Double, y: Double): Boolean {
+    return x > -offsetX && x < rect.width - offsetX &&
+            y > -offsetY && y < rect.height - offsetY
+}
+
+/**
+ * x,y are relative to the "offset point" of the pose, with the y axis pointing upwards
+ */
+fun Pose.isPixelIsOpaque(x: Double, y: Double, threshold: Double = 0.05): Boolean {
+    val px = rect.left + x + offsetX
+    val py = rect.top + rect.height - (y + offsetY)
+    texture.file?.let { file ->
+        return ImageCache.image(file).pixelReader.getColor(px.toInt(), py.toInt()).opacity > threshold
+    }
+    return false
+}
+
+// COSTUME
+
+fun Costume.pose() = events["default"]?.choosePose()
+
+fun Costume.textStyle() = events["default"]?.chooseTextStyle()
 
 fun Costume.thumbnail(size: Double): Node? {
     val pose = pose()
@@ -92,7 +80,38 @@ fun Costume.thumbnail(size: Double): Node? {
     return Label("?")
 }
 
+// SCENE ACTOR
+
+fun SceneActor.isOverlapping(x: Double, y: Double): Boolean {
+    val tx = x - this.x
+    val ty = y - this.y
+    return pose?.isOverlapping(tx, ty) ?: false
+}
+
 fun SceneActor.costume(): Costume? = Resources.instance.optionalCostume(costumeName)
+
+fun SceneActor.isAt(x: Double, y: Double): Boolean {
+    var tx = x - this.x
+    var ty = y - this.y
+    // TODO Need to account for rotation and scale!?!?
+    pose?.let { pose ->
+        return pose.isOverlapping(tx, ty) && pose.isPixelIsOpaque(tx, ty)
+    }
+    textStyle?.let { textStyle ->
+        val offestX = textStyle.offsetX(displayText)
+        val offsetY = textStyle.offsetY(displayText)
+        val width = textStyle.width(displayText)
+        val height = textStyle.height(displayText)
+        tx -= offestX
+        ty -= offsetY
+        println("Comparing $displayText $tx, $ty with $width, $height")
+        return tx > 0 && ty > 0 && tx < width && ty < height
+
+    }
+    return false
+}
+
+// COLOR Conversions
 
 fun uk.co.nickthecoder.tickle.graphics.Color.toJavaFX(): javafx.scene.paint.Color {
     return javafx.scene.paint.Color(red.toDouble(), green.toDouble(), blue.toDouble(), alpha.toDouble())
@@ -102,4 +121,8 @@ fun javafx.scene.paint.Color.toTickle(): uk.co.nickthecoder.tickle.graphics.Colo
     return uk.co.nickthecoder.tickle.graphics.Color(red.toFloat(), green.toFloat(), blue.toFloat(), opacity.toFloat())
 }
 
-fun javafx.scene.paint.Color.background() = Background(BackgroundFill(this, CornerRadii(0.0), Insets(0.0)))
+private val squareCorners = CornerRadii(0.0)
+
+private val noInsets = Insets(0.0)
+
+fun Color.background() = Background(BackgroundFill(toJavaFX(), squareCorners, noInsets))

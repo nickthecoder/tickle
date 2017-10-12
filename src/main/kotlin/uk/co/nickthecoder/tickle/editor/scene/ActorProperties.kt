@@ -86,6 +86,7 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
         xP.value?.let { sceneActor.x = it }
         yP.value?.let { sceneActor.y = it }
         directionP.value?.let { sceneActor.direction.degrees = it }
+        sceneActor.text = textP.value
 
         // Note. We are not updating the dynamic "attributes", because they should ONLY be updated via their
         // Parameters, The scene editor should NOT be changing the string value directly.
@@ -98,6 +99,8 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
         yP.value = sceneActor.y
         xP.value = sceneActor.x
         directionP.value = sceneActor.direction.degrees
+        textP.value = sceneActor.text
+
         textP.hidden = sceneActor.pose != null
 
         // Note. We do not update the dynamic "attributes", because they should ONLY be updated via their

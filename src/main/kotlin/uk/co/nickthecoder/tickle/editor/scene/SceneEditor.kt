@@ -68,7 +68,7 @@ class SceneEditor(val sceneResource: SceneResource)
             addEventHandler(MouseEvent.MOUSE_RELEASED) { onMouseReleased(it) }
         }
 
-        layers.stack.background = sceneResource.background.toJavaFX().background()
+        layers.stack.background = sceneResource.background.background()
 
         with(shortcuts) {
             add(EditorActions.ESCAPE) { onEscape() }
@@ -105,7 +105,7 @@ class SceneEditor(val sceneResource: SceneResource)
         val list = mutableListOf<SceneActor>()
         layers.visibleLayers().filter { ignoreStageLock || it.isLocked == false }.forEach { stageLayer ->
             stageLayer.sceneStage.sceneActors.forEach { sceneActor ->
-                if (isSceneActorAt(sceneActor, x, y)) {
+                if (sceneActor.isAt(x, y)) {
                     list.add(sceneActor)
                 }
             }

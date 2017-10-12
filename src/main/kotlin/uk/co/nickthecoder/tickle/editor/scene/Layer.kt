@@ -45,8 +45,7 @@ abstract class Layer {
             rotate(sceneActor.direction.degrees - (pose?.direction?.degrees ?: 0.0))
             if (pose == null) {
                 sceneActor.textStyle?.let {
-                    val text = if (sceneActor.text.isBlank()) "<no text>" else sceneActor.text
-                    drawText(it, text)
+                    drawText(it, sceneActor.displayText)
                 }
             } else {
                 drawPose(pose)

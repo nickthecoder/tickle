@@ -6,7 +6,6 @@ import javafx.scene.shape.StrokeLineCap
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
-import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.editor.util.AngleParameter
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
@@ -51,6 +50,7 @@ class GlassLayer(val selection: Selection)
             restore()
         }
 
+        // Dotted lines around each selected SceneActor
         with(gc) {
             save()
             setLineDashes(3.0, 10.0)
@@ -61,9 +61,7 @@ class GlassLayer(val selection: Selection)
                 translate(sceneActor.x, sceneActor.y)
                 rotate(sceneActor.direction.degrees - (sceneActor.pose?.direction?.degrees ?: 0.0))
 
-                sceneActor.pose?.let { pose ->
-                    drawOutlined(selectionColor(sceneActor === selection.latest())) { drawBoundingBox(pose) }
-                }
+                drawOutlined(selectionColor(sceneActor === selection.latest())) { drawBoundingBox(sceneActor) }
 
                 restore()
             }
@@ -138,16 +136,28 @@ class GlassLayer(val selection: Selection)
         dirty = true
     }
 
-    fun drawBoundingBox(pose: Pose) {
+    fun drawBoundingBox(sceneActor: SceneActor) {
         val margin = 2.0
 
-        with(canvas.graphicsContext2D) {
+        sceneActor.pose?.let { pose ->
 
-            strokeRect(
+            canvas.graphicsContext2D.strokeRect(
                     -pose.offsetX - margin,
                     -pose.offsetY - margin,
                     pose.rect.width.toDouble() + margin * 2,
                     pose.rect.height.toDouble() + margin * 2)
+
+            return
+        }
+
+        sceneActor.textStyle?.let { textStyle ->
+            val text = sceneActor.displayText
+            val offestX = textStyle.offsetX(text)
+            val offsetY = textStyle.offsetY(text)
+            val width = textStyle.width(text)
+            val height = textStyle.height(text)
+
+            canvas.graphicsContext2D.strokeRect(offestX, offsetY, width, height)
         }
     }
 

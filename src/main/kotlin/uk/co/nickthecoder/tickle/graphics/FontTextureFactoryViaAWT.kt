@@ -54,7 +54,7 @@ open class FontTextureFactoryViaAWT(val font: Font, val maxTextureWidth: Int = f
             if (font.canDisplay(c)) {
 
                 val bounds: Rectangle2D = metrics.getStringBounds(c.toString(), prepareG)
-                val advance = metrics.charWidth(c)
+                val advance = metrics.charWidth(c).toDouble()
 
                 if (bounds.height > lineHeight) {
                     lineHeight = bounds.height.toInt() + 1
@@ -143,8 +143,8 @@ open class FontTextureFactoryViaAWT(val font: Font, val maxTextureWidth: Int = f
             // println("Created Glyph $c : ${rect} offset= ${pose.offsetX},${pose.offsetY} advance=${glyphData.advance}")
         }
 
-        return FontTexture(texture, glyphs, metrics.height)
+        return FontTexture(texture, glyphs, metrics.height.toDouble())
     }
 
-    data class GlyphData(val bounds: Rectangle2D, val advance: Int, val x: Int, val y: Int)
+    data class GlyphData(val bounds: Rectangle2D, val advance: Double, val x: Int, val y: Int)
 }
