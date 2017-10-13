@@ -38,11 +38,23 @@ class Resources {
 
     val listeners = mutableListOf<ResourcesListener>()
 
-    fun scenePathFromString(path: String): File {
+    fun toPath(file: File): String {
+        try {
+            return file.absoluteFile.toRelativeString(resourceDirectory)
+        } catch(e: Exception) {
+            return file.absolutePath
+        }
+    }
+
+    fun fromPath(path: String): File {
+        return resourceDirectory.resolve(path).absoluteFile
+    }
+
+    fun scenePathToFile(path: String): File {
         return sceneDirectory.resolve(path + ".scene")
     }
 
-    fun scenePathToString(file: File): String {
+    fun sceneFileToPath(file: File): String {
         val path = if (file.isAbsolute) {
             file.relativeToOrSelf(sceneDirectory).path
         } else {

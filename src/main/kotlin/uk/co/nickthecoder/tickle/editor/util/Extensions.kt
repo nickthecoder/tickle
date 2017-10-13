@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.editor.scene
+package uk.co.nickthecoder.tickle.editor.util
 
 import javafx.geometry.Insets
 import javafx.geometry.Rectangle2D
@@ -13,7 +13,6 @@ import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneActor
-import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.graphics.Color
 
 /*
@@ -104,7 +103,6 @@ fun SceneActor.isAt(x: Double, y: Double): Boolean {
         val height = textStyle.height(displayText)
         tx -= offestX
         ty -= offsetY
-        println("Comparing $displayText $tx, $ty with $width, $height")
         return tx > 0 && ty > 0 && tx < width && ty < height
 
     }

@@ -1,59 +1,41 @@
 {
-    "director": "uk.co.nickthecoder.tickle.demo.Play",
-    "background": "#4d3399",
-    "layout": "default",
+    "director": "uk.co.nickthecoder.tickle.NoDirector",
+    "background": "#000000",
+    "layout": "glass",
     "stages": [
         {
-            "name": "background",
+            "name": "glass",
             "actors": [
-                {
-                    "costume": "spark",
-                    "x": 80,
-                    "y": 533,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 196,
-                    "y": 525,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 358,
-                    "y": 541,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 507,
-                    "y": 519,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 627,
-                    "y": 539,
-                    "direction": 0
-                },
                 {
                     "costume": "info",
-                    "x": 442,
-                    "y": 415,
+                    "x": 10,
+                    "y": 539,
                     "direction": 0,
                     "text": "? FPS"
-                }
-            ]
-        },
-        {
-            "name": "main",
-            "actors": [
+                },
                 {
-                    "costume": "plainText",
-                    "x": 649,
-                    "y": 523,
+                    "costume": "hand",
+                    "x": 166,
+                    "y": 489,
                     "direction": 0,
-                    "text": "Test"
+                    "attributes": [
+                        {
+                            "name": "myDirection",
+                            "value": "0"
+                        },
+                        {
+                            "name": "myDouble",
+                            "value": "0"
+                        },
+                        {
+                            "name": "myInt",
+                            "value": "0"
+                        },
+                        {
+                            "name": "myOtherDirection",
+                            "value": "0"
+                        }
+                    ]
                 }
             ]
         }

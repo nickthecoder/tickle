@@ -95,4 +95,44 @@ class Scene {
             renderer.endView()
         }
     }
+
+    fun merge(extraScene: Scene) {
+
+        extraScene.stages.forEach { stageName, extraStage ->
+            val existingStage = stages[stageName]
+            if (existingStage == null) {
+                stages[stageName] = extraStage
+            } else {
+                if (existingStage.javaClass !== extraStage.javaClass) {
+                    System.err.println("WARNING. Mering stage $stageName with a stage of the same name, but a different class")
+                }
+                // TODO Add warning if they have different StageConstraints when StageConstraints are implemented.
+                extraStage.actors.forEach { actor ->
+                    existingStage.add(actor)
+                }
+            }
+        }
+        extraScene.views.forEach { viewName, view ->
+            if (view is StageView) {
+
+                if (stages().contains(view.stage)) {
+                    if (views.containsKey(viewName)) {
+                        System.err.println("WARNING. Duplicate view '$viewName' ignored while merging scene.")
+                    } else {
+                        addView(viewName, view, extraScene.autoPositions[viewName])
+                    }
+                } else {
+                    // Do nothing. We don't need to include views for stages whose actors have been moved to an
+                    // existing stage.
+                }
+
+            } else {
+                if (!views.containsKey(viewName)) {
+                    addView(viewName, view, extraScene.autoPositions[viewName])
+                }
+            }
+        }
+
+    }
+
 }

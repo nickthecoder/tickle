@@ -98,8 +98,8 @@ class JsonResources {
             jinfo.add("height", height)
             jinfo.add("resizable", resizable)
 
-            jinfo.add("initialScene", resources.scenePathToString(initialScenePath))
-            jinfo.add("testScene", resources.scenePathToString(testScenePath))
+            jinfo.add("initialScene", resources.sceneFileToPath(initialScenePath))
+            jinfo.add("testScene", resources.sceneFileToPath(testScenePath))
 
             jinfo.add("producer", producerString)
             val jpackages = JsonArray()
@@ -118,8 +118,8 @@ class JsonResources {
             height = jinfo.getInt("height", 600)
             resizable = jinfo.getBoolean("resizable", true)
 
-            initialScenePath = resources.scenePathFromString(jinfo.getString("initialScene", "splash"))
-            testScenePath = resources.scenePathFromString(jinfo.getString("testScene", "splash"))
+            initialScenePath = resources.scenePathToFile(jinfo.getString("initialScene", "splash"))
+            testScenePath = resources.scenePathToFile(jinfo.getString("testScene", "splash"))
 
             producerString = jinfo.getString("producer", NoProducer::javaClass.name)
             jinfo.get("packages")?.let {
@@ -256,7 +256,7 @@ class JsonResources {
             texture.file?.let { file ->
                 val jtexture = JsonObject()
                 jtexture.add("name", name)
-                jtexture.add("file", toPath(file))
+                jtexture.add("file", resources.toPath(file))
                 jtextures.add(jtexture)
             }
         }
@@ -267,7 +267,7 @@ class JsonResources {
         jtextures.forEach { jele ->
             val jtexture = jele.asObject()
             val name = jtexture.get("name").asString()
-            val file = fromPath(jtexture.get("file").asString())
+            val file = resources.fromPath(jtexture.get("file").asString())
             resources.addTexture(name, file)
 
             // println("Loaded texture $name : $file")
@@ -597,7 +597,7 @@ class JsonResources {
                 jfont.add("fontName", fontResource.fontName)
                 jfont.add("style", fontResource.style.name)
             } else {
-                jfont.add("file", toPath(fontResource.file!!))
+                jfont.add("file", resources.toPath(fontResource.file!!))
             }
             jfont.add("size", fontResource.size)
             jfonts.add(jfont)
@@ -621,7 +621,7 @@ class JsonResources {
                     val styleString = jfont.getString("style", "PLAIN")
                     fontResource.style = FontResource.FontStyle.valueOf(styleString)
                 } else {
-                    fontResource.file = fromPath(fontPath)
+                    fontResource.file = resources.fromPath(fontPath)
                 }
 
                 fontResource.size = jfont.getDouble("size", 22.0)
@@ -629,20 +629,6 @@ class JsonResources {
             }
             //println("Loaded pose $name : ${pose}")
         }
-    }
-
-    // Utility methods
-
-    fun toPath(file: File): String {
-        try {
-            return file.absoluteFile.toRelativeString(resources.resourceDirectory)
-        } catch(e: Exception) {
-            return file.absolutePath
-        }
-    }
-
-    fun fromPath(path: String): File {
-        return resources.resourceDirectory.resolve(path).absoluteFile
     }
 
 }

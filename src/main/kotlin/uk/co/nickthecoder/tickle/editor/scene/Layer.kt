@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
 import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.editor.util.image
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 

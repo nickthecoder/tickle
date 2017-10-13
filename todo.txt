@@ -23,6 +23,9 @@ SceneEditor, If layout changes, rebuild the layout pane (and the pulldown button
 BUGS
 ====
 
+If an attribute is a Float, then a DoubleParameter is created, and then throws, when it tries to assign it's double value back to the float.
+	Grenade's "hue" was an example.
+
 Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
 	I only want the EDITOR to depend on paratask-core.
 	Have a factory method for Attributes, which checks Class.forName( "uk...paratask...Parameter" )
@@ -90,6 +93,23 @@ https://www.khronos.org/opengl/wiki/Fragment_Shader
 https://www.khronos.org/opengl/wiki/Logical_Operation
 
 
+Allow a Layout to specify a (set of?) scene paths to merge whenever a scene using this layout is started
+	This allows standard stages to be included (such as a "glass" stage, showing score, "pause" etc)
+	(i.e. when starting to PLAY the scene, not when designing it).
+	Hmm, Maybe it SHOULD be loaded when designing too (but is never editable)
+Also allow a SceneResource to specify a (set of?) scene paths to be merged.
+	This will allow a "background" scene to be chosen per actual scene.
+Views to have a Z-Order, to define the order they are rendered.
+
+
+Pose : Allow a "mirrored" version (X,Y or Both)
+	Just make the rectangle have -ve widths/heights???
+	Use this to implement "Bee" without the special transformation
+Costume to have an "initial" event name (which is normally "default").
+	But Bee's will be "right" (and Bee will not have a "default" event).
+	Each SceneActor can then override this.
+
+
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).
 	
@@ -121,11 +141,6 @@ Add my own "runLater", which will call the code at the end of a tick.
 
 Costumes to inherit?
 	Just the events?
-
-View clipping.
-
-Merge scenes from two or more scene files
-	SceneResource to have a set of "includes", so that merging multiple .scene files is done automatically.
 
 Tags
 	Consider special methods on Tagged and TagManager to use inline reified typed methods to return Roles of the

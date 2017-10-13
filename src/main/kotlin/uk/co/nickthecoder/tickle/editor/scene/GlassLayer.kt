@@ -10,6 +10,7 @@ import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.editor.util.AngleParameter
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
+import uk.co.nickthecoder.tickle.editor.util.costume
 
 class GlassLayer(val selection: Selection)
 

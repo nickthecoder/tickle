@@ -32,6 +32,7 @@ class Play : AbstractDirector() {
     lateinit var stageView: ZOrderStageView
 
     override fun begin() {
+        Game.instance.mergeScene("info")
         stage = Game.instance.scene.findStage("main")!!
         stageView = Game.instance.scene.findStageView("main")!! as ZOrderStageView
     }
@@ -57,10 +58,6 @@ class Play : AbstractDirector() {
         }
         centerAction?.act()
         stageView.direction.degrees = degrees
-
-        if (Game.instance.gameLoop.tickCount % 100 == 0L) {
-            println("FPS = ${Game.instance.gameLoop.actualFPS().toInt()} Actors : ${stage.actors.size}")
-        }
 
     }
 

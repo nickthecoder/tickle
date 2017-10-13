@@ -5,7 +5,7 @@
         "height": 600,
         "resizable": true,
         "initialScene": "level01",
-        "testScene": "info",
+        "testScene": "test",
         "producer": "uk.co.nickthecoder.tickle.demo.Demo",
         "packages": [
             "uk.co.nickthecoder.tickle"
@@ -41,6 +41,26 @@
                     "hAlignment": "LEFT",
                     "leftRightMargin": 0,
                     "vAlignment": "BOTTOM",
+                    "topBottomMargin": 0
+                }
+            ]
+        },
+        {
+            "name": "glass",
+            "stages": [
+                {
+                    "name": "glass",
+                    "stage": "uk.co.nickthecoder.tickle.stage.GameStage"
+                }
+            ],
+            "views": [
+                {
+                    "name": "glass",
+                    "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView",
+                    "stage": "glass",
+                    "hAlignment": "LEFT",
+                    "leftRightMargin": 0,
+                    "vAlignment": "TOP",
                     "topBottomMargin": 0
                 }
             ]

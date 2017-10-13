@@ -25,12 +25,12 @@ class Grenade() : AbstractRole() {
     var exit = Vector2d(0.0, 50.0)
 
     @Attribute
-    var hue: Float = 1.0f
+    var hue: Double = 1.0
 
     val action = PeriodicFactory<Actor>(10.0) {
 
         val randomHue = Rand.plusMinus(0.06f)
-        val newColor = Color.createFromHSB(hue + randomHue, 1f, 1f)
+        val newColor = Color.createFromHSB(hue.toFloat() + randomHue, 1f, 1f)
         val transparent = Color(newColor.red, newColor.green, newColor.blue, 0f)
         val newRole = ActionRole()
 

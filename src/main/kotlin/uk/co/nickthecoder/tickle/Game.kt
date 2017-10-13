@@ -78,6 +78,19 @@ class Game(
         return JsonScene(sceneFile).sceneResource
     }
 
+    fun startScene(scenePath : String) {
+        val file = resources.scenePathToFile(scenePath)
+        val sr = loadScene(file)
+        startScene(sr)
+    }
+
+    fun mergeScene(scenePath : String) {
+        val file = resources.scenePathToFile(scenePath)
+        val sr = loadScene(file)
+        val extraScene = sr.createScene()
+        scene.merge(extraScene)
+    }
+
     fun startScene(sceneResource: SceneResource) {
         director = Director.createDirector(sceneResource.directorString)
         scene = sceneResource.createScene()

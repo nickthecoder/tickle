@@ -1,8 +1,6 @@
 package uk.co.nickthecoder.tickle.editor.util
 
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.tickle.editor.scene.toJavaFX
-import uk.co.nickthecoder.tickle.editor.scene.toTickle
 import uk.co.nickthecoder.tickle.graphics.HAlignment
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.graphics.VAlignment

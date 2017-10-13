@@ -14,6 +14,8 @@ import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.SceneStage
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.util.background
+import uk.co.nickthecoder.tickle.editor.util.isAt
 
 
 class SceneEditor(val sceneResource: SceneResource)
