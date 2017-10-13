@@ -419,7 +419,6 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
 
         override fun draw() {
-
             with(canvas.graphicsContext2D) {
                 save()
                 translate(actorResource.x, actorResource.y)

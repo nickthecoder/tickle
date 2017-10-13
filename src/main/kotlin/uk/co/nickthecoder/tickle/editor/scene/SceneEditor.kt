@@ -33,10 +33,10 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     val costumeBox = CostumesBox { selectCostumeName(it) }
     val layersBox = LayersBox(layers)
-    val stagesBox = StagesBox(sceneResource)
+    val stagesBox = StagesBox(this)
 
     val costumesPane = TitledPane("Costumes", costumeBox.build())
-    val propertiesPane = PropertiesPane()
+    val propertiesPane = TitledPane("Properties", ActorPropertiesBox(this).build())
     val layersPane = TitledPane("Layers", layersBox.build())
     val stagesPane = TitledPane("Stages", stagesBox.build())
 
@@ -95,16 +95,6 @@ class SceneEditor(val sceneResource: SceneResource) {
         return list
     }
 
-    fun updateAttributesBox() {
-        val latest = selection.latest()
-        if (latest == null) {
-            propertiesPane.clear()
-            MainWindow.instance.accordion.expandedPane = costumesPane
-        } else {
-            propertiesPane.show(ActorProperties(latest, sceneResource))
-        }
-    }
-
     fun buildContextMenu(): ContextMenu {
         val menu = ContextMenu()
         val delete = MenuItem("Delete")
@@ -137,7 +127,6 @@ class SceneEditor(val sceneResource: SceneResource) {
         mouseHandler?.escape()
         selection.clear()
         mouseHandler = Select()
-        updateAttributesBox()
     }
 
     fun delete(actorResource: ActorResource) {
@@ -152,7 +141,6 @@ class SceneEditor(val sceneResource: SceneResource) {
             sceneResource.fireChange(actorResource, ModificationType.DELETE)
         }
         selection.clear()
-        updateAttributesBox()
     }
 
 
@@ -278,7 +266,6 @@ class SceneEditor(val sceneResource: SceneResource) {
                         } else {
                             selection.add(highestActor)
                         }
-                        updateAttributesBox()
 
                     } else if (event.isShiftDown) {
                         if (actors.contains(selection.latest())) {
@@ -294,7 +281,6 @@ class SceneEditor(val sceneResource: SceneResource) {
                         } else {
                             selection.clearAndSelect(highestActor)
                         }
-                        updateAttributesBox()
 
                     } else {
                         if (actors.contains(selection.latest())) {
@@ -309,7 +295,6 @@ class SceneEditor(val sceneResource: SceneResource) {
                         } else {
                             selection.clearAndSelect(highestActor)
                         }
-                        updateAttributesBox()
 
                     }
                 }

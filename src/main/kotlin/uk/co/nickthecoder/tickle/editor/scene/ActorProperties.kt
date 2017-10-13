@@ -7,15 +7,13 @@ import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.ActorResource
 import uk.co.nickthecoder.tickle.ModificationType
-import uk.co.nickthecoder.tickle.SceneResourceListener
 import uk.co.nickthecoder.tickle.SceneResource
+import uk.co.nickthecoder.tickle.SceneResourceListener
 
 
 class ActorProperties(val actorResource: ActorResource, val sceneResource: SceneResource)
 
-    : PropertiesPaneContent, SceneResourceListener, ParameterListener {
-
-    override val title = actorResource.costumeName
+    : SceneResourceListener, ParameterListener {
 
     val xP = DoubleParameter("x", value = actorResource.x.toDouble())
 
@@ -51,7 +49,7 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
         sceneResource.listeners.add(this)
     }
 
-    override fun cleanUp() {
+    fun cleanUp() {
         sceneResource.listeners.remove(this)
         groupP.parameterListeners.remove(this)
     }
@@ -65,16 +63,18 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
         }
     }
 
-    override fun actorModified(sceneResource: SceneResource, actorResource : ActorResource, type : ModificationType) {
-        dirty = true
-        Platform.runLater {
-            if (dirty) {
-                updateParameters()
+    override fun actorModified(sceneResource: SceneResource, actorResource: ActorResource, type: ModificationType) {
+        if (actorResource == this.actorResource) {
+            dirty = true
+            Platform.runLater {
+                if (dirty) {
+                    updateParameters()
+                }
             }
         }
     }
 
-    override fun build(): Node {
+    fun build(): Node {
         val field = groupP.createField()
         val box = HBox()
         box.children.add(field.controlContainer)

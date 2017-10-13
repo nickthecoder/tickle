@@ -7,11 +7,21 @@ import javafx.scene.image.ImageView
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.EditorAction
 
-class StagesBox(val sceneResource: SceneResource) {
+class StagesBox(val sceneEditor: SceneEditor) {
+
+    val sceneResource: SceneResource = sceneEditor.sceneResource
 
     val tree = TreeView<String>()
 
     val root = TreeItem<String>("Stages")
+
+    init {
+        tree.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
+            if (newValue is ActorItem) {
+                sceneEditor.selection.clearAndSelect(newValue.actor)
+            }
+        }
+    }
 
     fun build(): Node {
 
