@@ -1,9 +1,9 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.scene.canvas.Canvas
+import uk.co.nickthecoder.tickle.ActorResource
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.editor.util.image
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
@@ -36,17 +36,17 @@ abstract class Layer {
 
     abstract fun drawContent()
 
-    fun drawActor(sceneActor: SceneActor) {
+    fun drawActor(actorResource: ActorResource) {
 
-        val pose = sceneActor.pose
+        val pose = actorResource.pose
 
         with(canvas.graphicsContext2D) {
             save()
-            translate(sceneActor.x.toDouble(), sceneActor.y.toDouble())
-            rotate(sceneActor.direction.degrees - (pose?.direction?.degrees ?: 0.0))
+            translate(actorResource.x.toDouble(), actorResource.y.toDouble())
+            rotate(actorResource.direction.degrees - (pose?.direction?.degrees ?: 0.0))
             if (pose == null) {
-                sceneActor.textStyle?.let {
-                    drawText(it, sceneActor.displayText)
+                actorResource.textStyle?.let {
+                    drawText(it, actorResource.displayText)
                 }
             } else {
                 drawPose(pose)

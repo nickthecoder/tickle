@@ -1,12 +1,12 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.SceneStage
+import uk.co.nickthecoder.tickle.StageResource
 
 class StageLayer(
         val sceneResource: SceneResource,
         val stageName: String,
-        val sceneStage: SceneStage)
+        val stageResource: StageResource)
 
     : Layer() {
 
@@ -25,8 +25,8 @@ class StageLayer(
 
     override fun drawContent() {
 
-        sceneStage.sceneActors.forEach { sceneActor ->
-            drawActor( sceneActor )
+        stageResource.actorResources.forEach { actorResource ->
+            drawActor( actorResource )
         }
     }
 

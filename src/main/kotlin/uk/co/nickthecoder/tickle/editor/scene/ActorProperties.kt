@@ -5,24 +5,24 @@ import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.ActorResource
 import uk.co.nickthecoder.tickle.SceneListerner
 import uk.co.nickthecoder.tickle.SceneResource
 
 
-class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResource)
+class ActorProperties(val actorResource: ActorResource, val sceneResource: SceneResource)
 
     : PropertiesPaneContent, SceneListerner, ParameterListener {
 
-    override val title = sceneActor.costumeName
+    override val title = actorResource.costumeName
 
-    val xP = DoubleParameter("x", value = sceneActor.x.toDouble())
+    val xP = DoubleParameter("x", value = actorResource.x.toDouble())
 
-    val yP = DoubleParameter("y", value = sceneActor.y.toDouble())
+    val yP = DoubleParameter("y", value = actorResource.y.toDouble())
 
-    val directionP = DoubleParameter("direction", value = sceneActor.direction.degrees)
+    val directionP = DoubleParameter("direction", value = actorResource.direction.degrees)
 
-    val textP = StringParameter("text", value = sceneActor.text)
+    val textP = StringParameter("text", value = actorResource.text)
 
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
@@ -34,7 +34,7 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
 
     init {
 
-        sceneActor.attributes.map().keys.sorted().map { sceneActor.attributes.getOrCreateData(it) }.forEach { data ->
+        actorResource.attributes.map().keys.sorted().map { actorResource.attributes.getOrCreateData(it) }.forEach { data ->
             data.parameter?.let { it ->
                 val parameter = it.copyBounded()
                 attributesP.add(parameter)
@@ -59,7 +59,7 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
         dirty = true
         Platform.runLater {
             if (dirty) {
-                updateSceneActor()
+                updateActorResource()
             }
         }
     }
@@ -82,11 +82,11 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
         return scrollPane
     }
 
-    fun updateSceneActor() {
-        xP.value?.let { sceneActor.x = it }
-        yP.value?.let { sceneActor.y = it }
-        directionP.value?.let { sceneActor.direction.degrees = it }
-        sceneActor.text = textP.value
+    fun updateActorResource() {
+        xP.value?.let { actorResource.x = it }
+        yP.value?.let { actorResource.y = it }
+        directionP.value?.let { actorResource.direction.degrees = it }
+        actorResource.text = textP.value
 
         // Note. We are not updating the dynamic "attributes", because they should ONLY be updated via their
         // Parameters, The scene editor should NOT be changing the string value directly.
@@ -96,12 +96,12 @@ class ActorProperties(val sceneActor: SceneActor, val sceneResource: SceneResour
     }
 
     fun updateParameters() {
-        yP.value = sceneActor.y
-        xP.value = sceneActor.x
-        directionP.value = sceneActor.direction.degrees
-        textP.value = sceneActor.text
+        yP.value = actorResource.y
+        xP.value = actorResource.x
+        directionP.value = actorResource.direction.degrees
+        textP.value = actorResource.text
 
-        textP.hidden = sceneActor.pose != null
+        textP.hidden = actorResource.pose != null
 
         // Note. We do not update the dynamic "attributes", because they should ONLY be updated via their
         // Parameters, The scene editor should NOT be changing the string value directly.

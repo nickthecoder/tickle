@@ -4,9 +4,9 @@ import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
+import uk.co.nickthecoder.tickle.ActorResource
 import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
-import uk.co.nickthecoder.tickle.SceneActor
 import uk.co.nickthecoder.tickle.editor.util.AngleParameter
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
@@ -26,7 +26,7 @@ class GlassLayer(val selection: Selection)
             }
         }
 
-    var newActor: SceneActor? = null
+    var newActor: ActorResource? = null
 
     init {
         selection.listeners.add(this)
@@ -51,18 +51,18 @@ class GlassLayer(val selection: Selection)
             restore()
         }
 
-        // Dotted lines around each selected SceneActor
+        // Dotted lines around each selected ActorResource
         with(gc) {
             save()
             setLineDashes(3.0, 10.0)
 
-            selection.selected().forEach { sceneActor ->
+            selection.selected().forEach { actorResource ->
                 save()
 
-                translate(sceneActor.x, sceneActor.y)
-                rotate(sceneActor.direction.degrees - (sceneActor.pose?.direction?.degrees ?: 0.0))
+                translate(actorResource.x, actorResource.y)
+                rotate(actorResource.direction.degrees - (actorResource.pose?.direction?.degrees ?: 0.0))
 
-                drawOutlined(selectionColor(sceneActor === selection.latest())) { drawBoundingBox(sceneActor) }
+                drawOutlined(selectionColor(actorResource === selection.latest())) { drawBoundingBox(actorResource) }
 
                 restore()
             }
@@ -137,10 +137,10 @@ class GlassLayer(val selection: Selection)
         dirty = true
     }
 
-    fun drawBoundingBox(sceneActor: SceneActor) {
+    fun drawBoundingBox(actorResource: ActorResource) {
         val margin = 2.0
 
-        sceneActor.pose?.let { pose ->
+        actorResource.pose?.let { pose ->
 
             canvas.graphicsContext2D.strokeRect(
                     -pose.offsetX - margin,
@@ -151,8 +151,8 @@ class GlassLayer(val selection: Selection)
             return
         }
 
-        sceneActor.textStyle?.let { textStyle ->
-            val text = sceneActor.displayText
+        actorResource.textStyle?.let { textStyle ->
+            val text = actorResource.displayText
             val offestX = textStyle.offsetX(text)
             val offsetY = textStyle.offsetY(text)
             val width = textStyle.width(text)
@@ -279,7 +279,7 @@ class GlassLayer(val selection: Selection)
 
     }
 
-    abstract inner class Arrow(name: String, val sceneActor: SceneActor, val distance: Int)
+    abstract inner class Arrow(name: String, val actorResource: ActorResource, val distance: Int)
 
         : AbstractDragHandle(name) {
 
@@ -287,15 +287,15 @@ class GlassLayer(val selection: Selection)
 
         abstract fun get(): Double
 
-        override fun x() = sceneActor.x + (directionLength + distance * directionExtra) * Math.cos(Math.toRadians(get()))
+        override fun x() = actorResource.x + (directionLength + distance * directionExtra) * Math.cos(Math.toRadians(get()))
 
-        override fun y() = sceneActor.y + (directionLength + distance * directionExtra) * Math.sin(Math.toRadians(get()))
+        override fun y() = actorResource.y + (directionLength + distance * directionExtra) * Math.sin(Math.toRadians(get()))
 
         override fun draw() {
 
             with(canvas.graphicsContext2D) {
                 save()
-                translate(sceneActor.x, sceneActor.y)
+                translate(actorResource.x, actorResource.y)
                 val length = directionLength + distance * directionExtra
 
                 rotate(get())
@@ -310,27 +310,27 @@ class GlassLayer(val selection: Selection)
 
     }
 
-    inner class RotateArrow(name: String, sceneActor: SceneActor)
+    inner class RotateArrow(name: String, actorResource: ActorResource)
 
-        : Arrow(name, sceneActor, 0) {
+        : Arrow(name, actorResource, 0) {
 
-        override fun get() = sceneActor.direction.degrees
+        override fun get() = actorResource.direction.degrees
 
         override fun set(degrees: Double) {
-            sceneActor.direction.degrees = degrees
+            actorResource.direction.degrees = degrees
         }
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
 
-            val dx = x - sceneActor.x
-            val dy = y - sceneActor.y
+            val dx = x - actorResource.x
+            val dy = y - actorResource.y
 
             val atan = Math.atan2(dy, dx)
             var angle = if (atan < 0) atan + Math.PI * 2 else atan
 
             angle -= angle.rem(Math.toRadians(if (snap) 15.0 else 1.0))
 
-            val degrees = angle - sceneActor.direction.radians
+            val degrees = angle - actorResource.direction.radians
 
             selection.forEach {
                 it.direction.radians += degrees
@@ -343,9 +343,9 @@ class GlassLayer(val selection: Selection)
 
     }
 
-    inner class DirectionArrow(name: String, sceneActor: SceneActor, val data: AttributeData, distance: Int)
+    inner class DirectionArrow(name: String, actorResource: ActorResource, val data: AttributeData, distance: Int)
 
-        : Arrow(name, sceneActor, distance) {
+        : Arrow(name, actorResource, distance) {
 
         val parameter = if (data.parameter is AngleParameter)
             (data.parameter as AngleParameter).degreesP
@@ -360,8 +360,8 @@ class GlassLayer(val selection: Selection)
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
 
-            val dx = x - sceneActor.x
-            val dy = y - sceneActor.y
+            val dx = x - actorResource.x
+            val dy = y - actorResource.y
 
             val atan = Math.atan2(dy, dx)
             var angle = if (atan < 0) atan + Math.PI * 2 else atan
@@ -376,7 +376,7 @@ class GlassLayer(val selection: Selection)
         }
     }
 
-    inner class PolarArrow(name: String, val sceneActor: SceneActor, val data: AttributeData)
+    inner class PolarArrow(name: String, val actorResource: ActorResource, val data: AttributeData)
 
         : AbstractDragHandle(name) {
 
@@ -387,13 +387,13 @@ class GlassLayer(val selection: Selection)
             parameter.magnitude = magnitude
         }
 
-        override fun x() = sceneActor.x + parameter.value.vector().x * data.scale
-        override fun y() = sceneActor.y + parameter.value.vector().y * data.scale
+        override fun x() = actorResource.x + parameter.value.vector().x * data.scale
+        override fun y() = actorResource.y + parameter.value.vector().y * data.scale
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
 
-            val dx = x - sceneActor.x
-            val dy = y - sceneActor.y
+            val dx = x - actorResource.x
+            val dy = y - actorResource.y
 
             val atan = Math.atan2(dy, dx)
             var angle = if (atan < 0) atan + Math.PI * 2 else atan
@@ -412,7 +412,7 @@ class GlassLayer(val selection: Selection)
 
             with(canvas.graphicsContext2D) {
                 save()
-                translate(sceneActor.x, sceneActor.y)
+                translate(actorResource.x, actorResource.y)
                 val length = parameter.magnitude!! * data.scale
 
                 rotate(parameter.value.angle.degrees)
@@ -423,7 +423,7 @@ class GlassLayer(val selection: Selection)
 
     }
 
-    open inner class AbsoluteHandle(name: String, val sceneActor: SceneActor, val data: AttributeData)
+    open inner class AbsoluteHandle(name: String, val actorResource: ActorResource, val data: AttributeData)
 
         : AbstractDragHandle(name) {
 
@@ -454,17 +454,17 @@ class GlassLayer(val selection: Selection)
 
     }
 
-    inner class RelativeHandle(name: String, sceneActor: SceneActor, data: AttributeData)
+    inner class RelativeHandle(name: String, actorResource: ActorResource, data: AttributeData)
 
-        : AbsoluteHandle(name, sceneActor, data) {
+        : AbsoluteHandle(name, actorResource, data) {
 
-        override fun x() = sceneActor.x + super.x() * data.scale
-        override fun y() = sceneActor.y + super.y() * data.scale
+        override fun x() = actorResource.x + super.x() * data.scale
+        override fun y() = actorResource.y + super.y() * data.scale
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
 
-            var dx = (x - sceneActor.x) / data.scale
-            var dy = (y - sceneActor.y) / data.scale
+            var dx = (x - actorResource.x) / data.scale
+            var dy = (y - actorResource.y) / data.scale
 
             if (snap) {
                 dx = Math.floor(dx)
@@ -479,7 +479,7 @@ class GlassLayer(val selection: Selection)
 
             with(canvas.graphicsContext2D) {
                 save()
-                translate(sceneActor.x + parameter.x!! * data.scale, sceneActor.y + parameter.y!! * data.scale)
+                translate(actorResource.x + parameter.x!! * data.scale, actorResource.y + parameter.y!! * data.scale)
                 drawOutlined(handleColor(hovering)) { drawDiamondHandle() }
                 restore()
             }

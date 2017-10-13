@@ -1,12 +1,12 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
-import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.ActorResource
 
-class Selection : Iterable<SceneActor> {
+class Selection : Iterable<ActorResource> {
 
-    private val items = mutableSetOf<SceneActor>()
+    private val items = mutableSetOf<ActorResource>()
 
-    private var latest: SceneActor? = null
+    private var latest: ActorResource? = null
 
     val listeners = mutableListOf<SelectionListener>()
     val size
@@ -23,14 +23,14 @@ class Selection : Iterable<SceneActor> {
         fireChange()
     }
 
-    fun add(obj: SceneActor?) {
+    fun add(obj: ActorResource?) {
         obj ?: return
         items.add(obj)
         latest = obj
         fireChange()
     }
 
-    fun remove(obj: SceneActor?) {
+    fun remove(obj: ActorResource?) {
         obj ?: return
         items.remove(obj)
         if (obj === latest) {
@@ -39,11 +39,11 @@ class Selection : Iterable<SceneActor> {
         fireChange()
     }
 
-    fun selected(): Set<SceneActor> = items
+    fun selected(): Set<ActorResource> = items
 
-    fun latest(): SceneActor? = latest
+    fun latest(): ActorResource? = latest
 
-    fun clearAndSelect(obj: SceneActor?) {
+    fun clearAndSelect(obj: ActorResource?) {
         clear()
         obj?.let { add(it) }
         fireChange()
@@ -53,7 +53,7 @@ class Selection : Iterable<SceneActor> {
         listeners.forEach { it.selectionChanged() }
     }
 
-    override fun iterator(): Iterator<SceneActor> = items.iterator()
+    override fun iterator(): Iterator<ActorResource> = items.iterator()
 
 }
 

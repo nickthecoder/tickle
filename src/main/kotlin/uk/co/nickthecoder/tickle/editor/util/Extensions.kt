@@ -12,7 +12,7 @@ import javafx.scene.layout.CornerRadii
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.ActorResource
 import uk.co.nickthecoder.tickle.graphics.Color
 
 /*
@@ -81,15 +81,15 @@ fun Costume.thumbnail(size: Double): Node? {
 
 // SCENE ACTOR
 
-fun SceneActor.isOverlapping(x: Double, y: Double): Boolean {
+fun ActorResource.isOverlapping(x: Double, y: Double): Boolean {
     val tx = x - this.x
     val ty = y - this.y
     return pose?.isOverlapping(tx, ty) ?: false
 }
 
-fun SceneActor.costume(): Costume? = Resources.instance.optionalCostume(costumeName)
+fun ActorResource.costume(): Costume? = Resources.instance.optionalCostume(costumeName)
 
-fun SceneActor.isAt(x: Double, y: Double): Boolean {
+fun ActorResource.isAt(x: Double, y: Double): Boolean {
     var tx = x - this.x
     var ty = y - this.y
     // TODO Need to account for rotation and scale!?!?

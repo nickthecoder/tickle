@@ -49,8 +49,8 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
         stageButton.graphic = ImageView(EditorAction.imageResource("layers.png"))
         stageButton.items.add(singleLayerMode)
         stageButton.items.add(SeparatorMenuItem())
-        sceneResource.sceneStages.forEach { stageName, sceneStage ->
-            val layer = StageLayer(sceneResource, stageName, sceneStage)
+        sceneResource.stageResources.forEach { stageName, stageResource ->
+            val layer = StageLayer(sceneResource, stageName, stageResource)
             add(layer)
             stageLayers.add(layer)
             map[stageName] = layer

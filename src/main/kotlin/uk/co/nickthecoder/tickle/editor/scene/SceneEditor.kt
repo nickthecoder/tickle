@@ -8,10 +8,10 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
-import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.ActorResource
 import uk.co.nickthecoder.tickle.SceneListerner
 import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.SceneStage
+import uk.co.nickthecoder.tickle.StageResource
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
@@ -104,12 +104,12 @@ class SceneEditor(val sceneResource: SceneResource)
         dirty = false
     }
 
-    fun findActorsAt(x: Double, y: Double, ignoreStageLock: Boolean = false): List<SceneActor> {
-        val list = mutableListOf<SceneActor>()
+    fun findActorsAt(x: Double, y: Double, ignoreStageLock: Boolean = false): List<ActorResource> {
+        val list = mutableListOf<ActorResource>()
         layers.visibleLayers().filter { ignoreStageLock || it.isLocked == false }.forEach { stageLayer ->
-            stageLayer.sceneStage.sceneActors.forEach { sceneActor ->
-                if (sceneActor.isAt(x, y)) {
-                    list.add(sceneActor)
+            stageLayer.stageResource.actorResources.forEach { actorResource ->
+                if (actorResource.isAt(x, y)) {
+                    list.add(actorResource)
                 }
             }
         }
@@ -132,9 +132,9 @@ class SceneEditor(val sceneResource: SceneResource)
         delete.onAction = EventHandler { onDelete() }
         menu.items.add(delete)
 
-        if (selection.isNotEmpty() && sceneResource.sceneStages.size > 1) {
+        if (selection.isNotEmpty() && sceneResource.stageResources.size > 1) {
             val moveToStageMenu = Menu("Move to Stage")
-            sceneResource.sceneStages.forEach { stageName, stage ->
+            sceneResource.stageResources.forEach { stageName, stage ->
                 val stageItem = MenuItem(stageName)
                 stageItem.onAction = EventHandler { moveSelectTo(stage) }
                 moveToStageMenu.items.add(stageItem)
@@ -145,10 +145,10 @@ class SceneEditor(val sceneResource: SceneResource)
         return menu
     }
 
-    fun moveSelectTo(sceneStage: SceneStage) {
-        selection.forEach { sceneActor ->
-            delete(sceneActor)
-            sceneStage.sceneActors.add(sceneActor)
+    fun moveSelectTo(stageResource: StageResource) {
+        selection.forEach { actorResource ->
+            delete(actorResource)
+            stageResource.actorResources.add(actorResource)
         }
         sceneResource.fireChange()
     }
@@ -161,15 +161,15 @@ class SceneEditor(val sceneResource: SceneResource)
         draw()
     }
 
-    fun delete(sceneActor: SceneActor) {
-        sceneResource.sceneStages.values.forEach { sceneStage ->
-            sceneStage.sceneActors.remove(sceneActor)
+    fun delete(actorResource: ActorResource) {
+        sceneResource.stageResources.values.forEach { stageResource ->
+            stageResource.actorResources.remove(actorResource)
         }
     }
 
     fun onDelete() {
-        selection.selected().forEach { sceneActor ->
-            delete(sceneActor)
+        selection.selected().forEach { actorResource ->
+            delete(actorResource)
         }
         selection.clear()
         updateAttributesBox()
@@ -346,9 +346,9 @@ class SceneEditor(val sceneResource: SceneResource)
 
         override fun onMouseDragged(event: MouseEvent) {
             if (event.button == MouseButton.PRIMARY) {
-                selection.selected().forEach { sceneActor ->
-                    sceneActor.x += dragDeltaX
-                    sceneActor.y -= dragDeltaY
+                selection.selected().forEach { actorResource ->
+                    actorResource.x += dragDeltaX
+                    actorResource.y -= dragDeltaY
                 }
                 if (selection.isNotEmpty()) {
                     sceneResource.fireChange()
@@ -382,7 +382,7 @@ class SceneEditor(val sceneResource: SceneResource)
 
     inner class Stamp(val costumeName: String) : MouseHandler {
 
-        var newActor = SceneActor(true)
+        var newActor = ActorResource(true)
 
         init {
             newActor.costumeName = costumeName
@@ -396,11 +396,11 @@ class SceneEditor(val sceneResource: SceneResource)
         }
 
         override fun onMousePressed(event: MouseEvent) {
-            layers.currentLayer()?.sceneStage?.sceneActors?.add(newActor)
+            layers.currentLayer()?.stageResource?.actorResources?.add(newActor)
 
             if (event.isShiftDown) {
 
-                newActor = SceneActor()
+                newActor = ActorResource()
                 newActor.costumeName = costumeName
                 layers.glass.newActor = newActor
 

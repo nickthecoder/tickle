@@ -4,10 +4,10 @@ import javafx.scene.Node
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
 import javafx.scene.image.ImageView
-import uk.co.nickthecoder.tickle.SceneActor
+import uk.co.nickthecoder.tickle.ActorResource
 import uk.co.nickthecoder.tickle.SceneListerner
 import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.SceneStage
+import uk.co.nickthecoder.tickle.StageResource
 import uk.co.nickthecoder.tickle.editor.EditorAction
 
 class StagesBox(val sceneResource: SceneResource) {
@@ -21,7 +21,7 @@ class StagesBox(val sceneResource: SceneResource) {
         tree.root = root
         tree.isShowRoot = false
 
-        sceneResource.sceneStages.forEach { stageName, stage ->
+        sceneResource.stageResources.forEach { stageName, stage ->
             root.children.add(StageItem(stageName, stage))
         }
 
@@ -29,12 +29,12 @@ class StagesBox(val sceneResource: SceneResource) {
 
     }
 
-    inner class StageItem(val stageName: String, val stage: SceneStage)
+    inner class StageItem(val stageName: String, val stage: StageResource)
 
         : TreeItem<String>(stageName), SceneListerner {
 
         init {
-            stage.sceneActors.forEach { actor ->
+            stage.actorResources.forEach { actor ->
                 children.add(ActorItem(actor))
             }
         }
@@ -46,7 +46,7 @@ class StagesBox(val sceneResource: SceneResource) {
         override fun isLeaf() = false
     }
 
-    inner class ActorItem(val actor: SceneActor)
+    inner class ActorItem(val actor: ActorResource)
 
         : TreeItem<String>(actor.costumeName), SceneListerner {
 
