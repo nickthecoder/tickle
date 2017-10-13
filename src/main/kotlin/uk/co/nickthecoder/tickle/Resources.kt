@@ -34,7 +34,7 @@ class Resources {
         get() = File(file.parentFile, "scenes").absoluteFile
 
     val texturesDirectory: File
-        get() = File(file.parentFile, "textures").absoluteFile
+        get() = File(file.parentFile, "images").absoluteFile
 
     val listeners = mutableListOf<ResourcesListener>()
 

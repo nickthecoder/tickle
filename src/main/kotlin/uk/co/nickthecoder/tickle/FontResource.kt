@@ -52,12 +52,15 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1) {
             }
         }
 
-    val fontTexture: FontTexture
+    var fontTexture: FontTexture
         get() {
             cached?.let { return it }
             val c = createFontTexture()
             cached = c
             return c
+        }
+        set(v) {
+            cached = v
         }
 
     fun createFontTexture(): FontTexture {

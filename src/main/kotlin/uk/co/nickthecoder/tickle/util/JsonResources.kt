@@ -6,10 +6,7 @@ import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.*
-import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.graphics.HAlignment
-import uk.co.nickthecoder.tickle.graphics.TextStyle
-import uk.co.nickthecoder.tickle.graphics.VAlignment
+import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
 import uk.co.nickthecoder.tickle.stage.FlexVAlignment
 import java.io.*
@@ -602,6 +599,8 @@ class JsonResources {
                 jfont.add("file", resources.toPath(fontResource.file!!))
             }
             jfont.add("size", fontResource.size)
+            jfont.add("xPadding", fontResource.xPadding)
+            jfont.add("yPadding", fontResource.yPadding)
             jfonts.add(jfont)
         }
 
@@ -627,10 +626,76 @@ class JsonResources {
                 }
 
                 fontResource.size = jfont.getDouble("size", 22.0)
+                fontResource.xPadding = jfont.getInt("xPadding", 1)
+                fontResource.yPadding = jfont.getInt("yPadding", 1)
+
+                val pngFile = File(resources.texturesDirectory, "$name.png")
+                val metricsFile = File(resources.texturesDirectory, "$name.metrics")
+                if (pngFile.exists() && metricsFile.exists()) {
+                    val texture = Texture.create(pngFile)
+                    val fontTexture = loadFontMetrics(metricsFile, texture)
+                    fontResource.fontTexture = fontTexture
+                }
+
                 resources.addFontResource(name, fontResource)
             }
             //println("Loaded pose $name : ${pose}")
         }
     }
 
+    companion object {
+
+        fun saveFontMetrics(file: File, fontTexture: FontTexture) {
+            val jroot = JsonObject()
+            jroot.add("lineHeight", fontTexture.lineHeight)
+            jroot.add("leading", fontTexture.leading)
+            jroot.add("ascent", fontTexture.ascent)
+            jroot.add("descent", fontTexture.descent)
+            val jglyphs = JsonArray()
+            jroot.add("glyphs", jglyphs)
+            fontTexture.glyphs.forEach { c, data ->
+                val jglyph = JsonObject()
+                jglyph.add("c", c.toString())
+                jglyph.add("left", data.pose.rect.left)
+                jglyph.add("top", data.pose.rect.top)
+                jglyph.add("right", data.pose.rect.right)
+                jglyph.add("bottom", data.pose.rect.bottom)
+                jglyph.add("advance", data.advance)
+
+                jglyphs.add(jglyph)
+            }
+
+            BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
+                jroot.writeTo(it, PrettyPrint.indentWithSpaces(4))
+            }
+        }
+
+        fun loadFontMetrics(file: File, texture: Texture): FontTexture {
+            val jroot = Json.parse(InputStreamReader(FileInputStream(file))).asObject()
+
+            val lineHeight = jroot.get("lineHeight").asDouble()
+            val leading = jroot.get("leading").asDouble()
+            val ascent = jroot.get("ascent").asDouble()
+            val descent = jroot.get("descent").asDouble()
+
+            val glyphs = mutableMapOf<Char, Glyph>()
+
+            val jglyphs = jroot.get("glyphs").asArray()
+            jglyphs.forEach {
+                val jglyph = it.asObject()
+                val c = jglyph.get("c").asString().first()
+                val left = jglyph.get("left").asInt()
+                val top = jglyph.get("top").asInt()
+                val right = jglyph.get("right").asInt()
+                val bottom = jglyph.get("bottom").asInt()
+                val advance = jglyph.get("advance").asDouble()
+                val rect = YDownRect(left, top, right, bottom)
+                val pose = Pose(texture, rect)
+                val glyph = Glyph(pose, advance)
+                glyphs[c] = (glyph)
+            }
+
+            return FontTexture(texture, glyphs, lineHeight, leading = leading, ascent = ascent, descent = descent)
+        }
+    }
 }

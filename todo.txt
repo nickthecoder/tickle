@@ -1,6 +1,14 @@
 Current Work
 ============
 
+Support patterned and outlined fonts
+	Add padding parameters to the FontsTab
+	Add button parameter to save as .png and .glyphData file
+	User then adds a pattern over the font
+	User can also copy the font, grow the selection and add blur, and save it as FONTNAME.outline.png
+	When loading fonts, check if a .png and .glyphData file exists with the same name, and if so, don't create the font. Load it.
+	Also check if there is a -outline.png file too, and if so, 
+
 
 BUGS
 ====
@@ -75,7 +83,6 @@ Allow a Layout to specify a (set of?) scene paths to merge whenever a scene usin
 	Hmm, Maybe it SHOULD be loaded when designing too (but is never editable)
 Also allow a SceneResource to specify a (set of?) scene paths to be merged.
 	This will allow a "background" scene to be chosen per actual scene.
-Views to have a Z-Order, to define the order they are rendered.
 
 
 Pose : Allow a "mirrored" version (X,Y or Both)
@@ -110,7 +117,7 @@ Mouse
 	Find Actors at a point
 		Overlapping, or using pixel data
 
-Ensure Textures are deleted when removed from resources (Use finialise?).
+Ensure Textures are deleted when removed from resources (Use finalise?).
 
 Add my own "runLater", which will call the code at the end of a tick.
 	I could use this to delete textures (i.e. put the runLater call in Texture.finalize).
@@ -118,15 +125,7 @@ Add my own "runLater", which will call the code at the end of a tick.
 Costumes to inherit?
 	Just the events?
 
-Tags
-	Consider special methods on Tagged and TagManager to use inline reified typed methods to return Roles of the
-		specified type. Hmm, can't do that - It will still need a cast, so reified isn't helpful.
-	Maybe also using a Class as the tag.
-	How about finding roles with tag x AND tag y. Tag x OR tag y?
-		Or should this be done by the client?
-	Nearby - Only return those in a the surrounding N blocks.
-		N=0 when it will be used for collision detection.
-		Create a new TaggedRole interface.
+
 
 Later
 =====
@@ -165,7 +164,6 @@ UncharteredStageView
 Much Later
 ==========
 
-When adding an actor to a scene, also add child actors as dictated by the costume
 
 StageConstraint
 
@@ -174,7 +172,4 @@ New Game Wizard
 	Hello World will have a font, a Play director and a Splash director
 		Splash will display some simple text and a button to lauch "level01"
 		Maybe also have a "Me" Role
-
-Code Templates
-	Create one of Director, Role, Tags
 
