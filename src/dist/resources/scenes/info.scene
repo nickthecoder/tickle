@@ -8,10 +8,10 @@
             "actors": [
                 {
                     "costume": "info",
-                    "x": 10,
-                    "y": 539,
+                    "x": 1017,
+                    "y": 594,
                     "direction": 0,
-                    "text": "? FPS"
+                    "text": "Abc\nDef hij klm"
                 },
                 {
                     "costume": "hand",

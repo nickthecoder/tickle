@@ -21,7 +21,7 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
 
     val directionP = DoubleParameter("direction", value = actorResource.direction.degrees)
 
-    val textP = StringParameter("text", value = actorResource.text)
+    val textP = StringParameter("text", value = actorResource.text, rows = 3)
 
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 

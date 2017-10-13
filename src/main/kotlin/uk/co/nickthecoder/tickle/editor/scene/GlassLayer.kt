@@ -159,12 +159,12 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
         actorResource.textStyle?.let { textStyle ->
             val text = actorResource.displayText
-            val offestX = textStyle.offsetX(text)
+            val offsetX = textStyle.offsetX(text)
             val offsetY = textStyle.offsetY(text)
             val width = textStyle.width(text)
             val height = textStyle.height(text)
 
-            canvas.graphicsContext2D.strokeRect(offestX, offsetY, width, height)
+            canvas.graphicsContext2D.strokeRect(-offsetX, offsetY - height, width, height)
         }
     }
 

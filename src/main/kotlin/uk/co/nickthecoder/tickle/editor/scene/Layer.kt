@@ -65,18 +65,23 @@ abstract class Layer {
     fun drawText(textStyle: TextStyle, text: String) {
 
         val fontTexture = textStyle.fontResource.fontTexture
+
+        canvas.graphicsContext2D.translate(0.0, -textStyle.offsetY(text))
         var dx = 0.0
-        text.forEach { c ->
-            if (c == '\n') {
-                canvas.graphicsContext2D.translate(-dx, fontTexture.lineHeight.toDouble())
-                dx = 0.0
-            } else {
+
+        text.split('\n').forEach { line ->
+            val offsetX = -textStyle.offsetX(line)
+            canvas.graphicsContext2D.translate(offsetX, 0.0)
+
+            line.forEach { c ->
                 fontTexture.glyphs[c]?.let { glyph ->
                     drawPose(glyph.pose)
-                    canvas.graphicsContext2D.translate(glyph.advance.toDouble(), 0.0)
-                    dx += glyph.advance.toDouble()
+                    dx += glyph.advance
+                    canvas.graphicsContext2D.translate(glyph.advance, 0.0)
                 }
             }
+            canvas.graphicsContext2D.translate(-dx - offsetX, -fontTexture.lineHeight)
+            dx = 0.0
         }
     }
 

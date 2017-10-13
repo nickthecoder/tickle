@@ -9,10 +9,10 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.CornerRadii
+import uk.co.nickthecoder.tickle.ActorResource
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.ActorResource
 import uk.co.nickthecoder.tickle.graphics.Color
 
 /*
@@ -101,8 +101,8 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
         val offsetY = textStyle.offsetY(displayText)
         val width = textStyle.width(displayText)
         val height = textStyle.height(displayText)
-        tx -= offestX
-        ty -= offsetY
+        tx += offestX
+        ty += height - offsetY
         return tx > 0 && ty > 0 && tx < width && ty < height
 
     }

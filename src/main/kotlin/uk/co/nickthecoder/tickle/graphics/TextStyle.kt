@@ -11,17 +11,17 @@ class TextStyle(
     fun offsetX(text: CharSequence): Double {
         return when (halignment) {
             HAlignment.LEFT -> 0.0
-            HAlignment.RIGHT -> fontResource.fontTexture.width(text)
-            HAlignment.CENTER -> fontResource.fontTexture.width(text) / 2.0
+            HAlignment.RIGHT -> width(text)
+            HAlignment.CENTER -> width(text) / 2.0
         }
     }
 
     fun offsetY(text: CharSequence): Double {
         return when (valignment) {
-            VAlignment.TOP -> fontResource.fontTexture.height(text)
-            VAlignment.BOTTOM -> 0.0
-            VAlignment.CENTER -> fontResource.fontTexture.height(text) / 2.0
-            VAlignment.BASELINE -> 0.0
+            VAlignment.TOP -> 0.0
+            VAlignment.CENTER -> height(text) / 2.0
+            VAlignment.BASELINE -> height(text) - fontResource.fontTexture.descent
+            VAlignment.BOTTOM -> height(text)
         }
     }
 
