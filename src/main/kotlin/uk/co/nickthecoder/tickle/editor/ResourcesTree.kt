@@ -21,6 +21,7 @@ class ResourcesTree()
     init {
         isEditable = false
         root = RootItem()
+        isShowRoot = false
         root.children
         // Prevent Double Click expanding/contracting the item (as this is used to show the contents of the directory).
         addEventFilter(MouseEvent.MOUSE_PRESSED) { if (it.clickCount == 2) it.consume() }

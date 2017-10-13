@@ -2,29 +2,14 @@ Current Work
 ============
 
 Fonts
-	Costume/Actor and SceneActor to support text appearance
+	Get alignments working correctly in SceneEditor and the game
 
+	Consider SAVING the font as a .png and .glyphinfo file, so that the game runtime doesn't need the font at all!
+	Likewise, other special effects, such as "outline" "shadow" and "pixelate" can be done from the editor, not the game.???
 
-	Save and load fonts as png + json file.
-
-	Place FPS on test scenes
-		Make a reusable component, which updates every N ticks/seconds
-			Delay action
-			ChangeTextAction { text }
-	VAlignment Top, Middle, Baseline, Bottom (will need extra data on FontTexture)
-	HAlign Left, Middle, Center
-	
-SceneEditor, If layout changes, rebuild the layout pane (and the pulldown button)
-	If costume is added/removed, rebuild the costume pane
-	If a Costume or pose is changed :
-		Select nothing (saves worrying about the attributes pane).
-		Redraw - Maybe an image cache needs flushing too?
 
 BUGS
 ====
-
-If an attribute is a Float, then a DoubleParameter is created, and then throws, when it tries to assign it's double value back to the float.
-	Grenade's "hue" was an example.
 
 Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
 	I only want the EDITOR to depend on paratask-core.
@@ -43,6 +28,8 @@ New Features
 
 SceneEditor :
 	Tree structure of Stages and SceneActors
+		Include x,y as ints, and update.
+		The SceneListener will need to pass a SceneActor (maybe as Any) as well as "new/delete/change" enum.
 
 Put the "padding" back into the AWT Font Factorory, and then allow it to be "blurred" in various ways, for outlined text
 	https://github.com/mattdesl/lwjgl-basics/wiki/ShaderLesson5
@@ -159,8 +146,6 @@ Undo/Redo in scene editor
 
 JBox2d integration
 
-Auto detection of a grid to aid splitting a texture into Pose's rectangles.
-
 Split the project into multiple modules
 	core
 	demo
@@ -171,8 +156,22 @@ Load pose meta-data from SVG files.
 	Can get the offesetX,Y from the object's center of rotation.
 	Can still use GIMP, by linking pngs and exporting the pngs from GIMP.
 
-Scene Editor
-
+RevealStageView
+	Age Of Empires style outline of actors hidden behind buildings.
+	Render all buildings and movables in one pass as a normal IsometricStageView (ordered based on Actor's Y position)
+		Render all movables to an off-screen buffer using their outline images. (Tagged "REVEAL")
+		Render all buildings to an off-screen buffer using just their masks (Tagged "HIDES")
+		Combine the two using logical AND
+		Render the result to the window.
+	Note. when rendering the outlines, it would be nice to do this is two stages, one for a white outline,
+	and again for a coloured thinner image coloured based on who's side the character belongs to.
+	Rather than have multiple overlapping views, have one compound view, so that we only need to scroll the compound view.
+FogOfWarStageView
+	Filter which objects to render based on their proximity to friendly units.
+UncharteredStageView
+	Draw the scenery to off-screen buffer
+	Draw white blobs on revealed places
+	Merge using logical AND
 
 Much Later
 ==========

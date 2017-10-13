@@ -37,14 +37,15 @@ class SceneEditor(val sceneResource: SceneResource)
     val shortcuts = ShortcutHelper("SceneEditor", scrollPane)
 
     val costumeBox = CostumesBox { selectCostumeName(it) }
-
     val layersBox = LayersBox(layers)
+    val stagesBox = StagesBox(sceneResource)
 
     val costumesPane = TitledPane("Costumes", costumeBox.build())
     val propertiesPane = PropertiesPane()
     val layersPane = TitledPane("Layers", layersBox.build())
+    val stagesPane = TitledPane("Stages", stagesBox.build())
 
-    val sidePanes = listOf(costumesPane, layersPane, propertiesPane)
+    val sidePanes = listOf(costumesPane, layersPane, propertiesPane, stagesPane)
 
     val costumeHistory = mutableListOf<String>()
 
