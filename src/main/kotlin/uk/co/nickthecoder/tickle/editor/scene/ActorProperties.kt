@@ -6,13 +6,14 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.ActorResource
-import uk.co.nickthecoder.tickle.SceneListerner
+import uk.co.nickthecoder.tickle.ModificationType
+import uk.co.nickthecoder.tickle.SceneResourceListener
 import uk.co.nickthecoder.tickle.SceneResource
 
 
 class ActorProperties(val actorResource: ActorResource, val sceneResource: SceneResource)
 
-    : PropertiesPaneContent, SceneListerner, ParameterListener {
+    : PropertiesPaneContent, SceneResourceListener, ParameterListener {
 
     override val title = actorResource.costumeName
 
@@ -64,7 +65,7 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
         }
     }
 
-    override fun sceneChanged(sceneResource: SceneResource) {
+    override fun actorModified(sceneResource: SceneResource, actorResource : ActorResource, type : ModificationType) {
         dirty = true
         Platform.runLater {
             if (dirty) {
@@ -91,7 +92,7 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
         // Note. We are not updating the dynamic "attributes", because they should ONLY be updated via their
         // Parameters, The scene editor should NOT be changing the string value directly.
 
-        sceneResource.fireChange()
+        sceneResource.fireChange(actorResource, ModificationType.CHANGE)
         dirty = false
     }
 

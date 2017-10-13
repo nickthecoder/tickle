@@ -21,7 +21,7 @@ import uk.co.nickthecoder.tickle.Director
 import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.SceneStub
-import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
+import uk.co.nickthecoder.tickle.editor.scene.SceneResourceEditor
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
@@ -36,7 +36,7 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
     private val task = SceneDetailsTask(sceneName, sceneResource)
     private val taskForm = TaskForm(task)
 
-    private val sceneEditor = SceneEditor(sceneResource)
+    private val sceneEditor = SceneResourceEditor(sceneResource)
 
     private val minorTabs = MyTabPane<MyTab>()
 

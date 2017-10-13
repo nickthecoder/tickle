@@ -8,19 +8,16 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
-import uk.co.nickthecoder.tickle.ActorResource
-import uk.co.nickthecoder.tickle.SceneListerner
-import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.StageResource
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.editor.util.isAt
 
 
-class SceneEditor(val sceneResource: SceneResource)
+class SceneResourceEditor(val sceneResource: SceneResource)
 
-    : SceneListerner {
+    : SceneResourceListener {
 
     val scrollPane = ScrollPane()
 
@@ -90,7 +87,7 @@ class SceneEditor(val sceneResource: SceneResource)
         sceneResource.listeners.remove(this)
     }
 
-    override fun sceneChanged(sceneResource: SceneResource) {
+    override fun actorModified(sceneResource: SceneResource, actorResource: ActorResource, type: ModificationType) {
         dirty = true
         Platform.runLater {
             if (dirty) {
@@ -149,8 +146,9 @@ class SceneEditor(val sceneResource: SceneResource)
         selection.forEach { actorResource ->
             delete(actorResource)
             stageResource.actorResources.add(actorResource)
+            sceneResource.fireChange(actorResource, ModificationType.DELETE)
+            sceneResource.fireChange(actorResource, ModificationType.NEW)
         }
-        sceneResource.fireChange()
     }
 
     fun onEscape() {
@@ -170,10 +168,10 @@ class SceneEditor(val sceneResource: SceneResource)
     fun onDelete() {
         selection.selected().forEach { actorResource ->
             delete(actorResource)
+            sceneResource.fireChange(actorResource, ModificationType.DELETE)
         }
         selection.clear()
         updateAttributesBox()
-        sceneResource.fireChange()
     }
 
 
@@ -349,9 +347,7 @@ class SceneEditor(val sceneResource: SceneResource)
                 selection.selected().forEach { actorResource ->
                     actorResource.x += dragDeltaX
                     actorResource.y -= dragDeltaY
-                }
-                if (selection.isNotEmpty()) {
-                    sceneResource.fireChange()
+                    sceneResource.fireChange(actorResource, ModificationType.CHANGE)
                 }
             }
         }
@@ -372,7 +368,7 @@ class SceneEditor(val sceneResource: SceneResource)
 
         override fun onMouseDragged(event: MouseEvent) {
             dragHandle.moveTo(worldX(event), worldY(event), event.isShiftDown)
-            sceneResource.fireChange()
+            selection.latest()?.let { sceneResource.fireChange(it, ModificationType.CHANGE) }
         }
 
         override fun onMouseReleased(event: MouseEvent) {
@@ -409,7 +405,7 @@ class SceneEditor(val sceneResource: SceneResource)
                 selection.clearAndSelect(newActor)
                 mouseHandler = Select()
             }
-            sceneResource.fireChange()
+            sceneResource.fireChange(newActor, ModificationType.NEW)
         }
 
     }

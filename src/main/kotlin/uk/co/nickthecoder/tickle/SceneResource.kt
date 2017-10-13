@@ -27,7 +27,7 @@ class SceneResource {
      */
     val stageResources = mutableMapOf<String, StageResource>()
 
-    val listeners = mutableSetOf<SceneListerner>()
+    val listeners = mutableSetOf<SceneResourceListener>()
 
 
     /**
@@ -83,15 +83,9 @@ class SceneResource {
         }
     }
 
-    fun fireChange() {
+    fun fireChange(actorResource: ActorResource, type: ModificationType) {
         listeners.forEach {
-            it.sceneChanged(this)
+            it.actorModified(this, actorResource, type)
         }
     }
-}
-
-interface SceneListerner {
-
-    fun sceneChanged(sceneResource: SceneResource)
-
 }
