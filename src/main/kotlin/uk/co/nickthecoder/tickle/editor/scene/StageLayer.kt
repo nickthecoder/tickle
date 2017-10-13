@@ -43,6 +43,7 @@ class StageLayer(
         stageResource.actorResources.forEach { actorResource ->
             drawActor(actorResource)
         }
+        dirty = false
     }
 
     override fun actorModified(sceneResource: SceneResource, actorResource: ActorResource, type: ModificationType) {

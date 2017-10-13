@@ -1,12 +1,6 @@
 Current Work
 ============
 
-Fonts
-	Get alignments working correctly in SceneEditor and the game
-
-	Consider SAVING the font as a .png and .glyphinfo file, so that the game runtime doesn't need the font at all!
-	Likewise, other special effects, such as "outline" "shadow" and "pixelate" can be done from the editor, not the game.???
-
 
 BUGS
 ====

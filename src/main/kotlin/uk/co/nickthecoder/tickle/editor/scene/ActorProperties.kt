@@ -54,11 +54,18 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
         groupP.parameterListeners.remove(this)
     }
 
+    /**
+     * When an actor changes, and I update the parameters, this ignores ParameterChanged events.
+     */
+    private var ignoreChanges: Boolean = false
+
     override fun parameterChanged(event: ParameterEvent) {
-        dirty = true
-        Platform.runLater {
-            if (dirty) {
-                updateActorResource()
+        if (!ignoreChanges) {
+            dirty = true
+            Platform.runLater {
+                if (dirty) {
+                    updateActorResource()
+                }
             }
         }
     }
@@ -68,7 +75,9 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
             dirty = true
             Platform.runLater {
                 if (dirty) {
+                    ignoreChanges = true
                     updateParameters()
+                    ignoreChanges = false
                 }
             }
         }
