@@ -17,7 +17,7 @@ class FontSandbox : Sandbox(height = 700) {
     val xPadding = 1
     val yPadding = 1
 
-    val fontResource = FontResource(Font.SANS_SERIF, FontResource.FontStyle.PLAIN, 42.0, xPadding, yPadding)
+    val fontResource = FontResource(Font.SANS_SERIF, FontResource.FontStyle.PLAIN, 22.0, xPadding, yPadding)
 
     val font = fontResource.fontTexture
 

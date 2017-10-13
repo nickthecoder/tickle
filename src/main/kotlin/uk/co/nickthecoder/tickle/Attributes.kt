@@ -161,8 +161,11 @@ class Attributes {
             Int::class -> {
                 IntParameter("attribute_$name", required = false, label = name)
             }
-            Float::class, Double::class -> {
+            Float::class -> {
                 FloatParameter("attribute_$name", required = false, label = name)
+            }
+            Double::class -> {
+                DoubleParameter("attribute_$name", required = false, label = name)
             }
             String::class -> {
                 StringParameter("attribute_$name", required = false, label = name)
