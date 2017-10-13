@@ -5,7 +5,18 @@ import uk.co.nickthecoder.tickle.graphics.FontTextureFactoryViaAWT
 import java.awt.Font
 import java.io.File
 
-class FontResource() {
+class FontResource(var xPadding: Int = 1, var yPadding: Int = 1) {
+
+    constructor(fontName: String, style: FontStyle, size: Double, xPadding: Int = 1, yPadding: Int = 1) : this(xPadding, yPadding) {
+        this.fontName = fontName
+        this.style = style
+        this.size = size
+    }
+
+    constructor(file: File, size: Double, xPadding: Int = 1, yPadding: Int = 1) : this(xPadding, yPadding) {
+        this.file = file
+        this.size = size
+    }
 
     private var cached: FontTexture? = null
 
@@ -57,7 +68,7 @@ class FontResource() {
             val loadedFont = Font.createFont(java.awt.Font.TRUETYPE_FONT, file)
             font = loadedFont.deriveFont(size.toFloat())
         }
-        return FontTextureFactoryViaAWT(font).create()
+        return FontTextureFactoryViaAWT(font, xPadding = xPadding, yPadding = yPadding).create()
     }
 
     enum class FontStyle { PLAIN, BOLD, ITALIC, BOLD_ITALIC }

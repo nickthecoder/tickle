@@ -16,7 +16,7 @@ Attributes now depends on paratask-core, and therefore a running game also depen
 	Have a factory method for Attributes, which checks Class.forName( "uk...paratask...Parameter" )
 		It either returns Attributes (which has no parameter stuff) of DesignAttributes
 		Then cast wherever they are used in the editor.
-		Add an extension function : ActorResource.designAttributes() which does the cast. Ditto for Costume
+		Add an extension function : SceneActor.designAttributes() which does the cast. Ditto for Costume
 
 InputPicker :
 	Java FX key code name "Number Sign" does not map to anything in enum class Key
@@ -25,11 +25,6 @@ InputPicker :
 
 New Features
 ============
-
-SceneEditor :
-	Tree structure of Stages and ActorResources
-		Include x,y as ints, and update.
-		The SceneListener will need to pass a ActorResources (maybe as Any) as well as "new/delete/change" enum.
 
 Put the "padding" back into the AWT Font Factorory, and then allow it to be "blurred" in various ways, for outlined text
 	https://github.com/mattdesl/lwjgl-basics/wiki/ShaderLesson5
@@ -94,7 +89,7 @@ Pose : Allow a "mirrored" version (X,Y or Both)
 	Use this to implement "Bee" without the special transformation
 Costume to have an "initial" event name (which is normally "default").
 	But Bee's will be "right" (and Bee will not have a "default" event).
-	Each ActorResource can then override this.
+	Each SceneActor can then override this.
 
 
 Editor

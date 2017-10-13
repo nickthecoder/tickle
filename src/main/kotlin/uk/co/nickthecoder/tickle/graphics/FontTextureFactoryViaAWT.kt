@@ -8,12 +8,20 @@ import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.RenderingHints
 import java.awt.geom.AffineTransform
-import java.awt.geom.Rectangle2D
 import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
 
 
-open class FontTextureFactoryViaAWT(val font: Font, val maxTextureWidth: Int = font.size * 20) {
+/**
+ *
+ * Note. Some fonts may extend higher than their ascent, or lower than their descent. In such cases, padding is
+ * required around each glyph to prevent one glyph overlapping another.
+ */
+open class FontTextureFactoryViaAWT(
+        val font: Font,
+        val xPadding: Int = 1,
+        val yPadding: Int = 1,
+        val maxTextureWidth: Int = (font.size + xPadding * 2) * 12) {
 
     protected val glyphDataMap = mutableMapOf<Char, GlyphData>()
 
@@ -31,16 +39,15 @@ open class FontTextureFactoryViaAWT(val font: Font, val maxTextureWidth: Int = f
     protected val metrics: FontMetrics
 
     /** The next position to place a glyph in the texture.*/
-    private var nextX: Int = maxTextureWidth + 1 // Force the first character to create a new line
+    private var nextX: Int = 0
 
     private var nextY: Int = 0
-
-    private var lineHeight: Int = 0
 
     init {
         prepareG.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
         prepareG.font = font
         metrics = prepareG.fontMetrics
+        requiredHeight = metrics.height
     }
 
     fun range(from: Char, to: Char): FontTextureFactoryViaAWT {
@@ -53,39 +60,32 @@ open class FontTextureFactoryViaAWT(val font: Font, val maxTextureWidth: Int = f
 
             if (font.canDisplay(c)) {
 
-                val bounds: Rectangle2D = metrics.getStringBounds(c.toString(), prepareG)
+                val cWidth = metrics.charWidth(c)
                 val advance = metrics.charWidth(c).toDouble()
 
-                if (bounds.height > lineHeight) {
-                    lineHeight = bounds.height.toInt() + 1
-                }
-
-                if (nextX + bounds.width > maxTextureWidth) {
+                if (nextX + cWidth + xPadding * 2 > maxTextureWidth) {
                     nextX = 0
-                    nextY += lineHeight
-                    lineHeight = 0
+                    nextY += metrics.height + yPadding * 2
                 }
 
-                val glyphData = GlyphData(bounds, advance, nextX, nextY)
+                val glyphData = GlyphData(cWidth.toDouble() + xPadding * 2, advance, nextX, nextY)
 
-                nextX += bounds.width.toInt() + 1
+                nextX += cWidth + xPadding * 2
 
                 if (nextX > requiredWidth) {
                     requiredWidth = nextX
                 }
-                if (nextY > requiredHeight) {
-                    requiredHeight = nextY
-                }
-                // println("$c = $glyphData")
                 glyphDataMap[c] = glyphData
             }
 
         }
+        requiredHeight = nextY
+
         return this
     }
 
     open fun create(): FontTexture {
-        // IF no ranges were specified, use the default range of 32..255
+        // If no ranges were specified, use the default range of 32..255
         if (glyphDataMap.isEmpty()) {
             range()
         }
@@ -100,8 +100,7 @@ open class FontTextureFactoryViaAWT(val font: Font, val maxTextureWidth: Int = f
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
 
         glyphDataMap.forEach { c, glyphData ->
-            // println("Drawing glyph $c ${glyphData.x},${(glyphData.y - glyphData.bounds.y).toInt()}")
-            g.drawString(c.toString(), glyphData.x, (glyphData.y - (glyphData.bounds.height + glyphData.bounds.y)).toInt())
+            g.drawString(c.toString(), glyphData.x + xPadding.toInt(), glyphData.y + metrics.ascent + yPadding.toInt())
         }
 
         /* Flip image to get the origin at the bottom left */
@@ -135,16 +134,37 @@ open class FontTextureFactoryViaAWT(val font: Font, val maxTextureWidth: Int = f
 
         val glyphs = mutableMapOf<Char, Glyph>()
         glyphDataMap.forEach { c, glyphData ->
-            val rect = YDownRect(glyphData.x, glyphData.y, glyphData.x + glyphData.bounds.width.toInt(), glyphData.y - glyphData.bounds.height.toInt())
+
+            val rect = YDownRect(
+                    glyphData.x,
+                    glyphData.y,
+                    glyphData.x + glyphData.width.toInt(),
+                    glyphData.y + metrics.height + yPadding * 2)
+
             val pose = Pose(texture, rect)
-            pose.offsetX = -glyphData.bounds.x
-            pose.offsetY = glyphData.bounds.y
+            pose.offsetX = xPadding.toDouble()
+            pose.offsetY = metrics.height + yPadding.toDouble()
             glyphs[c] = Glyph(pose, glyphData.advance)
-            // println("Created Glyph $c : ${rect} offset= ${pose.offsetX},${pose.offsetY} advance=${glyphData.advance}")
         }
 
-        return FontTexture(texture, glyphs, metrics.height.toDouble())
+        return FontTexture(
+                texture,
+                glyphs, metrics.height.toDouble(),
+                leading = metrics.leading.toDouble(),
+                ascent = metrics.ascent.toDouble(),
+                descent = metrics.descent.toDouble())
     }
 
-    data class GlyphData(val bounds: Rectangle2D, val advance: Double, val x: Int, val y: Int)
 }
+
+data class GlyphData(
+        /** The width of this glyph (i.e. the width of the bounding rectangle which encompases the glyph */
+        val width: Double,
+        /** The starting position of the NEXT glyph relative to this one when rendering text. This of course
+         * does not take into accound kerning. Kerning is not supported by the fonts in Tickle.
+         */
+        val advance: Double,
+        /** The position of the top of the glyph within the texture image */
+        val x: Int,
+        /** The position of the left of the glyph within the texture image */
+        val y: Int)

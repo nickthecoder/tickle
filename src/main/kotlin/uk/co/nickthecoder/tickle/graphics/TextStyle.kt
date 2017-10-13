@@ -8,40 +8,49 @@ class TextStyle(
         var valignment: VAlignment,
         var color: Color) {
 
-    fun offsetX(text: String): Double {
+    fun offsetX(text: CharSequence): Double {
         return when (halignment) {
             HAlignment.LEFT -> 0.0
-            HAlignment.RIGHT -> width(text)
-            HAlignment.CENTER -> width(text) / 2.0
+            HAlignment.RIGHT -> fontResource.fontTexture.width(text)
+            HAlignment.CENTER -> fontResource.fontTexture.width(text) / 2.0
         }
     }
 
-    fun offsetY(text: String): Double {
-        // TODO NONE of these are correct yet! Need descent data, and multi-line is tricky!
-        // Currently the glyph's offsets are based on the BASELINE, which isn't useful in most cases. Hmmm.
+    fun offsetY(text: CharSequence): Double {
         return when (valignment) {
-            VAlignment.TOP -> height(text)
+            VAlignment.TOP -> fontResource.fontTexture.height(text)
             VAlignment.BOTTOM -> 0.0
-            VAlignment.CENTER -> height(text) / 2.0
+            VAlignment.CENTER -> fontResource.fontTexture.height(text) / 2.0
             VAlignment.BASELINE -> 0.0
         }
     }
 
-    fun singleLineWidth(line: String): Double {
-        return line.sumByDouble { fontResource.fontTexture.glyphs[it]?.advance ?: 0.0 }
-    }
+    fun width(text: CharSequence) = fontResource.fontTexture.width(text)
 
-    fun width(text: String): Double {
-        return text.split('\n').map { singleLineWidth(it) }.max() ?: 0.0
-    }
-
-    fun height(text: String): Double {
-        val lineCount = text.filter { it == '\n' }.count() + 1
-        return fontResource.fontTexture.lineHeight * lineCount
-    }
+    fun height(text: CharSequence) = fontResource.fontTexture.height(text)
 
     fun draw(renderer: Renderer, text: CharSequence, x: Double, y: Double, color: Color = Color.WHITE) {
-        fontResource.fontTexture.draw(renderer, text, x, y, color)
+
+        val dy = when (valignment) {
+            VAlignment.TOP -> 0.0
+            VAlignment.CENTER -> height(text) / 2
+            VAlignment.BASELINE -> height(text) - fontResource.fontTexture.descent
+            VAlignment.BOTTOM -> height(text)
+        }
+        var lineY = y + dy
+
+        text.split('\n').forEach { line ->
+
+            val dx = when (halignment) {
+                HAlignment.LEFT -> 0.0
+                HAlignment.CENTER -> fontResource.fontTexture.width(line) / 2
+                HAlignment.RIGHT -> fontResource.fontTexture.width(line)
+            }
+
+            fontResource.fontTexture.draw(renderer, line, x - dx, lineY, color)
+            lineY -= fontResource.fontTexture.lineHeight
+        }
+
     }
 }
 

@@ -3,7 +3,13 @@ package uk.co.nickthecoder.tickle.graphics
 /**
  * Holds a texture, and the meta-data for a Font at a particular font-size.
  */
-class FontTexture(val texture: Texture, val glyphs: Map<Char, Glyph>, val lineHeight: Double) {
+class FontTexture(
+        val texture: Texture,
+        val glyphs: Map<Char, Glyph>,
+        val lineHeight: Double,
+        val leading: Double,
+        val ascent: Double,
+        val descent: Double) {
 
     fun drawOutlined(renderer: Renderer, text: CharSequence, x: Double, y: Double, fill: Color = Color.WHITE, outline: Color = Color.BLACK, thickness: Int) {
 
@@ -48,6 +54,30 @@ class FontTexture(val texture: Texture, val glyphs: Map<Char, Glyph>, val lineHe
                 drawX += glyph.advance
             }
         }
+    }
+
+    fun lineWidth(text: String): Double {
+        if (text.isEmpty()) return 0.0
+        if (text.length == 1) return (glyphs[text[0]]?.width)?.toDouble() ?: 0.0
+
+        val last = glyphs[text.last()]
+        val lastAdjustment = if (last == null) 0.0 else last.width - last.advance
+
+        return text.sumByDouble { glyphs[it]?.advance ?: 0.0 }
+    }
+
+    fun width(text: CharSequence): Double {
+        var max = 0.0
+        text.split('\n').forEach { line ->
+            val lw = lineWidth(line)
+            if (lw > max) max = lw
+        }
+        return max
+    }
+
+    fun height(text: CharSequence): Double {
+        val extra = if (text.last() == '\n') 0 else 1
+        return (text.count { it == '\n' } + extra) * lineHeight
     }
 
     fun cleanUp() {

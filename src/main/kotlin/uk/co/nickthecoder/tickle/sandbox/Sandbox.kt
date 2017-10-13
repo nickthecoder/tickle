@@ -11,9 +11,9 @@ import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 
 
-abstract class Sandbox() {
+abstract class Sandbox(title: String = "Sandbox", width: Int = 800, height: Int = 400) {
 
-    val window = Window("Sandbox", 800, 400)
+    val window = Window(title, width, height)
 
     val renderer = Renderer(window)
 
