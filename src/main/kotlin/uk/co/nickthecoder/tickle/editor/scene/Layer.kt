@@ -25,7 +25,6 @@ abstract class Layer {
 
         drawContent()
         gc.restore()
-
     }
 
     fun panBy(dx: Double, dy: Double) {

@@ -1,6 +1,5 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
-import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.control.*
@@ -8,16 +7,17 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.ActorResource
+import uk.co.nickthecoder.tickle.ModificationType
+import uk.co.nickthecoder.tickle.SceneResource
+import uk.co.nickthecoder.tickle.StageResource
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.editor.util.isAt
 
 
-class SceneResourceEditor(val sceneResource: SceneResource)
-
-    : SceneResourceListener {
+class SceneEditor(val sceneResource: SceneResource) {
 
     val scrollPane = ScrollPane()
 
@@ -28,8 +28,6 @@ class SceneResourceEditor(val sceneResource: SceneResource)
     val selection = Selection()
 
     val layers = Layers(sceneResource, selection)
-
-    var dirty = true
 
     val shortcuts = ShortcutHelper("SceneEditor", scrollPane)
 
@@ -45,10 +43,6 @@ class SceneResourceEditor(val sceneResource: SceneResource)
     val sidePanes = listOf(costumesPane, layersPane, propertiesPane, stagesPane)
 
     val costumeHistory = mutableListOf<String>()
-
-    init {
-        sceneResource.listeners.add(this)
-    }
 
     fun build(): Node {
 
@@ -78,28 +72,16 @@ class SceneResourceEditor(val sceneResource: SceneResource)
             shortcuts.add(action) { selectCostumeFromHistory(index) }
         }
 
-        draw()
+        layers.visibleLayers().forEach { it.draw() }
+        layers.glass.draw()
+
         return borderPane
     }
 
     fun cleanUp() {
         selection.clear() // Will clear the "Properties" box.
-        sceneResource.listeners.remove(this)
     }
 
-    override fun actorModified(sceneResource: SceneResource, actorResource: ActorResource, type: ModificationType) {
-        dirty = true
-        Platform.runLater {
-            if (dirty) {
-                draw()
-            }
-        }
-    }
-
-    fun draw() {
-        layers.draw()
-        dirty = false
-    }
 
     fun findActorsAt(x: Double, y: Double, ignoreStageLock: Boolean = false): List<ActorResource> {
         val list = mutableListOf<ActorResource>()
@@ -156,7 +138,6 @@ class SceneResourceEditor(val sceneResource: SceneResource)
         selection.clear()
         mouseHandler = Select()
         updateAttributesBox()
-        draw()
     }
 
     fun delete(actorResource: ActorResource) {

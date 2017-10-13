@@ -1,15 +1,26 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
-import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.StageResource
+import javafx.application.Platform
+import uk.co.nickthecoder.tickle.*
 
 class StageLayer(
         val sceneResource: SceneResource,
         val stageName: String,
         val stageResource: StageResource)
 
-    : Layer() {
+    : Layer(), SceneResourceListener {
 
+    private var dirty = true
+        set(v) {
+            if (field != v) {
+                field = v
+                Platform.runLater {
+                    if (dirty) {
+                        draw()
+                    }
+                }
+            }
+        }
 
     var isVisible: Boolean = true
         set(v) {
@@ -23,11 +34,25 @@ class StageLayer(
             canvas.opacity = if (v) 0.5 else 1.0
         }
 
+    init {
+        sceneResource.listeners.add(this)
+    }
+
     override fun drawContent() {
 
         stageResource.actorResources.forEach { actorResource ->
-            drawActor( actorResource )
+            drawActor(actorResource)
         }
     }
 
+    override fun actorModified(sceneResource: SceneResource, actorResource: ActorResource, type: ModificationType) {
+        if (isVisible) {
+            dirty = true
+            Platform.runLater {
+                if (dirty) {
+                    draw()
+                }
+            }
+        }
+    }
 }

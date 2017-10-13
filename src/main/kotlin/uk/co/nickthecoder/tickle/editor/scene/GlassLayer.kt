@@ -4,24 +4,25 @@ import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
-import uk.co.nickthecoder.tickle.ActorResource
-import uk.co.nickthecoder.tickle.AttributeData
-import uk.co.nickthecoder.tickle.AttributeType
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.util.AngleParameter
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 import uk.co.nickthecoder.tickle.editor.util.costume
 
-class GlassLayer(val selection: Selection)
+class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
-    : Layer(), SelectionListener {
+    : Layer(), SelectionListener, SceneResourceListener {
 
-    var dirty = true
+    var dirty = false
         set(v) {
-            field = v
-            Platform.runLater {
-                if (dirty) {
-                    draw()
+            if (field != v) {
+                field = v
+
+                Platform.runLater {
+                    if (dirty) {
+                        draw()
+                    }
                 }
             }
         }
@@ -30,6 +31,7 @@ class GlassLayer(val selection: Selection)
 
     init {
         selection.listeners.add(this)
+        sceneResource.listeners.add(this)
     }
 
     override fun drawContent() {
@@ -104,6 +106,10 @@ class GlassLayer(val selection: Selection)
                 return
             }
         }
+    }
+
+    override fun actorModified(sceneResource: SceneResource, actorResource: ActorResource, type: ModificationType) {
+        dirty = true
     }
 
     override fun selectionChanged() {
@@ -318,6 +324,7 @@ class GlassLayer(val selection: Selection)
 
         override fun set(degrees: Double) {
             actorResource.direction.degrees = degrees
+            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
         }
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
@@ -332,8 +339,9 @@ class GlassLayer(val selection: Selection)
 
             val degrees = angle - actorResource.direction.radians
 
-            selection.forEach {
-                it.direction.radians += degrees
+            selection.forEach { actor ->
+                actor.direction.radians += degrees
+                sceneResource.fireChange(actor, ModificationType.CHANGE)
             }
         }
 
@@ -356,6 +364,7 @@ class GlassLayer(val selection: Selection)
 
         override fun set(degrees: Double) {
             parameter.value = degrees
+            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
         }
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
@@ -385,6 +394,7 @@ class GlassLayer(val selection: Selection)
         fun set(angleRadians: Double, magnitude: Double) {
             parameter.angle = Math.toDegrees(angleRadians)
             parameter.magnitude = magnitude
+            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
         }
 
         override fun x() = actorResource.x + parameter.value.vector().x * data.scale
@@ -432,7 +442,7 @@ class GlassLayer(val selection: Selection)
         fun set(x: Double, y: Double) {
             parameter.x = x
             parameter.y = y
-
+            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
         }
 
         override fun x() = parameter.x!!
