@@ -17,6 +17,8 @@ class Scene {
 
     private val autoPositions = mutableMapOf<String, FlexPosition>()
 
+    private var orderedViews: List<View>? = null
+
     fun stages() = stages.values
 
     fun views() = views.values
@@ -64,6 +66,7 @@ class Scene {
             layout(window.width, window.height)
         }
 
+        orderedViews = views.values.sortedBy { it.zOrder }
     }
 
     fun activated() {
@@ -88,8 +91,7 @@ class Scene {
         // println("Rendering scene rects=${views.values.map { it.rect }} #actors=${views.values.filterIsInstance<StageView>().map { it.stage.actors.size }}")
         renderer.clear()
 
-        // TODO How should these be ordered?
-        views.values.forEach { view ->
+        orderedViews?.forEach { view ->
             renderer.beginView()
             view.draw(renderer)
             renderer.endView()

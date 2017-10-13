@@ -20,20 +20,20 @@
                 },
                 {
                     "costume": "spark",
-                    "x": 358,
-                    "y": 541,
+                    "x": 465,
+                    "y": 559,
                     "direction": 0
                 },
                 {
                     "costume": "spark",
-                    "x": 507,
-                    "y": 519,
+                    "x": 739,
+                    "y": 502,
                     "direction": 0
                 },
                 {
                     "costume": "spark",
-                    "x": 627,
-                    "y": 539,
+                    "x": 943,
+                    "y": 554,
                     "direction": 0
                 }
             ]

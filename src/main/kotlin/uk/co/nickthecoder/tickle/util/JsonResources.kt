@@ -166,6 +166,7 @@ class JsonResources {
                 if (layoutView.stageName.isNotBlank()) {
                     jview.add("stage", layoutView.stageName)
                 }
+                jview.add("zOrder", layoutView.zOrder)
 
                 with(layoutView.position) {
                     jview.add("hAlignment", hAlignment.name)
@@ -217,6 +218,7 @@ class JsonResources {
                     val viewName = jview.get("name").asString()
                     layoutView.viewString = jview.get("view").asString()
                     layoutView.stageName = jview.getString("stage", "")
+                    layoutView.zOrder = jview.getInt("zOrder", 50)
 
                     // X
                     val hAlignmentString = jview.getString("hAlignment", FlexHAlignment.LEFT.name)

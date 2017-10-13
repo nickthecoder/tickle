@@ -15,6 +15,7 @@ class Layout() {
 
         layoutViews.forEach { viewName, layoutView ->
             val view = layoutView.createView()
+            view.zOrder = layoutView.zOrder
             if (view is StageView) {
                 val stage = scene.stages[layoutView.stageName]
                 if (stage == null) {
@@ -57,6 +58,8 @@ class LayoutStage() {
 class LayoutView(
         var viewString: String = ZOrderStageView::class.java.name,
         var stageName: String = "") {
+
+    var zOrder: Int = 50
 
     val position = FlexPosition()
 

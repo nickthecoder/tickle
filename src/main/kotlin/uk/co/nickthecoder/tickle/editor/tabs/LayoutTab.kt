@@ -123,6 +123,7 @@ class LayoutTab(val name: String, val layout: Layout)
                 inner.viewNameP.value = name
                 inner.stageNameP.value = layoutView.stageName
                 inner.viewClassP.value = Class.forName(layoutView.viewString)
+                inner.zOrderP.value = layoutView.zOrder
 
                 with(layoutView.position) {
                     inner.hAlignmentP.value = hAlignment
@@ -176,6 +177,7 @@ class LayoutTab(val name: String, val layout: Layout)
                 with(layoutView) {
                     stageName = inner.stageNameP.value
                     viewString = inner.viewClassP.value!!.name
+                    zOrder = inner.zOrderP.value!!
                 }
 
                 with(layoutView.position) {
@@ -234,6 +236,7 @@ class LayoutTab(val name: String, val layout: Layout)
         val viewNameP = StringParameter("viewName")
         val stageNameP = StringParameter("stageName")
         val viewClassP = ChoiceParameter<Class<*>>("class", value = ZOrderStageView::class.java)
+        val zOrderP = IntParameter("zOrder")
 
         // X
         val hAlignmentP = ChoiceParameter<FlexHAlignment>("hAlignment", label = "", value = FlexHAlignment.LEFT).enumChoices()
@@ -283,7 +286,7 @@ class LayoutTab(val name: String, val layout: Layout)
                 vPositionP.hidden = !topBottomMarginP.hidden
             }
 
-            addParameters(viewNameP, stageNameP, viewClassP, xGroup, yGroup)
+            addParameters(viewNameP, stageNameP, viewClassP, zOrderP, xGroup, yGroup)
             ClassLister.setChoices(viewClassP, View::class.java)
         }
     }
