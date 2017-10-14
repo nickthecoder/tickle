@@ -11,8 +11,8 @@ class TextStyleParameter(name: String)
     : SimpleGroupParameter(name) {
 
     val fontP = createFontParameter("font")
-    val colorP = ColorParameter("color", label = "Colour")
-    val outlineColorP = ColorParameter("outlineColor", label = "Outline Colour")
+    val colorP = AlphaColorParameter("color", label = "Colour")
+    val outlineColorP = AlphaColorParameter("outlineColor", label = "Outline Colour")
     val hAlignmentP = ChoiceParameter<HAlignment>("xAlignment", value = HAlignment.LEFT).enumChoices(mixCase = true)
     val vAlignmentP = ChoiceParameter<VAlignment>("yAlignment", value = VAlignment.TOP).enumChoices(mixCase = true)
 
