@@ -5,10 +5,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.editor.util.AngleParameter
-import uk.co.nickthecoder.tickle.editor.util.PolarParameter
-import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
-import uk.co.nickthecoder.tickle.editor.util.costume
+import uk.co.nickthecoder.tickle.editor.util.*
 
 class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
@@ -70,21 +67,22 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             }
             restore()
         }
+        // Name of the 'latest' actor
+        selection.latest()?.let { actor ->
+            drawCostumeName(actor)
+        }
 
+        // Each drag handle
         dragHandles.forEach { handle ->
             handle.draw()
         }
 
+        // Text for the handle the mouse is hovering over
         dragHandles.firstOrNull { it.hovering }?.let { handle ->
             with(canvas.graphicsContext2D) {
                 save()
                 translate(handle.x(), handle.y())
-                scale(1.0, -1.0)
-                lineWidth = 3.0
-                stroke = Color.BLACK
-                strokeText(handle.name, 20.0, 0.0)
-                fill = latestColor
-                fillText(handle.name, 20.0, 0.0)
+                outlinedText(handle.name)
                 restore()
             }
         }
@@ -141,6 +139,27 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         }
 
         dirty = true
+    }
+
+    fun outlinedText(text: String) {
+        with(canvas.graphicsContext2D) {
+            scale(1.0, -1.0)
+            lineWidth = 3.0
+            stroke = Color.BLACK
+            strokeText(text, 0.0, 0.0)
+            fill = latestColor
+            fillText(text, 0.0, 0.0)
+        }
+    }
+
+    fun drawCostumeName(actorResource: ActorResource) {
+
+        with(canvas.graphicsContext2D) {
+            save()
+            translate(actorResource.x - actorResource.offsetX(), actorResource.y - actorResource.offsetY() - 20.0)
+            outlinedText(actorResource.costumeName)
+            restore()
+        }
     }
 
     fun drawBoundingBox(actorResource: ActorResource) {

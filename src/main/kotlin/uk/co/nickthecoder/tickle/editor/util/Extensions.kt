@@ -79,7 +79,7 @@ fun Costume.thumbnail(size: Double): Node? {
     return Label("?")
 }
 
-// SCENE ACTOR
+// ACTOR RESOURCE
 
 fun ActorResource.isOverlapping(x: Double, y: Double): Boolean {
     val tx = x - this.x
@@ -107,6 +107,26 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
 
     }
     return false
+}
+
+fun ActorResource.offsetX() : Double {
+    pose?.let { pose ->
+        return pose.offsetX
+    }
+    textStyle?.let { textStyle ->
+        return textStyle.offsetX(text)
+    }
+    return 0.0
+}
+
+fun ActorResource.offsetY() : Double {
+    pose?.let { pose ->
+        return pose.offsetY
+    }
+    textStyle?.let { textStyle ->
+        return textStyle.height(text) - textStyle.offsetY(text)
+    }
+    return 0.0
 }
 
 // COLOR Conversions
