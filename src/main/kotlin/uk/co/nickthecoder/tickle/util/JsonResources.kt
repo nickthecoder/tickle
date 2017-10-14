@@ -665,17 +665,23 @@ class JsonResources {
         fun copyGlyphs(texture: Texture, glyphs: Map<Char, Glyph>): Map<Char, Glyph> {
             val result = mutableMapOf<Char, Glyph>()
             glyphs.forEach { c, glyph ->
-                result[c] = Glyph(Pose(texture, glyph.pose.rect), glyph.advance)
+                val pose = Pose(texture, glyph.pose.rect)
+                pose.offsetX = glyph.pose.offsetX
+                pose.offsetY = glyph.pose.offsetY
+                result[c] = Glyph(pose, glyph.advance)
             }
             return result
         }
 
-        fun saveFontMetrics(file: File, fontTexture: FontTexture) {
+        fun saveFontMetrics(file: File, fontResource: FontResource) {
+            val fontTexture = fontResource.fontTexture
             val jroot = JsonObject()
             jroot.add("lineHeight", fontTexture.lineHeight)
             jroot.add("leading", fontTexture.leading)
             jroot.add("ascent", fontTexture.ascent)
             jroot.add("descent", fontTexture.descent)
+            jroot.add("xPadding", fontResource.xPadding)
+            jroot.add("yPadding", fontResource.yPadding)
             val jglyphs = JsonArray()
             jroot.add("glyphs", jglyphs)
             fontTexture.glyphs.forEach { c, data ->
@@ -702,6 +708,8 @@ class JsonResources {
             val leading = jroot.get("leading").asDouble()
             val ascent = jroot.get("ascent").asDouble()
             val descent = jroot.get("descent").asDouble()
+            val xPadding = jroot.getDouble("xPadding", 1.0)
+            val yPadding = jroot.getDouble("yPadding", 1.0)
 
             val glyphs = mutableMapOf<Char, Glyph>()
 
@@ -716,9 +724,13 @@ class JsonResources {
                 val advance = jglyph.get("advance").asDouble()
                 val rect = YDownRect(left, top, right, bottom)
                 val pose = Pose(texture, rect)
+                pose.offsetX = xPadding
+                pose.offsetY = rect.height - yPadding
                 val glyph = Glyph(pose, advance)
                 glyphs[c] = (glyph)
             }
+            val exampleGlyph = glyphs.values.first()
+            println("Example glyph pose ${exampleGlyph.pose}")
 
             return FontTexture(glyphs, lineHeight, leading = leading, ascent = ascent, descent = descent)
         }

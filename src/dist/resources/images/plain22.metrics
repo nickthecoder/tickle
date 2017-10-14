@@ -3,6 +3,8 @@
     "leading": 0,
     "ascent": 21,
     "descent": 6,
+    "xPadding": 4,
+    "yPadding": 4,
     "glyphs": [
         {
             "c": " ",

@@ -59,14 +59,14 @@ abstract class Layer {
         canvas.graphicsContext2D.drawImage(
                 image,
                 pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(),
-                -pose.offsetX.toDouble(), -pose.offsetY.toDouble(), pose.rect.width.toDouble(), pose.rect.height.toDouble())
+                -pose.offsetX, -pose.offsetY, pose.rect.width.toDouble(), pose.rect.height.toDouble())
     }
 
     fun drawText(textStyle: TextStyle, text: String) {
 
         val fontTexture = textStyle.fontResource.fontTexture
-
-        canvas.graphicsContext2D.translate(0.0, -textStyle.offsetY(text))
+        //textStyle.offsetY(text) - textStyle.height(text)
+        canvas.graphicsContext2D.translate(0.0, textStyle.offsetY(text))
         var dx = 0.0
 
         text.split('\n').forEach { line ->

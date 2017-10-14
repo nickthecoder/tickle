@@ -8,15 +8,15 @@
             "actors": [
                 {
                     "costume": "info",
-                    "x": 1017,
-                    "y": 594,
+                    "x": 1024,
+                    "y": 601,
                     "direction": 0,
-                    "text": "Abc\nDef hij klm"
+                    "text": "lkjldsajdlsajj \nd ll \nd jsjsh\ndsak\nd skkhdajkhsa kjhd kAbc\nDef hij klm\ndsah"
                 },
                 {
                     "costume": "hand",
-                    "x": 166,
-                    "y": 489,
+                    "x": 0,
+                    "y": 600,
                     "direction": 0,
                     "attributes": [
                         {
@@ -38,25 +38,11 @@
                     ]
                 },
                 {
-                    "costume": "info",
-                    "x": 450,
-                    "y": 539,
-                    "direction": 0,
-                    "text": ""
-                },
-                {
                     "costume": "plainText",
-                    "x": 620,
-                    "y": 499,
+                    "x": 581,
+                    "y": 0,
                     "direction": 0,
-                    "text": ""
-                },
-                {
-                    "costume": "info",
-                    "x": 436,
-                    "y": 422,
-                    "direction": 0,
-                    "text": ""
+                    "text": "dsljd\ndjsldd\ndjslkdl\njdlsjdlHdhjk"
                 }
             ]
         }

@@ -1,17 +1,10 @@
 Current Work
 ============
 
-Support patterned and outlined fonts
-	Add padding parameters to the FontsTab
-	Add button parameter to save as .png and .glyphData file
-	User then adds a pattern over the font
-	User can also copy the font, grow the selection and add blur, and save it as FONTNAME.outline.png
-	When loading fonts, check if a .png and .glyphData file exists with the same name, and if so, don't create the font. Load it.
-	Also check if there is a -outline.png file too, and if so, 
-
-
 BUGS
 ====
+
+Fonts not aligned correctly in game 1 line too high. In editor, I think padding is causing problems.
 
 Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
 	I only want the EDITOR to depend on paratask-core.

@@ -14,8 +14,8 @@ import java.awt.Font
  */
 class FontSandbox : Sandbox(height = 700) {
 
-    val xPadding = 1
-    val yPadding = 1
+    val xPadding = 4
+    val yPadding = 4
 
     val fontResource = FontResource(Font.SANS_SERIF, FontResource.FontStyle.PLAIN, 22.0, xPadding, yPadding)
 
@@ -54,12 +54,14 @@ class FontSandbox : Sandbox(height = 700) {
         val center = TextStyle(fontResource, HAlignment.CENTER, VAlignment.CENTER, Color.WHITE)
 
         topLeft.draw(renderer, "Top\nLeft", 0.0, window.height.toDouble())
-        topRight.draw(renderer, "Top\nRight", window.width.toDouble(), window.height.toDouble())
+        topRight.draw(renderer, "Top\nRight\n", window.width.toDouble(), window.height.toDouble())
         bottomLeft.draw(renderer, "Bottom\nLeft", 0.0, 0.0)
         bottomRight.draw(renderer, "Bottom\nRight", window.width.toDouble(), 0.0)
         baselineCenter.draw(renderer, "Baseline\nCenter\njqy", window.width.toDouble() / 2, 0.0)
         center.draw(renderer, "Center\nCenter\njqy", window.width.toDouble() / 2, window.height.toDouble() / 2)
 
+        val exampleGlyph = font.glyphs.values.first()
+        println("Glyph pose ${exampleGlyph.pose}")
         renderer.endView()
         window.swap()
     }

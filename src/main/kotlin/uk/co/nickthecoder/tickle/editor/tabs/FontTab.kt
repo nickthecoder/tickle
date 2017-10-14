@@ -73,7 +73,7 @@ In addition, you can create another .png file if you wish to add an outline to t
         ImageIO.write(bImage, "png", pngFile)
 
         val metricsFile = File(Resources.instance.texturesDirectory, "$name.metrics")
-        JsonResources.saveFontMetrics(metricsFile, fontResource.fontTexture)
+        JsonResources.saveFontMetrics(metricsFile, fontResource)
 
     }
 }
