@@ -35,12 +35,12 @@ class SceneEditor(val sceneResource: SceneResource) {
     val layersBox = LayersBox(layers)
     val stagesBox = StagesBox(this)
 
-    val costumesPane = TitledPane("Costumes", costumeBox.build())
+    val costumesPane = TitledPane("Costume Picker", costumeBox.build())
     val propertiesPane = TitledPane("Properties", ActorPropertiesBox(this).build())
+    val stagesPane = TitledPane("Actors", stagesBox.build())
     val layersPane = TitledPane("Layers", layersBox.build())
-    val stagesPane = TitledPane("Stages", stagesBox.build())
 
-    val sidePanes = listOf(costumesPane, layersPane, propertiesPane, stagesPane)
+    val sidePanes = listOf(costumesPane, propertiesPane, stagesPane, layersPane)
 
     val costumeHistory = mutableListOf<String>()
 

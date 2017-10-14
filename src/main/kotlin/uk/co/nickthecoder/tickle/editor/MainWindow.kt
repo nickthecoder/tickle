@@ -82,9 +82,11 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
 
         with(shortcuts) {
-            add(EditorActions.ACCORDION_RESOURCES) { accordionPane(0) }
-            add(EditorActions.ACCORDION_COSTUME) { accordionPane(1) }
-            add(EditorActions.ACCORDION_PROPERTIES) { accordionPane(2) }
+            add(EditorActions.ACCORDION_ONE) { accordionPane(0) }
+            add(EditorActions.ACCORDION_TWO) { accordionPane(1) }
+            add(EditorActions.ACCORDION_THREE) { accordionPane(2) }
+            add(EditorActions.ACCORDION_FOUR) { accordionPane(3) }
+            add(EditorActions.ACCORDION_FIVE) { accordionPane(4) }
             add(EditorActions.TAB_CLOSE) { tabPane.selectedTab?.close() }
         }
 

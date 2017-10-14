@@ -16,6 +16,7 @@ class Coin : ActionRole() {
     @Attribute(AttributeType.POLAR, scale = 10.0)
     var velocity = Polar2d(Angle(), 2.0)
 
+    @Attribute
     var turningSpeed = Angle.degrees(3.0)
 
     @CostumeAttribute
@@ -31,9 +32,6 @@ class Coin : ActionRole() {
         action = growShrink.and(circle)
 
         actor.color = color
-
-        // Color(0.6f, 0.6f, 0.4f, 1f)
-        // Color(0.7f, 0.7f, 1f, 1f)
     }
 
 }

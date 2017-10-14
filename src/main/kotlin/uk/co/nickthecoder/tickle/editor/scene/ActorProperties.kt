@@ -26,7 +26,7 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(xP, yP, directionP, textP, attributesP)
+            .addParameters(attributesP, xP, yP, directionP, textP)
             .asVertical()
 
     var dirty = false

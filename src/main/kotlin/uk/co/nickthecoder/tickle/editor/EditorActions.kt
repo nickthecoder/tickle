@@ -13,9 +13,11 @@ object EditorActions {
     val RUN = EditorAction("run", KeyCode.R, control = true, label = "Run", tooltip = "Run the game")
     val TEST = EditorAction("test", KeyCode.T, control = true, label = "Test", tooltip = "Test the game")
 
-    val ACCORDION_RESOURCES = EditorAction("accordion.resources", KeyCode.F2)
-    val ACCORDION_COSTUME = EditorAction("accordion.costume", KeyCode.F3)
-    val ACCORDION_PROPERTIES = EditorAction("accordion.properties", KeyCode.F4)
+    val ACCORDION_ONE = EditorAction("accordion.one", KeyCode.F4)
+    val ACCORDION_TWO = EditorAction("accordion.two", KeyCode.F5)
+    val ACCORDION_THREE = EditorAction("accordion.three", KeyCode.F6)
+    val ACCORDION_FOUR = EditorAction("accordion.four", KeyCode.F7)
+    val ACCORDION_FIVE = EditorAction("accordion.five", KeyCode.F8)
 
     val ESCAPE = EditorAction("escape", KeyCode.ESCAPE)
     val DELETE = EditorAction("delete", KeyCode.DELETE)

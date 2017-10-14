@@ -15,7 +15,7 @@ class AngleParameter(
     : CompoundParameter<Angle>(
         name, label, description) {
 
-    val degreesP = DoubleParameter("${name}_degrees", minValue = 0.0, maxValue = 360.0)
+    val degreesP = DoubleParameter("${name}_degrees", minValue = -360.0, maxValue = 360.0)
     var degrees by degreesP
 
     override val converter = object : StringConverter<Angle>() {

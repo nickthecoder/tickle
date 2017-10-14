@@ -172,13 +172,17 @@
                 },
                 {
                     "costume": "coin",
-                    "x": 567,
-                    "y": 402,
+                    "x": 631,
+                    "y": 368,
                     "direction": 0,
                     "attributes": [
                         {
                             "name": "velocity",
-                            "value": "102.0:14.241488686229399"
+                            "value": "271.0:9.702061636580135"
+                        },
+                        {
+                            "name": "turningSpeed",
+                            "value": "-2.0"
                         }
                     ]
                 },
@@ -191,6 +195,10 @@
                         {
                             "name": "velocity",
                             "value": "315.0:4.596737973824482"
+                        },
+                        {
+                            "name": "turningSpeed",
+                            "value": "3.0"
                         }
                     ]
                 },
@@ -203,6 +211,10 @@
                         {
                             "name": "velocity",
                             "value": "130.0:5.954829972383762"
+                        },
+                        {
+                            "name": "turningSpeed",
+                            "value": "3.0"
                         }
                     ]
                 }

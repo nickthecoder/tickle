@@ -163,10 +163,10 @@ class Attributes {
                 IntParameter("attribute_$name", required = false, label = name)
             }
             Float::class -> {
-                FloatParameter("attribute_$name", required = false, label = name)
+                FloatParameter("attribute_$name", required = false, minValue = -Float.MAX_VALUE, label = name)
             }
             Double::class -> {
-                DoubleParameter("attribute_$name", required = false, label = name)
+                DoubleParameter("attribute_$name", required = false, minValue = -Double.MAX_VALUE, label = name)
             }
             String::class -> {
                 StringParameter("attribute_$name", required = false, label = name)
