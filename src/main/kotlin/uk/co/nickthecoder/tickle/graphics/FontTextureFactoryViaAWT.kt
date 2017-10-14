@@ -148,7 +148,6 @@ open class FontTextureFactoryViaAWT(
         }
 
         return FontTexture(
-                texture,
                 glyphs, metrics.height.toDouble(),
                 leading = metrics.leading.toDouble(),
                 ascent = metrics.ascent.toDouble(),

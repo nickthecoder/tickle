@@ -63,7 +63,9 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1) {
             cached = v
         }
 
-    fun createFontTexture(): FontTexture {
+    var outlineFontTexture: FontTexture? = null
+
+    private fun createFontTexture(): FontTexture {
         val font: Font
         if (file == null) {
             font = Font(fontName, style.ordinal, size.toInt())

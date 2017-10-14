@@ -36,6 +36,27 @@
                             "value": "0"
                         }
                     ]
+                },
+                {
+                    "costume": "info",
+                    "x": 450,
+                    "y": 539,
+                    "direction": 0,
+                    "text": ""
+                },
+                {
+                    "costume": "plainText",
+                    "x": 620,
+                    "y": 499,
+                    "direction": 0,
+                    "text": ""
+                },
+                {
+                    "costume": "info",
+                    "x": 436,
+                    "y": 422,
+                    "direction": 0,
+                    "text": ""
                 }
             ]
         }

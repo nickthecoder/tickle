@@ -4,7 +4,6 @@ package uk.co.nickthecoder.tickle.graphics
  * Holds a texture, and the meta-data for a Font at a particular font-size.
  */
 class FontTexture(
-        val texture: Texture,
         val glyphs: Map<Char, Glyph>,
         val lineHeight: Double,
         val leading: Double,
@@ -76,12 +75,9 @@ class FontTexture(
     }
 
     fun height(text: CharSequence): Double {
-        val extra = if (text.last() == '\n') 0 else 1
+        val extra = if (text.endsWith('\n')) 0 else 1
         return (text.count { it == '\n' } + extra) * lineHeight
     }
 
-    fun cleanUp() {
-        texture.cleanUp()
-    }
 }
 

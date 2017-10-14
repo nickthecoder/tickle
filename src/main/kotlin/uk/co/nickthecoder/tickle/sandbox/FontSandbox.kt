@@ -21,7 +21,7 @@ class FontSandbox : Sandbox(height = 700) {
 
     val font = fontResource.fontTexture
 
-    val pose = Pose(font.texture)
+    val pose = Pose(font.glyphs.values.first().pose.texture)
 
     var x = 10.0
     var y = 10.0

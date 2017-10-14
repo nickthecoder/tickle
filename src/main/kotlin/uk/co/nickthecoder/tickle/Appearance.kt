@@ -1,6 +1,5 @@
 package uk.co.nickthecoder.tickle
 
-import uk.co.nickthecoder.tickle.graphics.FontTexture
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 

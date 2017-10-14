@@ -52,12 +52,30 @@ class Actor(val role: Role? = null) {
 
     var color: Color = Color.WHITE
 
-
     internal var appearance: Appearance = InvisibleAppearance()
 
     private val modelMatrix = Matrix4f()
 
     private var dirtyMatrix: Boolean = false
+
+
+    val textAppearance: TextAppearance?
+        get() {
+            val app = appearance
+            if (app is TextAppearance) {
+                return app
+            }
+            return null
+        }
+
+    val poseAppearance: PoseAppearance?
+        get() {
+            val app = appearance
+            if (app is PoseAppearance) {
+                return app
+            }
+            return null
+        }
 
     init {
         role?.actor = this
@@ -105,19 +123,6 @@ class Actor(val role: Role? = null) {
     fun changeAppearance(text: String, textStyle: TextStyle) {
         appearance = TextAppearance(this, text, textStyle)
     }
-
-    fun changeText(text: String) {
-        val app = appearance
-        if (app is TextAppearance) {
-            app.text = text
-        }
-    }
-
-    /*
-    fun changeAppearance(text : String, font : FontFile, size : Int) {
-        appearance = TextAppearance(this, font.fontTexture(size))
-    }
-    */
 
     var flipX: Boolean = false
         set(v) {

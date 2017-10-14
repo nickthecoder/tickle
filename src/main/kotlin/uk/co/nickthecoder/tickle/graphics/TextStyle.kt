@@ -6,7 +6,8 @@ class TextStyle(
         var fontResource: FontResource,
         var halignment: HAlignment,
         var valignment: VAlignment,
-        var color: Color) {
+        var color: Color,
+        var outlineColor: Color? = null) {
 
     fun offsetX(text: CharSequence): Double {
         return when (halignment) {
@@ -29,12 +30,19 @@ class TextStyle(
 
     fun height(text: CharSequence) = fontResource.fontTexture.height(text)
 
-    fun draw(renderer: Renderer, text: CharSequence, x: Double, y: Double, color: Color = Color.WHITE) {
+    fun draw(renderer: Renderer, text: CharSequence, x: Double, y: Double) {
+        if (outlineColor != null && fontResource.outlineFontTexture != null) {
+            draw(renderer, fontResource.outlineFontTexture!!, outlineColor!!, text, x, y)
+        }
+        draw(renderer, fontResource.fontTexture, color, text, x, y)
+    }
+
+    private fun draw(renderer: Renderer, fontTexture: FontTexture, color: Color, text: CharSequence, x: Double, y: Double) {
 
         val dy = when (valignment) {
             VAlignment.TOP -> 0.0
             VAlignment.CENTER -> height(text) / 2
-            VAlignment.BASELINE -> height(text) - fontResource.fontTexture.descent
+            VAlignment.BASELINE -> height(text) - fontTexture.descent
             VAlignment.BOTTOM -> height(text)
         }
         var lineY = y + dy
@@ -43,12 +51,12 @@ class TextStyle(
 
             val dx = when (halignment) {
                 HAlignment.LEFT -> 0.0
-                HAlignment.CENTER -> fontResource.fontTexture.width(line) / 2
-                HAlignment.RIGHT -> fontResource.fontTexture.width(line)
+                HAlignment.CENTER -> fontTexture.width(line) / 2
+                HAlignment.RIGHT -> fontTexture.width(line)
             }
 
-            fontResource.fontTexture.draw(renderer, line, x - dx, lineY, color)
-            lineY -= fontResource.fontTexture.lineHeight
+            fontTexture.draw(renderer, line, x - dx, lineY, color)
+            lineY -= fontTexture.lineHeight
         }
 
     }

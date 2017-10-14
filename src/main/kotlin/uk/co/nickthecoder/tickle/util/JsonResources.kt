@@ -355,6 +355,11 @@ class JsonResources {
                         jtextStyle.add("halign", textStyle.halignment.name)
                         jtextStyle.add("valign", textStyle.valignment.name)
                         jtextStyle.add("color", textStyle.color.toHashRGBA())
+                        if (textStyle.fontResource.outlineFontTexture != null) {
+                            textStyle.outlineColor?.let {
+                                jtextStyle.add("outlineColor", it.toHashRGBA())
+                            }
+                        }
                     }
                     jevent.add("textStyles", jtextStyles)
                 }
@@ -406,6 +411,10 @@ class JsonResources {
                             val valign = VAlignment.valueOf(jtextStyle.getString("valign", VAlignment.BASELINE.name))
                             val color = Color.fromString(jtextStyle.getString("color", "#FFFFFF"))
                             val textStyle = TextStyle(fontResource, halign, valign, color)
+                            if (textStyle.fontResource.outlineFontTexture != null) {
+                                val outlineColor = Color.fromString(jtextStyle.getString("outlineColor", "#000000"))
+                                textStyle.outlineColor = outlineColor
+                            }
                             event.textStyles.add(textStyle)
                         }
                     }
@@ -630,11 +639,19 @@ class JsonResources {
                 fontResource.yPadding = jfont.getInt("yPadding", 1)
 
                 val pngFile = File(resources.texturesDirectory, "$name.png")
+                val outlinePngFile = File(resources.texturesDirectory, "$name-outline.png")
                 val metricsFile = File(resources.texturesDirectory, "$name.metrics")
+
                 if (pngFile.exists() && metricsFile.exists()) {
                     val texture = Texture.create(pngFile)
                     val fontTexture = loadFontMetrics(metricsFile, texture)
                     fontResource.fontTexture = fontTexture
+
+                    if (outlinePngFile.exists()) {
+                        val outlineTexture = Texture.create(outlinePngFile)
+                        fontResource.outlineFontTexture = FontTexture(copyGlyphs(outlineTexture, fontTexture.glyphs), fontTexture.lineHeight,
+                                leading = fontTexture.leading, ascent = fontTexture.ascent, descent = fontTexture.descent)
+                    }
                 }
 
                 resources.addFontResource(name, fontResource)
@@ -644,6 +661,14 @@ class JsonResources {
     }
 
     companion object {
+
+        fun copyGlyphs(texture: Texture, glyphs: Map<Char, Glyph>): Map<Char, Glyph> {
+            val result = mutableMapOf<Char, Glyph>()
+            glyphs.forEach { c, glyph ->
+                result[c] = Glyph(Pose(texture, glyph.pose.rect), glyph.advance)
+            }
+            return result
+        }
 
         fun saveFontMetrics(file: File, fontTexture: FontTexture) {
             val jroot = JsonObject()
@@ -695,7 +720,7 @@ class JsonResources {
                 glyphs[c] = (glyph)
             }
 
-            return FontTexture(texture, glyphs, lineHeight, leading = leading, ascent = ascent, descent = descent)
+            return FontTexture(glyphs, lineHeight, leading = leading, ascent = ascent, descent = descent)
         }
     }
 }

@@ -40,7 +40,7 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
 
     }
 
-    override fun toString() = "Texture $width x $height"
+    override fun toString() = "Texture $width x $height handle=$handle"
 
     companion object {
 

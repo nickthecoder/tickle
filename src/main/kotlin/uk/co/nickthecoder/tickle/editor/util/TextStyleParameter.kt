@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.editor.util
 
 import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.HAlignment
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.graphics.VAlignment
@@ -11,16 +12,20 @@ class TextStyleParameter(name: String)
 
     val fontP = createFontParameter("font")
     val colorP = ColorParameter("color", label = "Colour")
-    val hAlignmentP = ChoiceParameter<HAlignment>("xAligment", value = HAlignment.LEFT).enumChoices(mixCase = true)
-    val vAlignmentP = ChoiceParameter<VAlignment>("yAligment", value = VAlignment.TOP).enumChoices(mixCase = true)
+    val outlineColorP = ColorParameter("outlineColor", label = "Outline Colour")
+    val hAlignmentP = ChoiceParameter<HAlignment>("xAlignment", value = HAlignment.LEFT).enumChoices(mixCase = true)
+    val vAlignmentP = ChoiceParameter<VAlignment>("yAlignment", value = VAlignment.TOP).enumChoices(mixCase = true)
 
     init {
-        addParameters(fontP, colorP, hAlignmentP, vAlignmentP)
+        addParameters(fontP, colorP, outlineColorP, hAlignmentP, vAlignmentP)
+        outlineColorP.hidden = fontP.value?.outlineFontTexture == null
+        fontP.listen { outlineColorP.hidden = fontP.value?.outlineFontTexture == null }
     }
 
     fun from(textStyle: TextStyle) {
         fontP.value = textStyle.fontResource
         colorP.value = textStyle.color.toJavaFX()
+        outlineColorP.value = (textStyle.outlineColor ?: Color.TRANSPARENT_BLACK).toJavaFX()
         hAlignmentP.value = textStyle.halignment
         vAlignmentP.value = textStyle.valignment
     }
@@ -28,11 +33,17 @@ class TextStyleParameter(name: String)
     fun update(textStyle: TextStyle) {
         textStyle.fontResource = fontP.value!!
         textStyle.color = colorP.value.toTickle()
+        textStyle.outlineColor = outlineColorP.value.toTickle()
         textStyle.halignment = hAlignmentP.value!!
         textStyle.valignment = vAlignmentP.value!!
     }
 
     fun createTextStyle(): TextStyle {
-        return TextStyle(fontP.value!!, color = colorP.value.toTickle(), halignment = hAlignmentP.value!!, valignment = vAlignmentP.value!!)
+        return TextStyle(
+                fontP.value!!,
+                color = colorP.value.toTickle(),
+                outlineColor = outlineColorP.value.toTickle(),
+                halignment = hAlignmentP.value!!,
+                valignment = vAlignmentP.value!!)
     }
 }

@@ -66,7 +66,7 @@ In addition, you can create another .png file if you wish to add an outline to t
             return
         }
 
-        val image = ImageCache.image(fontResource.fontTexture.texture)
+        val image = ImageCache.image(fontResource.fontTexture.glyphs.values.first().pose.texture)
         val bImage = SwingFXUtils.fromFXImage(image, null)
         val name = nameP.value
         val pngFile = File(Resources.instance.texturesDirectory, "$name.png")

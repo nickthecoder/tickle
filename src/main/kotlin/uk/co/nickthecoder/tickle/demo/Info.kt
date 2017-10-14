@@ -10,7 +10,7 @@ class Info : ActionRole() {
     override fun activated() {
         action =
                 DelayAction(1.0)
-                        .then(OneAction { actor.changeText(text()) })
+                        .then(OneAction { actor.textAppearance?.text = text() })
                         .forever()
 
         super.activated()
