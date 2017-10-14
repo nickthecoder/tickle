@@ -21,18 +21,19 @@ class Coin : ActionRole() {
     @CostumeAttribute
     var value: Int = 1
 
+    @CostumeAttribute(hasAlpha = false)
+    var color: Color = Color.WHITE
+
     override fun activated() {
 
         val growShrink = (Grow(actor, 1.0, 2.0).then(Grow(actor, 1.0, 1.0)).forever())
         val circle = Circle(velocity.angle, turningSpeed).and(MovePolar(actor.position, velocity))
         action = growShrink.and(circle)
 
-        if (value < 10) {
-            actor.color = Color(0.6f, 0.6f, 0.4f, 1f)
+        actor.color = color
 
-        } else if (value >= 10 && value < 100) {
-            actor.color = Color(0.7f, 0.7f, 1f, 1f)
-        }
+        // Color(0.6f, 0.6f, 0.4f, 1f)
+        // Color(0.7f, 0.7f, 1f, 1f)
     }
 
 }

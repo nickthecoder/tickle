@@ -193,6 +193,16 @@
                         "coin"
                     ]
                 }
+            ],
+            "attributes": [
+                {
+                    "name": "color",
+                    "value": "#999900ff"
+                },
+                {
+                    "name": "value",
+                    "value": "1"
+                }
             ]
         },
         {
@@ -205,6 +215,16 @@
                     "poses": [
                         "coin"
                     ]
+                }
+            ],
+            "attributes": [
+                {
+                    "name": "color",
+                    "value": "#ffffffff"
+                },
+                {
+                    "name": "value",
+                    "value": "10"
                 }
             ]
         },
@@ -221,6 +241,10 @@
                 }
             ],
             "attributes": [
+                {
+                    "name": "color",
+                    "value": "#ffff4dff"
+                },
                 {
                     "name": "value",
                     "value": "100"

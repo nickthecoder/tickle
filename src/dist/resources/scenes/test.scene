@@ -42,18 +42,6 @@
             "name": "main",
             "actors": [
                 {
-                    "costume": "coin10",
-                    "x": 143,
-                    "y": 440,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "119.99999999999999:8.386298349093002"
-                        }
-                    ]
-                },
-                {
                     "costume": "grenade",
                     "x": 138,
                     "y": 186,
@@ -181,6 +169,42 @@
                     "y": 330,
                     "direction": 0,
                     "text": "Hello World"
+                },
+                {
+                    "costume": "coin",
+                    "x": 567,
+                    "y": 402,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "velocity",
+                            "value": "102.0:14.241488686229399"
+                        }
+                    ]
+                },
+                {
+                    "costume": "coin10",
+                    "x": 294,
+                    "y": 362,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "velocity",
+                            "value": "315.0:4.596737973824482"
+                        }
+                    ]
+                },
+                {
+                    "costume": "coin100",
+                    "x": 449,
+                    "y": 446,
+                    "direction": 0,
+                    "attributes": [
+                        {
+                            "name": "velocity",
+                            "value": "130.0:5.954829972383762"
+                        }
+                    ]
                 }
             ]
         }

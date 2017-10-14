@@ -5,6 +5,7 @@ import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.editor.util.AngleParameter
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
+import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
@@ -111,7 +112,7 @@ class Attributes {
 
         val toDiscard = map.keys.toMutableSet()
 
-        // TODO SHould this be memberProperties rathter than members?
+        // TODO SHould this be memberProperties rather than members?
         kClass.members.forEach { property ->
             property.annotations.filterIsInstance<Attribute>().firstOrNull()?.let { annotation ->
                 val hasExistingValue = map.contains(property.name)
@@ -119,7 +120,7 @@ class Attributes {
                 data.attributeType = annotation.attributeType
                 data.order = annotation.order
                 data.scale = annotation.scale
-                createParameter(property.name, property.returnType.jvmErasure)?.let { parameter ->
+                createParameter(property.name, property.returnType.jvmErasure, hasAlpha = annotation.hasAlpha)?.let { parameter ->
                     data.parameter = parameter
                     parameter.listen { data.value = parameter.stringValue }
 
@@ -136,7 +137,7 @@ class Attributes {
             }
             property.annotations.filterIsInstance<CostumeAttribute>().firstOrNull()?.let { annotation ->
                 val data = getOrCreateData(property.name)
-                createParameter(property.name, property.returnType.jvmErasure)?.let { parameter ->
+                createParameter(property.name, property.returnType.jvmErasure, hasAlpha = annotation.hasAlpha)?.let { parameter ->
                     data.costumeParameter = parameter
                     parameter.listen { data.value = parameter.stringValue }
                 }
@@ -151,7 +152,7 @@ class Attributes {
 
     }
 
-    private fun createParameter(name: String, klass: KClass<*>): ValueParameter<*>? {
+    private fun createParameter(name: String, klass: KClass<*>, hasAlpha: Boolean): ValueParameter<*>? {
 
         return when (klass) {
 
@@ -179,6 +180,13 @@ class Attributes {
             Angle::class -> {
                 AngleParameter("attribute_$name", label = name)
             }
+            Color::class -> {
+                if (hasAlpha) {
+                    AlphaColorParameter("attribute_$name", label = name)
+                } else {
+                    ColorParameter("attribute_$name", label = name)
+                }
+            }
             else -> {
                 System.err.println("Type $klass (for attribute $name) is not currently supported.")
                 null
@@ -201,10 +209,10 @@ class Attributes {
             Polar2d::class -> Polar2d.fromString(value)
             Vector2d::class -> vector2dFromString(value)
             Angle::class -> Angle.degrees(value.toDouble())
+            Color::class -> Color.fromString(value)
             else -> throw IllegalArgumentException("Type $klass is not currently supported.")
         }
     }
-
 
     private fun changeAttribute(obj: Any?, value: String, klass: KClass<*>) {
         if (obj is Polar2d) {
