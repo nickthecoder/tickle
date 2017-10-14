@@ -9,7 +9,7 @@ import uk.co.nickthecoder.tickle.util.Angle
 
 private var nextId: Int = 0
 
-class Actor(val role: Role? = null) {
+class Actor(var costume: Costume, val role: Role? = null) {
 
     val id = nextId++
 
@@ -148,6 +148,19 @@ class Actor(val role: Role? = null) {
                 dirtyMatrix
             }
         }
+
+    fun event(name: String) {
+        costume.events[name]?.let { event ->
+            event.choosePose()?.let { changeAppearance(it) }
+        }
+    }
+
+    fun createChild(eventName: String, deltaZ: Int = 0): Actor {
+        val actor = costume.createChild(eventName)
+        stage?.add(actor)
+        actor.z = z + deltaZ
+        return actor
+    }
 
     fun die() {
         stage?.remove(this)

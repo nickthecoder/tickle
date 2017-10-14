@@ -140,6 +140,28 @@
             "offsetX": 20,
             "offsetY": 20,
             "direction": 0
+        },
+        {
+            "name": "eye",
+            "texture": "sprites",
+            "left": 63,
+            "bottom": 113,
+            "right": 93,
+            "top": 68,
+            "offsetX": 16,
+            "offsetY": 23,
+            "direction": 0
+        },
+        {
+            "name": "pupil",
+            "texture": "sprites",
+            "left": 97,
+            "bottom": 104,
+            "right": 111,
+            "top": 89,
+            "offsetX": 7,
+            "offsetY": 7,
+            "direction": 0
         }
     ],
     "costumes": [
@@ -337,6 +359,25 @@
                             "color": "#ffffffff",
                             "outlineColor": "#000000ff"
                         }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "eye",
+            "role": "uk.co.nickthecoder.tickle.demo.Eye",
+            "canRotate": false,
+            "events": [
+                {
+                    "name": "default",
+                    "poses": [
+                        "eye"
+                    ]
+                },
+                {
+                    "name": "pupil",
+                    "poses": [
+                        "pupil"
                     ]
                 }
             ]

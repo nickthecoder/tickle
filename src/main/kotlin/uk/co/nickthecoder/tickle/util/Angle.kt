@@ -22,6 +22,10 @@ open class Angle() {
         return vector
     }
 
+    fun of(vector2d: Vector2d) {
+        radians = Math.atan2(vector2d.y, vector2d.x)
+    }
+
     override fun toString() = "$degrees°"
 
     companion object {

@@ -23,7 +23,7 @@ class Costume() {
         val role = if (roleString.isBlank()) null else Role.create(roleString)
         role?.let { attributes.applyToObject(it) }
 
-        val actor = Actor(role)
+        val actor = Actor(this, role)
         val pose = events["default"]?.choosePose()
         if (pose == null) {
             val textStyle = events["default"]?.chooseTextStyle()
@@ -58,6 +58,17 @@ class Costume() {
             System.err.println("Warning. Costume '${Resources.instance.findCostumeName(this)}' couldn't create role '$roleString'. $e")
             return null
         }
+    }
+
+    fun createChild(eventName: String): Actor {
+        events[eventName]?.let { event ->
+            // TODO When costumes can have other costumes as event, then use that costume, and build the role if one is defined.
+
+            val actor = Actor(this)
+            event.choosePose()?.let { actor.changeAppearance(it) }
+            return actor
+        }
+        return Actor(this)
     }
 
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"

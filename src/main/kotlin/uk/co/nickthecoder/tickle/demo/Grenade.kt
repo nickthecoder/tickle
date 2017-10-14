@@ -34,7 +34,7 @@ class Grenade() : AbstractRole() {
         val transparent = Color(newColor.red, newColor.green, newColor.blue, 0f)
         val newRole = ActionRole()
 
-        val newActor = Actor(newRole)
+        val newActor = Actor(Costume(), newRole)
 
         with(newActor) {
             x = actor.x + exit.x

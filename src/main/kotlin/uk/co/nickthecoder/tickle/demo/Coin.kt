@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.ActionRole
 import uk.co.nickthecoder.tickle.AttributeType
+import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.animation.Grow
 import uk.co.nickthecoder.tickle.action.movement.polar.Circle
 import uk.co.nickthecoder.tickle.action.movement.polar.MovePolar
@@ -25,13 +26,14 @@ class Coin : ActionRole() {
     @CostumeAttribute(hasAlpha = false)
     var color: Color = Color.WHITE
 
-    override fun activated() {
+    override fun createAction(): Action? {
 
         val growShrink = (Grow(actor, 1.0, 2.0).then(Grow(actor, 1.0, 1.0)).forever())
         val circle = Circle(velocity.angle, turningSpeed).and(MovePolar(actor.position, velocity))
         action = growShrink.and(circle)
 
         actor.color = color
+        return action
     }
 
 }

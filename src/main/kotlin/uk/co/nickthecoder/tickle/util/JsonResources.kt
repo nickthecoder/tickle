@@ -729,8 +729,6 @@ class JsonResources {
                 val glyph = Glyph(pose, advance)
                 glyphs[c] = (glyph)
             }
-            val exampleGlyph = glyphs.values.first()
-            println("Example glyph pose ${exampleGlyph.pose}")
 
             return FontTexture(glyphs, lineHeight, leading = leading, ascent = ascent, descent = descent)
         }

@@ -1,6 +1,7 @@
 {
     "director": "uk.co.nickthecoder.tickle.NoDirector",
     "background": "#000000",
+    "showMouse": true,
     "layout": "glass",
     "stages": [
         {
@@ -17,25 +18,7 @@
                     "costume": "hand",
                     "x": 0,
                     "y": 600,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "myDirection",
-                            "value": "0"
-                        },
-                        {
-                            "name": "myDouble",
-                            "value": "0"
-                        },
-                        {
-                            "name": "myInt",
-                            "value": "0"
-                        },
-                        {
-                            "name": "myOtherDirection",
-                            "value": "0"
-                        }
-                    ]
+                    "direction": 0
                 },
                 {
                     "costume": "plainText",
@@ -43,6 +26,18 @@
                     "y": 0,
                     "direction": 0,
                     "text": "dsljd\ndjsldd\ndjslkdl\njdlsjdlHdhjk"
+                },
+                {
+                    "costume": "eye",
+                    "x": 62,
+                    "y": 561,
+                    "direction": 0
+                },
+                {
+                    "costume": "eye",
+                    "x": 97,
+                    "y": 560,
+                    "direction": 0
                 }
             ]
         }

@@ -20,6 +20,7 @@ import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.SceneStub
 import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
+import uk.co.nickthecoder.tickle.editor.util.toJavaFX
 import uk.co.nickthecoder.tickle.editor.util.toTickle
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
@@ -190,8 +191,7 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
         } catch (e: Exception) {
             //
         }
-        val c = sceneResource.background
-        backgroundColorP.value = javafx.scene.paint.Color(c.red.toDouble(), c.green.toDouble(), c.blue.toDouble(), 1.0)
+        backgroundColorP.value = sceneResource.background.toJavaFX()
         showMouseP.value = sceneResource.showMouse
         layoutP.value = sceneResource.layoutName
     }
