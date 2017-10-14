@@ -22,6 +22,8 @@ class SceneResource {
 
     var background: Color = Color.BLACK
 
+    var showMouse: Boolean = true
+
     /**
      * Keyed on the name of the stage
      */
@@ -38,6 +40,7 @@ class SceneResource {
         val scene = layout.createScene()
 
         scene.background = background
+        scene.showMouse = showMouse
 
         stageResources.forEach { name, stageResource ->
             val stage = scene.stages[name]

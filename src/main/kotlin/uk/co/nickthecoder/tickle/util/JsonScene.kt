@@ -36,6 +36,8 @@ class JsonScene {
         val jroot = JsonObject()
         jroot.add("director", sceneResource.directorString)
         jroot.add("background", sceneResource.background.toHashRGB())
+        jroot.add("showMouse", sceneResource.showMouse)
+
         jroot.add("layout", sceneResource.layoutName)
         val jstages = JsonArray()
         jroot.add("stages", jstages)
@@ -56,6 +58,7 @@ class JsonScene {
         sceneResource.directorString = jroot.getString("director", NoDirector::class.java.name)
         sceneResource.layoutName = jroot.getString("layout", "default")
         sceneResource.background = Color.fromString(jroot.getString("background", "#FFFFFF"))
+        sceneResource.showMouse = jroot.getBoolean("showMouse", true)
 
         sceneResource.layoutName
         jroot.get("stages")?.let {

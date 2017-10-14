@@ -4,8 +4,6 @@ Current Work
 BUGS
 ====
 
-Fonts not aligned correctly in game 1 line too high. In editor, I think padding is causing problems.
-
 Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
 	I only want the EDITOR to depend on paratask-core.
 	Have a factory method for Attributes, which checks Class.forName( "uk...paratask...Parameter" )
@@ -20,12 +18,6 @@ InputPicker :
 
 New Features
 ============
-
-Put the "padding" back into the AWT Font Factorory, and then allow it to be "blurred" in various ways, for outlined text
-	https://github.com/mattdesl/lwjgl-basics/wiki/ShaderLesson5
-	https://github.com/mattdesl/lwjgl-basics/wiki/OpenGL-ES-Blurs
-	Could make it generic for use for non-font textures. e.g. a drop shadow for people, trees, buildings etc.
-	
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 	Just as a prelude to pixel collision detection.
@@ -106,7 +98,6 @@ PoseTab should show the whole Texture, with a single shaded rectangle to show th
 
 
 Mouse
-	Hide the mouse, so it can be replaced by an actor
 	Find Actors at a point
 		Overlapping, or using pixel data
 

@@ -1,6 +1,7 @@
 {
     "director": "uk.co.nickthecoder.tickle.demo.Play",
     "background": "#000000",
+    "showMouse": true,
     "layout": "default",
     "stages": [
         {

@@ -11,6 +11,8 @@ class Scene {
 
     var background: Color = Color.BLACK
 
+    var showMouse: Boolean = true
+
     val stages = mutableMapOf<String, Stage>()
 
     private val views = mutableMapOf<String, View>()
@@ -57,6 +59,8 @@ class Scene {
     }
 
     fun begin() {
+        Game.instance.window.showMouse(showMouse)
+
         stages.values.forEach { stage ->
             stage.begin()
         }

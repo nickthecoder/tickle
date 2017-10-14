@@ -10,19 +10,17 @@ import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
-import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
-import uk.co.nickthecoder.paratask.parameters.ColorParameter
-import uk.co.nickthecoder.paratask.parameters.FileParameter
-import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
-import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.Director
 import uk.co.nickthecoder.tickle.NoDirector
+import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.SceneResource
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.SceneStub
 import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
+import uk.co.nickthecoder.tickle.editor.util.toTickle
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 
@@ -174,10 +172,12 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
 
     val backgroundColorP = ColorParameter("backgroundColor")
 
+    val showMouseP = BooleanParameter("showMouse")
+
     val layoutP = ChoiceParameter<String>("layout", value = "")
 
     override val taskD = TaskDescription("sceneDetails")
-            .addParameters(directorP, backgroundColorP, layoutP)
+            .addParameters(directorP, backgroundColorP, showMouseP, layoutP)
 
     init {
         ClassLister.setChoices(directorP, Director::class.java)
@@ -192,6 +192,7 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
         }
         val c = sceneResource.background
         backgroundColorP.value = javafx.scene.paint.Color(c.red.toDouble(), c.green.toDouble(), c.blue.toDouble(), 1.0)
+        showMouseP.value = sceneResource.showMouse
         layoutP.value = sceneResource.layoutName
     }
 
@@ -199,7 +200,7 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
     override fun run() {
         sceneResource.directorString = directorP.value!!.name
         sceneResource.layoutName = layoutP.value!!
-        val c = backgroundColorP.value
-        sceneResource.background = uk.co.nickthecoder.tickle.graphics.Color(c.red.toFloat(), c.green.toFloat(), c.blue.toFloat())
+        sceneResource.showMouse = showMouseP.value == true
+        sceneResource.background = backgroundColorP.value.toTickle()
     }
 }
