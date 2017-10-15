@@ -8,6 +8,7 @@ import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.CostumeEvent
 import uk.co.nickthecoder.tickle.NoProducer
 import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.resources.*
@@ -108,6 +109,7 @@ class JsonResources {
                 jpackages.add(it)
             }
             jinfo.add("packages", jpackages)
+
             return jinfo
         }
     }
@@ -130,6 +132,7 @@ class JsonResources {
                     packages.add(it.asString())
                 }
             }
+            ClassLister.packages(packages)
 
             // println("Loaded info : $title : $width x $height Resize? $resizable. Game=$producerString")
         }
