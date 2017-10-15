@@ -8,7 +8,7 @@ import javafx.scene.control.SeparatorMenuItem
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
-import uk.co.nickthecoder.tickle.SceneResource
+import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.editor.EditorAction
 
 /**

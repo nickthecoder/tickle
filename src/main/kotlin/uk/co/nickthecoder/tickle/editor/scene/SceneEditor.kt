@@ -7,10 +7,10 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
-import uk.co.nickthecoder.tickle.ActorResource
-import uk.co.nickthecoder.tickle.ModificationType
-import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.StageResource
+import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.resources.ModificationType
+import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.resources.StageResource
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background

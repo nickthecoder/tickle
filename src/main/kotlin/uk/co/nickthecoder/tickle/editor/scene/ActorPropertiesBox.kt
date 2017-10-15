@@ -2,7 +2,7 @@ package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.scene.Node
 import javafx.scene.layout.StackPane
-import uk.co.nickthecoder.tickle.ActorResource
+import uk.co.nickthecoder.tickle.resources.ActorResource
 
 class ActorPropertiesBox(val sceneEditor: SceneEditor)
     : SelectionListener {

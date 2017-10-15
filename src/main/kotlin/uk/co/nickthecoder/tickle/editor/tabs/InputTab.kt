@@ -6,7 +6,7 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.events.*
 
 class InputTab(name: String, input: CompoundInput)

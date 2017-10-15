@@ -6,6 +6,10 @@ import javafx.scene.shape.StrokeLineCap
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.util.*
+import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.resources.ModificationType
+import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.resources.SceneResourceListener
 
 class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 

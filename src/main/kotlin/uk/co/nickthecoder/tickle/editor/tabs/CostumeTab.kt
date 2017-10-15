@@ -11,9 +11,9 @@ import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.TextStyleParameter
-import uk.co.nickthecoder.tickle.editor.util.createFontParameter
 import uk.co.nickthecoder.tickle.editor.util.createPoseParameter
 import uk.co.nickthecoder.tickle.graphics.TextStyle
+import uk.co.nickthecoder.tickle.resources.Resources
 
 class CostumeTab(val name: String, val costume: Costume)
 

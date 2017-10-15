@@ -10,6 +10,8 @@ import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.ResourcesListener
 import java.io.File
 
 class ResourcesTree()

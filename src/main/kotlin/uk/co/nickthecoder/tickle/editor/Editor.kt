@@ -4,7 +4,7 @@ import javafx.application.Application
 import javafx.stage.Stage
 import org.lwjgl.glfw.GLFW
 import uk.co.nickthecoder.paratask.util.AutoExit
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.guessTickleFile
 import uk.co.nickthecoder.tickle.util.JsonResources

@@ -8,6 +8,7 @@ import uk.co.nickthecoder.tickle.action.animation.Fade
 import uk.co.nickthecoder.tickle.action.movement.polar.DragPolar
 import uk.co.nickthecoder.tickle.action.movement.polar.MovePolar
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.Polar2d

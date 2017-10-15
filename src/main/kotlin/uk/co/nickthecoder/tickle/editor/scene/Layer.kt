@@ -1,9 +1,9 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.scene.canvas.Canvas
-import uk.co.nickthecoder.tickle.ActorResource
+import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.editor.util.image
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle

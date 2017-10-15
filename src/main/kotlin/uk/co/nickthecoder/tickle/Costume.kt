@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.tickle
 
+import uk.co.nickthecoder.tickle.resources.Resources
+
 class Costume() {
 
     var roleString: String = ""

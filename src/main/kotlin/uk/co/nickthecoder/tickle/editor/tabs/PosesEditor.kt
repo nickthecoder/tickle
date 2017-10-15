@@ -19,8 +19,8 @@ import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.ResourcesListener
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.ResourcesListener
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.graphics.Texture

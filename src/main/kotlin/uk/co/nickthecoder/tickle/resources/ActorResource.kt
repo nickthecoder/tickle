@@ -1,5 +1,8 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.resources
 
+import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Attributes
+import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Angle
 

@@ -6,7 +6,7 @@ import javafx.scene.control.Button
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.Tooltip
 import javafx.scene.layout.FlowPane
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.editor.util.thumbnail
 
 class CostumesBox( val onSelect : (String)->Unit) {

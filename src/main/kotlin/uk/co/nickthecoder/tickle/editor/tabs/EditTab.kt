@@ -9,8 +9,8 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.gui.defaultWhileFocusWithin
-import uk.co.nickthecoder.tickle.Resources
-import uk.co.nickthecoder.tickle.ResourcesListener
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.ResourcesListener
 import uk.co.nickthecoder.tickle.editor.EditorAction
 
 

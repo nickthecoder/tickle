@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.util.Angle

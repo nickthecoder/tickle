@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle.util
 
 import uk.co.nickthecoder.tickle.Role
-import uk.co.nickthecoder.tickle.TaggedRole
 
 /**
  * Remembers which Roles have which tags. Director has a TagManager, and is the easiest way to manage tags.

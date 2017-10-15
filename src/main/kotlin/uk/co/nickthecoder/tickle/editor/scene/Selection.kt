@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
-import uk.co.nickthecoder.tickle.ActorResource
+import uk.co.nickthecoder.tickle.resources.ActorResource
 
 class Selection : Iterable<ActorResource> {
 

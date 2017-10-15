@@ -13,7 +13,7 @@ import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.paratask.util.process.Exec
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.util.ImageParameter
 import uk.co.nickthecoder.tickle.editor.util.RenameTask

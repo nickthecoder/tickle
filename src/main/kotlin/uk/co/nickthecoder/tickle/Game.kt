@@ -6,6 +6,8 @@ import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.loop.FullSpeedGameLoop
 import uk.co.nickthecoder.tickle.loop.GameLoop
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 

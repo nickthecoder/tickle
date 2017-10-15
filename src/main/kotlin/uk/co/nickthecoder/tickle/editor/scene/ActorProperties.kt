@@ -5,10 +5,10 @@ import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.tickle.ActorResource
-import uk.co.nickthecoder.tickle.ModificationType
-import uk.co.nickthecoder.tickle.SceneResource
-import uk.co.nickthecoder.tickle.SceneResourceListener
+import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.resources.ModificationType
+import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.resources.SceneResourceListener
 
 
 class ActorProperties(val actorResource: ActorResource, val sceneResource: SceneResource)

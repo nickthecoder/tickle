@@ -6,6 +6,10 @@ import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.resources.StageResource
 import java.io.*
 
 class JsonScene {

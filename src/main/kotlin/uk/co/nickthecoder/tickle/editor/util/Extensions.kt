@@ -9,10 +9,10 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.CornerRadii
-import uk.co.nickthecoder.tickle.ActorResource
+import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.graphics.Color
 
 /*

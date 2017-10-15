@@ -2,7 +2,7 @@ package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.AbstractDirector
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.CenterView
 import uk.co.nickthecoder.tickle.action.CenterViewBetween

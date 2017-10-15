@@ -11,6 +11,8 @@ import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.events.CompoundInput
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 

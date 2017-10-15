@@ -1,7 +1,7 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.application.Platform
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.resources.*
 
 class StageLayer(
         val sceneResource: SceneResource,

@@ -4,8 +4,8 @@ import javafx.scene.Node
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
 import javafx.scene.image.ImageView
-import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.EditorAction
+import uk.co.nickthecoder.tickle.resources.*
 
 class StagesBox(val sceneEditor: SceneEditor) {
 

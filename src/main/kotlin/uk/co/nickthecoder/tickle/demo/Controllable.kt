@@ -2,7 +2,7 @@ package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.AbstractRole
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.TaggedRole
+import uk.co.nickthecoder.tickle.util.TaggedRole
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.NoAction
 import uk.co.nickthecoder.tickle.util.Tagged

@@ -1,5 +1,6 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.resources
 
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.graphics.FontTexture

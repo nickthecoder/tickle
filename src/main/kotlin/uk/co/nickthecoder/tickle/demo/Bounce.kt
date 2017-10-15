@@ -4,7 +4,7 @@ import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.AbstractRole
 import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.TaggedRole
+import uk.co.nickthecoder.tickle.util.TaggedRole
 import uk.co.nickthecoder.tickle.neighbourhood.Occupant
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.Rectd

@@ -12,7 +12,7 @@ import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.Layout
 import uk.co.nickthecoder.tickle.LayoutStage
 import uk.co.nickthecoder.tickle.LayoutView
-import uk.co.nickthecoder.tickle.Resources
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.stage.*
 

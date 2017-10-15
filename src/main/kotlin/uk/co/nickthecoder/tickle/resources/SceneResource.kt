@@ -1,5 +1,7 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.resources
 
+import uk.co.nickthecoder.tickle.NoDirector
+import uk.co.nickthecoder.tickle.Scene
 import uk.co.nickthecoder.tickle.graphics.Color
 import java.io.File
 
