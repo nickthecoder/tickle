@@ -4,11 +4,11 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.GameInfo
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.NoProducer
 import uk.co.nickthecoder.tickle.Producer
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.XYiParameter
+import uk.co.nickthecoder.tickle.resources.Resources
 
 class GameInfoTab()
     : EditTaskTab(
@@ -31,7 +31,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val producerP = ChoiceParameter<Class<*>>("producer", value = NoProducer::class.java)
 
     val packageInfoP = InformationParameter("packageInfo", information = "The top level packages used by your game. This is used to scan the code for Producer, Director and Role classes.")
-    val packagesP = MultipleParameter("packages", label = "Packages", value = listOf("uk.co.nickthecoder.tickle")) {
+    val packagesP = MultipleParameter("packages", label = "Packages", value = gameInfo.packages.toMutableList()) {
         StringParameter("package")
     }
     val noteP = InformationParameter("note", information = "Note. When adding a new package, click the 'Apply' button to refresh the list of Producer classes.")
@@ -66,6 +66,8 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
         gameInfo.testScenePath = Resources.instance.scenePathToFile(testSceneP.value)
         gameInfo.resizable = resizableP.value!!
         gameInfo.producerString = producerP.value!!.name
+        gameInfo.packages.clear()
+        gameInfo.packages.addAll(packagesP.value)
     }
 }
 
