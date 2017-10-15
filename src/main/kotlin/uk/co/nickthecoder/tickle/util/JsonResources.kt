@@ -121,8 +121,8 @@ class JsonResources {
 
             initialScenePath = resources.scenePathToFile(jinfo.getString("initialScene", "splash"))
             testScenePath = resources.scenePathToFile(jinfo.getString("testScene", "splash"))
-
             producerString = jinfo.getString("producer", NoProducer::javaClass.name)
+
             jinfo.get("packages")?.let {
                 val newPackages = it.asArray()
                 packages.clear()

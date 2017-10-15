@@ -1,6 +1,10 @@
 Current Work
 ============
 
+Game info packages aren't being saved.
+Costume to have a Z-Order (set the actor's z when created).
+Actor.z should be an int???
+
 BUGS
 ====
 
@@ -114,9 +118,12 @@ Costumes to inherit?
 Later
 =====
 
+Game based on "flocking" :	https://www.youtube.com/watch?v=M028vafB0l8
+
 Undo/Redo in scene editor
 
 JBox2d integration
+	Stickflick style jointed characters.
 
 Split the project into multiple modules
 	core

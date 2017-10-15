@@ -32,7 +32,7 @@ class Occupant(
     fun neighbours(): Set<Occupant> {
         val set = mutableSetOf<Occupant>()
         blockRange.forEach { block ->
-            set.addAll(block.getOccupants())
+            set.addAll(block.occupants)
         }
         set.remove(this)
         return set

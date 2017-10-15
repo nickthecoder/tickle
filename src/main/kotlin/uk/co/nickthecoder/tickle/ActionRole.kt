@@ -32,14 +32,17 @@ open class ActionRole() : Role {
 
     override lateinit var actor: Actor
 
+    override fun begin() {}
+
+    override fun end() {}
+
     final override fun activated() {
-        super.activated()
         activated = true
         action = createAction() ?: NoAction()
         action.begin()
     }
 
-    open fun createAction() : Action? = NoAction()
+    open fun createAction(): Action? = NoAction()
 
     final override fun tick() {
         if (action.act()) {

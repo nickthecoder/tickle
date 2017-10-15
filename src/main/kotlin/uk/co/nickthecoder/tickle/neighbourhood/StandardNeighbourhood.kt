@@ -79,7 +79,7 @@ class StandardNeighbourhood(
             var x = row.ox()
             for (sq in row.row()) {
                 System.err.println("\n$sq : expected : $x,$y\n ")
-                for (actor in sq.getOccupants()) {
+                for (actor in sq.occupants) {
                     System.err.println(actor)
                 }
                 x += blockWidth
@@ -125,16 +125,12 @@ class StandardNeighbourhood(
                     newBlocks.add(Block(this@StandardNeighbourhood, ox + i * blockWidth, y))
                 }
                 row.addAll(0, newBlocks)
-                for (i in 0..-ix - 1) {
-                    row[i].initialiseNeighbours()
-                }
             } else {
                 val extra = ix - row.size + 1
                 for (i in 0..extra - 1) {
                     val block = Block(this@StandardNeighbourhood, ox + row.size * blockWidth, y)
 
                     row.add(block)
-                    block.initialiseNeighbours()
                 }
 
             }

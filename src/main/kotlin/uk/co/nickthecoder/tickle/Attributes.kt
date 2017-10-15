@@ -24,22 +24,20 @@ import kotlin.reflect.jvm.jvmErasure
  * When using "@Attribute", the each instance of the Role can have a different value, and is defined in the
  * SceneEditor, for each Actor added to the scene.
  *
- * Attributes are also used for StageConstraints, and other classes as Tickle gains more features.
+ * Attributes are also used for StageConstraints, and will be used  with other classes as Tickle gains more features.
  *
  * Example.
  *
- * A game has collectable items, so we define a Role called "Collectable".
- * We have several types of collectable (maybe coins of various colours and values).
- * So we create many Costumes, each with their own pose.
- * So we place the "@CostumeAttribute" on the Collectable class's "value" property.
+ * A game has collectable items of different values, so we define a Role called "Collectable",
+ * with an field called "value" of type int.
+ * We create a Costume for each type of collectable item, each with have its own pose.
+ * We place the "@CostumeAttribute" on the Collectable class's "value" property.
  * Now we can use the Editor to assign a value for each of the costumes.
  *
- * If we want the collectable to move about, and every collectable can move a a different speed, then
- * we need a "speed" property on the Collectable class with the "@Attribute" annotation.
+ * If we want the collectable to move about, and every collectable can move at different speeds, then
+ * we need a "speed" field on the Collectable class with the "@Attribute" annotation.
  * We can then set the speed for each collectable item from within the SceneEditor.
  *
- * Currently, only the following attribute types are supported :
- * Boolean, Int, Float, Double, String
  */
 class Attributes {
 

@@ -1,94 +1,42 @@
 package uk.co.nickthecoder.tickle.neighbourhood
 
+import uk.co.nickthecoder.tickle.Role
+
 class Block(
         private val neighbourhood: Neighbourhood,
         val x: Double,
         val y: Double) {
 
-    private var neighbours: MutableList<Block>? = null
+    private val _occupants = mutableSetOf<Occupant>()
 
-    private val occupants = mutableSetOf<Occupant>()
-
-    /**
-     * This is only valid if you have previously called [initialiseNeighbours].
-     */
-    val neighbouringBlocks: List<Block>
-        get() = this.neighbours!!
+    val occupants : Set<Occupant>
+        get() = _occupants
 
 
-    /**
-     * Caches the list of Blocks that touch this one, including diagonally, and also this Block. Therefore the length is
-     * from 1 to 9.
-     */
-    fun initialiseNeighbours() {
+    fun add(role: Role): Occupant {
+        val occupant = Occupant(neighbourhood, role)
+        add(occupant)
+        return occupant
+    }
 
-        this.neighbours = ArrayList<Block>(9)
-
-        for (dx in -1..1) {
-            for (dy in -1..1) {
-
-                if (dx == 0 && dy == 0) {
-                    this.neighbours!!.add(this)
-
-                    if (this.neighbourhood.getBlock(this.x, this.y) != this) {
-                        throw RuntimeException("Block is in the wrong place")
-                    }
-
-                } else {
-                    val neighbour = this.neighbourhood.getExistingBlock(
-                            this.x + dx * this.neighbourhood.blockWidth,
-                            this.y + dy * this.neighbourhood.blockHeight)
-
-                    if (neighbour === this) {
-                        throw RuntimeException("Block in two places at once. $dx,$dy")
-                    }
-
-                    if (neighbour != null) {
-
-                        if (this.x != neighbour.x - dx * this.neighbourhood.blockWidth) {
-                            throw RuntimeException("Incorrect x neighbour")
-                        }
-
-                        if (this.y != neighbour.y - dy * this.neighbourhood.blockHeight) {
-                            throw RuntimeException("Incorrect y neighbour")
-                        }
-
-                        if (neighbour.neighbours != null) {
-                            this.neighbours!!.add(neighbour)
-                            neighbour.neighbours!!.add(this)
-                        }
-                    }
-                }
-            }
-        }
+    fun remove(role: Role) {
+        _occupants.firstOrNull { it.role === role }?.let { remove(it) }
     }
 
     fun add(occupant: Occupant) {
-        this.occupants.add(occupant)
+        _occupants.add(occupant)
     }
 
     fun remove(occupant: Occupant) {
-        this.occupants.remove(occupant)
+        _occupants.remove(occupant)
     }
 
-    fun getOccupants(): Set<Occupant> {
-        return this.occupants
+    fun neighbouringBlock(dx: Int, dy: Int): Block? {
+        return neighbourhood.getExistingBlock(x + dx * neighbourhood.blockWidth, y + dy * neighbourhood.blockHeight)
     }
 
-    /**
-     * Prints debugging info to stderr.
-     */
-    fun debug() {
-        System.err.println("Debugging Block : " + this + "( " + this.x + "," + this.y + ")")
-        System.err.println("Occupants : " + this.occupants)
-
-        System.err.println()
-
-        for (nb in this.neighbours!!) {
-            System.err.println("Neighbour : " + nb)
-            System.err.println("  Occupants : " + nb.occupants)
-            System.err.println("  mutual neighbours : " + nb.neighbours!!.contains(this))
-        }
+    fun distantBlock(dx: Double, dy: Double): Block? {
+        return neighbourhood.getExistingBlock(x + dx, y + dy)
     }
 
     override fun toString(): String {

@@ -13,14 +13,14 @@ interface Role {
      * For Actor created dynamically during a game, activated() will be called immediately after begin().
      * tick() events will not happen before both begin() and activated().
      */
-    fun begin() {}
+    fun begin()
 
     /**
      * When starting a new scene, all of the Actors' Role's begin() methods are called before any Role's
      * activated method is called.
      * tick() events will not happen before both begin() and activated().
      */
-    fun activated() {}
+    fun activated()
 
     /**
      * Called once per frame from inside the main game loop.
@@ -34,7 +34,7 @@ interface Role {
      * Signals that the Actor has died, and has been removed from the Stage. Do not attempt to revive a dead Actor, by
      * placing it on a new Stage. Weirdness may ensue.
      */
-    fun end() {}
+    fun end()
 
     /**
      * Finds the closest role from the list, or null if the list is empty (or only contains this).
