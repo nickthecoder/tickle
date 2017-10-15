@@ -28,7 +28,7 @@ class Grenade() : AbstractRole() {
     @Attribute
     var hue: Double = 1.0
 
-    val action = PeriodicFactory<Actor>(10.0) {
+    val action = PeriodicFactory(0.05) {
 
         val randomHue = Rand.plusMinus(0.06f)
         val newColor = Color.createFromHSB(hue.toFloat() + randomHue, 1f, 1f)

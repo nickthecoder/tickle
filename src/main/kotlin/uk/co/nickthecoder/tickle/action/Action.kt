@@ -16,16 +16,24 @@ interface Action {
         return SequentialAction(this, other)
     }
 
+    fun then(func: () -> Unit): SequentialAction {
+        return then(OneAction(func))
+    }
+
     fun and(other: Action): ParallelAction {
         return ParallelAction(this, other)
+    }
+
+    fun and(func: () -> Unit): ParallelAction {
+        return and(OneAction(func))
     }
 
     fun forever(): ForeverAction {
         return ForeverAction(this)
     }
 
-    fun repeat(times: Int): RepeatAction {
-        return RepeatAction(this, times)
+    fun repeat(times: Int): Repeat {
+        return Repeat(this, times)
     }
 
 }

@@ -1,6 +1,8 @@
 package uk.co.nickthecoder.tickle.action
 
-class RepeatAction(val child: Action, val times: Int) : Action {
+class Repeat(val child: Action, val times: Int) : Action {
+
+    constructor(times: Int, child: Action) : this(child, times)
 
     private var current = -1
 

@@ -2,7 +2,7 @@ package uk.co.nickthecoder.tickle.action
 
 import uk.co.nickthecoder.tickle.Game
 
-class DelayAction(val seconds: Double) : Action {
+class Delay(val seconds: Double) : Action {
 
     var endSeconds: Double = 0.0
 
