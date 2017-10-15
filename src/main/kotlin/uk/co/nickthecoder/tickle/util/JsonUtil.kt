@@ -6,8 +6,8 @@ import uk.co.nickthecoder.tickle.Attributes
 
 object JsonUtil {
 
-    fun loadAttributes(jparent: JsonObject, attributes: Attributes) {
-        jparent.get("attributes")?.let {
+    fun loadAttributes(jparent: JsonObject, attributes: Attributes, tagName: String = "attributes") {
+        jparent.get(tagName)?.let {
             it.asArray().forEach {
                 val jattribute = it.asObject()
                 val attributeName = jattribute.get("name").asString()
@@ -17,7 +17,7 @@ object JsonUtil {
         }
     }
 
-    fun saveAttributes(jparent: JsonObject, attributes: Attributes) {
+    fun saveAttributes(jparent: JsonObject, attributes: Attributes, tagName: String = "attributes") {
         val map = attributes.map()
         if (map.isNotEmpty()) {
             val jattributes = JsonArray()
@@ -31,7 +31,7 @@ object JsonUtil {
                 }
             }
             if (!jattributes.isEmpty) {
-                jparent.add("attributes", jattributes)
+                jparent.add(tagName, jattributes)
             }
         }
     }

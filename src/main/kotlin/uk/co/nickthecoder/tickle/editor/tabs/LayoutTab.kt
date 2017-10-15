@@ -12,6 +12,7 @@ import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.stage.*
+import uk.co.nickthecoder.tickle.util.ClassAndAttributesParameter
 
 class LayoutTab(val name: String, val layout: Layout)
 
@@ -73,7 +74,8 @@ class LayoutTab(val name: String, val layout: Layout)
                 val inner = stagesP.newValue()
                 inner.stageNameP.value = name
                 inner.stageClassP.value = Class.forName(layoutStage.stageString)
-                inner.stageConstraintClassP.value = Class.forName(layoutStage.stageConstraintString)
+                inner.stageConstraintP.classP.value = Class.forName(layoutStage.stageConstraintString)
+                inner.stageConstraintP.attributes = layoutStage.constraintAttributes
             }
 
         }
@@ -98,7 +100,8 @@ class LayoutTab(val name: String, val layout: Layout)
                 layout.layoutStages[inner.stageNameP.value] = layoutStage
 
                 layoutStage.stageString = inner.stageClassP.value!!.name
-                layoutStage.stageConstraintString = inner.stageConstraintClassP.value!!.name
+                layoutStage.stageConstraintString = inner.stageConstraintP.classP.value!!.name
+                layoutStage.constraintAttributes = inner.stageConstraintP.attributes!!
             }
         }
     }
@@ -125,9 +128,9 @@ class LayoutTab(val name: String, val layout: Layout)
                 with(layoutView.position) {
                     inner.hAlignmentP.value = hAlignment
                     inner.leftRightMarginP.value = leftRightMargin
-                    inner.hPositionP.value = hPosition.toDouble()
+                    inner.hPositionP.value = hPosition
                     inner.widthP.value = width
-                    inner.widthRatioP.value = widthRatio?.toDouble()
+                    inner.widthRatioP.value = widthRatio
                     if (width != null) {
                         inner.hOneOfP.value = inner.widthP
                     } else if (widthRatio != null) {
@@ -138,9 +141,9 @@ class LayoutTab(val name: String, val layout: Layout)
 
                     inner.vAlignmentP.value = vAlignment
                     inner.topBottomMarginP.value = topBottomMargin
-                    inner.vPositionP.value = vPosition.toDouble()
+                    inner.vPositionP.value = vPosition
                     inner.heightP.value = height
-                    inner.heightRatioP.value = heightRatio?.toDouble()
+                    inner.heightRatioP.value = heightRatio
                     if (height != null) {
                         inner.vOneOfP.value = inner.heightP
                     } else if (heightRatio != null) {
@@ -208,13 +211,12 @@ class LayoutTab(val name: String, val layout: Layout)
 
         val stageNameP = StringParameter("stageName")
         val stageClassP = ChoiceParameter<Class<*>>("class", value = GameStage::class.java)
-        val stageConstraintClassP = ChoiceParameter<Class<*>>("constraint", value = NoStageConstraint::class.java)
+        val stageConstraintP = ClassAndAttributesParameter("contraint", StageConstraint::class.java)
         val createViewP = ButtonParameter("createView", label = "", buttonText = "Create Whole Screen View") { createView() }
 
         init {
-            addParameters(stageNameP, stageClassP, stageConstraintClassP, createViewP)
+            addParameters(stageNameP, stageClassP, stageConstraintP, createViewP)
             ClassLister.setChoices(stageClassP, Stage::class.java)
-            ClassLister.setChoices(stageConstraintClassP, StageConstraint::class.java)
         }
 
         fun createView() {

@@ -55,7 +55,17 @@
                 {
                     "name": "glass",
                     "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
-                    "constraint": "uk.co.nickthecoder.tickle.resources.GridConstraint"
+                    "constraint": "uk.co.nickthecoder.tickle.resources.GridConstraint",
+                    "constraintAttributes": [
+                        {
+                            "name": "xSpacing",
+                            "value": "50"
+                        },
+                        {
+                            "name": "ySpacing",
+                            "value": "50"
+                        }
+                    ]
                 }
             ],
             "views": [

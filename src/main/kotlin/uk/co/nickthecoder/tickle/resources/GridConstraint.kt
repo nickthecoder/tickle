@@ -1,22 +1,21 @@
 package uk.co.nickthecoder.tickle.resources
 
+import uk.co.nickthecoder.tickle.util.Attribute
+
 /**
  * Snaps actors to a grid
  */
-class GridConstraint : StageConstraint {
+class GridConstraint : NoStageConstraint() {
 
+    @Attribute
     var xSpacing: Double = 40.0
-    var ySpacing: Double = 40.0
 
-    override fun forStage(stageName: String, stageResource: StageResource) {
-    }
+    @Attribute
+    var ySpacing: Double = 40.0
 
     override fun addActorResource(actorResource: ActorResource): Boolean {
         adjust(actorResource)
         return true
-    }
-
-    override fun removeActorResource(actorResource: ActorResource) {
     }
 
     override fun moveActorResource(actorResource: ActorResource, isNew: Boolean) {

@@ -1,6 +1,10 @@
 package uk.co.nickthecoder.tickle.resources
 
+import java.util.jar.Attributes
+
 interface StageConstraint {
+
+    val attributes : Attributes
 
     fun forStage(stageName: String, stageResource: StageResource)
 
@@ -12,7 +16,9 @@ interface StageConstraint {
 
 }
 
-class NoStageConstraint : StageConstraint {
+open class NoStageConstraint : StageConstraint {
+
+    override val attributes = Attributes()
 
     override fun forStage(stageName: String, stageResource: StageResource) {}
 

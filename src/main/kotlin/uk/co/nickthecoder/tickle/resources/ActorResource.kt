@@ -27,9 +27,14 @@ class ActorResource(val isDesigning: Boolean = false) {
             field = v
         }
 
+    /**
+     * Used by SceneEditor in conjunction with StageConstraint. This is where the actor was dragged to, but [x],[y]
+     * are the final position of the actor determined by the StageConstraint. When using NoStageConstraint,
+     * draggedX,draggedY will be the same as x,y.
+     */
     var draggedX: Double = 0.0
 
-    var draggedY : Double = 0.0
+    var draggedY: Double = 0.0
 
     val direction = Angle()
 

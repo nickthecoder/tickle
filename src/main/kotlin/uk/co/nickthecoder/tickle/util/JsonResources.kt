@@ -154,6 +154,7 @@ class JsonResources {
                 jstage.add("name", stageName)
                 jstage.add("stage", layoutStage.stageString)
                 jstage.add("constraint", layoutStage.stageConstraintString)
+                JsonUtil.saveAttributes(jstage, layoutStage.constraintAttributes, "constraintAttributes")
             }
 
             val jviews = JsonArray()
@@ -209,6 +210,8 @@ class JsonResources {
                     val stageName = jstage.get("name").asString()
                     layoutStage.stageString = jstage.get("stage").asString()
                     layoutStage.stageConstraintString = jstage.getString("constraint", NoStageConstraint::class.java.name)
+                    JsonUtil.loadAttributes(jstage, layoutStage.constraintAttributes, "constraintAttributes")
+
                     layout.layoutStages[stageName] = layoutStage
                 }
             }

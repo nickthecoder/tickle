@@ -17,13 +17,14 @@ import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.jvmErasure
 
 /**
- * Holds a set of user-definable attributes. These are used to set property fields on Role objects, for values
- * defined in the Editor and SceneEditor.
+ * Holds a set of user-definable attributes.
  *
  * Annotate properties in Role with "@CostumeAttribute" or "@Attribute".
  * When using "@CostumeAttribute", the value is defined once in the Costume.
  * When using "@Attribute", the each instance of the Role can have a different value, and is defined in the
  * SceneEditor, for each Actor added to the scene.
+ *
+ * Attributes are also used for StageConstraints, and other classes as Tickle gains more features.
  *
  * Example.
  *
@@ -112,7 +113,7 @@ class Attributes {
 
         val toDiscard = map.keys.toMutableSet()
 
-        // TODO SHould this be memberProperties rather than members?
+        // TODO Should this be memberProperties rather than members?
         kClass.members.forEach { property ->
             property.annotations.filterIsInstance<Attribute>().firstOrNull()?.let { annotation ->
                 val hasExistingValue = map.contains(property.name)
@@ -120,6 +121,7 @@ class Attributes {
                 data.attributeType = annotation.attributeType
                 data.order = annotation.order
                 data.scale = annotation.scale
+
                 createParameter(property.name, property.returnType.jvmErasure, hasAlpha = annotation.hasAlpha)?.let { parameter ->
                     data.parameter = parameter
                     parameter.listen { data.value = parameter.stringValue }
@@ -131,6 +133,9 @@ class Attributes {
                         val theValue = (property as KProperty1<Any, Any>).get(instance)
                         @Suppress("UNCHECKED_CAST")
                         (data.parameter as ValueParameter<Any>).value = theValue
+                        data.value = data.parameter!!.stringValue
+                    } else {
+                        data.value?.let { data.parameter!!.stringValue = it }
                     }
                 }
                 toDiscard.remove(property.name)
@@ -194,11 +199,6 @@ class Attributes {
         }
     }
 
-
-    fun fromString(value: String, klass: Class<*>): Any {
-        return fromString(value, klass.kotlin)
-    }
-
     fun fromString(value: String, klass: KClass<*>): Any {
         return when (klass) {
             Boolean::class -> value.toBoolean()
@@ -237,6 +237,12 @@ class Attributes {
         } else {
             throw IllegalArgumentException("Type $klass is not currently supported.")
         }
+    }
+
+    override fun toString(): String {
+        return "Attributes : " + map.map { (name, data) ->
+            "$name=${data.value}"
+        }.joinToString()
     }
 }
 
