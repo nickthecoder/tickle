@@ -23,7 +23,7 @@ class PeriodicFactory(
     }
 
     override fun act(): Boolean {
-        remainder += Game.instance.tickDuration //Game.instance.seconds - lastSeconds
+        remainder += Game.instance.tickDuration
         while (remainder >= period) {
             remainder -= period
             factory()

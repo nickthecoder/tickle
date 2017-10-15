@@ -1,9 +1,6 @@
 Current Work
 ============
 
-Costume to have a Z-Order (set the actor's z when created).
-Actor.z should be an int???
-
 BUGS
 ====
 

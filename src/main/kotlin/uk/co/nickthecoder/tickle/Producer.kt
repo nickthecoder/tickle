@@ -13,14 +13,13 @@ import java.io.File
  * Perform actions when the game first starts and when it ends.
  * Add additional auto-generated resources to the Resources class at the beginning of the game.
  * Take a snapshot of the screen when a particular key is pressed.
- * To keep track of the score, and high-score tables (Old school!)
- * To hold information carried forward from one level to the next, such as lives remaining.
+ * To hold information carried forward from one level to the next, such as score and lives remaining.
  *
- * See Director
+ * See [Director]
  */
 interface Producer {
 
-    fun begin() {}
+    fun begin()
 
     fun startScene(sceneFile: File) {
         Game.instance.endScene()
@@ -28,19 +27,38 @@ interface Producer {
         Game.instance.startScene(scene)
     }
 
-    fun preTick() {}
+    fun sceneBegin()
 
-    fun postTick() {}
+    fun sceneActivated()
 
-    fun end() {}
+    fun preTick()
 
-    fun onKeyEvent(event: KeyEvent) {}
+    fun postTick()
+
+    fun sceneEnd()
+
+    fun end()
+
+    fun onKeyEvent(event: KeyEvent)
 }
 
-abstract class AbstractProducder() : Producer {
-    // TODO Load scene
+abstract class AbstractProducer : Producer {
+
+    override fun begin() {}
+
+    override fun sceneBegin() {}
+
+    override fun sceneActivated() {}
+
+    override fun postTick() {}
+
+    override fun preTick() {}
+
+    override fun sceneEnd() {}
+
+    override fun end() {}
+
+    override fun onKeyEvent(event: KeyEvent) {}
 }
 
-class NoProducer() : AbstractProducder() {
-
-}
+class NoProducer : AbstractProducer()

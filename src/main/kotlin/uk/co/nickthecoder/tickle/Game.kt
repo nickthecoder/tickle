@@ -97,15 +97,18 @@ class Game(
         director = Director.createDirector(sceneResource.directorString)
         scene = sceneResource.createScene()
 
+        producer.sceneBegin()
         director.begin()
         scene.begin()
         scene.activated()
         director.activated()
+        producer.sceneActivated()
     }
 
     fun endScene() {
         scene.end()
         director.end()
+        producer.sceneEnd()
     }
 
     fun cleanUp() {
