@@ -6,7 +6,8 @@ import uk.co.nickthecoder.tickle.resources.*
 class StageLayer(
         val sceneResource: SceneResource,
         val stageName: String,
-        val stageResource: StageResource)
+        val stageResource: StageResource,
+        val stageConstraint: StageConstraint)
 
     : Layer(), SceneResourceListener {
 
@@ -36,6 +37,12 @@ class StageLayer(
 
     init {
         sceneResource.listeners.add(this)
+        stageResource.actorResources.forEach { actor ->
+            actor.draggedX = actor.x
+            actor.draggedY = actor.y
+            actor.layer = this
+            stageConstraint.addActorResource(actor)
+        }
     }
 
     override fun drawContent() {

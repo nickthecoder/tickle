@@ -8,8 +8,11 @@ import javafx.scene.control.SeparatorMenuItem
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
-import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.editor.EditorAction
+import uk.co.nickthecoder.tickle.resources.NoStageConstraint
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.resources.StageConstraint
 
 /**
  */
@@ -50,7 +53,18 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
         stageButton.items.add(singleLayerMode)
         stageButton.items.add(SeparatorMenuItem())
         sceneResource.stageResources.forEach { stageName, stageResource ->
-            val layer = StageLayer(sceneResource, stageName, stageResource)
+
+            val layout = Resources.instance.layout(sceneResource.layoutName)
+            val constraintName = layout.layoutStages[stageName]?.stageConstraintString
+            var constraint: StageConstraint = NoStageConstraint()
+            try {
+                constraint = Class.forName(constraintName).newInstance() as StageConstraint
+            } catch(e: Exception) {
+                System.err.println("WARNING : Failed to create the StageConstraint for stage $stageName. Using NoStageConstraint")
+            }
+            constraint.forStage(stageName, stageResource)
+
+            val layer = StageLayer(sceneResource, stageName, stageResource, constraint)
             add(layer)
             stageLayers.add(layer)
             map[stageName] = layer

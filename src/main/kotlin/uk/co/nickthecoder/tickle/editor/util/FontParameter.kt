@@ -2,7 +2,7 @@ package uk.co.nickthecoder.tickle.editor.util
 
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.tickle.FontResource
+import uk.co.nickthecoder.tickle.resources.FontResource
 import java.awt.Font
 
 

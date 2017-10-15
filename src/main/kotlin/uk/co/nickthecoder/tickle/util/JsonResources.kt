@@ -4,10 +4,13 @@ import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.Costume
+import uk.co.nickthecoder.tickle.CostumeEvent
+import uk.co.nickthecoder.tickle.NoProducer
+import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.*
-import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
 import uk.co.nickthecoder.tickle.stage.FlexVAlignment
 import java.io.*
@@ -150,6 +153,7 @@ class JsonResources {
 
                 jstage.add("name", stageName)
                 jstage.add("stage", layoutStage.stageString)
+                jstage.add("constraint", layoutStage.stageConstraintString)
             }
 
             val jviews = JsonArray()
@@ -204,6 +208,7 @@ class JsonResources {
                     val layoutStage = LayoutStage()
                     val stageName = jstage.get("name").asString()
                     layoutStage.stageString = jstage.get("stage").asString()
+                    layoutStage.stageConstraintString = jstage.getString("constraint", NoStageConstraint::class.java.name)
                     layout.layoutStages[stageName] = layoutStage
                 }
             }

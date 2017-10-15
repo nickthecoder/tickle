@@ -9,11 +9,8 @@ import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
-import uk.co.nickthecoder.tickle.Layout
-import uk.co.nickthecoder.tickle.LayoutStage
-import uk.co.nickthecoder.tickle.LayoutView
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
+import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.stage.*
 
 class LayoutTab(val name: String, val layout: Layout)
@@ -76,6 +73,7 @@ class LayoutTab(val name: String, val layout: Layout)
                 val inner = stagesP.newValue()
                 inner.stageNameP.value = name
                 inner.stageClassP.value = Class.forName(layoutStage.stageString)
+                inner.stageConstraintClassP.value = Class.forName(layoutStage.stageConstraintString)
             }
 
         }
@@ -99,9 +97,8 @@ class LayoutTab(val name: String, val layout: Layout)
                 val layoutStage = LayoutStage()
                 layout.layoutStages[inner.stageNameP.value] = layoutStage
 
-                with(layoutStage) {
-                    layoutStage.stageString = inner.stageClassP.value!!.name
-                }
+                layoutStage.stageString = inner.stageClassP.value!!.name
+                layoutStage.stageConstraintString = inner.stageConstraintClassP.value!!.name
             }
         }
     }
@@ -211,11 +208,13 @@ class LayoutTab(val name: String, val layout: Layout)
 
         val stageNameP = StringParameter("stageName")
         val stageClassP = ChoiceParameter<Class<*>>("class", value = GameStage::class.java)
+        val stageConstraintClassP = ChoiceParameter<Class<*>>("constraint", value = NoStageConstraint::class.java)
         val createViewP = ButtonParameter("createView", label = "", buttonText = "Create Whole Screen View") { createView() }
 
         init {
-            addParameters(stageNameP, stageClassP, createViewP)
+            addParameters(stageNameP, stageClassP, stageConstraintClassP, createViewP)
             ClassLister.setChoices(stageClassP, Stage::class.java)
+            ClassLister.setChoices(stageConstraintClassP, StageConstraint::class.java)
         }
 
         fun createView() {

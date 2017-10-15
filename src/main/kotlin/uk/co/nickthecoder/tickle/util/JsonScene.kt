@@ -4,7 +4,7 @@ import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.Resources

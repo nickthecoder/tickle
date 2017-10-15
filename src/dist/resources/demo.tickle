@@ -17,11 +17,13 @@
             "stages": [
                 {
                     "name": "background",
-                    "stage": "uk.co.nickthecoder.tickle.stage.GameStage"
+                    "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
+                    "constraint": "uk.co.nickthecoder.tickle.resources.NoStageConstraint"
                 },
                 {
                     "name": "main",
-                    "stage": "uk.co.nickthecoder.tickle.stage.GameStage"
+                    "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
+                    "constraint": "uk.co.nickthecoder.tickle.resources.NoStageConstraint"
                 }
             ],
             "views": [
@@ -52,7 +54,8 @@
             "stages": [
                 {
                     "name": "glass",
-                    "stage": "uk.co.nickthecoder.tickle.stage.GameStage"
+                    "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
+                    "constraint": "uk.co.nickthecoder.tickle.resources.GridConstraint"
                 }
             ],
             "views": [

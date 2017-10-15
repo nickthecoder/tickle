@@ -7,14 +7,14 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
-import uk.co.nickthecoder.tickle.resources.ActorResource
-import uk.co.nickthecoder.tickle.resources.ModificationType
-import uk.co.nickthecoder.tickle.resources.SceneResource
-import uk.co.nickthecoder.tickle.resources.StageResource
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.editor.util.isAt
+import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.resources.ModificationType
+import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.resources.StageResource
 
 
 class SceneEditor(val sceneResource: SceneResource) {
@@ -244,6 +244,9 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     inner class Select : MouseHandler {
 
+        var offsetX: Double = 0.0
+        var offsetY: Double = 0.0
+
         override fun onMousePressed(event: MouseEvent) {
             val wx = worldX(event)
             val wy = worldY(event)
@@ -298,6 +301,10 @@ class SceneEditor(val sceneResource: SceneResource) {
 
                     }
                 }
+                selection.latest()?.let { latest ->
+                    offsetX = latest.x - wx
+                    offsetY = latest.y - wy
+                }
 
             } else if (event.button == MouseButton.MIDDLE || event.isAltDown) {
                 mouseHandler = Pan()
@@ -311,8 +318,9 @@ class SceneEditor(val sceneResource: SceneResource) {
         override fun onMouseDragged(event: MouseEvent) {
             if (event.button == MouseButton.PRIMARY) {
                 selection.selected().forEach { actorResource ->
-                    actorResource.x += dragDeltaX
-                    actorResource.y -= dragDeltaY
+                    actorResource.draggedX += dragDeltaX
+                    actorResource.draggedY -= dragDeltaY
+                    actorResource.layer?.stageConstraint?.moveActorResource(actorResource, false)
                     sceneResource.fireChange(actorResource, ModificationType.CHANGE)
                 }
             }
@@ -348,30 +356,39 @@ class SceneEditor(val sceneResource: SceneResource) {
 
         init {
             newActor.costumeName = costumeName
+            newActor.layer = layers.currentLayer()
             layers.glass.newActor = newActor
         }
 
         override fun onMouseMoved(event: MouseEvent) {
-            newActor.x = worldX(event)
-            newActor.y = worldY(event)
+
+            newActor.draggedX = worldX(event)
+            newActor.draggedY = worldY(event)
+            layers.currentLayer()?.stageConstraint?.moveActorResource(newActor, true)
             layers.glass.dirty = true
         }
 
         override fun onMousePressed(event: MouseEvent) {
-            layers.currentLayer()?.stageResource?.actorResources?.add(newActor)
 
-            if (event.isShiftDown) {
+            if (layers.currentLayer()?.stageConstraint?.addActorResource(newActor) == true) {
+                layers.currentLayer()?.stageResource?.actorResources?.add(newActor)
+                newActor.layer = layers.currentLayer()
 
-                newActor = ActorResource()
-                newActor.costumeName = costumeName
-                layers.glass.newActor = newActor
+                if (event.isShiftDown) {
 
-            } else {
-                layers.glass.newActor = null
-                selection.clearAndSelect(newActor)
-                mouseHandler = Select()
+                    newActor = ActorResource()
+                    newActor.costumeName = costumeName
+                    layers.glass.newActor = newActor
+
+                } else {
+                    layers.glass.newActor = null
+                    selection.clearAndSelect(newActor)
+                    mouseHandler = Select()
+                }
+                sceneResource.fireChange(newActor, ModificationType.NEW)
+
             }
-            sceneResource.fireChange(newActor, ModificationType.NEW)
+
         }
 
     }

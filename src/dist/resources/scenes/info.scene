@@ -9,8 +9,8 @@
             "actors": [
                 {
                     "costume": "info",
-                    "x": 1024,
-                    "y": 601,
+                    "x": 1000,
+                    "y": 560,
                     "direction": 0,
                     "text": "lkjldsajdlsajj \nd ll \nd jsjsh\ndsak\nd skkhdajkhsa kjhd kAbc\nDef hij klm\ndsah"
                 },
@@ -21,22 +21,27 @@
                     "direction": 0
                 },
                 {
-                    "costume": "plainText",
-                    "x": 581,
-                    "y": 0,
-                    "direction": 0,
-                    "text": "dsljd\ndjsldd\ndjslkdl\njdlsjdlHdhjk"
-                },
-                {
                     "costume": "eye",
-                    "x": 62,
-                    "y": 561,
+                    "x": 80,
+                    "y": 560,
                     "direction": 0
                 },
                 {
                     "costume": "eye",
-                    "x": 97,
+                    "x": 120,
                     "y": 560,
+                    "direction": 0
+                },
+                {
+                    "costume": "eye",
+                    "x": 960,
+                    "y": 40,
+                    "direction": 0
+                },
+                {
+                    "costume": "eye",
+                    "x": 1000,
+                    "y": 40,
                     "direction": 0
                 }
             ]

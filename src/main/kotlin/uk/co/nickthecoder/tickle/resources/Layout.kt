@@ -1,5 +1,6 @@
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.resources
 
+import uk.co.nickthecoder.tickle.Scene
 import uk.co.nickthecoder.tickle.stage.*
 
 class Layout() {
@@ -34,7 +35,10 @@ class Layout() {
 }
 
 class LayoutStage() {
+
     var stageString: String = GameStage::class.java.name
+
+    var stageConstraintString: String = NoStageConstraint::class.java.name
 
     fun createStage(): Stage {
 

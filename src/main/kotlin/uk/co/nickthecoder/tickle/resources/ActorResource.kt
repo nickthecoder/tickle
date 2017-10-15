@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle.resources
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Attributes
 import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.editor.scene.StageLayer
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Angle
 
@@ -26,6 +27,10 @@ class ActorResource(val isDesigning: Boolean = false) {
             field = v
         }
 
+    var draggedX: Double = 0.0
+
+    var draggedY : Double = 0.0
+
     val direction = Angle()
 
     val attributes = Attributes()
@@ -38,6 +43,8 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     val displayText
         get() = if (text.isBlank()) "<no text>" else text
+
+    var layer: StageLayer? = null
 
     fun createActor(): Actor? {
         val costume = Resources.instance.optionalCostume(costumeName)

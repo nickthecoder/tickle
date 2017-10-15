@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.sandbox
 
-import uk.co.nickthecoder.tickle.FontResource
+import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.HAlignment

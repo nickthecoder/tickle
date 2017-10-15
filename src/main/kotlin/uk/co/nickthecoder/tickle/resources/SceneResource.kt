@@ -62,7 +62,7 @@ class SceneResource {
 
     /**
      * Called when the layout has changed. Attempt to move all of the actors from like-names stages, but any
-     * unmatches stage names will result in actors being put in a "random" stage.
+     * unmatched stage names will result in actors being put in a "random" stage.
      */
     private fun updateLayout() {
 
@@ -80,16 +80,14 @@ class SceneResource {
             } else {
                 if (oldStage.actorResources.isNotEmpty()) {
                     System.err.println("Warning. Layout ${layoutName} doesn't have a stage called '${stageName}'. Placing actors in another stage.")
-                    stageResources.values.firstOrNull()?.let { firstStage ->
-                        firstStage.actorResources.addAll(oldStage.actorResources)
-                    }
+                    stageResources.values.firstOrNull()?.actorResources?.addAll(oldStage.actorResources)
                 }
             }
         }
     }
 
     fun fireChange(actorResource: ActorResource, type: ModificationType) {
-        listeners.forEach {
+        listeners.toList().forEach {
             it.actorModified(this, actorResource, type)
         }
     }

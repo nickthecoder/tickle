@@ -165,13 +165,6 @@
                     "direction": 10.999999999999998
                 },
                 {
-                    "costume": "plainText",
-                    "x": 105,
-                    "y": 330,
-                    "direction": 0,
-                    "text": "Hello World"
-                },
-                {
                     "costume": "coin",
                     "x": 631,
                     "y": 368,
@@ -218,13 +211,6 @@
                             "value": "3.0"
                         }
                     ]
-                },
-                {
-                    "costume": "info",
-                    "x": 104,
-                    "y": 296,
-                    "direction": 0,
-                    "text": "Hello\nWorld"
                 }
             ]
         }

@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.graphics
 
-import uk.co.nickthecoder.tickle.FontResource
+import uk.co.nickthecoder.tickle.resources.FontResource
 
 class TextStyle(
         var fontResource: FontResource,
