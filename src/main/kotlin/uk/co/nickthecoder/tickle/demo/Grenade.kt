@@ -40,7 +40,7 @@ class Grenade() : AbstractRole() {
         with(newActor) {
             x = actor.x + exit.x
             y = actor.y + exit.y
-            z = actor.z - 1
+            zOrder = actor.zOrder - 1
             changeAppearance(Resources.instance.pose("spark"))
             color = newColor
         }

@@ -14,6 +14,8 @@ class Costume() {
 
     var canRotate: Boolean = false
 
+    var zOrder : Double = 0.0
+
     val attributes = Attributes()
 
     val events = mutableMapOf<String, CostumeEvent>()
@@ -26,6 +28,8 @@ class Costume() {
         role?.let { attributes.applyToObject(it) }
 
         val actor = Actor(this, role)
+        actor.zOrder = zOrder
+
         val pose = events["default"]?.choosePose()
         if (pose == null) {
             val textStyle = events["default"]?.chooseTextStyle()

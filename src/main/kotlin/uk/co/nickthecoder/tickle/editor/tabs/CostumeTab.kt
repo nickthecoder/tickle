@@ -8,7 +8,10 @@ import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.Costume
+import uk.co.nickthecoder.tickle.CostumeEvent
+import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.TextStyleParameter
 import uk.co.nickthecoder.tickle.editor.util.createPoseParameter
@@ -65,12 +68,14 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val canRotateP = BooleanParameter("canRotate")
 
+        val zOrderP = DoubleParameter("zOrder")
+
         val infoP = InformationParameter("info",
                 information = "The role has no fields with the '@CostumeAttribute' annotation, and therefore, this costume has no attributes.")
         val attributesP = SimpleGroupParameter("attributes")
 
         override val taskD = TaskDescription("costumeDetails")
-                .addParameters(nameP, roleClassP, canRotateP, attributesP)
+                .addParameters(nameP, roleClassP, canRotateP, zOrderP, attributesP)
 
         init {
             ClassLister.setNullableChoices(roleClassP, Role::class.java)
@@ -78,6 +83,7 @@ class CostumeTab(val name: String, val costume: Costume)
             nameP.value = name
             roleClassP.value = costume.roleClass()
             canRotateP.value = costume.canRotate
+            zOrderP.value = costume.zOrder
 
             updateAttributes()
             roleClassP.listen {
@@ -93,6 +99,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
             costume.roleString = if (roleClassP.value == null) "" else roleClassP.value!!.name
             costume.canRotate = canRotateP.value == true
+            costume.zOrder = zOrderP.value!!
         }
 
         fun updateAttributes() {

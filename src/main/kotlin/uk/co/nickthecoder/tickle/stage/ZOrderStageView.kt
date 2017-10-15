@@ -10,7 +10,7 @@ class ZOrderStageView
     override fun draw(renderer: Renderer) {
         super.draw(renderer)
 
-        stage.actors.sortedBy { it.z }.forEach { actor ->
+        stage.actors.sortedBy { it.zOrder }.forEach { actor ->
             actor.appearance.draw(renderer)
         }
     }

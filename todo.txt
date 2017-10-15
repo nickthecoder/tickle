@@ -1,7 +1,6 @@
 Current Work
 ============
 
-Game info packages aren't being saved.
 Costume to have a Z-Order (set the actor's z when created).
 Actor.z should be an int???
 

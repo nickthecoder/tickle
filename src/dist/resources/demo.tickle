@@ -182,6 +182,7 @@
             "name": "bee",
             "role": "uk.co.nickthecoder.tickle.demo.Bee",
             "canRotate": true,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -195,6 +196,7 @@
             "name": "grenade",
             "role": "uk.co.nickthecoder.tickle.demo.Grenade",
             "canRotate": true,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -208,6 +210,7 @@
             "name": "hand",
             "role": "uk.co.nickthecoder.tickle.demo.Hand",
             "canRotate": false,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -221,6 +224,7 @@
             "name": "coin",
             "role": "uk.co.nickthecoder.tickle.demo.Coin",
             "canRotate": true,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -232,7 +236,7 @@
             "attributes": [
                 {
                     "name": "color",
-                    "value": "#999900ff"
+                    "value": "#999900"
                 },
                 {
                     "name": "value",
@@ -244,6 +248,7 @@
             "name": "coin10",
             "role": "uk.co.nickthecoder.tickle.demo.Coin",
             "canRotate": true,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -267,6 +272,7 @@
             "name": "coin100",
             "role": "uk.co.nickthecoder.tickle.demo.Coin",
             "canRotate": true,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -278,7 +284,7 @@
             "attributes": [
                 {
                     "name": "color",
-                    "value": "#ffff4dff"
+                    "value": "#ffff4d"
                 },
                 {
                     "name": "value",
@@ -290,6 +296,7 @@
             "name": "spark",
             "role": "",
             "canRotate": false,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -303,6 +310,7 @@
             "name": "shootingStar",
             "role": "uk.co.nickthecoder.tickle.demo.ShootingStar",
             "canRotate": false,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -316,6 +324,7 @@
             "name": "simpleBounce",
             "role": "uk.co.nickthecoder.tickle.demo.SimpleBounce",
             "canRotate": false,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -329,6 +338,7 @@
             "name": "neighbourhoodBounce",
             "role": "uk.co.nickthecoder.tickle.demo.NeighbourhoodBounce",
             "canRotate": false,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -342,6 +352,7 @@
             "name": "plainText",
             "role": "",
             "canRotate": false,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -361,6 +372,7 @@
             "name": "info",
             "role": "uk.co.nickthecoder.tickle.demo.Info",
             "canRotate": false,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",
@@ -380,6 +392,7 @@
             "name": "eye",
             "role": "uk.co.nickthecoder.tickle.demo.Eye",
             "canRotate": false,
+            "zOrder": 0,
             "events": [
                 {
                     "name": "default",

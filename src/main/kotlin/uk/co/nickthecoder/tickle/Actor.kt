@@ -32,7 +32,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
             position.y = v
         }
 
-    var z: Double = 0.0
+    var zOrder: Double = 0.0
 
     val direction: Angle = object : Angle() {
         override var radians = 0.0
@@ -155,10 +155,10 @@ class Actor(var costume: Costume, val role: Role? = null) {
         }
     }
 
-    fun createChild(eventName: String, deltaZ: Int = 0): Actor {
+    fun createChild(eventName: String, deltaZ: Double = 0.0): Actor {
         val actor = costume.createChild(eventName)
         stage?.add(actor)
-        actor.z = z + deltaZ
+        actor.zOrder = zOrder + deltaZ
         return actor
     }
 

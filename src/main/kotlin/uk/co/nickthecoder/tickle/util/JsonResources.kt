@@ -338,6 +338,7 @@ class JsonResources {
             jcostume.add("name", name)
             jcostume.add("role", costume.roleString)
             jcostume.add("canRotate", costume.canRotate)
+            jcostume.add("zOrder", costume.zOrder)
 
             val jevents = JsonArray()
             jcostume.add("events", jevents)
@@ -395,6 +396,7 @@ class JsonResources {
             val costume = Costume()
             costume.roleString = jcostume.getString("role", "")
             costume.canRotate = jcostume.getBoolean("canRotate", false)
+            costume.zOrder = jcostume.getDouble("zOrder", 0.0)
 
             jcostume.get("events")?.let {
                 val jevents = it.asArray()
