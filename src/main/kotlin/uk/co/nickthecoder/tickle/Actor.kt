@@ -159,10 +159,20 @@ class Actor(var costume: Costume, val role: Role? = null) {
         }
     }
 
-    fun createChild(eventName: String, deltaZ: Double = 0.0): Actor {
+    fun createChild(eventName: String, deltaX: Double = 0.0, deltaY: Double = 0.0, deltaZ: Double = 0.0): Actor {
         val actor = costume.createChild(eventName)
+        if (actor.costume == this.costume) {
+            // The actor was created without its own costume, so use MY zOrder as the basis for the
+            // new actor's zOrder
+            actor.zOrder = zOrder + deltaZ
+        } else {
+            // The costume will have given it a zOrder, so use that.
+            // deltaZ will probably be 0 when creating actors with their own costume.
+            actor.zOrder += deltaZ
+        }
+        actor.x = x + deltaX
+        actor.y = y + deltaY
         stage?.add(actor)
-        actor.zOrder = zOrder + deltaZ
         return actor
     }
 

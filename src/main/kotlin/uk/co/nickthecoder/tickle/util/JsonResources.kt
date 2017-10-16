@@ -359,6 +359,17 @@ class JsonResources {
                     }
                     jevent.add("poses", jposes)
                 }
+
+                if (event.costumes.isNotEmpty()) {
+                    val jcos = JsonArray()
+                    event.costumes.forEach { cos ->
+                        resources.findCostumeName(cos)?.let { cosName ->
+                            jcos.add(cosName)
+                        }
+                    }
+                    jevent.add("costumes", jcos)
+                }
+
                 if (event.textStyles.isNotEmpty()) {
                     val jtextStyles = JsonArray()
                     event.textStyles.forEach { textStyle ->
@@ -392,7 +403,11 @@ class JsonResources {
         return jcostumes
     }
 
+    data class CostumeEventData(val costumeEvent: CostumeEvent, val costumeName: String)
+
     fun loadCostumes(jcostumes: JsonArray) {
+        val costumeEvents = mutableListOf<CostumeEventData>()
+
         jcostumes.forEach {
             val jcostume = it.asObject()
             val name = jcostume.get("name").asString()
@@ -413,6 +428,16 @@ class JsonResources {
                         jposes.forEach {
                             val poseName = it.asString()
                             resources.optionalPose(poseName)?.let { event.poses.add(it) }
+                        }
+                    }
+
+                    jevent.get("costumes")?.let {
+                        val jcoses = it.asArray()
+                        jcoses.forEach {
+                            val costumeName = it.asString()
+                            // We cannot add the costume event at this point, because the costume may not have been loaded yet
+                            // So instead, save the details, and process it afterwards.
+                            costumeEvents.add(CostumeEventData(event, costumeName))
                         }
                     }
 
@@ -448,6 +473,11 @@ class JsonResources {
 
             resources.addCostume(name, costume)
             // println("Loaded costume $name : ${costume}")
+        }
+
+        // Now all costume have been loaded, lets add the costume events.
+        costumeEvents.forEach { data ->
+            data.costumeEvent.costumes.add(resources.costume(data.costumeName))
         }
     }
 

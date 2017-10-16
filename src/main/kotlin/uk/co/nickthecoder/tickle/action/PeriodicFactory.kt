@@ -10,26 +10,32 @@ import uk.co.nickthecoder.tickle.Game
  */
 class PeriodicFactory(
         val period: Double = 1.0,
-        var amount: Int? = null,
+        val amount: Int? = null,
         val factory: () -> Unit)
 
     : Action {
 
-    var remainder: Double = 0.0
+    private var created = 0
+
+    var timeRemainder: Double = 0.0
 
     override fun begin(): Boolean {
-        remainder = 0.0
+        created = 0
+        timeRemainder = 0.0
         return amount ?: 1 <= 0
     }
 
     override fun act(): Boolean {
-        remainder += Game.instance.tickDuration
-        while (remainder >= period) {
-            remainder -= period
+        if (amount != null && created >= amount) {
+            return true
+        }
+        timeRemainder += Game.instance.tickDuration
+        while (timeRemainder >= period) {
+            timeRemainder -= period
             factory()
 
-            amount?.dec()
-            if (amount == 0) {
+            created++
+            if (amount != null && created >= amount) {
                 return true
             }
         }

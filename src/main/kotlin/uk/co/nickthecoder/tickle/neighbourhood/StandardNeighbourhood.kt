@@ -10,9 +10,9 @@ class StandardNeighbourhood(
     : Neighbourhood {
 
     /**
-     * The offset of the top-most row. Each NeighbourhoodRow has its own x-offset.
+     * The offset of the bottom-most row. Each NeighbourhoodRow has its own x-offset.
      */
-    private var oy: Double = 0.0
+    private var oy: Double = blockHeight / 2
 
     /**
      * The Blocks are arranged in a list of rows (each row has a list of Blocks).
@@ -21,7 +21,7 @@ class StandardNeighbourhood(
 
     override fun clear() {
         rows.clear()
-        oy = 0.0
+        oy = blockHeight / 2
     }
 
     override fun getBlock(x: Double, y: Double) = (getExistingRow(y) ?: createRow(y)).getBlock(x)
@@ -91,11 +91,12 @@ class StandardNeighbourhood(
 
     private inner class NeighbourhoodRow(val y: Double) {
 
-        private var ox: Double = 0.0
+        private var ox: Double = blockWidth / 2
 
         private val row = mutableListOf<Block>()
 
         fun ox() = ox
+
         fun row(): List<Block> = row
 
         fun getBlock(x: Double): Block {

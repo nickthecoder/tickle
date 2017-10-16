@@ -36,7 +36,7 @@ open class ActionRole() : Role {
 
     override fun end() {}
 
-    final override fun activated() {
+    override fun activated() {
         activated = true
         action = createAction() ?: NoAction()
         action.begin()
@@ -44,7 +44,7 @@ open class ActionRole() : Role {
 
     open fun createAction(): Action? = NoAction()
 
-    final override fun tick() {
+    override fun tick() {
         if (action.act()) {
             actor.die()
         }

@@ -14,7 +14,7 @@ class Costume() {
 
     var canRotate: Boolean = false
 
-    var zOrder : Double = 0.0
+    var zOrder: Double = 0.0
 
     val attributes = Attributes()
 
@@ -66,9 +66,24 @@ class Costume() {
         }
     }
 
+    fun createRole(): Role? {
+        roleClass()?.let {
+            return Role.create(roleString)
+        }
+        return null
+    }
+
     fun createChild(eventName: String): Actor {
         events[eventName]?.let { event ->
-            // TODO When costumes can have other costumes as event, then use that costume, and build the role if one is defined.
+
+            val newCostume = event.chooseCostume()
+            if (newCostume != null) {
+                val role = newCostume.createRole()
+                val actor = Actor(newCostume, role)
+                val defaultEvent = newCostume.events["default"]
+                defaultEvent?.choosePose()?.let { actor.changeAppearance(it) }
+                return actor
+            }
 
             val actor = Actor(this)
             event.choosePose()?.let { actor.changeAppearance(it) }

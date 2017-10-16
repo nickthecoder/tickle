@@ -10,9 +10,13 @@ class CostumeEvent {
 
     var textStyles = mutableListOf<TextStyle>()
 
+    var costumes = mutableListOf<Costume>()
+
     var strings = mutableListOf<String>()
 
     fun choosePose(): Pose? = if (poses.isEmpty()) null else poses[Random().nextInt(poses.size)]
+
+    fun chooseCostume(): Costume? = if (costumes.isEmpty()) null else costumes[Random().nextInt(costumes.size)]
 
     fun chooseTextStyle(): TextStyle? = if (textStyles.isEmpty()) null else textStyles[Random().nextInt(textStyles.size)]
 

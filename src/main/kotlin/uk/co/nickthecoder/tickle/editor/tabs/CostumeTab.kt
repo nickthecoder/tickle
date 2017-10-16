@@ -14,6 +14,7 @@ import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.TextStyleParameter
+import uk.co.nickthecoder.tickle.editor.util.createCostumeParameter
 import uk.co.nickthecoder.tickle.editor.util.createPoseParameter
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.resources.Resources
@@ -144,6 +145,12 @@ class CostumeTab(val name: String, val costume: Costume)
                     inner.poseP.value = pose
                     inner.typeP.value = inner.poseP
                 }
+                event.costumes.forEach { costume ->
+                    val inner = eventsP.newValue()
+                    inner.eventNameP.value = eventName
+                    inner.costumeP.value = costume
+                    inner.typeP.value = inner.costumeP
+                }
                 event.textStyles.forEach { textStyle ->
                     val inner = eventsP.newValue()
                     inner.eventNameP.value = eventName
@@ -164,10 +171,10 @@ class CostumeTab(val name: String, val costume: Costume)
             eventsP.innerParameters.forEach { inner ->
                 when (inner.typeP.value) {
                     inner.poseP -> addPose(inner.eventNameP.value, inner.poseP.value!!)
+                    inner.costumeP -> addCostume(inner.eventNameP.value, inner.costumeP.value!!)
                     inner.textStyleP -> addTextStyle(inner.eventNameP.value, inner.textStyleP.createTextStyle())
                     inner.stringP -> addString(inner.eventNameP.value, inner.stringP.value)
                 }
-
             }
         }
 
@@ -178,6 +185,15 @@ class CostumeTab(val name: String, val costume: Costume)
                 costume.events[eventName] = event
             }
             event.poses.add(pose)
+        }
+
+        fun addCostume(eventName: String, cos: Costume) {
+            var event = costume.events[eventName]
+            if (event == null) {
+                event = CostumeEvent()
+                costume.events[eventName] = event
+            }
+            event.costumes.add(cos)
         }
 
         fun addTextStyle(eventName: String, textStyle: TextStyle) {
@@ -205,10 +221,12 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val poseP = createPoseParameter()
         val textStyleP = TextStyleParameter("style")
+        val costumeP = createCostumeParameter()
+
         val stringP = StringParameter("string")
 
         val typeP = OneOfParameter("type", value = poseP, choiceLabel = "Type")
-                .addParameters(poseP, textStyleP, stringP)
+                .addParameters(poseP, costumeP, textStyleP, stringP)
 
         init {
             addParameters(eventNameP, typeP)
@@ -219,6 +237,7 @@ class CostumeTab(val name: String, val costume: Costume)
             val type = typeP.value?.label ?: ""
             val dataName = when (typeP.value) {
                 poseP -> Resources.instance.findPoseName(poseP.value)
+                costumeP -> Resources.instance.findCostumeName(costumeP.value)
                 textStyleP -> Resources.instance.findFontResourceName(textStyleP.fontP.value)
                 stringP -> stringP.value
                 else -> ""
