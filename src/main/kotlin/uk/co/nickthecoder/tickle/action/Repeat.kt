@@ -7,14 +7,17 @@ class Repeat(val child: Action, val times: Int) : Action {
     private var current = -1
 
     override fun begin(): Boolean {
-        current = 1
-        while (current <= times) {
-            if (child.begin() == false) {
-                return false
-            }
-            current++
+        if (times <= 0) {
+            return true
         }
-        return true
+        current = 1
+        while (child.begin()) {
+            current++
+            if (current > times) {
+                return true
+            }
+        }
+        return false
     }
 
     override fun act(): Boolean {
@@ -23,7 +26,12 @@ class Repeat(val child: Action, val times: Int) : Action {
             if (current > times) {
                 return true
             }
-            child.begin()
+            while (child.begin()) {
+                current++
+                if (current > times) {
+                    return true
+                }
+            }
         }
         return false
     }

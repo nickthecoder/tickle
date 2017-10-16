@@ -13,7 +13,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     val id = nextId++
 
-    internal var stage: Stage? = null
+    var stage: Stage? = null
 
     val position = Vector2d(0.0, 0.0)
 
@@ -122,6 +122,10 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     fun changeAppearance(text: String, textStyle: TextStyle) {
         appearance = TextAppearance(this, text, textStyle)
+    }
+
+    fun hide() {
+        appearance = InvisibleAppearance()
     }
 
     var flipX: Boolean = false
