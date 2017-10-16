@@ -39,6 +39,8 @@ class JsonScene {
 
         val jroot = JsonObject()
         jroot.add("director", sceneResource.directorString)
+        JsonUtil.saveAttributes(jroot, sceneResource.directorAttributes, "directorAttributes")
+
         jroot.add("background", sceneResource.background.toHashRGB())
         jroot.add("showMouse", sceneResource.showMouse)
 
@@ -60,6 +62,8 @@ class JsonScene {
         val jroot = Json.parse(InputStreamReader(FileInputStream(file))).asObject()
 
         sceneResource.directorString = jroot.getString("director", NoDirector::class.java.name)
+        JsonUtil.loadAttributes(jroot, sceneResource.directorAttributes, "directorAttributes")
+
         sceneResource.layoutName = jroot.getString("layout", "default")
         sceneResource.background = Color.fromString(jroot.getString("background", "#FFFFFF"))
         sceneResource.showMouse = jroot.getBoolean("showMouse", true)

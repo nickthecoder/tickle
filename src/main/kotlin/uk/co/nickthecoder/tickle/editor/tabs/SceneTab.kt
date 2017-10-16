@@ -14,14 +14,14 @@ import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.Director
 import uk.co.nickthecoder.tickle.NoDirector
-import uk.co.nickthecoder.tickle.resources.Resources
-import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.SceneStub
 import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.toJavaFX
 import uk.co.nickthecoder.tickle.editor.util.toTickle
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 
@@ -177,8 +177,13 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
 
     val layoutP = ChoiceParameter<String>("layout", value = "")
 
+    val infoP = InformationParameter("info",
+            information = "The Director has no fields with the '@Attribute' annotation, and therefore, this scene has no attributes.")
+
+    val attributesP = SimpleGroupParameter("attributes")
+
     override val taskD = TaskDescription("sceneDetails")
-            .addParameters(directorP, backgroundColorP, showMouseP, layoutP)
+            .addParameters(directorP, backgroundColorP, showMouseP, layoutP, attributesP)
 
     init {
         ClassLister.setChoices(directorP, Director::class.java)
@@ -194,6 +199,11 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
         backgroundColorP.value = sceneResource.background.toJavaFX()
         showMouseP.value = sceneResource.showMouse
         layoutP.value = sceneResource.layoutName
+
+        updateAttributes()
+        directorP.listen {
+            updateAttributes()
+        }
     }
 
 
@@ -203,4 +213,29 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
         sceneResource.showMouse = showMouseP.value == true
         sceneResource.background = backgroundColorP.value.toTickle()
     }
+
+    fun updateAttributes() {
+        sceneResource.directorAttributes.updateAttributesMetaData(directorP.value!!.name, true)
+        attributesP.children.toList().forEach {
+            attributesP.remove(it)
+        }
+
+        sceneResource.directorAttributes.data().forEach { data ->
+            data.parameter?.let { it ->
+                val parameter = it.copyBounded()
+                attributesP.add(parameter)
+                try {
+                    parameter.stringValue = data.value ?: ""
+                } catch (e: Exception) {
+                    // Do nothing
+                }
+            }
+        }
+
+        if (attributesP.children.size == 0) {
+            attributesP.add(infoP)
+        }
+
+    }
+
 }

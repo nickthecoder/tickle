@@ -104,10 +104,14 @@ class CostumeTab(val name: String, val costume: Costume)
         }
 
         fun updateAttributes() {
+
+            costume.attributes.updateAttributesMetaData(roleClassP.value?.name ?: Role::class.java.name, true)
+
             attributesP.children.toList().forEach {
                 attributesP.remove(it)
             }
             attributesP.hidden = roleClassP.value == null
+
 
             costume.attributes.data().forEach { data ->
                 data.costumeParameter?.let { it ->

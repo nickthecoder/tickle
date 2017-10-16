@@ -2,16 +2,18 @@ package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.AbstractDirector
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.CenterView
 import uk.co.nickthecoder.tickle.action.CenterViewBetween
 import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.stage.ZOrderStageView
+import uk.co.nickthecoder.tickle.util.Attribute
 
 class Play : AbstractDirector() {
 
+    @Attribute
     var degrees = 0.0
 
     val clockwise = Resources.instance.input("clockwise") // Z : Rotate the view

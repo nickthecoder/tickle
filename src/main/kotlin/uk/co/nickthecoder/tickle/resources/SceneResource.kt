@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.resources
 
+import uk.co.nickthecoder.tickle.Attributes
 import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.Scene
 import uk.co.nickthecoder.tickle.graphics.Color
@@ -13,6 +14,8 @@ class SceneResource {
     var file: File? = null
 
     var directorString: String = NoDirector::class.java.name
+
+    val directorAttributes = Attributes()
 
     var layoutName: String = ""
         set(v) {

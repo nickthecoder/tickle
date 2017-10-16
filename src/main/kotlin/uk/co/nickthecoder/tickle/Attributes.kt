@@ -105,6 +105,7 @@ class Attributes {
                 instance = kClass.java.newInstance()
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             // Do nothing
             return
         }

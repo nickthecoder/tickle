@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.editor.util
 
 import org.reflections.Reflections
 import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
+import java.lang.reflect.Modifier
 
 
 object ClassLister {
@@ -31,7 +32,7 @@ object ClassLister {
         }
         val results = mutableListOf<Class<*>>()
         reflectionsMap.values.forEach {
-            results.addAll(it.getSubTypesOf(type).filter { !it.isInterface && !it.simpleName.startsWith("Abstract") }.sortedBy { it.name })
+            results.addAll(it.getSubTypesOf(type).filter { !it.isInterface && !Modifier.isAbstract(it.modifiers) }.sortedBy { it.name })
         }
         cache[type] = results
 

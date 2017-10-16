@@ -4,6 +4,10 @@ Current Work
 BUGS
 ====
 
+Role that use Game.instance in constructors (e.g. val/var) will throw an exception when they are created by reflection
+in the SceneEdtor.
+	Use lateinit var and set in the begin/activate methods.
+
 Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
 	I only want the EDITOR to depend on paratask-core.
 	Have a factory method for Attributes, which checks Class.forName( "uk...paratask...Parameter" )
