@@ -81,7 +81,18 @@ class Costume() {
                 val role = newCostume.createRole()
                 val actor = Actor(newCostume, role)
                 val defaultEvent = newCostume.events["default"]
-                defaultEvent?.choosePose()?.let { actor.changeAppearance(it) }
+
+                // Set the appearance. Either a Pose or a TextStyle (Pose takes precedence if it has both)
+                val pose = defaultEvent?.choosePose()
+                if (pose == null) {
+                    val style = defaultEvent?.chooseTextStyle()
+                    if (style != null) {
+                        actor.changeAppearance(defaultEvent?.chooseString() ?: "", style)
+                    }
+                } else {
+                    actor.changeAppearance(pose)
+                }
+
                 return actor
             }
 
