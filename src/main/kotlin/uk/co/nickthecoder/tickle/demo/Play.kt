@@ -56,6 +56,7 @@ class Play : AbstractDirector() {
             activeControllable = con
             centerAction = CenterView(stageView, con.actor.position)
         }
+
     }
 
     override fun postTick() {

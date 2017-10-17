@@ -54,7 +54,7 @@ class Window(
         }
     }
 
-    fun showMouse( value : Boolean = true ) {
+    fun showMouse(value: Boolean = true) {
         glfwSetInputMode(handle, GLFW_CURSOR, if (value) GLFW_CURSOR_NORMAL else GLFW_CURSOR_HIDDEN)
     }
 
@@ -70,23 +70,7 @@ class Window(
 
         glfwSetWindowShouldClose(handle, false)
 
-        MemoryStack.stackPush().use { stack ->
-            val pWidth = stack.mallocInt(1)
-            val pHeight = stack.mallocInt(1)
-
-            // Get the window size passed to glfwCreateWindow
-            glfwGetWindowSize(handle, pWidth, pHeight)
-
-            // Get the resolution of the primary monitor
-            val vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor())
-
-            // Center the window
-            glfwSetWindowPos(
-                    handle,
-                    (vidmode.width() - pWidth.get(0)) / 2,
-                    (vidmode.height() - pHeight.get(0)) / 2
-            )
-        }
+        center()
 
         // Make the OpenGL context instance
         glfwMakeContextCurrent(handle)
@@ -123,6 +107,22 @@ class Window(
         glfwSetWindowPos(handle, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2)
 
         glfwSetWindowAttrib(handle, GLFW_RESIZABLE, if (resizable) GLFW_TRUE else GLFW_FALSE)
+    }
+
+    fun resize(width: Int, height: Int) {
+        glfwSetWindowSize(handle, width, height)
+    }
+
+    // Center the window
+    fun center() {
+        // Get the resolution of the primary monitor
+        val vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor())
+
+        glfwSetWindowPos(
+                handle,
+                (vidmode.width() - width) / 2,
+                (vidmode.height() - height) / 2
+        )
     }
 
     fun wholeViewport() {

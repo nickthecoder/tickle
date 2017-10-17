@@ -19,6 +19,11 @@ class StandardNeighbourhood(
      */
     private val rows = mutableListOf<NeighbourhoodRow>()
 
+
+    override fun blocksAcross(): Int = rows.maxBy { it.count() }?.count() ?: 0
+
+    override fun blocksDown(): Int = rows.size
+
     override fun clear() {
         rows.clear()
         oy = blockHeight / 2
@@ -27,6 +32,7 @@ class StandardNeighbourhood(
     override fun getBlock(x: Double, y: Double) = (getExistingRow(y) ?: createRow(y)).getBlock(x)
 
     override fun getExistingBlock(x: Double, y: Double): Block? = getExistingRow(y)?.getExistingBlock(x)
+
 
     /**
      * Finds the row for the given Y coordinate, or null if there is no row there.
@@ -98,6 +104,8 @@ class StandardNeighbourhood(
         fun ox() = ox
 
         fun row(): List<Block> = row
+
+        fun count() = row.size
 
         fun getBlock(x: Double): Block {
             var result = getExistingBlock(x)

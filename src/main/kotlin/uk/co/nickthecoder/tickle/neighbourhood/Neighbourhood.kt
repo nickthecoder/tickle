@@ -54,4 +54,11 @@ interface Neighbourhood {
      */
     fun getExistingBlock(x: Double, y: Double): Block?
 
+    fun blocksAcross(): Int
+
+    fun blocksDown(): Int
+
+    fun width(): Double = blocksAcross() * blockWidth
+
+    fun height(): Double = blocksDown() * blockHeight
 }
