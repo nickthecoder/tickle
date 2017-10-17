@@ -95,6 +95,7 @@ class Game(
 
     fun startScene(sceneResource: SceneResource) {
         director = Director.createDirector(sceneResource.directorString)
+        sceneResource.directorAttributes.applyToObject(director)
         scene = sceneResource.createScene()
 
         producer.sceneBegin()
