@@ -1,12 +1,12 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.scene.canvas.Canvas
-import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.editor.util.image
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
+import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.resources.Resources
 
 abstract class Layer {
 
@@ -43,6 +43,7 @@ abstract class Layer {
             save()
             translate(actorResource.x.toDouble(), actorResource.y.toDouble())
             rotate(actorResource.direction.degrees - (pose?.direction?.degrees ?: 0.0))
+            scale(actorResource.scale, actorResource.scale)
             if (pose == null) {
                 actorResource.textStyle?.let {
                     drawText(it, actorResource.displayText)

@@ -38,6 +38,8 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     val direction = Angle()
 
+    var scale: Double = 1.0
+
     val attributes = Attributes()
 
     val pose: Pose? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.choosePose() }
@@ -62,6 +64,7 @@ class ActorResource(val isDesigning: Boolean = false) {
         actor.x = x
         actor.y = y
         actor.direction.degrees = direction.degrees
+        actor.scale = scale
 
         actor.role?.let { attributes.applyToObject(it) }
 

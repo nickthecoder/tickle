@@ -4,7 +4,8 @@ import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.AttributeData
+import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
@@ -64,6 +65,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
                 translate(actorResource.x, actorResource.y)
                 rotate(actorResource.direction.degrees - (actorResource.pose?.direction?.degrees ?: 0.0))
+                scale( actorResource.scale, actorResource.scale)
 
                 drawOutlined(selectionColor(actorResource === selection.latest())) { drawBoundingBox(actorResource) }
 

@@ -91,6 +91,7 @@ class JsonScene {
             jactor.add("x", actorResource.x)
             jactor.add("y", actorResource.y)
             jactor.add("direction", actorResource.direction.degrees)
+            jactor.add("scale", actorResource.scale)
             if (actorResource.pose == null) {
                 jactor.add("text", actorResource.text)
             }
@@ -123,6 +124,7 @@ class JsonScene {
         actorResource.x = jactor.getDouble("x", 0.0)
         actorResource.y = jactor.getDouble("y", 0.0)
         actorResource.direction.degrees = jactor.getDouble("direction", 0.0)
+        actorResource.scale = jactor.getDouble("scale", 1.0)
         actorResource.text = jactor.getString("text", "")
 
         stageResource.actorResources.add(actorResource)

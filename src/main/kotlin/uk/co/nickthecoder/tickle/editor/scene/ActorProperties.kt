@@ -21,12 +21,14 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
 
     val directionP = DoubleParameter("direction", value = actorResource.direction.degrees)
 
+    val scaleP = DoubleParameter("scale", value = actorResource.scale)
+
     val textP = StringParameter("text", value = actorResource.text, rows = 3)
 
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(attributesP, xP, yP, directionP, textP)
+            .addParameters(attributesP, xP, yP, directionP, scaleP, textP)
             .asVertical()
 
     var dirty = false
@@ -96,6 +98,7 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
         xP.value?.let { actorResource.x = it }
         yP.value?.let { actorResource.y = it }
         directionP.value?.let { actorResource.direction.degrees = it }
+        scaleP.value?.let { actorResource.scale = it }
         actorResource.text = textP.value
 
         // Note. We are not updating the dynamic "attributes", because they should ONLY be updated via their
@@ -109,6 +112,7 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
         yP.value = actorResource.y
         xP.value = actorResource.x
         directionP.value = actorResource.direction.degrees
+        scaleP.value = actorResource.scale
         textP.value = actorResource.text
 
         textP.hidden = actorResource.pose != null

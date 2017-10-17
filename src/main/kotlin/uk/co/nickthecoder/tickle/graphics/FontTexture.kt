@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.tickle.graphics
 
+import org.joml.Matrix4f
+
 /**
  * Holds a texture, and the meta-data for a Font at a particular font-size.
  */
@@ -32,7 +34,7 @@ class FontTexture(
         draw(renderer, text, x, y, fill)
     }
 
-    fun draw(renderer: Renderer, text: CharSequence, x: Double, y: Double, color: Color = Color.WHITE) {
+    fun draw(renderer: Renderer, text: CharSequence, x: Double, y: Double, color: Color = Color.WHITE, modelMatrix: Matrix4f? = null) {
         var drawX = x
         var drawY = y
 
@@ -49,7 +51,7 @@ class FontTexture(
                 continue
             }
             glyphs[ch]?.let { glyph ->
-                glyph.pose.draw(renderer, drawX, drawY, color)
+                glyph.pose.draw(renderer, drawX, drawY, color, modelMatrix)
                 drawX += glyph.advance
             }
         }

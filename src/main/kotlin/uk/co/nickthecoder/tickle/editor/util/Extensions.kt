@@ -9,11 +9,11 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.CornerRadii
-import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.resources.Resources
 
 /*
  Contains may extension functions, used from within the SceneEditor.
@@ -92,16 +92,24 @@ fun ActorResource.costume(): Costume? = Resources.instance.optionalCostume(costu
 fun ActorResource.isAt(x: Double, y: Double): Boolean {
     var tx = x - this.x
     var ty = y - this.y
-    // TODO Need to account for rotation and scale!?!?
+    tx /= scale
+    ty /= scale
+    if (direction.radians != 0.0) {
+        val sin = Math.sin(-direction.radians)
+        val cos = Math.cos(-direction.radians)
+        val ttx = sin * ty - cos * tx
+        ty = sin * tx + cos * ty
+        tx = ttx
+    }
     pose?.let { pose ->
         return pose.isOverlapping(tx, ty) && pose.isPixelIsOpaque(tx, ty)
     }
     textStyle?.let { textStyle ->
-        val offestX = textStyle.offsetX(displayText)
+        val offsetX = textStyle.offsetX(displayText)
         val offsetY = textStyle.offsetY(displayText)
         val width = textStyle.width(displayText)
         val height = textStyle.height(displayText)
-        tx += offestX
+        tx += offsetX
         ty += height - offsetY
         return tx > 0 && ty > 0 && tx < width && ty < height
 
@@ -109,7 +117,7 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
     return false
 }
 
-fun ActorResource.offsetX() : Double {
+fun ActorResource.offsetX(): Double {
     pose?.let { pose ->
         return pose.offsetX
     }
@@ -119,7 +127,7 @@ fun ActorResource.offsetX() : Double {
     return 0.0
 }
 
-fun ActorResource.offsetY() : Double {
+fun ActorResource.offsetY(): Double {
     pose?.let { pose ->
         return pose.offsetY
     }

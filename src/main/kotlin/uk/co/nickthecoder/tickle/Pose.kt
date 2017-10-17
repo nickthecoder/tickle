@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle
 
+import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Texture
@@ -40,14 +41,15 @@ class Pose(
         rectd.top = 1 - (rect.top.toDouble() / texture.height)
     }
 
-    fun draw(renderer: Renderer, x: Double, y: Double, color: Color = Color.WHITE) {
+    fun draw(renderer: Renderer, x: Double, y: Double, color: Color = Color.WHITE, modelMatrix: Matrix4f? = null) {
         val left = x - offsetX
         val bottom = y - offsetY
         renderer.drawTexture(
                 texture,
                 left, bottom, left + rect.width, bottom + rect.height,
                 rectd,
-                color)
+                color,
+                modelMatrix)
     }
 
     fun draw(renderer: Renderer, actor: Actor) {
@@ -65,7 +67,8 @@ class Pose(
             renderer.drawTexture(
                     texture,
                     left, bottom, left + rect.width, bottom + rect.height,
-                    rectd, color = actor.color,
+                    rectd,
+                    color = actor.color,
                     modelMatrix = actor.getModelMatrix())
         }
     }

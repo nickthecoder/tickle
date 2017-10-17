@@ -85,7 +85,7 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     fun findActorsAt(x: Double, y: Double, ignoreStageLock: Boolean = false): List<ActorResource> {
         val list = mutableListOf<ActorResource>()
-        layers.visibleLayers().filter { ignoreStageLock || it.isLocked == false }.forEach { stageLayer ->
+        layers.visibleLayers().filter { ignoreStageLock || !it.isLocked }.forEach { stageLayer ->
             stageLayer.stageResource.actorResources.forEach { actorResource ->
                 if (actorResource.isAt(x, y)) {
                     list.add(actorResource)

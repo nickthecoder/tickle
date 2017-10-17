@@ -163,11 +163,12 @@ class Renderer(val window: Window) {
         drawTexture(texture, left, bottom, right, top, textureRect, color, identityMatrix)
     }
 
-    fun drawTexture(texture: Texture, left: Double, bottom: Double, right: Double, top: Double, textureRect: Rectd, color: Color = Color.WHITE, modelMatrix: Matrix4f) {
-        if (modelMatrix !== currentModelMatrix) {
+    fun drawTexture(texture: Texture, left: Double, bottom: Double, right: Double, top: Double, textureRect: Rectd, color: Color = Color.WHITE, modelMatrix: Matrix4f?) {
+        val mm = modelMatrix?: identityMatrix
+        if (mm !== currentModelMatrix) {
             flush()
-            program.setUniform(uniModel, modelMatrix)
-            currentModelMatrix = modelMatrix
+            program.setUniform(uniModel, mm)
+            currentModelMatrix = mm
         }
 
         drawTextureRegion(

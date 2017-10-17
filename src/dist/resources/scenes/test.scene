@@ -1,11 +1,5 @@
 {
-    "director": "uk.co.nickthecoder.tickle.demo.Play",
-    "directorAttributes": [
-        {
-            "name": "degrees",
-            "value": "10"
-        }
-    ],
+    "director": "uk.co.nickthecoder.tickle.NoDirector",
     "background": "#4d3399",
     "showMouse": false,
     "layout": "default",
@@ -13,210 +7,34 @@
         {
             "name": "background",
             "actors": [
-                {
-                    "costume": "spark",
-                    "x": 80,
-                    "y": 533,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 196,
-                    "y": 525,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 465,
-                    "y": 559,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 739,
-                    "y": 502,
-                    "direction": 0
-                },
-                {
-                    "costume": "spark",
-                    "x": 943,
-                    "y": 554,
-                    "direction": 0
-                }
+                
             ]
         },
         {
             "name": "main",
             "actors": [
                 {
-                    "costume": "grenade",
-                    "x": 138,
-                    "y": 186,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "exit",
-                            "value": "-2.0x55.0"
-                        },
-                        {
-                            "name": "maxVelocity",
-                            "value": "110.0:3.844801685392889"
-                        },
-                        {
-                            "name": "minVelocity",
-                            "value": "67.00000000000001:10.530906893520614"
-                        }
-                    ]
+                    "costume": "plainText",
+                    "x": 175,
+                    "y": 395,
+                    "direction": 45,
+                    "scale": 1,
+                    "text": "Hello World"
                 },
                 {
-                    "costume": "grenade",
-                    "x": 631,
-                    "y": 197,
-                    "direction": 47,
-                    "attributes": [
-                        {
-                            "name": "exit",
-                            "value": "-35.0x32.0"
-                        },
-                        {
-                            "name": "hue",
-                            "value": "0.4"
-                        },
-                        {
-                            "name": "maxVelocity",
-                            "value": "158.0:4.0853395"
-                        },
-                        {
-                            "name": "minVelocity",
-                            "value": "123.00000000000003:12.287392"
-                        }
-                    ]
+                    "costume": "plainText",
+                    "x": 327,
+                    "y": 410,
+                    "direction": 6,
+                    "scale": 2,
+                    "text": "Another text"
                 },
                 {
-                    "costume": "shootingStar",
-                    "x": 261,
-                    "y": 228,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "curveAngle",
-                            "value": "59.99999999999999"
-                        },
-                        {
-                            "name": "headingAndLength",
-                            "value": "97.0:124.16923934694937"
-                        },
-                        {
-                            "name": "sideDuration",
-                            "value": "1"
-                        },
-                        {
-                            "name": "turnAngle",
-                            "value": "190.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "shootingStar",
-                    "x": 167,
-                    "y": 360,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "curveAngle",
-                            "value": "59.99999999999999"
-                        },
-                        {
-                            "name": "headingAndLength",
-                            "value": "26.000000000000004:70.66116330771806"
-                        },
-                        {
-                            "name": "sideDuration",
-                            "value": "1.1"
-                        },
-                        {
-                            "name": "turnAngle",
-                            "value": "190.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "shootingStar",
-                    "x": 313,
-                    "y": 320,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "curveAngle",
-                            "value": "59.99999999999999"
-                        },
-                        {
-                            "name": "headingAndLength",
-                            "value": "53.0:199.6121238802894"
-                        },
-                        {
-                            "name": "sideDuration",
-                            "value": "0.9"
-                        },
-                        {
-                            "name": "turnAngle",
-                            "value": "190.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "bee",
-                    "x": 423,
-                    "y": 382,
-                    "direction": 10.999999999999998
-                },
-                {
-                    "costume": "coin",
-                    "x": 631,
+                    "costume": "spark",
+                    "x": 344,
                     "y": 368,
                     "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "271.0:9.702061636580135"
-                        },
-                        {
-                            "name": "turningSpeed",
-                            "value": "-2.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "coin10",
-                    "x": 294,
-                    "y": 362,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "315.0:4.596737973824482"
-                        },
-                        {
-                            "name": "turningSpeed",
-                            "value": "3.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "coin100",
-                    "x": 449,
-                    "y": 446,
-                    "direction": 0,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "130.0:5.954829972383762"
-                        },
-                        {
-                            "name": "turningSpeed",
-                            "value": "3.0"
-                        }
-                    ]
+                    "scale": 2
                 }
             ]
         }

@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.tickle.graphics
 
+import org.joml.Matrix4f
+import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.resources.FontResource
 
 class TextStyle(
@@ -37,7 +39,23 @@ class TextStyle(
         draw(renderer, fontResource.fontTexture, color, text, x, y)
     }
 
-    private fun draw(renderer: Renderer, fontTexture: FontTexture, color: Color, text: CharSequence, x: Double, y: Double) {
+    fun draw(renderer: Renderer, text: CharSequence, actor: Actor) {
+        val modelMatrix: Matrix4f?
+
+        if (actor.isSimpleImage()) {
+            modelMatrix = null
+        } else {
+            modelMatrix = actor.getModelMatrix()
+        }
+
+        if (outlineColor != null && fontResource.outlineFontTexture != null) {
+            draw(renderer, fontResource.outlineFontTexture!!, outlineColor!!, text, actor.x, actor.y, modelMatrix)
+        }
+        draw(renderer, fontResource.fontTexture, color, text, actor.x, actor.y, modelMatrix)
+
+    }
+
+    private fun draw(renderer: Renderer, fontTexture: FontTexture, color: Color, text: CharSequence, x: Double, y: Double, modelMatrix: Matrix4f? = null) {
 
         val dy = when (valignment) {
             VAlignment.TOP -> 0.0
@@ -55,7 +73,7 @@ class TextStyle(
                 HAlignment.RIGHT -> fontTexture.width(line)
             }
 
-            fontTexture.draw(renderer, line, x - dx, lineY, color)
+            fontTexture.draw(renderer, line, x - dx, lineY, color, modelMatrix)
             lineY -= fontTexture.lineHeight
         }
 

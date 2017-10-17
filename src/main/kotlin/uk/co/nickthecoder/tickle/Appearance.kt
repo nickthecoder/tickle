@@ -43,7 +43,7 @@ class TextAppearance(val actor: Actor, var text: String, val textStyle: TextStyl
     override val directionRadians = 0.0
 
     override fun draw(renderer: Renderer) {
-        textStyle.draw(renderer, text, actor.x, actor.y)
+        textStyle.draw(renderer, text, actor)
     }
 
     override fun toString() = "TextAppearance '$text'"
