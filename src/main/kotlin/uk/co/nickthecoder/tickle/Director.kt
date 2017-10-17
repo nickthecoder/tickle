@@ -1,9 +1,6 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.events.KeyEvent
-import uk.co.nickthecoder.tickle.neighbourhood.Neighbourhood
-import uk.co.nickthecoder.tickle.neighbourhood.StandardNeighbourhood
-import uk.co.nickthecoder.tickle.util.TagManager
 
 /**
  * Looks after a single Scene. A game will typically have at least two Directors, one to handle the menu or splash
@@ -24,25 +21,21 @@ import uk.co.nickthecoder.tickle.util.TagManager
  */
 interface Director {
 
-    val tagManager: TagManager
+    fun begin()
 
-    val neighbourhood: Neighbourhood
+    fun activated()
 
-    fun begin() {}
-
-    fun activated() {}
-
-    fun preTick() {}
+    fun preTick()
 
     fun tick() {
         Game.instance.scene.tick()
     }
 
-    fun postTick() {}
+    fun postTick()
 
-    fun end() {}
+    fun end()
 
-    fun onKeyEvent(event: KeyEvent) {}
+    fun onKeyEvent(event: KeyEvent)
 
     companion object {
         fun createDirector(directorString: String): Director {
@@ -64,10 +57,17 @@ interface Director {
 
 open class AbstractDirector : Director {
 
-    override val tagManager = TagManager()
+    override fun begin() {}
 
-    override val neighbourhood = StandardNeighbourhood(60.0)
+    override fun activated() {}
 
+    override fun end() {}
+
+    override fun onKeyEvent(event: KeyEvent) {}
+
+    override fun postTick() {}
+
+    override fun preTick() {}
 }
 
 class NoDirector : AbstractDirector()

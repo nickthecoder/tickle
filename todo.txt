@@ -6,9 +6,7 @@ Look at Fade - wrong now that Color is mutable
 BUGS
 ====
 
-Role that use Game.instance in constructors (e.g. val/var) will throw an exception when they are created by reflection
-in the SceneEdtor.
-	Use lateinit var and set in the begin/activate methods.
+findActorAt doesn't work for rotated text that is not bottom? left aligned (as the offset isn't taken into account when doing the rotation maths).
 
 Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
 	I only want the EDITOR to depend on paratask-core.

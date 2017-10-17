@@ -3,12 +3,11 @@ package uk.co.nickthecoder.tickle.demo
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.AbstractRole
 import uk.co.nickthecoder.tickle.AttributeType
-import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.util.TaggedRole
 import uk.co.nickthecoder.tickle.neighbourhood.Occupant
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.Rectd
 import uk.co.nickthecoder.tickle.util.Tagged
+import uk.co.nickthecoder.tickle.util.TaggedRole
 
 val ROOM_WIDTH = 8000.0
 val ROOM_HEIGHT = 8000.0
@@ -17,12 +16,13 @@ abstract class Bounce : AbstractRole(), TaggedRole {
 
     val radius = 30.0
 
-    override val tagged = Tagged(Game.instance.director.tagManager, this)
+    override lateinit var tagged : Tagged
 
     @Attribute(AttributeType.RELATIVE_POSITION, scale = 10.0)
     var velocity = Vector2d()
 
     override fun activated() {
+        tagged = Tagged(Play.instance.tagManager, this)
         tagged.add(DemoTags.BOUNCY)
     }
 
@@ -86,7 +86,7 @@ class SimpleBounce : Bounce() {
 
 class NeighbourhoodBounce : Bounce() {
 
-    val occupant = Occupant(Game.instance.director.neighbourhood, this)
+    val occupant = Occupant(Play.instance.neighbourhood, this)
 
     private val worldRect = Rectd()
 

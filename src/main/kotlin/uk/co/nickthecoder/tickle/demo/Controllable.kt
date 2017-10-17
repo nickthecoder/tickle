@@ -1,21 +1,21 @@
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.AbstractRole
-import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.util.TaggedRole
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.NoAction
 import uk.co.nickthecoder.tickle.util.Tagged
+import uk.co.nickthecoder.tickle.util.TaggedRole
 
 abstract class Controllable : AbstractRole(), TaggedRole {
 
     var hasInput: Boolean = false
 
-    override val tagged = Tagged(Game.instance.director.tagManager, this)
+    override lateinit var tagged: Tagged
 
     var movement: Action = NoAction()
 
     override fun begin() {
+        tagged = Tagged(Play.instance.tagManager, this)
         tagged.add(DemoTags.CONTROLLABLE)
     }
 

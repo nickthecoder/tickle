@@ -1,5 +1,11 @@
 {
-    "director": "uk.co.nickthecoder.tickle.NoDirector",
+    "director": "uk.co.nickthecoder.tickle.demo.Play",
+    "directorAttributes": [
+        {
+            "name": "degrees",
+            "value": "0"
+        }
+    ],
     "background": "#4d3399",
     "showMouse": false,
     "layout": "default",
