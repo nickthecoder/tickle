@@ -9,7 +9,7 @@ import uk.co.nickthecoder.tickle.stage.View
 
 class Scene {
 
-    var background: Color = Color.BLACK
+    var background: Color = Color.black()
 
     var showMouse: Boolean = true
 

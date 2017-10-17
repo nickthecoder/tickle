@@ -25,7 +25,7 @@ class TextStyleParameter(name: String)
     fun from(textStyle: TextStyle) {
         fontP.value = textStyle.fontResource
         colorP.value = textStyle.color.toJavaFX()
-        outlineColorP.value = (textStyle.outlineColor ?: Color.TRANSPARENT_BLACK).toJavaFX()
+        outlineColorP.value = (textStyle.outlineColor ?: Color.black().transparent()).toJavaFX()
         hAlignmentP.value = textStyle.halignment
         vAlignmentP.value = textStyle.valignment
     }

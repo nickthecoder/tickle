@@ -23,9 +23,6 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     var x: Double = 0.0
     var y: Double = 0.0
-        set(v) {
-            field = v
-        }
 
     /**
      * Used by SceneEditor in conjunction with StageConstraint. This is where the actor was dragged to, but [x],[y]

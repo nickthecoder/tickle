@@ -12,7 +12,11 @@ class FontTexture(
         val ascent: Double,
         val descent: Double) {
 
-    fun drawOutlined(renderer: Renderer, text: CharSequence, x: Double, y: Double, fill: Color = Color.WHITE, outline: Color = Color.BLACK, thickness: Int) {
+    private val WHITE = Color.white()
+
+    private val BLACK = Color.black()
+
+    fun drawOutlined(renderer: Renderer, text: CharSequence, x: Double, y: Double, fill: Color = WHITE, outline: Color = BLACK, thickness: Int) {
 
         val t2 = thickness * thickness
         for (dx in -thickness..thickness) {
@@ -25,7 +29,7 @@ class FontTexture(
         draw(renderer, text, x, y, fill)
     }
 
-    fun drawOutlined(renderer: Renderer, text: CharSequence, x: Double, y: Double, fill: Color = Color.WHITE, outline: Color = Color.BLACK) {
+    fun drawOutlined(renderer: Renderer, text: CharSequence, x: Double, y: Double, fill: Color = WHITE, outline: Color = BLACK) {
 
         draw(renderer, text, x - 1, y, outline)
         draw(renderer, text, x + 1, y, outline)
@@ -34,7 +38,7 @@ class FontTexture(
         draw(renderer, text, x, y, fill)
     }
 
-    fun draw(renderer: Renderer, text: CharSequence, x: Double, y: Double, color: Color = Color.WHITE, modelMatrix: Matrix4f? = null) {
+    fun draw(renderer: Renderer, text: CharSequence, x: Double, y: Double, color: Color = WHITE, modelMatrix: Matrix4f? = null) {
         var drawX = x
         var drawY = y
 

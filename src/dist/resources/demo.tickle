@@ -361,8 +361,8 @@
                             "font": "plain22",
                             "halign": "CENTER",
                             "valign": "BOTTOM",
-                            "color": "#000000ff",
-                            "outlineColor": "#ffffffff"
+                            "color": "#00000083",
+                            "outlineColor": "#ffffff7f"
                         }
                     ]
                 }

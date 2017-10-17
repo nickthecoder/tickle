@@ -1,6 +1,8 @@
 Current Work
 ============
 
+Look at Fade - wrong now that Color is mutable
+
 BUGS
 ====
 
@@ -22,6 +24,14 @@ InputPicker :
 
 New Features
 ============
+
+Allow fonts to have multiple outlines i.e. one myfont.png may have myfont-thinOutline.png and myfont.blurredOutline.png
+	Could specify an outline name in TextStyle, and lazily load the extra texture.
+
+TextStyle to have an extraSpacing property which causes letters to be moved further appart
+	Ditto for extra line height.
+
+	
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 	Just as a prelude to pixel collision detection.

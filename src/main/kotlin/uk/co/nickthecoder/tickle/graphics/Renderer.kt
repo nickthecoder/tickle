@@ -26,7 +26,8 @@ class Renderer(val window: Window) {
     val identityMatrix = Matrix4f()
 
     private var currentTexture: Texture? = null
-    var currentColor: Color? = null
+    private val currentColor = Color(-1f, -1f, -1f, -1f)
+
     var currentModelMatrix = identityMatrix
 
     private var uniColor: Int = -1
@@ -89,13 +90,13 @@ class Renderer(val window: Window) {
 
         /* Set color uniform */
         uniColor = program.getUniformLocation("color")
-        program.setUniform(uniColor, Color.SEMI_TRANSPARENT_WHITE)
+        program.setUniform(uniColor, Color.white())
 
         // centerView(0f, 0f)
     }
 
 
-    fun changeProjection( projection: Matrix4f) {
+    fun changeProjection(projection: Matrix4f) {
         val uniProjection = program.getUniformLocation("projection")
         program.setUniform(uniProjection, projection)
     }
@@ -109,7 +110,7 @@ class Renderer(val window: Window) {
     }
 
     fun beginView() {
-        currentColor = null
+        currentColor.red = -1.12345f // An invalid value, therefore equals tests will fail
         currentTexture = null
     }
 
@@ -119,7 +120,6 @@ class Renderer(val window: Window) {
         }
         currentTexture?.unbind()
         currentTexture = null
-        currentColor = null
     }
 
     fun begin() {
@@ -155,16 +155,18 @@ class Renderer(val window: Window) {
         }
     }
 
-    fun drawTexture(texture: Texture, worldRect: Rectd, textureRect: Rectd, color: Color = Color.WHITE) {
+    private val WHITE = Color.white()
+
+    fun drawTexture(texture: Texture, worldRect: Rectd, textureRect: Rectd, color: Color = WHITE) {
         drawTexture(texture, worldRect.left, worldRect.bottom, worldRect.right, worldRect.top, textureRect, color, identityMatrix)
     }
 
-    fun drawTexture(texture: Texture, left: Double, bottom: Double, right: Double, top: Double, textureRect: Rectd, color: Color = Color.WHITE) {
+    fun drawTexture(texture: Texture, left: Double, bottom: Double, right: Double, top: Double, textureRect: Rectd, color: Color = WHITE) {
         drawTexture(texture, left, bottom, right, top, textureRect, color, identityMatrix)
     }
 
-    fun drawTexture(texture: Texture, left: Double, bottom: Double, right: Double, top: Double, textureRect: Rectd, color: Color = Color.WHITE, modelMatrix: Matrix4f?) {
-        val mm = modelMatrix?: identityMatrix
+    fun drawTexture(texture: Texture, left: Double, bottom: Double, right: Double, top: Double, textureRect: Rectd, color: Color = WHITE, modelMatrix: Matrix4f?) {
+        val mm = modelMatrix ?: identityMatrix
         if (mm !== currentModelMatrix) {
             flush()
             program.setUniform(uniModel, mm)
@@ -181,13 +183,13 @@ class Renderer(val window: Window) {
             texture: Texture,
             x1: Float, y1: Float, x2: Float, y2: Float,
             s1: Float, t1: Float, s2: Float, t2: Float,
-            color: Color = Color.WHITE) {
+            color: Color = WHITE) {
 
         if (currentColor != color) {
             if (drawing) {
                 end()
             }
-            currentColor = color
+            currentColor.set(color)
             program.setUniform(uniColor, color)
         }
 

@@ -31,10 +31,18 @@
                 },
                 {
                     "costume": "spark",
-                    "x": 344,
-                    "y": 368,
+                    "x": 462,
+                    "y": 562,
                     "direction": 0,
                     "scale": 2
+                },
+                {
+                    "costume": "info",
+                    "x": 522,
+                    "y": 574,
+                    "direction": 0,
+                    "scale": 1,
+                    "text": ""
                 }
             ]
         }

@@ -24,7 +24,7 @@ class Coin : ActionRole() {
     var value: Int = 1
 
     @CostumeAttribute(hasAlpha = false)
-    var color: Color = Color.WHITE
+    var color: Color = Color.white()
 
     override fun createAction(): Action? {
 

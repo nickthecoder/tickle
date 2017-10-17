@@ -35,7 +35,7 @@ abstract class Sandbox(title: String = "Sandbox", width: Int = 800, height: Int 
 
         window.enableVSync()
         window.wholeViewport()
-        renderer.clearColor(Color.BLACK)
+        renderer.clearColor(Color.black())
         window.keyboardEvents { onKey(it) }
 
         println("Projection Center @ $centerX, $centerY in window ${window.width}x${window.height}")

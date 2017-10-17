@@ -1,18 +1,16 @@
 package uk.co.nickthecoder.tickle.graphics
 
-import java.nio.FloatBuffer
-
+/**
+ * NOTE. Color is mutable, in order to prevent lots of Color objects being created, and then thrown away,
+ * which would give the garbage collector a hard time, and would lead to lost frames while gc runs.
+ *
+ */
 class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
 
-    val red = Math.max(0f, Math.min(1f, r))
-    val green = Math.max(0f, Math.min(1f, g))
-    val blue = Math.max(0f, Math.min(1f, b))
-    val alpha = Math.max(0f, Math.min(1f, a))
-
-    fun intoBuffer(buffer: FloatBuffer) {
-        buffer.put(red).put(green).put(blue).put(alpha)
-        buffer.flip()
-    }
+    var red = Math.max(0f, Math.min(1f, r))
+    var green = Math.max(0f, Math.min(1f, g))
+    var blue = Math.max(0f, Math.min(1f, b))
+    var alpha = Math.max(0f, Math.min(1f, a))
 
     fun lerp(other: Color, t: Float): Color {
         val s = 1 - t
@@ -23,9 +21,52 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
                 alpha * s + other.alpha * t)
     }
 
+    fun mul(other: Color, dest: Color): Color {
+        dest.red = red * other.red
+        dest.green = green * other.green
+        dest.blue = blue * other.blue
+        dest.alpha = alpha * other.alpha
+        return dest
+    }
+
     fun toHashRGB() = String.format("#%02x%02x%02x", (red * 255).toInt(), (green * 255).toInt(), (blue * 255).toInt())
 
     fun toHashRGBA() = String.format("#%02x%02x%02x%02x", (red * 255).toInt(), (green * 255).toInt(), (blue * 255).toInt(), (alpha * 255).toInt())
+
+    fun semi(): Color {
+        alpha /= 2
+        return this
+    }
+
+    fun transparent(): Color {
+        alpha = 0f
+        return this
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is Color) {
+            return equals(other)
+        }
+        return false
+    }
+
+    fun equals(other: Color): Boolean {
+        return other.red == red && other.green == green && other.blue == blue && other.alpha == alpha
+    }
+
+    fun set(r: Float, g: Float, b: Float, a: Float) {
+        red = r
+        green = g
+        blue = b
+        alpha = a
+    }
+
+    fun set(other: Color) {
+        red = other.red
+        green = other.green
+        blue = other.blue
+        alpha = other.alpha
+    }
 
     override fun toString() = "r=$red g=$green b=$blue a=$alpha"
 
@@ -79,17 +120,12 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
             throw IllegalArgumentException("Not a valid color string")
         }
 
-        val WHITE = Color(1f, 1f, 1f)
-        val BLACK = Color(0f, 0f, 0f)
-        val RED = Color(1f, 0f, 0f)
-        val GREEN = Color(0f, 1f, 0f)
-        val BLUE = Color(0f, 0f, 1f)
+        fun white() = Color(1f, 1f, 1f)
+        fun black() = Color(0f, 0f, 0f)
+        fun red() = Color(1f, 0f, 0f)
+        fun green() = Color(0f, 1f, 0f)
+        fun blue() = Color(0f, 0f, 1f)
 
-        val SEMI_TRANSPARENT_WHITE = Color(1f, 1f, 1f, 0.5f)
-        val SEMI_TRANSPARENT_BLACK = Color(0f, 0f, 0f, 0.5f)
-
-        val TRANSPARENT_WHITE = Color(1f, 1f, 1f, 0.0f)
-        val TRANSPARENT_BLACK = Color(0f, 0f, 0f, 0.0f)
 
         fun create(r: Int, g: Int, b: Int, a: Int) = Color(r.toFloat() / 255f, g.toFloat() / 255f, b.toFloat() / 255f, a.toFloat() / 255f)
     }

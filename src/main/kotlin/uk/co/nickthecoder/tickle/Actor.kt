@@ -50,7 +50,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
             dirtyMatrix = true
         }
 
-    var color: Color = Color.WHITE
+    var color: Color = Color.white()
 
     internal var appearance: Appearance = InvisibleAppearance()
 
@@ -156,6 +156,12 @@ class Actor(var costume: Costume, val role: Role? = null) {
     fun event(name: String) {
         costume.events[name]?.let { event ->
             event.choosePose()?.let { changeAppearance(it) }
+
+            textAppearance?.let {ta ->
+                event.chooseString()?.let {
+                    ta.text = it
+                }
+            }
         }
     }
 

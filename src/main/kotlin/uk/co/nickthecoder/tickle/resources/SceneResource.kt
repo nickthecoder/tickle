@@ -25,7 +25,7 @@ class SceneResource {
             }
         }
 
-    var background: Color = Color.BLACK
+    var background: Color = Color.black()
 
     var showMouse: Boolean = true
 

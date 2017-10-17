@@ -39,6 +39,8 @@ class TextStyle(
         draw(renderer, fontResource.fontTexture, color, text, x, y)
     }
 
+    private val tempColor = Color.white()
+
     fun draw(renderer: Renderer, text: CharSequence, actor: Actor) {
         val modelMatrix: Matrix4f?
 
@@ -49,10 +51,10 @@ class TextStyle(
         }
 
         if (outlineColor != null && fontResource.outlineFontTexture != null) {
-            draw(renderer, fontResource.outlineFontTexture!!, outlineColor!!, text, actor.x, actor.y, modelMatrix)
-        }
-        draw(renderer, fontResource.fontTexture, color, text, actor.x, actor.y, modelMatrix)
 
+            draw(renderer, fontResource.outlineFontTexture!!, actor.color.mul(outlineColor!!, tempColor), text, actor.x, actor.y, modelMatrix)
+        }
+        draw(renderer, fontResource.fontTexture, actor.color.mul(color, tempColor), text, actor.x, actor.y, modelMatrix)
     }
 
     private fun draw(renderer: Renderer, fontTexture: FontTexture, color: Color, text: CharSequence, x: Double, y: Double, modelMatrix: Matrix4f? = null) {

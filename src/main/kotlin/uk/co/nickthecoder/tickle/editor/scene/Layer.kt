@@ -55,7 +55,9 @@ abstract class Layer {
         }
     }
 
-    fun drawPose(pose: Pose, color: Color = Color.WHITE) {
+    private val WHITE = Color.white()
+
+    fun drawPose(pose: Pose, color: Color = WHITE) {
         val image = pose.image()
         canvas.graphicsContext2D.drawImage(
                 image,

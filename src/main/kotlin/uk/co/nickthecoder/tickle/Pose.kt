@@ -41,7 +41,9 @@ class Pose(
         rectd.top = 1 - (rect.top.toDouble() / texture.height)
     }
 
-    fun draw(renderer: Renderer, x: Double, y: Double, color: Color = Color.WHITE, modelMatrix: Matrix4f? = null) {
+    private val WHITE = Color.white()
+
+    fun draw(renderer: Renderer, x: Double, y: Double, color: Color = WHITE, modelMatrix: Matrix4f? = null) {
         val left = x - offsetX
         val bottom = y - offsetY
         renderer.drawTexture(
