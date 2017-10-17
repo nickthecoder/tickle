@@ -2,21 +2,21 @@ package uk.co.nickthecoder.tickle.action.animation
 
 import uk.co.nickthecoder.tickle.graphics.Color
 
-class Fade(
+class Colorize(
         val color: Color,
         seconds: Double,
-        val finalAlpha: Float,
+        val finalColor: Color,
         ease: Ease = LinearEase.instance)
 
     : AnimationAction(seconds, ease) {
 
-    private var initialAlpha = 0f
+    private val initialColor = Color.white()
 
     override fun storeInitialValue() {
-        initialAlpha = color.alpha
+        initialColor.set(color)
     }
 
     override fun update(t: Double) {
-        color.alpha = lerp(initialAlpha, finalAlpha, t.toFloat())
+        initialColor.lerp(finalColor, t.toFloat(), color)
     }
 }

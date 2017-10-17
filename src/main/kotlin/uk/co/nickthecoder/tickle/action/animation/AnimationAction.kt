@@ -55,6 +55,7 @@ abstract class AnimationAction(
 
     companion object {
         fun lerp(from: Double, to: Double, t: Double) = (1 - t) * from + t * to
+        fun lerp(from: Float, to: Float, t: Float) = (1 - t) * from + t * to
     }
 
 }

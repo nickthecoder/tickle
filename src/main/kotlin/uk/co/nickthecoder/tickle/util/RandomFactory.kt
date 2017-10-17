@@ -18,7 +18,11 @@ class RandomFactory(seed: Long? = null) {
 
     fun plusMinus(limit: Float, ease: Ease = LinearEase.instance): Float = (nextDouble(ease) * limit * 2 - limit).toFloat()
 
-    fun between(from: Color, to: Color, ease: Ease = LinearEase.instance) = from.lerp(to, nextDouble(ease).toFloat())
+    fun between(from: Color, to: Color, ease: Ease = LinearEase.instance): Color {
+        val result = Color()
+        from.lerp(to, nextDouble(ease).toFloat(), result)
+        return result
+    }
 
     fun between(from: Polar2d, to: Polar2d, ease: Ease = LinearEase.instance) = Polar2d(from).lerp(to, nextDouble(ease))
 

@@ -35,7 +35,6 @@ class FontSandbox : Sandbox(height = 700) {
         renderer.clear()
 
         val semiBlack = Color.black().semi()
-        val semiWhite = Color.white().semi()
         val white = Color.white()
 
         pose.draw(renderer, 250.0, 400.0, Color.white().semi())

@@ -65,9 +65,6 @@ class FontTexture(
         if (text.isEmpty()) return 0.0
         if (text.length == 1) return (glyphs[text[0]]?.width)?.toDouble() ?: 0.0
 
-        val last = glyphs[text.last()]
-        val lastAdjustment = if (last == null) 0.0 else last.width - last.advance
-
         return text.sumByDouble { glyphs[it]?.advance ?: 0.0 }
     }
 

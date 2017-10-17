@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.tickle.graphics
 
+import java.util.*
+
 /**
  * NOTE. Color is mutable, in order to prevent lots of Color objects being created, and then thrown away,
  * which would give the garbage collector a hard time, and would lead to lost frames while gc runs.
@@ -7,18 +9,23 @@ package uk.co.nickthecoder.tickle.graphics
  */
 class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
 
+    constructor() : this(1f, 1f, 1f, 1f)
+
     var red = Math.max(0f, Math.min(1f, r))
     var green = Math.max(0f, Math.min(1f, g))
     var blue = Math.max(0f, Math.min(1f, b))
     var alpha = Math.max(0f, Math.min(1f, a))
 
-    fun lerp(other: Color, t: Float): Color {
+    /**
+     * Linear interpolation between two colors.
+     */
+    fun lerp(other: Color, t: Float, dest: Color): Color {
         val s = 1 - t
-        return Color(
-                red * s + other.red * t,
-                green * s + other.green * t,
-                blue * s + other.blue * t,
-                alpha * s + other.alpha * t)
+        dest.red = red * s + other.red * t
+        dest.green = green * s + other.green * t
+        dest.blue = blue * s + other.blue * t
+        dest.alpha = alpha * s + other.alpha * t
+        return dest
     }
 
     fun mul(other: Color, dest: Color): Color {
@@ -52,6 +59,14 @@ class Color(r: Float, g: Float, b: Float, a: Float = 1f) {
 
     fun equals(other: Color): Boolean {
         return other.red == red && other.green == green && other.blue == blue && other.alpha == alpha
+    }
+
+    /**
+     * Cheap and cheerful hashCode - haven't tested for likely collisions, but assuming Float.hashCode is
+     * good over 0..9, I think it should be ok.
+     */
+    override fun hashCode(): Int {
+        return Objects.hash(red, 2 + green, 4 + blue, 6 + green, 8 + alpha)
     }
 
     fun set(r: Float, g: Float, b: Float, a: Float) {
