@@ -1,8 +1,6 @@
 Current Work
 ============
 
-Look at Fade - wrong now that Color is mutable
-
 BUGS
 ====
 

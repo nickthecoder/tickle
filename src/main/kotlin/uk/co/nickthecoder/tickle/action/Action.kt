@@ -36,4 +36,7 @@ interface Action {
         return Repeat(this, times)
     }
 
+    fun whilst(conditional: Action) = WhileAction(conditional, this)
+
+
 }
