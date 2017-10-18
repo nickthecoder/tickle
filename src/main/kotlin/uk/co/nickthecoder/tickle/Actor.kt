@@ -165,7 +165,12 @@ class Actor(var costume: Costume, val role: Role? = null) {
         }
     }
 
-    fun createChild(eventName: String): Actor = costume.createChild(eventName)
+    fun createChild(eventName: String): Actor {
+        val actor = costume.createChild(eventName)
+        actor.x = x
+        actor.y = y
+        return actor
+    }
 
     fun createChildOnStage(eventName: String): Actor {
         val actor = createChild(eventName)
