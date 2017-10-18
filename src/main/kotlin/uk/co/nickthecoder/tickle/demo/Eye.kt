@@ -12,7 +12,8 @@ class Eye : AbstractRole() {
     val angle = Angle()
 
     override fun activated() {
-        pupilA = actor.createChild("pupil", deltaZ = 1.0)
+        pupilA = actor.createChildOnStage("pupil")
+        pupilA.zOrder += 1
     }
 
     override fun tick() {

@@ -87,12 +87,12 @@ class Costume() {
                 if (pose == null) {
                     val style = defaultEvent?.chooseTextStyle()
                     if (style != null) {
-                        actor.changeAppearance(defaultEvent?.chooseString() ?: "", style)
+                        val text = defaultEvent.chooseString() ?: ""
+                        actor.changeAppearance(text, style)
                     }
                 } else {
                     actor.changeAppearance(pose)
                 }
-
                 return actor
             }
 

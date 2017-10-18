@@ -52,7 +52,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     var color: Color = Color.white()
 
-    internal var appearance: Appearance = InvisibleAppearance()
+    var appearance: Appearance = InvisibleAppearance()
 
     private val modelMatrix = Matrix4f()
 
@@ -157,7 +157,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
         costume.events[name]?.let { event ->
             event.choosePose()?.let { changeAppearance(it) }
 
-            textAppearance?.let {ta ->
+            textAppearance?.let { ta ->
                 event.chooseString()?.let {
                     ta.text = it
                 }
@@ -165,19 +165,10 @@ class Actor(var costume: Costume, val role: Role? = null) {
         }
     }
 
-    fun createChild(eventName: String, deltaX: Double = 0.0, deltaY: Double = 0.0, deltaZ: Double = 0.0): Actor {
-        val actor = costume.createChild(eventName)
-        if (actor.costume == this.costume) {
-            // The actor was created without its own costume, so use MY zOrder as the basis for the
-            // new actor's zOrder
-            actor.zOrder = zOrder + deltaZ
-        } else {
-            // The costume will have given it a zOrder, so use that.
-            // deltaZ will probably be 0 when creating actors with their own costume.
-            actor.zOrder += deltaZ
-        }
-        actor.x = x + deltaX
-        actor.y = y + deltaY
+    fun createChild(eventName: String): Actor = costume.createChild(eventName)
+
+    fun createChildOnStage(eventName: String): Actor {
+        val actor = createChild(eventName)
         stage?.add(actor)
         return actor
     }

@@ -13,6 +13,9 @@ interface Appearance {
      */
     fun draw(renderer: Renderer)
 
+    fun width(): Double
+
+    fun height(): Double
 }
 
 class InvisibleAppearance : Appearance {
@@ -22,6 +25,10 @@ class InvisibleAppearance : Appearance {
     override fun draw(renderer: Renderer) {
         // Do nothing
     }
+
+    override fun width(): Double = 0.0
+
+    override fun height(): Double = 0.0
 
     override fun toString() = "InvisibleAppearance"
 }
@@ -35,6 +42,10 @@ class PoseAppearance(val actor: Actor, var pose: Pose) : Appearance {
         pose.draw(renderer, actor)
     }
 
+    override fun width(): Double = pose.rect.width.toDouble() * actor.scale
+    override fun height(): Double = pose.rect.height.toDouble() * actor.scale
+
+
     override fun toString() = "PoseAppearance pose=$pose"
 }
 
@@ -45,6 +56,9 @@ class TextAppearance(val actor: Actor, var text: String, val textStyle: TextStyl
     override fun draw(renderer: Renderer) {
         textStyle.draw(renderer, text, actor)
     }
+
+    override fun width(): Double = textStyle.width(text) * actor.scale
+    override fun height(): Double = textStyle.height(text) * actor.scale
 
     override fun toString() = "TextAppearance '$text'"
 }
