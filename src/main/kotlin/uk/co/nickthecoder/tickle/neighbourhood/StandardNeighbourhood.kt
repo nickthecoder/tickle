@@ -80,14 +80,11 @@ class StandardNeighbourhood(
         System.err.println("StandardNeighbourhood : " + blockWidth + "x" + blockHeight + " oy=" + oy)
         var y = oy
         for (row in rows) {
-            System.err.println("\nRow : " + y + " ... " + row.y)
+            System.err.println("\n\nRow : " + y + " ... " + row.y)
 
             var x = row.ox()
-            for (sq in row.row()) {
-                System.err.println("\n$sq : expected : $x,$y\n ")
-                for (actor in sq.occupants) {
-                    System.err.println(actor)
-                }
+            for (block in row.row()) {
+                System.err.println("$block : expected : $x , $y ${block.occupants}")
                 x += blockWidth
             }
 

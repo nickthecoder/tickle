@@ -11,7 +11,7 @@ import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.resources.SceneResourceListener
 
 
-class ActorProperties(val actorResource: ActorResource, val sceneResource: SceneResource)
+class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: SceneResource)
 
     : SceneResourceListener, ParameterListener {
 
@@ -33,6 +33,11 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
 
     var dirty = false
 
+    /**
+     * When an actor changes, and I update the parameters, this ignores ParameterChanged events.
+     */
+    private var ignoreChanges: Boolean = false
+
     init {
 
         actorResource.attributes.map().keys.sorted().map { actorResource.attributes.getOrCreateData(it) }.forEach { data ->
@@ -51,15 +56,20 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
         sceneResource.listeners.add(this)
     }
 
+
+    fun build(): Node {
+        val field = groupP.createField()
+        val box = HBox()
+        box.children.add(field.controlContainer)
+        box.style = "-fx-padding:10px;"
+        val scrollPane = ScrollPane(box)
+        return scrollPane
+    }
+
     fun cleanUp() {
         sceneResource.listeners.remove(this)
         groupP.parameterListeners.remove(this)
     }
-
-    /**
-     * When an actor changes, and I update the parameters, this ignores ParameterChanged events.
-     */
-    private var ignoreChanges: Boolean = false
 
     override fun parameterChanged(event: ParameterEvent) {
         if (!ignoreChanges) {
@@ -83,15 +93,6 @@ class ActorProperties(val actorResource: ActorResource, val sceneResource: Scene
                 }
             }
         }
-    }
-
-    fun build(): Node {
-        val field = groupP.createField()
-        val box = HBox()
-        box.children.add(field.controlContainer)
-        box.style = "-fx-padding:10px;"
-        val scrollPane = ScrollPane(box)
-        return scrollPane
     }
 
     fun updateActorResource() {
