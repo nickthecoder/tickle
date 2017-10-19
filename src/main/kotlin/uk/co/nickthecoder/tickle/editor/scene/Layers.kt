@@ -80,6 +80,8 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
 
     fun stageLayer(name: String): StageLayer? = map[name]
 
+    fun stageLayers(): List<StageLayer> = stageLayers
+
     fun editableLayers() = stageLayers.filter { it.isVisible && !it.isLocked }
 
     fun visibleLayers() = stageLayers.filter { it.isVisible }
