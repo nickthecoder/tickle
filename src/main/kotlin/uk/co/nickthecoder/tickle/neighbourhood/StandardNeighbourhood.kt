@@ -3,11 +3,11 @@ package uk.co.nickthecoder.tickle.neighbourhood
 import java.util.*
 
 
-class StandardNeighbourhood(
+class StandardNeighbourhood<T>(
         override val blockWidth: Double,
         override val blockHeight: Double = blockWidth)
 
-    : Neighbourhood {
+    : Neighbourhood<T> {
 
     /**
      * The offset of the bottom-most row. Each NeighbourhoodRow has its own x-offset.
@@ -29,9 +29,9 @@ class StandardNeighbourhood(
         oy = blockHeight / 2
     }
 
-    override fun getBlock(x: Double, y: Double) = (getExistingRow(y) ?: createRow(y)).getBlock(x)
+    override fun blockAt(x: Double, y: Double) = (existingRowAt(y) ?: createRow(y)).blockAt(x)
 
-    override fun getExistingBlock(x: Double, y: Double): Block? = getExistingRow(y)?.getExistingBlock(x)
+    override fun existingBlockAt(x: Double, y: Double): Block<T>? = existingRowAt(y)?.existingBlockAt(x)
 
 
     /**
@@ -41,7 +41,7 @@ class StandardNeighbourhood(
      * *
      * @return The row if found, otherwise null
      */
-    private fun getExistingRow(y: Double): NeighbourhoodRow? {
+    private fun existingRowAt(y: Double): NeighbourhoodRow? {
         val iy = Math.floor((y - oy) / blockHeight).toInt()
         if (iy < 0 || iy >= rows.size) {
             return null
@@ -73,7 +73,7 @@ class StandardNeighbourhood(
             throw RuntimeException("Attempt to recreate an existing row " + y)
         }
 
-        return getExistingRow(y)!!
+        return existingRowAt(y)!!
     }
 
     fun debug() {
@@ -96,16 +96,16 @@ class StandardNeighbourhood(
 
         private var ox: Double = blockWidth / 2
 
-        private val row = mutableListOf<Block>()
+        private val row = mutableListOf<Block<T>>()
 
         fun ox() = ox
 
-        fun row(): List<Block> = row
+        fun row(): List<Block<T>> = row
 
         fun count() = row.size
 
-        fun getBlock(x: Double): Block {
-            var result = getExistingBlock(x)
+        fun blockAt(x: Double): Block<T> {
+            var result = existingBlockAt(x)
             if (result == null) {
                 result = createBlock(x)
             }
@@ -113,7 +113,7 @@ class StandardNeighbourhood(
 
         }
 
-        internal fun getExistingBlock(x: Double): Block? {
+        internal fun existingBlockAt(x: Double): Block<T>? {
             val ix = Math.floor((x - ox) / blockWidth).toInt()
             if (ix < 0 || ix >= row.size) {
                 return null
@@ -121,11 +121,11 @@ class StandardNeighbourhood(
             return row[ix]
         }
 
-        private fun createBlock(x: Double): Block {
+        private fun createBlock(x: Double): Block<T> {
             val ix = Math.floor((x - ox) / blockWidth).toInt()
 
             if (ix < 0) {
-                val newBlocks = ArrayList<Block>(-ix)
+                val newBlocks = ArrayList<Block<T>>(-ix)
                 ox += ix * this@StandardNeighbourhood.blockWidth
                 for (i in 0..-ix - 1) {
                     newBlocks.add(Block(this@StandardNeighbourhood, ox + i * blockWidth, y))
@@ -141,7 +141,7 @@ class StandardNeighbourhood(
 
             }
 
-            return getExistingBlock(x)!!
+            return existingBlockAt(x)!!
         }
 
     }

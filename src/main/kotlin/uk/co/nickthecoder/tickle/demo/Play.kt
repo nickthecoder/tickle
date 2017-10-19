@@ -6,6 +6,7 @@ import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.CenterView
 import uk.co.nickthecoder.tickle.action.CenterViewBetween
 import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.neighbourhood.Occupant
 import uk.co.nickthecoder.tickle.neighbourhood.StandardNeighbourhood
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.stage.Stage
@@ -17,7 +18,7 @@ class Play : AbstractDirector() {
 
     val tagManager = TagManager()
 
-    val neighbourhood = StandardNeighbourhood(60.0)
+    val neighbourhood = StandardNeighbourhood<Occupant>(60.0)
 
     @Attribute
     var degrees = 0.0

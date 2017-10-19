@@ -5,14 +5,14 @@ import uk.co.nickthecoder.tickle.util.Rectd
 
 
 class Occupant(
-        private val neighbourhood: Neighbourhood, val role: Role) {
+        private val neighbourhood: Neighbourhood<Occupant>, val role: Role) {
 
     private var blockRange = BlockRange(neighbourhood)
 
     fun update(worldRect: Rectd) {
 
-        val bl = neighbourhood.getBlock(worldRect.left, worldRect.bottom)
-        val tr = neighbourhood.getBlock(worldRect.right, worldRect.top)
+        val bl = neighbourhood.blockAt(worldRect.left, worldRect.bottom)
+        val tr = neighbourhood.blockAt(worldRect.right, worldRect.top)
 
         if (blockRange.bottomLeft !== bl || blockRange.topRight !== tr) {
             remove()

@@ -4,8 +4,18 @@ Current Work
 Next
 ====
 
-	Also add a "Properties" menu item to the SceneEditor's existing Popup Menu
-Context button as another shortcut for the Costume Picker?
+Costumes have a "editor" event, whos pose is used in the CostumePicker in preference to "default"
+
+Costumes to override "default" as the first pose.
+	i.e. a "firstEvent" field, which defaults to "default".
+	Also a "editorEvent" field, which also defaults to "default"
+		Hmmm, better to have an actual Pose?
+
+Costumes "Based On" another costume.
+
+Costumes and Poses "Grouped"
+	Costume Picker expands a single group at a time?
+	Maybe add an accordian under the ungrouped costumes
 
 BUGS
 ====

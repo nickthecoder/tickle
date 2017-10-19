@@ -1,21 +1,21 @@
 package uk.co.nickthecoder.tickle.neighbourhood
 
 
-class BlockRange(
-        val neighbourhood: Neighbourhood,
-        var bottomLeft: Block? = null,
-        var topRight: Block? = null)
+class BlockRange<T>(
+        val neighbourhood: Neighbourhood<T>,
+        var bottomLeft: Block<T>? = null,
+        var topRight: Block<T>? = null)
 
-    : Iterable<Block> {
+    : Iterable<Block<T>> {
 
-    override fun iterator(): Iterator<Block> {
+    override fun iterator(): Iterator<Block<T>> {
 
         val bottomLeft = this.bottomLeft
         val topRight = this.topRight
 
-        if (bottomLeft == null || topRight == null) return emptyList<Block>().iterator()
+        if (bottomLeft == null || topRight == null) return emptyList<Block<T>>().iterator()
 
-        return object : Iterator<Block> {
+        return object : Iterator<Block<T>> {
 
             private var x = bottomLeft.x
             private var y = bottomLeft.y
@@ -24,8 +24,8 @@ class BlockRange(
                 return y <= topRight.y
             }
 
-            override fun next(): Block {
-                val block = neighbourhood.getBlock(x, y)
+            override fun next(): Block<T> {
+                val block = neighbourhood.blockAt(x, y)
                 x += neighbourhood.blockWidth
                 if (x > topRight.x) {
                     y += neighbourhood.blockHeight

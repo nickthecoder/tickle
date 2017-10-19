@@ -2,15 +2,10 @@ package uk.co.nickthecoder.tickle.neighbourhood
 
 
 /**
- * A rectangular grid of [Block]s.
- *
- *
- * Used by [Occupant] and [SinglePointCollisionStrategy] to speed up collision
- * detection, by only considering nearby Actors. SinglePointCollisionStrategy links to each Actor from only **one**
- * Block, whereas NeighbourhoodCollisionStrategy links to an Actor in all of the Blocks where the Actors bounding
- * rectangle overlaps the Block.
+ * A rectangular grid of [Block]s, where each block can contain multiple occupants of type T.
+ * T is often Role.
  */
-interface Neighbourhood {
+interface Neighbourhood<T> {
 
     /**
      * Resets the Neighbourhood, so that there are no Actors held within it.
@@ -40,7 +35,7 @@ interface Neighbourhood {
      * *
      * @see .getExistingBlock
      */
-    fun getBlock(x: Double, y: Double): Block
+    fun blockAt(x: Double, y: Double): Block<T>
 
     /**
      * Looks for a Block that has already been created.
@@ -52,7 +47,7 @@ interface Neighbourhood {
      * *
      * @see .getBlock
      */
-    fun getExistingBlock(x: Double, y: Double): Block?
+    fun existingBlockAt(x: Double, y: Double): Block<T>?
 
     fun blocksAcross(): Int
 
