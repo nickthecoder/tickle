@@ -4,7 +4,6 @@ Current Work
 Next
 ====
 
-Arrange Actors in a tree, with each costume as a group
 	Allow deletion of actors from the tree.
 	Allow deletion of whole groups (but with a warning dialog) (Easy way to remove all pills for example).
 Double click an actor to bring up attributes.

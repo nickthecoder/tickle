@@ -118,7 +118,6 @@ class SceneEditor(val sceneResource: SceneResource) {
         selection.forEach { actorResource ->
             delete(actorResource)
             stageResource.actorResources.add(actorResource)
-            sceneResource.fireChange(actorResource, ModificationType.DELETE)
             sceneResource.fireChange(actorResource, ModificationType.NEW)
         }
     }
@@ -130,15 +129,13 @@ class SceneEditor(val sceneResource: SceneResource) {
     }
 
     fun delete(actorResource: ActorResource) {
-        sceneResource.stageResources.values.forEach { stageResource ->
-            stageResource.actorResources.remove(actorResource)
-        }
+        actorResource.layer?.stageResource?.actorResources?.remove(actorResource)
+        sceneResource.fireChange(actorResource, ModificationType.DELETE)
     }
 
     fun onDelete() {
         selection.selected().forEach { actorResource ->
             delete(actorResource)
-            sceneResource.fireChange(actorResource, ModificationType.DELETE)
         }
         selection.clear()
     }

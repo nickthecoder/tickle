@@ -1,10 +1,15 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
+import javafx.event.EventHandler
 import javafx.scene.Node
+import javafx.scene.control.ContextMenu
+import javafx.scene.control.MenuItem
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
 import javafx.scene.image.ImageView
+import javafx.scene.input.MouseEvent
 import uk.co.nickthecoder.tickle.editor.EditorAction
+import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
 import uk.co.nickthecoder.tickle.resources.SceneResource
@@ -35,13 +40,30 @@ class ActorsBox(val sceneEditor: SceneEditor) {
             root.children.add(StageItem(layer))
         }
 
+        tree.addEventHandler(MouseEvent.MOUSE_PRESSED) { onMouse(it) }
+        tree.addEventHandler(MouseEvent.MOUSE_RELEASED) { onMouse(it) }
         return tree
 
     }
 
-    inner class StageItem(val layer: StageLayer)
+    fun onMouse(event: MouseEvent) {
+        if (event.isPopupTrigger) {
+            tree.selectionModel.selectedItem?.let {
+                val item = it as MyTreeItem?
+                item?.createContextMenu()?.show(MainWindow.instance.scene.window, event.screenX, event.screenY)
+                event.consume()
+            }
+        }
+    }
 
-        : TreeItem<String>(layer.stageName), SceneResourceListener {
+
+    private abstract class MyTreeItem(label: String) : TreeItem<String>(label) {
+        open fun createContextMenu(): ContextMenu? = null
+    }
+
+    private inner class StageItem(val layer: StageLayer)
+
+        : MyTreeItem(layer.stageName), SceneResourceListener {
 
         val groups = mutableMapOf<String, List<ActorResource>>()
 
@@ -70,11 +92,9 @@ class ActorsBox(val sceneEditor: SceneEditor) {
         override fun isLeaf() = false
     }
 
-    inner class CostumeGroupItem(val layer: Layer, val costumeName: String, actors: List<ActorResource>)
+    private inner class CostumeGroupItem(val layer: Layer, val costumeName: String, actors: List<ActorResource>)
 
-        : TreeItem<String>(costumeName), SceneResourceListener {
-
-        val actorList = actors.toMutableList()
+        : MyTreeItem(costumeName), SceneResourceListener {
 
         init {
             sceneResource.listeners.add(this)
@@ -89,12 +109,31 @@ class ActorsBox(val sceneEditor: SceneEditor) {
             }
         }
 
+        override fun createContextMenu(): ContextMenu? {
+            val menu = ContextMenu()
+            val delete = MenuItem("Delete (${children.count()} actors)")
+            delete.onAction = EventHandler {
+                onDelete()
+            }
+
+            menu.items.addAll(delete)
+
+            return menu
+        }
+
+        fun onDelete() {
+            children.filterIsInstance<ActorItem>().forEach {
+                it.onDelete()
+            }
+            parent?.children?.remove(this)
+        }
+
         override fun isLeaf() = false
     }
 
-    inner class ActorItem(val actorResource: ActorResource)
+    private inner class ActorItem(val actorResource: ActorResource)
 
-        : TreeItem<String>(actorResource.costumeName), SceneResourceListener {
+        : MyTreeItem(actorResource.costumeName), SceneResourceListener {
 
         init {
             sceneResource.listeners.add(this)
@@ -113,6 +152,23 @@ class ActorsBox(val sceneEditor: SceneEditor) {
                     ModificationType.NEW -> Unit
                 }
             }
+        }
+
+        override fun createContextMenu(): ContextMenu? {
+            val menu = ContextMenu()
+            val delete = MenuItem("Delete")
+            delete.onAction = EventHandler {
+                onDelete()
+            }
+
+            menu.items.addAll(delete)
+
+            return menu
+        }
+
+        fun onDelete() {
+            actorResource.layer?.stageResource?.actorResources?.remove(actorResource)
+            sceneResource.fireChange(actorResource, ModificationType.DELETE)
         }
 
         fun updateLabel() {
