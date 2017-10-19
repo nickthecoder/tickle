@@ -5,6 +5,7 @@ import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.NoDirector
+import uk.co.nickthecoder.tickle.editor.util.costume
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.Resources
@@ -25,8 +26,8 @@ class JsonScene {
 
     constructor(file: File, isDesigning: Boolean = false) {
         sceneResource = SceneResource()
-        load(file)
         this.isDesigning = isDesigning
+        load(file)
     }
 
     constructor(sceneResource: SceneResource) {

@@ -47,8 +47,6 @@ class Attributes {
         map.clear()
     }
 
-    fun getValue(name: String) = map[name]?.value
-
     fun setValue(name: String, value: String) {
         getOrCreateData(name).value = value
     }
@@ -65,7 +63,8 @@ class Attributes {
     }
 
     /**
-     * Updates the object's property fields with the stored attribute values.
+     * Updates the Role's fields (or other class's fields that uses Attributes) with the stored attribute values.
+     *
      */
     fun applyToObject(obj: Any) {
         val klass = obj.javaClass.kotlin
@@ -75,12 +74,15 @@ class Attributes {
         }
     }
 
+    /**
+     * Updates a field on the Role (or other user created class that uses Attributes).
+     */
     private fun updateAttribute(obj: Any, klass: KClass<*>, name: String, value: String?) {
         if (value == null) return
         try {
             val property = klass.memberProperties.filterIsInstance<KProperty1<Any?, Any?>>().firstOrNull { it.name == name }
             if (property == null) {
-                System.err.println("Could not find a mutable property (var) called '$name' on class '${klass.qualifiedName}'")
+                System.err.println("ERROR. Could not find a mutable property (var) called '$name' on class '${klass.qualifiedName}'")
             } else {
                 if (property is KMutableProperty1<Any?, Any?>) {
                     property.set(obj, fromString(value, property.returnType.jvmErasure))
@@ -90,15 +92,55 @@ class Attributes {
             }
 
         } catch (e: Exception) {
-            System.err.println("Failed to set property '$name' on class '$klass'. Reason : $e")
+            System.err.println("ERROR. Failed to set property '$name' on class '$klass'. Reason : $e")
         }
     }
 
+    /**
+     * Class fields tagged with @Attribute can either be simple mutable ('var') values, such as a Double, or 'val's
+     * of classes whose fields are mutable such as
+     *     val intialAngle : Angle = ...
+     * This method is used by [updateAttribute] to alter the later kind (i.e. val fields that are not mutable, but
+     * whose fields are mutable).
+     */
+    private fun changeAttribute(obj: Any?, value: String, klass: KClass<*>) {
+        if (obj is Polar2d) {
+            val v = Polar2d.fromString(value)
+            obj.angle.radians = v.angle.radians
+            obj.magnitude = v.magnitude
+            return
 
+        } else if (obj is Vector2d) {
+            val v = vector2dFromString(value)
+            obj.x = v.x
+            obj.y = v.y
+
+        } else if (obj is Angle) {
+            val v = Angle.degrees(value.toDouble())
+            obj.radians = v.radians
+
+        } else if (klass == Boolean::class || klass == Int::class || klass == Float::class || klass == Double::class || klass == String::class) {
+
+            throw IllegalArgumentException("Cannot change immutable type $klass.")
+
+        } else {
+            throw IllegalArgumentException("Type $klass is not currently supported.")
+        }
+    }
+
+    /**
+     * Uses reflection to scan the Class for fields using the @Attribute or @CostumeAttribute annotations.
+     * Creates Parameters for each annotated field. The Parameter is given a ParameterListener which updates the
+     * string representation of the data whenever the parameter changes.
+     *
+     * When isDesigning == true, an instance of the Role (or other class that uses Attributes) is created, so that
+     * we can find the default value the field has immediately after creation. In this way, we can show the default
+     * value in the Editor/SceneEditor.
+     */
     fun updateAttributesMetaData(className: String, isDesigning: Boolean) {
 
         val kClass: KClass<*>
-        var instance: Any = 0
+        var instance: Any? = null
         try {
             kClass = Class.forName(className).kotlin
             if (isDesigning) {
@@ -110,12 +152,17 @@ class Attributes {
             return
         }
 
+        /*
+         * Copy the list of attribute names, and as we find their corresponding property, remove them from the list
+         * Any names remaining are old attributes, but the class no longer has that property, so the attribute should
+         * be removed.
+         */
         val toDiscard = map.keys.toMutableSet()
 
         // TODO Should this be memberProperties rather than members?
         kClass.members.forEach { property ->
             property.annotations.filterIsInstance<Attribute>().firstOrNull()?.let { annotation ->
-                val hasExistingValue = map.contains(property.name)
+                val hasExistingValue = map[property.name]?.value != null
                 val data = getOrCreateData(property.name)
                 data.attributeType = annotation.attributeType
                 data.order = annotation.order
@@ -125,11 +172,11 @@ class Attributes {
                     data.parameter = parameter
                     parameter.listen { data.value = parameter.stringValue }
 
-                    if (!hasExistingValue && instance != 0) {
+                    if (!hasExistingValue && instance != null) {
                         // I believe this is safe, because this class creates the parameters based on the return type
                         // of the property. So this is safe as long as createParameter is correct.
                         @Suppress("UNCHECKED_CAST")
-                        val theValue = (property as KProperty1<Any, Any>).get(instance)
+                        val theValue = (property as KProperty1<Any, Any>).get(instance!!)
                         @Suppress("UNCHECKED_CAST")
                         (data.parameter as ValueParameter<Any>).value = theValue
                         data.value = data.parameter!!.stringValue
@@ -213,30 +260,6 @@ class Attributes {
         }
     }
 
-    private fun changeAttribute(obj: Any?, value: String, klass: KClass<*>) {
-        if (obj is Polar2d) {
-            val v = Polar2d.fromString(value)
-            obj.angle.radians = v.angle.radians
-            obj.magnitude = v.magnitude
-            return
-
-        } else if (obj is Vector2d) {
-            val v = vector2dFromString(value)
-            obj.x = v.x
-            obj.y = v.y
-
-        } else if (obj is Angle) {
-            val v = Angle.degrees(value.toDouble())
-            obj.radians = v.radians
-
-        } else if (klass == Boolean::class || klass == Int::class || klass == Float::class || klass == Double::class || klass == String::class) {
-
-            throw IllegalArgumentException("Cannot change immutable type $klass.")
-
-        } else {
-            throw IllegalArgumentException("Type $klass is not currently supported.")
-        }
-    }
 
     override fun toString(): String {
         return "Attributes : " + map.map { (name, data) ->
