@@ -1,8 +1,20 @@
 Current Work
 ============
 
+Next
+====
+
+Arrange Actors in a tree, with each costume as a group
+	Allow deletion of actors from the tree.
+	Allow deletion of whole groups (but with a warning dialog) (Easy way to remove all pills for example).
+Double click an actor to bring up attributes.
+	Also add a "Properties" menu item to the SceneEditor's existing Popup Menu
+Context button as another shortcut for the Costume Picker?
+
 BUGS
 ====
+
+Renaming a costume doesn't update ActorResource in scenes that use it.
 
 findActorAt doesn't work for rotated text that is not bottom? left aligned (as the offset isn't taken into account when doing the rotation maths).
 

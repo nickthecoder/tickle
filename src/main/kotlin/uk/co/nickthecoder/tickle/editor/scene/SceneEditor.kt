@@ -31,7 +31,7 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     val shortcuts = ShortcutHelper("SceneEditor", scrollPane)
 
-    val costumeBox = CostumesBox { selectCostumeName(it) }
+    val costumeBox = CostumePickerBox { selectCostumeName(it) }
     val layersBox = LayersBox(layers)
     val stagesBox = StagesBox(this)
 
