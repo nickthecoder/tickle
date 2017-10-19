@@ -36,11 +36,11 @@ class SceneEditor(val sceneResource: SceneResource) {
     val actorsBox = ActorsBox(this)
 
     val costumesPane = TitledPane("Costume Picker", costumeBox.build())
-    val propertiesPane = TitledPane("Properties", ActorAttributesBox(this).build())
+    val attributesPane = TitledPane("Attributes", ActorAttributesBox(this).build())
     val stagesPane = TitledPane("Actors", actorsBox.build())
     val layersPane = TitledPane("Layers", layersBox.build())
 
-    val sidePanes = listOf(costumesPane, propertiesPane, stagesPane, layersPane)
+    val sidePanes = listOf(costumesPane, attributesPane, stagesPane, layersPane)
 
     val costumeHistory = mutableListOf<String>()
 
@@ -283,19 +283,23 @@ class SceneEditor(val sceneResource: SceneResource) {
                         }
 
                     } else {
-                        if (actors.contains(selection.latest())) {
+                        if (event.clickCount == 2) {
 
-                            // Do nothing
+                            MainWindow.instance.accordion.expandedPane = attributesPane
 
-
-                        } else if (selection.contains(highestActor)) {
-                            // Already in the selection, but this makes it the "latest" one
-                            // So it is shown in the details dialog, and you can see/edit its direction arrow.
-                            selection.add(highestActor)
                         } else {
-                            selection.clearAndSelect(highestActor)
-                        }
+                            if (actors.contains(selection.latest())) {
 
+                                // Do nothing
+
+                            } else if (selection.contains(highestActor)) {
+                                // Already in the selection, but this makes it the "latest" one
+                                // So it is shown in the details dialog, and you can see/edit its direction arrow.
+                                selection.add(highestActor)
+                            } else {
+                                selection.clearAndSelect(highestActor)
+                            }
+                        }
                     }
                 }
                 selection.latest()?.let { latest ->
