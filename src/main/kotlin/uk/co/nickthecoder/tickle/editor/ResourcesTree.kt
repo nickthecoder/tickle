@@ -8,6 +8,7 @@ import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
 import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.Costume
+import uk.co.nickthecoder.tickle.CostumeGroup
 import uk.co.nickthecoder.tickle.GameInfo
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.events.CompoundInput
@@ -262,21 +263,102 @@ class ResourcesTree()
     inner class CostumesItem() : TopLevelItem() {
 
         init {
-            resources.costumes.items().map { it }.sortedBy { it.key }.forEach { (name, costume) ->
-                children.add(DataItem(name, costume, "costume.png"))
+            println("Costume group : ${resources.costumeGroups.items()}")
+            resources.costumeGroups.items().map { it }.sortedBy { it.key }.forEach { (groupName, costumeGroup) ->
+                children.add(CostumeGroupItem(groupName, costumeGroup))
+            }
+            resources.costumes.items().map { it }.sortedBy { it.key }.forEach { (costumeName, costume) ->
+                if (resources.findCostumeGroup(costumeName) == null) {
+                    children.add(CostumeItem(costumeName, costume, null))
+                }
             }
             value = toString()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
-            if (resource is Costume) {
-                children.add(DataItem(name, resource, "costume.png"))
+            if (resource is CostumeGroup) {
+                children.add(CostumeGroupItem(name, resource))
                 updateLabel()
+            }
+            if (resource is Costume) {
+                if (resources.findCostumeGroup(name) == null) {
+                    children.add(CostumeItem(name, resource, null))
+                    updateLabel()
+                }
+            }
+        }
+
+        /**
+         * If a costume was removed from a CostumeGroup, then we need to ADD it to our children.
+         */
+        override fun resourceRemoved(resource: Any, name: String) {
+            if (resource is Costume) {
+                if (resources.costumes.findName(resource) != null && resources.findCostumeGroup(name) == null) {
+                    children.add(CostumeItem(name, resource, null))
+                }
             }
         }
 
         override fun toString() = "Costumes (${children.size})"
 
+    }
+
+    inner class CostumeGroupItem(val name: String, val costumeGroup: CostumeGroup) : TopLevelItem(name) {
+
+        init {
+            costumeGroup.items().map { it }.sortedBy { it.key }.forEach { (costumeName, costume) ->
+                children.add(CostumeItem(costumeName, costume, costumeGroup))
+            }
+            value = toString()
+        }
+
+        override fun resourceAdded(resource: Any, name: String) {
+            if (resource is Costume && costumeGroup.findName(resource) != null) {
+                children.add(CostumeItem(name, resource, costumeGroup))
+                updateLabel()
+            }
+        }
+
+        override fun toString() = "$name (${children.size})"
+
+    }
+
+    inner class CostumeItem(name: String, val costume: Costume, val costumeGroup: CostumeGroup?)
+
+        : DataItem(name, costume, "costume.png") {
+
+        override fun resourceRemoved(resource: Any, name: String) {
+            if (resource === costume) {
+                if (!exists(resource)) {
+                    parent?.let { (it as ResourceItem).remove(this) }
+                }
+            }
+        }
+
+        /**
+         * If a costume was ADDED to a CostumeGroup, we need to REMOVE it, if this is in the non-group
+         */
+        override fun resourceAdded(resource: Any, name: String) {
+            if (costumeGroup == null && resource === costume) {
+                println("Resource Added : $name = $resource")
+                if (resources.findCostumeGroup(name) != null) {
+                    println("Was null")
+                    parent?.let {
+                        println("Removing")
+                        (it as ResourceItem).remove(this)
+                    }
+                }
+            }
+        }
+
+        fun exists(costume: Costume): Boolean {
+            if (costumeGroup == null) {
+                val costumeName = resources.costumes.findName(costume)
+                return costumeName != null && resources.findCostumeGroup(costumeName) == null
+            } else {
+                return costumeGroup.findName(costume) != null
+            }
+        }
     }
 
     inner class LayoutsItem() : TopLevelItem() {
@@ -298,7 +380,6 @@ class ResourcesTree()
         override fun toString() = "Layouts (${children.size})"
 
     }
-
 
     inner class InputsItem() : TopLevelItem() {
 

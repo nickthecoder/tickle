@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.resources
 
-class ResourceType<T : Any>(val resources: Resources, val typeLabel: String) {
+open class ResourceType<T : Any>(val resources: Resources, val typeLabel: String) {
 
     private val items = mutableMapOf<String, T>()
 
@@ -20,7 +20,7 @@ class ResourceType<T : Any>(val resources: Resources, val typeLabel: String) {
         resources.fireAdded(item, name)
     }
 
-    fun delete(name: String) {
+    fun remove(name: String) {
         items[name]?.let {
             items.remove(name)
             resources.fireRemoved(it, name)

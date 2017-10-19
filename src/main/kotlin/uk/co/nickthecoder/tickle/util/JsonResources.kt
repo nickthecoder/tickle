@@ -4,10 +4,7 @@ import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
-import uk.co.nickthecoder.tickle.Costume
-import uk.co.nickthecoder.tickle.CostumeEvent
-import uk.co.nickthecoder.tickle.NoProducer
-import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.*
@@ -40,7 +37,8 @@ class JsonResources {
         addArray(jroot, "textures", saveTextures())
         addArray(jroot, "fonts", saveFonts())
         addArray(jroot, "poses", savePoses())
-        addArray(jroot, "costumes", saveCostumes())
+        addArray(jroot, "costumeGroups", saveCostumeGroups())
+        addArray(jroot, "costumes", saveCostumes(resources.costumes, false))
         addArray(jroot, "inputs", saveInputs())
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
@@ -63,6 +61,7 @@ class JsonResources {
         val jtextures = jroot.get("textures")
         val jfonts = jroot.get("fonts")
         val jposes = jroot.get("poses")
+        val jcostumeGroups = jroot.get("costumeGroups")
         val jcostumes = jroot.get("costumes")
         val jinputs = jroot.get("inputs")
 
@@ -82,7 +81,10 @@ class JsonResources {
             loadPoses(jposes)
         }
         if (jcostumes is JsonArray) {
-            loadCostumes(jcostumes)
+            loadCostumes(jcostumes, resources.costumes)
+        }
+        if (jcostumeGroups is JsonArray) {
+            loadCostumeGroups(jcostumeGroups)
         }
         if (jinputs is JsonArray) {
             loadInputs(jinputs)
@@ -332,72 +334,107 @@ class JsonResources {
         }
     }
 
+    // Costume Groups
+
+    fun saveCostumeGroups(): JsonArray {
+        val jgroups = JsonArray()
+
+        resources.costumeGroups.items().forEach { name, group ->
+            val jgroup = JsonObject()
+            jgroup.add("name", name)
+            jgroup.add("costumes", saveCostumes(group, true))
+            jgroups.add(jgroup)
+        }
+        return jgroups
+    }
+
+    fun loadCostumeGroups(jgroups: JsonArray) {
+
+        jgroups.forEach {
+            val jgroup = it.asObject()
+            val group = CostumeGroup(resources)
+            val groupName = jgroup.get("name").asString()
+            val jcostumes = jgroup.get("costumes").asArray()
+            loadCostumes(jcostumes, group)
+
+            group.items().forEach { costumeName, costume ->
+                resources.costumes.add(costumeName, costume)
+            }
+            resources.costumeGroups.add(groupName, group)
+        }
+    }
+
     // COSTUMES
 
-    fun saveCostumes(): JsonArray {
+    fun saveCostumes(costumes: ResourceType<Costume>, all: Boolean): JsonArray {
         val jcostumes = JsonArray()
-        resources.costumes.items().forEach { name, costume ->
-            val jcostume = JsonObject()
-            jcostume.add("name", name)
-            jcostume.add("role", costume.roleString)
-            jcostume.add("canRotate", costume.canRotate)
-            jcostume.add("zOrder", costume.zOrder)
 
-            val jevents = JsonArray()
-            jcostume.add("events", jevents)
-            costume.events.forEach { eventName, event ->
-                val jevent = JsonObject()
-                jevents.add(jevent)
-                jevent.add("name", eventName)
+        costumes.items().forEach { name, costume ->
 
-                if (event.poses.isNotEmpty()) {
-                    val jposes = JsonArray()
-                    event.poses.forEach { pose ->
-                        resources.poses.findName(pose)?.let { poseName ->
-                            jposes.add(poseName)
-                        }
-                    }
-                    jevent.add("poses", jposes)
-                }
+            if (all || resources.findCostumeGroup(name) == null) {
 
-                if (event.costumes.isNotEmpty()) {
-                    val jcos = JsonArray()
-                    event.costumes.forEach { cos ->
-                        resources.costumes.findName(cos)?.let { cosName ->
-                            jcos.add(cosName)
-                        }
-                    }
-                    jevent.add("costumes", jcos)
-                }
+                val jcostume = JsonObject()
+                jcostume.add("name", name)
+                jcostume.add("role", costume.roleString)
+                jcostume.add("canRotate", costume.canRotate)
+                jcostume.add("zOrder", costume.zOrder)
 
-                if (event.textStyles.isNotEmpty()) {
-                    val jtextStyles = JsonArray()
-                    event.textStyles.forEach { textStyle ->
-                        val jtextStyle = JsonObject()
-                        jtextStyles.add(jtextStyle)
-                        jtextStyle.add("font", resources.fontResources.findName(textStyle.fontResource))
-                        jtextStyle.add("halign", textStyle.halignment.name)
-                        jtextStyle.add("valign", textStyle.valignment.name)
-                        jtextStyle.add("color", textStyle.color.toHashRGBA())
-                        if (textStyle.fontResource.outlineFontTexture != null) {
-                            textStyle.outlineColor?.let {
-                                jtextStyle.add("outlineColor", it.toHashRGBA())
+                val jevents = JsonArray()
+                jcostume.add("events", jevents)
+                costume.events.forEach { eventName, event ->
+                    val jevent = JsonObject()
+                    jevents.add(jevent)
+                    jevent.add("name", eventName)
+
+                    if (event.poses.isNotEmpty()) {
+                        val jposes = JsonArray()
+                        event.poses.forEach { pose ->
+                            resources.poses.findName(pose)?.let { poseName ->
+                                jposes.add(poseName)
                             }
                         }
+                        jevent.add("poses", jposes)
                     }
-                    jevent.add("textStyles", jtextStyles)
-                }
-                if (event.strings.isNotEmpty()) {
-                    val jstrings = JsonArray()
-                    event.strings.forEach { str ->
-                        jstrings.add(str)
-                    }
-                    jevent.add("strings", jstrings)
-                }
-            }
-            JsonUtil.saveAttributes(jcostume, costume.attributes)
 
-            jcostumes.add(jcostume)
+                    if (event.costumes.isNotEmpty()) {
+                        val jcos = JsonArray()
+                        event.costumes.forEach { cos ->
+                            resources.costumes.findName(cos)?.let { cosName ->
+                                jcos.add(cosName)
+                            }
+                        }
+                        jevent.add("costumes", jcos)
+                    }
+
+                    if (event.textStyles.isNotEmpty()) {
+                        val jtextStyles = JsonArray()
+                        event.textStyles.forEach { textStyle ->
+                            val jtextStyle = JsonObject()
+                            jtextStyles.add(jtextStyle)
+                            jtextStyle.add("font", resources.fontResources.findName(textStyle.fontResource))
+                            jtextStyle.add("halign", textStyle.halignment.name)
+                            jtextStyle.add("valign", textStyle.valignment.name)
+                            jtextStyle.add("color", textStyle.color.toHashRGBA())
+                            if (textStyle.fontResource.outlineFontTexture != null) {
+                                textStyle.outlineColor?.let {
+                                    jtextStyle.add("outlineColor", it.toHashRGBA())
+                                }
+                            }
+                        }
+                        jevent.add("textStyles", jtextStyles)
+                    }
+                    if (event.strings.isNotEmpty()) {
+                        val jstrings = JsonArray()
+                        event.strings.forEach { str ->
+                            jstrings.add(str)
+                        }
+                        jevent.add("strings", jstrings)
+                    }
+                }
+                JsonUtil.saveAttributes(jcostume, costume.attributes)
+
+                jcostumes.add(jcostume)
+            }
         }
 
         return jcostumes
@@ -405,7 +442,7 @@ class JsonResources {
 
     data class CostumeEventData(val costumeEvent: CostumeEvent, val costumeName: String)
 
-    fun loadCostumes(jcostumes: JsonArray) {
+    fun loadCostumes(jcostumes: JsonArray, group: ResourceType<Costume>) {
         val costumeEvents = mutableListOf<CostumeEventData>()
 
         jcostumes.forEach {
@@ -471,7 +508,7 @@ class JsonResources {
 
             JsonUtil.loadAttributes(jcostume, costume.attributes)
 
-            resources.costumes.add(name, costume)
+            group.add(name, costume)
             // println("Loaded costume $name : ${costume}")
         }
 

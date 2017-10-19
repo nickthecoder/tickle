@@ -37,7 +37,7 @@ class LayoutTab(val name: String, val layout: Layout)
         minorTabs.add(viewsTab)
         borderPane.center = minorTabs
 
-        addDeleteButton { Resources.instance.layouts.delete(name) }
+        addDeleteButton { Resources.instance.layouts.remove(name) }
     }
 
     override fun save(): Boolean {

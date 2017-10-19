@@ -1,14 +1,17 @@
 package uk.co.nickthecoder.tickle.editor.util
 
+import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.UnthreadedTaskRunner
+import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.FileParameter
 import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.OneOfParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.Costume
+import uk.co.nickthecoder.tickle.CostumeGroup
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.events.CompoundInput
@@ -25,6 +28,8 @@ class NewResourceTask : AbstractTask() {
 
     val costumeP = createPoseParameter()
 
+    val costumeGroupP = InformationParameter("costumeGroup", information = "")
+
     val layoutP = InformationParameter("layout", information = "")
 
     val inputP = InformationParameter("input", information = "")
@@ -37,8 +42,14 @@ class NewResourceTask : AbstractTask() {
 
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
             .addParameters(
-                    "Texture" to textureP, "Pose" to poseP, "Font" to fontP, "Costume" to costumeP, "Layout" to layoutP,
-                    "Input" to inputP, "Scene Directory" to sceneDirectoryP, "Scene" to sceneP)
+                    "Texture" to textureP,
+                    "Pose" to poseP, "Font" to fontP,
+                    "Costume" to costumeP,
+                    "Costume Group" to costumeGroupP,
+                    "Layout" to layoutP,
+                    "Input" to inputP,
+                    "Scene Directory" to sceneDirectoryP,
+                    "Scene" to sceneP)
 
     val nameP = StringParameter("resourceName")
 
@@ -66,6 +77,11 @@ class NewResourceTask : AbstractTask() {
                 costume.addPose("default", costumeP.value!!)
                 Resources.instance.costumes.add(name, costume)
                 data = costume
+            }
+            costumeGroupP -> {
+                val costumeGroup = CostumeGroup(Resources.instance)
+                Resources.instance.costumeGroups.add(name, costumeGroup)
+                data = costumeGroup
             }
             layoutP -> {
                 val layout = Layout()
@@ -112,5 +128,15 @@ class NewResourceTask : AbstractTask() {
             MainWindow.instance.openTab(nameP.value, data)
         }
     }
-}
 
+    fun newCostumeGroup(): NewResourceTask {
+        resourceTypeP.value = costumeGroupP
+        resourceTypeP.hidden = true
+        return this
+    }
+
+    fun prompt() {
+        val taskPrompter = TaskPrompter(this)
+        taskPrompter.placeOnStage(Stage())
+    }
+}

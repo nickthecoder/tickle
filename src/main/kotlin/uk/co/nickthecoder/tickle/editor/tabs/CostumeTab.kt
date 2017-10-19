@@ -12,10 +12,7 @@ import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.CostumeEvent
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Role
-import uk.co.nickthecoder.tickle.editor.util.ClassLister
-import uk.co.nickthecoder.tickle.editor.util.TextStyleParameter
-import uk.co.nickthecoder.tickle.editor.util.createCostumeParameter
-import uk.co.nickthecoder.tickle.editor.util.createPoseParameter
+import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.resources.Resources
 
@@ -43,7 +40,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         borderPane.center = minorTabs
 
-        addDeleteButton { Resources.instance.costumes.delete(name) }
+        addDeleteButton { Resources.instance.costumes.remove(name) }
     }
 
     override fun save(): Boolean {
@@ -71,12 +68,14 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val zOrderP = DoubleParameter("zOrder")
 
+        val costumeGroupP = CostumeGroupParameter { chooseCostumeGroup(it) }
+
         val infoP = InformationParameter("info",
                 information = "The role has no fields with the '@CostumeAttribute' annotation, and therefore, this costume has no attributes.")
         val attributesP = SimpleGroupParameter("attributes")
 
         override val taskD = TaskDescription("costumeDetails")
-                .addParameters(nameP, roleClassP, canRotateP, zOrderP, attributesP)
+                .addParameters(nameP, roleClassP, canRotateP, zOrderP, costumeGroupP, attributesP)
 
         init {
             ClassLister.setNullableChoices(roleClassP, Role::class.java)
@@ -85,6 +84,7 @@ class CostumeTab(val name: String, val costume: Costume)
             roleClassP.value = costume.roleClass()
             canRotateP.value = costume.canRotate
             zOrderP.value = costume.zOrder
+            costumeGroupP.costumeP.value = costume.costumeGroup
 
             updateAttributes()
             roleClassP.listen {
@@ -101,6 +101,16 @@ class CostumeTab(val name: String, val costume: Costume)
             costume.roleString = if (roleClassP.value == null) "" else roleClassP.value!!.name
             costume.canRotate = canRotateP.value == true
             costume.zOrder = zOrderP.value!!
+
+            if (costume.costumeGroup != costumeGroupP.costumeP.value) {
+                costume.costumeGroup?.remove(name)
+                costume.costumeGroup = costumeGroupP.costumeP.value
+                costume.costumeGroup?.add(nameP.value, costume)
+            }
+        }
+
+        fun chooseCostumeGroup(groupName: String) {
+            costumeGroupP.costumeP.value = Resources.instance.costumeGroups.find(groupName)
         }
 
         fun updateAttributes() {

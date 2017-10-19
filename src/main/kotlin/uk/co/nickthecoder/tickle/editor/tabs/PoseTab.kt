@@ -29,7 +29,7 @@ class PoseTab(name: String, pose: Pose)
     : EditTaskTab(PoseTask(name, pose), name, pose, graphicName = "pose.png") {
 
     init {
-        addDeleteButton { Resources.instance.poses.delete(name) }
+        addDeleteButton { Resources.instance.poses.remove(name) }
         val createCostumeButton = Button("Create Costume")
         createCostumeButton.setOnAction { (task as PoseTask).createCostume() }
         leftButtons.children.add(createCostumeButton)

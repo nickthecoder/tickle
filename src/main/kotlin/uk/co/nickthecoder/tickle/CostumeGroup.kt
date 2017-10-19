@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle
 
-class CostumeGroup() {
+import uk.co.nickthecoder.tickle.resources.ResourceType
+import uk.co.nickthecoder.tickle.resources.Resources
 
-    val costumes = mutableSetOf<Costume>()
-
-}
+class CostumeGroup(resources: Resources) : ResourceType<Costume>(resources, "Costume")

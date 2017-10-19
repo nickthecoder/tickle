@@ -42,7 +42,7 @@ class TextureTab(name: String, val texture: Texture)
         minorTabs.add(posesTab)
         borderPane.center = minorTabs
 
-        addDeleteButton { Resources.instance.textures.delete(name) }
+        addDeleteButton { Resources.instance.textures.remove(name) }
         val editButton = Button("Edit")
         editButton.setOnAction { edit() }
         leftButtons.children.add(editButton)

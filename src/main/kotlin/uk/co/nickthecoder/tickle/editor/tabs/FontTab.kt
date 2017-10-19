@@ -7,10 +7,10 @@ import uk.co.nickthecoder.paratask.parameters.ButtonParameter
 import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.IntParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
-import uk.co.nickthecoder.tickle.resources.FontResource
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.editor.util.FontParameter
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
+import uk.co.nickthecoder.tickle.resources.FontResource
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 import javax.imageio.ImageIO
@@ -21,7 +21,7 @@ class FontTab(name: String, val fontResource: FontResource)
     : EditTaskTab(FontTask(name, fontResource), name, data = fontResource, graphicName = "font.png") {
 
     init {
-        addDeleteButton { Resources.instance.fontResources.delete(name) }
+        addDeleteButton { Resources.instance.fontResources.remove(name) }
     }
 }
 

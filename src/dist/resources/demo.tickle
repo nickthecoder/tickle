@@ -177,6 +177,109 @@
             "direction": 0
         }
     ],
+    "costumeGroups": [
+        {
+            "name": "coin",
+            "costumes": [
+                {
+                    "name": "coin10",
+                    "role": "uk.co.nickthecoder.tickle.demo.Coin",
+                    "canRotate": true,
+                    "zOrder": 0,
+                    "events": [
+                        {
+                            "name": "default",
+                            "poses": [
+                                "coin"
+                            ]
+                        }
+                    ],
+                    "attributes": [
+                        {
+                            "name": "color",
+                            "value": "#ffffffff"
+                        },
+                        {
+                            "name": "turningSpeed",
+                            "value": "3.0"
+                        },
+                        {
+                            "name": "value",
+                            "value": "10"
+                        },
+                        {
+                            "name": "velocity",
+                            "value": "0.0:2.0"
+                        }
+                    ]
+                },
+                {
+                    "name": "coin",
+                    "role": "uk.co.nickthecoder.tickle.demo.Coin",
+                    "canRotate": true,
+                    "zOrder": 0,
+                    "events": [
+                        {
+                            "name": "default",
+                            "poses": [
+                                "coin"
+                            ]
+                        }
+                    ],
+                    "attributes": [
+                        {
+                            "name": "color",
+                            "value": "#999900"
+                        },
+                        {
+                            "name": "turningSpeed",
+                            "value": "3.0"
+                        },
+                        {
+                            "name": "value",
+                            "value": "1"
+                        },
+                        {
+                            "name": "velocity",
+                            "value": "0.0:2.0"
+                        }
+                    ]
+                },
+                {
+                    "name": "coin100",
+                    "role": "uk.co.nickthecoder.tickle.demo.Coin",
+                    "canRotate": true,
+                    "zOrder": 0,
+                    "events": [
+                        {
+                            "name": "default",
+                            "poses": [
+                                "coin"
+                            ]
+                        }
+                    ],
+                    "attributes": [
+                        {
+                            "name": "color",
+                            "value": "#ffff4d"
+                        },
+                        {
+                            "name": "turningSpeed",
+                            "value": "3.0"
+                        },
+                        {
+                            "name": "value",
+                            "value": "100"
+                        },
+                        {
+                            "name": "velocity",
+                            "value": "0.0:2.0"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
     "costumes": [
         {
             "name": "bee",
@@ -217,78 +320,6 @@
                     "poses": [
                         "hand"
                     ]
-                }
-            ]
-        },
-        {
-            "name": "coin",
-            "role": "uk.co.nickthecoder.tickle.demo.Coin",
-            "canRotate": true,
-            "zOrder": 0,
-            "events": [
-                {
-                    "name": "default",
-                    "poses": [
-                        "coin"
-                    ]
-                }
-            ],
-            "attributes": [
-                {
-                    "name": "color",
-                    "value": "#999900"
-                },
-                {
-                    "name": "value",
-                    "value": "1"
-                }
-            ]
-        },
-        {
-            "name": "coin10",
-            "role": "uk.co.nickthecoder.tickle.demo.Coin",
-            "canRotate": true,
-            "zOrder": 0,
-            "events": [
-                {
-                    "name": "default",
-                    "poses": [
-                        "coin"
-                    ]
-                }
-            ],
-            "attributes": [
-                {
-                    "name": "color",
-                    "value": "#ffffffff"
-                },
-                {
-                    "name": "value",
-                    "value": "10"
-                }
-            ]
-        },
-        {
-            "name": "coin100",
-            "role": "uk.co.nickthecoder.tickle.demo.Coin",
-            "canRotate": true,
-            "zOrder": 0,
-            "events": [
-                {
-                    "name": "default",
-                    "poses": [
-                        "coin"
-                    ]
-                }
-            ],
-            "attributes": [
-                {
-                    "name": "color",
-                    "value": "#ffff4d"
-                },
-                {
-                    "name": "value",
-                    "value": "100"
                 }
             ]
         },

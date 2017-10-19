@@ -42,6 +42,15 @@ class Resources {
 
     val listeners = mutableListOf<ResourcesListener>()
 
+    fun findCostumeGroup(costumeName: String): CostumeGroup? {
+        costumeGroups.items().values.forEach { costumeGroup ->
+            if (costumeGroup.find(costumeName) != null) {
+                return costumeGroup
+            }
+        }
+        return null
+    }
+
     fun toPath(file: File): String {
         try {
             return file.absoluteFile.toRelativeString(resourceDirectory)

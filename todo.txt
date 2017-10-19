@@ -4,6 +4,9 @@ Current Work
 Next
 ====
 
+Right click the ResourcesTree for popup menu :
+	Delete, Rename, New
+
 Costumes have a "editor" event, whos pose is used in the CostumePicker in preference to "default"
 
 Costumes to override "default" as the first pose.
