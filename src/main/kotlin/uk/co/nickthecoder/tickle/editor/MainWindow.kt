@@ -15,7 +15,10 @@ import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.Costume
+import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.GameInfo
+import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.tabs.*
 import uk.co.nickthecoder.tickle.editor.util.NewResourceTask
 import uk.co.nickthecoder.tickle.events.CompoundInput
@@ -91,6 +94,9 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             add(EditorActions.ACCORDION_FOUR) { accordionPane(3) }
             add(EditorActions.ACCORDION_FIVE) { accordionPane(4) }
             add(EditorActions.TAB_CLOSE) { tabPane.selectedTab?.close() }
+
+            add(EditorActions.SHOW_COSTUME_PICKER) { accordionPane(1) }
+
         }
 
         tabPane.selectionModel.selectedItemProperty().addListener { _, _, newValue ->

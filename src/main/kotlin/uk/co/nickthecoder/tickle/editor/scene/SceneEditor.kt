@@ -40,6 +40,7 @@ class SceneEditor(val sceneResource: SceneResource) {
     val stagesPane = TitledPane("Actors", actorsBox.build())
     val layersPane = TitledPane("Layers", layersBox.build())
 
+    // NOTE. If this order changes, also change the index for SHOW_COSTUME_PICKER in MainWindow
     val sidePanes = listOf(costumesPane, attributesPane, stagesPane, layersPane)
 
     val costumeHistory = mutableListOf<String>()
@@ -80,6 +81,7 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     fun cleanUp() {
         selection.clear() // Will clear the "Properties" box.
+        shortcuts.clear()
     }
 
 

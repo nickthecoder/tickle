@@ -19,6 +19,8 @@ object EditorActions {
     val ACCORDION_FOUR = EditorAction("accordion.four", KeyCode.F7)
     val ACCORDION_FIVE = EditorAction("accordion.five", KeyCode.F8)
 
+    val SHOW_COSTUME_PICKER = EditorAction("show.costumePicker", KeyCode.CONTEXT_MENU)
+
     val ESCAPE = EditorAction("escape", KeyCode.ESCAPE)
     val DELETE = EditorAction("delete", KeyCode.DELETE)
 
