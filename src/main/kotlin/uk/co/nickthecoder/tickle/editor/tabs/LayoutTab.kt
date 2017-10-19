@@ -37,7 +37,7 @@ class LayoutTab(val name: String, val layout: Layout)
         minorTabs.add(viewsTab)
         borderPane.center = minorTabs
 
-        addDeleteButton { Resources.instance.deleteLayout(name) }
+        addDeleteButton { Resources.instance.layouts.delete(name) }
     }
 
     override fun save(): Boolean {
@@ -81,7 +81,7 @@ class LayoutTab(val name: String, val layout: Layout)
         }
 
         override fun customCheck() {
-            val l = Resources.instance.optionalLayout(nameP.value)
+            val l = Resources.instance.layouts.find(nameP.value)
             if (l != null && l != layout) {
                 throw ParameterException(nameP, "This name is already used.")
             }
@@ -90,7 +90,7 @@ class LayoutTab(val name: String, val layout: Layout)
 
         override fun run() {
             if (nameP.value != name) {
-                Resources.instance.renameLayout(name, nameP.value)
+                Resources.instance.layouts.rename(name, nameP.value)
             }
 
             layout.layoutStages.clear()

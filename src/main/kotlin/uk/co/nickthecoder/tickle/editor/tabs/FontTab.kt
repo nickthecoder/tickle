@@ -21,7 +21,7 @@ class FontTab(name: String, val fontResource: FontResource)
     : EditTaskTab(FontTask(name, fontResource), name, data = fontResource, graphicName = "font.png") {
 
     init {
-        addDeleteButton { Resources.instance.deleteFontResource(name) }
+        addDeleteButton { Resources.instance.fontResources.delete(name) }
     }
 }
 
@@ -48,7 +48,7 @@ In addition, you can create another .png file if you wish to add an outline to t
 
     override fun run() {
         if (nameP.value != name) {
-            Resources.instance.renameFontResource(name, nameP.value)
+            Resources.instance.fontResources.rename(name, nameP.value)
         }
         fontResource.xPadding = xPaddingP.value!!
         fontResource.yPadding = yPaddingP.value!!

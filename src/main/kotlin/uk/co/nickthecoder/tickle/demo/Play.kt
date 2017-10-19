@@ -23,10 +23,10 @@ class Play : AbstractDirector() {
     @Attribute
     var degrees = 0.0
 
-    val clockwise = Resources.instance.input("clockwise") // Z : Rotate the view
-    val antiClockwise = Resources.instance.input("anti-clockwise") // X : Rotate the view
-    val reset = Resources.instance.input("reset") // O : Reset the rotation to 0°
-    val toggle = Resources.instance.input("toggle") // TAB : Toggles between Controllable roles.
+    val clockwise = Resources.instance.inputs.find("clockwise")!! // Z : Rotate the view
+    val antiClockwise = Resources.instance.inputs.find("anti-clockwise")!! // X : Rotate the view
+    val reset = Resources.instance.inputs.find("reset")!! // O : Reset the rotation to 0°
+    val toggle = Resources.instance.inputs.find("toggle")!! // TAB : Toggles between Controllable roles.
 
     var activeControllable: Controllable? = null
 

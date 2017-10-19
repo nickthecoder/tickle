@@ -41,7 +41,7 @@ class SceneResource {
      * Gets the Layout to create the scene, and then populates the Stages with Actors.
      */
     fun createScene(): Scene {
-        val layout = Resources.instance.layout(layoutName)
+        val layout = Resources.instance.layouts.find(layoutName)!!
         val scene = layout.createScene()
 
         scene.background = background
@@ -72,7 +72,7 @@ class SceneResource {
         val oldStages = stageResources.toMap()
         stageResources.clear()
 
-        val layout = Resources.instance.layout(layoutName)
+        val layout = Resources.instance.layouts.find(layoutName)!!
         layout.layoutStages.keys.forEach { stageName ->
             stageResources[stageName] = StageResource()
         }

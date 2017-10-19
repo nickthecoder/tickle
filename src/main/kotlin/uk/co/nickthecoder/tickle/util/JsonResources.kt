@@ -142,7 +142,7 @@ class JsonResources {
 
     fun saveLayouts(): JsonArray {
         val jlayouts = JsonArray()
-        resources.layouts().forEach { name, layout ->
+        resources.layouts.items().forEach { name, layout ->
             val jlayout = JsonObject()
             jlayouts.add(jlayout)
             jlayout.add("name", name)
@@ -254,7 +254,7 @@ class JsonResources {
                     layout.layoutViews[viewName] = layoutView
                 }
             }
-            resources.addLayout(name, layout)
+            resources.layouts.add(name, layout)
 
         }
     }
@@ -263,7 +263,7 @@ class JsonResources {
 
     fun saveTextures(): JsonArray {
         val jtextures = JsonArray()
-        resources.textures().forEach { name, texture ->
+        resources.textures.items().forEach { name, texture ->
             texture.file?.let { file ->
                 val jtexture = JsonObject()
                 jtexture.add("name", name)
@@ -279,7 +279,7 @@ class JsonResources {
             val jtexture = jele.asObject()
             val name = jtexture.get("name").asString()
             val file = resources.fromPath(jtexture.get("file").asString())
-            resources.addTexture(name, file)
+            resources.textures.add(name, Texture.create(file))
 
             // println("Loaded texture $name : $file")
         }
@@ -289,8 +289,8 @@ class JsonResources {
 
     fun savePoses(): JsonArray {
         val jposes = JsonArray()
-        resources.poses().forEach { name, pose ->
-            resources.findTextureName(pose.texture)?.let { textureName ->
+        resources.poses.items().forEach { name, pose ->
+            resources.textures.findName(pose.texture)?.let { textureName ->
                 val jpose = JsonObject()
                 jpose.add("name", name)
                 jpose.add("texture", textureName)
@@ -314,7 +314,7 @@ class JsonResources {
             val jpose = jele.asObject()
             val name = jpose.get("name").asString()
             val textureName = jpose.get("texture").asString()
-            val pose = Pose(resources.texture(textureName))
+            val pose = Pose(resources.textures.find(textureName)!!)
 
             pose.rect.left = jpose.get("left").asInt()
             pose.rect.bottom = jpose.get("bottom").asInt()
@@ -327,7 +327,7 @@ class JsonResources {
             pose.direction.degrees = jpose.get("direction").asDouble()
             pose.updateRectd()
 
-            resources.addPose(name, pose)
+            resources.poses.add(name, pose)
             //println("Loaded pose $name : ${pose}")
         }
     }
@@ -336,7 +336,7 @@ class JsonResources {
 
     fun saveCostumes(): JsonArray {
         val jcostumes = JsonArray()
-        resources.costumes().forEach { name, costume ->
+        resources.costumes.items().forEach { name, costume ->
             val jcostume = JsonObject()
             jcostume.add("name", name)
             jcostume.add("role", costume.roleString)
@@ -353,7 +353,7 @@ class JsonResources {
                 if (event.poses.isNotEmpty()) {
                     val jposes = JsonArray()
                     event.poses.forEach { pose ->
-                        resources.findPoseName(pose)?.let { poseName ->
+                        resources.poses.findName(pose)?.let { poseName ->
                             jposes.add(poseName)
                         }
                     }
@@ -363,7 +363,7 @@ class JsonResources {
                 if (event.costumes.isNotEmpty()) {
                     val jcos = JsonArray()
                     event.costumes.forEach { cos ->
-                        resources.findCostumeName(cos)?.let { cosName ->
+                        resources.costumes.findName(cos)?.let { cosName ->
                             jcos.add(cosName)
                         }
                     }
@@ -375,7 +375,7 @@ class JsonResources {
                     event.textStyles.forEach { textStyle ->
                         val jtextStyle = JsonObject()
                         jtextStyles.add(jtextStyle)
-                        jtextStyle.add("font", resources.findFontResourceName(textStyle.fontResource))
+                        jtextStyle.add("font", resources.fontResources.findName(textStyle.fontResource))
                         jtextStyle.add("halign", textStyle.halignment.name)
                         jtextStyle.add("valign", textStyle.valignment.name)
                         jtextStyle.add("color", textStyle.color.toHashRGBA())
@@ -427,7 +427,7 @@ class JsonResources {
                         val jposes = it.asArray()
                         jposes.forEach {
                             val poseName = it.asString()
-                            resources.optionalPose(poseName)?.let { event.poses.add(it) }
+                            resources.poses.find(poseName)?.let { event.poses.add(it) }
                         }
                     }
 
@@ -445,7 +445,7 @@ class JsonResources {
                         val jtextStyles = it.asArray()
                         jtextStyles.forEach {
                             val jtextStyle = it.asObject()
-                            val fontResource = resources.fontResource(jtextStyle.get("font").asString())
+                            val fontResource = resources.fontResources.find(jtextStyle.get("font").asString())!!
                             val halign = HAlignment.valueOf(jtextStyle.getString("halign", HAlignment.LEFT.name))
                             val valign = VAlignment.valueOf(jtextStyle.getString("valign", VAlignment.BASELINE.name))
                             val color = Color.fromString(jtextStyle.getString("color", "#FFFFFF"))
@@ -471,13 +471,13 @@ class JsonResources {
 
             JsonUtil.loadAttributes(jcostume, costume.attributes)
 
-            resources.addCostume(name, costume)
+            resources.costumes.add(name, costume)
             // println("Loaded costume $name : ${costume}")
         }
 
         // Now all costume have been loaded, lets add the costume events.
         costumeEvents.forEach { data ->
-            data.costumeEvent.costumes.add(resources.costume(data.costumeName))
+            data.costumeEvent.costumes.add(resources.costumes.find(data.costumeName)!!)
         }
     }
 
@@ -485,7 +485,7 @@ class JsonResources {
 
     fun saveInputs(): JsonArray {
         val jinputs = JsonArray()
-        resources.inputs().forEach { name, input ->
+        resources.inputs.items().forEach { name, input ->
             val jinput = JsonObject()
             jinput.add("name", name)
 
@@ -632,7 +632,7 @@ class JsonResources {
                 }
             }
 
-            resources.addInput(name, input)
+            resources.inputs.add(name, input)
             // println("Loaded input $name : $input")
         }
     }
@@ -642,7 +642,7 @@ class JsonResources {
 
     fun saveFonts(): JsonArray {
         val jfonts = JsonArray()
-        resources.fontResources().forEach { name, fontResource ->
+        resources.fontResources.items().forEach { name, fontResource ->
             val jfont = JsonObject()
             jfont.add("name", name)
             if (fontResource.file == null) {
@@ -698,7 +698,7 @@ class JsonResources {
                     }
                 }
 
-                resources.addFontResource(name, fontResource)
+                resources.fontResources.add(name, fontResource)
             }
             //println("Loaded pose $name : ${pose}")
         }

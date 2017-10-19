@@ -1,8 +1,8 @@
 package uk.co.nickthecoder.tickle.action.movement.polar
 
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.events.Input
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Polar2d
 
 open class AcceleratePolarInput(
@@ -15,8 +15,8 @@ open class AcceleratePolarInput(
 
     : Action {
 
-    val accelerate = Resources.instance.optionalInput(accelerate) ?: Input.dummyInput
-    val decelerate = Resources.instance.optionalInput(decelerate) ?: Input.dummyInput
+    val accelerate = Resources.instance.inputs.find(accelerate) ?: Input.dummyInput
+    val decelerate = Resources.instance.inputs.find(decelerate) ?: Input.dummyInput
 
     override fun act(): Boolean {
         if (accelerate.isPressed()) {

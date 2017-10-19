@@ -187,7 +187,7 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
 
     init {
         ClassLister.setChoices(directorP, Director::class.java)
-        Resources.instance.layouts().forEach { name, _ ->
+        Resources.instance.layouts.items().forEach { name, _ ->
             layoutP.choice(name, name, name)
         }
 

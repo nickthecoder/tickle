@@ -12,7 +12,7 @@ fun createTextureParameter(parameterName: String = "texture"): ChoiceParameter<T
 
     val parameter = ChoiceParameter<Texture?>(name = parameterName, required = true, value = null)
 
-    Resources.instance.textures().forEach { name, texture ->
+    Resources.instance.textures.items().forEach { name, texture ->
         parameter.addChoice(name, texture, name)
     }
     return parameter
@@ -23,7 +23,7 @@ fun createPoseParameter(parameterName: String = "pose"): ChoiceParameter<Pose?> 
 
     val choice = ChoiceParameter<Pose?>(parameterName, required = true, value = null)
 
-    Resources.instance.poses().forEach { poseName, pose ->
+    Resources.instance.poses.items().forEach { poseName, pose ->
         choice.addChoice(poseName, pose, poseName)
     }
     return choice
@@ -34,7 +34,7 @@ fun createFontParameter(parameterName: String = "font"): ChoiceParameter<FontRes
 
     val choice = ChoiceParameter<FontResource?>(parameterName, required = true, value = null)
 
-    Resources.instance.fontResources().forEach { name, fontResource ->
+    Resources.instance.fontResources.items().forEach { name, fontResource ->
         choice.addChoice(name, fontResource, name)
     }
     return choice
@@ -45,7 +45,7 @@ fun createCostumeParameter(parameterName: String = "costume"): ChoiceParameter<C
 
     val choice = ChoiceParameter<Costume?>(parameterName, required = true, value = null)
 
-    Resources.instance.costumes().forEach { costumeName, costume ->
+    Resources.instance.costumes.items().forEach { costumeName, costume ->
         choice.addChoice(costumeName, costume, costumeName)
     }
     return choice

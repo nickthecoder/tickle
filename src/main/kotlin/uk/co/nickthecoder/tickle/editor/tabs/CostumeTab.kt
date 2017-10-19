@@ -43,7 +43,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         borderPane.center = minorTabs
 
-        addDeleteButton { Resources.instance.deleteCostume(name) }
+        addDeleteButton { Resources.instance.costumes.delete(name) }
     }
 
     override fun save(): Boolean {
@@ -95,7 +95,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         override fun run() {
             if (nameP.value != name) {
-                Resources.instance.renameCostume(name, nameP.value)
+                Resources.instance.costumes.rename(name, nameP.value)
             }
 
             costume.roleString = if (roleClassP.value == null) "" else roleClassP.value!!.name
@@ -240,9 +240,9 @@ class CostumeTab(val name: String, val costume: Costume)
             val eventName = if (eventNameP.value.isBlank()) "<no name>" else eventNameP.value
             val type = typeP.value?.label ?: ""
             val dataName = when (typeP.value) {
-                poseP -> Resources.instance.findPoseName(poseP.value)
-                costumeP -> Resources.instance.findCostumeName(costumeP.value)
-                textStyleP -> Resources.instance.findFontResourceName(textStyleP.fontP.value)
+                poseP -> Resources.instance.poses.findName(poseP.value)
+                costumeP -> Resources.instance.costumes.findName(costumeP.value)
+                textStyleP -> Resources.instance.fontResources.findName(textStyleP.fontP.value)
                 stringP -> stringP.value
                 else -> ""
             }

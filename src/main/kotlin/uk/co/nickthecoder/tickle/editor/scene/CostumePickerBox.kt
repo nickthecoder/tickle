@@ -19,7 +19,7 @@ class CostumePickerBox(val onSelect : (String)->Unit) {
 
         scrollPane.isFitToWidth = true
 
-        Resources.instance.costumes().forEach { costumeName, costume ->
+        Resources.instance.costumes.items().forEach { costumeName, costume ->
             costume.thumbnail(40.0)?.let { iv ->
                 val button = Button()
                 val roleName = costume.roleString.split(".").lastOrNull()

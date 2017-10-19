@@ -4,8 +4,8 @@ package uk.co.nickthecoder.tickle.demo
 import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Costume
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.action.movement.polar.*
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Polar2d
 
@@ -13,9 +13,9 @@ class Bee : Controllable() {
 
     val velocity = Polar2d()
 
-    val ejectNoBounce = Resources.instance.input("ejectNoBounce")
-    val ejectSimple = Resources.instance.input("ejectSimple")
-    val ejectNeighbourhood = Resources.instance.input("ejectNeighbourhood")
+    val ejectNoBounce = Resources.instance.inputs.find("ejectNoBounce")!!
+    val ejectSimple = Resources.instance.inputs.find("ejectSimple")!!
+    val ejectNeighbourhood = Resources.instance.inputs.find("ejectNeighbourhood")!!
 
     override fun activated() {
 
@@ -56,8 +56,8 @@ class Bee : Controllable() {
     }
 
     fun eject(role: Bounce) {
-        val bouncyA = Actor(Costume(),role)
-        bouncyA.changeAppearance(Resources.instance.pose("coin"))
+        val bouncyA = Actor(Costume(), role)
+        bouncyA.changeAppearance(Resources.instance.poses.find("coin")!!)
         bouncyA.position.x = actor.x
         bouncyA.position.y = actor.y
         role.velocity.x = Math.cos(actor.direction.radians) * 10.0

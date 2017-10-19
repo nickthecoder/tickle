@@ -7,7 +7,9 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
 import uk.co.nickthecoder.paratask.util.FileLister
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.Costume
+import uk.co.nickthecoder.tickle.GameInfo
+import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.FontResource
@@ -112,7 +114,7 @@ class ResourcesTree()
     inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo, "gameInfo.png") {
 
         init {
-            resources.poses().forEach { name, pose ->
+            resources.poses.items().forEach { name, pose ->
                 children.add(DataItem(name, pose))
             }
         }
@@ -170,7 +172,7 @@ class ResourcesTree()
     inner class TexturesItem() : TopLevelItem() {
 
         init {
-            resources.textures().map { it }.sortedBy { it.key }.forEach { (name, texture) ->
+            resources.textures.items().map { it }.sortedBy { it.key }.forEach { (name, texture) ->
                 children.add(TextureItem(name, texture))
             }
             updateLabel()
@@ -192,7 +194,7 @@ class ResourcesTree()
         : DataItem(name, texture, "texture.png") {
 
         init {
-            resources.poses().filter { it.value.texture === texture }.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
+            resources.poses.items().filter { it.value.texture === texture }.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
                 children.add(DataItem(name, pose, "pose.png"))
             }
         }
@@ -220,7 +222,7 @@ class ResourcesTree()
     inner class PosesItem() : TopLevelItem() {
 
         init {
-            resources.poses().map { it }.sortedBy { it.key }.forEach { (name, pose) ->
+            resources.poses.items().map { it }.sortedBy { it.key }.forEach { (name, pose) ->
                 children.add(DataItem(name, pose, "pose.png"))
             }
             updateLabel()
@@ -240,7 +242,7 @@ class ResourcesTree()
     inner class FontResourcesItem() : TopLevelItem() {
 
         init {
-            resources.fontResources().map { it }.sortedBy { it.key }.forEach { (name, fontResource) ->
+            resources.fontResources.items().map { it }.sortedBy { it.key }.forEach { (name, fontResource) ->
                 children.add(DataItem(name, fontResource, "font.png"))
             }
             updateLabel()
@@ -260,7 +262,7 @@ class ResourcesTree()
     inner class CostumesItem() : TopLevelItem() {
 
         init {
-            resources.costumes().map { it }.sortedBy { it.key }.forEach { (name, costume) ->
+            resources.costumes.items().map { it }.sortedBy { it.key }.forEach { (name, costume) ->
                 children.add(DataItem(name, costume, "costume.png"))
             }
             value = toString()
@@ -280,7 +282,7 @@ class ResourcesTree()
     inner class LayoutsItem() : TopLevelItem() {
 
         init {
-            resources.layouts().map { it }.sortedBy { it.key }.forEach { (name, layout) ->
+            resources.layouts.items().map { it }.sortedBy { it.key }.forEach { (name, layout) ->
                 children.add(DataItem(name, layout, "layout.png"))
             }
             updateLabel()
@@ -301,7 +303,7 @@ class ResourcesTree()
     inner class InputsItem() : TopLevelItem() {
 
         init {
-            resources.inputs().map { it }.sortedBy { it.key }.forEach { (name, input) ->
+            resources.inputs.items().map { it }.sortedBy { it.key }.forEach { (name, input) ->
                 children.add(DataItem(name, input, "input.png"))
             }
             updateLabel()

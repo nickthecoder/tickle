@@ -21,19 +21,15 @@ import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.resources.Resources
-import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.MainWindow
-import uk.co.nickthecoder.tickle.editor.util.ImageParameter
-import uk.co.nickthecoder.tickle.editor.util.ImageParameterField
-import uk.co.nickthecoder.tickle.editor.util.RectiParameter
-import uk.co.nickthecoder.tickle.editor.util.XYParameter
+import uk.co.nickthecoder.tickle.editor.util.*
+import uk.co.nickthecoder.tickle.resources.Resources
 
 class PoseTab(name: String, pose: Pose)
     : EditTaskTab(PoseTask(name, pose), name, pose, graphicName = "pose.png") {
 
     init {
-        addDeleteButton { Resources.instance.deletePose(name) }
+        addDeleteButton { Resources.instance.poses.delete(name) }
         val createCostumeButton = Button("Create Costume")
         createCostumeButton.setOnAction { (task as PoseTask).createCostume() }
         leftButtons.children.add(createCostumeButton)
@@ -45,7 +41,7 @@ class PoseTab(name: String, pose: Pose)
 class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
 
     val nameP = StringParameter("name", value = name)
-    val textureNameP = ButtonParameter("texture", buttonText = Resources.instance.findTextureName(pose.texture) ?: "<none>") {
+    val textureNameP = ButtonParameter("texture", buttonText = Resources.instance.textures.findName(pose.texture) ?: "<none>") {
         editTexture()
     }
 
@@ -84,7 +80,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
     }
 
     override fun customCheck() {
-        val p = Resources.instance.optionalPose(nameP.value)
+        val p = Resources.instance.poses.find(nameP.value)
         if (p != null && p != pose) {
             throw ParameterException(nameP, "This name is already used.")
         }
@@ -93,7 +89,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
     override fun run() {
         //println("Run LTRB : ${positionP.left},${positionP.top}, ${positionP.right}, ${positionP.bottom}  size : ${positionP.width}, ${positionP.height}")
         if (nameP.value != name) {
-            Resources.instance.renamePose(name, nameP.value)
+            Resources.instance.poses.rename(name, nameP.value)
         }
         pose.rect.left = positionP.left!!
         pose.rect.bottom = positionP.bottom!!
@@ -107,7 +103,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
     }
 
     fun editTexture() {
-        val trName = Resources.instance.findTextureName(pose.texture)
+        val trName = Resources.instance.textures.findName(pose.texture)
         if (trName != null) {
             val tab = TextureTab(trName, pose.texture)
             MainWindow.instance.tabPane.add(tab)
@@ -116,20 +112,20 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
     }
 
     fun createCostume() {
-        val poseName = Resources.instance.findPoseName(pose)
+        val poseName = Resources.instance.poses.findName(pose)
         if (poseName == null) {
             return
         }
 
-        if (Resources.instance.optionalCostume(poseName) != null) {
+        if (Resources.instance.costumes.find(poseName) != null) {
             Alert(Alert.AlertType.INFORMATION, "A Costume called ${name} already exists.").showAndWait()
             return
         }
 
         val costume = Costume()
         costume.addPose("default", pose)
-        Resources.instance.addCostume(poseName, costume)
-        MainWindow.instance?.openTab(poseName, costume)
+        Resources.instance.costumes.add(poseName, costume)
+        MainWindow.instance.openTab(poseName, costume)
     }
 
 

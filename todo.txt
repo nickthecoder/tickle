@@ -11,6 +11,9 @@ Costumes to override "default" as the first pose.
 	Also a "editorEvent" field, which also defaults to "default"
 		Hmmm, better to have an actual Pose?
 
+Use thumbnails of Costume's editor pose in the Resources tree
+	Ditto for Pose
+
 Costumes "Based On" another costume.
 
 Costumes and Poses "Grouped"

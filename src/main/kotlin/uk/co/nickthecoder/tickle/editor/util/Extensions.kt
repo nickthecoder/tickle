@@ -87,7 +87,7 @@ fun ActorResource.isOverlapping(x: Double, y: Double): Boolean {
     return pose?.isOverlapping(tx, ty) ?: false
 }
 
-fun ActorResource.costume(): Costume? = Resources.instance.optionalCostume(costumeName)
+fun ActorResource.costume(): Costume? = Resources.instance.costumes.find(costumeName)
 
 fun ActorResource.isAt(x: Double, y: Double): Boolean {
     var tx = x - this.x

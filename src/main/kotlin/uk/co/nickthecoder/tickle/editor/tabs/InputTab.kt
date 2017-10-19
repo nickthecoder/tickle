@@ -6,14 +6,14 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.events.*
+import uk.co.nickthecoder.tickle.resources.Resources
 
 class InputTab(name: String, input: CompoundInput)
     : EditTaskTab(InputTask(name, input), name, input, graphicName = "input.png") {
 
     init {
-        addDeleteButton { Resources.instance.deleteInput(name) }
+        addDeleteButton { Resources.instance.inputs.delete(name) }
     }
 }
 
@@ -38,7 +38,7 @@ class InputTask(val name: String, val compoundInput: CompoundInput) : AbstractTa
     }
 
     override fun customCheck() {
-        val i = Resources.instance.optionalInput(nameP.value)
+        val i = Resources.instance.inputs.find(nameP.value)
         if (i != null && i != compoundInput) {
             throw ParameterException(nameP, "This name is already used.")
         }
@@ -46,7 +46,7 @@ class InputTask(val name: String, val compoundInput: CompoundInput) : AbstractTa
 
     override fun run() {
         if (nameP.value != name) {
-            Resources.instance.renameInput(name, nameP.value)
+            Resources.instance.inputs.rename(name, nameP.value)
         }
         compoundInput.inputs.clear()
         inputsP.innerParameters.forEach {

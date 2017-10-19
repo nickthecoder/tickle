@@ -54,7 +54,7 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
         stageButton.items.add(SeparatorMenuItem())
         sceneResource.stageResources.forEach { stageName, stageResource ->
 
-            val layout = Resources.instance.layout(sceneResource.layoutName)
+            val layout = Resources.instance.layouts.find(sceneResource.layoutName)!!
             val constraintName = layout.layoutStages[stageName]?.stageConstraintString
             var constraint: StageConstraint = NoStageConstraint()
             try {

@@ -8,9 +8,11 @@ import uk.co.nickthecoder.paratask.parameters.FileParameter
 import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.OneOfParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
-import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.Costume
+import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.events.CompoundInput
+import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
@@ -52,29 +54,29 @@ class NewResourceTask : AbstractTask() {
 
         when (resourceTypeP.value) {
             textureP -> {
-                data = Resources.instance.addTexture(name, textureP.value!!)
+                data = Resources.instance.textures.add(name, Texture.create(textureP.value!!))
             }
             poseP -> {
                 val pose = Pose(poseP.value!!)
-                Resources.instance.addPose(name, pose)
+                Resources.instance.poses.add(name, pose)
                 data = pose
             }
             costumeP -> {
                 val costume = Costume()
                 costume.addPose("default", costumeP.value!!)
-                Resources.instance.addCostume(name, costume)
+                Resources.instance.costumes.add(name, costume)
                 data = costume
             }
             layoutP -> {
                 val layout = Layout()
                 layout.layoutStages["main"] = LayoutStage()
                 layout.layoutViews["main"] = LayoutView(stageName = "main")
-                Resources.instance.addLayout(name, layout)
+                Resources.instance.layouts.add(name, layout)
                 data = layout
             }
             inputP -> {
                 val input = CompoundInput()
-                Resources.instance.addInput(name, input)
+                Resources.instance.inputs.add(name, input)
                 data = input
             }
             sceneDirectoryP -> {
@@ -87,8 +89,8 @@ class NewResourceTask : AbstractTask() {
                 val file = File(dir, "${name}.scene")
                 val newScene = SceneResource()
                 var layoutName: String? = "default"
-                if (Resources.instance.optionalLayout(layoutName!!) == null) {
-                    layoutName = Resources.instance.layouts().keys.firstOrNull()
+                if (Resources.instance.layouts.find(layoutName!!) == null) {
+                    layoutName = Resources.instance.layouts.items().keys.firstOrNull()
                     if (layoutName == null) {
                         throw ParameterException(sceneP, "The resources have no layouts. Create a Layout before creating a Scene.")
                     }
@@ -101,7 +103,7 @@ class NewResourceTask : AbstractTask() {
 
                 val fontResource = FontResource()
                 fontP.update(fontResource)
-                Resources.instance.addFontResource(nameP.value, fontResource)
+                Resources.instance.fontResources.add(nameP.value, fontResource)
                 data = fontResource
             }
         }

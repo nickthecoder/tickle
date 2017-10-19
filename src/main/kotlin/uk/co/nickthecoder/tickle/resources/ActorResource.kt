@@ -39,9 +39,9 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     val attributes = Attributes()
 
-    val pose: Pose? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.choosePose() }
+    val pose: Pose? by lazy { Resources.instance.costumes.find(costumeName)?.events?.get("default")?.choosePose() }
 
-    val textStyle: TextStyle? by lazy { Resources.instance.optionalCostume(costumeName)?.events?.get("default")?.chooseTextStyle() }
+    val textStyle: TextStyle? by lazy { Resources.instance.costumes.find(costumeName)?.events?.get("default")?.chooseTextStyle() }
 
     var text: String = ""
 
@@ -51,7 +51,7 @@ class ActorResource(val isDesigning: Boolean = false) {
     var layer: StageLayer? = null
 
     fun createActor(): Actor? {
-        val costume = Resources.instance.optionalCostume(costumeName)
+        val costume = Resources.instance.costumes.find(costumeName)
         if (costume == null) {
             System.err.println("ERROR. Costume $costumeName not found in resources.")
             return null
@@ -69,7 +69,7 @@ class ActorResource(val isDesigning: Boolean = false) {
     }
 
     private fun updateAttributesMetaData() {
-        val roleString = Resources.instance.optionalCostume(costumeName)?.roleString
+        val roleString = Resources.instance.costumes.find(costumeName)?.roleString
         if (roleString != null && roleString.isNotBlank()) {
             attributes.updateAttributesMetaData(roleString, isDesigning)
         }

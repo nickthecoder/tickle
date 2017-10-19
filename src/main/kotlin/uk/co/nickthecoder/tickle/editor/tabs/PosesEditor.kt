@@ -85,7 +85,7 @@ class PosesEditor(val texture: Texture)
         container.onDragDetected = EventHandler { onDragDetected(it) }
         container.onMouseReleased = EventHandler { onMouseReleased(it) }
 
-        Resources.instance.poses().forEach { name, pose ->
+        Resources.instance.poses.items().forEach { name, pose ->
             includePose(name, pose)
         }
 
@@ -106,7 +106,7 @@ class PosesEditor(val texture: Texture)
 
     override fun resourceChanged(resource: Any) {
         if (resource is Pose) {
-            Resources.instance.findPoseName(resource)?.let { name ->
+            Resources.instance.poses.findName(resource)?.let { name ->
                 removePose(name)
                 includePose(name, resource)
             }
@@ -151,11 +151,11 @@ class PosesEditor(val texture: Texture)
 
     fun onMouseClicked(event: MouseEvent) {
         posesList.items.forEachIndexed { i, name ->
-            val pose = Resources.instance.pose(name)
+            val pose = Resources.instance.poses.find(name)!!
             if (pose.rect.contains(event.x.toInt(), event.y.toInt())) {
                 posesList.selectionModel.clearAndSelect(i)
                 if (event.clickCount == 2) {
-                    MainWindow.instance?.openTab(name, pose)
+                    MainWindow.instance.openTab(name, pose)
                 }
                 event.consume()
                 return
@@ -215,7 +215,7 @@ class NewPoseTask(
         pose.offsetX = (offsetX ?: rect.width / 2).toDouble()
         pose.offsetY = (offsetY ?: rect.height / 2).toDouble()
 
-        Resources.instance.addPose(nameP.value, pose)
+        Resources.instance.poses.add(nameP.value, pose)
     }
 }
 

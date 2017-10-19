@@ -13,11 +13,11 @@ import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.paratask.util.process.Exec
-import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.util.ImageParameter
 import uk.co.nickthecoder.tickle.editor.util.RenameTask
 import uk.co.nickthecoder.tickle.graphics.Texture
+import uk.co.nickthecoder.tickle.resources.Resources
 import java.io.File
 
 class TextureTab(name: String, val texture: Texture)
@@ -42,7 +42,7 @@ class TextureTab(name: String, val texture: Texture)
         minorTabs.add(posesTab)
         borderPane.center = minorTabs
 
-        addDeleteButton { Resources.instance.deleteTexture(name) }
+        addDeleteButton { Resources.instance.textures.delete(name) }
         val editButton = Button("Edit")
         editButton.setOnAction { edit() }
         leftButtons.children.add(editButton)
@@ -98,7 +98,7 @@ class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
     }
 
     override fun customCheck() {
-        val t = Resources.instance.optionalTexture(nameP.value)
+        val t = Resources.instance.textures.find(nameP.value)
         if (t != null && t != texture) {
             throw ParameterException(nameP, "This name is already used.")
         }
@@ -106,7 +106,7 @@ class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
 
     override fun run() {
         if (nameP.value != name) {
-            Resources.instance.renameTexture(name, nameP.value)
+            Resources.instance.textures.rename(name, nameP.value)
         }
     }
 

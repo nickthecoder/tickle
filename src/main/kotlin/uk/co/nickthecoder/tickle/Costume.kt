@@ -61,7 +61,7 @@ class Costume() {
         try {
             return Class.forName(roleString)
         } catch (e: Exception) {
-            System.err.println("Warning. Costume '${Resources.instance.findCostumeName(this)}' couldn't create role '$roleString'. $e")
+            System.err.println("Warning. Costume '${Resources.instance.costumes.findName(this)}' couldn't create role '$roleString'. $e")
             return null
         }
     }
