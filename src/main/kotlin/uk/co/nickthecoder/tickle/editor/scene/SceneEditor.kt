@@ -99,20 +99,33 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     fun buildContextMenu(): ContextMenu {
         val menu = ContextMenu()
-        val delete = MenuItem("Delete")
-        delete.onAction = EventHandler { onDelete() }
-        menu.items.add(delete)
 
-        if (selection.isNotEmpty() && sceneResource.stageResources.size > 1) {
-            val moveToStageMenu = Menu("Move to Stage")
-            sceneResource.stageResources.forEach { stageName, stage ->
-                val stageItem = MenuItem(stageName)
-                stageItem.onAction = EventHandler { moveSelectTo(stage) }
-                moveToStageMenu.items.add(stageItem)
+        if (selection.isNotEmpty()) {
+
+            val deleteText = "Delete " + if (selection.size > 1) {
+                "(${selection.size} actors)"
+            } else {
+                selection.latest()!!.costumeName
             }
-            menu.items.add(moveToStageMenu)
-        }
 
+            val delete = MenuItem(deleteText)
+            delete.onAction = EventHandler { onDelete() }
+
+            val attributes = MenuItem("Attributes")
+            attributes.onAction = EventHandler { MainWindow.instance.accordion.expandedPane = attributesPane }
+
+            menu.items.addAll(delete, attributes)
+
+            if (sceneResource.stageResources.size > 1) {
+                val moveToStageMenu = Menu("Move to Stage")
+                sceneResource.stageResources.forEach { stageName, stage ->
+                    val stageItem = MenuItem(stageName)
+                    stageItem.onAction = EventHandler { moveSelectTo(stage) }
+                    moveToStageMenu.items.add(stageItem)
+                }
+                menu.items.add(moveToStageMenu)
+            }
+        }
         return menu
     }
 
