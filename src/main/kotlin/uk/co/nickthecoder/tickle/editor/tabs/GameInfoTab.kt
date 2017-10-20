@@ -38,9 +38,11 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val packagesGroupP = SimpleGroupParameter("packagesGroup", label = "Packages")
             .addParameters(packageInfoP, packagesP, noteP)
 
+    val outputFormatP = ChoiceParameter<GameInfo.JsonFormat>("outputFormat", value = gameInfo.outputFormat)
+            .enumChoices(true)
 
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, packagesGroupP)
+            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, packagesGroupP, outputFormatP)
 
     init {
         windowSizeP.x = gameInfo.width
@@ -68,6 +70,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
         gameInfo.producerString = producerP.value!!.name
         gameInfo.packages.clear()
         gameInfo.packages.addAll(packagesP.value)
+        gameInfo.outputFormat = outputFormatP.value!!
     }
 }
 

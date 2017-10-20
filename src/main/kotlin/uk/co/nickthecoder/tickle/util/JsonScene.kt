@@ -3,7 +3,6 @@ package uk.co.nickthecoder.tickle.util
 import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
-import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.resources.*
@@ -49,7 +48,7 @@ class JsonScene {
         }
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
-            jroot.writeTo(it, PrettyPrint.indentWithSpaces(4))
+            jroot.writeTo(it, Resources.instance.gameInfo.outputFormat.writerConfig)
         }
     }
 

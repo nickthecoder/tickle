@@ -48,7 +48,7 @@ class JsonResources {
         addArray(jroot, "inputs", saveInputs())
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
-            jroot.writeTo(it, PrettyPrint.indentWithSpaces(4))
+            jroot.writeTo(it, resources.gameInfo.outputFormat.writerConfig)
         }
     }
 
@@ -120,6 +120,8 @@ class JsonResources {
             packages.forEach {
                 jpackages.add(it)
             }
+            jinfo.add("outputFormat", outputFormat.name)
+
             jinfo.add("packages", jpackages)
 
             return jinfo
@@ -144,6 +146,7 @@ class JsonResources {
                     packages.add(it.asString())
                 }
             }
+            outputFormat = GameInfo.JsonFormat.valueOf(jinfo.getString("outputFormat", "PRETTY"))
             ClassLister.packages(packages)
 
             // println("Loaded info : $title : $width x $height Resize? $resizable. Game=$producerString")
