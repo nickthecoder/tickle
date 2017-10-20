@@ -103,6 +103,10 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             onTabChanged(newValue)
         }
 
+
+        val resource = MainWindow::class.java.getResource("tickle.css")
+        scene.stylesheets.add(resource.toExternalForm())
+
         stage.show()
         instance = this
     }

@@ -1,0 +1,22 @@
+.titled-pane.pickGroup  > .content > * {
+    -fx-padding: 0;
+}
+.titled-pane.pickGroup > .content {
+    -fx-border-color: none;
+    -fx-border-insets: 0;
+}
+
+.pickPose {
+    -fx-padding: 4px;
+}
+.pickPose .button {
+    -fx-padding: 2px;
+}
+.pickText {
+    -fx-padding: 4px;
+    -fx-spacing: 4px;
+}
+.pickText .button {
+    -fx-pref-width: 176px;
+    -fx-alignment: center-left;
+}

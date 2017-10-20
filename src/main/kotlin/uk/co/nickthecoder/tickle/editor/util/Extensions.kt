@@ -3,7 +3,6 @@ package uk.co.nickthecoder.tickle.editor.util
 import javafx.geometry.Insets
 import javafx.geometry.Rectangle2D
 import javafx.scene.Node
-import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Background
@@ -39,6 +38,19 @@ fun Pose.imageView(): ImageView? {
     return null
 }
 
+fun Pose.thumbnail(size: Double): Node? {
+    val iv = imageView()
+    if (iv != null) {
+        iv.isPreserveRatio = true
+        if (iv.viewport.width > iv.viewport.height) {
+            iv.fitWidth = size
+        } else {
+            iv.fitHeight = size
+        }
+    }
+    return iv
+}
+
 fun Pose.isOverlapping(x: Double, y: Double): Boolean {
     return x > -offsetX && x < rect.width - offsetX &&
             y > -offsetY && y < rect.height - offsetY
@@ -61,23 +73,6 @@ fun Pose.isPixelIsOpaque(x: Double, y: Double, threshold: Double = 0.05): Boolea
 fun Costume.pose() = events["default"]?.choosePose()
 
 fun Costume.textStyle() = events["default"]?.chooseTextStyle()
-
-fun Costume.thumbnail(size: Double): Node? {
-    val pose = pose()
-    if (pose != null) {
-        val iv = pose.imageView()
-        if (iv != null) {
-            iv.isPreserveRatio = true
-            if (iv.viewport.width > iv.viewport.height) {
-                iv.fitWidth = size
-            } else {
-                iv.fitHeight = size
-            }
-        }
-        return iv
-    }
-    return Label("?")
-}
 
 // ACTOR RESOURCE
 
