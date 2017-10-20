@@ -20,7 +20,8 @@ import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 
-class NewResourceTask : AbstractTask() {
+
+class NewResourceTask(type: ResourceType = ResourceType.ANY) : AbstractTask() {
 
     val textureP = FileParameter("textureFile", label = "File", value = File(Resources.instance.file.parentFile, "images").absoluteFile)
 
@@ -51,12 +52,28 @@ class NewResourceTask : AbstractTask() {
                     "Scene Directory" to sceneDirectoryP,
                     "Scene" to sceneP)
 
-    val nameP = StringParameter("resourceName")
+    val nameP = StringParameter("name", label = "${type.label} Name")
 
-    override val taskD = TaskDescription("newResource", height = 300)
+    override val taskD = TaskDescription("newResource", label = "New ${type.label}", height = if (type == ResourceType.ANY) 300 else null)
             .addParameters(resourceTypeP, nameP)
 
     override val taskRunner = UnthreadedTaskRunner(this)
+
+    init {
+        resourceTypeP.hidden = true
+
+        when (type) {
+            ResourceType.POSE -> resourceTypeP.value = poseP
+            ResourceType.COSTUME -> resourceTypeP.value = costumeP
+            ResourceType.COSTUME_GROUP -> resourceTypeP.value = costumeGroupP
+            ResourceType.LAYOUT -> resourceTypeP.value = layoutP
+            ResourceType.INPUT -> resourceTypeP.value = inputP
+            ResourceType.FONT -> resourceTypeP.value = fontP
+            ResourceType.SCENE_DIRECTORY -> resourceTypeP.value = sceneDirectoryP
+            ResourceType.SCENE -> resourceTypeP.value = sceneP
+            else -> resourceTypeP.hidden = false
+        }
+    }
 
     override fun run() {
 
@@ -129,14 +146,21 @@ class NewResourceTask : AbstractTask() {
         }
     }
 
-    fun newCostumeGroup(): NewResourceTask {
-        resourceTypeP.value = costumeGroupP
-        resourceTypeP.hidden = true
-        return this
-    }
-
     fun prompt() {
         val taskPrompter = TaskPrompter(this)
         taskPrompter.placeOnStage(Stage())
     }
+
+    enum class ResourceType(val label: String) {
+        ANY("Resource"),
+        POSE("Pose"),
+        COSTUME("Costume"),
+        COSTUME_GROUP("Costume Group"),
+        LAYOUT("Layout"),
+        INPUT("Input"),
+        FONT("Font"),
+        SCENE_DIRECTORY("Scene Directory"),
+        SCENE("Scene")
+    }
+
 }

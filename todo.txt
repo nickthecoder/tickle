@@ -5,7 +5,8 @@ Next
 ====
 
 CostumeTab : Copy button
-New Costume : Allow text as well as pose.
+New Costume : Allow text as well as pose (or just no pose)
+	Create a Costume from a FontTab
 
 Create CostumeGroupTab, where we can rename a group, and quickly add more costumes to it.
 	Using a "MultipleChoiceParameter" - to be created in paratask!
@@ -14,21 +15,17 @@ Create CostumeGroupTab, where we can rename a group, and quickly add more costum
 Right click the ResourcesTree for popup menu :
 	Delete, Rename, New
 
-Costumes have a "editor" event, who's pose is used in the CostumePicker in preference to "default"
-
 Costumes to override "default" as the first pose.
 	i.e. a "firstEvent" field, which defaults to "default".
-	Also a "editorEvent" field, which also defaults to "default"
-		Hmmm, better to have an actual Pose?
 
 Use thumbnails of Costume's editor pose in the Resources tree
 	Ditto for Pose
 
 Costumes "Based On" another costume.
 
-Costumes and Poses "Grouped"
-	Costume Picker expands a single group at a time?
-	Maybe add an accordian under the ungrouped costumes
+Create groups of Poses? Similar to the groups of Costumes???
+	Hmm, Could just use the texture as the grouping.
+	Anyway, we need a PoseChoiceParameter, which is a MenuButton with a hierarchical menu.
 
 BUGS
 ====
