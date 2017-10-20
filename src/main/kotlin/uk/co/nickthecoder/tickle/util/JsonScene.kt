@@ -5,12 +5,8 @@ import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
 import uk.co.nickthecoder.tickle.NoDirector
-import uk.co.nickthecoder.tickle.editor.util.costume
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.resources.ActorResource
-import uk.co.nickthecoder.tickle.resources.Resources
-import uk.co.nickthecoder.tickle.resources.SceneResource
-import uk.co.nickthecoder.tickle.resources.StageResource
+import uk.co.nickthecoder.tickle.resources.*
 import java.io.*
 
 class JsonScene {
@@ -91,6 +87,8 @@ class JsonScene {
             jactor.add("costume", actorResource.costumeName)
             jactor.add("x", actorResource.x)
             jactor.add("y", actorResource.y)
+            jactor.add("xAlignment", actorResource.xAlignment.name)
+            jactor.add("yAlignment", actorResource.yAlignment.name)
             jactor.add("direction", actorResource.direction.degrees)
             jactor.add("scale", actorResource.scale)
             if (actorResource.pose == null) {
@@ -124,6 +122,9 @@ class JsonScene {
 
         actorResource.x = jactor.getDouble("x", 0.0)
         actorResource.y = jactor.getDouble("y", 0.0)
+        actorResource.xAlignment = ActorXAlignment.valueOf(jactor.getString("xAlignment", "LEFT"))
+        actorResource.yAlignment = ActorYAlignment.valueOf(jactor.getString("yAlignment", "BOTTOM"))
+
         actorResource.direction.degrees = jactor.getDouble("direction", 0.0)
         actorResource.scale = jactor.getDouble("scale", 1.0)
         actorResource.text = jactor.getString("text", "")

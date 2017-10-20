@@ -4,6 +4,8 @@ import org.joml.Matrix4f
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
+import uk.co.nickthecoder.tickle.resources.ActorXAlignment
+import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.util.Angle
 
@@ -76,6 +78,9 @@ class Actor(var costume: Costume, val role: Role? = null) {
             }
             return null
         }
+
+    var xAlignment: ActorXAlignment = ActorXAlignment.LEFT
+    var yAlignment: ActorYAlignment = ActorYAlignment.BOTTOM
 
     init {
         role?.actor = this

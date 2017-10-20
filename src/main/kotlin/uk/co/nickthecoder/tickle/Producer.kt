@@ -27,6 +27,8 @@ interface Producer {
         Game.instance.startScene(scene)
     }
 
+    fun sceneLoaded()
+
     fun sceneBegin()
 
     fun sceneActivated()
@@ -43,6 +45,8 @@ interface Producer {
 }
 
 abstract class AbstractProducer : Producer {
+
+    override fun sceneLoaded() {}
 
     override fun begin() {}
 

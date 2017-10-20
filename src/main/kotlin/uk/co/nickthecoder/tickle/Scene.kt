@@ -2,6 +2,8 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
+import uk.co.nickthecoder.tickle.resources.ActorXAlignment
+import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 import uk.co.nickthecoder.tickle.stage.FlexPosition
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.stage.StageView
@@ -45,6 +47,42 @@ class Scene {
             }
         }
     }
+
+    /**
+     * Called after the scene has been loaded, and producer.sceneLoaded and director.sceneLoaded have been called.
+     * Adjusts any actors who's position is not relative to the bottom left.
+     * This is useful for games with resizable windows, and actors need to be aligned with the right edge for example.
+     *
+     * When/If dynamic window resizing is implemented in Tickle, adjustment will also need to take place when a window
+     * is resized during the game.
+     */
+    fun adjustActors(deltaX: Double, deltaY: Double) {
+
+        stages.values.forEach { stage ->
+            stage.firstView()?.let { view ->
+
+                val ratioX = view.rect.width / (view.rect.width - deltaX)
+                val ratioY = view.rect.height / (view.rect.height - deltaY)
+
+                stage.actors.forEach { actor ->
+
+                    when (actor.xAlignment) {
+                        ActorXAlignment.LEFT -> Unit // Do nothing
+                        ActorXAlignment.CENTER -> actor.x += deltaX / 2
+                        ActorXAlignment.RIGHT -> actor.x += deltaX
+                        ActorXAlignment.RATIO -> actor.x = actor.x * ratioX
+                    }
+                    when (actor.yAlignment) {
+                        ActorYAlignment.BOTTOM -> Unit // Do nothing
+                        ActorYAlignment.CENTER -> actor.y += deltaY / 2
+                        ActorYAlignment.TOP -> actor.y += deltaY
+                        ActorYAlignment.RATIO -> actor.y = actor.y * ratioY
+                    }
+                }
+            }
+        }
+    }
+
 
     fun addView(name: String, view: View, position: FlexPosition? = null) {
         views[name] = view

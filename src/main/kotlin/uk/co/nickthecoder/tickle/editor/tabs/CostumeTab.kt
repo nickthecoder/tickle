@@ -40,7 +40,10 @@ class CostumeTab(val name: String, val costume: Costume)
 
         borderPane.center = minorTabs
 
-        addDeleteButton { Resources.instance.costumes.remove(name) }
+        addDeleteButton {
+            costume.costumeGroup?.remove(name)
+            Resources.instance.costumes.remove(name)
+        }
     }
 
     override fun save(): Boolean {

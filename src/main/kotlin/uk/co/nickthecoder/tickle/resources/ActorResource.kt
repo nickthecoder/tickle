@@ -7,6 +7,8 @@ import uk.co.nickthecoder.tickle.editor.scene.StageLayer
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Angle
 
+enum class ActorXAlignment { LEFT, CENTER, RIGHT, RATIO }
+enum class ActorYAlignment { BOTTOM, CENTER, TOP, RATIO }
 
 /**
  * Details of an Actor's initial state.
@@ -23,6 +25,9 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     var x: Double = 0.0
     var y: Double = 0.0
+
+    var xAlignment: ActorXAlignment = ActorXAlignment.LEFT
+    var yAlignment: ActorYAlignment = ActorYAlignment.BOTTOM
 
     /**
      * Used by SceneEditor in conjunction with StageConstraint. This is where the actor was dragged to, but [x],[y]
@@ -62,9 +67,10 @@ class ActorResource(val isDesigning: Boolean = false) {
         actor.y = y
         actor.direction.degrees = direction.degrees
         actor.scale = scale
+        actor.xAlignment = xAlignment
+        actor.yAlignment = yAlignment
 
         actor.role?.let { attributes.applyToObject(it) }
-
         return actor
     }
 

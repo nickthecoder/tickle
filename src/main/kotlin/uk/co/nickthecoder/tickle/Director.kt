@@ -21,6 +21,8 @@ import uk.co.nickthecoder.tickle.events.KeyEvent
  */
 interface Director {
 
+    fun sceneLoaded()
+
     fun begin()
 
     fun activated()
@@ -56,6 +58,8 @@ interface Director {
 }
 
 open class AbstractDirector : Director {
+
+    override fun sceneLoaded() {}
 
     override fun begin() {}
 

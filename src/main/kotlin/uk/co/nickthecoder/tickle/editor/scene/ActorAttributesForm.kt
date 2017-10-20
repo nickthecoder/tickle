@@ -5,19 +5,26 @@ import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.tickle.resources.ActorResource
-import uk.co.nickthecoder.tickle.resources.ModificationType
-import uk.co.nickthecoder.tickle.resources.SceneResource
-import uk.co.nickthecoder.tickle.resources.SceneResourceListener
+import uk.co.nickthecoder.tickle.resources.*
 
 
 class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: SceneResource)
 
     : SceneResourceListener, ParameterListener {
 
-    val xP = DoubleParameter("x", value = actorResource.x.toDouble())
+    val xP = DoubleParameter("x", value = actorResource.x)
 
-    val yP = DoubleParameter("y", value = actorResource.y.toDouble())
+    val yP = DoubleParameter("y", value = actorResource.y)
+
+    val xAlignmentP = ChoiceParameter<ActorXAlignment>("xAlignment", value = actorResource.xAlignment)
+            .enumChoices(true)
+
+    val yAlignmentP = ChoiceParameter<ActorYAlignment>("yAlignment", value = actorResource.yAlignment)
+            .enumChoices(true)
+
+    val alignmentGroupP = SimpleGroupParameter("alignment")
+            .addParameters(xAlignmentP, yAlignmentP)
+            .asHorizontal(LabelPosition.NONE)
 
     val directionP = DoubleParameter("direction", value = actorResource.direction.degrees)
 
@@ -28,7 +35,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(attributesP, xP, yP, directionP, scaleP, textP)
+            .addParameters(attributesP, xP, yP, alignmentGroupP, directionP, scaleP, textP)
             .asVertical()
 
     var dirty = false
@@ -98,6 +105,9 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     fun updateActorResource() {
         xP.value?.let { actorResource.x = it }
         yP.value?.let { actorResource.y = it }
+        actorResource.xAlignment = xAlignmentP.value!!
+        actorResource.yAlignment = yAlignmentP.value!!
+
         directionP.value?.let { actorResource.direction.degrees = it }
         scaleP.value?.let { actorResource.scale = it }
         actorResource.text = textP.value
@@ -112,6 +122,9 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     fun updateParameters() {
         yP.value = actorResource.y
         xP.value = actorResource.x
+        xAlignmentP.value = actorResource.xAlignment
+        yAlignmentP.value = actorResource.yAlignment
+
         directionP.value = actorResource.direction.degrees
         scaleP.value = actorResource.scale
         textP.value = actorResource.text
