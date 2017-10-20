@@ -111,6 +111,8 @@ class Window(
 
     fun resize(width: Int, height: Int) {
         glfwSetWindowSize(handle, width, height)
+        _width = width
+        _height = height
     }
 
     // Center the window
