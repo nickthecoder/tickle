@@ -1,13 +1,16 @@
 package uk.co.nickthecoder.tickle.action
 
 /**
- * Perform the 'thenAction' while the condition action is still active.
- * Ends when the 'condition' ends.
- * If the 'thenAction' ends before the 'condition', only the 'condition' will act.
+ * Acts on both the [body] and [condition] actions together.
+ * This action ends when the [condition] ends. If the [body] ends before the [condition], then this
+ * will continue, but only [condition] will act.
+ *
+ * Note that [body] can be terminated before its natural end. [UntilAction] does not have this early
+ * termination.
  */
-class WhileAction(
+class WhilstAction(
         val condition: Action,
-        val thenAction: Action)
+        val body: Action)
 
     : Action {
 
@@ -16,7 +19,7 @@ class WhileAction(
     override fun begin(): Boolean {
         val result = condition.begin()
         if (!result) {
-            thenEnded = thenAction.begin()
+            thenEnded = body.begin()
         }
         return result
     }
@@ -24,7 +27,7 @@ class WhileAction(
     override fun act(): Boolean {
         val result = condition.act()
         if (!result && !thenEnded) {
-            thenAction.act()
+            body.act()
         }
         return result
     }

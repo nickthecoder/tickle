@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.action
 
-class OneAction(val func: () -> Unit) : Action {
+class Do(val func: () -> Unit) : Action {
 
     override fun begin(): Boolean {
         func()

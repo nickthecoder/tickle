@@ -4,6 +4,15 @@ Current Work
 Next
 ====
 
+CostumeTab : Copy button
+New Costume : Allow text as well as pose.
+
+Create CostumeGroupTab, where we can rename a group, and quickly add more costumes to it.
+	Using a "MultipleChoiceParameter" - to be created in paratask!
+	Also, allow a group to be hidden from the CostumePicker
+
+CostumePicker to show font based costumes differently. VBox of buttons with costume name and a "font.png" graphic)
+
 Right click the ResourcesTree for popup menu :
 	Delete, Rename, New
 

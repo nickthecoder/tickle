@@ -263,7 +263,6 @@ class ResourcesTree()
     inner class CostumesItem() : TopLevelItem() {
 
         init {
-            println("Costume group : ${resources.costumeGroups.items()}")
             resources.costumeGroups.items().map { it }.sortedBy { it.key }.forEach { (groupName, costumeGroup) ->
                 children.add(CostumeGroupItem(groupName, costumeGroup))
             }
@@ -340,11 +339,8 @@ class ResourcesTree()
          */
         override fun resourceAdded(resource: Any, name: String) {
             if (costumeGroup == null && resource === costume) {
-                println("Resource Added : $name = $resource")
                 if (resources.findCostumeGroup(name) != null) {
-                    println("Was null")
                     parent?.let {
-                        println("Removing")
                         (it as ResourceItem).remove(this)
                     }
                 }

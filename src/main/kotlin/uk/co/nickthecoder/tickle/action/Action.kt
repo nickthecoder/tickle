@@ -17,7 +17,7 @@ interface Action {
     }
 
     fun then(func: () -> Unit): SequentialAction {
-        return then(OneAction(func))
+        return then(Do(func))
     }
 
     fun and(other: Action): ParallelAction {
@@ -25,7 +25,7 @@ interface Action {
     }
 
     fun and(func: () -> Unit): ParallelAction {
-        return and(OneAction(func))
+        return and(Do(func))
     }
 
     fun forever(): ForeverAction {
@@ -36,7 +36,8 @@ interface Action {
         return Repeat(this, times)
     }
 
-    fun whilst(conditional: Action) = WhileAction(conditional, this)
+    fun whilst(conditional: Action) = WhilstAction(conditional, this)
 
+    fun until(conditional: () -> Boolean) = UntilAction(conditional, this)
 
 }
