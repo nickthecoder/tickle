@@ -20,7 +20,7 @@ class Costume() {
 
     val events = mutableMapOf<String, CostumeEvent>()
 
-    var costumeGroup : CostumeGroup? = null
+    var costumeGroup: CostumeGroup? = null
 
     // TODO Will have relatedCostumes later. And we can then use that to create bullets, explosions, etc.
     // RelatedCostumes should also store info about position and direction relative to the parent actor.
@@ -104,6 +104,12 @@ class Costume() {
         }
         return Actor(this)
     }
+
+    /**
+     * This is the pose used to display this costume from within the SceneEditor and CostumePickerBox.
+     * This makes is easy to create invisible objects in the game, but visible in the editor.
+     */
+    fun editorPose(): Pose? = events.get("editor")?.choosePose() ?: events.get("default")?.choosePose()
 
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }

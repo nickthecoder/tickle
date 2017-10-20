@@ -44,6 +44,8 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     val attributes = Attributes()
 
+    val editorPose: Pose? by lazy { Resources.instance.costumes.find(costumeName)?.editorPose() }
+
     val pose: Pose? by lazy { Resources.instance.costumes.find(costumeName)?.events?.get("default")?.choosePose() }
 
     val textStyle: TextStyle? by lazy { Resources.instance.costumes.find(costumeName)?.events?.get("default")?.chooseTextStyle() }

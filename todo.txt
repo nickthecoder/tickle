@@ -11,12 +11,10 @@ Create CostumeGroupTab, where we can rename a group, and quickly add more costum
 	Using a "MultipleChoiceParameter" - to be created in paratask!
 	Also, allow a group to be hidden from the CostumePicker
 
-CostumePicker to show font based costumes differently. VBox of buttons with costume name and a "font.png" graphic)
-
 Right click the ResourcesTree for popup menu :
 	Delete, Rename, New
 
-Costumes have a "editor" event, whos pose is used in the CostumePicker in preference to "default"
+Costumes have a "editor" event, who's pose is used in the CostumePicker in preference to "default"
 
 Costumes to override "default" as the first pose.
 	i.e. a "firstEvent" field, which defaults to "default".

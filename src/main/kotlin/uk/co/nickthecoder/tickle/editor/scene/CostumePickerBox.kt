@@ -10,7 +10,6 @@ import javafx.scene.layout.FlowPane
 import javafx.scene.layout.VBox
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.editor.EditorAction
-import uk.co.nickthecoder.tickle.editor.util.pose
 import uk.co.nickthecoder.tickle.editor.util.textStyle
 import uk.co.nickthecoder.tickle.editor.util.thumbnail
 import uk.co.nickthecoder.tickle.resources.ResourceType
@@ -55,7 +54,7 @@ class CostumePickerBox(val onSelect: (String) -> Unit) {
 
         group.items().forEach { costumeName, costume ->
             if (all || Resources.instance.findCostumeGroup(costumeName) == null) {
-                val pose = costume.pose()
+                val pose = costume.editorPose()
 
                 if (pose == null) {
 

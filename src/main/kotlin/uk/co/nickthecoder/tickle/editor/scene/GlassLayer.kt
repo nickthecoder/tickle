@@ -64,7 +64,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
                 save()
 
                 translate(actorResource.x, actorResource.y)
-                rotate(actorResource.direction.degrees - (actorResource.pose?.direction?.degrees ?: 0.0))
+                rotate(actorResource.direction.degrees - (actorResource.editorPose?.direction?.degrees ?: 0.0))
                 scale( actorResource.scale, actorResource.scale)
 
                 drawOutlined(selectionColor(actorResource === selection.latest())) { drawBoundingBox(actorResource) }
@@ -171,7 +171,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
     fun drawBoundingBox(actorResource: ActorResource) {
         val margin = 2.0
 
-        actorResource.pose?.let { pose ->
+        actorResource.editorPose?.let { pose ->
 
             canvas.graphicsContext2D.strokeRect(
                     -pose.offsetX - margin,

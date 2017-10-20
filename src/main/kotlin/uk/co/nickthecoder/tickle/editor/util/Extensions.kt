@@ -70,8 +70,6 @@ fun Pose.isPixelIsOpaque(x: Double, y: Double, threshold: Double = 0.05): Boolea
 
 // COSTUME
 
-fun Costume.pose() = events["default"]?.choosePose()
-
 fun Costume.textStyle() = events["default"]?.chooseTextStyle()
 
 // ACTOR RESOURCE
@@ -79,7 +77,7 @@ fun Costume.textStyle() = events["default"]?.chooseTextStyle()
 fun ActorResource.isOverlapping(x: Double, y: Double): Boolean {
     val tx = x - this.x
     val ty = y - this.y
-    return pose?.isOverlapping(tx, ty) ?: false
+    return editorPose?.isOverlapping(tx, ty) ?: false
 }
 
 fun ActorResource.costume(): Costume? = Resources.instance.costumes.find(costumeName)
@@ -96,7 +94,7 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
         ty = sin * tx + cos * ty
         tx = ttx
     }
-    pose?.let { pose ->
+    editorPose?.let { pose ->
         return pose.isOverlapping(tx, ty) && pose.isPixelIsOpaque(tx, ty)
     }
     textStyle?.let { textStyle ->
@@ -113,7 +111,7 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
 }
 
 fun ActorResource.offsetX(): Double {
-    pose?.let { pose ->
+    editorPose?.let { pose ->
         return pose.offsetX
     }
     textStyle?.let { textStyle ->
@@ -123,7 +121,7 @@ fun ActorResource.offsetX(): Double {
 }
 
 fun ActorResource.offsetY(): Double {
-    pose?.let { pose ->
+    editorPose?.let { pose ->
         return pose.offsetY
     }
     textStyle?.let { textStyle ->

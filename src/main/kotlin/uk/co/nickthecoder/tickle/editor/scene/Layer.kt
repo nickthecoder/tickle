@@ -37,7 +37,7 @@ abstract class Layer {
 
     fun drawActor(actorResource: ActorResource) {
 
-        val pose = actorResource.pose
+        val pose = actorResource.editorPose
 
         with(canvas.graphicsContext2D) {
             save()
