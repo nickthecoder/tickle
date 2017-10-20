@@ -17,6 +17,12 @@ class JsonResources {
 
     var resources: Resources
 
+    /**
+     * WHile loading the costumes, one costume event may depend upon a costume that hasn't been loaded yet.
+     * So we store the events in a list, and process them once all costumes have been loaded.
+     */
+    val costumeEvents = mutableListOf<CostumeEventData>()
+
     constructor(file: File) {
         this.resources = Resources()
         load(file)
@@ -90,6 +96,10 @@ class JsonResources {
             loadInputs(jinputs)
         }
 
+        // Now all costume have been loaded, lets add the costume events.
+        costumeEvents.forEach { data ->
+            data.costumeEvent.costumes.add(resources.costumes.find(data.costumeName)!!)
+        }
     }
 
     // INFO
@@ -443,7 +453,6 @@ class JsonResources {
     data class CostumeEventData(val costumeEvent: CostumeEvent, val costumeName: String)
 
     fun loadCostumes(jcostumes: JsonArray, group: ResourceType<Costume>) {
-        val costumeEvents = mutableListOf<CostumeEventData>()
 
         jcostumes.forEach {
             val jcostume = it.asObject()
@@ -512,10 +521,6 @@ class JsonResources {
             // println("Loaded costume $name : ${costume}")
         }
 
-        // Now all costume have been loaded, lets add the costume events.
-        costumeEvents.forEach { data ->
-            data.costumeEvent.costumes.add(resources.costumes.find(data.costumeName)!!)
-        }
     }
 
     // INPUTS
