@@ -143,7 +143,7 @@ class Attributes {
         var instance: Any? = null
         try {
             kClass = Class.forName(className).kotlin
-            if (isDesigning) {
+            if (isDesigning && className.isNotBlank()) {
                 instance = kClass.java.newInstance()
             }
         } catch (e: Exception) {

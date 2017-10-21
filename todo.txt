@@ -5,7 +5,6 @@ Next
 ====
 
 CostumeTab : Copy button
-	Create a Costume from a FontTab
 
 Create CostumeGroupTab, where we can rename a group, and quickly add more costumes to it.
 	Using a "MultipleChoiceParameter" - to be created in paratask!
