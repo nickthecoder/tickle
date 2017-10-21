@@ -6,28 +6,29 @@ import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.UnthreadedTaskRunner
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
-import uk.co.nickthecoder.paratask.parameters.FileParameter
-import uk.co.nickthecoder.paratask.parameters.InformationParameter
-import uk.co.nickthecoder.paratask.parameters.OneOfParameter
-import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.CostumeGroup
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.events.CompoundInput
-import uk.co.nickthecoder.tickle.graphics.Texture
+import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 
 
-class NewResourceTask(type: ResourceType = ResourceType.ANY) : AbstractTask() {
+class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String = "") : AbstractTask() {
 
     val textureP = FileParameter("textureFile", label = "File", value = File(Resources.instance.file.parentFile, "images").absoluteFile)
 
     val poseP = createTextureParameter()
 
-    val costumeP = createPoseParameter(required = false)
+    val costumePoseP = createPoseParameter("pose", required = false)
+    val costumeFontP = createFontParameter("font")
+    val costumeP = OneOfParameter("newCostume", label = "From", choiceLabel = "From")
+            .addParameters("Pose" to costumePoseP, "Font" to costumeFontP)
+            .asHorizontal(LabelPosition.NONE)
 
     val costumeGroupP = InformationParameter("costumeGroup", information = "")
 
@@ -42,7 +43,42 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY) : AbstractTask() {
     val sceneP = FileParameter("scene", label = "Directory", expectFile = false, value = Resources.instance.sceneDirectory.absoluteFile)
 
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
-            .addParameters(
+
+
+    val nameP = StringParameter("name", label = "${type.label} Name", value = defaultName)
+
+    override val taskD = TaskDescription("newResource", label = "New ${type.label}", height = if (type == ResourceType.ANY) 300 else null)
+            .addParameters(resourceTypeP, nameP)
+
+    override val taskRunner = UnthreadedTaskRunner(this)
+
+    constructor(pose: Pose, defaultName: String = "") : this(ResourceType.COSTUME, defaultName) {
+        costumeP.value = costumePoseP
+        costumePoseP.value = pose
+    }
+
+    constructor(fontResource: FontResource, defaultName: String = "") : this(ResourceType.COSTUME, defaultName) {
+        costumeP.value = costumeFontP
+        costumeFontP.value = fontResource
+    }
+
+
+    init {
+
+        val parameter = when (type) {
+            ResourceType.POSE -> poseP
+            ResourceType.COSTUME -> costumeP
+            ResourceType.COSTUME_GROUP -> costumeGroupP
+            ResourceType.LAYOUT -> layoutP
+            ResourceType.INPUT -> inputP
+            ResourceType.FONT -> fontP
+            ResourceType.SCENE_DIRECTORY -> sceneDirectoryP
+            ResourceType.SCENE -> sceneP
+            else -> null
+
+        }
+        if (parameter == null) {
+            resourceTypeP.addParameters(
                     "Texture" to textureP,
                     "Pose" to poseP, "Font" to fontP,
                     "Costume" to costumeP,
@@ -51,28 +87,35 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY) : AbstractTask() {
                     "Input" to inputP,
                     "Scene Directory" to sceneDirectoryP,
                     "Scene" to sceneP)
-
-    val nameP = StringParameter("name", label = "${type.label} Name")
-
-    override val taskD = TaskDescription("newResource", label = "New ${type.label}", height = if (type == ResourceType.ANY) 300 else null)
-            .addParameters(resourceTypeP, nameP)
-
-    override val taskRunner = UnthreadedTaskRunner(this)
-
-    init {
-        resourceTypeP.hidden = true
-
-        when (type) {
-            ResourceType.POSE -> resourceTypeP.value = poseP
-            ResourceType.COSTUME -> resourceTypeP.value = costumeP
-            ResourceType.COSTUME_GROUP -> resourceTypeP.value = costumeGroupP
-            ResourceType.LAYOUT -> resourceTypeP.value = layoutP
-            ResourceType.INPUT -> resourceTypeP.value = inputP
-            ResourceType.FONT -> resourceTypeP.value = fontP
-            ResourceType.SCENE_DIRECTORY -> resourceTypeP.value = sceneDirectoryP
-            ResourceType.SCENE -> resourceTypeP.value = sceneP
-            else -> resourceTypeP.hidden = false
+        } else {
+            resourceTypeP.hidden = true
+            resourceTypeP.value = parameter
+            if (parameter !is InformationParameter) {
+                taskD.addParameters(parameter)
+            }
         }
+    }
+
+    override fun customCheck() {
+        val resourceType = when (resourceTypeP.value) {
+            textureP -> Resources.instance.textures
+            poseP -> Resources.instance.poses
+            costumeP -> Resources.instance.costumes
+            costumeGroupP -> Resources.instance.costumeGroups
+            layoutP -> Resources.instance.layouts
+            inputP -> Resources.instance.inputs
+            fontP -> Resources.instance.fontResources
+            sceneDirectoryP -> null
+            sceneP -> null
+            else -> null
+        }
+
+        if (resourceType != null) {
+            if (resourceType.find(nameP.value) != null) {
+                throw ParameterException(nameP, "Already exists")
+            }
+        }
+        // TODO Do similar tests for sceneDirectory name and scene name.
     }
 
     override fun run() {
@@ -91,8 +134,15 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY) : AbstractTask() {
             }
             costumeP -> {
                 val costume = Costume()
-                costumeP.value?.let {
-                    costume.addPose("default", it)
+                if (costumeP.value == costumePoseP) {
+                    costumePoseP.value?.let {
+                        costume.addPose("default", it)
+                    }
+                } else if (costumeP.value == costumeFontP) {
+                    costumeFontP.value?.let { font ->
+                        val textStyle = TextStyle(font, HAlignment.LEFT, VAlignment.BOTTOM, Color.white())
+                        costume.addTextStyle("default", textStyle)
+                    }
                 }
                 Resources.instance.costumes.add(name, costume)
                 data = costume

@@ -3,7 +3,6 @@ package uk.co.nickthecoder.tickle.editor.tabs
 import javafx.geometry.Insets
 import javafx.geometry.Rectangle2D
 import javafx.scene.Node
-import javafx.scene.control.Alert
 import javafx.scene.control.Button
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
@@ -19,7 +18,6 @@ import uk.co.nickthecoder.paratask.parameters.ButtonParameter
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
-import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.*
@@ -112,20 +110,8 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
     }
 
     fun createCostume() {
-        val poseName = Resources.instance.poses.findName(pose)
-        if (poseName == null) {
-            return
-        }
-
-        if (Resources.instance.costumes.find(poseName) != null) {
-            Alert(Alert.AlertType.INFORMATION, "A Costume called ${name} already exists.").showAndWait()
-            return
-        }
-
-        val costume = Costume()
-        costume.addPose("default", pose)
-        Resources.instance.costumes.add(poseName, costume)
-        MainWindow.instance.openTab(poseName, costume)
+        val task = NewResourceTask(pose, nameP.value)
+        task.prompt()
     }
 
 

@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.embed.swing.SwingFXUtils
+import javafx.scene.control.Button
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.ButtonParameter
@@ -9,6 +10,7 @@ import uk.co.nickthecoder.paratask.parameters.IntParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.editor.util.FontParameter
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
+import uk.co.nickthecoder.tickle.editor.util.NewResourceTask
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.JsonResources
@@ -22,6 +24,10 @@ class FontTab(name: String, val fontResource: FontResource)
 
     init {
         addDeleteButton { Resources.instance.fontResources.remove(name) }
+
+        val createCostumeButton = Button("Create Costume")
+        createCostumeButton.setOnAction { (task as FontTask).createCostume() }
+        leftButtons.children.add(createCostumeButton)
     }
 }
 
@@ -76,4 +82,11 @@ In addition, you can create another .png file if you wish to add an outline to t
         JsonResources.saveFontMetrics(metricsFile, fontResource)
 
     }
+
+    fun createCostume() {
+        val task = NewResourceTask(fontResource, nameP.value)
+        task.prompt()
+    }
+
+
 }

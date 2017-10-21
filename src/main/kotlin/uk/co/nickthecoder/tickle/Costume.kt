@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle
 
+import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.resources.Resources
 
 class Costume() {
@@ -46,6 +47,10 @@ class Costume() {
 
     fun addPose(eventName: String, pose: Pose) {
         getOrCreateEvent(eventName).poses.add(pose)
+    }
+
+    fun addTextStyle(eventName: String, textStyle: TextStyle) {
+        getOrCreateEvent(eventName).textStyles.add(textStyle)
     }
 
     fun getOrCreateEvent(eventName: String): CostumeEvent {

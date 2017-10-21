@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.editor.util
 
+import javafx.application.Platform
 import uk.co.nickthecoder.paratask.TaskListener
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.CostumeGroup
@@ -50,7 +51,9 @@ class CostumeGroupParameter(name: String = "group", val newGroupCallback: (Strin
 
     override fun ended(cancelled: Boolean) {
         if (!cancelled) {
-            newGroupCallback(newTask.nameP.value)
+            Platform.runLater {
+                newGroupCallback(newTask.nameP.value)
+            }
         }
     }
 
