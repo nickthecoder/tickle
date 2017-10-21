@@ -27,7 +27,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY) : AbstractTask() {
 
     val poseP = createTextureParameter()
 
-    val costumeP = createPoseParameter()
+    val costumeP = createPoseParameter(required = false)
 
     val costumeGroupP = InformationParameter("costumeGroup", information = "")
 
@@ -91,7 +91,9 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY) : AbstractTask() {
             }
             costumeP -> {
                 val costume = Costume()
-                costume.addPose("default", costumeP.value!!)
+                costumeP.value?.let {
+                    costume.addPose("default", it)
+                }
                 Resources.instance.costumes.add(name, costume)
                 data = costume
             }

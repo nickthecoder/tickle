@@ -19,10 +19,13 @@ fun createTextureParameter(parameterName: String = "texture"): ChoiceParameter<T
 }
 
 
-fun createPoseParameter(parameterName: String = "pose"): ChoiceParameter<Pose?> {
+fun createPoseParameter(parameterName: String = "pose", required: Boolean = true): ChoiceParameter<Pose?> {
 
-    val choice = ChoiceParameter<Pose?>(parameterName, required = true, value = null)
+    val choice = ChoiceParameter<Pose?>(parameterName, required = required, value = null)
 
+    if (!required) {
+        choice.addChoice("", null, "None")
+    }
     Resources.instance.poses.items().forEach { poseName, pose ->
         choice.addChoice(poseName, pose, poseName)
     }

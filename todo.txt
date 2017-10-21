@@ -5,7 +5,6 @@ Next
 ====
 
 CostumeTab : Copy button
-New Costume : Allow text as well as pose (or just no pose)
 	Create a Costume from a FontTab
 
 Create CostumeGroupTab, where we can rename a group, and quickly add more costumes to it.
