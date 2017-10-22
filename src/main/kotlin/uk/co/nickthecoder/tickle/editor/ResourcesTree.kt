@@ -1,13 +1,16 @@
 package uk.co.nickthecoder.tickle.editor
 
+import javafx.scene.Node
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
 import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
+import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.editor.util.thumbnail
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.FontResource
@@ -120,13 +123,16 @@ class ResourcesTree()
         override fun data(): EditorPreferences = resources.preferences
     }
 
-    open inner class DataItem(var name: String, val data: Any, val graphicName: String = "unknown.png")
+    open inner class DataItem(var name: String, val data: Any, graphic: Node?)
 
         : ResourceItem(name), ResourcesListener {
 
+        constructor(name: String, data: Any, graphicName: String = "unknown.png") :
+                this(name, data, ImageView(EditorAction.imageResource(graphicName)))
+
         init {
             resources.listeners.add(this)
-            graphic = ImageView(EditorAction.imageResource(graphicName))
+            this.graphic = graphic
         }
 
         override fun data() = data
@@ -299,7 +305,9 @@ class ResourcesTree()
 
     }
 
-    inner class CostumeGroupItem(name: String, val costumeGroup: CostumeGroup) : DataItem(name, costumeGroup, graphicName = "folder2.png") {
+    inner class CostumeGroupItem(name: String, val costumeGroup: CostumeGroup)
+
+        : DataItem(name, costumeGroup, graphicName = "folder2.png") {
 
         init {
             costumeGroup.items().map { it }.sortedBy { it.key }.forEach { (costumeName, costume) ->
@@ -320,9 +328,23 @@ class ResourcesTree()
         override fun toString() = "$name (${children.size})"
     }
 
+    fun wrappedThumbnail(costume: Costume) = wrappedThumbnail(costume.editorPose())
+
+    /**
+     * Wrap the thumbnail image in a box, so that all the labels line up, despite the images being different
+     * widths (or null).
+     */
+    fun wrappedThumbnail(pose: Pose?): Node {
+        val box = HBox()
+        box.prefWidth = resources.preferences.treeThumnailSize.toDouble()
+        val iv = pose?.thumbnail(resources.preferences.treeThumnailSize)
+        iv?.let { box.children.add(it) }
+        return box
+    }
+
     inner class CostumeItem(name: String, val costume: Costume, val costumeGroup: CostumeGroup?)
 
-        : DataItem(name, costume, "costume.png") {
+        : DataItem(name, costume, wrappedThumbnail(costume)) {
 
         override fun resourceRemoved(resource: Any, name: String) {
             if (resource === costume) {

@@ -65,7 +65,7 @@ class CostumePickerBox(val onSelect: (String) -> Unit) {
                     }
 
                 } else {
-                    pose.thumbnail(Resources.instance.preferences.costumePickerThumbnailSize.toDouble())?.let { iv ->
+                    pose.thumbnail(Resources.instance.preferences.costumePickerThumbnailSize)?.let { iv ->
                         poseButtons.children.add(createButton(costumeName, costume, iv, false))
                     }
                 }

@@ -2,7 +2,6 @@ package uk.co.nickthecoder.tickle.editor.util
 
 import javafx.geometry.Insets
 import javafx.geometry.Rectangle2D
-import javafx.scene.Node
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Background
@@ -38,16 +37,16 @@ fun Pose.imageView(): ImageView? {
     return null
 }
 
-fun Pose.thumbnail(size: Double): Node? {
+fun Pose.thumbnail(size: Int): ImageView? {
     val iv = imageView()
 
     if (iv != null) {
         if (iv.viewport.width > size || iv.viewport.height > size) {
             iv.isPreserveRatio = true
             if (iv.viewport.width > iv.viewport.height) {
-                iv.fitWidth = size
+                iv.fitWidth = size.toDouble()
             } else {
-                iv.fitHeight = size
+                iv.fitHeight = size.toDouble()
             }
         }
     }
