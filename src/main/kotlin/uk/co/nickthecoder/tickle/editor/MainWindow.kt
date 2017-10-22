@@ -15,10 +15,7 @@ import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
-import uk.co.nickthecoder.tickle.Costume
-import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.GameInfo
-import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.tabs.*
 import uk.co.nickthecoder.tickle.editor.util.NewResourceTask
 import uk.co.nickthecoder.tickle.events.CompoundInput
@@ -194,6 +191,9 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
         } else if (data is Costume) {
             return CostumeTab(name, data)
+
+        } else if (data is CostumeGroup) {
+            return CostumeGroupTab(name, data)
 
         } else if (data is SceneStub) {
             return SceneTab(name, data)

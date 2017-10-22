@@ -60,7 +60,7 @@ class ResourcesTree()
 
             val data = item.data()
 
-            MainWindow.instance.openTab(item.value, data)
+            MainWindow.instance.openTab(item.name, data)
 
         } else {
             item.isExpanded = !item.isExpanded
@@ -302,7 +302,7 @@ class ResourcesTree()
 
     }
 
-    inner class CostumeGroupItem(val name: String, val costumeGroup: CostumeGroup) : TopLevelItem(name) {
+    inner class CostumeGroupItem(name: String, val costumeGroup: CostumeGroup) : DataItem(name, costumeGroup, graphicName = "folder2.png") {
 
         init {
             costumeGroup.items().map { it }.sortedBy { it.key }.forEach { (costumeName, costume) ->
@@ -318,8 +318,9 @@ class ResourcesTree()
             }
         }
 
-        override fun toString() = "$name (${children.size})"
+        override fun isLeaf() = false
 
+        override fun toString() = "$name (${children.size})"
     }
 
     inner class CostumeItem(name: String, val costume: Costume, val costumeGroup: CostumeGroup?)

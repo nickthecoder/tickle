@@ -19,11 +19,6 @@ Use thumbnails of Costume's editor pose in the Resources tree
 
 Costumes "Based On" another costume.
 
-Instead of CosutmeEvent having child costumes. Have richer information, including relative position, direction etc.
-	Hmm, sounds like a litmited solution. What about custom information, such as "fire rate"?
-		That is a bad example, as that would be on the child costume. But offset X/Y could also be on the child costume.
-			Not really, because a gun's position depends on the size of the ship, not the size of the gun.
-
 Preferences (Code like GameInfo)
 	Resource Tree Thumbnail Size
 	Costume Picker Thumnail Size

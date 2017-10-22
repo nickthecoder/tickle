@@ -50,7 +50,7 @@
   ]
 , "costumeGroups": 
   [
-    { "name": "coin", "costumes": 
+    { "name": "coins", "costumes": 
       [
         { "name": "coin10", "role": "uk.co.nickthecoder.tickle.demo.Coin", "canRotate": true, "zOrder": 0, "initialEvent": "default", "events": 
           [
@@ -196,15 +196,6 @@
         { "name": "pupil", "poses": 
           [
             "pupil"
-          ]
-        }
-      ]
-    },
-    { "name": "2", "role": "uk.co.nickthecoder.tickle.demo.Bee", "canRotate": true, "zOrder": 0, "initialEvent": "default2", "events": 
-      [
-        { "name": "default2", "poses": 
-          [
-            "bee"
           ]
         }
       ]
