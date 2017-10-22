@@ -199,7 +199,7 @@ class ResourcesTree()
 
         init {
             resources.poses.items().filter { it.value.texture === texture }.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
-                children.add(DataItem(name, pose, "pose.png"))
+                children.add(DataItem(name, pose, wrappedThumbnail(pose)))
             }
         }
 
@@ -227,14 +227,14 @@ class ResourcesTree()
 
         init {
             resources.poses.items().map { it }.sortedBy { it.key }.forEach { (name, pose) ->
-                children.add(DataItem(name, pose, "pose.png"))
+                children.add(DataItem(name, pose, wrappedThumbnail(pose)))
             }
             updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Pose) {
-                children.add(DataItem(name, resource, "pose.png"))
+                children.add(DataItem(name, resource, wrappedThumbnail(resource)))
                 updateLabel()
             }
         }

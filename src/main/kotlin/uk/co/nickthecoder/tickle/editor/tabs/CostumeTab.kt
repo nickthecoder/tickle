@@ -70,7 +70,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val nameP = StringParameter("name", value = name)
 
-        val roleClassP = ChoiceParameter<Class<*>?>("class", required = false, value = null)
+        val roleClassP = ChoiceParameter<Class<*>?>("role", required = false, value = null)
 
         val canRotateP = BooleanParameter("canRotate")
 
