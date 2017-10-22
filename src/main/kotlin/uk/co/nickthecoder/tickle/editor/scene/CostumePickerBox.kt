@@ -65,7 +65,7 @@ class CostumePickerBox(val onSelect: (String) -> Unit) {
                     }
 
                 } else {
-                    pose.thumbnail(40.0)?.let { iv ->
+                    pose.thumbnail(Resources.instance.preferences.costumePickerThumbnailSize.toDouble())?.let { iv ->
                         poseButtons.children.add(createButton(costumeName, costume, iv, false))
                     }
                 }
@@ -88,8 +88,9 @@ class CostumePickerBox(val onSelect: (String) -> Unit) {
             button.text = name
             button.maxWidth = Double.MAX_VALUE
         } else {
-            button.prefWidth = 44.0
-            button.prefHeight = 44.0
+            val size = Resources.instance.preferences.costumePickerThumbnailSize + 4.0 // 2 pixel padding
+            button.prefWidth = size
+            button.prefHeight = size
             button.tooltip = Tooltip(name)
         }
         button.graphic = icon

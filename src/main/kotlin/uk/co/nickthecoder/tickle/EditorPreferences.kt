@@ -9,6 +9,10 @@ class EditorPreferences {
 
     val packages: MutableList<String> = mutableListOf("uk.co.nickthecoder.tickle")
 
+    var treeThumnailSize: Int = 24
+
+    var costumePickerThumbnailSize: Int = 40
+
     override fun toString(): String {
         return "outputFormat=$outputFormat packages=$packages"
     }

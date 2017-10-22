@@ -40,12 +40,15 @@ fun Pose.imageView(): ImageView? {
 
 fun Pose.thumbnail(size: Double): Node? {
     val iv = imageView()
+
     if (iv != null) {
-        iv.isPreserveRatio = true
-        if (iv.viewport.width > iv.viewport.height) {
-            iv.fitWidth = size
-        } else {
-            iv.fitHeight = size
+        if (iv.viewport.width > size || iv.viewport.height > size) {
+            iv.isPreserveRatio = true
+            if (iv.viewport.width > iv.viewport.height) {
+                iv.fitWidth = size
+            } else {
+                iv.fitHeight = size
+            }
         }
     }
     return iv

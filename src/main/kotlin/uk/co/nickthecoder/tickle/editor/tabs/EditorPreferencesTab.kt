@@ -19,6 +19,10 @@ class EditorPreferencesTab
 
 class EditorPreferencesTask(val editorPreferences: EditorPreferences) : AbstractTask() {
 
+    val treeThumbnailSizeP = IntParameter("treeThumbnailSize", value = editorPreferences.treeThumnailSize)
+
+    val costumePickerSizeP = IntParameter("costumePickerThumbnailSize", value = editorPreferences.costumePickerThumbnailSize)
+
     val packageInfoP = InformationParameter("packageInfo", information = "The top level packages used by your game. This is used to scan the code for Producer, Director and Role classes.")
     val packagesP = MultipleParameter("packages", label = "Packages", value = editorPreferences.packages.toMutableList()) {
         StringParameter("package")
@@ -30,7 +34,7 @@ class EditorPreferencesTask(val editorPreferences: EditorPreferences) : Abstract
             .enumChoices(true)
 
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(packagesGroupP, outputFormatP)
+            .addParameters(treeThumbnailSizeP, costumePickerSizeP, packagesGroupP, outputFormatP)
 
     override fun run() {
         ClassLister.packages(packagesP.value)
@@ -38,6 +42,8 @@ class EditorPreferencesTask(val editorPreferences: EditorPreferences) : Abstract
         with(editorPreferences) {
             packages.clear()
             packages.addAll(packagesP.value)
+            treeThumnailSize = treeThumbnailSizeP.value!!
+            costumePickerThumbnailSize = costumePickerSizeP.value!!
             outputFormat = outputFormatP.value!!
         }
     }

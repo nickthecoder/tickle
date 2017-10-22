@@ -3,7 +3,7 @@
     "uk.co.nickthecoder.tickle",
     "uk.co.nickthecoder.demo"
   ]
-}, "layouts": 
+, "treeThumbnailSize": 24, "costumePickerThumbnailSize": 100}, "layouts": 
   [
     { "name": "default", "stages": 
       [

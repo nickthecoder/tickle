@@ -120,6 +120,8 @@ class JsonResources {
                 jpackages.add(it)
             }
             jpreferences.add("packages", jpackages)
+            jpreferences.add("treeThumbnailSize", treeThumnailSize)
+            jpreferences.add("costumePickerThumbnailSize", costumePickerThumbnailSize)
 
             return jpreferences
         }
@@ -138,6 +140,8 @@ class JsonResources {
             ClassLister.packages(packages)
 
             outputFormat = EditorPreferences.JsonFormat.valueOf(jpreferences.getString("outputFormat", "PRETTY"))
+            treeThumnailSize = jpreferences.getInt("treeThumbnailSize", 24)
+            costumePickerThumbnailSize = jpreferences.getInt("costumePickerThumbnailSize", 40)
 
             // println("Loaded preferences : ${resources.preferences}")
         }
