@@ -2,8 +2,9 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.util.Copyable
 
-class Costume() {
+class Costume : Copyable<Costume> {
 
     var roleString: String = ""
         set(v) {
@@ -114,6 +115,27 @@ class Costume() {
      * This makes is easy to create invisible objects in the game, but visible in the editor.
      */
     fun editorPose(): Pose? = events.get("editor")?.choosePose() ?: events.get(initialEventName)?.choosePose()
+
+    override fun copy(): Costume {
+        val copy = Costume()
+        copy.roleString = roleString
+        copy.canRotate = canRotate
+        copy.zOrder = zOrder
+        copy.costumeGroup = costumeGroup
+        copy.initialEventName = initialEventName
+
+        attributes.map().forEach { name, data ->
+            data.value?.let { copy.attributes.setValue(name, it) }
+        }
+
+        events.forEach { eventName, event ->
+            val copyEvent = event.copy()
+            copy.events[eventName] = copyEvent
+        }
+        val events = mutableMapOf<String, CostumeEvent>()
+
+        return copy
+    }
 
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }

@@ -105,9 +105,9 @@
   ]
 , "costumes": 
   [
-    { "name": "bee", "role": "uk.co.nickthecoder.tickle.demo.Bee", "canRotate": true, "zOrder": 0, "initialEvent": "default2", "events": 
+    { "name": "bee", "role": "uk.co.nickthecoder.tickle.demo.Bee", "canRotate": true, "zOrder": 0, "initialEvent": "default", "events": 
       [
-        { "name": "default2", "poses": 
+        { "name": "default", "poses": 
           [
             "bee"
           ]
@@ -196,6 +196,15 @@
         { "name": "pupil", "poses": 
           [
             "pupil"
+          ]
+        }
+      ]
+    },
+    { "name": "2", "role": "uk.co.nickthecoder.tickle.demo.Bee", "canRotate": true, "zOrder": 0, "initialEvent": "default2", "events": 
+      [
+        { "name": "default2", "poses": 
+          [
+            "bee"
           ]
         }
       ]

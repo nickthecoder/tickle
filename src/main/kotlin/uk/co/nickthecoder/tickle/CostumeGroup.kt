@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle
 
-import uk.co.nickthecoder.tickle.resources.ResourceType
+import uk.co.nickthecoder.tickle.resources.ResourceMap
 import uk.co.nickthecoder.tickle.resources.Resources
 
-class CostumeGroup(resources: Resources) : ResourceType<Costume>(resources, "Costume")
+class CostumeGroup(resources: Resources) : ResourceMap<Costume>(resources, "Costume")

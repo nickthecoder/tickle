@@ -12,7 +12,7 @@ import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.editor.EditorAction
 import uk.co.nickthecoder.tickle.editor.util.textStyle
 import uk.co.nickthecoder.tickle.editor.util.thumbnail
-import uk.co.nickthecoder.tickle.resources.ResourceType
+import uk.co.nickthecoder.tickle.resources.ResourceMap
 import uk.co.nickthecoder.tickle.resources.Resources
 
 /**
@@ -40,7 +40,7 @@ class CostumePickerBox(val onSelect: (String) -> Unit) {
         return scrollPane
     }
 
-    fun buildGroup(group: ResourceType<Costume>, all: Boolean): Node {
+    fun buildGroup(group: ResourceMap<Costume>, all: Boolean): Node {
 
         val poseButtons = FlowPane()
         val textButtons = VBox()

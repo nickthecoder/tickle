@@ -379,7 +379,7 @@ class JsonResources {
 
     // COSTUMES
 
-    fun saveCostumes(costumes: ResourceType<Costume>, all: Boolean): JsonArray {
+    fun saveCostumes(costumes: ResourceMap<Costume>, all: Boolean): JsonArray {
         val jcostumes = JsonArray()
 
         costumes.items().forEach { name, costume ->
@@ -456,7 +456,7 @@ class JsonResources {
 
     data class CostumeEventData(val costumeEvent: CostumeEvent, val costumeName: String)
 
-    fun loadCostumes(jcostumes: JsonArray, group: ResourceType<Costume>) {
+    fun loadCostumes(jcostumes: JsonArray, group: ResourceMap<Costume>) {
 
         jcostumes.forEach {
             val jcostume = it.asObject()

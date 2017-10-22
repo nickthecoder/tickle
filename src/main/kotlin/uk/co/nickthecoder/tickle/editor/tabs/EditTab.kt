@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
+import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.control.Alert
 import javafx.scene.control.Button
@@ -8,10 +9,18 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
 import javafx.scene.layout.HBox
+import javafx.stage.Stage
+import uk.co.nickthecoder.paratask.AbstractTask
+import uk.co.nickthecoder.paratask.TaskDescription
+import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.gui.defaultWhileFocusWithin
+import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.tickle.editor.EditorAction
+import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.util.ResourceType
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
-import uk.co.nickthecoder.tickle.editor.EditorAction
+import uk.co.nickthecoder.tickle.util.Copyable
 
 
 abstract class EditTab(
@@ -23,9 +32,9 @@ abstract class EditTab(
 
     protected val borderPane = BorderPane()
 
-    protected val leftButtons = FlowPane()
+    val leftButtons = FlowPane()
 
-    protected val rightButtons = FlowPane()
+    val rightButtons = FlowPane()
 
     protected val buttons = HBox()
 
@@ -102,6 +111,19 @@ abstract class EditTab(
         leftButtons.children.add(button)
     }
 
+    inline fun <reified T : Copyable<*>> addCopyButton(resource: Copyable<T>, resourceType: ResourceType, noinline action: (String, T) -> Unit) {
+        val button = Button("Copy")
+
+        button.setOnAction {
+            val prompter = TaskPrompter(CopyResourceTask<T>(resource, resourceType) { newName, newResource ->
+                action(newName, newResource)
+                MainWindow.instance.openTab(newName, newResource)
+            })
+            prompter.placeOnStage(Stage())
+        }
+        leftButtons.children.add(button)
+    }
+
     abstract fun save(): Boolean
 
     protected fun onCancel() {
@@ -118,6 +140,24 @@ abstract class EditTab(
         if (save()) {
             Resources.instance.fireChanged(data)
             close()
+        }
+    }
+
+    class CopyResourceTask<T>(val resource: Copyable<T>, resourceType: ResourceType, val action: (String, T) -> Unit)
+
+        : AbstractTask() {
+
+        val newNameP = StringParameter("newName", required = true)
+
+        override val taskD = TaskDescription("copy${resourceType.label}")
+                .addParameters(newNameP)
+
+        override fun run() {
+            Platform.runLater {
+                val copy = resource.copy()
+                action(newNameP.value, copy)
+
+            }
         }
     }
 }

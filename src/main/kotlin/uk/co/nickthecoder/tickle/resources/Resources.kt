@@ -19,19 +19,19 @@ class Resources {
 
     val gameInfo = GameInfo("Tickle", 600, 400, true)
 
-    val textures = ResourceType<Texture>(this, "Texture")
+    val textures = ResourceMap<Texture>(this, "Texture")
 
-    val poses = ResourceType<Pose>(this, "Pose")
+    val poses = ResourceMap<Pose>(this, "Pose")
 
-    val costumes = ResourceType<Costume>(this, "Costume")
+    val costumes = ResourceMap<Costume>(this, "Costume")
 
-    val costumeGroups = ResourceType<CostumeGroup>(this, "Costume Group")
+    val costumeGroups = ResourceMap<CostumeGroup>(this, "Costume Group")
 
-    val inputs = ResourceType<CompoundInput>(this, "Input")
+    val inputs = ResourceMap<CompoundInput>(this, "Input")
 
-    val layouts = ResourceType<Layout>(this, "Layout")
+    val layouts = ResourceMap<Layout>(this, "Layout")
 
-    val fontResources = ResourceType<FontResource>(this, "Font")
+    val fontResources = ResourceMap<FontResource>(this, "Font")
 
 
     val sceneDirectory: File

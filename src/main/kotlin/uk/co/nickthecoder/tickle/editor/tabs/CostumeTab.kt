@@ -44,7 +44,12 @@ class CostumeTab(val name: String, val costume: Costume)
             costume.costumeGroup?.remove(name)
             Resources.instance.costumes.remove(name)
         }
+        addCopyButton(costume, ResourceType.COSTUME) { newName, newCostume ->
+            Resources.instance.costumes.add(newName, newCostume)
+            newCostume.costumeGroup?.add(newName, newCostume)
+        }
     }
+
 
     override fun save(): Boolean {
         if (detailsForm.check()) {

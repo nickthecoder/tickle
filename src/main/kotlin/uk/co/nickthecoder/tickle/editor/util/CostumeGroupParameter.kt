@@ -15,7 +15,7 @@ class CostumeGroupParameter(name: String = "group", val newGroupCallback: (Strin
 
     val createGroupP = ButtonParameter(name + "_create", buttonText = "New Group") { createNewGroup() }
 
-    val newTask = NewResourceTask(NewResourceTask.ResourceType.COSTUME_GROUP)
+    val newTask = NewResourceTask(ResourceType.COSTUME_GROUP)
 
     init {
         addParameters(costumeP, createGroupP)
