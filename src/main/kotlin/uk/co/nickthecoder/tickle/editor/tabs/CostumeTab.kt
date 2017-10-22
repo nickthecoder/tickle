@@ -78,12 +78,14 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val costumeGroupP = CostumeGroupParameter { chooseCostumeGroup(it) }
 
+        val showInSceneEditorP = BooleanParameter("showInSceneEditor", value = costume.showInSceneEditor)
+
         val infoP = InformationParameter("info",
                 information = "The role has no fields with the '@CostumeAttribute' annotation, and therefore, this costume has no attributes.")
         val attributesP = SimpleGroupParameter("attributes")
 
         override val taskD = TaskDescription("costumeDetails")
-                .addParameters(nameP, roleClassP, canRotateP, zOrderP, costumeGroupP, attributesP)
+                .addParameters(nameP, roleClassP, canRotateP, zOrderP, costumeGroupP, showInSceneEditorP, attributesP)
 
         init {
             ClassLister.setNullableChoices(roleClassP, Role::class.java)
@@ -109,6 +111,7 @@ class CostumeTab(val name: String, val costume: Costume)
             costume.roleString = if (roleClassP.value == null) "" else roleClassP.value!!.name
             costume.canRotate = canRotateP.value == true
             costume.zOrder = zOrderP.value!!
+            costume.showInSceneEditor = showInSceneEditorP.value == true
 
             if (costume.costumeGroup != costumeGroupP.costumeP.value) {
                 costume.costumeGroup?.remove(name)

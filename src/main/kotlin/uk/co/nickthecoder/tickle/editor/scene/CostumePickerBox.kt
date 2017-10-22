@@ -29,10 +29,12 @@ class CostumePickerBox(val onSelect: (String) -> Unit) {
         vbox.children.add(buildGroup(Resources.instance.costumes, false))
 
         Resources.instance.costumeGroups.items().forEach { groupName, costumeGroup ->
-            val pane = TitledPane(groupName, buildGroup(costumeGroup, true))
-            pane.styleClass.add("pickGroup")
-            pane.isAnimated = false // The animation is too slow, and there's no API to change the speed. Grr.
-            vbox.children.add(pane)
+            if (costumeGroup.showInSceneEditor) {
+                val pane = TitledPane(groupName, buildGroup(costumeGroup, true))
+                pane.styleClass.add("pickGroup")
+                pane.isAnimated = false // The animation is too slow, and there's no API to change the speed. Grr.
+                vbox.children.add(pane)
+            }
         }
 
         scrollPane.isFitToWidth = true
@@ -53,7 +55,7 @@ class CostumePickerBox(val onSelect: (String) -> Unit) {
         textButtons.isFillWidth = false
 
         group.items().forEach { costumeName, costume ->
-            if (all || Resources.instance.findCostumeGroup(costumeName) == null) {
+            if (costume.showInSceneEditor && (all || Resources.instance.findCostumeGroup(costumeName) == null)) {
                 val pose = costume.editorPose()
 
                 if (pose == null) {

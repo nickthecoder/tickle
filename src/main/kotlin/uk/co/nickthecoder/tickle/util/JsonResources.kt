@@ -356,6 +356,8 @@ class JsonResources {
             val jgroup = JsonObject()
             jgroup.add("name", name)
             jgroup.add("costumes", saveCostumes(group, true))
+
+            jgroup.add("showInSceneEditor", group.showInSceneEditor)
             jgroups.add(jgroup)
         }
         return jgroups
@@ -367,6 +369,8 @@ class JsonResources {
             val jgroup = it.asObject()
             val group = CostumeGroup(resources)
             val groupName = jgroup.get("name").asString()
+            group.showInSceneEditor = jgroup.getBoolean("showInSceneEditor", true)
+
             val jcostumes = jgroup.get("costumes").asArray()
             loadCostumes(jcostumes, group)
 
@@ -392,6 +396,7 @@ class JsonResources {
                 jcostume.add("canRotate", costume.canRotate)
                 jcostume.add("zOrder", costume.zOrder)
                 jcostume.add("initialEvent", costume.initialEventName)
+                jcostume.add("showInSceneEditor", costume.showInSceneEditor)
 
                 val jevents = JsonArray()
                 jcostume.add("events", jevents)
@@ -466,6 +471,7 @@ class JsonResources {
             costume.canRotate = jcostume.getBoolean("canRotate", false)
             costume.zOrder = jcostume.getDouble("zOrder", 0.0)
             costume.initialEventName = jcostume.getString("initialEvent", "default")
+            costume.showInSceneEditor = jcostume.getBoolean("showInSceneEditor", true)
 
             jcostume.get("events")?.let {
                 val jevents = it.asArray()

@@ -26,6 +26,8 @@ class Costume : Copyable<Costume> {
 
     var initialEventName: String = "default"
 
+    var showInSceneEditor: Boolean = true
+
     fun createActor(text: String = ""): Actor {
         val role = if (roleString.isBlank()) null else Role.create(roleString)
         role?.let { attributes.applyToObject(it) }

@@ -4,10 +4,6 @@ Current Work
 Next
 ====
 
-Create CostumeGroupTab, where we can rename a group, and quickly add more costumes to it.
-	Using a "MultipleChoiceParameter" - to be created in paratask!
-	Also, allow a group to be hidden from the CostumePicker
-
 Right click the ResourcesTree for popup menu :
 	Delete, Rename, New
 
