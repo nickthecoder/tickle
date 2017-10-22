@@ -54,7 +54,7 @@ class LayoutStage() {
                 System.err.println("'$newStage' is not a type of Stage")
             }
         } catch (e: Exception) {
-            System.err.println("Failed to create a Role from : '$stageString'")
+            System.err.println("Failed to create a Stage from : '$stageString'")
         }
         return GameStage()
 
@@ -82,7 +82,7 @@ class LayoutView(
                 System.err.println("'$newView' is not a type of Stage")
             }
         } catch (e: Exception) {
-            System.err.println("Failed to create a Role from : '$viewString'")
+            System.err.println("Failed to create a View from : '$viewString'")
         }
         return ZOrderStageView()
 

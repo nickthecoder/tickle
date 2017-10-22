@@ -50,7 +50,7 @@ interface Director {
                     System.err.println("'$directorString' is not a type of Director")
                 }
             } catch (e: Exception) {
-                System.err.println("Failed to create a Role from : '$directorString'")
+                System.err.println("Failed to create a Director from : '$directorString'")
             }
             return NoDirector()
         }

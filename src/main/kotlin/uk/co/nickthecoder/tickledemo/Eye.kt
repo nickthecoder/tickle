@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.demo
+package uk.co.nickthecoder.tickledemo
 
 import uk.co.nickthecoder.tickle.AbstractRole
 import uk.co.nickthecoder.tickle.Actor
