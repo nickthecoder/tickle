@@ -2,7 +2,9 @@ package uk.co.nickthecoder.tickle.editor.tabs
 
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
-import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.paratask.parameters.BooleanParameter
+import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
+import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.GameInfo
 import uk.co.nickthecoder.tickle.NoProducer
 import uk.co.nickthecoder.tickle.Producer
@@ -10,7 +12,8 @@ import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.XYiParameter
 import uk.co.nickthecoder.tickle.resources.Resources
 
-class GameInfoTab()
+class GameInfoTab
+
     : EditTaskTab(
         GameInfoTask(Resources.instance.gameInfo),
         dataName = "Game Info",
@@ -30,19 +33,8 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val resizableP = BooleanParameter("resizable", value = gameInfo.resizable)
     val producerP = ChoiceParameter<Class<*>>("producer", value = NoProducer::class.java)
 
-    val packageInfoP = InformationParameter("packageInfo", information = "The top level packages used by your game. This is used to scan the code for Producer, Director and Role classes.")
-    val packagesP = MultipleParameter("packages", label = "Packages", value = gameInfo.packages.toMutableList()) {
-        StringParameter("package")
-    }
-    val noteP = InformationParameter("note", information = "Note. When adding a new package, click the 'Apply' button to refresh the list of Producer classes.")
-    val packagesGroupP = SimpleGroupParameter("packagesGroup", label = "Packages")
-            .addParameters(packageInfoP, packagesP, noteP)
-
-    val outputFormatP = ChoiceParameter<GameInfo.JsonFormat>("outputFormat", value = gameInfo.outputFormat)
-            .enumChoices(true)
-
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, packagesGroupP, outputFormatP)
+            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP)
 
     init {
         windowSizeP.x = gameInfo.width
@@ -58,19 +50,17 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     }
 
     override fun run() {
-        ClassLister.packages(packagesP.value)
         ClassLister.setChoices(producerP, Producer::class.java)
 
-        gameInfo.title = titleP.value
-        gameInfo.width = windowSizeP.x!!
-        gameInfo.height = windowSizeP.y!!
-        gameInfo.initialScenePath = Resources.instance.scenePathToFile(initialSceneP.value)
-        gameInfo.testScenePath = Resources.instance.scenePathToFile(testSceneP.value)
-        gameInfo.resizable = resizableP.value!!
-        gameInfo.producerString = producerP.value!!.name
-        gameInfo.packages.clear()
-        gameInfo.packages.addAll(packagesP.value)
-        gameInfo.outputFormat = outputFormatP.value!!
+        with(gameInfo) {
+            title = titleP.value
+            width = windowSizeP.x!!
+            height = windowSizeP.y!!
+            initialScenePath = Resources.instance.scenePathToFile(initialSceneP.value)
+            testScenePath = Resources.instance.scenePathToFile(testSceneP.value)
+            resizable = resizableP.value!!
+            producerString = producerP.value!!.name
+        }
     }
-}
 
+}

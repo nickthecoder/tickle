@@ -1,9 +1,6 @@
 package uk.co.nickthecoder.tickle.resources
 
-import uk.co.nickthecoder.tickle.Costume
-import uk.co.nickthecoder.tickle.CostumeGroup
-import uk.co.nickthecoder.tickle.GameInfo
-import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.JsonResources
@@ -18,6 +15,8 @@ class Resources {
 
 
     val gameInfo = GameInfo("Tickle", 600, 400, true)
+
+    val preferences = EditorPreferences()
 
     val textures = ResourceMap<Texture>(this, "Texture")
 

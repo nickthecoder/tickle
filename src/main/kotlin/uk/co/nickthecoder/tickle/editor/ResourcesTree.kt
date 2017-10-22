@@ -7,10 +7,7 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
 import uk.co.nickthecoder.paratask.util.FileLister
-import uk.co.nickthecoder.tickle.Costume
-import uk.co.nickthecoder.tickle.CostumeGroup
-import uk.co.nickthecoder.tickle.GameInfo
-import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.FontResource
@@ -100,6 +97,7 @@ class ResourcesTree()
         init {
             children.addAll(
                     GameInfoItem(),
+                    EditorPreferencesItem(),
                     TexturesItem(),
                     PosesItem(),
                     FontResourcesItem(),
@@ -114,13 +112,12 @@ class ResourcesTree()
 
     inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo, "gameInfo.png") {
 
-        init {
-            resources.poses.items().forEach { name, pose ->
-                children.add(DataItem(name, pose))
-            }
-        }
-
         override fun data(): GameInfo = resources.gameInfo
+    }
+
+    inner class EditorPreferencesItem() : DataItem("Editor Preferences", resources.gameInfo, "preferences.png") {
+
+        override fun data(): EditorPreferences = resources.preferences
     }
 
     open inner class DataItem(var name: String, val data: Any, val graphicName: String = "unknown.png")

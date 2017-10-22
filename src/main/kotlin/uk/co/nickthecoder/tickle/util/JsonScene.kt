@@ -48,7 +48,7 @@ class JsonScene {
         }
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
-            jroot.writeTo(it, Resources.instance.gameInfo.outputFormat.writerConfig)
+            jroot.writeTo(it, Resources.instance.preferences.outputFormat.writerConfig)
         }
     }
 

@@ -7,9 +7,6 @@ Next
 Right click the ResourcesTree for popup menu :
 	Delete, Rename, New
 
-Costumes to override "default" as the first pose.
-	i.e. a "firstEvent" field, which defaults to "default".
-
 Use thumbnails of Costume's editor pose in the Resources tree
 	Ditto for Pose
 

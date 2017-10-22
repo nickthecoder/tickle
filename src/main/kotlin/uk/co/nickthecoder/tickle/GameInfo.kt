@@ -1,7 +1,5 @@
 package uk.co.nickthecoder.tickle
 
-import com.eclipsesource.json.UglyPrint
-import com.eclipsesource.json.WriterConfig
 import java.io.File
 
 class GameInfo(
@@ -11,9 +9,7 @@ class GameInfo(
         var resizable: Boolean,
         var initialScenePath: File = File("splash"),
         var testScenePath: File = File(""),
-        var producerString: String = NoProducer::class.java.name,
-        val packages: MutableList<String> = mutableListOf("uk.co.nickthecoder.tickle"),
-        var outputFormat: JsonFormat = JsonFormat.PRETTY) {
+        var producerString: String = NoProducer::class.java.name) {
 
     fun createProducer(): Producer {
         try {
@@ -28,12 +24,6 @@ class GameInfo(
             System.err.println("Failed to create a Producer from : '$producerString'")
         }
         return NoProducer()
-    }
-
-    enum class JsonFormat(val writerConfig: WriterConfig) {
-        COMPACT(WriterConfig.MINIMAL),
-        UGLY(UglyPrint("  ")),
-        PRETTY(WriterConfig.PRETTY_PRINT)
     }
 
 }

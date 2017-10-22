@@ -39,6 +39,7 @@ class JsonResources {
 
         val jroot = JsonObject()
         jroot.add("info", saveInfo())
+        jroot.add("preferences", savePreferences())
         addArray(jroot, "layouts", saveLayouts())
         addArray(jroot, "textures", saveTextures())
         addArray(jroot, "fonts", saveFonts())
@@ -48,7 +49,7 @@ class JsonResources {
         addArray(jroot, "inputs", saveInputs())
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
-            jroot.writeTo(it, resources.gameInfo.outputFormat.writerConfig)
+            jroot.writeTo(it, resources.preferences.outputFormat.writerConfig)
         }
     }
 
@@ -63,6 +64,7 @@ class JsonResources {
         val jroot = Json.parse(InputStreamReader(FileInputStream(file))).asObject()
 
         val jinfo = jroot.get("info")
+        val jpreferences = jroot.get("preferences")
         val jlayouts = jroot.get("layouts")
         val jtextures = jroot.get("textures")
         val jfonts = jroot.get("fonts")
@@ -73,6 +75,9 @@ class JsonResources {
 
         if (jinfo is JsonObject) {
             loadInfo(jinfo)
+        }
+        if (jpreferences is JsonObject) {
+            loadPreferences(jpreferences)
         }
         if (jlayouts is JsonArray) {
             loadLayouts(jlayouts)
@@ -102,6 +107,43 @@ class JsonResources {
         }
     }
 
+    // EDITOR PREFERENCES
+
+    fun savePreferences(): JsonObject {
+        val jpreferences = JsonObject()
+        with(resources.preferences) {
+
+            jpreferences.add("outputFormat", outputFormat.name)
+
+            val jpackages = JsonArray()
+            packages.forEach {
+                jpackages.add(it)
+            }
+            jpreferences.add("packages", jpackages)
+
+            return jpreferences
+        }
+    }
+
+    fun loadPreferences(jpreferences: JsonObject) {
+        with(resources.preferences) {
+
+            jpreferences.get("packages")?.let {
+                val newPackages = it.asArray()
+                packages.clear()
+                newPackages.forEach {
+                    packages.add(it.asString())
+                }
+            }
+            ClassLister.packages(packages)
+
+            outputFormat = EditorPreferences.JsonFormat.valueOf(jpreferences.getString("outputFormat", "PRETTY"))
+
+
+            println("Loaded preferences : ${resources.preferences}")
+        }
+    }
+
     // INFO
 
     fun saveInfo(): JsonObject {
@@ -116,13 +158,6 @@ class JsonResources {
             jinfo.add("testScene", resources.sceneFileToPath(testScenePath))
 
             jinfo.add("producer", producerString)
-            val jpackages = JsonArray()
-            packages.forEach {
-                jpackages.add(it)
-            }
-            jinfo.add("outputFormat", outputFormat.name)
-
-            jinfo.add("packages", jpackages)
 
             return jinfo
         }
@@ -138,16 +173,6 @@ class JsonResources {
             initialScenePath = resources.scenePathToFile(jinfo.getString("initialScene", "splash"))
             testScenePath = resources.scenePathToFile(jinfo.getString("testScene", "splash"))
             producerString = jinfo.getString("producer", NoProducer::javaClass.name)
-
-            jinfo.get("packages")?.let {
-                val newPackages = it.asArray()
-                packages.clear()
-                newPackages.forEach {
-                    packages.add(it.asString())
-                }
-            }
-            outputFormat = GameInfo.JsonFormat.valueOf(jinfo.getString("outputFormat", "PRETTY"))
-            ClassLister.packages(packages)
 
             // println("Loaded info : $title : $width x $height Resize? $resizable. Game=$producerString")
         }

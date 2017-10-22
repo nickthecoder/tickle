@@ -177,6 +177,9 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         if (data is GameInfo) {
             return GameInfoTab()
 
+        } else if (data is EditorPreferences) {
+            return EditorPreferencesTab()
+
         } else if (data is Texture) {
             return TextureTab(name, data)
 
