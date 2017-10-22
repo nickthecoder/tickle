@@ -1,5 +1,5 @@
 {
-    "director": "uk.co.nickthecoder.tickledemo.Play",
+    "director": "uk.co.nickthecoder.demo.Play",
     "directorAttributes": [
         {
             "name": "degrees",

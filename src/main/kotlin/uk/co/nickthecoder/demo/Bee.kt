@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickledemo
+package uk.co.nickthecoder.demo
 
 
 import org.joml.Matrix4f

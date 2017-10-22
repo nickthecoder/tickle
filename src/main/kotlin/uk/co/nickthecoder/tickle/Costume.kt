@@ -134,7 +134,6 @@ class Costume : Copyable<Costume> {
             val copyEvent = event.copy()
             copy.events[eventName] = copyEvent
         }
-        val events = mutableMapOf<String, CostumeEvent>()
 
         return copy
     }

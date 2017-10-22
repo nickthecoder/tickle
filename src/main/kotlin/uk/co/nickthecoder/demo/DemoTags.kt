@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickledemo
+package uk.co.nickthecoder.demo
 
 /**
  * Tags used within the Demo game.

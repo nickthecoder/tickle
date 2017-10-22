@@ -139,8 +139,7 @@ class JsonResources {
 
             outputFormat = EditorPreferences.JsonFormat.valueOf(jpreferences.getString("outputFormat", "PRETTY"))
 
-
-            println("Loaded preferences : ${resources.preferences}")
+            // println("Loaded preferences : ${resources.preferences}")
         }
     }
 
