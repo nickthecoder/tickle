@@ -21,6 +21,14 @@ Use thumbnails of Costume's editor pose in the Resources tree
 
 Costumes "Based On" another costume.
 
+Instead of CosutmeEvent having chld costumes. Have richer information, including relative position, direction etc.
+
+Preferences (Code like GameInfo)
+	Resource Tree Thumbnail Size
+	Costume Picker Thumnail Size
+	Output Format (moved from GameInfo)
+
+
 Create groups of Poses? Similar to the groups of Costumes???
 	Hmm, Could just use the texture as the grouping.
 	Anyway, we need a PoseChoiceParameter, which is a MenuButton with a hierarchical menu.
@@ -38,6 +46,7 @@ Attributes now depends on paratask-core, and therefore a running game also depen
 		It either returns Attributes (which has no parameter stuff) of DesignAttributes
 		Then cast wherever they are used in the editor.
 		Add an extension function : SceneActor.designAttributes() which does the cast. Ditto for Costume
+	Also, "UglyPrint" is in paratask-core.
 
 InputPicker :
 	Java FX key code name "Number Sign" does not map to anything in enum class Key
@@ -53,7 +62,8 @@ Allow fonts to have multiple outlines i.e. one myfont.png may have myfont-thinOu
 TextStyle to have an extraSpacing property which causes letters to be moved further appart
 	Ditto for extra line height.
 
-	
+Allow text style to be overriden in the SceneEditor.
+	Only save the overridden values if the differ from the Costume's values.
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 	Just as a prelude to pixel collision detection.
@@ -109,10 +119,10 @@ Also allow a SceneResource to specify a (set of?) scene paths to be merged.
 Pose : Allow a "mirrored" version (X,Y or Both)
 	Just make the rectangle have -ve widths/heights???
 	Use this to implement "Bee" without the special transformation
+
 Costume to have an "initial" event name (which is normally "default").
 	But Bee's will be "right" (and Bee will not have a "default" event).
 	Each SceneActor can then override this.
-
 
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).
@@ -132,7 +142,6 @@ PoseTab should show the whole Texture, with a single shaded rectangle to show th
 	Double click to auto adjust the pose's rectangle and offset.
 	Make it a resuable copmonent, which can show one or many shaded rectangles.
 
-
 Mouse
 	Find Actors at a point
 		Overlapping, or using pixel data
@@ -149,6 +158,8 @@ Costumes to inherit?
 
 Later
 =====
+
+Create a simpler GUI that a "published" game can use to let players change the input mappings.L
 
 Game based on "flocking" :	https://www.youtube.com/watch?v=M028vafB0l8
 
@@ -186,9 +197,6 @@ UncharteredStageView
 
 Much Later
 ==========
-
-
-StageConstraint
 
 New Game Wizard
 	Choice of a completely blank project, or a "Hello World"

@@ -149,12 +149,14 @@ class CostumeTab(val name: String, val costume: Costume)
 
     inner class CostumeEventsTask() : AbstractTask() {
 
+        val initialEventP = StringParameter("initialEvent", value = costume.initialEventName)
+
         val eventsP = MultipleParameter("events") {
             EventParameter()
         }.asListDetail(allowReordering = false) { it.toString() }
 
         override val taskD = TaskDescription("costumeEvents")
-                .addParameters(eventsP)
+                .addParameters(initialEventP, eventsP)
 
         init {
             costume.events.forEach { eventName, event ->
@@ -186,6 +188,8 @@ class CostumeTab(val name: String, val costume: Costume)
         }
 
         override fun run() {
+            costume.initialEventName = initialEventP.value
+
             costume.events.clear()
             eventsP.innerParameters.forEach { inner ->
                 when (inner.typeP.value) {

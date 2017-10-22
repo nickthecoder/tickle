@@ -23,8 +23,7 @@ class Costume() {
 
     var costumeGroup: CostumeGroup? = null
 
-    // TODO Will have relatedCostumes later. And we can then use that to create bullets, explosions, etc.
-    // RelatedCostumes should also store info about position and direction relative to the parent actor.
+    var initialEventName: String = "default"
 
     fun createActor(text: String = ""): Actor {
         val role = if (roleString.isBlank()) null else Role.create(roleString)
@@ -33,9 +32,9 @@ class Costume() {
         val actor = Actor(this, role)
         actor.zOrder = zOrder
 
-        val pose = events["default"]?.choosePose()
+        val pose = events[initialEventName]?.choosePose()
         if (pose == null) {
-            val textStyle = events["default"]?.chooseTextStyle()
+            val textStyle = events[initialEventName]?.chooseTextStyle()
             if (textStyle != null) {
                 actor.changeAppearance(text, textStyle)
             }
@@ -87,7 +86,7 @@ class Costume() {
             if (newCostume != null) {
                 val role = newCostume.createRole()
                 val actor = Actor(newCostume, role)
-                val defaultEvent = newCostume.events["default"]
+                val defaultEvent = newCostume.events[newCostume.initialEventName]
 
                 // Set the appearance. Either a Pose or a TextStyle (Pose takes precedence if it has both)
                 val pose = defaultEvent?.choosePose()
@@ -114,7 +113,7 @@ class Costume() {
      * This is the pose used to display this costume from within the SceneEditor and CostumePickerBox.
      * This makes is easy to create invisible objects in the game, but visible in the editor.
      */
-    fun editorPose(): Pose? = events.get("editor")?.choosePose() ?: events.get("default")?.choosePose()
+    fun editorPose(): Pose? = events.get("editor")?.choosePose() ?: events.get(initialEventName)?.choosePose()
 
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }
