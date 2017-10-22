@@ -23,6 +23,12 @@ class JsonResources {
      */
     val costumeEvents = mutableListOf<CostumeEventData>()
 
+    /**
+     * When a costume inherits events from another costume, store the costume names in this map, and then
+     * update the costume once all of the costumes have been loaded.
+     */
+    val inherritedCostumeEvents = mutableMapOf<String, String>()
+
     constructor(file: File) {
         this.resources = Resources()
         load(file)
@@ -104,6 +110,14 @@ class JsonResources {
         // Now all costume have been loaded, lets add the costume events.
         costumeEvents.forEach { data ->
             data.costumeEvent.costumes.add(resources.costumes.find(data.costumeName)!!)
+        }
+
+        inherritedCostumeEvents.forEach { costumeName, inheritsFromCostumeName ->
+            val from = resources.costumes.find(costumeName)
+            val to = resources.costumes.find(inheritsFromCostumeName)
+            if (from != null && to != null) {
+                from.inheritEventsFrom = to
+            }
         }
     }
 
@@ -425,6 +439,9 @@ class JsonResources {
                 jcostume.add("zOrder", costume.zOrder)
                 jcostume.add("initialEvent", costume.initialEventName)
                 jcostume.add("showInSceneEditor", costume.showInSceneEditor)
+                if (costume.inheritEventsFrom != null) {
+                    jcostume.add("inheritsEventsFrom", resources.costumes.findName(costume.inheritEventsFrom))
+                }
 
                 val jevents = JsonArray()
                 jcostume.add("events", jevents)
@@ -500,6 +517,11 @@ class JsonResources {
             costume.zOrder = jcostume.getDouble("zOrder", 0.0)
             costume.initialEventName = jcostume.getString("initialEvent", "default")
             costume.showInSceneEditor = jcostume.getBoolean("showInSceneEditor", true)
+
+            val inheritsFrom: String? = jcostume.getString("inheritsEventsFrom", null)
+            if (inheritsFrom != null) {
+                inherritedCostumeEvents[name] = inheritsFrom
+            }
 
             jcostume.get("events")?.let {
                 val jevents = it.asArray()

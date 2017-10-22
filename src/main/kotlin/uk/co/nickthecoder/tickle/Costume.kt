@@ -28,6 +28,8 @@ class Costume : Copyable<Costume> {
 
     var showInSceneEditor: Boolean = true
 
+    var inheritEventsFrom: Costume? = null
+
     fun createActor(text: String = ""): Actor {
         val role = if (roleString.isBlank()) null else Role.create(roleString)
         role?.let { attributes.applyToObject(it) }
@@ -35,9 +37,9 @@ class Costume : Copyable<Costume> {
         val actor = Actor(this, role)
         actor.zOrder = zOrder
 
-        val pose = events[initialEventName]?.choosePose()
+        val pose = choosePose(initialEventName)
         if (pose == null) {
-            val textStyle = events[initialEventName]?.chooseTextStyle()
+            val textStyle = chooseTextStyle(initialEventName)
             if (textStyle != null) {
                 actor.changeAppearance(text, textStyle)
             }
@@ -83,32 +85,29 @@ class Costume : Copyable<Costume> {
     }
 
     fun createChild(eventName: String): Actor {
-        events[eventName]?.let { event ->
 
-            val newCostume = event.chooseCostume()
-            if (newCostume != null) {
-                val role = newCostume.createRole()
-                val actor = Actor(newCostume, role)
-                val defaultEvent = newCostume.events[newCostume.initialEventName]
+        val newCostume = chooseCostume(eventName)
+        if (newCostume != null) {
+            val role = newCostume.createRole()
+            val actor = Actor(newCostume, role)
 
-                // Set the appearance. Either a Pose or a TextStyle (Pose takes precedence if it has both)
-                val pose = defaultEvent?.choosePose()
-                if (pose == null) {
-                    val style = defaultEvent?.chooseTextStyle()
-                    if (style != null) {
-                        val text = defaultEvent.chooseString() ?: ""
-                        actor.changeAppearance(text, style)
-                    }
-                } else {
-                    actor.changeAppearance(pose)
+            // Set the appearance. Either a Pose or a TextStyle (Pose takes precedence if it has both)
+            val pose = newCostume.choosePose(newCostume.initialEventName)
+            if (pose == null) {
+                val style = newCostume.chooseTextStyle(newCostume.initialEventName)
+                if (style != null) {
+                    val text = newCostume.chooseString(newCostume.initialEventName) ?: ""
+                    actor.changeAppearance(text, style)
                 }
-                return actor
+            } else {
+                actor.changeAppearance(pose)
             }
-
-            val actor = Actor(this)
-            event.choosePose()?.let { actor.changeAppearance(it) }
             return actor
         }
+
+        // TODO Should this ALSO try text style if there was no pose?
+        val actor = Actor(this)
+        actor.costume.choosePose(eventName)?.let { actor.changeAppearance(it) }
         return Actor(this)
     }
 
@@ -116,7 +115,7 @@ class Costume : Copyable<Costume> {
      * This is the pose used to display this costume from within the SceneEditor and CostumePickerBox.
      * This makes is easy to create invisible objects in the game, but visible in the editor.
      */
-    fun editorPose(): Pose? = events.get("editor")?.choosePose() ?: events.get(initialEventName)?.choosePose()
+    fun editorPose(): Pose? = choosePose("editor") ?: choosePose(initialEventName)
 
     override fun copy(): Costume {
         val copy = Costume()
@@ -137,6 +136,14 @@ class Costume : Copyable<Costume> {
 
         return copy
     }
+
+    fun choosePose(eventName: String): Pose? = events[eventName]?.choosePose() ?: inheritEventsFrom?.choosePose(eventName)
+
+    fun chooseCostume(eventName: String): Costume? = events[eventName]?.chooseCostume() ?: inheritEventsFrom?.chooseCostume(eventName)
+
+    fun chooseTextStyle(eventName: String): TextStyle? = events[eventName]?.chooseTextStyle() ?: inheritEventsFrom?.chooseTextStyle(eventName)
+
+    fun chooseString(eventName: String): String? = events[eventName]?.chooseString() ?: inheritEventsFrom?.chooseString(eventName)
 
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }

@@ -10,7 +10,6 @@ import javafx.scene.layout.FlowPane
 import javafx.scene.layout.VBox
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.editor.EditorAction
-import uk.co.nickthecoder.tickle.editor.util.textStyle
 import uk.co.nickthecoder.tickle.editor.util.thumbnail
 import uk.co.nickthecoder.tickle.resources.ResourceMap
 import uk.co.nickthecoder.tickle.resources.Resources
@@ -60,7 +59,7 @@ class CostumePickerBox(val onSelect: (String) -> Unit) {
 
                 if (pose == null) {
 
-                    if (costume.textStyle() != null) {
+                    if (costume.chooseTextStyle(costume.initialEventName) != null) {
                         textButtons.children.add(createButton(costumeName, costume, ImageView(EditorAction.imageResource("font.png")), true))
                     }
 

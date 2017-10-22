@@ -1,32 +1,18 @@
-{
-    "director": "uk.co.nickthecoder.demo.Play",
-    "directorAttributes": [
-        {
-            "name": "degrees",
-            "value": "0"
-        }
-    ],
-    "background": "#000000",
-    "showMouse": true,
-    "layout": "default",
-    "stages": [
-        {
-            "name": "background",
-            "actors": [
-                
-            ]
-        },
-        {
-            "name": "main",
-            "actors": [
-                {
-                    "costume": "bee",
-                    "x": 390,
-                    "y": 370,
-                    "direction": 0,
-                    "scale": 1
-                }
-            ]
-        }
-    ]
+{ "director": "uk.co.nickthecoder.demo.Play", "directorAttributes": 
+  [
+    { "name": "degrees", "value": "0"}
+  ]
+, "background": "#000000", "showMouse": true, "layout": "default", "stages": 
+  [
+    { "name": "background", "actors": 
+      [
+        
+      ]
+    },
+    { "name": "main", "actors": 
+      [
+        { "costume": "bee", "x": 390, "y": 370, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1}
+      ]
+    }
+  ]
 }

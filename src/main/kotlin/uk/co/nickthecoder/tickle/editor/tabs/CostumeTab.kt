@@ -159,12 +159,14 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val initialEventP = StringParameter("initialEvent", value = costume.initialEventName)
 
+        val inheritEventsFromP = createCostumeParameter("inheritEventsFrom", required = false, value = costume.inheritEventsFrom)
+
         val eventsP = MultipleParameter("events") {
             EventParameter()
-        }.asListDetail(allowReordering = false) { it.toString() }
+        }.asListDetail(isBoxed = true, allowReordering = false) { it.toString() }
 
         override val taskD = TaskDescription("costumeEvents")
-                .addParameters(initialEventP, eventsP)
+                .addParameters(initialEventP, inheritEventsFromP, eventsP)
 
         init {
             costume.events.forEach { eventName, event ->
@@ -197,6 +199,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         override fun run() {
             costume.initialEventName = initialEventP.value
+            costume.inheritEventsFrom = inheritEventsFromP.value
 
             costume.events.clear()
             eventsP.innerParameters.forEach { inner ->

@@ -1,210 +1,85 @@
-{
-    "director": "uk.co.nickthecoder.demo.Play",
-    "directorAttributes": [
-        {
-            "name": "degrees",
-            "value": "0"
-        }
-    ],
-    "background": "#661a33",
-    "showMouse": true,
-    "layout": "default",
-    "stages": [
-        {
-            "name": "background",
-            "actors": [
-                
-            ]
+{ "director": "uk.co.nickthecoder.demo.Play", "directorAttributes": 
+  [
+    { "name": "degrees", "value": "0"}
+  ]
+, "background": "#661a33", "showMouse": true, "layout": "default", "stages": 
+  [
+    { "name": "background", "actors": 
+      [
+        
+      ]
+    },
+    { "name": "main", "actors": 
+      [
+        { "costume": "bee", "x": 207, "y": 325, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
+        { "costume": "grenade", "x": 226, "y": 83, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "attributes": 
+          [
+            { "name": "hue", "value": "0"},
+            { "name": "maxVelocity", "value": "103.99999999999999:3.0"},
+            { "name": "minVelocity", "value": "62.0:7.694154"},
+            { "name": "exit", "value": "4.0x46.0"}
+          ]
         },
-        {
-            "name": "main",
-            "actors": [
-                {
-                    "costume": "bee",
-                    "x": 207,
-                    "y": 325,
-                    "direction": 0,
-                    "scale": 1
-                },
-                {
-                    "costume": "grenade",
-                    "x": 226,
-                    "y": 83,
-                    "direction": 0,
-                    "scale": 1,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0"
-                        },
-                        {
-                            "name": "maxVelocity",
-                            "value": "103.99999999999999:3.0"
-                        },
-                        {
-                            "name": "minVelocity",
-                            "value": "62.0:7.694154"
-                        },
-                        {
-                            "name": "exit",
-                            "value": "4.0x46.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "coin",
-                    "x": 254,
-                    "y": 433,
-                    "direction": 20,
-                    "scale": 1,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "86.00000000000001:6.11310068623117"
-                        }
-                    ]
-                },
-                {
-                    "costume": "coin10",
-                    "x": 85,
-                    "y": 310,
-                    "direction": 0,
-                    "scale": 1,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "327.0:7.2401657439591816"
-                        }
-                    ]
-                },
-                {
-                    "costume": "coin100",
-                    "x": 544,
-                    "y": 432,
-                    "direction": 329,
-                    "scale": 1,
-                    "attributes": [
-                        {
-                            "name": "velocity",
-                            "value": "344.00000000000006:6.648308055437864"
-                        }
-                    ]
-                },
-                {
-                    "costume": "bee",
-                    "x": 598,
-                    "y": 501,
-                    "direction": 0,
-                    "scale": 1
-                },
-                {
-                    "costume": "grenade",
-                    "x": 418,
-                    "y": 82,
-                    "direction": 0,
-                    "scale": 1,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0.2"
-                        },
-                        {
-                            "name": "maxVelocity",
-                            "value": "123.00000000000003:3.6472592"
-                        },
-                        {
-                            "name": "minVelocity",
-                            "value": "85.0:10.530432"
-                        },
-                        {
-                            "name": "exit",
-                            "value": "4.0x47.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "grenade",
-                    "x": 578,
-                    "y": 81,
-                    "direction": 0,
-                    "scale": 1,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0.4"
-                        },
-                        {
-                            "name": "maxVelocity",
-                            "value": "119.99999999999999:3.696282"
-                        },
-                        {
-                            "name": "minVelocity",
-                            "value": "84.0:10.34843"
-                        },
-                        {
-                            "name": "exit",
-                            "value": "3.0x41.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "grenade",
-                    "x": 739,
-                    "y": 82,
-                    "direction": 0,
-                    "scale": 1,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0.6"
-                        },
-                        {
-                            "name": "maxVelocity",
-                            "value": "105.0:5.4465585"
-                        },
-                        {
-                            "name": "minVelocity",
-                            "value": "126.0:10.300486"
-                        },
-                        {
-                            "name": "exit",
-                            "value": "2.0x41.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "grenade",
-                    "x": 920,
-                    "y": 85,
-                    "direction": 0,
-                    "scale": 1,
-                    "attributes": [
-                        {
-                            "name": "hue",
-                            "value": "0.8"
-                        },
-                        {
-                            "name": "maxVelocity",
-                            "value": "123.00000000000003:6.101844"
-                        },
-                        {
-                            "name": "minVelocity",
-                            "value": "146.0:13.923002"
-                        },
-                        {
-                            "name": "exit",
-                            "value": "3.0x34.0"
-                        }
-                    ]
-                },
-                {
-                    "costume": "shootingStar",
-                    "x": 148,
-                    "y": 510,
-                    "direction": 0,
-                    "scale": 1
-                }
-            ]
+        { "costume": "coin", "x": 254, "y": 433, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 20, "scale": 1, "attributes": 
+          [
+            { "name": "velocity", "value": "86.00000000000001:6.11310068623117"},
+            { "name": "turningSpeed", "value": "3.0"}
+          ]
+        },
+        { "costume": "coin10", "x": 85, "y": 310, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "attributes": 
+          [
+            { "name": "velocity", "value": "327.0:7.2401657439591816"},
+            { "name": "turningSpeed", "value": "3.0"}
+          ]
+        },
+        { "costume": "coin100", "x": 544, "y": 432, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 329, "scale": 1, "attributes": 
+          [
+            { "name": "velocity", "value": "344.00000000000006:6.648308055437864"},
+            { "name": "turningSpeed", "value": "3.0"}
+          ]
+        },
+        { "costume": "bee", "x": 598, "y": 501, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
+        { "costume": "grenade", "x": 418, "y": 82, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "attributes": 
+          [
+            { "name": "hue", "value": "0.2"},
+            { "name": "maxVelocity", "value": "123.00000000000003:3.6472592"},
+            { "name": "minVelocity", "value": "85.0:10.530432"},
+            { "name": "exit", "value": "4.0x47.0"}
+          ]
+        },
+        { "costume": "grenade", "x": 578, "y": 81, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "attributes": 
+          [
+            { "name": "hue", "value": "0.4"},
+            { "name": "maxVelocity", "value": "119.99999999999999:3.696282"},
+            { "name": "minVelocity", "value": "84.0:10.34843"},
+            { "name": "exit", "value": "3.0x41.0"}
+          ]
+        },
+        { "costume": "grenade", "x": 739, "y": 82, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "attributes": 
+          [
+            { "name": "hue", "value": "0.6"},
+            { "name": "maxVelocity", "value": "105.0:5.4465585"},
+            { "name": "minVelocity", "value": "126.0:10.300486"},
+            { "name": "exit", "value": "2.0x41.0"}
+          ]
+        },
+        { "costume": "grenade", "x": 920, "y": 85, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "attributes": 
+          [
+            { "name": "hue", "value": "0.8"},
+            { "name": "maxVelocity", "value": "123.00000000000003:6.101844"},
+            { "name": "minVelocity", "value": "146.0:13.923002"},
+            { "name": "exit", "value": "3.0x34.0"}
+          ]
+        },
+        { "costume": "shootingStar", "x": 148, "y": 510, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "attributes": 
+          [
+            { "name": "curveAngle", "value": "59.99999999999999"},
+            { "name": "headingAndLength", "value": "14.999999999999998:400.0"},
+            { "name": "sideDuration", "value": "1"},
+            { "name": "turnAngle", "value": "190.0"}
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }

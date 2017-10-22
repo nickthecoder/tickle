@@ -159,14 +159,17 @@ class Actor(var costume: Costume, val role: Role? = null) {
         }
 
     fun event(name: String) {
-        costume.events[name]?.let { event ->
-            event.choosePose()?.let { changeAppearance(it) }
+        val pose = costume.choosePose(name)
+        if (pose == null) {
 
-            textAppearance?.let { ta ->
-                event.chooseString()?.let {
-                    ta.text = it
-                }
+            val newText = costume.chooseString(name) ?: textAppearance?.text
+            val textStyle = costume.chooseTextStyle(name) ?: textAppearance?.textStyle
+            if (newText != null && textStyle != null) {
+                changeAppearance(newText, textStyle)
             }
+
+        } else {
+            changeAppearance(pose)
         }
     }
 

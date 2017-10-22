@@ -13,7 +13,6 @@ class Eye : AbstractRole() {
 
     override fun activated() {
         pupilA = actor.createChildOnStage("pupil")
-        pupilA.zOrder += 1
     }
 
     override fun tick() {

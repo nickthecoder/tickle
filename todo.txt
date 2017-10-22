@@ -7,9 +7,6 @@ Next
 Right click the ResourcesTree for popup menu :
 	Delete, Rename, New
 
-Use thumbnails of Costume's editor pose in the Resources tree
-	Ditto for Pose
-
 Costumes "Based On" another costume.
 
 Preferences (Code like GameInfo)

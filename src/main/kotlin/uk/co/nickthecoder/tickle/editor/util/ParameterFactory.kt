@@ -44,10 +44,13 @@ fun createFontParameter(parameterName: String = "font"): ChoiceParameter<FontRes
 }
 
 
-fun createCostumeParameter(parameterName: String = "costume"): ChoiceParameter<Costume?> {
+fun createCostumeParameter(parameterName: String = "costume", required: Boolean = true, value: Costume? = null): ChoiceParameter<Costume?> {
 
-    val choice = ChoiceParameter<Costume?>(parameterName, required = true, value = null)
+    val choice = ChoiceParameter<Costume?>(parameterName, required = required, value = value)
 
+    if (!required) {
+        choice.addChoice("", null, "None")
+    }
     Resources.instance.costumes.items().forEach { costumeName, costume ->
         choice.addChoice(costumeName, costume, costumeName)
     }

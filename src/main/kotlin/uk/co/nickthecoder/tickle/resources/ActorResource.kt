@@ -48,12 +48,12 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     val pose: Pose? by lazy {
         val costume = Resources.instance.costumes.find(costumeName)
-        costume?.events?.get(costume.initialEventName)?.choosePose()
+        costume?.choosePose(costume.initialEventName)
     }
 
     val textStyle: TextStyle? by lazy {
         val costume = Resources.instance.costumes.find(costumeName)
-        costume?.events?.get(costume.initialEventName)?.chooseTextStyle()
+        costume?.chooseTextStyle(costume.initialEventName)
     }
 
     var text: String = ""

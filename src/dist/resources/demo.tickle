@@ -1,4 +1,4 @@
-{ "info": { "title": "Tickle", "width": 1024, "height": 600, "resizable": true, "initialScene": "level01", "testScene": "test", "producer": "uk.co.nickthecoder.tickledemo.Demo"}, "preferences": { "outputFormat": "UGLY", "packages": 
+{ "info": { "title": "Tickle", "width": 1024, "height": 600, "resizable": true, "initialScene": "level01", "testScene": "test", "producer": "uk.co.nickthecoder.demo.Demo"}, "preferences": { "outputFormat": "UGLY", "packages": 
   [
     "uk.co.nickthecoder.tickle",
     "uk.co.nickthecoder.demo"
@@ -53,7 +53,7 @@
   [
     { "name": "coins", "costumes": 
       [
-        { "name": "coin10", "role": "uk.co.nickthecoder.demo.Coin", "canRotate": true, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
+        { "name": "coin10", "role": "uk.co.nickthecoder.demo.Coin", "canRotate": true, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "inheritsEventsFrom": "coin", "events": 
           [
             { "name": "default", "poses": 
               [
@@ -212,7 +212,16 @@
             "eye"
           ]
         },
-        { "name": "pupil", "poses": 
+        { "name": "pupil", "costumes": 
+          [
+            "pupil"
+          ]
+        }
+      ]
+    },
+    { "name": "pupil", "role": "", "canRotate": false, "zOrder": 1, "initialEvent": "default", "showInSceneEditor": false, "events": 
+      [
+        { "name": "default", "poses": 
           [
             "pupil"
           ]

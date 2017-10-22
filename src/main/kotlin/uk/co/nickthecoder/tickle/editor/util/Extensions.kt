@@ -70,9 +70,6 @@ fun Pose.isPixelIsOpaque(x: Double, y: Double, threshold: Double = 0.05): Boolea
     return false
 }
 
-// COSTUME
-
-fun Costume.textStyle() = events[initialEventName]?.chooseTextStyle()
 
 // ACTOR RESOURCE
 
