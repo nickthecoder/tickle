@@ -20,10 +20,7 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
 
     init {
         glBindTexture(GL_TEXTURE_2D, handle)
-
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, buffer)
     }
 
@@ -42,7 +39,13 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
     fun cleanUp() {
         unbind()
         glDeleteTextures(handle)
+    }
 
+    /**
+     * Can only delete if there are no Poses using this texture.
+     */
+    override fun usedBy(): Any? {
+        return Resources.instance.poses.items().values.firstOrNull() { it.texture == this }
     }
 
     override fun delete() {
@@ -56,8 +59,6 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
     override fun toString() = "Texture $width x $height handle=$handle"
 
     companion object {
-
-        val OUTSIDE = Color(0f, 0f, 0f, 0f)
 
         private var boundHandle: Int? = null
 

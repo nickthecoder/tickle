@@ -94,10 +94,6 @@ Pose : Allow a "mirrored" version (X,Y or Both)
 	Just make the rectangle have -ve widths/heights???
 	Use this to implement "Bee" without the special transformation
 
-Costume to have an "initial" event name (which is normally "default").
-	But Bee's will be "right" (and Bee will not have a "default" event).
-	Each SceneActor can then override this.
-
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).
 	

@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.TextStyle
+import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Copyable
 import uk.co.nickthecoder.tickle.util.Deletable
@@ -119,6 +120,24 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
      */
     fun editorPose(): Pose? = choosePose("editor") ?: choosePose(initialEventName)
 
+    fun uses(pose: Pose): Boolean {
+        events.values.forEach { event ->
+            if (event.poses.contains(pose)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun uses(fontResource: FontResource): Boolean {
+        events.values.forEach { event ->
+            if (event.textStyles.firstOrNull { it.fontResource === fontResource } != null) {
+                return true
+            }
+        }
+        return false
+    }
+
     override fun copy(): Costume {
         val copy = Costume()
         copy.roleString = roleString
@@ -137,6 +156,11 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
         }
 
         return copy
+    }
+
+    override fun usedBy(): Any? {
+        // TODO Need to load all scenes!
+        return null
     }
 
     override fun delete() {

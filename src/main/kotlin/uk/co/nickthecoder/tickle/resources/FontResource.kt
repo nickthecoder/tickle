@@ -80,6 +80,9 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
         return FontTextureFactoryViaAWT(font, xPadding = xPadding, yPadding = yPadding).create()
     }
 
+    override fun usedBy(): Any? {
+        return Resources.instance.costumes.items().values.firstOrNull { it.uses(this) }
+    }
 
     override fun delete() {
         Resources.instance.fontResources.remove(this)

@@ -208,11 +208,13 @@ class ResourcesTree()
 
         override fun deleteMenuItem(): MenuItem? {
             if (data is Deletable) {
-                val menuItem = MenuItem("Delete ${value}")
-                menuItem.onAction = EventHandler {
-                    data.delete()
+                if (data.usedBy() == null) {
+                    val menuItem = MenuItem("Delete ${value}")
+                    menuItem.onAction = EventHandler {
+                        data.delete()
+                    }
+                    return menuItem
                 }
-                return menuItem
             }
             return null
         }

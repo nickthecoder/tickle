@@ -35,6 +35,10 @@ class Layout : Deletable, Renamable {
         return scene
     }
 
+    override fun usedBy(): Any? {
+        // TODO, Need to load all scenes
+        return null
+    }
 
     override fun delete() {
         Resources.instance.layouts.remove(this)

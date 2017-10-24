@@ -10,6 +10,12 @@ class CostumeGroup(resources: Resources)
 
     var showInSceneEditor: Boolean = true
 
+    /**
+     * A CostumeGroup can be deleted, even if it has Costumes (because those costumes become group-less).
+     * So a CostumeGroup always returns null, and can therefore always be deleted.
+     */
+    override fun usedBy(): Any? = null
+
     override fun delete() {
         items().toMutableMap().forEach { name, costume ->
             remove(name)

@@ -77,6 +77,10 @@ class Pose(
     }
 
 
+    override fun usedBy(): Any? {
+        return Resources.instance.costumes.items().values.firstOrNull { it.uses(this) }
+    }
+
     override fun delete() {
         Resources.instance.poses.remove(this)
     }

@@ -26,6 +26,8 @@ class CompoundInput : Input, Deletable, Renamable {
     }
 
 
+    override fun usedBy() = null
+
     override fun delete() {
         Resources.instance.inputs.remove(this)
     }
