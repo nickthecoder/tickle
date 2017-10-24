@@ -41,6 +41,19 @@ class Resources {
 
     val listeners = mutableListOf<ResourcesListener>()
 
+    fun findName(resource: Any): String? {
+        return when (resource) {
+            is Texture -> textures.findName(resource)
+            is Pose -> poses.findName(resource)
+            is Costume -> costumes.findName(resource)
+            is CostumeGroup -> costumeGroups.findName(resource)
+            is CompoundInput -> inputs.findName(resource)
+            is Layout -> layouts.findName(resource)
+            is FontResource -> fontResources.findName(resource)
+            else -> null
+        }
+    }
+
     fun findCostumeGroup(costumeName: String): CostumeGroup? {
         costumeGroups.items().values.forEach { costumeGroup ->
             if (costumeGroup.find(costumeName) != null) {

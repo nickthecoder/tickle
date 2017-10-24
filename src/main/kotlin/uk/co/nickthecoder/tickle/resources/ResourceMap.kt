@@ -27,6 +27,14 @@ open class ResourceMap<T : Any>(val resources: Resources, val typeLabel: String)
         }
     }
 
+    fun remove(resource: T) {
+        findName(resource)?.let { remove(it) }
+    }
+
+    fun rename(resource: T, newName: String) {
+        findName(resource)?.let { rename(it, newName) }
+    }
+
     fun rename(oldName: String, newName: String) {
         items[oldName]?.let { item ->
             items.remove(oldName)

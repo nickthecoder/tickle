@@ -4,12 +4,17 @@ import org.lwjgl.opengl.GL11.*
 import org.lwjgl.stb.STBImage
 import org.lwjgl.stb.STBImage.stbi_load
 import org.lwjgl.system.MemoryStack
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Renamable
 import java.io.File
 import java.io.IOException
 import java.nio.ByteBuffer
 
 
-class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuffer, val file: File? = null) {
+class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuffer, val file: File? = null)
+
+    : Deletable, Renamable {
 
     val handle: Int = glGenTextures()
 
@@ -38,6 +43,14 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
         unbind()
         glDeleteTextures(handle)
 
+    }
+
+    override fun delete() {
+        Resources.instance.textures.remove(this)
+    }
+
+    override fun rename(newName: String) {
+        Resources.instance.textures.rename(this, newName)
     }
 
     override fun toString() = "Texture $width x $height handle=$handle"

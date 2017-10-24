@@ -8,7 +8,7 @@ import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import java.io.File
 
 
-class RenameTask(file: File) : AbstractTask() {
+class RenameFileTask(file: File) : AbstractTask() {
 
     override val taskRunner = UnthreadedTaskRunner(this)
 

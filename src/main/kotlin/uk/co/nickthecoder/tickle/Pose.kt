@@ -4,13 +4,14 @@ import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Texture
-import uk.co.nickthecoder.tickle.util.Angle
-import uk.co.nickthecoder.tickle.util.Rectd
-import uk.co.nickthecoder.tickle.util.YDownRect
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.util.*
 
 class Pose(
         val texture: Texture,
-        rect: YDownRect = YDownRect(0, 0, texture.width, texture.height)) {
+        rect: YDownRect = YDownRect(0, 0, texture.width, texture.height))
+
+    : Deletable, Renamable {
 
     var rect: YDownRect = rect
         set(v) {
@@ -74,6 +75,16 @@ class Pose(
                     modelMatrix = actor.getModelMatrix())
         }
     }
+
+
+    override fun delete() {
+        Resources.instance.poses.remove(this)
+    }
+
+    override fun rename(newName: String) {
+        Resources.instance.poses.rename(this, newName)
+    }
+
 
     override fun equals(other: Any?): Boolean {
         if (other !is Pose) {

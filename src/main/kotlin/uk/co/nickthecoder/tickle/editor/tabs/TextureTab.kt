@@ -15,7 +15,7 @@ import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.paratask.util.process.Exec
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.util.ImageParameter
-import uk.co.nickthecoder.tickle.editor.util.RenameTask
+import uk.co.nickthecoder.tickle.editor.util.RenameFileTask
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.Resources
 import java.io.File
@@ -112,7 +112,7 @@ class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
 
     fun onRename() {
         texture.file?.let { file ->
-            val renameTask = RenameTask(file)
+            val renameTask = RenameFileTask(file)
             try {
                 check()
             } catch (e: Exception) {

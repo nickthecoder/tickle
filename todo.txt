@@ -4,20 +4,8 @@ Current Work
 Next
 ====
 
-Right click the ResourcesTree for popup menu :
-	Delete, Rename, New
-
-Costumes "Based On" another costume.
-
-Preferences (Code like GameInfo)
-	Resource Tree Thumbnail Size
-	Costume Picker Thumnail Size
-	Output Format (moved from GameInfo)
-
-
-Create groups of Poses? Similar to the groups of Costumes???
-	Hmm, Could just use the texture as the grouping.
-	Anyway, we need a PoseChoiceParameter, which is a MenuButton with a hierarchical menu.
+PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
+Ditto for CostumeChoiceParameter
 
 BUGS
 ====

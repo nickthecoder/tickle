@@ -41,8 +41,7 @@ class CostumeTab(val name: String, val costume: Costume)
         borderPane.center = minorTabs
 
         addDeleteButton {
-            costume.costumeGroup?.remove(name)
-            Resources.instance.costumes.remove(name)
+            costume.delete()
         }
         addCopyButton(costume, ResourceType.COSTUME) { newName, newCostume ->
             Resources.instance.costumes.add(newName, newCostume)

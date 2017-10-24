@@ -17,9 +17,7 @@ import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.SceneStub
 import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
-import uk.co.nickthecoder.tickle.editor.util.ClassLister
-import uk.co.nickthecoder.tickle.editor.util.toJavaFX
-import uk.co.nickthecoder.tickle.editor.util.toTickle
+import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.util.JsonScene
@@ -100,11 +98,25 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
     }
 
     fun onDelete() {
-        TaskPrompter(DeleteSceneTask()).placeOnStage(Stage())
+        val task = DeleteSceneTask(sceneFile)
+        task.taskRunner.listen { cancelled ->
+            if (!cancelled) {
+                close()
+            }
+        }
+        TaskPrompter(task).placeOnStage(Stage())
     }
 
     fun onRename() {
-        TaskPrompter(RenameSceneTask()).placeOnStage(Stage())
+        val task = RenameSceneTask(sceneFile)
+        task.taskRunner.listen { cancelled ->
+            if (!cancelled) {
+                close()
+                sceneResource.file = task.newFile()
+                MainWindow.instance.openTab(task.newNameP.value, sceneResource)
+            }
+        }
+        TaskPrompter(task).placeOnStage(Stage())
     }
 
     override fun removed() {
@@ -132,37 +144,6 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
         }
     }
 
-    inner class DeleteSceneTask : AbstractTask(threaded = false) {
-
-        override val taskD = TaskDescription("deleteScene", description = "Delete scene ${sceneName}. Are you sure?")
-
-        override fun run() {
-            val oldFile = sceneResource.file!!
-            oldFile.delete()
-            Resources.instance.fireRemoved(oldFile, oldFile.nameWithoutExtension)
-            close()
-        }
-    }
-
-    inner class RenameSceneTask() : AbstractTask(threaded = false) {
-        val newNameP = StringParameter("newName")
-        val directoryP = FileParameter("directory", mustExist = true, expectFile = false, value = sceneResource.file?.parentFile)
-
-        override val taskD = TaskDescription("renameScene")
-                .addParameters(newNameP, directoryP)
-
-        override fun run() {
-            val oldFile = sceneResource.file!!
-            val newFile = File(directoryP.value!!, "${newNameP.value}.scene")
-
-            oldFile.renameTo(newFile)
-            Resources.instance.fireRemoved(oldFile, oldFile.nameWithoutExtension)
-            Resources.instance.fireAdded(newFile, newFile.nameWithoutExtension)
-            sceneResource.file = newFile
-            MainWindow.instance.openTab(newFile.nameWithoutExtension, SceneStub(newFile))
-            close()
-        }
-    }
 
 }
 

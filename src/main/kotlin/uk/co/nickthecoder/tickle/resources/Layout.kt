@@ -3,8 +3,10 @@ package uk.co.nickthecoder.tickle.resources
 import uk.co.nickthecoder.tickle.Attributes
 import uk.co.nickthecoder.tickle.Scene
 import uk.co.nickthecoder.tickle.stage.*
+import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Renamable
 
-class Layout() {
+class Layout : Deletable, Renamable {
 
     val layoutStages = mutableMapOf<String, LayoutStage>()
     val layoutViews = mutableMapOf<String, LayoutView>()
@@ -33,9 +35,17 @@ class Layout() {
         return scene
     }
 
+
+    override fun delete() {
+        Resources.instance.layouts.remove(this)
+    }
+
+    override fun rename(newName: String) {
+        Resources.instance.layouts.rename(this, newName)
+    }
 }
 
-class LayoutStage() {
+class LayoutStage {
 
     var stageString: String = GameStage::class.java.name
 

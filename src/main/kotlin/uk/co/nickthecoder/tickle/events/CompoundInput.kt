@@ -1,7 +1,11 @@
 package uk.co.nickthecoder.tickle.events
 
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Renamable
 
-class CompoundInput() : Input {
+
+class CompoundInput : Input, Deletable, Renamable {
 
     val inputs = mutableSetOf<Input>()
 
@@ -19,6 +23,15 @@ class CompoundInput() : Input {
 
     override fun matches(event: KeyEvent): Boolean {
         return inputs.firstOrNull { it.matches(event) } != null
+    }
+
+
+    override fun delete() {
+        Resources.instance.inputs.remove(this)
+    }
+
+    override fun rename(newName: String) {
+        Resources.instance.inputs.rename(this, newName)
     }
 
 }

@@ -3,8 +3,10 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Copyable
+import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Renamable
 
-class Costume : Copyable<Costume> {
+class Costume : Copyable<Costume>, Deletable, Renamable {
 
     var roleString: String = ""
         set(v) {
@@ -135,6 +137,16 @@ class Costume : Copyable<Costume> {
         }
 
         return copy
+    }
+
+    override fun delete() {
+        Resources.instance.costumes.remove(this)
+        costumeGroup?.remove(this)
+    }
+
+    override fun rename(newName: String) {
+        Resources.instance.costumes.rename(this, newName)
+        costumeGroup?.rename(this, newName)
     }
 
     fun choosePose(eventName: String): Pose? = events[eventName]?.choosePose() ?: inheritEventsFrom?.choosePose(eventName)

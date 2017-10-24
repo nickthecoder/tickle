@@ -1,6 +1,10 @@
 package uk.co.nickthecoder.tickle.editor
 
+import javafx.application.Platform
+import javafx.event.EventHandler
 import javafx.scene.Node
+import javafx.scene.control.ContextMenu
+import javafx.scene.control.MenuItem
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
 import javafx.scene.image.ImageView
@@ -8,15 +12,19 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.HBox
+import javafx.stage.Stage
+import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.editor.util.thumbnail
+import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Layout
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
+import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Renamable
 import java.io.File
 
 class ResourcesTree()
@@ -30,18 +38,27 @@ class ResourcesTree()
         root = RootItem()
         isShowRoot = false
         root.children
-        // Prevent Double Click expanding/contracting the item (as this is used to show the contents of the directory).
-        addEventFilter(MouseEvent.MOUSE_PRESSED) { if (it.clickCount == 2) it.consume() }
-        addEventFilter(MouseEvent.MOUSE_CLICKED) { onMouseClicked(it) }
+        addEventFilter(MouseEvent.MOUSE_RELEASED) { onMousePressed(it) }
+        addEventFilter(MouseEvent.MOUSE_PRESSED) { onMousePressed(it) }
         addEventFilter(KeyEvent.KEY_PRESSED) { onKeyPressed(it) }
 
         root.isExpanded = true
     }
 
-    fun onMouseClicked(event: MouseEvent) {
+    fun onMousePressed(event: MouseEvent) {
         if (event.clickCount == 2) {
             editItem()
             event.consume()
+        }
+        if (event.isPopupTrigger) {
+            Platform.runLater {
+                val item = selectionModel.selectedItem
+                if (item != null && item is ResourceItem) {
+                    val menu = item.createContextMenu()
+                    menu.show(MainWindow.instance.stage, event.screenX, event.screenY)
+                }
+            }
+
         }
     }
 
@@ -67,12 +84,44 @@ class ResourcesTree()
         }
     }
 
-    abstract inner class ResourceItem(label: String = "") : TreeItem<String>(label) {
+    abstract inner class ResourceItem(label: String = "", val resourceType: ResourceType)
+
+        : TreeItem<String>(label) {
+
         open fun data(): Any? = null
 
         override fun isLeaf() = true
 
         open fun removed() {}
+
+        fun createContextMenu(): ContextMenu {
+            val menu = ContextMenu()
+            newMenuItem()?.let { menu.items.add(it) }
+            renameMenuItem()?.let { menu.items.add(it) }
+            deleteMenuItem()?.let { menu.items.add(it) }
+
+            return menu
+        }
+
+        open fun newMenuItem(): MenuItem? {
+            if (resourceType.canCreate) {
+                val menuItem = MenuItem("New ${resourceType.label}")
+                menuItem.onAction = EventHandler {
+                    TaskPrompter(NewResourceTask(resourceType)).placeOnStage(Stage())
+                }
+                return menuItem
+            } else {
+                return null
+            }
+        }
+
+        open fun deleteMenuItem(): MenuItem? = null
+
+        open fun renameMenuItem(): MenuItem? = null
+
+        init {
+            graphic = ImageView(EditorAction.imageResource(resourceType.graphicName))
+        }
 
         fun remove(child: ResourceItem) {
             children.remove(child)
@@ -95,7 +144,7 @@ class ResourcesTree()
     }
 
 
-    inner class RootItem : ResourceItem(resources.file.nameWithoutExtension) {
+    inner class RootItem : ResourceItem(resources.file.nameWithoutExtension, ResourceType.ANY) {
 
         init {
             children.addAll(
@@ -113,26 +162,25 @@ class ResourcesTree()
         override fun isLeaf() = false
     }
 
-    inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo, "gameInfo.png") {
+    inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo, ResourceType.GAME_INFO) {
 
         override fun data(): GameInfo = resources.gameInfo
     }
 
-    inner class EditorPreferencesItem() : DataItem("Editor Preferences", resources.gameInfo, "preferences.png") {
+    inner class EditorPreferencesItem() : DataItem("Editor Preferences", resources.gameInfo, ResourceType.PREFERENCES) {
 
         override fun data(): EditorPreferences = resources.preferences
     }
 
-    open inner class DataItem(var name: String, val data: Any, graphic: Node?)
+    open inner class DataItem(var name: String, val data: Any, resourceType: ResourceType, graphic: Node? = null)
 
-        : ResourceItem(name), ResourcesListener {
-
-        constructor(name: String, data: Any, graphicName: String = "unknown.png") :
-                this(name, data, ImageView(EditorAction.imageResource(graphicName)))
+        : ResourceItem(name, resourceType), ResourcesListener {
 
         init {
             resources.listeners.add(this)
-            this.graphic = graphic
+            if (graphic != null) {
+                this.graphic = graphic
+            }
         }
 
         override fun data() = data
@@ -157,12 +205,39 @@ class ResourcesTree()
         override fun removed() {
             resources.listeners.remove(this)
         }
+
+        override fun deleteMenuItem(): MenuItem? {
+            if (data is Deletable) {
+                val menuItem = MenuItem("Delete ${value}")
+                menuItem.onAction = EventHandler {
+                    data.delete()
+                }
+                return menuItem
+            }
+            return null
+        }
+
+        override fun renameMenuItem(): MenuItem? {
+            if (data is Renamable) {
+                val menuItem = MenuItem("Rename")
+                menuItem.onAction = EventHandler {
+                    val oldName = resources.findName(data)
+                    if (oldName != null) {
+                        TaskPrompter(RenameResourceTask(data, resourceType, oldName)).placeOnStage(Stage())
+                    }
+                }
+                return menuItem
+            }
+            return null
+        }
     }
 
-    abstract inner class TopLevelItem(label: String = "", graphicName: String = "folder2.png") : ResourceItem(label), ResourcesListener {
+    abstract inner class TopLevelItem(label: String = "", resourceType: ResourceType)
+
+        : ResourceItem(label, resourceType), ResourcesListener {
+
         init {
             resources.listeners.add(this)
-            graphic = ImageView(EditorAction.imageResource(graphicName))
         }
 
         override fun isLeaf() = false
@@ -173,7 +248,7 @@ class ResourcesTree()
 
     }
 
-    inner class TexturesItem() : TopLevelItem() {
+    inner class TexturesItem() : TopLevelItem("Textures", ResourceType.TEXTURE) {
 
         init {
             resources.textures.items().map { it }.sortedBy { it.key }.forEach { (name, texture) ->
@@ -195,11 +270,11 @@ class ResourcesTree()
 
     inner class TextureItem(name: String, val texture: Texture)
 
-        : DataItem(name, texture, "texture.png") {
+        : DataItem(name, texture, ResourceType.TEXTURE) {
 
         init {
             resources.poses.items().filter { it.value.texture === texture }.map { it }.sortedBy { it.key }.forEach { (name, pose) ->
-                children.add(DataItem(name, pose, wrappedThumbnail(pose)))
+                children.add(DataItem(name, pose, ResourceType.POSE, wrappedThumbnail(pose)))
             }
         }
 
@@ -215,7 +290,7 @@ class ResourcesTree()
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Pose) {
                 if (resource.texture === texture) {
-                    children.add(DataItem(name, resource, "pose.png"))
+                    children.add(DataItem(name, resource, ResourceType.POSE))
                 }
             }
         }
@@ -223,18 +298,18 @@ class ResourcesTree()
         override fun isLeaf() = false
     }
 
-    inner class PosesItem() : TopLevelItem() {
+    inner class PosesItem() : TopLevelItem("Poses", ResourceType.POSE) {
 
         init {
             resources.poses.items().map { it }.sortedBy { it.key }.forEach { (name, pose) ->
-                children.add(DataItem(name, pose, wrappedThumbnail(pose)))
+                children.add(DataItem(name, pose, ResourceType.POSE, wrappedThumbnail(pose)))
             }
             updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Pose) {
-                children.add(DataItem(name, resource, wrappedThumbnail(resource)))
+                children.add(DataItem(name, resource, ResourceType.POSE, wrappedThumbnail(resource)))
                 updateLabel()
             }
         }
@@ -243,18 +318,18 @@ class ResourcesTree()
     }
 
 
-    inner class FontResourcesItem() : TopLevelItem() {
+    inner class FontResourcesItem() : TopLevelItem("Fonts", ResourceType.FONT) {
 
         init {
             resources.fontResources.items().map { it }.sortedBy { it.key }.forEach { (name, fontResource) ->
-                children.add(DataItem(name, fontResource, "font.png"))
+                children.add(DataItem(name, fontResource, ResourceType.FONT))
             }
             updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is FontResource) {
-                children.add(DataItem(name, resource, "font.png"))
+                children.add(DataItem(name, resource, ResourceType.FONT))
                 updateLabel()
             }
         }
@@ -263,7 +338,7 @@ class ResourcesTree()
     }
 
 
-    inner class CostumesItem() : TopLevelItem() {
+    inner class CostumesItem() : TopLevelItem("Costumes", ResourceType.COSTUME) {
 
         init {
             resources.costumeGroups.items().map { it }.sortedBy { it.key }.forEach { (groupName, costumeGroup) ->
@@ -307,7 +382,7 @@ class ResourcesTree()
 
     inner class CostumeGroupItem(name: String, val costumeGroup: CostumeGroup)
 
-        : DataItem(name, costumeGroup, graphicName = "folder2.png") {
+        : DataItem(name, costumeGroup, ResourceType.COSTUME_GROUP) {
 
         init {
             costumeGroup.items().map { it }.sortedBy { it.key }.forEach { (costumeName, costume) ->
@@ -344,7 +419,7 @@ class ResourcesTree()
 
     inner class CostumeItem(name: String, val costume: Costume, val costumeGroup: CostumeGroup?)
 
-        : DataItem(name, costume, wrappedThumbnail(costume)) {
+        : DataItem(name, costume, ResourceType.COSTUME, wrappedThumbnail(costume)) {
 
         override fun resourceRemoved(resource: Any, name: String) {
             if (resource === costume) {
@@ -377,18 +452,18 @@ class ResourcesTree()
         }
     }
 
-    inner class LayoutsItem() : TopLevelItem() {
+    inner class LayoutsItem() : TopLevelItem("Layout", ResourceType.LAYOUT) {
 
         init {
             resources.layouts.items().map { it }.sortedBy { it.key }.forEach { (name, layout) ->
-                children.add(DataItem(name, layout, "layout.png"))
+                children.add(DataItem(name, layout, ResourceType.LAYOUT))
             }
             updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Layout) {
-                children.add(DataItem(name, resource, "layout.png"))
+                children.add(DataItem(name, resource, ResourceType.LAYOUT))
                 updateLabel()
             }
         }
@@ -397,18 +472,18 @@ class ResourcesTree()
 
     }
 
-    inner class InputsItem() : TopLevelItem() {
+    inner class InputsItem() : TopLevelItem("Inputs", ResourceType.INPUT) {
 
         init {
             resources.inputs.items().map { it }.sortedBy { it.key }.forEach { (name, input) ->
-                children.add(DataItem(name, input, "input.png"))
+                children.add(DataItem(name, input, ResourceType.INPUT))
             }
             updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is CompoundInput) {
-                children.add(DataItem(name, resource, "input.png"))
+                children.add(DataItem(name, resource, ResourceType.INPUT))
                 updateLabel()
             }
         }
@@ -418,7 +493,7 @@ class ResourcesTree()
     }
 
     inner class ScenesDirectoryItem(label: String, val directory: File)
-        : TopLevelItem(label, "folder.png") {
+        : TopLevelItem(label, ResourceType.SCENE_DIRECTORY) {
 
         init {
             val directoryLister = FileLister(onlyFiles = false)
@@ -446,7 +521,7 @@ class ResourcesTree()
 
     }
 
-    inner class SceneItem(val file: File) : DataItem(file.nameWithoutExtension, SceneStub(file), "scene.png") {
+    inner class SceneItem(val file: File) : DataItem(file.nameWithoutExtension, SceneStub(file), ResourceType.SCENE) {
         override fun resourceRemoved(resource: Any, name: String) {
             if (resource is File && resource == file) {
                 parent?.let {
@@ -456,6 +531,23 @@ class ResourcesTree()
                 super.resourceRemoved(resource, name)
             }
         }
+
+        override fun deleteMenuItem(): MenuItem? {
+            val menuItem = MenuItem("Delete")
+            menuItem.onAction = EventHandler {
+                TaskPrompter(DeleteSceneTask(file)).placeOnStage(Stage())
+            }
+            return menuItem
+        }
+
+        override fun renameMenuItem(): MenuItem? {
+            val menuItem = MenuItem("Rename")
+            menuItem.onAction = EventHandler {
+                TaskPrompter(RenameSceneTask(file)).placeOnStage(Stage())
+            }
+            return menuItem
+        }
+
     }
 }
 
