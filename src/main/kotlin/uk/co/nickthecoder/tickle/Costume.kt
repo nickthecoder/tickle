@@ -82,7 +82,10 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
 
     fun createRole(): Role? {
         roleClass()?.let {
-            return Role.create(roleString)
+            Role.create(roleString)?.let { role ->
+                attributes.applyToObject(role)
+                return role
+            }
         }
         return null
     }
