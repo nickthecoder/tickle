@@ -7,28 +7,15 @@ import uk.co.nickthecoder.tickle.action.NoAction
 /**
  * A Role that only has a single Action, and does nothing in the tick method itself.
  */
-open class ActionRole() : Role {
+open class ActionRole : Role {
 
-    private var activated: Boolean = false
+    private var finished: Boolean = false
 
     var action: Action = NoAction()
         set(v) {
             field = v
-            if (activated) {
-                v.begin()
-            }
+            finished = v.begin()
         }
-
-    /**
-     * If 'die' is true, then the Actor will be automatically killed when the Action ends.
-     */
-    constructor(action: Action, die: Boolean = true) : this() {
-        if (die) {
-            this.action = action
-        } else {
-            this.action = action.then(NoAction())
-        }
-    }
 
     override lateinit var actor: Actor
 
@@ -37,16 +24,16 @@ open class ActionRole() : Role {
     override fun end() {}
 
     override fun activated() {
-        activated = true
-        action = createAction() ?: NoAction()
-        action.begin()
+        action = createAction()
     }
 
-    open fun createAction(): Action? = NoAction()
+    open fun createAction(): Action = NoAction()
 
     override fun tick() {
-        if (action.act()) {
-            actor.die()
+        if (!finished) {
+            finished = action.act()
         }
     }
+
+    fun isFinished(): Boolean = finished
 }

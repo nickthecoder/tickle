@@ -26,7 +26,7 @@ class Coin : ActionRole() {
     @CostumeAttribute(hasAlpha = false)
     var color: Color = Color.white()
 
-    override fun createAction(): Action? {
+    override fun createAction(): Action {
 
         val growShrink = (Grow(actor, 1.0, 2.0).then(Grow(actor, 1.0, 1.0)).forever())
         val circle = Circle(velocity.angle, turningSpeed).and(MovePolar(actor.position, velocity))

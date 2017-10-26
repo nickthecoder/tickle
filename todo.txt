@@ -30,14 +30,8 @@ InputPicker :
 New Features
 ============
 
-Allow fonts to have multiple outlines i.e. one myfont.png may have myfont-thinOutline.png and myfont.blurredOutline.png
-	Could specify an outline name in TextStyle, and lazily load the extra texture.
-
-TextStyle to have an extraSpacing property which causes letters to be moved further appart
-	Ditto for extra line height.
-
 Allow text style to be overriden in the SceneEditor.
-	Only save the overridden values if the differ from the Costume's values.
+	Only save the overridden values if they differ from the Costume's values.
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 	Just as a prelude to pixel collision detection.
@@ -121,13 +115,16 @@ Ensure Textures are deleted when removed from resources (Use finalise?).
 Add my own "runLater", which will call the code at the end of a tick.
 	I could use this to delete textures (i.e. put the runLater call in Texture.finalize).
 
-Costumes to inherit?
-	Just the events?
-
-
 
 Later
 =====
+
+Allow fonts to have multiple outlines i.e. one myfont.png may have myfont-thinOutline.png and myfont.blurredOutline.png
+	Could specify an outline name in TextStyle, and lazily load the extra texture.
+
+TextStyle to have an extraSpacing property which causes letters to be moved further appart
+	Ditto for extra line height.
+
 
 Create a simpler GUI that a "published" game can use to let players change the input mappings.L
 

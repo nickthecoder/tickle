@@ -25,7 +25,7 @@ class ShootingStar() : ActionRole() {
     @Attribute
     var sideDuration: Double = 1.0
 
-    override fun createAction(): Action? {
+    override fun createAction(): Action {
 
         val growShrink = (Grow(actor, 1.0, 2.0).then(Grow(actor, 1.0, 1.0)).forever())
 

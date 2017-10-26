@@ -9,7 +9,7 @@ import uk.co.nickthecoder.tickle.graphics.Color
 
 class Info : ActionRole() {
 
-    override fun createAction(): Action? {
+    override fun createAction(): Action {
         actor.color = Color.white().semi()
         return Delay(1.0)
                 .then(Do { actor.textAppearance?.text = text() })

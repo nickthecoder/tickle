@@ -110,7 +110,7 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
 
         // TODO Should this ALSO try text style if there was no pose?
         val actor = Actor(this)
-        actor.costume.choosePose(eventName)?.let { actor.changeAppearance(it) }
+        choosePose(eventName)?.let { actor.changeAppearance(it) }
         return Actor(this)
     }
 

@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.tickle.action
 
+import uk.co.nickthecoder.tickle.Game
+
 interface Action {
 
     /**
@@ -38,6 +40,11 @@ interface Action {
 
     fun whilst(conditional: Action) = WhilstAction(conditional, this)
 
-    fun until(conditional: () -> Boolean) = UntilAction(conditional, this)
+    fun until(conditional: () -> Boolean) = UntilAction(this, conditional)
+
+    fun forSeconds(seconds: Double): UntilAction {
+        val endAt = Game.instance.seconds + seconds
+        return UntilAction(this) { Game.instance.seconds >= endAt }
+    }
 
 }

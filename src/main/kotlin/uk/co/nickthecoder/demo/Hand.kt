@@ -6,6 +6,6 @@ import uk.co.nickthecoder.tickle.action.movement.FollowMouse
 
 class Hand : ActionRole() {
 
-    override fun createAction(): Action? = FollowMouse(actor.position, actor.stage!!.firstView()!!)
+    override fun createAction(): Action = FollowMouse(actor.position, actor.stage!!.firstView()!!)
 
 }
