@@ -26,6 +26,10 @@ object SoundManager {
     val context: Long
         get() = _context
 
+    private val MAX_SOUNDS = 10
+
+    private val sources = mutableListOf<SoundSource>()
+
     fun initialise() {
 
         if (_device != 0L) {
@@ -44,12 +48,22 @@ object SoundManager {
         }
         ALC10.alcMakeContextCurrent(_context)
         AL.createCapabilities(_capabilities)
+
+        for (i in 0..MAX_SOUNDS) {
+            sources.add(SoundSource())
+        }
     }
 
     fun ensureInitialised() {
         if (_device == 0L) {
             initialise()
         }
+    }
+
+    private fun findFreeSource(): SoundSource? = sources.firstOrNull { !it.isPlaying() }
+
+    fun play(sound: Sound) {
+        findFreeSource()?.play(sound)
     }
 
     fun cleanUp() {

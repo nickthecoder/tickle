@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.Copyable
 import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Renamable
@@ -182,6 +183,8 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
     fun chooseTextStyle(eventName: String): TextStyle? = events[eventName]?.chooseTextStyle() ?: inheritEventsFrom?.chooseTextStyle(eventName)
 
     fun chooseString(eventName: String): String? = events[eventName]?.chooseString() ?: inheritEventsFrom?.chooseString(eventName)
+
+    fun chooseSound(eventName: String): Sound? = events[eventName]?.chooseSound() ?: inheritEventsFrom?.chooseSound(eventName)
 
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }

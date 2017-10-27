@@ -6,6 +6,7 @@ import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.sound.Sound
 
 
 fun createTextureParameter(parameterName: String = "texture"): ChoiceParameter<Texture?> {
@@ -53,6 +54,17 @@ fun createCostumeParameter(parameterName: String = "costume", required: Boolean 
     }
     Resources.instance.costumes.items().forEach { costumeName, costume ->
         choice.addChoice(costumeName, costume, costumeName)
+    }
+    return choice
+}
+
+
+fun createSoundParameter(parameterName: String = "sound"): ChoiceParameter<Sound?> {
+
+    val choice = ChoiceParameter<Sound?>(parameterName, required = true, value = null)
+
+    Resources.instance.sounds.items().forEach { name, sound ->
+        choice.addChoice(name, sound, name)
     }
     return choice
 }

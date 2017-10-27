@@ -15,6 +15,7 @@ import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.sound.Sound
 
 class CostumeTab(val name: String, val costume: Costume)
 
@@ -193,6 +194,12 @@ class CostumeTab(val name: String, val costume: Costume)
                     inner.stringP.value = str
                     inner.typeP.value = inner.stringP
                 }
+                event.sounds.forEach { sound ->
+                    val inner = eventsP.newValue()
+                    inner.eventNameP.value = eventName
+                    inner.soundP.value = sound
+                    inner.typeP.value = inner.soundP
+                }
             }
         }
 
@@ -207,6 +214,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     inner.costumeP -> addCostume(inner.eventNameP.value, inner.costumeP.value!!)
                     inner.textStyleP -> addTextStyle(inner.eventNameP.value, inner.textStyleP.createTextStyle())
                     inner.stringP -> addString(inner.eventNameP.value, inner.stringP.value)
+                    inner.soundP -> addSound(inner.eventNameP.value, inner.soundP.value!!)
                 }
             }
         }
@@ -246,6 +254,15 @@ class CostumeTab(val name: String, val costume: Costume)
             }
             event.strings.add(str)
         }
+
+        fun addSound(eventName: String, sound: Sound) {
+            var event = costume.events[eventName]
+            if (event == null) {
+                event = CostumeEvent()
+                costume.events[eventName] = event
+            }
+            event.sounds.add(sound)
+        }
     }
 
     inner class EventParameter() : MultipleGroupParameter("event") {
@@ -258,8 +275,10 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val stringP = StringParameter("string")
 
+        val soundP = createSoundParameter()
+
         val typeP = OneOfParameter("type", value = poseP, choiceLabel = "Type")
-                .addParameters(poseP, costumeP, textStyleP, stringP)
+                .addParameters(poseP, costumeP, textStyleP, stringP, soundP)
 
         init {
             addParameters(eventNameP, typeP)
@@ -273,6 +292,7 @@ class CostumeTab(val name: String, val costume: Costume)
                 costumeP -> Resources.instance.costumes.findName(costumeP.value)
                 textStyleP -> Resources.instance.fontResources.findName(textStyleP.fontP.value)
                 stringP -> stringP.value
+                soundP -> Resources.instance.sounds.findName(soundP.value)
                 else -> ""
             }
             return "$eventName ($type) $dataName"

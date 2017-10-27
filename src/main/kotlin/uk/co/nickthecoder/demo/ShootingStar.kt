@@ -33,6 +33,7 @@ class ShootingStar() : ActionRole() {
                 .and(Turn(headingAndLength.angle, curveAngle, sideDuration, Eases.easeInOutExpo)))
 
                 .then(Turn(headingAndLength.angle, turnAngle, 0.0))
+                .then { actor.event("changeDirection") }
 
         return growShrink.and(edge.forever())
     }

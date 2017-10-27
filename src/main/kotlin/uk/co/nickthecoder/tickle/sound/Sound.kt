@@ -59,25 +59,21 @@ class Sound {
         }
     }
 
+    private fun readFileIntoBuffer(file: File): ByteBuffer {
+
+        val path = file.toPath()
+        Files.newByteChannel(path).use { byteChannel ->
+            val buffer = BufferUtils.createByteBuffer(byteChannel.size().toInt() + 1)
+            while (byteChannel.read(buffer) != -1) {
+            }
+            buffer.flip()
+            return buffer
+        }
+    }
+
     fun cleanUp() {
         AL10.alDeleteBuffers(handle)
     }
 
-    companion object {
-
-
-        private fun readFileIntoBuffer(file: File): ByteBuffer {
-
-            val path = file.toPath()
-            Files.newByteChannel(path).use { byteChannel ->
-                val buffer = BufferUtils.createByteBuffer(byteChannel.size().toInt() + 1)
-                while (byteChannel.read(buffer) != -1) {
-                }
-                buffer.flip()
-                return buffer
-            }
-        }
-
-    }
-
+    override fun toString() = "Sound : file=$file"
 }

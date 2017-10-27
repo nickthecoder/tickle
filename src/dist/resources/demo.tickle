@@ -49,6 +49,10 @@
     { "name": "eye", "texture": "sprites", "left": 63, "bottom": 113, "right": 93, "top": 68, "offsetX": 16, "offsetY": 23, "direction": 0},
     { "name": "pupil", "texture": "sprites", "left": 97, "bottom": 104, "right": 111, "top": 89, "offsetX": 7, "offsetY": 7, "direction": 0}
   ]
+, "sounds": 
+  [
+    { "name": "fire", "file": "sounds/fire.ogg"}
+  ]
 , "costumeGroups": 
   [
     { "name": "coins", "costumes": 
@@ -154,6 +158,11 @@
         { "name": "default", "poses": 
           [
             "spark"
+          ]
+        },
+        { "name": "changeDirection", "sounds": 
+          [
+            "fire"
           ]
         }
       ]
@@ -311,9 +320,5 @@
         { "key": "C", "state": "PRESSED"}
       ]
     }
-  ]
-, "sounds": 
-  [
-    { "name": "fire", "file": "sounds/fire.ogg"}
   ]
 }

@@ -51,10 +51,10 @@ class JsonResources {
         addArray(jroot, "textures", saveTextures())
         addArray(jroot, "fonts", saveFonts())
         addArray(jroot, "poses", savePoses())
+        addArray(jroot, "sounds", saveSounds())
         addArray(jroot, "costumeGroups", saveCostumeGroups())
         addArray(jroot, "costumes", saveCostumes(resources.costumes, false))
         addArray(jroot, "inputs", saveInputs())
-        addArray(jroot, "sounds", saveSounds())
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
             jroot.writeTo(it, resources.preferences.outputFormat.writerConfig)
@@ -76,11 +76,11 @@ class JsonResources {
         val jlayouts = jroot.get("layouts")
         val jtextures = jroot.get("textures")
         val jfonts = jroot.get("fonts")
+        val jsounds = jroot.get("sounds")
         val jposes = jroot.get("poses")
         val jcostumeGroups = jroot.get("costumeGroups")
         val jcostumes = jroot.get("costumes")
         val jinputs = jroot.get("inputs")
-        val jsounds = jroot.get("sounds")
 
         if (jinfo is JsonObject) {
             loadInfo(jinfo)
@@ -97,6 +97,9 @@ class JsonResources {
         if (jfonts is JsonArray) {
             loadFonts(jfonts)
         }
+        if (jsounds is JsonArray) {
+            loadSounds(jsounds)
+        }
         if (jposes is JsonArray) {
             loadPoses(jposes)
         }
@@ -108,9 +111,6 @@ class JsonResources {
         }
         if (jinputs is JsonArray) {
             loadInputs(jinputs)
-        }
-        if (jsounds is JsonArray) {
-            loadSounds(jsounds)
         }
 
         // Now all costume have been loaded, lets add the costume events.
@@ -493,6 +493,7 @@ class JsonResources {
                         }
                         jevent.add("textStyles", jtextStyles)
                     }
+
                     if (event.strings.isNotEmpty()) {
                         val jstrings = JsonArray()
                         event.strings.forEach { str ->
@@ -500,6 +501,18 @@ class JsonResources {
                         }
                         jevent.add("strings", jstrings)
                     }
+
+
+                    if (event.sounds.isNotEmpty()) {
+                        val jsounds = JsonArray()
+                        event.sounds.forEach { sound ->
+                            resources.sounds.findName(sound)?.let { soundName ->
+                                jsounds.add(soundName)
+                            }
+                        }
+                        jevent.add("sounds", jsounds)
+                    }
+
                 }
                 JsonUtil.saveAttributes(jcostume, costume.attributes)
 
@@ -575,6 +588,15 @@ class JsonResources {
                         val jstrings = it.asArray()
                         jstrings.forEach {
                             event.strings.add(it.asString())
+                        }
+                    }
+
+                    jevent.get("sounds")?.let {
+                        val jsounds = it.asArray()
+                        jsounds.forEach {
+                            val soundName = it.asString()
+                            println("Looking for sound $it -> ${resources.sounds.find(soundName)}")
+                            resources.sounds.find(soundName)?.let { event.sounds.add(it) }
                         }
                     }
 
