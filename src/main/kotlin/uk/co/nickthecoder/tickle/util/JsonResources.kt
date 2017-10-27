@@ -9,6 +9,7 @@ import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.resources.*
+import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
 import uk.co.nickthecoder.tickle.stage.FlexVAlignment
 import java.io.*
@@ -53,6 +54,7 @@ class JsonResources {
         addArray(jroot, "costumeGroups", saveCostumeGroups())
         addArray(jroot, "costumes", saveCostumes(resources.costumes, false))
         addArray(jroot, "inputs", saveInputs())
+        addArray(jroot, "sounds", saveSounds())
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
             jroot.writeTo(it, resources.preferences.outputFormat.writerConfig)
@@ -78,6 +80,7 @@ class JsonResources {
         val jcostumeGroups = jroot.get("costumeGroups")
         val jcostumes = jroot.get("costumes")
         val jinputs = jroot.get("inputs")
+        val jsounds = jroot.get("sounds")
 
         if (jinfo is JsonObject) {
             loadInfo(jinfo)
@@ -105,6 +108,9 @@ class JsonResources {
         }
         if (jinputs is JsonArray) {
             loadInputs(jinputs)
+        }
+        if (jsounds is JsonArray) {
+            loadSounds(jsounds)
         }
 
         // Now all costume have been loaded, lets add the costume events.
@@ -804,6 +810,33 @@ class JsonResources {
                 resources.fontResources.add(name, fontResource)
             }
             //println("Loaded pose $name : ${pose}")
+        }
+    }
+
+
+    // SOUNDS
+
+    fun saveSounds(): JsonArray {
+        val jsounds = JsonArray()
+        resources.sounds.items().forEach { name, sound ->
+            sound.file?.let { file ->
+                val jsound = JsonObject()
+                jsound.add("name", name)
+                jsound.add("file", resources.toPath(file))
+                jsounds.add(jsound)
+            }
+        }
+        return jsounds
+    }
+
+    fun loadSounds(jsounds: JsonArray) {
+        jsounds.forEach {
+            val jsound = it.asObject()
+            val name = jsound.get("name").asString()
+            val file = resources.fromPath(jsound.get("file").asString())
+            resources.sounds.add(name, Sound(file))
+
+            // println("Loaded texture $name : $file")
         }
     }
 

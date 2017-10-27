@@ -1,8 +1,10 @@
 package uk.co.nickthecoder.tickle.resources
 
 import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.editor.util.ResourceType
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
+import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
@@ -18,19 +20,21 @@ class Resources {
 
     val preferences = EditorPreferences()
 
-    val textures = ResourceMap<Texture>(this, "Texture")
+    val textures = ResourceMap<Texture>(this, ResourceType.TEXTURE)
 
-    val poses = ResourceMap<Pose>(this, "Pose")
+    val poses = ResourceMap<Pose>(this, ResourceType.POSE)
 
-    val costumes = ResourceMap<Costume>(this, "Costume")
+    val costumes = ResourceMap<Costume>(this, ResourceType.COSTUME)
 
-    val costumeGroups = ResourceMap<CostumeGroup>(this, "Costume Group")
+    val costumeGroups = ResourceMap<CostumeGroup>(this, ResourceType.COSTUME_GROUP)
 
-    val inputs = ResourceMap<CompoundInput>(this, "Input")
+    val inputs = ResourceMap<CompoundInput>(this, ResourceType.INPUT)
 
-    val layouts = ResourceMap<Layout>(this, "Layout")
+    val layouts = ResourceMap<Layout>(this, ResourceType.LAYOUT)
 
-    val fontResources = ResourceMap<FontResource>(this, "Font")
+    val fontResources = ResourceMap<FontResource>(this, ResourceType.FONT)
+
+    val sounds = ResourceMap<Sound>(this, ResourceType.SOUND)
 
 
     val sceneDirectory: File

@@ -21,11 +21,11 @@ class Game(
     var director: Director = NoDirector()
     var scene: Scene = Scene()
 
-    lateinit var gameLoop: GameLoop
+    var gameLoop: GameLoop
 
     /**
      * A measure of time in seconds. Updated once per frame, It is actually just System.nano converted to
-     * seconds (as a float).
+     * seconds.
      */
     var seconds: Double = 0.0
 
@@ -36,31 +36,23 @@ class Game(
 
 
     init {
+        Game.instance = this
         Resources.instance = resources
         producer = resources.gameInfo.createProducer()
 
         instance = this
-        // TODO Move later in the Game lifecycle when scene loading is implemented.
-        // At the moment this needs to be here, because Demo creates the actors in it's constructor.
-
         seconds = System.nanoTime() / 1_000_000_000.0
+        window.keyboardEvents { onKeyEvent(it) }
+
+        gameLoop = FullSpeedGameLoop(this)
+        gameLoop.resetStats()
     }
 
     fun run(sceneFile: File) {
-        initialise()
         producer.begin()
         producer.startScene(sceneFile)
         loop()
         cleanUp()
-    }
-
-    fun initialise() {
-        Game.instance = this
-
-        window.keyboardEvents { onKeyEvent(it) }
-        gameLoop = FullSpeedGameLoop(this)
-
-        gameLoop.resetStats()
     }
 
     fun loop() {
@@ -80,13 +72,13 @@ class Game(
         return JsonScene(sceneFile).sceneResource
     }
 
-    fun startScene(scenePath : String) {
+    fun startScene(scenePath: String) {
         val file = resources.scenePathToFile(scenePath)
         val sr = loadScene(file)
         startScene(sr)
     }
 
-    fun mergeScene(scenePath : String) {
+    fun mergeScene(scenePath: String) {
         val file = resources.scenePathToFile(scenePath)
         val sr = loadScene(file)
         val extraScene = sr.createScene()

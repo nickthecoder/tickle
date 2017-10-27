@@ -1,6 +1,8 @@
 package uk.co.nickthecoder.tickle.resources
 
-open class ResourceMap<T : Any>(val resources: Resources, val typeLabel: String) {
+import uk.co.nickthecoder.tickle.editor.util.ResourceType
+
+open class ResourceMap<T : Any>(val resources: Resources, val resourceType : ResourceType) {
 
     private val items = mutableMapOf<String, T>()
 

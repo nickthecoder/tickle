@@ -23,6 +23,7 @@ import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Layout
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
+import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Renamable
 import java.io.File
@@ -153,6 +154,7 @@ class ResourcesTree()
                     TexturesItem(),
                     PosesItem(),
                     FontResourcesItem(),
+                    SoundsItem(),
                     CostumesItem(),
                     InputsItem(),
                     LayoutsItem(),
@@ -337,6 +339,26 @@ class ResourcesTree()
         }
 
         override fun toString() = "Fonts (${children.size})"
+    }
+
+
+    inner class SoundsItem() : TopLevelItem("Sounds", ResourceType.SOUND) {
+
+        init {
+            resources.sounds.items().map { it }.sortedBy { it.key }.forEach { (name, sound) ->
+                children.add(DataItem(name, sound, ResourceType.SOUND))
+            }
+            updateLabel()
+        }
+
+        override fun resourceAdded(resource: Any, name: String) {
+            if (resource is Sound) {
+                children.add(DataItem(name, resource, ResourceType.SOUND))
+                updateLabel()
+            }
+        }
+
+        override fun toString() = "Sounds (${children.size})"
     }
 
 

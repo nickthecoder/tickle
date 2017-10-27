@@ -11,6 +11,7 @@ enum class ResourceType(val label: String, val graphicName: String, val canCreat
     LAYOUT("Layout", "layout.png"),
     INPUT("Input", "input.png"),
     FONT("Font", "font.png"),
+    SOUND("Sound", "sound.png"),
     SCENE_DIRECTORY("Scene Directory", "folder.png"),
     SCENE("Scene", "scene.png")
 }

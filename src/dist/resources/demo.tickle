@@ -312,4 +312,8 @@
       ]
     }
   ]
+, "sounds": 
+  [
+    { "name": "fire", "file": "sounds/fire.ogg"}
+  ]
 }

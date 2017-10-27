@@ -1,12 +1,13 @@
 package uk.co.nickthecoder.tickle
 
+import uk.co.nickthecoder.tickle.editor.util.ResourceType
 import uk.co.nickthecoder.tickle.resources.ResourceMap
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Renamable
 
 class CostumeGroup(resources: Resources)
-    : ResourceMap<Costume>(resources, "Costume"), Deletable, Renamable {
+    : ResourceMap<Costume>(resources, ResourceType.COSTUME), Deletable, Renamable {
 
     var showInSceneEditor: Boolean = true
 

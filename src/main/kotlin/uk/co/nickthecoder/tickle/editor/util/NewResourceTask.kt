@@ -14,6 +14,7 @@ import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.resources.*
+import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 
@@ -41,6 +42,8 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
     val sceneDirectoryP = InformationParameter("sceneDirectory", information = "")
 
     val sceneP = FileParameter("scene", label = "Directory", expectFile = false, value = Resources.instance.sceneDirectory.absoluteFile)
+
+    val soundP = FileParameter("soundFile", label = "File", value = File(Resources.instance.file.parentFile, "sounds").absoluteFile, extensions = listOf("ogg"))
 
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
 
@@ -74,6 +77,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
             ResourceType.FONT -> fontP
             ResourceType.SCENE_DIRECTORY -> sceneDirectoryP
             ResourceType.SCENE -> sceneP
+            ResourceType.SOUND -> soundP
             else -> null
 
         }
@@ -86,7 +90,8 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
                     "Layout" to layoutP,
                     "Input" to inputP,
                     "Scene Directory" to sceneDirectoryP,
-                    "Scene" to sceneP)
+                    "Scene" to sceneP,
+                    "Sound" to soundP)
         } else {
             resourceTypeP.hidden = true
             resourceTypeP.value = parameter
@@ -105,6 +110,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
             layoutP -> Resources.instance.layouts
             inputP -> Resources.instance.inputs
             fontP -> Resources.instance.fontResources
+            soundP -> Resources.instance.sounds
             sceneDirectoryP -> null
             sceneP -> null
             else -> null
@@ -185,11 +191,15 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
                 Resources.instance.fireAdded(file, nameP.value)
             }
             fontP -> {
-
                 val fontResource = FontResource()
                 fontP.update(fontResource)
                 Resources.instance.fontResources.add(nameP.value, fontResource)
                 data = fontResource
+            }
+            soundP -> {
+                val sound = Sound(soundP.value!!)
+                Resources.instance.sounds.add(nameP.value, sound)
+                data = sound
             }
         }
 

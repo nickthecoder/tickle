@@ -24,6 +24,7 @@ import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Layout
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
@@ -203,6 +204,9 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
         } else if (data is FontResource) {
             return FontTab(name, data)
+
+        } else if (data is Sound) {
+            return SoundTab(name, data)
         }
 
         return null

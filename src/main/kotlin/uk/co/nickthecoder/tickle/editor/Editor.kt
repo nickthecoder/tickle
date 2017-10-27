@@ -4,15 +4,17 @@ import javafx.application.Application
 import javafx.stage.Stage
 import org.lwjgl.glfw.GLFW
 import uk.co.nickthecoder.paratask.util.AutoExit
-import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.guessTickleFile
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.sound.SoundManager
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
-class Editor() : Application() {
+class Editor : Application() {
 
-    var window: Window? = null
+    lateinit var window: Window
 
     override fun start(primaryStage: Stage) {
 
@@ -20,15 +22,16 @@ class Editor() : Application() {
         window = Window("Tickle Editor Hidden Window", 100, 100)
         val resources = if (resourceFile == null) Resources() else JsonResources(resourceFile!!).resources
         Resources.instance = resources
+        Game(window, resources)
 
         println("Loaded resource, creating main window")
-        MainWindow(primaryStage, window!!)
+        MainWindow(primaryStage, window)
     }
 
     override fun stop() {
         println("Stopping JavaFX Application, deleting GL context")
-        window?.delete()
-        window = null
+        window.delete()
+        SoundManager.cleanUp()
 
         // Terminate GLFW and free the error callback
         GLFW.glfwTerminate()

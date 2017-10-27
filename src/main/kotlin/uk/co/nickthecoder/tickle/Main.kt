@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import uk.co.nickthecoder.tickle.graphics.Window
+import uk.co.nickthecoder.tickle.sound.SoundManager
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
@@ -66,10 +67,9 @@ fun startGame(resourcesFile: File, sceneFile: File? = null) {
 
     Game(window, resources).run(sceneFile ?: resources.gameInfo.initialScenePath)
 
+    // Clean up OpenGL and OpenAL
     window.delete()
-
-    // Terminate GLFW and free the error callback
+    SoundManager.cleanUp()
     GLFW.glfwTerminate()
     GLFW.glfwSetErrorCallback(null).free()
-
 }

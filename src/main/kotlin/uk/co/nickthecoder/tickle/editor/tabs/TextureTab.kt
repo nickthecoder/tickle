@@ -110,6 +110,8 @@ class TextureTask(val name: String, val texture: Texture) : AbstractTask() {
         }
     }
 
+    // TODO Renaming the file doesn't change the Texture object
+
     fun onRename() {
         texture.file?.let { file ->
             val renameTask = RenameFileTask(file)
