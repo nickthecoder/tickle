@@ -12,7 +12,7 @@ import java.io.IOException
 import java.nio.ByteBuffer
 
 
-class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuffer, val file: File? = null)
+class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuffer?, val file: File? = null)
 
     : Deletable, Renamable {
 
@@ -54,6 +54,41 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
 
     override fun rename(newName: String) {
         Resources.instance.textures.rename(this, newName)
+    }
+
+    /**
+     * Transfers the texture from the GPU back to main memory (which is SLOW).
+     * The result is a ByteArray or size width * height * 4, and the format is RGBA.
+     * i.e. to get the alpha value at x,y :
+     *
+     *     read()[ (y * height + x) * 4 + 3 ]
+     *
+     * and then deal with the annoyance of java's lack of unsigned bytes. Grr :
+     *
+     *     .toInt() & 0xFF
+     */
+    fun read(): ByteArray {
+        bind()
+        val pixels = ByteArray(width * height * 4)
+        val buffer = ByteBuffer.allocateDirect(pixels.size)
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer)
+        buffer.get(pixels)
+        return pixels
+    }
+
+    /**
+     * This is used for debugging only. It dumps the alpha channel of the texture, showing values in the range 0..F
+     * i.e. it is a compressed form, only discarding the lowest 4 bits.
+     */
+    fun dumpAlpha() {
+        val pixels = read()
+        for (y in height - 1 downTo 0) {
+            for (x in 0..width - 1) {
+                val alpha = pixels[(x + (y * width)) * 4 + 3]
+                print(((alpha.toInt() and 0xff) / 16).toString(16))
+            }
+            println()
+        }
     }
 
     override fun toString() = "Texture $width x $height handle=$handle"

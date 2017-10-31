@@ -29,7 +29,7 @@ class Pose(
     val direction = Angle()
 
 
-    private val rectd = Rectd(0.0, 0.0, 1.0, 1.0)
+    internal val rectd = Rectd(0.0, 0.0, 1.0, 1.0)
 
     init {
         updateRectd()

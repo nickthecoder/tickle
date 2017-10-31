@@ -54,8 +54,8 @@ class Renderer(val window: Window) {
         drawing = false
 
         /* Load shaders */
-        val vertexShader = Shader.load(ShaderType.VERTEX_SHADER, Game::class.java.getResourceAsStream("shaders/legacy.vert"))
-        val fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, Game::class.java.getResourceAsStream("shaders/legacy.frag"))
+        val vertexShader = Shader.load(ShaderType.VERTEX_SHADER, Game::class.java.getResourceAsStream("shaders/renderer.vert"))
+        val fragmentShader = Shader.load(ShaderType.FRAGMENT_SHADER, Game::class.java.getResourceAsStream("shaders/renderer.frag"))
 
         program.attachShaders(vertexShader, fragmentShader)
         program.link()
@@ -74,19 +74,10 @@ class Renderer(val window: Window) {
         program.enableVertexAttribute(texAttrib)
         program.pointVertexAttribute(texAttrib, 2, 4 * java.lang.Float.BYTES, 2L * java.lang.Float.BYTES)
 
-        /* Set texture uniform */
-        val uniTex = program.getUniformLocation("texImage")
-        program.setUniform(uniTex, 0)
-
         /* Set model matrix to identity matrix */
         val model = Matrix4f()
         uniModel = program.getUniformLocation("model")
         program.setUniform(uniModel, model)
-
-        /* Set view matrix to identity matrix */
-        val view = Matrix4f()
-        val uniView = program.getUniformLocation("view")
-        program.setUniform(uniView, view)
 
         /* Set color uniform */
         uniColor = program.getUniformLocation("color")
@@ -94,7 +85,6 @@ class Renderer(val window: Window) {
 
         // centerView(0f, 0f)
     }
-
 
     fun changeProjection(projection: Matrix4f) {
         val uniProjection = program.getUniformLocation("projection")
@@ -110,6 +100,7 @@ class Renderer(val window: Window) {
     }
 
     fun beginView() {
+        program.use()
         currentColor.red = -1.12345f // An invalid value, therefore equals tests will fail
         currentTexture = null
     }

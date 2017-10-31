@@ -11,18 +11,8 @@
     },
     { "name": "main", "actors": 
       [
-        { "costume": "plainText", "x": 175, "y": 395, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 45, "scale": 1, "text": "Hello World"},
-        { "costume": "plainText", "x": 327, "y": 410, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 6, "scale": 2, "text": "Another text"},
-        { "costume": "spark", "x": 462, "y": 562, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 2},
-        { "costume": "info", "x": 522, "y": 574, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "text": ""},
-        { "costume": "grenade", "x": 81, "y": 538, "xAlignment": "RIGHT", "yAlignment": "RATIO", "direction": 0, "scale": 1, "attributes": 
-          [
-            { "name": "exit", "value": "0.0x50.0"},
-            { "name": "hue", "value": "1"},
-            { "name": "maxVelocity", "value": "20.0:12.0"},
-            { "name": "minVelocity", "value": "-20.0:2.0"}
-          ]
-        }
+        { "costume": "bee", "x": 357, "y": 305, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
+        { "costume": "hand", "x": 455, "y": 243, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1}
       ]
     }
   ]

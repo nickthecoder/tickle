@@ -319,6 +319,11 @@
       [
         { "key": "C", "state": "PRESSED"}
       ]
+    },
+    { "name": "overlap", "keys": 
+      [
+        { "key": "O", "state": "PRESSED"}
+      ]
     }
   ]
 }

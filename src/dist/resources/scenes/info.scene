@@ -1,56 +1,13 @@
-{
-    "director": "uk.co.nickthecoder.tickle.NoDirector",
-    "background": "#000000",
-    "showMouse": true,
-    "layout": "glass",
-    "stages": [
-        {
-            "name": "glass",
-            "actors": [
-                {
-                    "costume": "info",
-                    "x": 1000,
-                    "y": 600,
-                    "direction": 0,
-                    "scale": 1,
-                    "text": "Info"
-                },
-                {
-                    "costume": "hand",
-                    "x": 0,
-                    "y": 600,
-                    "direction": 0,
-                    "scale": 1
-                },
-                {
-                    "costume": "eye",
-                    "x": 80,
-                    "y": 560,
-                    "direction": 0,
-                    "scale": 1
-                },
-                {
-                    "costume": "eye",
-                    "x": 120,
-                    "y": 560,
-                    "direction": 0,
-                    "scale": 1
-                },
-                {
-                    "costume": "eye",
-                    "x": 960,
-                    "y": 40,
-                    "direction": 0,
-                    "scale": 1
-                },
-                {
-                    "costume": "eye",
-                    "x": 1000,
-                    "y": 40,
-                    "direction": 0,
-                    "scale": 1
-                }
-            ]
-        }
-    ]
+{ "director": "uk.co.nickthecoder.tickle.NoDirector", "background": "#000000", "showMouse": true, "layout": "glass", "stages": 
+  [
+    { "name": "glass", "actors": 
+      [
+        { "costume": "info", "x": 1000, "y": 600, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "text": "Info"},
+        { "costume": "eye", "x": 80, "y": 560, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
+        { "costume": "eye", "x": 120, "y": 560, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
+        { "costume": "eye", "x": 960, "y": 40, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
+        { "costume": "eye", "x": 1000, "y": 40, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1}
+      ]
+    }
+  ]
 }

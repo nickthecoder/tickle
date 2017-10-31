@@ -595,7 +595,6 @@ class JsonResources {
                         val jsounds = it.asArray()
                         jsounds.forEach {
                             val soundName = it.asString()
-                            println("Looking for sound $it -> ${resources.sounds.find(soundName)}")
                             resources.sounds.find(soundName)?.let { event.sounds.add(it) }
                         }
                     }

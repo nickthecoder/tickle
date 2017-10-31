@@ -104,7 +104,6 @@ class Scene {
         }
 
         with(Game.instance.renderer) {
-            clearColor(background)
             layout(window.width, window.height)
         }
 
@@ -131,6 +130,7 @@ class Scene {
 
     fun draw(renderer: Renderer) {
         // println("Rendering scene rects=${views.values.map { it.rect }} #actors=${views.values.filterIsInstance<StageView>().map { it.stage.actors.size }}")
+        renderer.clearColor(background)
         renderer.clear()
 
         orderedViews?.forEach { view ->
