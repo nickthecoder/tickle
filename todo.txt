@@ -1,6 +1,8 @@
 Current Work
 ============
 
+PixelOverlap doesn't use the model's transformation matrix! Eeek.
+
 Next
 ====
 
@@ -35,46 +37,6 @@ Allow text style to be overriden in the SceneEditor.
 
 Add some "solid" objects, and use overlap detection to kill the sparks.
 	Just as a prelude to pixel collision detection.
-
-Pixel Overlap
-	Find the intersection of their world rectangles
-	Onto an additional buffer A
-	Can we render the first using just the alpha channel (ignore RGB)
-	and then multiply by the 2nd's alpha channel
-
-	Non ovelapping would then be close to 0
-	So that we don't have to copy large data arrays...
-		Render the four quarters of A onto B (regular rendering)
-		If any pixels are not near zero, we have overlap (but in 1/4 the number of pixels).
-		Repeat this operation (this time each quarter of B onto C) and keep going, till we have just one pixel.
-		Now read the entire pixel buffer (of one pixel!!!)
-	http://wiki.lwjgl.org/wiki/Render_to_Texture_with_Frame_Buffer_Objects_(FBO).html
-
-
-If we only care about IF we've hit something, rather than who,
-	draw all objects we wish to test against in grey using logical OR
-	then draw my mask ADDING it
-	Any pixels that are lighter than grey are collisions. As this is just the highest bit,
-	we could OR the whole buffer!
-	
-So a "quick" game would look like :
-	Bullet.ifHit( any deadly ) kill me later
-	Player.ifHit( any deadly ) kill me later
-
-But when we want know know who's hit who :
-	Player.ifHit( any solids ) kill me
-	Player.listHits( any deadly ) ...
-
-	Buller.isHit( any solids ) kill me
-	(don't need to test for hitting player)
-
-The renderer can be reused. Center the "view" on the player, and rotate the view, so that the player is NOT rotated
-	i.e. has a normal rectangular shape.
-
-https://www.khronos.org/opengl/wiki/Pixel_Transfer
-https://www.khronos.org/opengl/wiki/Fragment_Shader
-https://www.khronos.org/opengl/wiki/Logical_Operation
-
 
 Allow a Layout to specify a (set of?) scene paths to merge whenever a scene using this layout is started
 	This allows standard stages to be included (such as a "glass" stage, showing score, "pause" etc)

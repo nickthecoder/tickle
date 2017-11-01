@@ -35,9 +35,6 @@ class Renderer(val window: Window) {
 
 
     init {
-        glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-
         /* Generate Vertex Buffer Object */
         vertexBuffer = VertexBuffer()
         vertexBuffer.bind(Target.ARRAY_BUFFER)
@@ -101,6 +98,8 @@ class Renderer(val window: Window) {
 
     fun beginView() {
         program.use()
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         currentColor.red = -1.12345f // An invalid value, therefore equals tests will fail
         currentTexture = null
     }

@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.graphics
 
 import org.joml.Matrix4f
+import org.lwjgl.opengl.EXTBlendMinmax.*
 import org.lwjgl.opengl.EXTFramebufferObject.*
 import org.lwjgl.opengl.GL11.*
 import uk.co.nickthecoder.tickle.Actor
@@ -13,7 +14,7 @@ import uk.co.nickthecoder.tickle.util.Rectd
  * A threshold of zero means they are overlapping if any pixels that are event slightly opaque overlap.
  * In practice, 0 is a bad default, but the "perfect" default value isn't obvious!
  */
-class PixelOverlap(val threshold: Int = 0, val size: Int = 128) {
+class PixelOverlap(val threshold: Int = 16, val size: Int = 128) {
 
     private val overlapFrameBufferId = glGenFramebuffersEXT()
     private val overlapTexture = Texture(size, size, GL_RGBA, null)
@@ -69,7 +70,7 @@ class PixelOverlap(val threshold: Int = 0, val size: Int = 128) {
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, overlapFrameBufferId)
 
             // Clear the overlap texture
-            // TODO, If we are keeping a single large texture for all collisions, then we don't want to clear the whole buffer. Only need to clear the overlap
+            // TODO, If we are keeping a single large texture for all collisions, then we don't want to clear the whole buffer. We only need to clear the overlap area.
             renderer.clearColor(transparent)
             renderer.clear()
 
@@ -93,38 +94,43 @@ class PixelOverlap(val threshold: Int = 0, val size: Int = 128) {
             //overlapTexture.dumpAlpha()
 
             // Blit each line of the overlapTexture onto the lineTexture
+            // By doing so, we reduce the amount of data transfered from GPU to main memory
             glViewport(0, 0, width, 1)
             projection.identity()
             projection.ortho2D(0f, width.toFloat(), 0f, 1f)
             renderer.changeProjection(projection)
             glBindTexture(GL_TEXTURE_2D, 0)
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, lineFrameBufferId)
-            // TODO Use "max" blending
+
+            // Use MAX blending, as we only care about the most opaque overlapping pixels
+            glBlendEquationEXT(GL_MAX_EXT)
+
             renderer.clear()
             renderer.begin()
             val sourceRect = Rectd()
             sourceRect.right = width.toDouble() / size
             val ratio = 1.0 / size
             for (y in 0..height - 1) {
+                //for (y in 10..10) {
                 sourceRect.bottom = ratio * y
                 sourceRect.top = ratio * (y + 1)
                 renderer.drawTexture(overlapTexture, 0.0, 0.0, width.toDouble(), 1.0, sourceRect)
             }
             renderer.end()
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+            glBlendEquationEXT(GL_FUNC_ADD_EXT)
 
             // The lineTexture should now contain the result we need. Read the pixels, and compare with the threshold.
             //println("Line")
             //lineTexture.dumpAlpha()
+
             val pixels = lineTexture.read()
             for (x in 0..width - 1) {
                 val pixel = pixels[x * 4 + 3].toInt() and 0xff
-                //print(" $pixel")
                 if (pixel > threshold) {
                     return true
                 }
             }
-            //println()
         }
 
         return false
