@@ -77,15 +77,16 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
     }
 
     /**
-     * This is used for debugging only. It dumps the alpha channel of the texture, showing values in the range 0..F
-     * i.e. it is a compressed form, only discarding the lowest 4 bits.
+     * Ascii-art style image of the texture.
+     * This is used for debugging only. It dumps the alpha channel of the texture, showing values in the range 0..ff
+     * I used it a lot when debugging the PixelOverlap code
      */
     fun dumpAlpha() {
         val pixels = read()
         for (y in height - 1 downTo 0) {
             for (x in 0..width - 1) {
                 val alpha = pixels[(x + (y * width)) * 4 + 3]
-                print(((alpha.toInt() and 0xff) / 16).toString(16))
+                print(String.format("%02x", alpha.toInt() and 0xff))
             }
             println()
         }

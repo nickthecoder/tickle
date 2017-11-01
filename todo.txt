@@ -3,6 +3,9 @@ Current Work
 
 PixelOverlap doesn't use the model's transformation matrix! Eeek.
 
+Don't clear the whole overlapTexture
+Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
+
 Next
 ====
 

@@ -8,13 +8,15 @@ import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.util.Rectd
 
+private val dump = false
+
 /**
  * We compare the alpha channel of the result of overlapping the two images with the threshold. If any pixel is
  * above the threshold, then the Actors are considered to be touching.
  * A threshold of zero means they are overlapping if any pixels that are event slightly opaque overlap.
  * In practice, 0 is a bad default, but the "perfect" default value isn't obvious!
  */
-class PixelOverlap(val threshold: Int = 16, val size: Int = 128) {
+class PixelOverlap(val threshold: Int = 0, val size: Int = 128) {
 
     private val overlapFrameBufferId = glGenFramebuffersEXT()
     private val overlapTexture = Texture(size, size, GL_RGBA, null)
@@ -64,7 +66,7 @@ class PixelOverlap(val threshold: Int = 16, val size: Int = 128) {
             // Render to our FBO
             glViewport(0, 0, width, height)
             projection.identity()
-            projection.ortho2D(0f, width.toFloat(), 0f, height.toFloat())
+            projection.ortho2D(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat())
             renderer.changeProjection(projection)
             glBindTexture(GL_TEXTURE_2D, 0)
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, overlapFrameBufferId)
@@ -76,22 +78,35 @@ class PixelOverlap(val threshold: Int = 16, val size: Int = 128) {
 
             // Draw actor A "normally" (The fragment shader will draw a WHITE pixels, but including the textures alpha (i.e. the rgb of the texture is ignored)
             renderer.begin()
-            renderer.drawTexture(poseA.texture, worldA.left - left, worldA.bottom - bottom, worldA.right - left, worldA.top - bottom, poseA.rectd)
+            actorA.appearance.draw(renderer)
             renderer.end()
 
+            if (dump) {
+                println("Actor A $actorA")
+                overlapTexture.dumpAlpha()
+                actorA.poseAppearance?.pose?.texture?.bind()
+                glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, overlapFrameBufferId)
+            }
+
+            // Use MIN blending, as we only care about the least opaque of the two pixelso
+            glBlendEquationEXT(GL_MIN_EXT)
+
             // Draw actor B using logical AND (and still drawing WHITE pixels, but using the texture's alpha channel)
-            glEnable(GL_COLOR_LOGIC_OP)
-            glLogicOp(GL_AND)
+            //glEnable(GL_COLOR_LOGIC_OP)
+            //glLogicOp(GL_AND)
+
             renderer.begin()
-            renderer.drawTexture(poseB.texture, worldB.left - left, worldB.bottom - bottom, worldB.right - left, worldB.top - bottom, poseB.rectd)
+            actorB.appearance.draw(renderer)
             renderer.end()
 
             // Stop using logical AND, and return to normal blending
-            glDisable(GL_COLOR_LOGIC_OP)
+            //glDisable(GL_COLOR_LOGIC_OP)
 
             // Now we have WHITE pixels where the actors overlap, and transparent everywhere else.
-            //println("Overlap")
-            //overlapTexture.dumpAlpha()
+            if (dump) {
+                println("Overlap")
+                overlapTexture.dumpAlpha()
+            }
 
             // Blit each line of the overlapTexture onto the lineTexture
             // By doing so, we reduce the amount of data transfered from GPU to main memory
@@ -121,8 +136,10 @@ class PixelOverlap(val threshold: Int = 16, val size: Int = 128) {
             glBlendEquationEXT(GL_FUNC_ADD_EXT)
 
             // The lineTexture should now contain the result we need. Read the pixels, and compare with the threshold.
-            //println("Line")
-            //lineTexture.dumpAlpha()
+            if (dump) {
+                println("Line")
+                lineTexture.dumpAlpha()
+            }
 
             val pixels = lineTexture.read()
             for (x in 0..width - 1) {
