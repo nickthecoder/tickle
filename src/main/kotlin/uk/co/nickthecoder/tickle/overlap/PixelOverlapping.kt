@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.graphics
+package uk.co.nickthecoder.tickle.overlap
 
 import org.joml.Matrix4f
 import org.lwjgl.opengl.EXTBlendMinmax.*
@@ -6,17 +6,21 @@ import org.lwjgl.opengl.EXTFramebufferObject.*
 import org.lwjgl.opengl.GL11.*
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.Rectd
 
 private val dump = false
 
 /**
- * We compare the alpha channel of the result of overlapping the two images with the threshold. If any pixel is
- * above the threshold, then the Actors are considered to be touching.
- * A threshold of zero means they are overlapping if any pixels that are event slightly opaque overlap.
- * In practice, 0 is a bad default, but the "perfect" default value isn't obvious!
+ * Tests if any overlapping pixels have an alpha value greater than zero. For many images, this isn't very good,
+ * because the anti-aliased / fuzzy edges of the image will make overlapping() return true, even when the objects
+ * appear to be a pixel or two apart. Instead, consider using [ThresholdPixelOverlapping]. You can use the
+ * [threshold] method of this class to create one.
  */
-class PixelOverlap(val threshold: Int = 0, val size: Int = 128) {
+class PixelOverlapping(val size: Int = 128)
+
+    : Overlapping {
 
     private val overlapFrameBufferId = glGenFramebuffersEXT()
     private val overlapTexture = Texture(size, size, GL_RGBA, null)
@@ -41,7 +45,13 @@ class PixelOverlap(val threshold: Int = 0, val size: Int = 128) {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
     }
 
-    fun overlapping(actorA: Actor, actorB: Actor): Boolean {
+    fun threshold(threshold: Int) = ThresholdPixelOverlapping(threshold, this)
+
+    override fun overlapping(actorA: Actor, actorB: Actor): Boolean {
+        return overlapping(actorA, actorB, 0)
+    }
+
+    fun overlapping(actorA: Actor, actorB: Actor, threshold: Int): Boolean {
 
         val poseA = actorA.poseAppearance?.pose
         val poseB = actorB.poseAppearance?.pose
