@@ -3,8 +3,8 @@ package uk.co.nickthecoder.demo
 import uk.co.nickthecoder.tickle.ActionRole
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.movement.FollowMouse
+import uk.co.nickthecoder.tickle.collision.PixelOverlapping
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.graphics.PixelOverlap
 import uk.co.nickthecoder.tickle.resources.Resources
 
 class Hand : ActionRole() {
@@ -13,7 +13,7 @@ class Hand : ActionRole() {
 
     val overlapKey = Resources.instance.inputs.find("overlap")!!
 
-    val pixelOverlap = PixelOverlap()
+    val pixelOverlap = PixelOverlapping()
 
     override fun tick() {
         super.tick()

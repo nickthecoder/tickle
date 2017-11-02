@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.overlap
+package uk.co.nickthecoder.tickle.collision
 
 import org.joml.Matrix4f
 import org.lwjgl.opengl.EXTBlendMinmax.*

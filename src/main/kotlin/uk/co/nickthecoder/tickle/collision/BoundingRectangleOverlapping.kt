@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.tickle.overlap
+package uk.co.nickthecoder.tickle.collision
 
 import uk.co.nickthecoder.tickle.Actor
 
