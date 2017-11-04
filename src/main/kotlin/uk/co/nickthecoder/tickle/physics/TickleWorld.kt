@@ -6,8 +6,13 @@ import org.jbox2d.dynamics.BodyDef
 import org.jbox2d.dynamics.World
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Game
 
-class TickleWorld(gravity: Vector2d = Vector2d(0.0, 0.0), val scale: Float = 100f) {
+class TickleWorld(
+        gravity: Vector2d = Vector2d(0.0, 0.0),
+        val scale: Float = 100f,
+        val velocityIterations: Int = 8,
+        val positionIterations: Int = 3) {
 
     val world = World(pixelsToWorld(gravity), true)
 
@@ -37,8 +42,22 @@ class TickleWorld(gravity: Vector2d = Vector2d(0.0, 0.0), val scale: Float = 100
         bodyDef.angle = actor.direction.radians.toFloat()
 
         def.updateShapes(this)
-        return world.createBody(bodyDef)
+        val body = world.createBody(bodyDef)
+        body.userData = actor
+        return body
+    }
+
+    fun tick() {
+        world.step(Game.instance.tickDuration.toFloat(), velocityIterations, positionIterations)
+        var body = world.bodyList
+        while (body != null) {
+            body = body.next
+            val actor = body.userData
+            if (actor is Actor) {
+                worldToPixels(actor.position, body.position)
+                actor.direction.radians = body.angle.toDouble()
+            }
+        }
     }
 
 }
-

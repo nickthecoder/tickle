@@ -4,10 +4,13 @@ import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
+import org.jbox2d.dynamics.BodyType
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.*
+import uk.co.nickthecoder.tickle.physics.*
 import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
@@ -142,7 +145,6 @@ class JsonResources {
             jpreferences.add("packages", jpackages)
             jpreferences.add("treeThumbnailSize", treeThumnailSize)
             jpreferences.add("costumePickerThumbnailSize", costumePickerThumbnailSize)
-            jpreferences.add("physicsEngine", physicsEngine)
             return jpreferences
         }
     }
@@ -162,7 +164,6 @@ class JsonResources {
             outputFormat = EditorPreferences.JsonFormat.valueOf(jpreferences.getString("outputFormat", "PRETTY"))
             treeThumnailSize = jpreferences.getInt("treeThumbnailSize", 24)
             costumePickerThumbnailSize = jpreferences.getInt("costumePickerThumbnailSize", 40)
-            physicsEngine = jpreferences.getBoolean("physicsEngine", false)
             // println("Loaded preferences : ${resources.preferences}")
         }
     }
@@ -181,6 +182,12 @@ class JsonResources {
             jinfo.add("testScene", resources.sceneFileToPath(testScenePath))
 
             jinfo.add("producer", producerString)
+            jinfo.add("physicsEngine", physicsEngine)
+            if (physicsEngine) {
+                jinfo.add("gravity_x", gravity.x)
+                jinfo.add("gravity_y", gravity.y)
+                jinfo.add("scale", scale)
+            }
 
             return jinfo
         }
@@ -197,6 +204,12 @@ class JsonResources {
             testScenePath = resources.scenePathToFile(jinfo.getString("testScene", "splash"))
             producerString = jinfo.getString("producer", NoProducer::javaClass.name)
 
+            physicsEngine = jinfo.getBoolean("physicsEngine", false)
+            if (physicsEngine) {
+                gravity.x = jinfo.getDouble("gravity_x", 0.0)
+                gravity.y = jinfo.getDouble("gravity_y", 0.0)
+                scale = jinfo.getDouble("scale", 100.0)
+            }
             // println("Loaded info : $title : $width x $height Resize? $resizable. Game=$producerString")
         }
     }
@@ -517,10 +530,54 @@ class JsonResources {
                 JsonUtil.saveAttributes(jcostume, costume.attributes)
 
                 jcostumes.add(jcostume)
+                costume.bodyDef?.let { saveBody(jcostume, it) }
             }
         }
 
         return jcostumes
+    }
+
+    fun saveBody(jcostume: JsonObject, bodyDef: CostumeBodyDef) {
+        val jbody = JsonObject()
+
+        with(bodyDef) {
+            jbody.add("bodyType", this.bodyType.name)
+        }
+        val jfixtures = JsonArray()
+        jbody.add("fixtures", jfixtures)
+        bodyDef.fixtures.forEach { fixture ->
+            val jfixture = JsonObject()
+            jfixture.add("friction", fixture.friction)
+            jfixture.add("density", fixture.density)
+            jfixture.add("restitution", fixture.restitution)
+            with(fixture.shapeDef) {
+                when (this) {
+                    is CircleDef -> {
+                        val jcircle = JsonObject()
+                        jfixture.add("circle", jcircle)
+                        jcircle.add("x", center.x)
+                        jcircle.add("y", center.y)
+                        jcircle.add("radius", radius)
+                    }
+                    is BoxDef -> {
+                        val jbox = JsonObject()
+                        jfixture.add("box", jbox)
+                        jbox.add("x", center.x)
+                        jbox.add("y", center.y)
+                        jbox.add("width", width)
+                        jbox.add("height", height)
+                        jbox.add("angle", angle.degrees)
+                    }
+                    else -> {
+                        System.err.println("ERROR. Unknown shape ${this.javaClass}")
+                    }
+                }
+            }
+            jfixtures.add(jfixture)
+
+        }
+
+        jcostume.add("body", jbody)
     }
 
     data class CostumeEventData(val costumeEvent: CostumeEvent, val costumeName: String)
@@ -605,10 +662,55 @@ class JsonResources {
 
             JsonUtil.loadAttributes(jcostume, costume.attributes)
 
+            val jbody = jcostume.get("body")
+            if (jbody != null && jbody.isObject) {
+                loadBody(jbody.asObject(), costume)
+            }
+
             group.add(name, costume)
             // println("Loaded costume $name : ${costume}")
         }
 
+    }
+
+    fun loadBody(jbody: JsonObject, costume: Costume) {
+        val bodyDef = CostumeBodyDef()
+        with(bodyDef) {
+            bodyType = BodyType.valueOf(jbody.getString("bodyType", BodyType.DYNAMIC.name))
+        }
+        jbody.get("fixtures")?.let {
+            val jfixtures = it.asArray()
+            jfixtures.forEach {
+                val jfixture = it.asObject()
+                var shape: ShapeDef? = null
+                jfixture.get("circle")?.let {
+                    val jcircle = it.asObject()
+                    val x = jcircle.getDouble("x", 0.0)
+                    val y = jcircle.getDouble("y", 0.0)
+                    val radius = jcircle.getDouble("radius", 0.0)
+                    val circle = CircleDef(Vector2d(x, y), radius)
+                    shape = circle
+                }
+                jfixture.get("box")?.let {
+                    val jbox = it.asObject()
+                    val x = jbox.getDouble("x", 0.0)
+                    val y = jbox.getDouble("y", 0.0)
+                    val width = jbox.getDouble("width", 0.0)
+                    val height = jbox.getDouble("height", 0.0)
+                    val angle = jbox.getDouble("angle", 0.0)
+                    val box = BoxDef(width, height, Vector2d(x, y), Angle.degrees(angle))
+                    shape = box
+                }
+                if (shape != null) {
+                    val fixture = CostumeFixtureDef(shape!!)
+                    fixture.density = jfixture.getFloat("density", 1f)
+                    fixture.restitution = jfixture.getFloat("restitution", 0f)
+                    fixture.friction = jfixture.getFloat("friction", 0f)
+                    bodyDef.fixtures.add(fixture)
+                }
+            }
+        }
+        costume.bodyDef = bodyDef
     }
 
     // INPUTS

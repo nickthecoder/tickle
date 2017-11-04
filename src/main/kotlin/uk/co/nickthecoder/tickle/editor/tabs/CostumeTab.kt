@@ -44,7 +44,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         minorTabs.add(detailsTab)
         minorTabs.add(eventsTab)
-        if (Resources.instance.preferences.physicsEngine) {
+        if (Resources.instance.gameInfo.physicsEngine) {
             minorTabs.add(physicsTab)
         }
 
@@ -63,9 +63,14 @@ class CostumeTab(val name: String, val costume: Costume)
     override fun save(): Boolean {
         if (detailsForm.check()) {
             if (eventsForm.check()) {
-                detailsTask.run()
-                eventsTask.run()
-                return true
+                if (physicsForm.check()) {
+                    detailsTask.run()
+                    eventsTask.run()
+                    physicsTask.run()
+                    return true
+                } else {
+                    physicsTab.isSelected = true
+                }
             } else {
                 eventsTab.isSelected = true
             }
@@ -310,8 +315,8 @@ class CostumeTab(val name: String, val costume: Costume)
 
     inner class PhysicsTask : AbstractTask() {
 
-        val bodyTypeP = ChoiceParameter("bodyType", value = costume.bodyDef?.bodyType ?: BodyType.DYNAMIC)
-                .enumChoices(mixCase = true)
+        val bodyTypeP = ChoiceParameter("bodyType", value = costume.bodyDef?.bodyType)
+                .nullableEnumChoices(mixCase = true, nullLabel = "None")
 
         val fixturesP = MultipleParameter("fixtures", minItems = 1) {
             FixtureParameter()
@@ -327,27 +332,36 @@ class CostumeTab(val name: String, val costume: Costume)
                 val fixtureParameter = fixturesP.newValue()
                 fixtureParameter.initParameters(fixture)
             }
+            fixturesP.hidden = bodyTypeP.value == BodyType.KINEMATIC || bodyTypeP.value == null
+            bodyTypeP.listen {
+                fixturesP.hidden = bodyTypeP.value == BodyType.KINEMATIC || bodyTypeP.value == null
+            }
         }
 
         override fun run() {
-            val bodyDef = costume.bodyDef ?: CostumeBodyDef()
-            costume.bodyDef = bodyDef
+            if (bodyTypeP.value == null) {
+                costume.bodyDef = null
+            } else {
+                val bodyDef = costume.bodyDef ?: CostumeBodyDef()
+                costume.bodyDef = bodyDef
 
-            with(bodyDef) {
-                bodyType = bodyTypeP.value!!
-            }
+                with(bodyDef) {
+                    bodyType = bodyTypeP.value!!
+                }
 
-            bodyDef.fixtures.clear()
-            fixturesP.innerParameters.forEach { fixtureParameter ->
-                bodyDef.fixtures.add(fixtureParameter.createCostumeFixtureDef())
+                bodyDef.fixtures.clear()
+                fixturesP.innerParameters.forEach { fixtureParameter ->
+                    bodyDef.fixtures.add(fixtureParameter.createCostumeFixtureDef())
+                }
+                println("Save fixtures ${costume.bodyDef?.fixtures}")
             }
         }
 
         inner class FixtureParameter : MultipleGroupParameter("fixture") {
 
-            val densityP = FloatParameter("density", minValue = 0f)
-            val frictionP = FloatParameter("friction", minValue = 0f, maxValue = 1f)
-            val restitutionP = FloatParameter("restitution", minValue = 0f, maxValue = 1f)
+            val densityP = FloatParameter("density", minValue = 0f, value = 1f)
+            val frictionP = FloatParameter("friction", minValue = 0f, maxValue = 1f, value = 0f)
+            val restitutionP = FloatParameter("restitution", minValue = 0f, maxValue = 1f, value = 1f)
 
             val circleRadiusP = DoubleParameter("circleRadius", label = "Radius")
             val circleCenterP = Vector2dParameter("circleCenter", label = "Center", showXY = false).asHorizontal()
@@ -369,6 +383,13 @@ class CostumeTab(val name: String, val costume: Costume)
 
             init {
                 addParameters(densityP, frictionP, restitutionP, shapeP)
+
+                densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
+                frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
+                bodyTypeP.listen {
+                    densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
+                    frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
+                }
             }
 
             fun initParameters(fixtureDef: CostumeFixtureDef) {
@@ -380,10 +401,12 @@ class CostumeTab(val name: String, val costume: Costume)
                 with(fixtureDef.shapeDef) {
                     when (this) {
                         is CircleDef -> {
-                            circleCenterP.value = position
+                            shapeP.value = circleP
+                            circleCenterP.value = center
                             circleRadiusP.value = radius
                         }
                         is BoxDef -> {
+                            shapeP.value = boxP
                             boxSizeP.xP.value = width
                             boxSizeP.yP.value = height
                             boxCenterP.value = center

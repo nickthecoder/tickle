@@ -13,8 +13,6 @@ class EditorPreferences {
 
     var costumePickerThumbnailSize: Int = 40
 
-    var physicsEngine: Boolean = false
-
     override fun toString(): String {
         return "outputFormat=$outputFormat packages=$packages"
     }

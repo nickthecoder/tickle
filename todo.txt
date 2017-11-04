@@ -1,17 +1,14 @@
 Current Work
 ============
 
+Allos for NULL body types (i.e. not a body) in CostumeTab
+
+Hide fields not applicable to Static and ? body type.
+	Also, do load or save that data!
+
+
 Don't clear the whole overlapTexture
 Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
-
-Other Overlapping subclasses:
-	Within: Is actors's position inside the worldRect of the other actor?
-		Can we do this with the unrotated rectangle?
-			Could inverse the matrix and apply it to the other actor's position.
-			Or, get the four corners of the world rect, transformed by the matrix, and then test if
-			other actor's x,y are within this quad.
-		Once this is implemented, use the same technique, but compare if any of actorA's corners are within
-			actorB's quad.
 
 Next
 ====

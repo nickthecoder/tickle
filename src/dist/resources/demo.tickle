@@ -1,9 +1,9 @@
-{ "info": { "title": "Tickle", "width": 1024, "height": 600, "resizable": true, "initialScene": "level01", "testScene": "test", "producer": "uk.co.nickthecoder.demo.Demo"}, "preferences": { "outputFormat": "UGLY", "packages": 
+{ "info": { "title": "Tickle", "width": 1024, "height": 600, "resizable": true, "initialScene": "level01", "testScene": "test", "producer": "uk.co.nickthecoder.demo.Demo", "physicsEngine": true, "gravity_x": 1, "gravity_y": 2, "scale": 101}, "preferences": { "outputFormat": "UGLY", "packages": 
   [
     "uk.co.nickthecoder.tickle",
     "uk.co.nickthecoder.demo"
   ]
-, "treeThumbnailSize": 24, "costumePickerThumbnailSize": 100, "physicsEngine": true}, "layouts": 
+, "treeThumbnailSize": 24, "costumePickerThumbnailSize": 100}, "layouts": 
   [
     { "name": "default", "stages": 
       [
@@ -118,7 +118,12 @@
           ]
         }
       ]
-    },
+    , "body": { "bodyType": "DYNAMIC", "fixtures": 
+      [
+        { "friction": 0.3, "density": 2, "restitution": 0.5, "circle": { "x": 1, "y": 2, "radius": 30}},
+        { "friction": 0, "density": 1, "restitution": 1, "box": { "x": 3, "y": 4, "width": 1, "height": 2, "angle": 5}}
+      ]
+    }},
     { "name": "grenade", "role": "uk.co.nickthecoder.demo.Grenade", "canRotate": true, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
       [
         { "name": "default", "poses": 

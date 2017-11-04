@@ -2,13 +2,12 @@ package uk.co.nickthecoder.tickle.editor.tabs
 
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
-import uk.co.nickthecoder.paratask.parameters.BooleanParameter
-import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
-import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.GameInfo
 import uk.co.nickthecoder.tickle.NoProducer
 import uk.co.nickthecoder.tickle.Producer
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
+import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 import uk.co.nickthecoder.tickle.editor.util.XYiParameter
 import uk.co.nickthecoder.tickle.resources.Resources
 
@@ -33,8 +32,15 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val resizableP = BooleanParameter("resizable", value = gameInfo.resizable)
     val producerP = ChoiceParameter<Class<*>>("producer", value = NoProducer::class.java)
 
+    val physicsEngineP = BooleanParameter("physicsEngine", value = gameInfo.physicsEngine)
+    val gravityP = Vector2dParameter("gravity", value = gameInfo.gravity).asHorizontal()
+    val scaleP = DoubleParameter("scale", value = gameInfo.scale)
+    val worldDetailsP = SimpleGroupParameter("physicsDetails")
+            .addParameters(gravityP, scaleP)
+            .asBox()
+
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP)
+            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, physicsEngineP, worldDetailsP)
 
     init {
         windowSizeP.x = gameInfo.width
@@ -47,6 +53,9 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
         } catch (e: Exception) {
             System.err.println("Couldn't find class ${gameInfo.producerString}, defaulting to NoProducer")
         }
+
+        worldDetailsP.hidden = physicsEngineP.value != true
+        physicsEngineP.listen { worldDetailsP.hidden = physicsEngineP.value != true }
     }
 
     override fun run() {
@@ -60,6 +69,9 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
             testScenePath = Resources.instance.scenePathToFile(testSceneP.value)
             resizable = resizableP.value!!
             producerString = producerP.value!!.name
+            physicsEngine = physicsEngineP.value == true
+            gravity = gravityP.value
+            scale = scaleP.value!!
         }
     }
 

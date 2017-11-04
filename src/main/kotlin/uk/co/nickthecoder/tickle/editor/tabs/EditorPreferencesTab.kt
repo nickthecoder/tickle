@@ -23,8 +23,6 @@ class EditorPreferencesTask(val editorPreferences: EditorPreferences) : Abstract
 
     val costumePickerSizeP = IntParameter("costumePickerThumbnailSize", value = editorPreferences.costumePickerThumbnailSize)
 
-    val physicsEngineP = BooleanParameter("physicsEngine", value = editorPreferences.physicsEngine)
-
     val packageInfoP = InformationParameter("packageInfo", information = "The top level packages used by your game. This is used to scan the code for Producer, Director and Role classes.")
     val packagesP = MultipleParameter("packages", label = "Packages", value = editorPreferences.packages.toMutableList()) {
         StringParameter("package")
@@ -36,7 +34,7 @@ class EditorPreferencesTask(val editorPreferences: EditorPreferences) : Abstract
             .enumChoices(true)
 
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(treeThumbnailSizeP, costumePickerSizeP, physicsEngineP, packagesGroupP, outputFormatP)
+            .addParameters(treeThumbnailSizeP, costumePickerSizeP, packagesGroupP, outputFormatP)
 
     override fun run() {
         ClassLister.packages(packagesP.value)
@@ -47,7 +45,6 @@ class EditorPreferencesTask(val editorPreferences: EditorPreferences) : Abstract
             treeThumnailSize = treeThumbnailSizeP.value!!
             costumePickerThumbnailSize = costumePickerSizeP.value!!
             outputFormat = outputFormatP.value!!
-            physicsEngine = physicsEngineP.value == true
         }
     }
 
