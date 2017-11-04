@@ -14,15 +14,16 @@ class Vector2dParameter(
         name: String,
         label: String = name.uncamel(),
         value: Vector2d = Vector2d(),
-        description: String = "")
+        description: String = "",
+        showXY: Boolean = true)
 
     : CompoundParameter<Vector2d>(
         name, label, description) {
 
-    val xP = DoubleParameter("${name}_x", label = "X", minValue = -Double.MAX_VALUE)
+    val xP = DoubleParameter("${name}_x", label = if (showXY) "X" else "", minValue = -Double.MAX_VALUE)
     var x by xP
 
-    val yP = DoubleParameter("${name}_y", label = "Y", minValue = -Double.MAX_VALUE)
+    val yP = DoubleParameter("${name}_y", label = if (showXY) "Y" else ",", minValue = -Double.MAX_VALUE)
     var y by yP
 
     override val converter = object : StringConverter<Vector2d>() {

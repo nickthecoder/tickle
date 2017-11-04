@@ -68,6 +68,7 @@ dependencies {
     runtime "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
     runtime "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
 
+    compile "org.jbox2d:jbox2d-library:2.1.2.2"
     testCompile 'junit:junit:4.11'
 
     // Only needed for the editor

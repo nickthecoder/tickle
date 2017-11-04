@@ -142,7 +142,7 @@ class JsonResources {
             jpreferences.add("packages", jpackages)
             jpreferences.add("treeThumbnailSize", treeThumnailSize)
             jpreferences.add("costumePickerThumbnailSize", costumePickerThumbnailSize)
-
+            jpreferences.add("physicsEngine", physicsEngine)
             return jpreferences
         }
     }
@@ -162,7 +162,7 @@ class JsonResources {
             outputFormat = EditorPreferences.JsonFormat.valueOf(jpreferences.getString("outputFormat", "PRETTY"))
             treeThumnailSize = jpreferences.getInt("treeThumbnailSize", 24)
             costumePickerThumbnailSize = jpreferences.getInt("costumePickerThumbnailSize", 40)
-
+            physicsEngine = jpreferences.getBoolean("physicsEngine", false)
             // println("Loaded preferences : ${resources.preferences}")
         }
     }

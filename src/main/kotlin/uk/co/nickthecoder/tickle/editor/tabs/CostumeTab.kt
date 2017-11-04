@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.geometry.Side
 import javafx.scene.control.TabPane
+import org.jbox2d.dynamics.BodyType
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.MyTab
@@ -14,6 +15,7 @@ import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.graphics.TextStyle
+import uk.co.nickthecoder.tickle.physics.*
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.Sound
 
@@ -27,10 +29,14 @@ class CostumeTab(val name: String, val costume: Costume)
     val eventsTask = CostumeEventsTask()
     val eventsForm = TaskForm(eventsTask)
 
+    val physicsTask = PhysicsTask()
+    val physicsForm = TaskForm(physicsTask)
+
     val minorTabs = MyTabPane<MyTab>()
 
     val detailsTab = MyTab("Details", detailsForm.build())
     val eventsTab = MyTab("Events", eventsForm.build())
+    val physicsTab = MyTab("Physics", physicsForm.build())
 
     init {
         minorTabs.side = Side.BOTTOM
@@ -38,6 +44,9 @@ class CostumeTab(val name: String, val costume: Costume)
 
         minorTabs.add(detailsTab)
         minorTabs.add(eventsTab)
+        if (Resources.instance.preferences.physicsEngine) {
+            minorTabs.add(physicsTab)
+        }
 
         borderPane.center = minorTabs
 
@@ -155,7 +164,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
     }
 
-    inner class CostumeEventsTask() : AbstractTask() {
+    inner class CostumeEventsTask : AbstractTask() {
 
         val initialEventP = StringParameter("initialEvent", value = costume.initialEventName)
 
@@ -265,7 +274,7 @@ class CostumeTab(val name: String, val costume: Costume)
         }
     }
 
-    inner class EventParameter() : MultipleGroupParameter("event") {
+    inner class EventParameter : MultipleGroupParameter("event") {
 
         val eventNameP = StringParameter("eventName")
 
@@ -297,6 +306,132 @@ class CostumeTab(val name: String, val costume: Costume)
             }
             return "$eventName ($type) $dataName"
         }
+    }
+
+    inner class PhysicsTask : AbstractTask() {
+
+        val bodyTypeP = ChoiceParameter("bodyType", value = costume.bodyDef?.bodyType ?: BodyType.DYNAMIC)
+                .enumChoices(mixCase = true)
+
+        val fixturesP = MultipleParameter("fixtures", minItems = 1) {
+            FixtureParameter()
+        }.asListDetail(isBoxed = true) { param ->
+            param.toString()
+        }
+
+        override val taskD = TaskDescription("physics")
+                .addParameters(bodyTypeP, fixturesP)
+
+        init {
+            costume.bodyDef?.fixtures?.forEach { fixture ->
+                val fixtureParameter = fixturesP.newValue()
+                fixtureParameter.initParameters(fixture)
+            }
+        }
+
+        override fun run() {
+            val bodyDef = costume.bodyDef ?: CostumeBodyDef()
+            costume.bodyDef = bodyDef
+
+            with(bodyDef) {
+                bodyType = bodyTypeP.value!!
+            }
+
+            bodyDef.fixtures.clear()
+            fixturesP.innerParameters.forEach { fixtureParameter ->
+                bodyDef.fixtures.add(fixtureParameter.createCostumeFixtureDef())
+            }
+        }
+
+        inner class FixtureParameter : MultipleGroupParameter("fixture") {
+
+            val densityP = FloatParameter("density", minValue = 0f)
+            val frictionP = FloatParameter("friction", minValue = 0f, maxValue = 1f)
+            val restitutionP = FloatParameter("restitution", minValue = 0f, maxValue = 1f)
+
+            val circleRadiusP = DoubleParameter("circleRadius", label = "Radius")
+            val circleCenterP = Vector2dParameter("circleCenter", label = "Center", showXY = false).asHorizontal()
+
+            val circleP = SimpleGroupParameter("circle", label = "")
+                    .addParameters(circleRadiusP, circleCenterP)
+                    .asPlain()
+
+            val boxSizeP = Vector2dParameter("boxSize", showXY = false).asHorizontal()
+            val boxCenterP = Vector2dParameter("boxCenter", label = "Center", showXY = false).asHorizontal()
+            val boxAngleP = AngleParameter("boxAngle", label = "Angle")
+
+            val boxP = SimpleGroupParameter("box", label = "")
+                    .addParameters(boxSizeP, boxCenterP, boxAngleP)
+                    .asPlain()
+
+            val shapeP = OneOfParameter("shape", choiceLabel = "Type")
+                    .addParameters("Circle" to circleP, "Box" to boxP)
+
+            init {
+                addParameters(densityP, frictionP, restitutionP, shapeP)
+            }
+
+            fun initParameters(fixtureDef: CostumeFixtureDef) {
+                with(fixtureDef) {
+                    densityP.value = density
+                    frictionP.value = friction
+                    restitutionP.value = restitution
+                }
+                with(fixtureDef.shapeDef) {
+                    when (this) {
+                        is CircleDef -> {
+                            circleCenterP.value = position
+                            circleRadiusP.value = radius
+                        }
+                        is BoxDef -> {
+                            boxSizeP.xP.value = width
+                            boxSizeP.yP.value = height
+                            boxCenterP.value = center
+                            boxAngleP.value = angle
+                        }
+                    }
+                }
+            }
+
+            fun createCostumeFixtureDef(): CostumeFixtureDef {
+
+                val shapeDef: ShapeDef = when (shapeP.value) {
+                    circleP -> {
+                        CircleDef(circleCenterP.value, circleRadiusP.value!!)
+                    }
+                    boxP -> {
+                        BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value)
+                    }
+                    else -> {
+                        throw IllegalStateException("Not a valid shape type")
+                    }
+                }
+
+                val fixtureDef = CostumeFixtureDef(shapeDef)
+                with(fixtureDef) {
+                    density = densityP.value!!
+                    friction = frictionP.value!!
+                    restitution = restitutionP.value!!
+                }
+
+                return fixtureDef
+            }
+
+            override fun toString(): String {
+                return when (shapeP.value) {
+                    circleP -> {
+                        "Circle @ ${circleCenterP.value.x} , ${circleCenterP.value.y}"
+                    }
+                    boxP -> {
+                        "Box @ ${boxCenterP.value.x} , ${boxCenterP.value.y}"
+                    }
+                    else -> {
+                        "Unknown"
+                    }
+                }
+            }
+        }
+
     }
 
 }

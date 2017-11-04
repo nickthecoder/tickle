@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.TextStyle
+import uk.co.nickthecoder.tickle.physics.CostumeBodyDef
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.Sound
@@ -33,6 +34,8 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
     var showInSceneEditor: Boolean = true
 
     var inheritEventsFrom: Costume? = null
+
+    var bodyDef : CostumeBodyDef? = null
 
     fun createActor(text: String = ""): Actor {
         val role = if (roleString.isBlank()) null else Role.create(roleString)
