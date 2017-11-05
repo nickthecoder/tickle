@@ -537,11 +537,11 @@ class JsonResources {
         return jcostumes
     }
 
-    fun saveBody(jcostume: JsonObject, bodyDef: CostumeBodyDef) {
+    fun saveBody(jcostume: JsonObject, bodyDef: TickleBodyDef) {
         val jbody = JsonObject()
 
         with(bodyDef) {
-            jbody.add("bodyType", this.bodyType.name)
+            jbody.add("bodyType", this.type.name)
         }
         val jfixtures = JsonArray()
         jbody.add("fixtures", jfixtures)
@@ -674,9 +674,9 @@ class JsonResources {
     }
 
     fun loadBody(jbody: JsonObject, costume: Costume) {
-        val bodyDef = CostumeBodyDef()
+        val bodyDef = TickleBodyDef()
         with(bodyDef) {
-            bodyType = BodyType.valueOf(jbody.getString("bodyType", BodyType.DYNAMIC.name))
+            type = BodyType.valueOf(jbody.getString("bodyType", BodyType.DYNAMIC.name))
         }
         jbody.get("fixtures")?.let {
             val jfixtures = it.asArray()
@@ -702,7 +702,7 @@ class JsonResources {
                     shape = box
                 }
                 if (shape != null) {
-                    val fixtureDef = CostumeFixtureDef(shape!!)
+                    val fixtureDef = FixtureDef(shape!!)
                     fixtureDef.density = jfixture.getFloat("density", 1f)
                     fixtureDef.restitution = jfixture.getFloat("restitution", 0f)
                     fixtureDef.friction = jfixture.getFloat("friction", 0f)

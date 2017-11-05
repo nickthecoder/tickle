@@ -185,9 +185,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
         childActor.x = x
         childActor.y = y
         Game.instance.scene.world?.let { world ->
-            childActor.body?.let { body ->
-                body.setTransform(world.pixelsToWorld(childActor.position), childActor.direction.radians.toFloat())
-            }
+            childActor.body?.setTransform(world.pixelsToWorld(childActor.position), childActor.direction.radians.toFloat())
         }
 
         return childActor
@@ -200,8 +198,12 @@ class Actor(var costume: Costume, val role: Role? = null) {
     }
 
     fun die() {
-        stage?.remove(this)
         role?.end()
+        body?.let {
+            Game.instance.scene.world?.destroyBody(it)
+            body = null
+        }
+        stage?.remove(this)
     }
 
     override fun toString() = "Actor #$id @ $x,$y Role=${role?.javaClass?.simpleName ?: "<none>"}"

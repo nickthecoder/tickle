@@ -99,6 +99,7 @@ class Game(
         scene.activated()
         director.activated()
         producer.sceneActivated()
+        System.gc()
     }
 
     fun endScene() {

@@ -1,10 +1,6 @@
 Current Work
 ============
 
-world iterations in GameInfo and its Tab (+Json)
-Delete body when actor is killed
-Delete world when scene ends
-
 Add addition attributes of BodyDef to CostumeBodyDef and the CostumeTab parameters + Json
 	linearDamping, angularDamping, fixedRotation, bullet, ?inertialScale?
 

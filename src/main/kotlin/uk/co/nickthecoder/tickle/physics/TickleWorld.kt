@@ -2,19 +2,39 @@ package uk.co.nickthecoder.tickle.physics
 
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.Body
-import org.jbox2d.dynamics.BodyDef
 import org.jbox2d.dynamics.World
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.resources.Resources
+
+fun worldScale() = Game.instance.scene.world?.scale ?: Resources.instance.gameInfo.scale.toFloat()
+
+fun pixelsToWorld(pixels: Double) = pixels.toFloat() / worldScale()
+
+fun worldToPixels(world: Float) = (world * worldScale()).toDouble()
+
+fun pixelsToWorld(vector2d: Vector2d) = Vec2(pixelsToWorld(vector2d.x), pixelsToWorld(vector2d.y))
+
+fun worldToPixels(vec2: Vec2) = Vector2d(worldToPixels(vec2.x), worldToPixels(vec2.y))
+
+fun pixelsToWorld(vec2: Vec2, vector2d: Vector2d) {
+    vec2.x = pixelsToWorld(vector2d.x)
+    vec2.y = pixelsToWorld(vector2d.y)
+}
+
+fun worldToPixels(vector2d: Vector2d, vec2: Vec2) {
+    vector2d.x = worldToPixels(vec2.x)
+    vector2d.y = worldToPixels(vec2.y)
+}
 
 class TickleWorld(
         gravity: Vector2d = Vector2d(0.0, 0.0),
         val scale: Float = 100f,
         val velocityIterations: Int = 8,
-        val positionIterations: Int = 3) {
+        val positionIterations: Int = 3)
 
-    val world = World(pixelsToWorld(gravity), true)
+    : World(pixelsToWorld(gravity), true) {
 
     fun pixelsToWorld(pixels: Double) = pixels.toFloat() / scale
 
@@ -34,16 +54,13 @@ class TickleWorld(
         vector2d.y = worldToPixels(vec2.y)
     }
 
-    fun createBody(def: CostumeBodyDef, actor: Actor): Body {
-        val bodyDef = BodyDef()
-        bodyDef.type = def.bodyType
-
+    fun createBody(bodyDef: TickleBodyDef, actor: Actor): Body {
+        bodyDef.updateShapes(this)
         bodyDef.position = pixelsToWorld(actor.position)
         bodyDef.angle = actor.direction.radians.toFloat()
 
-        def.updateShapes(this)
-        val body = world.createBody(bodyDef)
-        def.fixtureDefs.forEach { fixtureDef ->
+        val body = createBody(bodyDef)
+        bodyDef.fixtureDefs.forEach { fixtureDef ->
             body.createFixture(fixtureDef)
         }
         actor.body = body
@@ -52,8 +69,8 @@ class TickleWorld(
     }
 
     fun tick() {
-        world.step(Game.instance.tickDuration.toFloat(), velocityIterations, positionIterations)
-        var body = world.bodyList
+        step(Game.instance.tickDuration.toFloat(), velocityIterations, positionIterations)
+        var body = bodyList
         while (body != null) {
             val actor = body.userData
             if (actor is Actor) {

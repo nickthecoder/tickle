@@ -315,7 +315,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
     inner class PhysicsTask : AbstractTask() {
 
-        val bodyTypeP = ChoiceParameter("bodyType", required = false, value = costume.bodyDef?.bodyType)
+        val bodyTypeP = ChoiceParameter("bodyType", required = false, value = costume.bodyDef?.type)
                 .nullableEnumChoices(mixCase = true, nullLabel = "None")
 
         val fixturesP = MultipleParameter("fixtures", minItems = 1) {
@@ -342,11 +342,11 @@ class CostumeTab(val name: String, val costume: Costume)
             if (bodyTypeP.value == null) {
                 costume.bodyDef = null
             } else {
-                val bodyDef = costume.bodyDef ?: CostumeBodyDef()
+                val bodyDef = costume.bodyDef ?: TickleBodyDef()
                 costume.bodyDef = bodyDef
 
                 with(bodyDef) {
-                    bodyType = bodyTypeP.value!!
+                    type = bodyTypeP.value!!
                 }
 
                 bodyDef.fixtureDefs.clear()
@@ -391,7 +391,7 @@ class CostumeTab(val name: String, val costume: Costume)
                 }
             }
 
-            fun initParameters(fixtureDef: CostumeFixtureDef) {
+            fun initParameters(fixtureDef: FixtureDef) {
                 with(fixtureDef) {
                     densityP.value = density
                     frictionP.value = friction
@@ -415,7 +415,7 @@ class CostumeTab(val name: String, val costume: Costume)
                 }
             }
 
-            fun createCostumeFixtureDef(): CostumeFixtureDef {
+            fun createCostumeFixtureDef(): FixtureDef {
 
                 val shapeDef: ShapeDef = when (shapeP.value) {
                     circleP -> {
@@ -429,7 +429,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     }
                 }
 
-                val fixtureDef = CostumeFixtureDef(shapeDef)
+                val fixtureDef = FixtureDef(shapeDef)
                 with(fixtureDef) {
                     density = densityP.value!!
                     friction = frictionP.value!!
