@@ -541,8 +541,15 @@ class JsonResources {
         val jbody = JsonObject()
 
         with(bodyDef) {
-            jbody.add("bodyType", this.type.name)
+            jbody.add("bodyType", type.name)
+            if (type != BodyType.STATIC) {
+                jbody.add("linearDamping", linearDamping)
+                jbody.add("angularDamping", angularDamping)
+                jbody.add("bullet", bullet)
+                jbody.add("fixedRotation", fixedRotation)
+            }
         }
+
         val jfixtures = JsonArray()
         jbody.add("fixtures", jfixtures)
         bodyDef.fixtureDefs.forEach { fixtureDef ->
@@ -677,6 +684,10 @@ class JsonResources {
         val bodyDef = TickleBodyDef()
         with(bodyDef) {
             type = BodyType.valueOf(jbody.getString("bodyType", BodyType.DYNAMIC.name))
+            linearDamping = jbody.getFloat("linearDamping", 0f)
+            angularDamping = jbody.getFloat("angularDamping", 0f)
+            bullet = jbody.getBoolean("bullet", false)
+            fixedRotation = jbody.getBoolean("fixedRotation", false)
         }
         jbody.get("fixtures")?.let {
             val jfixtures = it.asArray()

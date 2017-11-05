@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.physics
 
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.Body
+import org.jbox2d.dynamics.BodyType
 import org.jbox2d.dynamics.World
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
@@ -27,6 +28,8 @@ fun worldToPixels(vector2d: Vector2d, vec2: Vec2) {
     vector2d.x = worldToPixels(vec2.x)
     vector2d.y = worldToPixels(vec2.y)
 }
+
+fun BodyType.hasFixtures() = this == BodyType.DYNAMIC || this == BodyType.STATIC
 
 class TickleWorld(
         gravity: Vector2d = Vector2d(0.0, 0.0),

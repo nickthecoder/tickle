@@ -318,6 +318,14 @@ class CostumeTab(val name: String, val costume: Costume)
         val bodyTypeP = ChoiceParameter("bodyType", required = false, value = costume.bodyDef?.type)
                 .nullableEnumChoices(mixCase = true, nullLabel = "None")
 
+        val linearDampingP = FloatParameter("linearDamping", value = costume.bodyDef?.linearDamping ?: 0f, minValue = 0f, maxValue = 1f)
+
+        val angularDampingP = FloatParameter("angularDamping", value = costume.bodyDef?.angularDamping ?: 0f, minValue = 0f, maxValue = 1f)
+
+        val fixedRotationP = BooleanParameter("fixedRotation", value = costume.bodyDef?.fixedRotation ?: false)
+
+        val bulletP = BooleanParameter("bullet", value = costume.bodyDef?.bullet ?: false)
+
         val fixturesP = MultipleParameter("fixtures", minItems = 1) {
             FixtureParameter()
         }.asListDetail(isBoxed = true) { param ->
@@ -325,17 +333,27 @@ class CostumeTab(val name: String, val costume: Costume)
         }
 
         override val taskD = TaskDescription("physics")
-                .addParameters(bodyTypeP, fixturesP)
+                .addParameters(bodyTypeP, linearDampingP, angularDampingP, fixedRotationP, bulletP, fixturesP)
 
         init {
             costume.bodyDef?.fixtureDefs?.forEach { fixtureDef ->
                 val fixtureParameter = fixturesP.newValue()
                 fixtureParameter.initParameters(fixtureDef)
             }
-            fixturesP.hidden = bodyTypeP.value == BodyType.KINEMATIC || bodyTypeP.value == null
+            updateHiddenFields()
             bodyTypeP.listen {
-                fixturesP.hidden = bodyTypeP.value == BodyType.KINEMATIC || bodyTypeP.value == null
+                updateHiddenFields()
             }
+        }
+
+        fun updateHiddenFields() {
+            val static = bodyTypeP.value == BodyType.STATIC || bodyTypeP.value == null
+            linearDampingP.hidden = static
+            angularDampingP.hidden = static
+            fixedRotationP.hidden = static
+            bulletP.hidden = static
+
+            fixturesP.hidden = ! (bodyTypeP.value?.hasFixtures() ?: false)
         }
 
         override fun run() {
@@ -347,6 +365,10 @@ class CostumeTab(val name: String, val costume: Costume)
 
                 with(bodyDef) {
                     type = bodyTypeP.value!!
+                    linearDamping = linearDampingP.value!!
+                    angularDamping = angularDampingP.value!!
+                    bullet = bulletP.value == true
+                    fixedRotation = fixedRotationP.value!!
                 }
 
                 bodyDef.fixtureDefs.clear()
