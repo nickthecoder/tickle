@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.demo
 
 
+import org.jbox2d.common.Vec2
 import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Costume
@@ -16,6 +17,7 @@ class Bee : Controllable() {
     val ejectNoBounce = Resources.instance.inputs.find("ejectNoBounce")!!
     val ejectSimple = Resources.instance.inputs.find("ejectSimple")!!
     val ejectNeighbourhood = Resources.instance.inputs.find("ejectNeighbourhood")!!
+    val ejectWorld = Resources.instance.inputs.find("ejectWorld")!!
 
     override fun activated() {
 
@@ -52,6 +54,12 @@ class Bee : Controllable() {
         }
         if (ejectNeighbourhood.isPressed()) {
             eject(NeighbourhoodBounce())
+        }
+        if (ejectWorld.isPressed()) {
+            val newActor = actor.createChildOnStage("ejectWorld")
+            newActor.body?.let { body ->
+                body.linearVelocity = Vec2(-3f, -3f)
+            }
         }
     }
 

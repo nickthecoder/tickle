@@ -2,8 +2,10 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
+import uk.co.nickthecoder.tickle.physics.TickleWorld
 import uk.co.nickthecoder.tickle.resources.ActorXAlignment
 import uk.co.nickthecoder.tickle.resources.ActorYAlignment
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.stage.FlexPosition
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.stage.StageView
@@ -22,6 +24,8 @@ class Scene {
     private val autoPositions = mutableMapOf<String, FlexPosition>()
 
     private var orderedViews: List<View>? = null
+
+    var world: TickleWorld? = null
 
     fun stages() = stages.values
 
@@ -98,8 +102,15 @@ class Scene {
 
     fun begin() {
         Game.instance.window.showMouse(showMouse)
-
+        if (Resources.instance.gameInfo.physicsEngine) {
+            world = TickleWorld(Resources.instance.gameInfo.gravity)
+        }
         stages.values.forEach { stage ->
+            stage.actors.forEach { actor ->
+                actor.costume.bodyDef?.let { bodyDef ->
+                    world?.createBody(bodyDef, actor)
+                }
+            }
             stage.begin()
         }
 
@@ -117,6 +128,7 @@ class Scene {
     }
 
     fun tick() {
+        world?.tick()
         stages.values.forEach { stage ->
             stage.tick()
         }

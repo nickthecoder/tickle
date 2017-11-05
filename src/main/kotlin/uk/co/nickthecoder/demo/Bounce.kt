@@ -16,7 +16,7 @@ abstract class Bounce : AbstractRole(), TaggedRole {
 
     val radius = 30.0
 
-    override lateinit var tagged : Tagged
+    override lateinit var tagged: Tagged
 
     @Attribute(AttributeType.RELATIVE_POSITION, scale = 10.0)
     var velocity = Vector2d()
@@ -108,6 +108,26 @@ class NeighbourhoodBounce : Bounce() {
             }
         }
 
+    }
+}
+
+class WorldBound : AbstractRole() {
+    override fun tick() {
+        actor.body?.let { body ->
+            if (body.position.x < 0f && body.linearVelocity.x < 0) {
+                body.linearVelocity.x = -body.linearVelocity.x
+            }
+            if (body.position.y < 0f && body.linearVelocity.y < 0) {
+                body.linearVelocity.y = -body.linearVelocity.y
+            }
+            if (body.position.x > 80f && body.linearVelocity.x > 0) {
+                body.linearVelocity.x = -body.linearVelocity.x
+            }
+            if (body.position.y > 80f && body.linearVelocity.y > 0) {
+                body.linearVelocity.y = -body.linearVelocity.y
+            }
+        }
+        // println("Actor ${actor}. Body ${actor.body}. Position ${actor.body?.position}")
     }
 }
 

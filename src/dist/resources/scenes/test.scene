@@ -12,7 +12,15 @@
     { "name": "main", "actors": 
       [
         { "costume": "bee", "x": 357, "y": 305, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
-        { "costume": "hand", "x": 455, "y": 243, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1}
+        { "costume": "hand", "x": 455, "y": 243, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
+        { "costume": "grenade", "x": 195, "y": 258, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "attributes": 
+          [
+            { "name": "exit", "value": "0.0x50.0"},
+            { "name": "hue", "value": "1"},
+            { "name": "maxVelocity", "value": "20.0:12.0"},
+            { "name": "minVelocity", "value": "-20.0:2.0"}
+          ]
+        }
       ]
     }
   ]

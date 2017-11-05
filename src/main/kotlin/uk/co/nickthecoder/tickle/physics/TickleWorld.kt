@@ -43,6 +43,10 @@ class TickleWorld(
 
         def.updateShapes(this)
         val body = world.createBody(bodyDef)
+        def.fixtureDefs.forEach { fixtureDef ->
+            body.createFixture(fixtureDef)
+        }
+        actor.body = body
         body.userData = actor
         return body
     }
@@ -51,12 +55,12 @@ class TickleWorld(
         world.step(Game.instance.tickDuration.toFloat(), velocityIterations, positionIterations)
         var body = world.bodyList
         while (body != null) {
-            body = body.next
             val actor = body.userData
             if (actor is Actor) {
                 worldToPixels(actor.position, body.position)
                 actor.direction.radians = body.angle.toDouble()
             }
+            body = body.next
         }
     }
 

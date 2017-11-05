@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle
 
+import org.jbox2d.dynamics.Body
 import org.joml.Matrix4f
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
@@ -61,6 +62,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     private var dirtyMatrix: Boolean = false
 
+    var body: Body? = null
 
     val textAppearance: TextAppearance?
         get() {
@@ -179,10 +181,16 @@ class Actor(var costume: Costume, val role: Role? = null) {
     }
 
     fun createChild(eventName: String): Actor {
-        val actor = costume.createChild(eventName)
-        actor.x = x
-        actor.y = y
-        return actor
+        val childActor = costume.createChild(eventName)
+        childActor.x = x
+        childActor.y = y
+        Game.instance.scene.world?.let { world ->
+            childActor.body?.let { body ->
+                body.setTransform(world.pixelsToWorld(childActor.position), childActor.direction.radians.toFloat())
+            }
+        }
+
+        return childActor
     }
 
     fun createChildOnStage(eventName: String): Actor {

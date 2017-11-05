@@ -315,7 +315,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
     inner class PhysicsTask : AbstractTask() {
 
-        val bodyTypeP = ChoiceParameter("bodyType", value = costume.bodyDef?.bodyType)
+        val bodyTypeP = ChoiceParameter("bodyType", required = false, value = costume.bodyDef?.bodyType)
                 .nullableEnumChoices(mixCase = true, nullLabel = "None")
 
         val fixturesP = MultipleParameter("fixtures", minItems = 1) {
@@ -328,9 +328,9 @@ class CostumeTab(val name: String, val costume: Costume)
                 .addParameters(bodyTypeP, fixturesP)
 
         init {
-            costume.bodyDef?.fixtures?.forEach { fixture ->
+            costume.bodyDef?.fixtureDefs?.forEach { fixtureDef ->
                 val fixtureParameter = fixturesP.newValue()
-                fixtureParameter.initParameters(fixture)
+                fixtureParameter.initParameters(fixtureDef)
             }
             fixturesP.hidden = bodyTypeP.value == BodyType.KINEMATIC || bodyTypeP.value == null
             bodyTypeP.listen {
@@ -349,11 +349,10 @@ class CostumeTab(val name: String, val costume: Costume)
                     bodyType = bodyTypeP.value!!
                 }
 
-                bodyDef.fixtures.clear()
+                bodyDef.fixtureDefs.clear()
                 fixturesP.innerParameters.forEach { fixtureParameter ->
-                    bodyDef.fixtures.add(fixtureParameter.createCostumeFixtureDef())
+                    bodyDef.fixtureDefs.add(fixtureParameter.createCostumeFixtureDef())
                 }
-                println("Save fixtures ${costume.bodyDef?.fixtures}")
             }
         }
 

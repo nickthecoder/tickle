@@ -545,12 +545,12 @@ class JsonResources {
         }
         val jfixtures = JsonArray()
         jbody.add("fixtures", jfixtures)
-        bodyDef.fixtures.forEach { fixture ->
+        bodyDef.fixtureDefs.forEach { fixtureDef ->
             val jfixture = JsonObject()
-            jfixture.add("friction", fixture.friction)
-            jfixture.add("density", fixture.density)
-            jfixture.add("restitution", fixture.restitution)
-            with(fixture.shapeDef) {
+            jfixture.add("friction", fixtureDef.friction)
+            jfixture.add("density", fixtureDef.density)
+            jfixture.add("restitution", fixtureDef.restitution)
+            with(fixtureDef.shapeDef) {
                 when (this) {
                     is CircleDef -> {
                         val jcircle = JsonObject()
@@ -702,11 +702,11 @@ class JsonResources {
                     shape = box
                 }
                 if (shape != null) {
-                    val fixture = CostumeFixtureDef(shape!!)
-                    fixture.density = jfixture.getFloat("density", 1f)
-                    fixture.restitution = jfixture.getFloat("restitution", 0f)
-                    fixture.friction = jfixture.getFloat("friction", 0f)
-                    bodyDef.fixtures.add(fixture)
+                    val fixtureDef = CostumeFixtureDef(shape!!)
+                    fixtureDef.density = jfixture.getFloat("density", 1f)
+                    fixtureDef.restitution = jfixture.getFloat("restitution", 0f)
+                    fixtureDef.friction = jfixture.getFloat("friction", 0f)
+                    bodyDef.fixtureDefs.add(fixtureDef)
                 }
             }
         }

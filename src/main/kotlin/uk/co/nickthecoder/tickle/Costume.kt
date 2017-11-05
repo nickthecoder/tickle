@@ -35,7 +35,7 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
 
     var inheritEventsFrom: Costume? = null
 
-    var bodyDef : CostumeBodyDef? = null
+    var bodyDef: CostumeBodyDef? = null
 
     fun createActor(text: String = ""): Actor {
         val role = if (roleString.isBlank()) null else Role.create(roleString)
@@ -96,10 +96,12 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
 
     fun createChild(eventName: String): Actor {
 
+        val childActor: Actor
         val newCostume = chooseCostume(eventName)
+
         if (newCostume != null) {
             val role = newCostume.createRole()
-            val actor = Actor(newCostume, role)
+            childActor = Actor(newCostume, role)
 
             // Set the appearance. Either a Pose or a TextStyle (Pose takes precedence if it has both)
             val pose = newCostume.choosePose(newCostume.initialEventName)
@@ -107,17 +109,23 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
                 val style = newCostume.chooseTextStyle(newCostume.initialEventName)
                 if (style != null) {
                     val text = newCostume.chooseString(newCostume.initialEventName) ?: ""
-                    actor.changeAppearance(text, style)
+                    childActor.changeAppearance(text, style)
                 }
             } else {
-                actor.changeAppearance(pose)
+                childActor.changeAppearance(pose)
             }
-            return actor
-        }
 
-        val actor = Actor(this)
-        actor.event(eventName)
-        return Actor(this)
+            newCostume.bodyDef?.let { bodyDef ->
+                Game.instance.scene.world?.let { world ->
+                    val body = world.createBody(bodyDef, childActor)
+                }
+            }
+
+        } else {
+            childActor = Actor(this)
+            childActor.event(eventName)
+        }
+        return childActor
     }
 
     /**

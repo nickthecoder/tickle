@@ -1,8 +1,6 @@
 package uk.co.nickthecoder.tickle.physics
 
-import org.jbox2d.dynamics.BodyDef
 import org.jbox2d.dynamics.BodyType
-import org.joml.Vector2d
 
 /**
  * Holds details of a Costume's body, where all values are in Tickle's coordinate system.
@@ -12,18 +10,11 @@ import org.joml.Vector2d
 class CostumeBodyDef {
 
     var bodyType: BodyType = BodyType.DYNAMIC
-    val fixtures = mutableListOf<CostumeFixtureDef>()
-
-    fun createBodyDef(position: Vector2d): BodyDef {
-        val bodyDef = BodyDef()
-        bodyDef.type = bodyType
-
-        return bodyDef
-    }
+    val fixtureDefs = mutableListOf<CostumeFixtureDef>()
 
     fun updateShapes(world: TickleWorld) {
-        fixtures.forEach { fixture ->
-            fixture.shape = fixture.shapeDef.createShape(world)
+        fixtureDefs.forEach { fixtureDef ->
+            fixtureDef.shape = fixtureDef.shapeDef.createShape(world)
         }
     }
 }

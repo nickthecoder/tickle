@@ -1,23 +1,30 @@
 Current Work
 ============
 
-Allos for NULL body types (i.e. not a body) in CostumeTab
+world iterations in GameInfo and its Tab (+Json)
+Delete body when actor is killed
+Delete world when scene ends
 
-Hide fields not applicable to Static and ? body type.
-	Also, do load or save that data!
+Add addition attributes of BodyDef to CostumeBodyDef and the CostumeTab parameters + Json
+	linearDamping, angularDamping, fixedRotation, bullet, ?inertialScale?
 
 
-Don't clear the whole overlapTexture
-Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
 
 Next
 ====
+
+PixelOverlapping
+	Don't clear the whole overlapTexture
+	Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
+
 
 PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
 Ditto for CostumeChoiceParameter
 
 BUGS
 ====
+
+Scene.adjustActors is not being called directly. Should it?
 
 Renaming a costume doesn't update ActorResource in scenes that use it.
 
@@ -87,6 +94,8 @@ Add my own "runLater", which will call the code at the end of a tick.
 
 Later
 =====
+
+Allow jBox2D to be optional (i.e. do not need to include the jar (and the logger) if it isn't used by the game.
 
 Allow fonts to have multiple outlines i.e. one myfont.png may have myfont-thinOutline.png and myfont.blurredOutline.png
 	Could specify an outline name in TextStyle, and lazily load the extra texture.
