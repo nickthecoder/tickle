@@ -413,7 +413,7 @@ class CostumeTab(val name: String, val costume: Costume)
                 }
             }
 
-            fun initParameters(fixtureDef: FixtureDef) {
+            fun initParameters(fixtureDef: TickleFixtureDef) {
                 with(fixtureDef) {
                     densityP.value = density
                     frictionP.value = friction
@@ -437,7 +437,7 @@ class CostumeTab(val name: String, val costume: Costume)
                 }
             }
 
-            fun createCostumeFixtureDef(): FixtureDef {
+            fun createCostumeFixtureDef(): TickleFixtureDef {
 
                 val shapeDef: ShapeDef = when (shapeP.value) {
                     circleP -> {
@@ -451,7 +451,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     }
                 }
 
-                val fixtureDef = FixtureDef(shapeDef)
+                val fixtureDef = TickleFixtureDef(shapeDef)
                 with(fixtureDef) {
                     density = densityP.value!!
                     friction = frictionP.value!!

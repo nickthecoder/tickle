@@ -172,6 +172,7 @@ class JsonResources {
 
     fun saveInfo(): JsonObject {
         val jinfo = JsonObject()
+
         with(resources.gameInfo) {
             jinfo.add("title", title)
             jinfo.add("width", width)
@@ -182,15 +183,22 @@ class JsonResources {
             jinfo.add("testScene", resources.sceneFileToPath(testScenePath))
 
             jinfo.add("producer", producerString)
-            jinfo.add("physicsEngine", physicsEngine)
-            if (physicsEngine) {
-                jinfo.add("gravity_x", gravity.x)
-                jinfo.add("gravity_y", gravity.y)
-                jinfo.add("scale", scale)
+        }
+
+        if (resources.gameInfo.physicsEngine) {
+            val jphysics = JsonObject()
+            jinfo.add("physics", jphysics)
+            with(resources.gameInfo.physicsInfo) {
+                jphysics.add("gravity_x", gravity.x)
+                jphysics.add("gravity_y", gravity.y)
+                jphysics.add("velocityIterations", velocityIterations)
+                jphysics.add("positionIterations", positionIterations)
+                jphysics.add("scale", scale)
             }
 
-            return jinfo
         }
+
+        return jinfo
     }
 
     fun loadInfo(jinfo: JsonObject) {
@@ -204,15 +212,24 @@ class JsonResources {
             testScenePath = resources.scenePathToFile(jinfo.getString("testScene", "splash"))
             producerString = jinfo.getString("producer", NoProducer::javaClass.name)
 
-            physicsEngine = jinfo.getBoolean("physicsEngine", false)
-            if (physicsEngine) {
-                gravity.x = jinfo.getDouble("gravity_x", 0.0)
-                gravity.y = jinfo.getDouble("gravity_y", 0.0)
-                scale = jinfo.getDouble("scale", 100.0)
-            }
-            // println("Loaded info : $title : $width x $height Resize? $resizable. Game=$producerString")
         }
+
+        val jphysics = jinfo.get("physics")?.asObject()
+        if (jphysics != null) {
+            resources.gameInfo.physicsEngine = true
+            if (resources.gameInfo.physicsEngine) {
+                with(resources.gameInfo.physicsInfo) {
+                    gravity.x = jphysics.getDouble("gravity_x", 0.0)
+                    gravity.y = jphysics.getDouble("gravity_y", 0.0)
+                    velocityIterations = jphysics.getInt("velocityIterations", 8)
+                    positionIterations = jphysics.getInt("positionIterations", 3)
+                    scale = jphysics.getDouble("scale", 100.0)
+                }
+            }
+        }
+        // println("Loaded info : $title : $width x $height Resize? $resizable. Game=$producerString")
     }
+
 
     // LAYOUTS
 
@@ -713,7 +730,7 @@ class JsonResources {
                     shape = box
                 }
                 if (shape != null) {
-                    val fixtureDef = FixtureDef(shape!!)
+                    val fixtureDef = TickleFixtureDef(shape!!)
                     fixtureDef.density = jfixture.getFloat("density", 1f)
                     fixtureDef.restitution = jfixture.getFloat("restitution", 0f)
                     fixtureDef.friction = jfixture.getFloat("friction", 0f)

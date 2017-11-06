@@ -14,7 +14,7 @@ import org.jbox2d.dynamics.BodyDef
  */
 class TickleBodyDef : BodyDef() {
 
-    val fixtureDefs = mutableListOf<FixtureDef>()
+    val fixtureDefs = mutableListOf<TickleFixtureDef>()
 
     /**
      * Creates Shape objects for each of the fixtureDefs from the ShapeDefs, converting the units from pixels, to

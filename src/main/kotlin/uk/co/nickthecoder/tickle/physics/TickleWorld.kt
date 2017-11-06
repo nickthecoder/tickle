@@ -9,7 +9,7 @@ import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.resources.Resources
 
-fun worldScale() = Game.instance.scene.world?.scale ?: Resources.instance.gameInfo.scale.toFloat()
+fun worldScale() = Game.instance.scene.world?.scale ?: Resources.instance.gameInfo.physicsInfo.scale.toFloat()
 
 fun pixelsToWorld(pixels: Double) = pixels.toFloat() / worldScale()
 

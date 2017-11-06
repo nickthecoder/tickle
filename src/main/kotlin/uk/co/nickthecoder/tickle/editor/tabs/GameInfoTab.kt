@@ -33,10 +33,13 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val producerP = ChoiceParameter<Class<*>>("producer", value = NoProducer::class.java)
 
     val physicsEngineP = BooleanParameter("physicsEngine", value = gameInfo.physicsEngine)
-    val gravityP = Vector2dParameter("gravity", value = gameInfo.gravity).asHorizontal()
-    val scaleP = DoubleParameter("scale", value = gameInfo.scale)
+    val gravityP = Vector2dParameter("gravity", value = gameInfo.physicsInfo.gravity).asHorizontal()
+    val scaleP = DoubleParameter("scale", value = gameInfo.physicsInfo.scale)
+    val velocityIterationsP = IntParameter("velocityIterations", value = gameInfo.physicsInfo.velocityIterations)
+    val positionIterationsP = IntParameter("positionIterations", value = gameInfo.physicsInfo.positionIterations)
+
     val worldDetailsP = SimpleGroupParameter("physicsDetails")
-            .addParameters(gravityP, scaleP)
+            .addParameters(gravityP, scaleP, velocityIterationsP, positionIterationsP)
             .asBox()
 
     override val taskD = TaskDescription("editGameInfo")
@@ -70,8 +73,13 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
             resizable = resizableP.value!!
             producerString = producerP.value!!.name
             physicsEngine = physicsEngineP.value == true
+        }
+
+        with(gameInfo.physicsInfo) {
             gravity = gravityP.value
             scale = scaleP.value!!
+            velocityIterations = velocityIterationsP.value!!
+            positionIterations = positionIterationsP.value!!
         }
     }
 

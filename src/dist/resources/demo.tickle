@@ -1,359 +1,806 @@
-{ "info": { "title": "Tickle", "width": 1024, "height": 600, "resizable": true, "initialScene": "level01", "testScene": "test", "producer": "uk.co.nickthecoder.demo.Demo", "physicsEngine": true, "gravity_x": 0, "gravity_y": 0, "scale": 100}, "preferences": { "outputFormat": "UGLY", "packages": 
-  [
-    "uk.co.nickthecoder.tickle",
-    "uk.co.nickthecoder.demo"
-  ]
-, "treeThumbnailSize": 24, "costumePickerThumbnailSize": 100}, "layouts": 
-  [
-    { "name": "default", "stages": 
-      [
-        { "name": "background", "stage": "uk.co.nickthecoder.tickle.stage.GameStage", "constraint": "uk.co.nickthecoder.tickle.resources.NoStageConstraint"},
-        { "name": "main", "stage": "uk.co.nickthecoder.tickle.stage.GameStage", "constraint": "uk.co.nickthecoder.tickle.resources.NoStageConstraint"}
-      ]
-    , "views": 
-      [
-        { "name": "background", "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView", "stage": "background", "zOrder": 10, "hAlignment": "LEFT", "leftRightMargin": 0, "vAlignment": "TOP", "topBottomMargin": 0},
-        { "name": "main", "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView", "stage": "main", "zOrder": 50, "hAlignment": "LEFT", "leftRightMargin": 0, "vAlignment": "BOTTOM", "topBottomMargin": 0}
+{
+  "info": {
+    "title": "Tickle",
+    "width": 1024,
+    "height": 600,
+    "resizable": true,
+    "initialScene": "level01",
+    "testScene": "test",
+    "producer": "uk.co.nickthecoder.demo.Demo",
+    "physics": {
+      "gravity_x": 0,
+      "gravity_y": 0,
+      "velocityIterations": 8,
+      "positionIterations": 3,
+      "scale": 100
+    }
+  },
+  "preferences": {
+    "outputFormat": "PRETTY",
+    "packages": [
+      "uk.co.nickthecoder.tickle",
+      "uk.co.nickthecoder.demo"
+    ],
+    "treeThumbnailSize": 24,
+    "costumePickerThumbnailSize": 100
+  },
+  "layouts": [
+    {
+      "name": "default",
+      "stages": [
+        {
+          "name": "background",
+          "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
+          "constraint": "uk.co.nickthecoder.tickle.resources.NoStageConstraint"
+        },
+        {
+          "name": "main",
+          "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
+          "constraint": "uk.co.nickthecoder.tickle.resources.NoStageConstraint"
+        }
+      ],
+      "views": [
+        {
+          "name": "background",
+          "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView",
+          "stage": "background",
+          "zOrder": 10,
+          "hAlignment": "LEFT",
+          "leftRightMargin": 0,
+          "vAlignment": "TOP",
+          "topBottomMargin": 0
+        },
+        {
+          "name": "main",
+          "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView",
+          "stage": "main",
+          "zOrder": 50,
+          "hAlignment": "LEFT",
+          "leftRightMargin": 0,
+          "vAlignment": "BOTTOM",
+          "topBottomMargin": 0
+        }
       ]
     },
-    { "name": "glass", "stages": 
-      [
-        { "name": "glass", "stage": "uk.co.nickthecoder.tickle.stage.GameStage", "constraint": "uk.co.nickthecoder.tickle.resources.GridConstraint", "constraintAttributes": 
-          [
-            { "name": "xSpacing", "value": "50"},
-            { "name": "ySpacing", "value": "50"}
+    {
+      "name": "glass",
+      "stages": [
+        {
+          "name": "glass",
+          "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
+          "constraint": "uk.co.nickthecoder.tickle.resources.GridConstraint",
+          "constraintAttributes": [
+            {
+              "name": "xSpacing",
+              "value": "50"
+            },
+            {
+              "name": "ySpacing",
+              "value": "50"
+            }
           ]
         }
-      ]
-    , "views": 
-      [
-        { "name": "glass", "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView", "stage": "glass", "zOrder": 90, "hAlignment": "LEFT", "leftRightMargin": 0, "vAlignment": "TOP", "topBottomMargin": 0}
+      ],
+      "views": [
+        {
+          "name": "glass",
+          "view": "uk.co.nickthecoder.tickle.stage.ZOrderStageView",
+          "stage": "glass",
+          "zOrder": 90,
+          "hAlignment": "LEFT",
+          "leftRightMargin": 0,
+          "vAlignment": "TOP",
+          "topBottomMargin": 0
+        }
       ]
     }
-  ]
-, "textures": 
-  [
-    { "name": "sprites", "file": "images/sprites.png"}
-  ]
-, "fonts": 
-  [
-    { "name": "plain22", "fontName": "SansSerif", "style": "PLAIN", "size": 22, "xPadding": 4, "yPadding": 4}
-  ]
-, "poses": 
-  [
-    { "name": "bee", "texture": "sprites", "left": 0, "bottom": 60, "right": 75, "top": 0, "offsetX": 38, "offsetY": 29, "direction": 24},
-    { "name": "grenade", "texture": "sprites", "left": 0, "bottom": 199, "right": 44, "top": 139, "offsetX": 20, "offsetY": 30, "direction": 0},
-    { "name": "hand", "texture": "sprites", "left": 138, "bottom": 60, "right": 188, "top": 0, "offsetX": 25, "offsetY": 40, "direction": 0},
-    { "name": "coin", "texture": "sprites", "left": 75, "bottom": 60, "right": 135, "top": 0, "offsetX": 30, "offsetY": 30, "direction": 0},
-    { "name": "spark", "texture": "sprites", "left": 0, "bottom": 100, "right": 40, "top": 60, "offsetX": 20, "offsetY": 20, "direction": 0},
-    { "name": "eye", "texture": "sprites", "left": 63, "bottom": 113, "right": 93, "top": 68, "offsetX": 16, "offsetY": 23, "direction": 0},
-    { "name": "pupil", "texture": "sprites", "left": 97, "bottom": 104, "right": 111, "top": 89, "offsetX": 7, "offsetY": 7, "direction": 0},
-    { "name": "projectile", "texture": "sprites", "left": 5, "bottom": 137, "right": 38, "top": 104, "offsetX": 17, "offsetY": 17, "direction": 0},
-    { "name": "redBall", "texture": "sprites", "left": 117, "bottom": 130, "right": 189, "top": 58, "offsetX": 36, "offsetY": 36, "direction": 0},
-    { "name": "blueBall", "texture": "sprites", "left": 46, "bottom": 199, "right": 117, "top": 128, "offsetX": 36, "offsetY": 36, "direction": 0},
-    { "name": "greenBall", "texture": "sprites", "left": 120, "bottom": 200, "right": 192, "top": 128, "offsetX": 36, "offsetY": 36, "direction": 0}
-  ]
-, "sounds": 
-  [
-    { "name": "fire", "file": "sounds/fire.ogg"}
-  ]
-, "costumeGroups": 
-  [
-    { "name": "coins", "costumes": 
-      [
-        { "name": "coin10", "role": "uk.co.nickthecoder.demo.Coin", "canRotate": true, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "inheritsEventsFrom": "coin", "events": 
-          [
-            { "name": "default", "poses": 
-              [
+  ],
+  "textures": [
+    {
+      "name": "sprites",
+      "file": "images/sprites.png"
+    }
+  ],
+  "fonts": [
+    {
+      "name": "plain22",
+      "fontName": "SansSerif",
+      "style": "PLAIN",
+      "size": 22,
+      "xPadding": 4,
+      "yPadding": 4
+    }
+  ],
+  "poses": [
+    {
+      "name": "bee",
+      "texture": "sprites",
+      "left": 0,
+      "bottom": 60,
+      "right": 75,
+      "top": 0,
+      "offsetX": 38,
+      "offsetY": 29,
+      "direction": 24
+    },
+    {
+      "name": "grenade",
+      "texture": "sprites",
+      "left": 0,
+      "bottom": 199,
+      "right": 44,
+      "top": 139,
+      "offsetX": 20,
+      "offsetY": 30,
+      "direction": 0
+    },
+    {
+      "name": "hand",
+      "texture": "sprites",
+      "left": 138,
+      "bottom": 60,
+      "right": 188,
+      "top": 0,
+      "offsetX": 25,
+      "offsetY": 40,
+      "direction": 0
+    },
+    {
+      "name": "coin",
+      "texture": "sprites",
+      "left": 75,
+      "bottom": 60,
+      "right": 135,
+      "top": 0,
+      "offsetX": 30,
+      "offsetY": 30,
+      "direction": 0
+    },
+    {
+      "name": "spark",
+      "texture": "sprites",
+      "left": 0,
+      "bottom": 100,
+      "right": 40,
+      "top": 60,
+      "offsetX": 20,
+      "offsetY": 20,
+      "direction": 0
+    },
+    {
+      "name": "eye",
+      "texture": "sprites",
+      "left": 63,
+      "bottom": 113,
+      "right": 93,
+      "top": 68,
+      "offsetX": 16,
+      "offsetY": 23,
+      "direction": 0
+    },
+    {
+      "name": "pupil",
+      "texture": "sprites",
+      "left": 97,
+      "bottom": 104,
+      "right": 111,
+      "top": 89,
+      "offsetX": 7,
+      "offsetY": 7,
+      "direction": 0
+    },
+    {
+      "name": "projectile",
+      "texture": "sprites",
+      "left": 5,
+      "bottom": 137,
+      "right": 38,
+      "top": 104,
+      "offsetX": 17,
+      "offsetY": 17,
+      "direction": 0
+    },
+    {
+      "name": "redBall",
+      "texture": "sprites",
+      "left": 117,
+      "bottom": 130,
+      "right": 189,
+      "top": 58,
+      "offsetX": 36,
+      "offsetY": 36,
+      "direction": 0
+    },
+    {
+      "name": "blueBall",
+      "texture": "sprites",
+      "left": 46,
+      "bottom": 199,
+      "right": 117,
+      "top": 128,
+      "offsetX": 36,
+      "offsetY": 36,
+      "direction": 0
+    },
+    {
+      "name": "greenBall",
+      "texture": "sprites",
+      "left": 120,
+      "bottom": 200,
+      "right": 192,
+      "top": 128,
+      "offsetX": 36,
+      "offsetY": 36,
+      "direction": 0
+    }
+  ],
+  "sounds": [
+    {
+      "name": "fire",
+      "file": "sounds/fire.ogg"
+    }
+  ],
+  "costumeGroups": [
+    {
+      "name": "coins",
+      "costumes": [
+        {
+          "name": "coin10",
+          "role": "uk.co.nickthecoder.demo.Coin",
+          "canRotate": true,
+          "zOrder": 0,
+          "initialEvent": "default",
+          "showInSceneEditor": true,
+          "inheritsEventsFrom": "coin",
+          "events": [
+            {
+              "name": "default",
+              "poses": [
                 "coin"
               ]
             }
-          ]
-        , "attributes": 
-          [
-            { "name": "color", "value": "#ffffffff"},
-            { "name": "turningSpeed", "value": "3.0"},
-            { "name": "value", "value": "10"},
-            { "name": "velocity", "value": "0.0:2.0"}
+          ],
+          "attributes": [
+            {
+              "name": "color",
+              "value": "#ffffffff"
+            },
+            {
+              "name": "turningSpeed",
+              "value": "3.0"
+            },
+            {
+              "name": "value",
+              "value": "10"
+            },
+            {
+              "name": "velocity",
+              "value": "0.0:2.0"
+            }
           ]
         },
-        { "name": "coin", "role": "uk.co.nickthecoder.demo.Coin", "canRotate": true, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-          [
-            { "name": "default", "poses": 
-              [
+        {
+          "name": "coin",
+          "role": "uk.co.nickthecoder.demo.Coin",
+          "canRotate": true,
+          "zOrder": 0,
+          "initialEvent": "default",
+          "showInSceneEditor": true,
+          "events": [
+            {
+              "name": "default",
+              "poses": [
                 "coin"
               ]
             }
-          ]
-        , "attributes": 
-          [
-            { "name": "color", "value": "#999900"},
-            { "name": "turningSpeed", "value": "3.0"},
-            { "name": "value", "value": "1"},
-            { "name": "velocity", "value": "0.0:2.0"}
+          ],
+          "attributes": [
+            {
+              "name": "color",
+              "value": "#999900"
+            },
+            {
+              "name": "turningSpeed",
+              "value": "3.0"
+            },
+            {
+              "name": "value",
+              "value": "1"
+            },
+            {
+              "name": "velocity",
+              "value": "0.0:2.0"
+            }
           ]
         },
-        { "name": "coin100", "role": "uk.co.nickthecoder.demo.Coin", "canRotate": true, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-          [
-            { "name": "default", "poses": 
-              [
+        {
+          "name": "coin100",
+          "role": "uk.co.nickthecoder.demo.Coin",
+          "canRotate": true,
+          "zOrder": 0,
+          "initialEvent": "default",
+          "showInSceneEditor": true,
+          "events": [
+            {
+              "name": "default",
+              "poses": [
                 "coin"
               ]
             }
-          ]
-        , "attributes": 
-          [
-            { "name": "color", "value": "#ffff4d"},
-            { "name": "turningSpeed", "value": "3.0"},
-            { "name": "value", "value": "100"},
-            { "name": "velocity", "value": "0.0:2.0"}
+          ],
+          "attributes": [
+            {
+              "name": "color",
+              "value": "#ffff4d"
+            },
+            {
+              "name": "turningSpeed",
+              "value": "3.0"
+            },
+            {
+              "name": "value",
+              "value": "100"
+            },
+            {
+              "name": "velocity",
+              "value": "0.0:2.0"
+            }
           ]
         }
-      ]
-    , "showInSceneEditor": true},
-    { "name": "balls", "costumes": 
-      [
-        { "name": "neighbourhoodBounce", "role": "uk.co.nickthecoder.demo.NeighbourhoodBounce", "canRotate": false, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": false, "events": 
-          [
-            { "name": "default", "poses": 
-              [
+      ],
+      "showInSceneEditor": true
+    },
+    {
+      "name": "balls",
+      "costumes": [
+        {
+          "name": "neighbourhoodBounce",
+          "role": "uk.co.nickthecoder.demo.NeighbourhoodBounce",
+          "canRotate": false,
+          "zOrder": 0,
+          "initialEvent": "default",
+          "showInSceneEditor": false,
+          "events": [
+            {
+              "name": "default",
+              "poses": [
                 "redBall"
               ]
             }
           ]
         },
-        { "name": "simpleBounce", "role": "uk.co.nickthecoder.demo.SimpleBounce", "canRotate": false, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": false, "events": 
-          [
-            { "name": "default", "poses": 
-              [
+        {
+          "name": "simpleBounce",
+          "role": "uk.co.nickthecoder.demo.SimpleBounce",
+          "canRotate": false,
+          "zOrder": 0,
+          "initialEvent": "default",
+          "showInSceneEditor": false,
+          "events": [
+            {
+              "name": "default",
+              "poses": [
                 "blueBall"
               ]
             }
-          ]
-        , "attributes": 
-          [
-            { "name": "velocity", "value": "0.0x0.0"}
+          ],
+          "attributes": [
+            {
+              "name": "velocity",
+              "value": "0.0x0.0"
+            }
           ]
         },
-        { "name": "worldBounce", "role": "uk.co.nickthecoder.demo.WorldBound", "canRotate": false, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-          [
-            { "name": "default", "poses": 
-              [
+        {
+          "name": "worldBounce",
+          "role": "uk.co.nickthecoder.demo.WorldBound",
+          "canRotate": false,
+          "zOrder": 0,
+          "initialEvent": "default",
+          "showInSceneEditor": true,
+          "events": [
+            {
+              "name": "default",
+              "poses": [
                 "greenBall"
               ]
             }
-          ]
-        , "body": { "bodyType": "DYNAMIC", "linearDamping": 0, "angularDamping": 0, "bullet": false, "fixedRotation": false, "fixtures": 
-          [
-            { "friction": 0, "density": 1, "restitution": 1, "circle": { "x": 0, "y": 0, "radius": 36}}
-          ]
-        }}
-      ]
-    , "showInSceneEditor": true}
-  ]
-, "costumes": 
-  [
-    { "name": "bee", "role": "uk.co.nickthecoder.demo.Bee", "canRotate": true, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-      [
-        { "name": "default", "poses": 
-          [
+          ],
+          "body": {
+            "bodyType": "DYNAMIC",
+            "linearDamping": 0,
+            "angularDamping": 0,
+            "bullet": false,
+            "fixedRotation": false,
+            "fixtures": [
+              {
+                "friction": 0,
+                "density": 1,
+                "restitution": 1,
+                "circle": {
+                  "x": 0,
+                  "y": 0,
+                  "radius": 36
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "showInSceneEditor": true
+    }
+  ],
+  "costumes": [
+    {
+      "name": "bee",
+      "role": "uk.co.nickthecoder.demo.Bee",
+      "canRotate": true,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "poses": [
             "bee"
           ]
         },
-        { "name": "ejectWorld", "costumes": 
-          [
+        {
+          "name": "ejectWorld",
+          "costumes": [
             "worldBounce"
           ]
         }
       ]
     },
-    { "name": "grenade", "role": "uk.co.nickthecoder.demo.Grenade", "canRotate": true, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-      [
-        { "name": "default", "poses": 
-          [
+    {
+      "name": "grenade",
+      "role": "uk.co.nickthecoder.demo.Grenade",
+      "canRotate": true,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "poses": [
             "grenade"
           ]
         }
-      ]
-    , "attributes": 
-      [
-        { "name": "exit", "value": "0.0x50.0"},
-        { "name": "hue", "value": "1"},
-        { "name": "maxVelocity", "value": "20.0:12.0"},
-        { "name": "minVelocity", "value": "-20.0:2.0"}
+      ],
+      "attributes": [
+        {
+          "name": "exit",
+          "value": "0.0x50.0"
+        },
+        {
+          "name": "hue",
+          "value": "1"
+        },
+        {
+          "name": "maxVelocity",
+          "value": "20.0:12.0"
+        },
+        {
+          "name": "minVelocity",
+          "value": "-20.0:2.0"
+        }
       ]
     },
-    { "name": "hand", "role": "uk.co.nickthecoder.demo.Hand", "canRotate": false, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-      [
-        { "name": "default", "poses": 
-          [
+    {
+      "name": "hand",
+      "role": "uk.co.nickthecoder.demo.Hand",
+      "canRotate": false,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "poses": [
             "hand"
           ]
         }
       ]
     },
-    { "name": "spark", "role": "", "canRotate": false, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-      [
-        { "name": "default", "poses": 
-          [
+    {
+      "name": "spark",
+      "role": "",
+      "canRotate": false,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "poses": [
             "spark"
           ]
         }
       ]
     },
-    { "name": "shootingStar", "role": "uk.co.nickthecoder.demo.ShootingStar", "canRotate": false, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-      [
-        { "name": "default", "poses": 
-          [
+    {
+      "name": "shootingStar",
+      "role": "uk.co.nickthecoder.demo.ShootingStar",
+      "canRotate": false,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "poses": [
             "spark"
           ]
         },
-        { "name": "changeDirection", "sounds": 
-          [
+        {
+          "name": "changeDirection",
+          "sounds": [
             "fire"
           ]
         }
-      ]
-    , "attributes": 
-      [
-        { "name": "curveAngle", "value": "59.99999999999999"},
-        { "name": "headingAndLength", "value": "14.999999999999998:400.0"},
-        { "name": "sideDuration", "value": "1"},
-        { "name": "turnAngle", "value": "190.0"}
+      ],
+      "attributes": [
+        {
+          "name": "curveAngle",
+          "value": "59.99999999999999"
+        },
+        {
+          "name": "headingAndLength",
+          "value": "14.999999999999998:400.0"
+        },
+        {
+          "name": "sideDuration",
+          "value": "1"
+        },
+        {
+          "name": "turnAngle",
+          "value": "190.0"
+        }
       ]
     },
-    { "name": "plainText", "role": "", "canRotate": false, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-      [
-        { "name": "default", "textStyles": 
-          [
-            { "font": "plain22", "halign": "CENTER", "valign": "BOTTOM", "color": "#00000083", "outlineColor": "#ffffff7f"}
+    {
+      "name": "plainText",
+      "role": "",
+      "canRotate": false,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "textStyles": [
+            {
+              "font": "plain22",
+              "halign": "CENTER",
+              "valign": "BOTTOM",
+              "color": "#00000083",
+              "outlineColor": "#ffffff7f"
+            }
           ]
         }
       ]
     },
-    { "name": "info", "role": "uk.co.nickthecoder.demo.Info", "canRotate": false, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-      [
-        { "name": "default", "textStyles": 
-          [
-            { "font": "plain22", "halign": "RIGHT", "valign": "TOP", "color": "#ffffffff", "outlineColor": "#000000ff"}
+    {
+      "name": "info",
+      "role": "uk.co.nickthecoder.demo.Info",
+      "canRotate": false,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "textStyles": [
+            {
+              "font": "plain22",
+              "halign": "RIGHT",
+              "valign": "TOP",
+              "color": "#ffffffff",
+              "outlineColor": "#000000ff"
+            }
           ]
         }
       ]
     },
-    { "name": "eye", "role": "uk.co.nickthecoder.demo.Eye", "canRotate": false, "zOrder": 0, "initialEvent": "default", "showInSceneEditor": true, "events": 
-      [
-        { "name": "default", "poses": 
-          [
+    {
+      "name": "eye",
+      "role": "uk.co.nickthecoder.demo.Eye",
+      "canRotate": false,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "poses": [
             "eye"
           ]
         },
-        { "name": "pupil", "costumes": 
-          [
+        {
+          "name": "pupil",
+          "costumes": [
             "pupil"
           ]
         }
       ]
     },
-    { "name": "pupil", "role": "", "canRotate": false, "zOrder": 1, "initialEvent": "default", "showInSceneEditor": false, "events": 
-      [
-        { "name": "default", "poses": 
-          [
+    {
+      "name": "pupil",
+      "role": "",
+      "canRotate": false,
+      "zOrder": 1,
+      "initialEvent": "default",
+      "showInSceneEditor": false,
+      "events": [
+        {
+          "name": "default",
+          "poses": [
             "pupil"
           ]
         }
       ]
     }
-  ]
-, "inputs": 
-  [
-    { "name": "left", "keys": 
-      [
-        { "key": "Left", "state": "PRESSED"}
-      ]
-    , "joystickAxis": 
-      [
-        { "joystickID": 0, "axis": "LEFT_X", "positive": false, "threshold": 0.5}
-      ]
-    },
-    { "name": "right", "keys": 
-      [
-        { "key": "Right", "state": "PRESSED"}
-      ]
-    , "joystickAxis": 
-      [
-        { "joystickID": 0, "axis": "LEFT_X", "positive": true, "threshold": 0.5}
+  ],
+  "inputs": [
+    {
+      "name": "left",
+      "keys": [
+        {
+          "key": "Left",
+          "state": "PRESSED"
+        }
+      ],
+      "joystickAxis": [
+        {
+          "joystickID": 0,
+          "axis": "LEFT_X",
+          "positive": false,
+          "threshold": 0.5
+        }
       ]
     },
-    { "name": "up", "keys": 
-      [
-        { "key": "Up", "state": "PRESSED"}
-      ]
-    , "mouse": 
-      [
-        { "button": 0, "state": "PRESSED"}
-      ]
-    , "joystick": 
-      [
-        { "joystickID": 0, "button": "A"}
-      ]
-    },
-    { "name": "down", "keys": 
-      [
-        { "key": "Down", "state": "PRESSED"}
-      ]
-    , "joystick": 
-      [
-        { "joystickID": 0, "button": "X"}
+    {
+      "name": "right",
+      "keys": [
+        {
+          "key": "Right",
+          "state": "PRESSED"
+        }
+      ],
+      "joystickAxis": [
+        {
+          "joystickID": 0,
+          "axis": "LEFT_X",
+          "positive": true,
+          "threshold": 0.5
+        }
       ]
     },
-    { "name": "reset", "keys": 
-      [
-        { "key": "O", "state": "PRESSED"}
+    {
+      "name": "up",
+      "keys": [
+        {
+          "key": "Up",
+          "state": "PRESSED"
+        }
+      ],
+      "mouse": [
+        {
+          "button": 0,
+          "state": "PRESSED"
+        }
+      ],
+      "joystick": [
+        {
+          "joystickID": 0,
+          "button": "A"
+        }
       ]
     },
-    { "name": "clockwise", "keys": 
-      [
-        { "key": "X", "state": "PRESSED"}
+    {
+      "name": "down",
+      "keys": [
+        {
+          "key": "Down",
+          "state": "PRESSED"
+        }
+      ],
+      "joystick": [
+        {
+          "joystickID": 0,
+          "button": "X"
+        }
       ]
     },
-    { "name": "anti-clockwise", "keys": 
-      [
-        { "key": "Z", "state": "PRESSED"}
+    {
+      "name": "reset",
+      "keys": [
+        {
+          "key": "O",
+          "state": "PRESSED"
+        }
       ]
     },
-    { "name": "toggle", "keys": 
-      [
-        { "key": "Tab", "state": "PRESSED"}
+    {
+      "name": "clockwise",
+      "keys": [
+        {
+          "key": "X",
+          "state": "PRESSED"
+        }
       ]
     },
-    { "name": "simpleBounce", "keys": 
-      [
-        { "key": "S", "state": "PRESSED"}
+    {
+      "name": "anti-clockwise",
+      "keys": [
+        {
+          "key": "Z",
+          "state": "PRESSED"
+        }
       ]
     },
-    { "name": "ejectSimple", "keys": 
-      [
-        { "key": "S", "state": "PRESSED"}
+    {
+      "name": "toggle",
+      "keys": [
+        {
+          "key": "Tab",
+          "state": "PRESSED"
+        }
       ]
     },
-    { "name": "ejectNeighbourhood", "keys": 
-      [
-        { "key": "N", "state": "PRESSED"}
+    {
+      "name": "simpleBounce",
+      "keys": [
+        {
+          "key": "S",
+          "state": "PRESSED"
+        }
       ]
     },
-    { "name": "ejectNoBounce", "keys": 
-      [
-        { "key": "C", "state": "PRESSED"}
+    {
+      "name": "ejectSimple",
+      "keys": [
+        {
+          "key": "S",
+          "state": "PRESSED"
+        }
       ]
     },
-    { "name": "overlap", "keys": 
-      [
-        { "key": "O", "state": "PRESSED"}
+    {
+      "name": "ejectNeighbourhood",
+      "keys": [
+        {
+          "key": "N",
+          "state": "PRESSED"
+        }
       ]
     },
-    { "name": "ejectWorld", "keys": 
-      [
-        { "key": "W", "state": "PRESSED"}
+    {
+      "name": "ejectNoBounce",
+      "keys": [
+        {
+          "key": "C",
+          "state": "PRESSED"
+        }
+      ]
+    },
+    {
+      "name": "overlap",
+      "keys": [
+        {
+          "key": "O",
+          "state": "PRESSED"
+        }
+      ]
+    },
+    {
+      "name": "ejectWorld",
+      "keys": [
+        {
+          "key": "W",
+          "state": "PRESSED"
+        }
       ]
     }
   ]

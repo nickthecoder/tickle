@@ -103,8 +103,8 @@ class Scene {
     fun begin() {
         Game.instance.window.showMouse(showMouse)
         if (Resources.instance.gameInfo.physicsEngine) {
-            val gi = Resources.instance.gameInfo
-            world = TickleWorld(gi.gravity, gi.scale.toFloat(), velocityIterations = gi.velocityIterations, positionIterations = gi.positionIterations)
+            val pi = Resources.instance.gameInfo.physicsInfo
+            world = TickleWorld(pi.gravity, pi.scale.toFloat(), velocityIterations = pi.velocityIterations, positionIterations = pi.positionIterations)
         }
         stages.values.forEach { stage ->
             stage.actors.forEach { actor ->
@@ -129,10 +129,10 @@ class Scene {
     }
 
     fun tick() {
-        world?.tick()
         stages.values.forEach { stage ->
             stage.tick()
         }
+        world?.tick()
     }
 
     fun end() {
