@@ -194,6 +194,8 @@ class JsonResources {
                 jphysics.add("velocityIterations", velocityIterations)
                 jphysics.add("positionIterations", positionIterations)
                 jphysics.add("scale", scale)
+                jphysics.add("filterGroups", filterGroupsString)
+                jphysics.add("filterBits", filterBitsString)
             }
 
         }
@@ -210,8 +212,7 @@ class JsonResources {
 
             initialScenePath = resources.scenePathToFile(jinfo.getString("initialScene", "splash"))
             testScenePath = resources.scenePathToFile(jinfo.getString("testScene", "splash"))
-            producerString = jinfo.getString("producer", NoProducer::javaClass.name)
-
+            producerString = jinfo.getString("producer", NoProducer::class.java.name)
         }
 
         val jphysics = jinfo.get("physics")?.asObject()
@@ -224,6 +225,8 @@ class JsonResources {
                     velocityIterations = jphysics.getInt("velocityIterations", 8)
                     positionIterations = jphysics.getInt("positionIterations", 3)
                     scale = jphysics.getDouble("scale", 100.0)
+                    filterGroupsString = jphysics.getString("filterGroups", NoFilterGroups::class.java.name)
+                    filterBitsString = jphysics.getString("filterBits", NoFilterBits::class.java.name)
                 }
             }
         }
@@ -579,6 +582,12 @@ class JsonResources {
                 jfixture.add("isSensor", isSensor)
             }
 
+            with(fixtureDef.filter) {
+                jfixture.add("group", groupIndex)
+                jfixture.add("category", categoryBits)
+                jfixture.add("mask", maskBits)
+            }
+
             with(fixtureDef.shapeDef) {
                 when (this) {
                     is CircleDef -> {
@@ -741,6 +750,11 @@ class JsonResources {
                         restitution = jfixture.getFloat("restitution", 0f)
                         friction = jfixture.getFloat("friction", 0f)
                         isSensor = jfixture.getBoolean("isSensor", false)
+                    }
+                    with(fixtureDef.filter) {
+                        groupIndex = jfixture.getInt("group", 0)
+                        categoryBits = jfixture.getInt("category", 0xFFFF)
+                        maskBits = jfixture.getInt("mask", 0xFFFF)
                     }
                     bodyDef.fixtureDefs.add(fixtureDef)
                 }

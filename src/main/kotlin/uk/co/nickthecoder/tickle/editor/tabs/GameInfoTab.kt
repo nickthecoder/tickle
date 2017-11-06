@@ -9,6 +9,10 @@ import uk.co.nickthecoder.tickle.Producer
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 import uk.co.nickthecoder.tickle.editor.util.XYiParameter
+import uk.co.nickthecoder.tickle.physics.FilterBits
+import uk.co.nickthecoder.tickle.physics.FilterGroups
+import uk.co.nickthecoder.tickle.physics.NoFilterBits
+import uk.co.nickthecoder.tickle.physics.NoFilterGroups
 import uk.co.nickthecoder.tickle.resources.Resources
 
 class GameInfoTab
@@ -38,27 +42,44 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val velocityIterationsP = IntParameter("velocityIterations", value = gameInfo.physicsInfo.velocityIterations)
     val positionIterationsP = IntParameter("positionIterations", value = gameInfo.physicsInfo.positionIterations)
 
-    val worldDetailsP = SimpleGroupParameter("physicsDetails")
-            .addParameters(gravityP, scaleP, velocityIterationsP, positionIterationsP)
+    val filterGroupsP = ChoiceParameter<Class<*>>("filterGroups", value = NoFilterGroups::class.java)
+    val filterBitsP = ChoiceParameter<Class<*>>("filterBits", value = NoFilterBits::class.java)
+
+    val physicsDetailsP = SimpleGroupParameter("physicsDetails")
+            .addParameters(gravityP, scaleP, velocityIterationsP, positionIterationsP, filterGroupsP, filterBitsP)
             .asBox()
 
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, physicsEngineP, worldDetailsP)
+            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, physicsEngineP, physicsDetailsP)
 
     init {
         windowSizeP.x = gameInfo.width
         windowSizeP.y = gameInfo.height
 
-
         ClassLister.setChoices(producerP, Producer::class.java)
+        ClassLister.setChoices(filterGroupsP, FilterGroups::class.java)
+        ClassLister.setChoices(filterBitsP, FilterBits::class.java)
+
         try {
             producerP.value = Class.forName(gameInfo.producerString)
         } catch (e: Exception) {
             System.err.println("Couldn't find class ${gameInfo.producerString}, defaulting to NoProducer")
         }
 
-        worldDetailsP.hidden = physicsEngineP.value != true
-        physicsEngineP.listen { worldDetailsP.hidden = physicsEngineP.value != true }
+        try {
+            filterGroupsP.value = Class.forName(gameInfo.physicsInfo.filterGroupsString)
+        } catch (e: Exception) {
+            System.err.println("Couldn't find class ${gameInfo.physicsInfo.filterGroupsString}, defaulting to NoFilterGroups")
+        }
+
+        try {
+            filterBitsP.value = Class.forName(gameInfo.physicsInfo.filterBitsString)
+        } catch (e: Exception) {
+            System.err.println("Couldn't find class ${gameInfo.physicsInfo.filterBitsString}, defaulting to NoFilterBits")
+        }
+
+        physicsDetailsP.hidden = physicsEngineP.value != true
+        physicsEngineP.listen { physicsDetailsP.hidden = physicsEngineP.value != true }
     }
 
     override fun run() {
@@ -80,6 +101,8 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
             scale = scaleP.value!!
             velocityIterations = velocityIterationsP.value!!
             positionIterations = positionIterationsP.value!!
+            filterGroupsString = filterGroupsP.value!!.name
+            filterBitsString = filterBitsP.value!!.name
         }
     }
 

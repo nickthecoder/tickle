@@ -7,4 +7,8 @@ class PhysicsInfo {
     var velocityIterations: Int = 8
     var positionIterations: Int = 3
     var scale: Double = 100.0
+    var filterGroupsString: String = ExampleFilterGroups::class.java.name
+    var filterBitsString: String = ExampleFilterBits::class.java.name
+
 }
+

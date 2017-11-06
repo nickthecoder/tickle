@@ -378,7 +378,7 @@ class CostumeTab(val name: String, val costume: Costume)
             }
         }
 
-        inner class FixtureParameter : MultipleGroupParameter("fixture") {
+        inner class FixtureParameter() : MultipleGroupParameter("fixture") {
 
             val densityP = FloatParameter("density", minValue = 0f, value = 1f)
             val frictionP = FloatParameter("friction", minValue = 0f, maxValue = 1f, value = 0f)
@@ -404,8 +404,12 @@ class CostumeTab(val name: String, val costume: Costume)
             val shapeP = OneOfParameter("shape", choiceLabel = "Type")
                     .addParameters("Circle" to circleP, "Box" to boxP)
 
+            val filterGroupP = createFilterGroupParameter()
+            val filterCategoriesP = createFilterBitsParameter("categories", "I Am")
+            val filterMaskP = createFilterBitsParameter("mask", "I Collide With")
+
             init {
-                addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP)
+                addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP, filterGroupP, filterCategoriesP, filterMaskP)
 
                 densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                 frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
@@ -421,6 +425,9 @@ class CostumeTab(val name: String, val costume: Costume)
                     frictionP.value = friction
                     restitutionP.value = restitution
                     isSensorP.value = isSensor
+                    filterGroupP.value = filter.groupIndex
+                    filterCategoriesP.value = filter.categoryBits
+                    filterMaskP.value = filter.maskBits
                 }
                 with(fixtureDef.shapeDef) {
                     when (this) {
@@ -460,6 +467,9 @@ class CostumeTab(val name: String, val costume: Costume)
                     friction = frictionP.value!!
                     restitution = restitutionP.value!!
                     isSensor = isSensorP.value == true
+                    filter.groupIndex = filterGroupP.value!!
+                    filter.categoryBits = filterCategoriesP.value
+                    filter.maskBits = filterMaskP.value
                 }
 
                 return fixtureDef
@@ -481,5 +491,59 @@ class CostumeTab(val name: String, val costume: Costume)
         }
 
     }
+
+}
+
+
+fun createFilterGroupParameter(): ChoiceParameter<Int> {
+    val choiceP = ChoiceParameter("collisionFilterGroup", value = 0)
+
+    val filterGroup = Class.forName(Resources.instance.gameInfo.physicsInfo.filterGroupsString).newInstance() as FilterGroups
+    filterGroup.values().forEach { name, value ->
+        choiceP.addChoice(name, value, name)
+    }
+    if (filterGroup.values().size <= 1) {
+        choiceP.hidden = true
+    }
+    return choiceP
+}
+
+fun createFilterBitsParameter(name: String, label: String) = FilterBitsParameter(name, label)
+
+class FilterBitsParameter(
+        name: String,
+        label: String) : SimpleGroupParameter(name, label) {
+
+    val filterMasks = Class.forName(Resources.instance.gameInfo.physicsInfo.filterBitsString).newInstance() as FilterBits
+
+    init {
+        filterMasks.values().forEach { maskName, _ ->
+            val param = BooleanParameter("${name}_$maskName", label = maskName)
+            addParameters(param)
+        }
+        asGrid(labelPosition = LabelPosition.LEFT, columns = filterMasks.columns(), isBoxed = true)
+        if (filterMasks.values().isEmpty()) {
+            hidden = true
+        }
+    }
+
+    var value: Int
+        get() {
+            if (hidden) return 0xFFFF
+            var value = 0
+            filterMasks.values().forEach { maskName, bit ->
+                val param = find("${name}_$maskName") as BooleanParameter
+                if (param.value == true) {
+                    value += bit
+                }
+            }
+            return value
+        }
+        set(v) {
+            filterMasks.values().forEach { maskName, bit ->
+                val param = find("${name}_$maskName") as BooleanParameter
+                param.value = (v and bit) != 0
+            }
+        }
 
 }
