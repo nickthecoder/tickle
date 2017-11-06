@@ -571,9 +571,14 @@ class JsonResources {
         jbody.add("fixtures", jfixtures)
         bodyDef.fixtureDefs.forEach { fixtureDef ->
             val jfixture = JsonObject()
-            jfixture.add("friction", fixtureDef.friction)
-            jfixture.add("density", fixtureDef.density)
-            jfixture.add("restitution", fixtureDef.restitution)
+
+            with(fixtureDef) {
+                jfixture.add("friction", friction)
+                jfixture.add("density", density)
+                jfixture.add("restitution", restitution)
+                jfixture.add("isSensor", isSensor)
+            }
+
             with(fixtureDef.shapeDef) {
                 when (this) {
                     is CircleDef -> {
@@ -731,9 +736,12 @@ class JsonResources {
                 }
                 if (shape != null) {
                     val fixtureDef = TickleFixtureDef(shape!!)
-                    fixtureDef.density = jfixture.getFloat("density", 1f)
-                    fixtureDef.restitution = jfixture.getFloat("restitution", 0f)
-                    fixtureDef.friction = jfixture.getFloat("friction", 0f)
+                    with(fixtureDef) {
+                        density = jfixture.getFloat("density", 1f)
+                        restitution = jfixture.getFloat("restitution", 0f)
+                        friction = jfixture.getFloat("friction", 0f)
+                        isSensor = jfixture.getBoolean("isSensor", false)
+                    }
                     bodyDef.fixtureDefs.add(fixtureDef)
                 }
             }

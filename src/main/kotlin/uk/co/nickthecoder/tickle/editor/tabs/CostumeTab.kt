@@ -353,7 +353,7 @@ class CostumeTab(val name: String, val costume: Costume)
             fixedRotationP.hidden = static
             bulletP.hidden = static
 
-            fixturesP.hidden = ! (bodyTypeP.value?.hasFixtures() ?: false)
+            fixturesP.hidden = !(bodyTypeP.value?.hasFixtures() ?: false)
         }
 
         override fun run() {
@@ -384,6 +384,8 @@ class CostumeTab(val name: String, val costume: Costume)
             val frictionP = FloatParameter("friction", minValue = 0f, maxValue = 1f, value = 0f)
             val restitutionP = FloatParameter("restitution", minValue = 0f, maxValue = 1f, value = 1f)
 
+            val isSensorP = BooleanParameter("isSensor")
+
             val circleRadiusP = DoubleParameter("circleRadius", label = "Radius")
             val circleCenterP = Vector2dParameter("circleCenter", label = "Center", showXY = false).asHorizontal()
 
@@ -403,7 +405,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     .addParameters("Circle" to circleP, "Box" to boxP)
 
             init {
-                addParameters(densityP, frictionP, restitutionP, shapeP)
+                addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP)
 
                 densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                 frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
@@ -418,6 +420,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     densityP.value = density
                     frictionP.value = friction
                     restitutionP.value = restitution
+                    isSensorP.value = isSensor
                 }
                 with(fixtureDef.shapeDef) {
                     when (this) {
@@ -456,6 +459,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     density = densityP.value!!
                     friction = frictionP.value!!
                     restitution = restitutionP.value!!
+                    isSensor = isSensorP.value == true
                 }
 
                 return fixtureDef

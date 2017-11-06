@@ -1,13 +1,22 @@
 Current Work
 ============
 
-Add addition attribute FixtureDef.isSensor to CostumeTab + Json
+Add attribute FixtureDef.isSensor to CostumeTab + Json
 Add Filter details to CostumeTab
 	GameInfo to have names for each of the filter bits.
 
+Add a GUI to edit Circle/Box/Polygon. With drag handles for center/radius/width/height
+	Use it to tweak edges and build cannon's fixtures properly
 
 Next
 ====
+
+Add guides and grid to SceneEditor (unrelated to StageConstraint)
+	This will make aligning edges much easier.
+	Pulldown button for Grid and Guides
+		Should X & Y guides be separate? Yes.
+	If the StageConstraint has adjusted to position, then don't snap.
+	For now, just use a Task to set the grid/guide info, but later add a GUI too.
 
 PixelOverlapping
 	Don't clear the whole overlapTexture

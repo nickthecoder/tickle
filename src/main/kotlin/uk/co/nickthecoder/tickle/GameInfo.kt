@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle
 
+import uk.co.nickthecoder.tickle.physics.PhysicsInfo
 import java.io.File
 
 class GameInfo(

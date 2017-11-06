@@ -417,6 +417,7 @@
                 "friction": 0,
                 "density": 1,
                 "restitution": 1,
+                "isSensor": false,
                 "circle": {
                   "x": 0,
                   "y": 0,
