@@ -405,12 +405,19 @@ class CostumeTab(val name: String, val costume: Costume)
             val shapeP = OneOfParameter("shape", choiceLabel = "Type")
                     .addParameters("Circle" to circleP, "Box" to boxP)
 
+            var shapeEditorP: ShapeEditorParameter? = null
+
             val filterGroupP = createFilterGroupParameter()
             val filterCategoriesP = createFilterBitsParameter("categories", "I Am")
             val filterMaskP = createFilterBitsParameter("mask", "I Collide With")
 
             init {
-                addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP, filterGroupP, filterCategoriesP, filterMaskP)
+                addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP)
+                costume.editorPose()?.let { pose ->
+                    shapeEditorP = ShapeEditorParameter("shapeEditor", pose)
+                    addParameters(shapeEditorP!!)
+                }
+                addParameters(filterGroupP, filterCategoriesP, filterMaskP)
 
                 densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                 frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
@@ -418,6 +425,10 @@ class CostumeTab(val name: String, val costume: Costume)
                     densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                     frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                 }
+                shapeP.listen {
+                    shapeEditorP?.update(createShapeDef())
+                }
+                shapeEditorP?.update(createShapeDef())
             }
 
             fun initParameters(fixtureDef: TickleFixtureDef) {
@@ -456,18 +467,29 @@ class CostumeTab(val name: String, val costume: Costume)
                 return this
             }
 
-            fun createCostumeFixtureDef(): TickleFixtureDef {
+            fun createShapeDef(): ShapeDef? {
+                try {
+                    when (shapeP.value) {
+                        circleP -> {
+                            return CircleDef(circleCenterP.value, circleRadiusP.value!!)
+                        }
+                        boxP -> {
+                            return BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value, roundedEnds = boxRoundedEndsP.value == true)
+                        }
+                        else -> {
+                            return null
+                        }
+                    }
+                } catch (e: KotlinNullPointerException) {
+                    return null
+                }
+            }
 
-                val shapeDef: ShapeDef = when (shapeP.value) {
-                    circleP -> {
-                        CircleDef(circleCenterP.value, circleRadiusP.value!!)
-                    }
-                    boxP -> {
-                        BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value, roundedEnds = boxRoundedEndsP.value == true)
-                    }
-                    else -> {
-                        throw IllegalStateException("Not a valid shape type")
-                    }
+
+            fun createCostumeFixtureDef(): TickleFixtureDef {
+                val shapeDef = createShapeDef()
+                if (shapeDef == null) {
+                    throw IllegalStateException("Not a valid shape")
                 }
 
                 val fixtureDef = TickleFixtureDef(shapeDef)

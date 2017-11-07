@@ -404,14 +404,14 @@
             {
               "name": "default",
               "poses": [
-                "greenBall"
+                "grenade"
               ]
             }
           ],
           "body": {
             "bodyType": "DYNAMIC",
             "linearDamping": 0,
-            "angularDamping": 0,
+            "angularDamping": 0.01,
             "bullet": false,
             "fixedRotation": false,
             "fixtures": [
@@ -423,10 +423,13 @@
                 "group": 0,
                 "category": 65535,
                 "mask": 65535,
-                "circle": {
-                  "x": 0,
+                "box": {
+                  "x": 2,
                   "y": 0,
-                  "radius": 36
+                  "width": 35,
+                  "height": 55,
+                  "angle": 0,
+                  "roundedEnds": true
                 }
               }
             ]
@@ -491,7 +494,33 @@
           "name": "minVelocity",
           "value": "-20.0:2.0"
         }
-      ]
+      ],
+      "body": {
+        "bodyType": "DYNAMIC",
+        "linearDamping": 0,
+        "angularDamping": 0,
+        "bullet": false,
+        "fixedRotation": false,
+        "fixtures": [
+          {
+            "friction": 0,
+            "density": 1,
+            "restitution": 1,
+            "isSensor": false,
+            "group": 0,
+            "category": 65535,
+            "mask": 65535,
+            "box": {
+              "x": 2,
+              "y": 0,
+              "width": 32,
+              "height": 55,
+              "angle": 0,
+              "roundedEnds": true
+            }
+          }
+        ]
+      }
     },
     {
       "name": "hand",

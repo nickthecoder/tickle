@@ -120,10 +120,10 @@ class WorldBound : AbstractRole() {
             if (body.position.y < 0f && body.linearVelocity.y < 0) {
                 body.linearVelocity.y = -body.linearVelocity.y
             }
-            if (body.position.x > 80f && body.linearVelocity.x > 0) {
+            if (body.position.x > 10f && body.linearVelocity.x > 0) {
                 body.linearVelocity.x = -body.linearVelocity.x
             }
-            if (body.position.y > 80f && body.linearVelocity.y > 0) {
+            if (body.position.y > 10f && body.linearVelocity.y > 0) {
                 body.linearVelocity.y = -body.linearVelocity.y
             }
         }

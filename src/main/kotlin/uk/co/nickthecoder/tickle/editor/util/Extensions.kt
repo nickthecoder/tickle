@@ -14,7 +14,7 @@ import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.Resources
 
 /*
- Contains may extension functions, used from within the SceneEditor.
+ Contains many extension functions, used from within the SceneEditor.
  These are functions that I don't want on the actual objects, because I don't want them available
  from a running Game, and some may have dependancies only available from the editor module, which will not
  be in the class path during an actual game.

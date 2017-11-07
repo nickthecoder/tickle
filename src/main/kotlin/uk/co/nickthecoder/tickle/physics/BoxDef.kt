@@ -24,35 +24,38 @@ class BoxDef(
             val circle2 = CircleShape()
 
             if (width > height) {
-                val radius = (width - height) / 2
+                val radius = height / 2
+                val rectWidth = width - radius * 2
                 box.setAsBox(
-                        world.pixelsToWorld(width / 2 - radius),
+                        world.pixelsToWorld(rectWidth / 2),
                         world.pixelsToWorld(height / 2),
                         world.pixelsToWorld(center),
                         angle.radians.toFloat())
 
-                circle1.m_p.x = world.pixelsToWorld(center.x - Math.sin(angle.radians))
-                circle1.m_p.y = world.pixelsToWorld(center.y + Math.cos(angle.radians))
+                circle1.m_p.x = world.pixelsToWorld(center.x - rectWidth / 2)
+                circle1.m_p.y = world.pixelsToWorld(center.y)
                 circle1.m_radius = world.pixelsToWorld(radius)
 
-                circle2.m_p.x = world.pixelsToWorld(center.x + Math.sin(angle.radians))
-                circle2.m_p.y = world.pixelsToWorld(center.y - Math.cos(angle.radians))
+                circle2.m_p.x = world.pixelsToWorld(center.x + rectWidth / 2)
+                circle2.m_p.y = world.pixelsToWorld(center.y)
                 circle2.m_radius = world.pixelsToWorld(radius)
 
             } else {
-                val radius = (height - width) / 2
+                val radius = width / 2
+                val rectHeight = height - radius * 2
+
                 box.setAsBox(
                         world.pixelsToWorld(width / 2),
-                        world.pixelsToWorld(height / 2 - radius),
+                        world.pixelsToWorld(rectHeight / 2),
                         world.pixelsToWorld(center),
                         angle.radians.toFloat())
 
-                circle1.m_p.x = world.pixelsToWorld(center.x + Math.cos(angle.radians))
-                circle1.m_p.y = world.pixelsToWorld(center.y - Math.sin(angle.radians))
+                circle1.m_p.x = world.pixelsToWorld(center.x)
+                circle1.m_p.y = world.pixelsToWorld(center.y - rectHeight / 2)
                 circle1.m_radius = world.pixelsToWorld(radius)
 
-                circle2.m_p.x = world.pixelsToWorld(center.x - Math.cos(angle.radians))
-                circle2.m_p.y = world.pixelsToWorld(center.y + Math.sin(angle.radians))
+                circle2.m_p.x = world.pixelsToWorld(center.x)
+                circle2.m_p.y = world.pixelsToWorld(center.y + rectHeight / 2)
                 circle2.m_radius = world.pixelsToWorld(radius)
             }
 
