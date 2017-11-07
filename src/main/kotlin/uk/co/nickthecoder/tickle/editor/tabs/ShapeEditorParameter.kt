@@ -50,6 +50,10 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
 
     val canvas = Canvas(width.toDouble() + margin * 2, height.toDouble() + margin * 2)
 
+    init {
+        canvas.graphicsContext2D.transform(1.0, 0.0, 0.0, -1.0, 0.0, canvas.height)
+    }
+
     override fun createControl(): Node {
         update(null)
         return canvas
@@ -75,6 +79,7 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
                 }
                 is BoxDef -> {
                     translate(shapeDef.center.x, shapeDef.center.y)
+                    rotate(shapeDef.angle.degrees)
                     drawOutlined(shapeColor) {
                         if (shapeDef.roundedEnds) {
                             if (shapeDef.width > shapeDef.height) {

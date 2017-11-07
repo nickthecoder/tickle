@@ -404,14 +404,14 @@
             {
               "name": "default",
               "poses": [
-                "grenade"
+                "bee"
               ]
             }
           ],
           "body": {
             "bodyType": "DYNAMIC",
-            "linearDamping": 0,
-            "angularDamping": 0.01,
+            "linearDamping": 0.3,
+            "angularDamping": 0.3,
             "bullet": false,
             "fixedRotation": false,
             "fixtures": [
@@ -424,11 +424,11 @@
                 "category": 65535,
                 "mask": 65535,
                 "box": {
-                  "x": 2,
-                  "y": 0,
-                  "width": 35,
-                  "height": 55,
-                  "angle": 0,
+                  "x": -3,
+                  "y": 1,
+                  "width": 20,
+                  "height": 58,
+                  "angle": -70,
                   "roundedEnds": true
                 }
               }

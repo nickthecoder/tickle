@@ -4,6 +4,8 @@ Current Work
 Add a GUI to edit Circle/Box/Polygon. With drag handles for center/radius/width/height
 	Use it to tweak edges and build cannon's fixtures properly
 
+Handle angle in the ShapeEditorParameter and also in creation of the Shape.
+
 Next
 ====
 
