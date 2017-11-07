@@ -16,6 +16,7 @@ import uk.co.nickthecoder.paratask.util.process.Exec
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.util.ImageParameter
 import uk.co.nickthecoder.tickle.editor.util.RenameFileTask
+import uk.co.nickthecoder.tickle.editor.util.colorTransparentPixels
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.Resources
 import java.io.File
@@ -43,9 +44,17 @@ class TextureTab(name: String, val texture: Texture)
         borderPane.center = minorTabs
 
         addDeleteButton { Resources.instance.textures.remove(name) }
+
         val editButton = Button("Edit")
         editButton.setOnAction { edit() }
         leftButtons.children.add(editButton)
+
+        texture.file?.let { file ->
+            val fixTransparentPixelsButton = Button("Fix Transparent Pixels")
+            fixTransparentPixelsButton.setOnAction { colorTransparentPixels(file) }
+            leftButtons.children.add(fixTransparentPixelsButton)
+        }
+
     }
 
     override fun removed() {

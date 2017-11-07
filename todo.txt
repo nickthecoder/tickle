@@ -1,15 +1,15 @@
 Current Work
 ============
 
-Add attribute FixtureDef.isSensor to CostumeTab + Json
-Add Filter details to CostumeTab
-	GameInfo to have names for each of the filter bits.
-
 Add a GUI to edit Circle/Box/Polygon. With drag handles for center/radius/width/height
 	Use it to tweak edges and build cannon's fixtures properly
 
 Next
 ====
+
+Add "Rounded Box", and "Rounded Bar"
+	Maybe RoundedBox just uses Box, with a "corner radius"
+	Also Rounded Bar is a box with "Rounded Ends" boolean (hides "corner radius").
 
 Add guides and grid to SceneEditor (unrelated to StageConstraint)
 	This will make aligning edges much easier.

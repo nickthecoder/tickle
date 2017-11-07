@@ -605,6 +605,7 @@ class JsonResources {
                         jbox.add("width", width)
                         jbox.add("height", height)
                         jbox.add("angle", angle.degrees)
+                        jbox.add("roundedEnds", roundedEnds)
                     }
                     else -> {
                         System.err.println("ERROR. Unknown shape ${this.javaClass}")
@@ -740,7 +741,8 @@ class JsonResources {
                     val width = jbox.getDouble("width", 0.0)
                     val height = jbox.getDouble("height", 0.0)
                     val angle = jbox.getDouble("angle", 0.0)
-                    val box = BoxDef(width, height, Vector2d(x, y), Angle.degrees(angle))
+                    val roundedEnds = jbox.getBoolean("roundedEnds", false)
+                    val box = BoxDef(width, height, Vector2d(x, y), Angle.degrees(angle), roundedEnds = roundedEnds)
                     shape = box
                 }
                 if (shape != null) {

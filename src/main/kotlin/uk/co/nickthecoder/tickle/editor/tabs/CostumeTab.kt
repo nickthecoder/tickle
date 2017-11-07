@@ -384,7 +384,7 @@ class CostumeTab(val name: String, val costume: Costume)
             val frictionP = FloatParameter("friction", minValue = 0f, maxValue = 1f, value = 0f)
             val restitutionP = FloatParameter("restitution", minValue = 0f, maxValue = 1f, value = 1f)
 
-            val isSensorP = BooleanParameter("isSensor")
+            val isSensorP = BooleanParameter("isSensor", value = false)
 
             val circleRadiusP = DoubleParameter("circleRadius", label = "Radius")
             val circleCenterP = Vector2dParameter("circleCenter", label = "Center", showXY = false).asHorizontal()
@@ -396,9 +396,10 @@ class CostumeTab(val name: String, val costume: Costume)
             val boxSizeP = Vector2dParameter("boxSize", showXY = false).asHorizontal()
             val boxCenterP = Vector2dParameter("boxCenter", label = "Center", showXY = false).asHorizontal()
             val boxAngleP = AngleParameter("boxAngle", label = "Angle")
+            val boxRoundedEndsP = BooleanParameter("roundedEnds", value = false)
 
             val boxP = SimpleGroupParameter("box", label = "")
-                    .addParameters(boxSizeP, boxCenterP, boxAngleP)
+                    .addParameters(boxSizeP, boxCenterP, boxAngleP, boxRoundedEndsP)
                     .asPlain()
 
             val shapeP = OneOfParameter("shape", choiceLabel = "Type")
@@ -442,9 +443,17 @@ class CostumeTab(val name: String, val costume: Costume)
                             boxSizeP.yP.value = height
                             boxCenterP.value = center
                             boxAngleP.value = angle
+                            boxRoundedEndsP.value = roundedEnds
                         }
                     }
                 }
+            }
+
+            fun defaultSizes(pose: Pose): FixtureParameter {
+                circleRadiusP.value = Math.min(pose.rect.width, pose.rect.height).toDouble()
+                boxSizeP.xP.value = pose.rect.width.toDouble()
+                boxSizeP.yP.value = pose.rect.height.toDouble()
+                return this
             }
 
             fun createCostumeFixtureDef(): TickleFixtureDef {
@@ -454,7 +463,7 @@ class CostumeTab(val name: String, val costume: Costume)
                         CircleDef(circleCenterP.value, circleRadiusP.value!!)
                     }
                     boxP -> {
-                        BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value)
+                        BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value, roundedEnds = boxRoundedEndsP.value == true)
                     }
                     else -> {
                         throw IllegalStateException("Not a valid shape type")
@@ -518,7 +527,7 @@ class FilterBitsParameter(
 
     init {
         filterMasks.values().forEach { maskName, _ ->
-            val param = BooleanParameter("${name}_$maskName", label = maskName)
+            val param = BooleanParameter("${name}_$maskName", label = maskName, value = false)
             addParameters(param)
         }
         asGrid(labelPosition = LabelPosition.LEFT, columns = filterMasks.columns(), isBoxed = true)

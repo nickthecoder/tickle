@@ -58,13 +58,15 @@ class TickleWorld(
     }
 
     fun createBody(bodyDef: TickleBodyDef, actor: Actor): Body {
-        bodyDef.updateShapes(this)
         bodyDef.position = pixelsToWorld(actor.position)
         bodyDef.angle = actor.direction.radians.toFloat()
 
         val body = createBody(bodyDef)
         bodyDef.fixtureDefs.forEach { fixtureDef ->
-            body.createFixture(fixtureDef)
+            fixtureDef.shapeDef.createShapes(this).forEach { shape ->
+                fixtureDef.shape = shape
+                body.createFixture(fixtureDef)
+            }
         }
         actor.body = body
         body.userData = actor
