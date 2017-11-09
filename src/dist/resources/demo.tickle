@@ -423,13 +423,21 @@
                 "group": 0,
                 "category": 65535,
                 "mask": 65535,
-                "box": {
-                  "x": -3,
-                  "y": 1,
-                  "width": 20,
-                  "height": 58,
-                  "angle": -70,
-                  "roundedEnds": true
+                "polygon": {
+                  "points": [
+                    {
+                      "x": -28,
+                      "y": -8
+                    },
+                    {
+                      "x": 25,
+                      "y": 0
+                    },
+                    {
+                      "x": 19,
+                      "y": 16
+                    }
+                  ]
                 }
               }
             ]

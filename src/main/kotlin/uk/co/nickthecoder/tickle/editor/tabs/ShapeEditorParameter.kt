@@ -10,6 +10,7 @@ import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.util.image
 import uk.co.nickthecoder.tickle.physics.BoxDef
 import uk.co.nickthecoder.tickle.physics.CircleDef
+import uk.co.nickthecoder.tickle.physics.PolygonDef
 import uk.co.nickthecoder.tickle.physics.ShapeDef
 
 class ShapeEditorParameter(name: String, val pose: Pose)
@@ -100,6 +101,14 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
                         }
                     }
                 }
+                is PolygonDef -> {
+                    lineCap = StrokeLineCap.ROUND
+                    drawOutlined(shapeColor) {
+                        val xs = DoubleArray(shapeDef.points.size, { i -> shapeDef.points.map { it.x }[i] })
+                        val ys = DoubleArray(shapeDef.points.size, { i -> shapeDef.points.map { it.y }[i] })
+                        strokePolygon(xs, ys, shapeDef.points.size)
+                    }
+                }
             }
 
             restore()
@@ -118,10 +127,10 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
         with(canvas.graphicsContext2D) {
             stroke = Color.BLACK
             lineCap = StrokeLineCap.ROUND
-            lineWidth = 4.0
+            lineWidth = 2.0
             shape()
             stroke = color
-            lineWidth = 2.5
+            lineWidth = 1.0
             shape()
         }
     }

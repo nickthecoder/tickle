@@ -607,6 +607,18 @@ class JsonResources {
                         jbox.add("angle", angle.degrees)
                         jbox.add("roundedEnds", roundedEnds)
                     }
+                    is PolygonDef -> {
+                        val jpolygon = JsonObject()
+                        jfixture.add("polygon", jpolygon)
+                        val jpoints = JsonArray()
+                        jpolygon.add("points", jpoints)
+                        points.forEach { point ->
+                            val jpoint = JsonObject()
+                            jpoint.add("x", point.x)
+                            jpoint.add("y", point.y)
+                            jpoints.add(jpoint)
+                        }
+                    }
                     else -> {
                         System.err.println("ERROR. Unknown shape ${this.javaClass}")
                     }
@@ -745,6 +757,19 @@ class JsonResources {
                     val box = BoxDef(width, height, Vector2d(x, y), Angle.degrees(angle), roundedEnds = roundedEnds)
                     shape = box
                 }
+                jfixture.get("polygon")?.let {
+                    val jpolygon = it.asObject()
+                    val jpoints = jpolygon.get("points").asArray()
+                    val polygon = PolygonDef()
+                    jpoints.forEach {
+                        val jpoint = it.asObject()
+                        val x = jpoint.getDouble("x", 0.0)
+                        val y = jpoint.getDouble("y", 0.0)
+                        polygon.points.add(Vector2d(x, y))
+                    }
+                    shape = polygon
+                }
+
                 if (shape != null) {
                     val fixtureDef = TickleFixtureDef(shape!!)
                     with(fixtureDef) {

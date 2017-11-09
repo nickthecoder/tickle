@@ -1,17 +1,10 @@
 Current Work
 ============
 
-Add a GUI to edit Circle/Box/Polygon. With drag handles for center/radius/width/height
-	Use it to tweak edges and build cannon's fixtures properly
-
-Handle angle in the ShapeEditorParameter and also in creation of the Shape.
-
 Next
 ====
 
-Add "Rounded Box", and "Rounded Bar"
-	Maybe RoundedBox just uses Box, with a "corner radius"
-	Also Rounded Bar is a box with "Rounded Ends" boolean (hides "corner radius").
+Add Box Corner Radius
 
 Add guides and grid to SceneEditor (unrelated to StageConstraint)
 	This will make aligning edges much easier.
@@ -50,8 +43,12 @@ InputPicker :
 	"Windows" is this meta?
 	Shift, Control, alt etc don't work either.
 
+Cannot press more than 2 keys simultaneously :-(
+
 New Features
 ============
+
+Arbitary polygons for CostumeTab fixtures.
 
 Allow text style to be overriden in the SceneEditor.
 	Only save the overridden values if they differ from the Costume's values.
@@ -102,6 +99,8 @@ Add my own "runLater", which will call the code at the end of a tick.
 Later
 =====
 
+Add drag handles to the CostumeTab shape editor.
+
 Allow jBox2D to be optional (i.e. do not need to include the jar (and the logger) if it isn't used by the game.
 
 Allow fonts to have multiple outlines i.e. one myfont.png may have myfont-thinOutline.png and myfont.blurredOutline.png
@@ -110,15 +109,11 @@ Allow fonts to have multiple outlines i.e. one myfont.png may have myfont-thinOu
 TextStyle to have an extraSpacing property which causes letters to be moved further appart
 	Ditto for extra line height.
 
-
-Create a simpler GUI that a "published" game can use to let players change the input mappings.L
+Create a simpler GUI that a "published" game can use to let players change the input mappings.
 
 Game based on "flocking" :	https://www.youtube.com/watch?v=M028vafB0l8
 
 Undo/Redo in scene editor
-
-JBox2d integration
-	Stickflick style jointed characters.
 
 Split the project into multiple modules
 	core
@@ -154,5 +149,5 @@ New Game Wizard
 	Choice of a completely blank project, or a "Hello World"
 	Hello World will have a font, a Play director and a Splash director
 		Splash will display some simple text and a button to lauch "level01"
-		Maybe also have a "Me" Role
+		Maybe also have a "Player" Role
 

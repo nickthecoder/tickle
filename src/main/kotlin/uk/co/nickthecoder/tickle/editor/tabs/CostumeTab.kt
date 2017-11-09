@@ -402,8 +402,15 @@ class CostumeTab(val name: String, val costume: Costume)
                     .addParameters(boxSizeP, boxCenterP, boxAngleP, boxRoundedEndsP)
                     .asPlain()
 
+            val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex, and the points are ordered clockwise (.")
+            val polygonPointsP = MultipleParameter("polygonPoints", minItems = 3) {
+                Vector2dParameter("point").asHorizontal()
+            }
+            val polygonP = SimpleGroupParameter("polygon")
+                    .addParameters(polygonInfo, polygonPointsP)
+
             val shapeP = OneOfParameter("shape", choiceLabel = "Type")
-                    .addParameters("Circle" to circleP, "Box" to boxP)
+                    .addParameters("Circle" to circleP, "Box" to boxP, "Polygon" to polygonP)
 
             var shapeEditorP: ShapeEditorParameter? = null
 
@@ -456,6 +463,13 @@ class CostumeTab(val name: String, val costume: Costume)
                             boxAngleP.value = angle
                             boxRoundedEndsP.value = roundedEnds
                         }
+                        is PolygonDef -> {
+                            shapeP.value = polygonP
+                            polygonPointsP.clear()
+                            points.forEach { point ->
+                                polygonPointsP.addValue(point)
+                            }
+                        }
                     }
                 }
             }
@@ -476,6 +490,9 @@ class CostumeTab(val name: String, val costume: Costume)
                         boxP -> {
                             return BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value, roundedEnds = boxRoundedEndsP.value == true)
                         }
+                        polygonP -> {
+                            return PolygonDef(polygonPointsP.value)
+                        }
                         else -> {
                             return null
                         }
@@ -485,12 +502,8 @@ class CostumeTab(val name: String, val costume: Costume)
                 }
             }
 
-
             fun createCostumeFixtureDef(): TickleFixtureDef {
-                val shapeDef = createShapeDef()
-                if (shapeDef == null) {
-                    throw IllegalStateException("Not a valid shape")
-                }
+                val shapeDef = createShapeDef() ?: throw IllegalStateException("Not a valid shape")
 
                 val fixtureDef = TickleFixtureDef(shapeDef)
                 with(fixtureDef) {
@@ -513,6 +526,9 @@ class CostumeTab(val name: String, val costume: Costume)
                     }
                     boxP -> {
                         "Box @ ${boxCenterP.value.x} , ${boxCenterP.value.y}"
+                    }
+                    polygonP -> {
+                        "Polygon (${polygonPointsP.value.size} points)"
                     }
                     else -> {
                         "Unknown"
