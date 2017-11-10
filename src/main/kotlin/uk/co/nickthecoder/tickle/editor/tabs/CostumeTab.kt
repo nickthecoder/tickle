@@ -402,7 +402,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     .addParameters(boxSizeP, boxCenterP, boxAngleP, boxRoundedEndsP)
                     .asPlain()
 
-            val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex, and the points are ordered clockwise (.")
+            val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex, and the points are ordered clockwise.")
             val polygonPointsP = MultipleParameter("polygonPoints", minItems = 3) {
                 Vector2dParameter("point").asHorizontal()
             }
@@ -421,7 +421,7 @@ class CostumeTab(val name: String, val costume: Costume)
             init {
                 addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP)
                 costume.editorPose()?.let { pose ->
-                    shapeEditorP = ShapeEditorParameter("shapeEditor", pose)
+                    shapeEditorP = ShapeEditorParameter("shapeEditor", pose, this)
                     addParameters(shapeEditorP!!)
                 }
                 addParameters(filterGroupP, filterCategoriesP, filterMaskP)
