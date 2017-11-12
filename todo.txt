@@ -4,8 +4,6 @@ Current Work
 Next
 ====
 
-Add Box Corner Radius
-
 Add guides and grid to SceneEditor (unrelated to StageConstraint)
 	This will make aligning edges much easier.
 	Pulldown button for Grid and Guides

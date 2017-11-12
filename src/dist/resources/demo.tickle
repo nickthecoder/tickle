@@ -404,7 +404,7 @@
             {
               "name": "default",
               "poses": [
-                "bee"
+                "grenade"
               ]
             }
           ],
@@ -423,25 +423,14 @@
                 "group": 0,
                 "category": 65535,
                 "mask": 65535,
-                "polygon": {
-                  "points": [
-                    {
-                      "x": 20,
-                      "y": 17
-                    },
-                    {
-                      "x": -30,
-                      "y": -3
-                    },
-                    {
-                      "x": -28,
-                      "y": -15
-                    },
-                    {
-                      "x": 23,
-                      "y": 1
-                    }
-                  ]
+                "box": {
+                  "x": 3,
+                  "y": -1.5,
+                  "width": 39,
+                  "height": 57,
+                  "angle": 0,
+                  "roundedEnds": false,
+                  "cornerRadius": 16
                 }
               }
             ]
@@ -522,10 +511,14 @@
             "group": 0,
             "category": 65535,
             "mask": 65535,
-            "circle": {
-              "x": 3,
-              "y": -2,
-              "radius": 22
+            "box": {
+              "x": 2,
+              "y": -1.5,
+              "width": 38,
+              "height": 55,
+              "angle": 0,
+              "roundedEnds": false,
+              "cornerRadius": 39
             }
           }
         ]

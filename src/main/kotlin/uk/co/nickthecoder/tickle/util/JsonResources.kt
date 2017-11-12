@@ -597,6 +597,7 @@ class JsonResources {
                         jcircle.add("y", center.y)
                         jcircle.add("radius", radius)
                     }
+
                     is BoxDef -> {
                         val jbox = JsonObject()
                         jfixture.add("box", jbox)
@@ -606,7 +607,13 @@ class JsonResources {
                         jbox.add("height", height)
                         jbox.add("angle", angle.degrees)
                         jbox.add("roundedEnds", roundedEnds)
+                        if (!roundedEnds && cornerRadius != 0.0) {
+                            jbox.add("cornerRadius", cornerRadius)
+                        } else {
+                            // Compile bug? Doesn't like the last statement in the "when" not having a value. Therefore an "else" is required. Grr.
+                        }
                     }
+
                     is PolygonDef -> {
                         val jpolygon = JsonObject()
                         jfixture.add("polygon", jpolygon)
@@ -619,6 +626,7 @@ class JsonResources {
                             jpoints.add(jpoint)
                         }
                     }
+
                     else -> {
                         System.err.println("ERROR. Unknown shape ${this.javaClass}")
                     }
@@ -754,7 +762,8 @@ class JsonResources {
                     val height = jbox.getDouble("height", 0.0)
                     val angle = jbox.getDouble("angle", 0.0)
                     val roundedEnds = jbox.getBoolean("roundedEnds", false)
-                    val box = BoxDef(width, height, Vector2d(x, y), Angle.degrees(angle), roundedEnds = roundedEnds)
+                    val cornerRadius = jbox.getDouble("cornerRadius", 0.0)
+                    val box = BoxDef(width, height, Vector2d(x, y), Angle.degrees(angle), roundedEnds = roundedEnds, cornerRadius = cornerRadius)
                     shape = box
                 }
                 jfixture.get("polygon")?.let {

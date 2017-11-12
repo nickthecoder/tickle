@@ -399,9 +399,10 @@ class CostumeTab(val name: String, val costume: Costume)
             val boxCenterP = Vector2dParameter("boxCenter", label = "Center", showXY = false).asHorizontal()
             val boxAngleP = AngleParameter("boxAngle", label = "Angle")
             val boxRoundedEndsP = BooleanParameter("roundedEnds", value = false)
+            val boxCornerRadiusP = DoubleParameter("cornerRadius", value = 0.0)
 
             val boxP = SimpleGroupParameter("box")
-                    .addParameters(boxSizeP, boxCenterP, boxAngleP, boxRoundedEndsP)
+                    .addParameters(boxSizeP, boxCenterP, boxAngleP, boxRoundedEndsP, boxCornerRadiusP)
 
             val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex, and the points ordered clockwise.")
             val polygonPointsP = MultipleParameter("polygonPoints", minItems = 3) {
@@ -439,6 +440,12 @@ class CostumeTab(val name: String, val costume: Costume)
                     densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                     frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                 }
+
+                // Show/Hide the raidus based on the boxRoundedEndsP value
+                boxRoundedEndsP.listen {
+                    boxCornerRadiusP.hidden = boxRoundedEndsP.value == true
+                }
+                boxCornerRadiusP.hidden = boxRoundedEndsP.value == true
             }
 
             fun initParameters(fixtureDef: TickleFixtureDef) {
@@ -466,6 +473,7 @@ class CostumeTab(val name: String, val costume: Costume)
                             boxCenterP.value = center
                             boxAngleP.value = angle
                             boxRoundedEndsP.value = roundedEnds
+                            boxCornerRadiusP.value = cornerRadius
                         }
                         is PolygonDef -> {
                             shapeP.value = polygonP
@@ -485,7 +493,7 @@ class CostumeTab(val name: String, val costume: Costume)
                             return CircleDef(Vector2d(circleCenterP.x!!, circleCenterP.y!!), circleRadiusP.value!!)
                         }
                         boxP -> {
-                            return BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value, roundedEnds = boxRoundedEndsP.value == true)
+                            return BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value, roundedEnds = boxRoundedEndsP.value == true, cornerRadius = boxCornerRadiusP.value ?: 0.0)
                         }
                         polygonP -> {
                             return PolygonDef(polygonPointsP.value)

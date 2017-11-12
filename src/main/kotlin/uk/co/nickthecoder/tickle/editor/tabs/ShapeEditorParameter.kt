@@ -233,7 +233,11 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
                                 strokeOval(-radius, -shapeDef.height / 2, radius * 2, radius * 2)
                             }
                         } else {
-                            strokeRect(-shapeDef.width / 2, -shapeDef.height / 2, shapeDef.width, shapeDef.height)
+                            if (shapeDef.cornerRadius == 0.0) {
+                                strokeRect(-shapeDef.width / 2, -shapeDef.height / 2, shapeDef.width, shapeDef.height)
+                            } else {
+                                strokeRoundRect(-shapeDef.width / 2, -shapeDef.height / 2, shapeDef.width, shapeDef.height, shapeDef.cornerRadius * 2, shapeDef.cornerRadius * 2)
+                            }
                         }
                     }
                 }
