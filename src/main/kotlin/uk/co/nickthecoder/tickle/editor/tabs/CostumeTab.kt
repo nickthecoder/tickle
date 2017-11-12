@@ -522,7 +522,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     TaskPrompter(task, showCancel = false).placeOnStage(Stage())
 
                     task.shapeEditorP.update(createShapeDef())
-                    shapeP.listen { task.shapeEditorP.update(createShapeDef()) }
+                    listen { task.shapeEditorP.update(createShapeDef()) }
                 }
             }
 
