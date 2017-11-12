@@ -250,10 +250,10 @@ class LayoutTab(val name: String, val layout: Layout)
         val widthP = IntParameter("width", label = "Fixed Width")
         val widthRatioP = DoubleParameter("widthRatio", label = "Ratio")
         val hOneOfP = OneOfParameter("hOneOf", label = "Width", value = remainingWidthP, choiceLabel = "Choose")
-                .addParameters(remainingWidthP, widthP, widthRatioP).asHorizontal(labelPosition = LabelPosition.NONE)
+                .addChoices(remainingWidthP, widthP, widthRatioP)
 
         val xGroup = SimpleGroupParameter("x")
-                .addParameters(hAlignGroupP, hOneOfP)
+                .addParameters(hAlignGroupP, hOneOfP, remainingWidthP, widthP, widthRatioP)
 
         // Y
         val vAlignmentP = ChoiceParameter<FlexVAlignment>("vAlignment", label = "", value = FlexVAlignment.TOP).enumChoices()
@@ -266,10 +266,10 @@ class LayoutTab(val name: String, val layout: Layout)
         val heightP = IntParameter("height", label = "Fixed Height")
         val heightRatioP = DoubleParameter("heightRatio", label = "Ratio")
         val vOneOfP = OneOfParameter("vOneOf", label = "Height", value = remainingHeightP, choiceLabel = "Choose")
-                .addParameters(remainingHeightP, heightP, heightRatioP).asHorizontal(labelPosition = LabelPosition.NONE)
+                .addChoices(remainingHeightP, heightP, heightRatioP)
 
         val yGroup = SimpleGroupParameter("y")
-                .addParameters(vAlignGroupP, vOneOfP)
+                .addParameters(vAlignGroupP, vOneOfP, remainingHeightP, heightP, heightRatioP)
 
 
         init {

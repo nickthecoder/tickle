@@ -21,15 +21,20 @@ import java.io.File
 
 class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String = "") : AbstractTask() {
 
+    val nameP = StringParameter("name", label = "${type.label} Name", value = defaultName)
+
     val textureP = FileParameter("textureFile", label = "File", value = File(Resources.instance.file.parentFile, "images").absoluteFile)
 
     val poseP = createTextureParameter()
 
-    val costumePoseP = createPoseParameter("pose", required = false)
-    val costumeFontP = createFontParameter("font")
-    val costumeP = OneOfParameter("newCostume", label = "From", choiceLabel = "From")
-            .addParameters("Pose" to costumePoseP, "Font" to costumeFontP)
-            .asHorizontal(LabelPosition.NONE)
+    val costumePoseP = createPoseParameter("costumePose", required = false)
+    val costumeFontP = createFontParameter("costumeFont")
+
+    val costumePoseOrFontP = OneOfParameter("newCostume", label = "From", choiceLabel = "From")
+            .addChoices("Pose" to costumePoseP, "Font" to costumeFontP)
+
+    val costumeP = SimpleGroupParameter("costume")
+            .addParameters(costumePoseOrFontP, costumePoseP, costumeFontP)
 
     val costumeGroupP = InformationParameter("costumeGroup", information = "")
 
@@ -48,20 +53,18 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
 
 
-    val nameP = StringParameter("name", label = "${type.label} Name", value = defaultName)
-
     override val taskD = TaskDescription("newResource", label = "New ${type.label}", height = if (type == ResourceType.ANY) 300 else null)
-            .addParameters(resourceTypeP, nameP)
+            .addParameters(nameP, resourceTypeP)
 
     override val taskRunner = UnthreadedTaskRunner(this)
 
     constructor(pose: Pose, defaultName: String = "") : this(ResourceType.COSTUME, defaultName) {
-        costumeP.value = costumePoseP
+        costumePoseOrFontP.value = costumePoseP
         costumePoseP.value = pose
     }
 
     constructor(fontResource: FontResource, defaultName: String = "") : this(ResourceType.COSTUME, defaultName) {
-        costumeP.value = costumeFontP
+        costumePoseOrFontP.value = costumeFontP
         costumeFontP.value = fontResource
     }
 
@@ -82,9 +85,10 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
 
         }
         if (parameter == null) {
-            resourceTypeP.addParameters(
+            resourceTypeP.addChoices(
                     "Texture" to textureP,
-                    "Pose" to poseP, "Font" to fontP,
+                    "Pose" to poseP,
+                    "Font" to fontP,
                     "Costume" to costumeP,
                     "Costume Group" to costumeGroupP,
                     "Layout" to layoutP,
@@ -92,6 +96,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
                     "Scene Directory" to sceneDirectoryP,
                     "Scene" to sceneP,
                     "Sound" to soundP)
+            taskD.addParameters(textureP, poseP, fontP, costumeP, costumeGroupP, layoutP, inputP, sceneDirectoryP, sceneP, soundP)
         } else {
             resourceTypeP.hidden = true
             resourceTypeP.value = parameter
@@ -140,11 +145,11 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
             }
             costumeP -> {
                 val costume = Costume()
-                if (costumeP.value == costumePoseP) {
+                if (costumePoseOrFontP.value == costumePoseP) {
                     costumePoseP.value?.let {
                         costume.addPose("default", it)
                     }
-                } else if (costumeP.value == costumeFontP) {
+                } else if (costumePoseOrFontP.value == costumeFontP) {
                     costumeFontP.value?.let { font ->
                         val textStyle = TextStyle(font, HAlignment.LEFT, VAlignment.BOTTOM, Color.white())
                         costume.addTextStyle("default", textStyle)

@@ -107,12 +107,12 @@ class InputParameter : MultipleGroupParameter("input") {
     // One Of ...
 
     val inputTypeP = OneOfParameter("inputType", label = " ", value = keyInputP, choiceLabel = "Input Type")
-            .addParameters(keyInputP, mouseInputP, joystickButtonInputP, joystickAxisInputP).asPlain()
+            .addChoices(keyInputP, mouseInputP, joystickButtonInputP, joystickAxisInputP)
 
     private var keyPressHandler: EventHandler<KeyEvent>? = null
 
     init {
-        addParameters(pickInputP, infoP, inputTypeP)
+        addParameters(pickInputP, infoP, inputTypeP, keyInputP, mouseInputP, joystickButtonInputP, joystickAxisInputP)
     }
 
     fun from(input: Input) {

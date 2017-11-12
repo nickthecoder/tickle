@@ -17,13 +17,13 @@ class FontParameter(name: String)
 
     val fontFileP = FileParameter("fontFile", label = "", extensions = listOf("ttf", "otf"))
     val fontOneOfP = OneOfParameter("fontChoice", label = "Font", value = fontNameAndStyleP, choiceLabel = "")
-            .addParameters("Named" to fontNameAndStyleP, "From File" to fontFileP)
-            .asHorizontal()
+            .addChoices("Named" to fontNameAndStyleP, "From File" to fontFileP)
+
     val fontSizeP = DoubleParameter("fontSize", label = "Size", value = 22.0)
 
 
     init {
-        addParameters(fontOneOfP, fontSizeP)
+        addParameters(fontOneOfP, fontNameAndStyleP, fontFileP, fontSizeP)
     }
 
     fun update(fontResource: FontResource) {

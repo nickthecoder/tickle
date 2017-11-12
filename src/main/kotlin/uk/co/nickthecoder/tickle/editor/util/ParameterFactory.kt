@@ -20,9 +20,9 @@ fun createTextureParameter(parameterName: String = "texture"): ChoiceParameter<T
 }
 
 
-fun createPoseParameter(parameterName: String = "pose", required: Boolean = true): ChoiceParameter<Pose?> {
+fun createPoseParameter(parameterName: String = "pose", label: String = "Pose", required: Boolean = true): ChoiceParameter<Pose?> {
 
-    val choice = ChoiceParameter<Pose?>(parameterName, required = required, value = null)
+    val choice = ChoiceParameter<Pose?>(parameterName, label = label, required = required, value = null)
 
     if (!required) {
         choice.addChoice("", null, "None")
@@ -34,9 +34,9 @@ fun createPoseParameter(parameterName: String = "pose", required: Boolean = true
 }
 
 
-fun createFontParameter(parameterName: String = "font"): ChoiceParameter<FontResource?> {
+fun createFontParameter(parameterName: String = "font", label: String = "Font"): ChoiceParameter<FontResource?> {
 
-    val choice = ChoiceParameter<FontResource?>(parameterName, required = true, value = null)
+    val choice = ChoiceParameter<FontResource?>(parameterName, label = label, required = true, value = null)
 
     Resources.instance.fontResources.items().forEach { name, fontResource ->
         choice.addChoice(name, fontResource, name)

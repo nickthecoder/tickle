@@ -295,10 +295,10 @@ class CostumeTab(val name: String, val costume: Costume)
         val soundP = createSoundParameter()
 
         val typeP = OneOfParameter("type", value = poseP, choiceLabel = "Type")
-                .addParameters(poseP, costumeP, textStyleP, stringP, soundP)
+                .addChoices(poseP, costumeP, textStyleP, stringP, soundP)
 
         init {
-            addParameters(eventNameP, typeP)
+            addParameters(eventNameP, typeP, poseP, costumeP, textStyleP, stringP, soundP)
         }
 
         override fun toString(): String {
@@ -392,18 +392,16 @@ class CostumeTab(val name: String, val costume: Costume)
             val circleCenterP = Vector2dParameter("circleCenter", label = "Center", showXY = false).asHorizontal()
             val circleRadiusP = DoubleParameter("circleRadius", label = "Radius")
 
-            val circleP = SimpleGroupParameter("circle", label = "")
+            val circleP = SimpleGroupParameter("circle")
                     .addParameters(circleCenterP, circleRadiusP)
-                    .asPlain()
 
             val boxSizeP = Vector2dParameter("boxSize", showXY = false).asHorizontal()
             val boxCenterP = Vector2dParameter("boxCenter", label = "Center", showXY = false).asHorizontal()
             val boxAngleP = AngleParameter("boxAngle", label = "Angle")
             val boxRoundedEndsP = BooleanParameter("roundedEnds", value = false)
 
-            val boxP = SimpleGroupParameter("box", label = "")
+            val boxP = SimpleGroupParameter("box")
                     .addParameters(boxSizeP, boxCenterP, boxAngleP, boxRoundedEndsP)
-                    .asPlain()
 
             val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex, and the points ordered clockwise.")
             val polygonPointsP = MultipleParameter("polygonPoints", minItems = 3) {
@@ -413,7 +411,10 @@ class CostumeTab(val name: String, val costume: Costume)
                     .addParameters(polygonInfo, polygonPointsP)
 
             val shapeP = OneOfParameter("shape", choiceLabel = "Type")
-                    .addParameters("Circle" to circleP, "Box" to boxP, "Polygon" to polygonP)
+                    .addChoices(
+                            "Circle" to circleP,
+                            "Box" to boxP,
+                            "Polygon" to polygonP)
 
             val shapeEditorButtonP = ButtonParameter("editShape", label = "", buttonText = "Edit Shape") { onEditShape() }
 
@@ -424,14 +425,13 @@ class CostumeTab(val name: String, val costume: Costume)
             init {
                 addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP)
                 costume.pose()?.let { pose ->
-                    //println("Creating shape editor")
-                    addParameters(/*shapeEditorP!!, */ shapeEditorButtonP)
+                    addParameters(shapeEditorButtonP)
 
                     circleRadiusP.value = Math.min(pose.rect.width, pose.rect.height).toDouble()
                     boxSizeP.xP.value = pose.rect.width.toDouble()
                     boxSizeP.yP.value = pose.rect.height.toDouble()
                 }
-                addParameters(filterGroupP, filterCategoriesP, filterMaskP)
+                addParameters(circleP, boxP, polygonP, filterGroupP, filterCategoriesP, filterMaskP)
 
                 densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                 frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
