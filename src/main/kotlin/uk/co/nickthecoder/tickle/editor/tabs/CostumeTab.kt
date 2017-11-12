@@ -2,11 +2,14 @@ package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.geometry.Side
 import javafx.scene.control.TabPane
+import javafx.stage.Stage
 import org.jbox2d.dynamics.BodyType
+import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
+import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.Costume
@@ -386,11 +389,11 @@ class CostumeTab(val name: String, val costume: Costume)
 
             val isSensorP = BooleanParameter("isSensor", value = false)
 
-            val circleRadiusP = DoubleParameter("circleRadius", label = "Radius")
             val circleCenterP = Vector2dParameter("circleCenter", label = "Center", showXY = false).asHorizontal()
+            val circleRadiusP = DoubleParameter("circleRadius", label = "Radius")
 
             val circleP = SimpleGroupParameter("circle", label = "")
-                    .addParameters(circleRadiusP, circleCenterP)
+                    .addParameters(circleCenterP, circleRadiusP)
                     .asPlain()
 
             val boxSizeP = Vector2dParameter("boxSize", showXY = false).asHorizontal()
@@ -402,7 +405,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     .addParameters(boxSizeP, boxCenterP, boxAngleP, boxRoundedEndsP)
                     .asPlain()
 
-            val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex, and the points are ordered clockwise.")
+            val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex, and the points ordered clockwise.")
             val polygonPointsP = MultipleParameter("polygonPoints", minItems = 3) {
                 Vector2dParameter("point").asHorizontal()
             }
@@ -412,7 +415,7 @@ class CostumeTab(val name: String, val costume: Costume)
             val shapeP = OneOfParameter("shape", choiceLabel = "Type")
                     .addParameters("Circle" to circleP, "Box" to boxP, "Polygon" to polygonP)
 
-            var shapeEditorP: ShapeEditorParameter? = null
+            val shapeEditorButtonP = ButtonParameter("editShape", label = "", buttonText = "Edit Shape") { onEditShape() }
 
             val filterGroupP = createFilterGroupParameter()
             val filterCategoriesP = createFilterBitsParameter("categories", "I Am")
@@ -420,9 +423,13 @@ class CostumeTab(val name: String, val costume: Costume)
 
             init {
                 addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP)
-                costume.editorPose()?.let { pose ->
-                    shapeEditorP = ShapeEditorParameter("shapeEditor", pose, this)
-                    addParameters(shapeEditorP!!)
+                costume.pose()?.let { pose ->
+                    //println("Creating shape editor")
+                    addParameters(/*shapeEditorP!!, */ shapeEditorButtonP)
+
+                    circleRadiusP.value = Math.min(pose.rect.width, pose.rect.height).toDouble()
+                    boxSizeP.xP.value = pose.rect.width.toDouble()
+                    boxSizeP.yP.value = pose.rect.height.toDouble()
                 }
                 addParameters(filterGroupP, filterCategoriesP, filterMaskP)
 
@@ -432,10 +439,6 @@ class CostumeTab(val name: String, val costume: Costume)
                     densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                     frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                 }
-                shapeP.listen {
-                    shapeEditorP?.update(createShapeDef())
-                }
-                shapeEditorP?.update(createShapeDef())
             }
 
             fun initParameters(fixtureDef: TickleFixtureDef) {
@@ -452,7 +455,8 @@ class CostumeTab(val name: String, val costume: Costume)
                     when (this) {
                         is CircleDef -> {
                             shapeP.value = circleP
-                            circleCenterP.value = center
+                            circleCenterP.x = center.x
+                            circleCenterP.y = center.y
                             circleRadiusP.value = radius
                         }
                         is BoxDef -> {
@@ -474,18 +478,11 @@ class CostumeTab(val name: String, val costume: Costume)
                 }
             }
 
-            fun defaultSizes(pose: Pose): FixtureParameter {
-                circleRadiusP.value = Math.min(pose.rect.width, pose.rect.height).toDouble()
-                boxSizeP.xP.value = pose.rect.width.toDouble()
-                boxSizeP.yP.value = pose.rect.height.toDouble()
-                return this
-            }
-
             fun createShapeDef(): ShapeDef? {
                 try {
                     when (shapeP.value) {
                         circleP -> {
-                            return CircleDef(circleCenterP.value, circleRadiusP.value!!)
+                            return CircleDef(Vector2d(circleCenterP.x!!, circleCenterP.y!!), circleRadiusP.value!!)
                         }
                         boxP -> {
                             return BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value, roundedEnds = boxRoundedEndsP.value == true)
@@ -519,10 +516,20 @@ class CostumeTab(val name: String, val costume: Costume)
                 return fixtureDef
             }
 
+            fun onEditShape() {
+                costume.pose()?.let {
+                    val task = ShapeEditorTask(it, this)
+                    TaskPrompter(task, showCancel = false).placeOnStage(Stage())
+
+                    task.shapeEditorP.update(createShapeDef())
+                    shapeP.listen { task.shapeEditorP.update(createShapeDef()) }
+                }
+            }
+
             override fun toString(): String {
                 return when (shapeP.value) {
                     circleP -> {
-                        "Circle @ ${circleCenterP.value.x} , ${circleCenterP.value.y}"
+                        "Circle @ ${circleCenterP.x} , ${circleCenterP.y}"
                     }
                     boxP -> {
                         "Box @ ${boxCenterP.value.x} , ${boxCenterP.value.y}"

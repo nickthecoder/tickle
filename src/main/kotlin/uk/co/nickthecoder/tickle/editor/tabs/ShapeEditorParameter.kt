@@ -8,6 +8,8 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
 import org.joml.Matrix3x2d
 import org.joml.Vector2d
+import uk.co.nickthecoder.paratask.AbstractTask
+import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.AbstractParameter
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.paratask.parameters.fields.ParameterField
@@ -30,28 +32,40 @@ class ShapeEditorParameter(name: String, val pose: Pose, val fixtureParameter: C
 
     override fun isStretchy(): Boolean = true
 
-    private var field: ShapeEditorField? = null
+    private var field = ShapeEditorField(this)
 
     override fun createField(): ParameterField {
-        val result = ShapeEditorField(this)
-        result.build()
-        field = result
-        return result
+        field.build()
+        return field
     }
 
     fun update(shapedDef: ShapeDef?) {
-        field?.update(shapedDef)
+        field.update(shapedDef)
     }
 
 }
 
+class ShapeEditorTask(pose: Pose, val fixtureParameter: CostumeTab.PhysicsTask.FixtureParameter)
+    : AbstractTask() {
+
+    val shapeEditorP = ShapeEditorParameter("shapeEditor", pose, fixtureParameter)
+
+    override val taskD = TaskDescription("editShape")
+            .addParameters(shapeEditorP)
+
+    override fun run() {
+        Platform.runLater {
+
+        }
+    }
+}
 
 class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterField(shapeEditorParameter) {
 
     val fixtureParameter = shapeEditorParameter.fixtureParameter
     val pose = shapeEditorParameter.pose
-    val width = pose.rect.width
-    val height = pose.rect.height
+    val poseWidth = pose.rect.width
+    val poseHeight = pose.rect.height
 
     val margin = 10.0
     val borderColor = Color(0.0, 0.0, 0.0, 0.3)
@@ -59,25 +73,23 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
     val handleColor = Color(0.0, 0.0, 1.0, 1.0)
     val currentHandleColor = Color(1.0, 1.0, 1.0, 1.0)
 
-    val canvas = Canvas(width.toDouble() + margin * 2, height.toDouble() + margin * 2)
+    val canvas = Canvas(poseWidth.toDouble() + margin * 2, poseHeight.toDouble() + margin * 2)
 
     val handles = mutableListOf<Handle>()
 
     init {
-        println("Creating SEP")
+        //println("Creating SEP")
         with(canvas) {
             graphicsContext2D.transform(1.0, 0.0, 0.0, -1.0, 0.0, canvas.height)
 
             addEventHandler(MouseEvent.MOUSE_PRESSED) { onMousePressed(it) }
-            addEventHandler(MouseEvent.DRAG_DETECTED) { }
             addEventHandler(MouseEvent.MOUSE_MOVED) { onMouseMoved(it) }
             addEventHandler(MouseEvent.MOUSE_DRAGGED) { onMouseDragged(it) }
-            addEventHandler(MouseEvent.MOUSE_RELEASED) { onMouseReleased(it) }
+            addEventHandler(MouseEvent.MOUSE_RELEASED) { dragging = false }
         }
     }
 
     override fun createControl(): Node {
-        update(null)
         return canvas
     }
 
@@ -91,8 +103,6 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
             field = v
         }
 
-    var dragging = false
-
     var currentHandle: Handle? = null
         set(v) {
             if (field != v) {
@@ -100,6 +110,11 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
                 dirty = true
             }
         }
+
+    var dragging = false
+
+    var currentShapedDef: ShapeDef? = null
+
 
     fun closestHandle(event: MouseEvent): Handle? {
         val offsetX = event.x - margin - pose.offsetX
@@ -126,50 +141,33 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
     fun onMousePressed(event: MouseEvent) {
         currentHandle = closestHandle(event)
         dragging = currentHandle != null
-        println("**** Dragging started? $dragging")
-        onMouseDragged(event) // TODO TEST
-        //event.consume()
     }
 
     fun onMouseMoved(event: MouseEvent) {
-        println("onMouseMoved")
+        // println("onMouseMoved")
         currentHandle = closestHandle(event)
     }
 
     fun onMouseDragged(event: MouseEvent) {
-        println("onMouseDragged")
-        if (dragging) {
+        //println("onMouseDragged")
 
-            val offsetX = event.x - margin - pose.offsetX
-            val offsetY = canvas.height - margin - event.y - pose.offsetY
-            currentHandle?.moveTo(offsetX, offsetY)
-            //println("Dragging = $currentHandle to $offsetX, $offsetY")
-        }
+        val offsetX = event.x - margin - pose.offsetX
+        val offsetY = canvas.height - margin - event.y - pose.offsetY
+        currentHandle?.moveTo(offsetX, offsetY)
     }
-
-    fun onMouseReleased(event: MouseEvent) {
-        dragging = false
-        println("Dragging Ended ( $dragging )")
-        //event.consume()
-    }
-
-    var currentShapedDef: ShapeDef? = null
 
     fun update(shapeDef: ShapeDef?) {
-        canvas.requestFocus() // TODO TEST
-        // if (currentShapedDef != null) return // TODO TEST
 
-        println("Update")
+        //println("Update using : $shapeDef")
         currentShapedDef = shapeDef
 
         if (!dragging) {
-            println("Rebuilding drag handles")
-            // Rebuild the handles
+            //println("Creating drag handles")
             handles.clear()
 
             when (shapeDef) {
                 is CircleDef -> {
-                    handles.add(RadiusHandle(fixtureParameter.circleCenterP, fixtureParameter.circleRadiusP))
+                    handles.add(RadiusHandle(fixtureParameter.circleCenterP.xP, fixtureParameter.circleCenterP.yP, fixtureParameter.circleRadiusP))
                     handles.add(PositionHandle(fixtureParameter.circleCenterP))
                 }
                 is BoxDef -> {
@@ -193,18 +191,18 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
     fun redraw() {
 
         dirty = false
-        println("Redraw")
+        //println("Redraw")
 
         val shapeDef = currentShapedDef
 
         with(canvas.graphicsContext2D) {
             save()
-            clearRect(0.0, 0.0, width.toDouble() + margin * 2, height.toDouble() + margin * 2)
+            clearRect(0.0, 0.0, canvas.width, canvas.height)
             lineWidth = 1.0
             stroke = borderColor
 
             translate(margin, margin)
-            strokeRect(0.0, 0.0, width.toDouble(), height.toDouble())
+            strokeRect(0.0, 0.0, poseWidth.toDouble(), poseHeight.toDouble())
 
             save()
             translate(pose.offsetX, pose.offsetY)
@@ -248,6 +246,7 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
                     }
                 }
             }
+
             restore()
 
             handles.forEach { it.draw() }
@@ -299,18 +298,16 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
         override fun position() = Vector2d(parameter.x ?: 0.0, parameter.y ?: 0.0)
 
         override fun moveTo(x: Double, y: Double) {
-            parameter.parameterListeners.fireValueChanged(parameter) // TODO TEST
-            println("Changing from ${parameter.xP.value} to $x")
             parameter.xP.value = x
             parameter.yP.value = y
         }
     }
 
-    inner class RadiusHandle(val centerParameter: Vector2dParameter, val radiusParameter: DoubleParameter) : Handle() {
-        override fun position() = Vector2d((centerParameter.x ?: 0.0) + (radiusParameter.value ?: 0.0), (centerParameter.y ?: 0.0))
+    inner class RadiusHandle(val centerXP: DoubleParameter, val centerYP: DoubleParameter, val radiusParameter: DoubleParameter) : Handle() {
+        override fun position() = Vector2d((centerXP.value ?: 0.0) + (radiusParameter.value ?: 0.0), (centerYP.value ?: 0.0))
 
         override fun moveTo(x: Double, y: Double) {
-            radiusParameter.value = x - (centerParameter.x ?: 0.0)
+            radiusParameter.value = x - (centerXP.value ?: 0.0)
         }
     }
 
@@ -365,13 +362,22 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
             val oldWidth = widthParameter.value ?: 0.0
             val oldHeight = heightParameter.value ?: 0.0
 
-            val width = Math.round(rotated.x - otherRotated.x).toDouble()
-            val height = Math.round(rotated.y - otherRotated.y).toDouble()
+            var width = Math.round(rotated.x - otherRotated.x).toDouble() * if (plusX) 1 else -1
+            var height = Math.round(rotated.y - otherRotated.y).toDouble() * if (plusY) 1 else -1
 
-            // TODO Check for negatives
-            // TODO Adjust the center position.
-            centerParameter.x = (centerParameter.x ?: 0.0) + (width - oldWidth) / 2
-            centerParameter.y = (centerParameter.y ?: 0.0) + (height - oldHeight) / 2
+            if (width < 0) {
+                width = -width
+                plusX = !plusX
+                other.plusX = !plusX
+            }
+            if (height < 0) {
+                height = -height
+                plusY = !plusY
+                other.plusY = !plusY
+            }
+
+            centerParameter.x = (centerParameter.x ?: 0.0) + (width - oldWidth) / 2 * if (plusX) 1 else -1
+            centerParameter.y = (centerParameter.y ?: 0.0) + (height - oldHeight) / 2 * if (plusY) 1 else -1
 
             widthParameter.value = width
             heightParameter.value = height

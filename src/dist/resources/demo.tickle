@@ -561,7 +561,33 @@
             "spark"
           ]
         }
-      ]
+      ],
+      "body": {
+        "bodyType": "DYNAMIC",
+        "linearDamping": 0,
+        "angularDamping": 0,
+        "bullet": false,
+        "fixedRotation": false,
+        "fixtures": [
+          {
+            "friction": 0,
+            "density": 1,
+            "restitution": 1,
+            "isSensor": false,
+            "group": 0,
+            "category": 65535,
+            "mask": 65535,
+            "box": {
+              "x": 0,
+              "y": -0.5,
+              "width": 22,
+              "height": 23,
+              "angle": 0,
+              "roundedEnds": false
+            }
+          }
+        ]
+      }
     },
     {
       "name": "shootingStar",
@@ -601,7 +627,17 @@
           "name": "turnAngle",
           "value": "190.0"
         }
-      ]
+      ],
+      "body": {
+        "bodyType": "KINEMATIC",
+        "linearDamping": 0,
+        "angularDamping": 0,
+        "bullet": false,
+        "fixedRotation": false,
+        "fixtures": [
+          
+        ]
+      }
     },
     {
       "name": "plainText",

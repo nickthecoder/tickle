@@ -132,6 +132,8 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
      */
     fun editorPose(): Pose? = choosePose("editor") ?: choosePose(initialEventName)
 
+    fun pose(): Pose? = choosePose(initialEventName)
+
     fun uses(pose: Pose): Boolean {
         events.values.forEach { event ->
             if (event.poses.contains(pose)) {
