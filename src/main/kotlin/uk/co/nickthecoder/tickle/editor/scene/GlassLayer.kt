@@ -44,7 +44,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             save()
             stroke = borderColor
             lineWidth = borderWidth
-            setLineDashes(10.0, 3.0)
+            setLineDashes(10.0 / scale, 3.0 / scale)
 
             strokeLine(-1.0, -1.0, canvas.width + 1, -1.0)
             strokeLine(canvas.width + 1, -1.0, canvas.width, canvas.height + 1)
@@ -65,7 +65,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
                 translate(actorResource.x, actorResource.y)
                 rotate(actorResource.direction.degrees - (actorResource.editorPose?.direction?.degrees ?: 0.0))
-                scale( actorResource.scale, actorResource.scale)
+                scale(actorResource.scale, actorResource.scale)
 
                 drawOutlined(selectionColor(actorResource === selection.latest())) { drawBoundingBox(actorResource) }
 
@@ -149,7 +149,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
     fun outlinedText(text: String) {
         with(canvas.graphicsContext2D) {
-            scale(1.0, -1.0)
+            scale(1.0 / scale, -1.0 / scale)
             lineWidth = 3.0
             stroke = Color.BLACK
             strokeText(text, 0.0, 0.0)
@@ -196,7 +196,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
     fun lineWithHandle(length: Double, handleShape: () -> Unit = { drawArrowHead() }) {
         with(canvas.graphicsContext2D) {
             save()
-            strokeLine(0.0, 0.0, length - 3, 0.0)
+            strokeLine(0.0, 0.0, length - 3 / scale, 0.0)
             translate(length, 0.0)
             handleShape()
             restore()
@@ -205,14 +205,14 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
     fun drawArrowHead() {
         with(canvas.graphicsContext2D) {
-            strokeLine(0.0, 0.0, -arrowSize, -arrowSize / 2)
-            strokeLine(0.0, 0.0, -arrowSize, arrowSize / 2)
+            strokeLine(0.0, 0.0, -arrowSize / scale, -arrowSize / 2 / scale)
+            strokeLine(0.0, 0.0, -arrowSize / scale, arrowSize / 2 / scale)
         }
     }
 
     fun drawRoundHandle() {
         with(canvas.graphicsContext2D) {
-            strokeOval(-3.0, -3.0, 6.0, 6.0)
+            strokeOval(-3.0 / scale, -3.0 / scale, 6.0 / scale, 6.0 / scale)
         }
     }
 
@@ -227,7 +227,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
     fun drawSquareHandle() {
         with(canvas.graphicsContext2D) {
-            strokeRect(-2.5, -2.5, 5.0, 5.0)
+            strokeRect(-2.5 / scale, -2.5 / scale, 5.0 / scale, 5.0 / scale)
         }
     }
 
@@ -235,10 +235,10 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         with(canvas.graphicsContext2D) {
             stroke = Color.BLACK
             lineCap = StrokeLineCap.ROUND
-            lineWidth = 4.0
+            lineWidth = 4.0 / scale
             shape()
             stroke = color
-            lineWidth = 2.5
+            lineWidth = 2.5 / scale
             shape()
         }
     }

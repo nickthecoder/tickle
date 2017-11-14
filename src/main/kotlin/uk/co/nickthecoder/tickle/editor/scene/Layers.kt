@@ -30,6 +30,12 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
 
     val stageButton = MenuButton("no stage selected")
 
+    var scale: Double = 1.0
+        set(v) {
+            field = v
+            allLayers.forEach { it.scale(v) }
+        }
+
     var currentLayer: StageLayer? = null
         set(v) {
             field = v
@@ -102,11 +108,11 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
 
 
     fun worldX(event: MouseEvent): Double {
-        return event.x - glass.panX
+        return glass.centerX + (event.x - glass.canvas.width / 2) / scale
     }
 
     fun worldY(event: MouseEvent): Double {
-        return glass.canvas.height - event.y - glass.panY
+        return glass.centerY + (glass.canvas.height / 2 - event.y) / scale
     }
 
     fun panBy(dx: Double, dy: Double) {

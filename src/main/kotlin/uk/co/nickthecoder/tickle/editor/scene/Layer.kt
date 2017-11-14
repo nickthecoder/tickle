@@ -12,8 +12,11 @@ abstract class Layer {
 
     val canvas = Canvas(Resources.instance.gameInfo.width.toDouble(), Resources.instance.gameInfo.height.toDouble())
 
-    var panX = 0.0
-    var panY = 0.0
+    // The center of the view in world coordinates, so that when scaling, the center will stay in the same
+    // place in the world view.
+    var centerX = canvas.width / 2
+    var centerY = canvas.height / 2
+    var scale: Double = 1.0
 
     fun draw() {
         val gc = canvas.graphicsContext2D
@@ -21,15 +24,21 @@ abstract class Layer {
         gc.clearRect(0.0, 0.0, canvas.width, canvas.height)
         gc.save()
         gc.transform(1.0, 0.0, 0.0, -1.0, 0.0, canvas.height)
-        gc.translate(panX, panY)
+        gc.scale(scale, scale)
+        gc.translate((-centerX + canvas.width / scale / 2), (-centerY + canvas.height / scale / 2))
 
         drawContent()
         gc.restore()
     }
 
+    fun scale(scale: Double) {
+        this.scale = scale
+        draw()
+    }
+
     fun panBy(dx: Double, dy: Double) {
-        panX += dx
-        panY += dy
+        centerX -= dx / scale
+        centerY -= dy / scale
         draw()
     }
 

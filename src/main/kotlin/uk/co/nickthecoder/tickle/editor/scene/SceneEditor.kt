@@ -68,6 +68,10 @@ class SceneEditor(val sceneResource: SceneResource) {
         with(shortcuts) {
             add(EditorActions.ESCAPE) { onEscape() }
             add(EditorActions.DELETE) { onDelete() }
+            add(EditorActions.ZOOM_RESET) { layers.scale = 1.0 }
+            add(EditorActions.ZOOM_IN1) { layers.scale *= 1.2 }
+            add(EditorActions.ZOOM_IN2) { layers.scale *= 1.2 }
+            add(EditorActions.ZOOM_OUT) { layers.scale /= 1.2 }
         }
         EditorActions.STAMPS.forEachIndexed { index, action ->
             shortcuts.add(action) { selectCostumeFromHistory(index) }

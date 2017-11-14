@@ -24,6 +24,11 @@ object EditorActions {
     val ESCAPE = EditorAction("escape", KeyCode.ESCAPE)
     val DELETE = EditorAction("delete", KeyCode.DELETE)
 
+    val ZOOM_RESET = EditorAction("zoom.reset", KeyCode.DIGIT0, control = true)
+    val ZOOM_IN1 = EditorAction("zoom.in", KeyCode.PLUS, control = true)
+    val ZOOM_IN2 = EditorAction("zoom.out", KeyCode.EQUALS, control = true)
+    val ZOOM_OUT = EditorAction("zoom.out", KeyCode.MINUS, control = true)
+
     val STAMPS = listOf(KeyCode.DIGIT1, KeyCode.DIGIT2, KeyCode.DIGIT3, KeyCode.DIGIT4, KeyCode.DIGIT5, KeyCode.DIGIT6, KeyCode.DIGIT7, KeyCode.DIGIT8, KeyCode.DIGIT9)
             .mapIndexed { index, keyCode -> EditorAction("stamp$index", keyCode) }
 
