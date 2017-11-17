@@ -80,7 +80,7 @@ class TickleWorld(
             val actor = body.userData
             if (actor is Actor) {
                 worldToPixels(actor.position, body.position)
-                actor.direction.radians = body.angle.toDouble()
+                actor.direction.radians = body.angle.toDouble() + (actor.poseAppearance?.directionRadians ?: 0.0)
             }
             body = body.next
         }

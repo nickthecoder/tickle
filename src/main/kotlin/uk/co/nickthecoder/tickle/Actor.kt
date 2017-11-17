@@ -241,7 +241,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
     fun updateBody() {
         if (body != null) {
             pixelsToWorld(tempVec2, position)
-            body?.setTransform(tempVec2, direction.radians.toFloat())
+            body?.setTransform(tempVec2, (direction.radians - (poseAppearance?.directionRadians ?: 0.0)).toFloat())
         }
     }
 
