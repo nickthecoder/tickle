@@ -75,8 +75,8 @@ class Play : AbstractDirector() {
 
     }
 
-    override fun onKeyEvent(event: KeyEvent) {
-        super.onKeyEvent(event)
+    override fun onKey(event: KeyEvent) {
+        super.onKey(event)
 
         if (toggle.matches(event)) {
 

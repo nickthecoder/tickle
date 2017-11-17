@@ -1,6 +1,8 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.events.MouseButtonHandler
+import uk.co.nickthecoder.tickle.events.MouseEvent
 
 /**
  * Looks after a single Scene. A game will typically have at least two Directors, one to handle the menu or splash
@@ -19,7 +21,7 @@ import uk.co.nickthecoder.tickle.events.KeyEvent
  *
  * There are many more things that Director can do!
  */
-interface Director {
+interface Director : MouseButtonHandler {
 
     fun sceneLoaded()
 
@@ -37,7 +39,7 @@ interface Director {
 
     fun end()
 
-    fun onKeyEvent(event: KeyEvent)
+    fun onKey(event: KeyEvent)
 
     companion object {
         fun createDirector(directorString: String): Director {
@@ -57,7 +59,7 @@ interface Director {
     }
 }
 
-open class AbstractDirector : Director {
+abstract class AbstractDirector : Director {
 
     override fun sceneLoaded() {}
 
@@ -67,7 +69,9 @@ open class AbstractDirector : Director {
 
     override fun end() {}
 
-    override fun onKeyEvent(event: KeyEvent) {}
+    override fun onKey(event: KeyEvent) {}
+
+    override fun onMouseButton(event: MouseEvent) {}
 
     override fun postTick() {}
 

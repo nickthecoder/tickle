@@ -24,7 +24,6 @@ interface Stage {
     fun addView(view: StageView)
 
     fun firstView(): StageView? = views.firstOrNull()
-
 }
 
 inline fun <reified T : Role> Stage.findRole(): List<T> {

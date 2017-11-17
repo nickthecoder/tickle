@@ -19,7 +19,7 @@ class Scene {
 
     val stages = mutableMapOf<String, Stage>()
 
-    private val views = mutableMapOf<String, View>()
+    internal val views = mutableMapOf<String, View>()
 
     private val autoPositions = mutableMapOf<String, FlexPosition>()
 
@@ -29,7 +29,7 @@ class Scene {
 
     fun stages() = stages.values
 
-    fun views() = views.values
+    fun views(): Collection<View> = orderedViews ?: views.values
 
     fun findStage(name: String) = stages[name]
 
@@ -129,6 +129,9 @@ class Scene {
     }
 
     fun tick() {
+        views.values.forEach { view ->
+            view.tick()
+        }
         stages.values.forEach { stage ->
             stage.tick()
         }

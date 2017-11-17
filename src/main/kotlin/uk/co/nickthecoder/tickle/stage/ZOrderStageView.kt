@@ -1,18 +1,10 @@
 package uk.co.nickthecoder.tickle.stage
 
-import uk.co.nickthecoder.tickle.graphics.Renderer
+import uk.co.nickthecoder.tickle.Actor
 
 class ZOrderStageView
     : AbstractStageView() {
 
-    override var zOrder = 0
-
-    override fun draw(renderer: Renderer) {
-        super.draw(renderer)
-
-        stage.actors.sortedBy { it.zOrder }.forEach { actor ->
-            actor.appearance.draw(renderer)
-        }
-    }
+    override fun actorOrder(actor : Actor) = actor.zOrder
 
 }

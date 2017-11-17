@@ -13,6 +13,8 @@ import org.lwjgl.system.MemoryUtil
 import uk.co.nickthecoder.tickle.events.ButtonState
 import uk.co.nickthecoder.tickle.events.Key
 import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.events.MouseEvent
+import uk.co.nickthecoder.tickle.stage.View
 
 class Window(
         title: String,
@@ -54,19 +56,28 @@ class Window(
         }
     }
 
+    fun mouseButtonEvents(mouseHandler: (MouseEvent) -> Unit) {
+        // Setup a key callback. It will be called every time a mouse buttons is pressed or released.
+        glfwSetMouseButtonCallback(handle) { _, button, action, mods ->
+            val event = MouseEvent(this, button, ButtonState.of(action), mods)
+            mousePosition(event.screenPosition)
+            mouseHandler(event)
+        }
+    }
+
     fun showMouse(value: Boolean = true) {
         glfwSetInputMode(handle, GLFW_CURSOR, if (value) GLFW_CURSOR_NORMAL else GLFW_CURSOR_HIDDEN)
     }
 
     fun close() {
-        if (current === this) {
-            current = null
+        if (instance === this) {
+            instance = null
         }
         glfwSetWindowShouldClose(handle, true)
     }
 
     fun show() {
-        current = this
+        instance = this
 
         glfwSetWindowShouldClose(handle, false)
 
@@ -137,22 +148,21 @@ class Window(
 
     fun shouldClose(): Boolean = glfwWindowShouldClose(handle)
 
-    private val mouseVector = Vector2d()
-
     private val xBuffer = BufferUtils.createDoubleBuffer(1)
     private val yBuffer = BufferUtils.createDoubleBuffer(1)
 
     /**
      * Returns the position of the mouse pointer relative to the top left of the window.
-     * This is very rarely useful, and instead, you should use [StageView].mousePosition]
+     * The result is returned by changing the [result] Vector2d (which avoids creating a new object).
+     *
+     * Often it is easier, and more useful to find the position of the mouse pointer in a view's coordinate system
+     * using [View.mousePosition].
      */
-    fun mousePosition(): Vector2d {
+    fun mousePosition(result: Vector2d) {
         glfwGetCursorPos(handle, xBuffer, yBuffer)
 
-        mouseVector.x = xBuffer.get(0)
-        mouseVector.y = yBuffer.get(0)
-
-        return mouseVector
+        result.x = xBuffer.get(0)
+        result.y = yBuffer.get(0)
     }
 
     fun swap() {
@@ -165,6 +175,6 @@ class Window(
     }
 
     companion object {
-        var current: Window? = null
+        var instance: Window? = null
     }
 }

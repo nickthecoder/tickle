@@ -13,28 +13,29 @@ class GameStage() : Stage {
 
     override val actors: Set<Actor> = mutableActors
 
+
     override fun begin() {
-        actors.map { it.role }.filterNotNull().forEach { role ->
-            role.begin()
+        actors.map { it.role }.forEach { role ->
+            role?.begin()
         }
     }
 
     override fun activated() {
-        actors.map { it.role }.filterNotNull().forEach { role ->
-            role.activated()
+        actors.map { it.role }.forEach { role ->
+            role?.activated()
         }
     }
 
     override fun end() {
-        actors.map { it.role }.filterNotNull().forEach { role ->
-            role.end()
+        actors.map { it.role }.forEach { role ->
+            role?.end()
         }
         mutableActors.clear()
     }
 
     override fun tick() {
-        actors.map { it.role }.filterNotNull().forEach { role ->
-            role.tick()
+        actors.map { it.role }.forEach { role ->
+            role?.tick()
         }
     }
 
@@ -55,4 +56,5 @@ class GameStage() : Stage {
     override fun addView(view: StageView) {
         mutableViews.add(view)
     }
+
 }

@@ -1,7 +1,8 @@
 package uk.co.nickthecoder.tickle
 
+import org.joml.Vector2d
 import org.lwjgl.glfw.GLFW
-import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.loop.FullSpeedGameLoop
@@ -34,6 +35,12 @@ class Game(
      */
     var tickDuration: Double = 1.0 / 60.0
 
+    private var mouseCapturedBy: MouseButtonHandler? = null
+
+    private val previousScreenMousePosition = Vector2d(-1.0, -1.0)
+
+    private val currentScreenMousePosition = Vector2d()
+
 
     init {
         Game.instance = this
@@ -43,6 +50,7 @@ class Game(
         instance = this
         seconds = System.nanoTime() / 1_000_000_000.0
         window.keyboardEvents { onKeyEvent(it) }
+        window.mouseButtonEvents { onMouseButtonEvent(it) }
 
         gameLoop = FullSpeedGameLoop(this)
         gameLoop.resetStats()
@@ -106,6 +114,7 @@ class Game(
         scene.end()
         director.end()
         producer.sceneEnd()
+        mouseCapturedBy = null
     }
 
     fun cleanUp() {
@@ -125,12 +134,70 @@ class Game(
         director.postTick()
         producer.postTick()
 
+        mouseCapturedBy?.let { capturedBy ->
+            if (capturedBy is MouseHandler) {
+                Window.instance?.mousePosition(currentScreenMousePosition)
+                if (currentScreenMousePosition != previousScreenMousePosition) {
+                    previousScreenMousePosition.set(currentScreenMousePosition)
+                    val event = MouseEvent(Window.instance!!, 0, ButtonState.UNKNOWN, 0)
+                    event.screenPosition.set(currentScreenMousePosition)
+                    event.captured = true
+                    capturedBy.onMouseMove(event)
+                    if (!event.captured) {
+                        mouseCapturedBy = null
+                    }
+                }
+            }
+        }
+
         scene.draw(renderer)
     }
 
     fun onKeyEvent(event: KeyEvent) {
-        producer.onKeyEvent(event)
-        director.onKeyEvent(event)
+        producer.onKey(event)
+        if (event.consumed) {
+            return
+        }
+        director.onKey(event)
+    }
+
+    fun onMouseButtonEvent(event: MouseEvent) {
+        mouseCapturedBy?.let {
+            event.captured = true
+            it.onMouseButton(event)
+            if (!event.captured) {
+                mouseCapturedBy = null
+            }
+            return
+        }
+
+        if (sendMouseButtonEvent(event, producer)) {
+            return
+        }
+
+        if (sendMouseButtonEvent(event, director)) {
+            return
+        }
+
+        if (event.state == ButtonState.PRESSED) {
+            // TODO Need to iterate BACKWARDS
+            scene.views().forEach { view ->
+                if (sendMouseButtonEvent(event, view)) {
+                    return
+                }
+            }
+
+        }
+    }
+
+    private fun sendMouseButtonEvent(event: MouseEvent, to: MouseButtonHandler): Boolean {
+        to.onMouseButton(event)
+        if (event.captured) {
+            event.captured = false
+            mouseCapturedBy = to
+            previousScreenMousePosition.set(event.screenPosition)
+        }
+        return event.consumed
     }
 
     companion object {

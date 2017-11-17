@@ -206,5 +206,18 @@ class Actor(var costume: Costume, val role: Role? = null) {
         stage?.remove(this)
     }
 
+    /**
+     * Is the point within the actor's rectangular region? Note, this uses a rectangle not aligned
+     * with the x/y axis, and is therefore still useful when the actor is rotated.
+     */
+    fun contains(vector: Vector2d) = appearance.contains(vector)
+
+    /**
+     * For a PoseAppearance, is the vector non-transparent pixel of the pose.
+     * For a TextAppearance, is the vector within the bounding rectangle of the text (note uses a rectangle not aligned
+     * with the x/y axis, and is therefore still useful when the actor is rotated).
+     */
+    fun touching(vector: Vector2d) = appearance.touching(vector)
+
     override fun toString() = "Actor #$id @ $x,$y Role=${role?.javaClass?.simpleName ?: "<none>"}"
 }

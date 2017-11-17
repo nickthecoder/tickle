@@ -1,19 +1,35 @@
 package uk.co.nickthecoder.demo
 
-import uk.co.nickthecoder.tickle.ActionRole
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.Delay
 import uk.co.nickthecoder.tickle.action.Do
+import uk.co.nickthecoder.tickle.events.MouseEvent
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.util.Button
 
-class Info : ActionRole() {
+class Info : Button() {
 
-    override fun createAction(): Action {
+    val action = Delay(1.0)
+            .then(Do { actor.textAppearance?.text = text() })
+            .forever()
+
+    override fun activated() {
+        super.activated()
         actor.color = Color.white().semi()
-        return Delay(1.0)
-                .then(Do { actor.textAppearance?.text = text() })
-                .forever()
+        action.begin()
+    }
+
+    override fun tick() {
+        action.act()
+    }
+
+    override fun onMouseClicked(event: MouseEvent) {
+        Game.instance.gameLoop.resetStats()
+        actor.textAppearance?.text = text()
+    }
+
+    override fun stateChanged(down: Boolean) {
+        actor.color = if (down) Color.white() else Color.white().semi()
     }
 
     fun text(): String {

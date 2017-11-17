@@ -1,6 +1,8 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.events.MouseButtonHandler
+import uk.co.nickthecoder.tickle.events.MouseEvent
 import java.io.File
 
 /**
@@ -17,7 +19,7 @@ import java.io.File
  *
  * See [Director]
  */
-interface Producer {
+interface Producer : MouseButtonHandler {
 
     fun begin()
 
@@ -41,7 +43,8 @@ interface Producer {
 
     fun end()
 
-    fun onKeyEvent(event: KeyEvent)
+    fun onKey(event: KeyEvent)
+
 }
 
 abstract class AbstractProducer : Producer {
@@ -62,7 +65,10 @@ abstract class AbstractProducer : Producer {
 
     override fun end() {}
 
-    override fun onKeyEvent(event: KeyEvent) {}
+    override fun onKey(event: KeyEvent) {}
+
+    override fun onMouseButton(event: MouseEvent) {}
+
 }
 
 class NoProducer : AbstractProducer()

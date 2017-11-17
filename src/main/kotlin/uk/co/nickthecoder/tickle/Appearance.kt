@@ -1,9 +1,11 @@
 package uk.co.nickthecoder.tickle
 
+import org.joml.Vector2d
 import org.joml.Vector4f
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Rectd
+import uk.co.nickthecoder.tickle.util.rotate
 
 interface Appearance {
 
@@ -15,11 +17,40 @@ interface Appearance {
      */
     fun draw(renderer: Renderer)
 
+    /**
+     * The width of the pose or the text (before scaling/rotating)
+     */
     fun width(): Double
 
+    /**
+     * The height of the pose or the text (before scaling/rotating)
+     */
     fun height(): Double
 
+    /**
+     * The offset position of the pose or the text (before scaling/rotating/flipping)
+     */
+    fun offsetX(): Double
+
+    /**
+     * The offset position of the pose or the text (before scaling/rotating/flipping)
+     */
+    fun offsetY(): Double
+
+    /**
+     * The bounding rectangle of the actor after scaling, rotating, flipping etc.
+     * Note, that this is a rectangle aligned with the x,y axis, and therefore when a long, thin object
+     * is rotated, the rectangle can be substantially larger that the object.
+     */
     fun worldRect(): Rectd
+
+    /**
+     * Is the point within the actor's rectangular region? Note, this uses a rectangle not aligned
+     * with the x/y axis, and is therefore still useful when the actor is rotated.
+     */
+    fun contains(point: Vector2d): Boolean
+
+    fun touching(point: Vector2d): Boolean
 }
 
 private val INVISIBLE_RECT = Rectd(0.0, 0.0, 0.0, 0.0)
@@ -36,32 +67,30 @@ class InvisibleAppearance : Appearance {
 
     override fun height(): Double = 0.0
 
+    override fun offsetX(): Double = 0.0
+
+    override fun offsetY(): Double = 0.0
+
     override fun worldRect() = INVISIBLE_RECT
+
+    override fun contains(point: Vector2d): Boolean = false
+
+    override fun touching(point: Vector2d): Boolean = false
 
     override fun toString() = "InvisibleAppearance"
 
 }
 
-class PoseAppearance(val actor: Actor, var pose: Pose) : Appearance {
+abstract class AbstractAppearance(val actor: Actor) : Appearance {
 
     private val worldRect = Rectd()
 
-    override val directionRadians
-        get() = pose.direction.radians
-
-    override fun draw(renderer: Renderer) {
-        pose.draw(renderer, actor)
-    }
-
-    override fun width(): Double = pose.rect.width.toDouble() * actor.scale
-    override fun height(): Double = pose.rect.height.toDouble() * actor.scale
-
     override fun worldRect(): Rectd {
         // TODO. It would be good to cache this info similar to getModelMatrix.
-        worldRect.left = actor.x - pose.offsetX
-        worldRect.bottom = actor.y - pose.offsetY
-        worldRect.right = worldRect.left + pose.rect.width
-        worldRect.top = worldRect.bottom + pose.rect.height
+        worldRect.left = actor.x - offsetX()
+        worldRect.bottom = actor.y - offsetY()
+        worldRect.right = worldRect.left + width()
+        worldRect.top = worldRect.bottom + height()
         if (!actor.isSimpleImage()) {
             // Rotates/scale/flip each corner of the rectangle...
             val a = Vector4f(worldRect.left.toFloat(), worldRect.top.toFloat(), 0f, 1f)
@@ -82,10 +111,52 @@ class PoseAppearance(val actor: Actor, var pose: Pose) : Appearance {
         return worldRect
     }
 
+    override fun contains(point: Vector2d): Boolean {
+        tempVector.set(point)
+        tempVector.sub(actor.position)
+        if (actor.scale != 1.0) {
+            tempVector.mul(1 / actor.scale)
+        }
+        if (actor.direction.radians != 0.0) {
+            tempVector.rotate(-actor.direction.radians)
+        }
+
+        val offsetX = offsetX()
+        val offsetY = offsetY()
+
+        return tempVector.x >= -offsetX && tempVector.x < width() - offsetX && tempVector.y > -offsetY && tempVector.y < height() - offsetY
+    }
+
+}
+
+class PoseAppearance(actor: Actor, var pose: Pose)
+
+    : AbstractAppearance(actor) {
+
+    override val directionRadians
+        get() = pose.direction.radians
+
+    override fun draw(renderer: Renderer) {
+        pose.draw(renderer, actor)
+    }
+
+    override fun width(): Double = pose.rect.width.toDouble() * actor.scale
+
+    override fun height(): Double = pose.rect.height.toDouble() * actor.scale
+
+    override fun offsetX() = pose.offsetX
+
+    override fun offsetY() = pose.offsetY
+
+    // TODO Implement correctly
+    override fun touching(point: Vector2d): Boolean = contains(point)
+
     override fun toString() = "PoseAppearance pose=$pose"
 }
 
-class TextAppearance(val actor: Actor, var text: String, val textStyle: TextStyle) : Appearance {
+class TextAppearance(actor: Actor, var text: String, val textStyle: TextStyle)
+
+    : AbstractAppearance(actor) {
 
     override val directionRadians = 0.0
 
@@ -96,8 +167,12 @@ class TextAppearance(val actor: Actor, var text: String, val textStyle: TextStyl
     override fun width(): Double = textStyle.width(text) * actor.scale
     override fun height(): Double = textStyle.height(text) * actor.scale
 
-    // TODO Inplement correctly
-    override fun worldRect() = INVISIBLE_RECT
+    override fun offsetX(): Double = textStyle.offsetX(text)
+    override fun offsetY(): Double = textStyle.height(text) - textStyle.offsetY(text)
+
+    override fun touching(point: Vector2d): Boolean = contains(point)
 
     override fun toString() = "TextAppearance '$text'"
 }
+
+private val tempVector = Vector2d()

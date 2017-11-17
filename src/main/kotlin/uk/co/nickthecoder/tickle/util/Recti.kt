@@ -1,5 +1,7 @@
 package uk.co.nickthecoder.tickle.util
 
+import org.joml.Vector2d
+
 /**
  * A rectangle using Ints.
  * Note, the right and bottom values are EXCLUSIVE, so width = right - left
@@ -18,6 +20,10 @@ data class Recti(
         get() = right - left
     val height
         get() = top - bottom
+
+    fun contains(screenPosition: Vector2d): Boolean {
+        return screenPosition.x >= left && screenPosition.x < right && screenPosition.y >= bottom && screenPosition.y < top
+    }
 
     override fun toString(): String = "($left,$bottom , $right,$top)"
 }

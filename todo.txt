@@ -4,17 +4,22 @@ Current Work
 Next
 ====
 
+Create Button objects
+	Stage to have actorAt(Vector2d) and also actorsAt(Vector2d)
+	View to have actorAt(int x, int y) actorsAt(int x, int y) which are in SCREEN coordinates.
+	Also support dragging by allowing a Stage/Role to capture the mouse, so that mouse events ONLY
+		go to it.
+
+Change the Body's position/angle when the Actor's position/angle is changed directly.
+	(Need to prevent this being triggered when the TickleWorld updates the actors though).
+	Make sure that the order of redraw/box2d/role.tick is ok.
+
 Add guides and grid to SceneEditor (unrelated to StageConstraint)
 	This will make aligning edges much easier.
 	Pulldown button for Grid and Guides
 		Should X & Y guides be separate? Yes.
 	If the StageConstraint has adjusted to position, then don't snap.
 	For now, just use a Task to set the grid/guide info, but later add a GUI too.
-
-PixelOverlapping
-	Don't clear the whole overlapTexture
-	Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
-
 
 PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
 Ditto for CostumeChoiceParameter
@@ -43,8 +48,26 @@ InputPicker :
 
 Cannot press more than 2 keys simultaneously :-(
 
+
+Possible Optimisatins
+---------------------
+	
+
+PixelOverlapping
+	Don't clear the whole overlapTexture
+	Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
+
+
 New Features
-============
+------------
+
+Preferences class to save things such as high-score, levels completed etc.
+
+Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
+	Also create a GUI suitable for launching from within the game to adjust *existing* inputs.
+	Include "reset"
+	Save to a separate file in user's config directory.
+		<aybe make it part of the (un-coded) "Preferences" class
 
 Arbitary polygons for CostumeTab fixtures.
 
