@@ -4,16 +4,6 @@ Current Work
 Next
 ====
 
-Create Button objects
-	Stage to have actorAt(Vector2d) and also actorsAt(Vector2d)
-	View to have actorAt(int x, int y) actorsAt(int x, int y) which are in SCREEN coordinates.
-	Also support dragging by allowing a Stage/Role to capture the mouse, so that mouse events ONLY
-		go to it.
-
-Change the Body's position/angle when the Actor's position/angle is changed directly.
-	(Need to prevent this being triggered when the TickleWorld updates the actors though).
-	Make sure that the order of redraw/box2d/role.tick is ok.
-
 Add guides and grid to SceneEditor (unrelated to StageConstraint)
 	This will make aligning edges much easier.
 	Pulldown button for Grid and Guides

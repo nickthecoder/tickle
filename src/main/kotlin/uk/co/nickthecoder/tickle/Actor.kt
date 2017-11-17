@@ -1,10 +1,13 @@
 package uk.co.nickthecoder.tickle
 
+import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.Body
 import org.joml.Matrix4f
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
+import uk.co.nickthecoder.tickle.physics.TickleWorld
+import uk.co.nickthecoder.tickle.physics.pixelsToWorld
 import uk.co.nickthecoder.tickle.resources.ActorXAlignment
 import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 import uk.co.nickthecoder.tickle.sound.SoundManager
@@ -184,9 +187,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
         val childActor = costume.createChild(eventName)
         childActor.x = x
         childActor.y = y
-        Game.instance.scene.world?.let { world ->
-            childActor.body?.setTransform(world.pixelsToWorld(childActor.position), childActor.direction.radians.toFloat())
-        }
+        updateBody()
 
         return childActor
     }
@@ -219,5 +220,32 @@ class Actor(var costume: Costume, val role: Role? = null) {
      */
     fun touching(vector: Vector2d) = appearance.touching(vector)
 
+    /**
+     * Directly changes the position and the angle of the body. Note, this can cause strange behaviour if the body
+     * overlaps another body.
+     */
+    fun updateBody(world: TickleWorld) {
+        if (body != null) {
+            world.pixelsToWorld(tempVec2, position)
+            body?.setTransform(tempVec2, direction.radians.toFloat())
+        }
+    }
+
+    /**
+     * Directly changes the position and the angle of the body. Note, this can cause strange behaviour if the body
+     * overlaps another body.
+     *
+     * Note. If your game has multiple worlds (each with its own scale), then use updateBody(TickleWorld) instead,
+     * so that the correct scaling factor can be applied.
+     */
+    fun updateBody() {
+        if (body != null) {
+            pixelsToWorld(tempVec2, position)
+            body?.setTransform(tempVec2, direction.radians.toFloat())
+        }
+    }
+
     override fun toString() = "Actor #$id @ $x,$y Role=${role?.javaClass?.simpleName ?: "<none>"}"
 }
+
+private val tempVec2 = Vec2()
