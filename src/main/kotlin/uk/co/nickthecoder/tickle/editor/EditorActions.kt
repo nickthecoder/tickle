@@ -29,6 +29,12 @@ object EditorActions {
     val ZOOM_IN2 = EditorAction("zoom.out", KeyCode.EQUALS, control = true)
     val ZOOM_OUT = EditorAction("zoom.out", KeyCode.MINUS, control = true)
 
+    val GRID_EDIT = EditorAction("grid.edit", KeyCode.POUND, control = true, shift = true)
+    val GRID_TOGGLE = EditorAction("grid.toggle", KeyCode.POUND, control = true)
+
+    val GUIDES_EDIT = EditorAction("guides.edit", KeyCode.G, control = true, shift = true)
+    val GUIDES_TOGGLE = EditorAction("guides.toggle", KeyCode.G, control = true)
+
     val STAMPS = listOf(KeyCode.DIGIT1, KeyCode.DIGIT2, KeyCode.DIGIT3, KeyCode.DIGIT4, KeyCode.DIGIT5, KeyCode.DIGIT6, KeyCode.DIGIT7, KeyCode.DIGIT8, KeyCode.DIGIT9)
             .mapIndexed { index, keyCode -> EditorAction("stamp$index", keyCode) }
 

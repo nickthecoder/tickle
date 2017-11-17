@@ -45,6 +45,9 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     val costumeHistory = mutableListOf<String>()
 
+    val gridButton = EditorActions.GRID_EDIT.createButton { sceneResource.grid.edit() }
+    val guidesButton = EditorActions.GUIDES_EDIT.createButton { sceneResource.guides.edit() }
+
     fun build(): Node {
 
         with(scrollPane) {
@@ -72,7 +75,10 @@ class SceneEditor(val sceneResource: SceneResource) {
             add(EditorActions.ZOOM_IN1) { layers.scale *= 1.2 }
             add(EditorActions.ZOOM_IN2) { layers.scale *= 1.2 }
             add(EditorActions.ZOOM_OUT) { layers.scale /= 1.2 }
+            add(EditorActions.GRID_TOGGLE) { sceneResource.grid.enabled != sceneResource.grid.enabled }
+            add(EditorActions.GUIDES_TOGGLE) { sceneResource.guides.enabled != sceneResource.guides.enabled }
         }
+
         EditorActions.STAMPS.forEachIndexed { index, action ->
             shortcuts.add(action) { selectCostumeFromHistory(index) }
         }
@@ -231,6 +237,18 @@ class SceneEditor(val sceneResource: SceneResource) {
         dragging = false
     }
 
+    fun snapActor(actorResource: ActorResource, isNew: Boolean) {
+        if (actorResource.layer?.stageConstraint?.snapActor(actorResource, isNew) != true) {
+            if (!sceneResource.grid.snapActor(actorResource)) {
+                sceneResource.guides.snapActor(actorResource)
+            }
+        }
+    }
+
+    fun viewX(event: MouseEvent) = layers.viewX(event)
+
+    fun viewY(event: MouseEvent) = layers.viewY(event)
+
     interface MouseHandler {
         fun onMousePressed(event: MouseEvent) {
             event.consume()
@@ -255,17 +273,14 @@ class SceneEditor(val sceneResource: SceneResource) {
         fun escape() {}
     }
 
-    fun worldX(event: MouseEvent) = layers.worldX(event)
-    fun worldY(event: MouseEvent) = layers.worldY(event)
-
     inner class Select : MouseHandler {
 
         var offsetX: Double = 0.0
         var offsetY: Double = 0.0
 
         override fun onMousePressed(event: MouseEvent) {
-            val wx = worldX(event)
-            val wy = worldY(event)
+            val wx = viewX(event)
+            val wy = viewY(event)
 
             if (event.button == MouseButton.PRIMARY) {
 
@@ -332,7 +347,7 @@ class SceneEditor(val sceneResource: SceneResource) {
         }
 
         override fun onMouseMoved(event: MouseEvent) {
-            layers.glass.hover(worldX(event), worldY(event))
+            layers.glass.hover(viewX(event), viewY(event))
         }
 
         override fun onMouseDragged(event: MouseEvent) {
@@ -340,7 +355,7 @@ class SceneEditor(val sceneResource: SceneResource) {
                 selection.selected().forEach { actorResource ->
                     actorResource.draggedX += dragDeltaX
                     actorResource.draggedY -= dragDeltaY
-                    actorResource.layer?.stageConstraint?.moveActorResource(actorResource, false)
+                    snapActor(actorResource, false)
                     sceneResource.fireChange(actorResource, ModificationType.CHANGE)
                 }
             }
@@ -361,7 +376,7 @@ class SceneEditor(val sceneResource: SceneResource) {
     inner class AdjustDragHandle(val dragHandle: GlassLayer.DragHandle) : MouseHandler {
 
         override fun onMouseDragged(event: MouseEvent) {
-            dragHandle.moveTo(worldX(event), worldY(event), event.isShiftDown)
+            dragHandle.moveTo(viewX(event), viewY(event), event.isShiftDown)
             selection.latest()?.let { sceneResource.fireChange(it, ModificationType.CHANGE) }
         }
 
@@ -382,9 +397,9 @@ class SceneEditor(val sceneResource: SceneResource) {
 
         override fun onMouseMoved(event: MouseEvent) {
 
-            newActor.draggedX = worldX(event)
-            newActor.draggedY = worldY(event)
-            layers.currentLayer()?.stageConstraint?.moveActorResource(newActor, true)
+            newActor.draggedX = viewX(event)
+            newActor.draggedY = viewY(event)
+            snapActor(newActor, true)
             layers.glass.dirty = true
         }
 

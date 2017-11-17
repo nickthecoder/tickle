@@ -18,8 +18,9 @@ class GridConstraint : NoStageConstraint() {
         return true
     }
 
-    override fun moveActorResource(actorResource: ActorResource, isNew: Boolean) {
+    override fun snapActor(actorResource: ActorResource, isNew: Boolean): Boolean {
         adjust(actorResource)
+        return true
     }
 
     fun adjust(actorResource: ActorResource) {

@@ -41,6 +41,37 @@ class JsonScene {
         jroot.add("showMouse", sceneResource.showMouse)
 
         jroot.add("layout", sceneResource.layoutName)
+
+        val jgrid = JsonObject()
+        jroot.add("grid", jgrid)
+        with(sceneResource.grid) {
+            jgrid.add("enabled", enabled == true)
+
+            jgrid.add("xSpacing", spacing.x)
+            jgrid.add("ySpacing", spacing.y)
+
+            jgrid.add("xOffset", offset.x)
+            jgrid.add("yOffset", offset.y)
+
+            jgrid.add("xCloseness", closeness.x)
+            jgrid.add("yCloseness", closeness.y)
+        }
+
+        val jguides = JsonObject()
+        jroot.add("guides", jguides)
+        with(sceneResource.guides) {
+            jguides.add("enabled", enabled)
+            jguides.add("closeness", closeness)
+
+            val jx = JsonArray()
+            xGuides.forEach { jx.add(it) }
+            jguides.add("x", jx)
+
+            val jy = JsonArray()
+            yGuides.forEach { jy.add(it) }
+            jguides.add("y", jy)
+        }
+
         val jstages = JsonArray()
         jroot.add("stages", jstages)
         sceneResource.stageResources.forEach { stageName, stageResource ->
@@ -63,6 +94,41 @@ class JsonScene {
         sceneResource.layoutName = jroot.getString("layout", "default")
         sceneResource.background = Color.fromString(jroot.getString("background", "#FFFFFF"))
         sceneResource.showMouse = jroot.getBoolean("showMouse", true)
+
+        jroot.get("grid")?.let {
+            val jgrid = it.asObject()
+            with(sceneResource.grid) {
+                enabled = jgrid.getBoolean("enabled", false)
+
+                spacing.x = jgrid.getDouble("xSpacing", 50.0)
+                spacing.y = jgrid.getDouble("ySpacing", 50.0)
+
+                offset.x = jgrid.getDouble("xOffset", 0.0)
+                offset.y = jgrid.getDouble("yOffset", 0.0)
+
+                closeness.x = jgrid.getDouble("xCloseness", 10.0)
+                closeness.y = jgrid.getDouble("yCloseness", 10.0)
+            }
+            //println("Loaded grid ${sceneResource.grid}")
+        }
+
+        jroot.get("guides")?.let {
+            val jguides = it.asObject()
+            with(sceneResource.guides) {
+                enabled = jguides.getBoolean("enabled", true)
+                closeness = jguides.getDouble("closeness", 10.0)
+
+                jguides.get("x")?.let {
+                    val jx = it.asArray()
+                    jx.forEach { xGuides.add(it.asDouble()) }
+                }
+                jguides.get("y")?.let {
+                    val jy = it.asArray()
+                    jy.forEach { yGuides.add(it.asDouble()) }
+                }
+            }
+            //println("Loaded guides ${sceneResource.guides}")
+        }
 
         sceneResource.layoutName
         jroot.get("stages")?.let {

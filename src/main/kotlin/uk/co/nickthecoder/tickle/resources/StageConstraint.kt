@@ -4,7 +4,7 @@ import java.util.jar.Attributes
 
 interface StageConstraint {
 
-    val attributes : Attributes
+    val attributes: Attributes
 
     fun forStage(stageName: String, stageResource: StageResource)
 
@@ -12,7 +12,10 @@ interface StageConstraint {
 
     fun removeActorResource(actorResource: ActorResource)
 
-    fun moveActorResource(actorResource: ActorResource, isNew: Boolean)
+    /**
+     * Return false iff further snapping can be done.
+     */
+    fun snapActor(actorResource: ActorResource, isNew: Boolean ): Boolean
 
 }
 
@@ -26,8 +29,9 @@ open class NoStageConstraint : StageConstraint {
 
     override fun removeActorResource(actorResource: ActorResource) {}
 
-    override fun moveActorResource(actorResource: ActorResource, isNew: Boolean) {
+    override fun snapActor(actorResource: ActorResource, isNew: Boolean): Boolean {
         actorResource.x = actorResource.draggedX
         actorResource.y = actorResource.draggedY
+        return false
     }
 }

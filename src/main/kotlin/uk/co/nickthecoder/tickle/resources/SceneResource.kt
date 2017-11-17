@@ -36,6 +36,9 @@ class SceneResource {
 
     val listeners = mutableSetOf<SceneResourceListener>()
 
+    var grid = SnapToGrid()
+
+    var guides = SnapToGuides()
 
     /**
      * Gets the Layout to create the scene, and then populates the Stages with Actors.

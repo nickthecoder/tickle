@@ -107,11 +107,11 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
     }
 
 
-    fun worldX(event: MouseEvent): Double {
+    fun viewX(event: MouseEvent): Double {
         return glass.centerX + (event.x - glass.canvas.width / 2) / scale
     }
 
-    fun worldY(event: MouseEvent): Double {
+    fun viewY(event: MouseEvent): Double {
         return glass.centerY + (glass.canvas.height / 2 - event.y) / scale
     }
 
