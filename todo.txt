@@ -4,13 +4,6 @@ Current Work
 Next
 ====
 
-Add guides and grid to SceneEditor (unrelated to StageConstraint)
-	This will make aligning edges much easier.
-	Pulldown button for Grid and Guides
-		Should X & Y guides be separate? Yes.
-	If the StageConstraint has adjusted to position, then don't snap.
-	For now, just use a Task to set the grid/guide info, but later add a GUI too.
-
 PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
 Ditto for CostumeChoiceParameter
 
@@ -36,13 +29,10 @@ InputPicker :
 	"Windows" is this meta?
 	Shift, Control, alt etc don't work either.
 
-Cannot press more than 2 keys simultaneously :-(
-
 
 Possible Optimisatins
 ---------------------
 	
-
 PixelOverlapping
 	Don't clear the whole overlapTexture
 	Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
@@ -50,8 +40,6 @@ PixelOverlapping
 
 New Features
 ------------
-
-Preferences class to save things such as high-score, levels completed etc.
 
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
 	Also create a GUI suitable for launching from within the game to adjust *existing* inputs.

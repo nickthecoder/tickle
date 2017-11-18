@@ -9,8 +9,10 @@ import uk.co.nickthecoder.tickle.loop.FullSpeedGameLoop
 import uk.co.nickthecoder.tickle.loop.GameLoop
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.util.AutoFlushPreferences
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
+import java.util.concurrent.ConcurrentLinkedQueue
 
 class Game(
         val window: Window,
@@ -41,6 +43,8 @@ class Game(
 
     private val currentScreenMousePosition = Vector2d()
 
+
+    val preferences by lazy { AutoFlushPreferences(producer.preferencesRoot()) }
 
     init {
         Game.instance = this
@@ -118,6 +122,7 @@ class Game(
     }
 
     fun cleanUp() {
+        processRunLater()
         renderer.delete()
         producer.end()
     }
@@ -133,6 +138,8 @@ class Game(
 
         director.postTick()
         producer.postTick()
+
+        processRunLater()
 
         mouseCapturedBy?.let { capturedBy ->
             if (capturedBy is MouseHandler) {
@@ -200,6 +207,20 @@ class Game(
         return event.consumed
     }
 
+    private var runLaters = ConcurrentLinkedQueue<() -> Unit>()
+
+    private fun processRunLater() {
+        var entry = runLaters.poll()
+        while (entry != null) {
+            entry()
+            entry = runLaters.poll()
+        }
+    }
+
+    fun runLater(func: () -> Unit) {
+        runLaters.add(func)
+    }
+
     companion object {
 
         lateinit var instance: Game
@@ -209,6 +230,9 @@ class Game(
          */
         var tickCount: Int = 0
 
+        fun runLater(func: () -> Unit) {
+            instance.runLater(func)
+        }
     }
 
 }

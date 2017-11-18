@@ -3,7 +3,9 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.events.MouseButtonHandler
 import uk.co.nickthecoder.tickle.events.MouseEvent
+import uk.co.nickthecoder.tickle.resources.Resources
 import java.io.File
+import java.util.prefs.Preferences
 
 /**
  * Looks at the big picture, and shouldn't be involved in the minor details.
@@ -44,6 +46,14 @@ interface Producer : MouseButtonHandler {
     fun end()
 
     fun onKey(event: KeyEvent)
+
+    /**
+     * Gets the preferences node, for persisting data, such as high-scores, levels unlocked etc.
+     * The default node uses Tickle's package name and the title of your game (as defined in [GameInfo]).
+     */
+    fun preferencesRoot(): Preferences {
+        return Preferences.userNodeForPackage(Game::class.java).node(Resources.instance.gameInfo.title)
+    }
 
 }
 
