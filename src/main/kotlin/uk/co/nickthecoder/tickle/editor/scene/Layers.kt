@@ -8,6 +8,7 @@ import javafx.scene.control.SeparatorMenuItem
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
+import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.editor.EditorAction
 import uk.co.nickthecoder.tickle.resources.NoStageConstraint
 import uk.co.nickthecoder.tickle.resources.Resources
@@ -16,13 +17,15 @@ import uk.co.nickthecoder.tickle.resources.StageConstraint
 
 /**
  */
-class Layers(sceneResource: SceneResource, selection: Selection) {
+class Layers(val sceneResource: SceneResource, selection: Selection) {
 
     val stack = StackPane()
 
     private val allLayers = mutableListOf<Layer>()
 
     private val stageLayers = mutableListOf<StageLayer>()
+
+    private val includedLayers = mutableMapOf<String, List<StageLayer>>()
 
     val glass = GlassLayer(sceneResource, selection)
 
@@ -58,6 +61,25 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
         stageButton.graphic = ImageView(EditorAction.imageResource("layers.png"))
         stageButton.items.add(singleLayerMode)
         stageButton.items.add(SeparatorMenuItem())
+
+        loadIncludes()
+
+        createStageLayers(sceneResource).forEach { layer ->
+            add(layer)
+            stageLayers.add(layer)
+            map[layer.stageName] = layer
+
+            stageButton.items.add(createMenuItem(layer))
+            currentLayer = layer
+
+        }
+
+        add(glass)
+    }
+
+    private fun createStageLayers(sceneResource: SceneResource): List<StageLayer> {
+        val result = mutableListOf<StageLayer>()
+
         sceneResource.stageResources.forEach { stageName, stageResource ->
 
             val layout = Resources.instance.layouts.find(sceneResource.layoutName)!!
@@ -71,15 +93,25 @@ class Layers(sceneResource: SceneResource, selection: Selection) {
             constraint.forStage(stageName, stageResource)
 
             val layer = StageLayer(sceneResource, stageName, stageResource, constraint)
-            add(layer)
-            stageLayers.add(layer)
-            map[stageName] = layer
-
-
-            stageButton.items.add(createMenuItem(layer))
-            currentLayer = layer
+            result.add(layer)
         }
-        add(glass)
+
+        return result
+    }
+
+    private fun loadIncludes() {
+        sceneResource.includes.forEach { include ->
+            val includedSR = Game.instance.loadScene(include)
+
+            val layers = mutableListOf<StageLayer>()
+            includedLayers.put(include.nameWithoutExtension, layers)
+
+            createStageLayers(includedSR).forEach { layer ->
+                layer.isLocked = true
+                layers.add(layer)
+                add(layer)
+            }
+        }
     }
 
     fun names(): Collection<String> = map.keys

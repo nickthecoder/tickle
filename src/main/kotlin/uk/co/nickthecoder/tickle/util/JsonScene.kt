@@ -72,6 +72,12 @@ class JsonScene {
             jguides.add("y", jy)
         }
 
+        val jincludes = JsonArray()
+        jroot.add("include", jincludes)
+        sceneResource.includes.forEach { include ->
+            jincludes.add(Resources.instance.sceneFileToPath(include))
+        }
+
         val jstages = JsonArray()
         jroot.add("stages", jstages)
         sceneResource.stageResources.forEach { stageName, stageResource ->
@@ -128,6 +134,13 @@ class JsonScene {
                 }
             }
             //println("Loaded guides ${sceneResource.guides}")
+        }
+
+        jroot.get("include")?.let {
+            val jincludes = it.asArray()
+            jincludes.forEach { jinclude ->
+                sceneResource.includes.add(Resources.instance.scenePathToFile(jinclude.asString()))
+            }
         }
 
         sceneResource.layoutName

@@ -27,8 +27,7 @@ interface Producer : MouseButtonHandler {
 
     fun startScene(sceneFile: File) {
         Game.instance.endScene()
-        val scene = Game.instance.loadScene(sceneFile)
-        Game.instance.startScene(scene)
+        Game.instance.startScene(sceneFile)
     }
 
     fun sceneLoaded()

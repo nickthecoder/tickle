@@ -30,6 +30,14 @@ class SceneResource {
     var showMouse: Boolean = true
 
     /**
+     * Names of included scenes. When a scene is started (as part of a running game), the included scenes
+     * will be automatically merged together.
+     * Within the SceneEditor, the included scenes will be loaded as separate layers, which are displayed, but
+     * are not merged, and not editable.
+     */
+    val includes = mutableListOf<File>()
+
+    /**
      * Keyed on the name of the stage
      */
     val stageResources = mutableMapOf<String, StageResource>()

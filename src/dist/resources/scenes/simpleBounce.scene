@@ -1,17 +1,55 @@
-{ "director": "uk.co.nickthecoder.demo.Play", "directorAttributes": 
-  [
-    { "name": "degrees", "value": "0"}
-  ]
-, "background": "#000000", "showMouse": true, "layout": "default", "stages": 
-  [
-    { "name": "background", "actors": 
-      [
+{
+  "director": "uk.co.nickthecoder.demo.Play",
+  "directorAttributes": [
+    {
+      "name": "degrees",
+      "value": "0"
+    }
+  ],
+  "background": "#000000",
+  "showMouse": true,
+  "layout": "default",
+  "grid": {
+    "enabled": false,
+    "xSpacing": 50,
+    "ySpacing": 50,
+    "xOffset": 0,
+    "yOffset": 0,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "guides": {
+    "enabled": true,
+    "closeness": 5,
+    "x": [
+      
+    ],
+    "y": [
+      
+    ]
+  },
+  "include": [
+    "info"
+  ],
+  "stages": [
+    {
+      "name": "background",
+      "actors": [
         
       ]
     },
-    { "name": "main", "actors": 
-      [
-        { "costume": "bee", "x": 390, "y": 370, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1}
+    {
+      "name": "main",
+      "actors": [
+        {
+          "costume": "bee",
+          "x": 390,
+          "y": 370,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1
+        }
       ]
     }
   ]

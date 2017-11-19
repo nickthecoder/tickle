@@ -4,6 +4,10 @@ Current Work
 Next
 ====
 
+Scene to define one (or more?) scenes to include
+	Use this to split pill popper levels into their maze, and the items in the maze.
+	SceneEditor to show the included level (but cannot edit it).
+
 PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
 Ditto for CostumeChoiceParameter
 
@@ -46,8 +50,6 @@ Key input to have a "ghosting" test, where multiple key presses are displayed, t
 	Include "reset"
 	Save to a separate file in user's config directory.
 		<aybe make it part of the (un-coded) "Preferences" class
-
-Arbitary polygons for CostumeTab fixtures.
 
 Allow text style to be overriden in the SceneEditor.
 	Only save the overridden values if they differ from the Costume's values.

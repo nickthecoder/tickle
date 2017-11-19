@@ -9,6 +9,28 @@
   "background": "#661a33",
   "showMouse": true,
   "layout": "default",
+  "grid": {
+    "enabled": false,
+    "xSpacing": 50,
+    "ySpacing": 50,
+    "xOffset": 0,
+    "yOffset": 0,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "guides": {
+    "enabled": true,
+    "closeness": 5,
+    "x": [
+      
+    ],
+    "y": [
+      
+    ]
+  },
+  "include": [
+    "info"
+  ],
   "stages": [
     {
       "name": "background",

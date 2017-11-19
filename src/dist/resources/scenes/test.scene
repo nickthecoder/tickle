@@ -30,6 +30,9 @@
       0
     ]
   },
+  "include": [
+    "info"
+  ],
   "stages": [
     {
       "name": "background",

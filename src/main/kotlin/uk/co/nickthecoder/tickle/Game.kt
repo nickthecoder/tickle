@@ -84,23 +84,37 @@ class Game(
         return JsonScene(sceneFile).sceneResource
     }
 
+    fun mergeScene(scenePath: String) {
+        mergeScene(Resources.instance.scenePathToFile(scenePath))
+    }
+
+    fun mergeScene(sceneFile: File) {
+        val sr = loadScene(sceneFile)
+        val extraScene = sr.createScene()
+        scene.merge(extraScene)
+
+        sr.includes.forEach { include ->
+            mergeScene(include)
+        }
+    }
+
     fun startScene(scenePath: String) {
-        val file = resources.scenePathToFile(scenePath)
-        val sr = loadScene(file)
+        startScene(Resources.instance.scenePathToFile(scenePath))
+    }
+
+    fun startScene(sceneFile: File) {
+        val sr = loadScene(sceneFile)
         startScene(sr)
     }
 
-    fun mergeScene(scenePath: String) {
-        val file = resources.scenePathToFile(scenePath)
-        val sr = loadScene(file)
-        val extraScene = sr.createScene()
-        scene.merge(extraScene)
-    }
-
-    fun startScene(sceneResource: SceneResource) {
+    private fun startScene(sceneResource: SceneResource) {
         director = Director.createDirector(sceneResource.directorString)
         sceneResource.directorAttributes.applyToObject(director)
         scene = sceneResource.createScene()
+
+        sceneResource.includes.forEach { include ->
+            mergeScene(include)
+        }
 
         producer.sceneLoaded()
         director.sceneLoaded()

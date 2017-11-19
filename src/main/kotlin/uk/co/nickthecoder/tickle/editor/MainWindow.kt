@@ -138,7 +138,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         stage.hide()
 
         Platform.runLater {
-            // Give this window the oppotunity to hide before the UI hangs
+            // Give this window the opportunity to hide before the UI hangs
             println("Game test started")
             with(Resources.instance.gameInfo) {
                 glWindow.change(title, width, height, resizable)

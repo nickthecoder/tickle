@@ -45,7 +45,6 @@ class Play : AbstractDirector() {
     }
 
     override fun begin() {
-        Game.instance.mergeScene("info")
         stage = Game.instance.scene.findStage("main")!!
         stageView = Game.instance.scene.findStageView("main")!! as ZOrderStageView
     }

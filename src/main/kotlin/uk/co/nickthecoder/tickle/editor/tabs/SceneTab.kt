@@ -161,10 +161,14 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
     val infoP = InformationParameter("info",
             information = "The Director has no fields with the '@Attribute' annotation, and therefore, this scene has no attributes.")
 
+    val includesP = MultipleParameter("includes") {
+        StringParameter("include")
+    }
+
     val attributesP = SimpleGroupParameter("attributes")
 
     override val taskD = TaskDescription("sceneDetails")
-            .addParameters(directorP, backgroundColorP, showMouseP, layoutP, attributesP)
+            .addParameters(directorP, backgroundColorP, showMouseP, layoutP, includesP, attributesP)
 
     init {
         ClassLister.setChoices(directorP, Director::class.java)
@@ -177,9 +181,15 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
         } catch (e: Exception) {
             //
         }
-        backgroundColorP.value = sceneResource.background.toJavaFX()
-        showMouseP.value = sceneResource.showMouse
-        layoutP.value = sceneResource.layoutName
+        with(sceneResource) {
+            backgroundColorP.value = background.toJavaFX()
+            showMouseP.value = showMouse
+            layoutP.value = layoutName
+            includes.forEach { file ->
+                includesP.addValue(Resources.instance.sceneFileToPath(file))
+            }
+            println("Includes = $includes")
+        }
 
         updateAttributes()
         directorP.listen {
@@ -189,10 +199,16 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
 
 
     override fun run() {
-        sceneResource.directorString = directorP.value!!.name
-        sceneResource.layoutName = layoutP.value!!
-        sceneResource.showMouse = showMouseP.value == true
-        sceneResource.background = backgroundColorP.value.toTickle()
+        with(sceneResource) {
+            directorString = directorP.value!!.name
+            layoutName = layoutP.value!!
+            showMouse = showMouseP.value == true
+            background = backgroundColorP.value.toTickle()
+            includes.clear()
+            includesP.value.forEach { str ->
+                includes.add(File(str))
+            }
+        }
     }
 
     fun updateAttributes() {
