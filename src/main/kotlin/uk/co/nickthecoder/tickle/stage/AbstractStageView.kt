@@ -3,7 +3,6 @@ package uk.co.nickthecoder.tickle.stage
 import org.joml.Matrix4f
 import org.joml.Vector2d
 import org.lwjgl.opengl.GL11
-import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.events.MouseButtonHandler
 import uk.co.nickthecoder.tickle.events.MouseEvent
 import uk.co.nickthecoder.tickle.events.MouseHandler
@@ -114,13 +113,11 @@ abstract class AbstractStageView
         projectionDirty = false
     }
 
-    abstract fun actorOrder(actor: Actor): Double
-
     override fun draw(renderer: Renderer) {
         GL11.glViewport(rect.left, rect.bottom, rect.width, rect.height)
         renderer.changeProjection(projection)
 
-        stage.actors.sortedBy { actorOrder(it) }.forEach { actor ->
+        orderedActors(false).forEach { actor ->
             actor.appearance.draw(renderer)
         }
     }
@@ -137,7 +134,7 @@ abstract class AbstractStageView
             }
 
             if (rect.contains(event.screenPosition)) {
-                stage.actors.sortedBy { -actorOrder(it) }.forEach { actor ->
+                orderedActors(true).forEach { actor ->
                     val role = actor.role
                     if (role is MouseButtonHandler) {
                         if (role.actor.touching(event.viewPosition)) {

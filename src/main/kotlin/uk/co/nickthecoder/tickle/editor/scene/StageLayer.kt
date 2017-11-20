@@ -1,12 +1,15 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.application.Platform
+import uk.co.nickthecoder.tickle.editor.util.isAt
 import uk.co.nickthecoder.tickle.resources.*
+import uk.co.nickthecoder.tickle.stage.StageView
 
 class StageLayer(
         val sceneResource: SceneResource,
         val stageName: String,
         val stageResource: StageResource,
+        val stageView: StageView,
         val stageConstraint: StageConstraint)
 
     : Layer(), SceneResourceListener {
@@ -45,9 +48,13 @@ class StageLayer(
         }
     }
 
+    fun actorsAt(x: Double, y: Double): Iterable<ActorResource> {
+        return stageView.orderActors(stageResource.actorResources, true).filter { it.isAt(x, y) }
+    }
+
     override fun drawContent() {
 
-        stageResource.actorResources.forEach { actorResource ->
+        stageView.orderActors(stageResource.actorResources, false).forEach { actorResource ->
             drawActor(actorResource)
         }
         dirty = false

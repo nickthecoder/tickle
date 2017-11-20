@@ -9,8 +9,8 @@ import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.neighbourhood.Occupant
 import uk.co.nickthecoder.tickle.neighbourhood.StandardNeighbourhood
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.stage.AbstractStageView
 import uk.co.nickthecoder.tickle.stage.Stage
-import uk.co.nickthecoder.tickle.stage.ZOrderStageView
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.TagManager
 
@@ -38,7 +38,7 @@ class Play : AbstractDirector() {
 
 
     lateinit var stage: Stage
-    lateinit var stageView: ZOrderStageView
+    lateinit var stageView: AbstractStageView
 
     init {
         instance = this
@@ -46,7 +46,7 @@ class Play : AbstractDirector() {
 
     override fun begin() {
         stage = Game.instance.scene.findStage("main")!!
-        stageView = Game.instance.scene.findStageView("main")!! as ZOrderStageView
+        stageView = Game.instance.scene.findStageView("main")!! as AbstractStageView
     }
 
     override fun activated() {

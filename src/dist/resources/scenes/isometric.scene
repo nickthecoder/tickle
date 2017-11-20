@@ -1,0 +1,329 @@
+{
+  "director": "uk.co.nickthecoder.demo.Play",
+  "directorAttributes": [
+    {
+      "name": "degrees",
+      "value": "0"
+    }
+  ],
+  "background": "#000000",
+  "showMouse": true,
+  "layout": "isometric",
+  "grid": {
+    "enabled": false,
+    "xSpacing": 50,
+    "ySpacing": 50,
+    "xOffset": 0,
+    "yOffset": 0,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "guides": {
+    "enabled": true,
+    "closeness": 5,
+    "x": [
+      
+    ],
+    "y": [
+      
+    ]
+  },
+  "include": [
+    "info"
+  ],
+  "stages": [
+    {
+      "name": "main",
+      "actors": [
+        {
+          "costume": "grenade",
+          "x": 116,
+          "y": 248,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "3.0x27.0"
+            },
+            {
+              "name": "hue",
+              "value": "0"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "29.0:10.519030373565807"
+            },
+            {
+              "name": "minVelocity",
+              "value": "118.00000000000001:2.95296461204668"
+            }
+          ]
+        },
+        {
+          "costume": "grenade",
+          "x": 139,
+          "y": 282,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "4.0x28.0"
+            },
+            {
+              "name": "hue",
+              "value": "0.1"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "35.0:7.283028216339685"
+            },
+            {
+              "name": "minVelocity",
+              "value": "108.0:2.8460498941515415"
+            }
+          ]
+        },
+        {
+          "costume": "grenade",
+          "x": 199,
+          "y": 253,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "3.0x33.0"
+            },
+            {
+              "name": "hue",
+              "value": "0.2"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "20.0:12.0"
+            },
+            {
+              "name": "minVelocity",
+              "value": "119.0:3.0016662039607267"
+            }
+          ]
+        },
+        {
+          "costume": "grenade",
+          "x": 262,
+          "y": 237,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "2.0x27.0"
+            },
+            {
+              "name": "hue",
+              "value": "0.3"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "20.0:12.0"
+            },
+            {
+              "name": "minVelocity",
+              "value": "123.00000000000003:2.884441020371191"
+            }
+          ]
+        },
+        {
+          "costume": "grenade",
+          "x": 300,
+          "y": 281,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "3.0x27.0"
+            },
+            {
+              "name": "hue",
+              "value": "0.4"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "20.0:12.0"
+            },
+            {
+              "name": "minVelocity",
+              "value": "128.0:3.0610455730027932"
+            }
+          ]
+        },
+        {
+          "costume": "grenade",
+          "x": 364,
+          "y": 262,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "2.0x29.0"
+            },
+            {
+              "name": "hue",
+              "value": "0.5"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "20.0:12.0"
+            },
+            {
+              "name": "minVelocity",
+              "value": "122.0:3.3286633954186478"
+            }
+          ]
+        },
+        {
+          "costume": "grenade",
+          "x": 378,
+          "y": 230,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "3.0x29.0"
+            },
+            {
+              "name": "hue",
+              "value": "0.55"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "20.0:12.0"
+            },
+            {
+              "name": "minVelocity",
+              "value": "118.00000000000001:2.7294688127912363"
+            }
+          ]
+        },
+        {
+          "costume": "grenade",
+          "x": 407,
+          "y": 256,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "1.0x25.0"
+            },
+            {
+              "name": "hue",
+              "value": "0.6"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "20.0:12.0"
+            },
+            {
+              "name": "minVelocity",
+              "value": "117.0:2.817800560721074"
+            }
+          ]
+        },
+        {
+          "costume": "grenade",
+          "x": 465,
+          "y": 235,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "2.0x28.0"
+            },
+            {
+              "name": "hue",
+              "value": "0.8"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "20.0:12.0"
+            },
+            {
+              "name": "minVelocity",
+              "value": "123.00000000000003:3.1064449134018135"
+            }
+          ]
+        },
+        {
+          "costume": "grenade",
+          "x": 451,
+          "y": 277,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "6.0x28.0"
+            },
+            {
+              "name": "hue",
+              "value": "0.7"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "20.0:12.0"
+            },
+            {
+              "name": "minVelocity",
+              "value": "134.00000000000003:2.121320343559643"
+            }
+          ]
+        },
+        {
+          "costume": "bee",
+          "x": 227,
+          "y": 273,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1
+        },
+        {
+          "costume": "hand",
+          "x": 170,
+          "y": 343,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1
+        }
+      ]
+    }
+  ]
+}

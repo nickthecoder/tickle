@@ -10,10 +10,10 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.StackPane
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.editor.EditorAction
-import uk.co.nickthecoder.tickle.resources.NoStageConstraint
-import uk.co.nickthecoder.tickle.resources.Resources
-import uk.co.nickthecoder.tickle.resources.SceneResource
-import uk.co.nickthecoder.tickle.resources.StageConstraint
+import uk.co.nickthecoder.tickle.resources.*
+import uk.co.nickthecoder.tickle.stage.StageView
+import uk.co.nickthecoder.tickle.stage.View
+import uk.co.nickthecoder.tickle.stage.ZOrderStageView
 
 /**
  */
@@ -92,7 +92,11 @@ class Layers(val sceneResource: SceneResource, selection: Selection) {
             }
             constraint.forStage(stageName, stageResource)
 
-            val layer = StageLayer(sceneResource, stageName, stageResource, constraint)
+            val layoutView: LayoutView? = layout.layoutViews.values.firstOrNull() { it.stageName == stageName }
+            val view: View? = layoutView?.createView()
+            val stageView: StageView = if (view is StageView) view else ZOrderStageView()
+
+            val layer = StageLayer(sceneResource, stageName, stageResource, stageView, constraint)
             result.add(layer)
         }
 

@@ -10,7 +10,6 @@ import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
-import uk.co.nickthecoder.tickle.editor.util.isAt
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
 import uk.co.nickthecoder.tickle.resources.SceneResource
@@ -98,11 +97,7 @@ class SceneEditor(val sceneResource: SceneResource) {
     fun findActorsAt(x: Double, y: Double, ignoreStageLock: Boolean = false): List<ActorResource> {
         val list = mutableListOf<ActorResource>()
         layers.visibleLayers().filter { ignoreStageLock || !it.isLocked }.forEach { stageLayer ->
-            stageLayer.stageResource.actorResources.forEach { actorResource ->
-                if (actorResource.isAt(x, y)) {
-                    list.add(actorResource)
-                }
-            }
+            list.addAll(stageLayer.actorsAt(x, y))
         }
         return list
     }

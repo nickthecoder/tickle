@@ -16,6 +16,8 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val yP = DoubleParameter("y", value = actorResource.y)
 
+    val zOrderP = DoubleParameter("zOrder", value = actorResource.zOrder)
+
     val xAlignmentP = ChoiceParameter<ActorXAlignment>("xAlignment", value = actorResource.xAlignment)
             .enumChoices(true)
 
@@ -35,7 +37,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(attributesP, xP, yP, alignmentGroupP, directionP, scaleP, textP)
+            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, textP)
             .asVertical()
 
     var dirty = false

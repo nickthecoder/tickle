@@ -25,6 +25,7 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     var x: Double = 0.0
     var y: Double = 0.0
+    var zOrder: Double = 0.0
 
     var xAlignment: ActorXAlignment = ActorXAlignment.LEFT
     var yAlignment: ActorYAlignment = ActorYAlignment.BOTTOM
@@ -63,6 +64,13 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     var layer: StageLayer? = null
 
+    init {
+        if (isDesigning) {
+            val costume = Resources.instance.costumes.find(costumeName)
+            zOrder = costume?.zOrder ?: 0.0
+        }
+    }
+
     fun createActor(): Actor? {
         val costume = Resources.instance.costumes.find(costumeName)
         if (costume == null) {
@@ -73,6 +81,7 @@ class ActorResource(val isDesigning: Boolean = false) {
 
         actor.x = x
         actor.y = y
+        actor.zOrder = zOrder
         actor.direction.degrees = direction.degrees
         actor.scale = scale
         actor.xAlignment = xAlignment

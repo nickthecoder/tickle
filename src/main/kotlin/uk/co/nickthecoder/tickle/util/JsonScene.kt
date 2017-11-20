@@ -160,11 +160,16 @@ class JsonScene {
         jstage.add("actors", jactors)
 
         stageResource.actorResources.forEach { actorResource ->
+            val costume = Resources.instance.costumes.find(actorResource.costumeName)
+
             val jactor = JsonObject()
             jactors.add(jactor)
             jactor.add("costume", actorResource.costumeName)
             jactor.add("x", actorResource.x)
             jactor.add("y", actorResource.y)
+            if (actorResource.zOrder != costume?.zOrder) { // Only save zOrders which are NOT the default zOrder for the Costume.
+                jactor.add("zOrder", actorResource.zOrder)
+            }
             jactor.add("xAlignment", actorResource.xAlignment.name)
             jactor.add("yAlignment", actorResource.yAlignment.name)
             jactor.add("direction", actorResource.direction.degrees)
@@ -197,9 +202,12 @@ class JsonScene {
         // attributes unsupported by the Role class.
         JsonUtil.loadAttributes(jactor, actorResource.attributes)
         actorResource.costumeName = jactor.get("costume").asString()
+        val costume = Resources.instance.costumes.find(actorResource.costumeName)
 
         actorResource.x = jactor.getDouble("x", 0.0)
         actorResource.y = jactor.getDouble("y", 0.0)
+        actorResource.zOrder = jactor.getDouble("zOrder", costume?.zOrder ?: 0.0)
+
         actorResource.xAlignment = ActorXAlignment.valueOf(jactor.getString("xAlignment", "LEFT"))
         actorResource.yAlignment = ActorYAlignment.valueOf(jactor.getString("yAlignment", "BOTTOM"))
 

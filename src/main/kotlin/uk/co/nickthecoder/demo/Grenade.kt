@@ -39,7 +39,8 @@ class Grenade() : AbstractRole() {
         with(newActor) {
             x = actor.x + exit.x
             y = actor.y + exit.y
-            zOrder = actor.zOrder - 1
+            //zOrder = actor.zOrder - 1
+            zOrder = actor.y // Useful in combination with ZThenYStageView
             changeAppearance(Resources.instance.poses.find("spark")!!)
             color = newColor
         }
