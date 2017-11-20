@@ -156,7 +156,7 @@ class Scene {
         }
     }
 
-    fun merge(extraScene: Scene) {
+    internal fun merge(extraScene: Scene) {
 
         extraScene.stages.forEach { stageName, extraStage ->
             val existingStage = stages[stageName]
@@ -168,7 +168,7 @@ class Scene {
                 }
                 // TODO Add warning if they have different StageConstraints when StageConstraints are implemented.
                 extraStage.actors.forEach { actor ->
-                    existingStage.add(actor)
+                    existingStage.add(actor, false)
                 }
             }
         }

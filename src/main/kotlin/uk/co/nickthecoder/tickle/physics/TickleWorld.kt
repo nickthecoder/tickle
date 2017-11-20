@@ -39,6 +39,8 @@ class TickleWorld(
 
     : World(pixelsToWorld(gravity), true) {
 
+    val tempVec = Vec2()
+
     fun pixelsToWorld(pixels: Double) = pixels.toFloat() / scale
 
     fun worldToPixels(world: Float) = (world * scale).toDouble()

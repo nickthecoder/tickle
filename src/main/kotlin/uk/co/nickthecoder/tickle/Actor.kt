@@ -226,8 +226,8 @@ class Actor(var costume: Costume, val role: Role? = null) {
      */
     fun updateBody(world: TickleWorld) {
         if (body != null) {
-            world.pixelsToWorld(tempVec2, position)
-            body?.setTransform(tempVec2, direction.radians.toFloat())
+            world.pixelsToWorld(world.tempVec, position)
+            body?.setTransform(world.tempVec, direction.radians.toFloat())
         }
     }
 
@@ -240,12 +240,11 @@ class Actor(var costume: Costume, val role: Role? = null) {
      */
     fun updateBody() {
         if (body != null) {
-            pixelsToWorld(tempVec2, position)
-            body?.setTransform(tempVec2, (direction.radians - (poseAppearance?.directionRadians ?: 0.0)).toFloat())
+            val tempVec = Vec2()
+            pixelsToWorld(tempVec, position)
+            body?.setTransform(tempVec, (direction.radians - (poseAppearance?.directionRadians ?: 0.0)).toFloat())
         }
     }
 
     override fun toString() = "Actor #$id @ $x,$y Role=${role?.javaClass?.simpleName ?: "<none>"}"
 }
-
-private val tempVec2 = Vec2()
