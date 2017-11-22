@@ -14,5 +14,6 @@ annotation class Attribute(
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class CostumeAttribute(
+        val order: Int = 1,
         val hasAlpha: Boolean = true /*For Color attributes only */
 )

@@ -190,6 +190,7 @@ class Attributes {
                 val data = getOrCreateData(property.name)
                 createParameter(property.name, property.returnType.jvmErasure, hasAlpha = annotation.hasAlpha)?.let { parameter ->
                     data.costumeParameter = parameter
+                    data.order = annotation.order
                     parameter.listen { data.value = parameter.stringValue }
                 }
                 toDiscard.remove(property.name)

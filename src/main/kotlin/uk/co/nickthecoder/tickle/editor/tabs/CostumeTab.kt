@@ -153,7 +153,7 @@ class CostumeTab(val name: String, val costume: Costume)
             attributesP.hidden = roleClassP.value == null
 
 
-            costume.attributes.data().forEach { data ->
+            costume.attributes.data().sortedBy { it.order }.forEach { data ->
                 data.costumeParameter?.let { it ->
                     val parameter = it.copyBounded()
                     attributesP.add(parameter)
