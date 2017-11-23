@@ -10,6 +10,8 @@ Ditto for CostumeChoiceParameter
 BUGS
 ====
 
+CostumeTab costumeGroup parameter not set correcgtly (shows none)
+
 Scene.adjustActors is not being called directly. Should it?
 
 Renaming a costume doesn't update ActorResource in scenes that use it.
@@ -40,6 +42,15 @@ PixelOverlapping
 
 New Features
 ------------
+
+Add extra snap points to each pose. It always has a snap point of its origin (the offset)
+	Save data relative to its "origin", in Y upwards coordinates.
+	This will allow rods to be easily joined together (walls, floor etc) at any angle.
+	Allow rotation about any of the snap points.
+		For the (0,0) snap point the rotation arrow is the actor's direction.
+		For all other snap points, maybe point the arrow in the direction of (0,0)
+	Rods can still have their origin in the middle of the image, plus two snap points at the ends.
+	SceneEditor should ask for a LIST of snap adjustments, and then adjust by the smallest (if it is smaller than a threshold).
 
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
 	Also create a GUI suitable for launching from within the game to adjust *existing* inputs.
