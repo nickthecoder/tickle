@@ -69,6 +69,10 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
 
     var outlineFontTexture: FontTexture? = null
 
+    fun clearCache() {
+        cached = null
+    }
+
     private fun createFontTexture(): FontTexture {
         val font: Font
         if (file == null) {
@@ -77,6 +81,7 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
             val loadedFont = Font.createFont(java.awt.Font.TRUETYPE_FONT, file)
             font = loadedFont.deriveFont(size.toFloat())
         }
+        println("Creating font texture using padding of $xPadding, $yPadding")
         return FontTextureFactoryViaAWT(font, xPadding = xPadding, yPadding = yPadding).create()
     }
 

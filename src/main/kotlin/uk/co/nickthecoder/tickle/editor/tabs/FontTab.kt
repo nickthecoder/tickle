@@ -65,6 +65,7 @@ In addition, you can create another .png file if you wish to add an outline to t
 
     fun generatePngAndMetrics() {
 
+        fontResource.clearCache()
         try {
             check()
             run()
