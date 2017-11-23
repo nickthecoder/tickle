@@ -24,8 +24,13 @@ interface Stage {
     fun addView(view: StageView)
 
     fun firstView(): StageView? = views.firstOrNull()
+
 }
 
-inline fun <reified T : Role> Stage.findRole(): List<T> {
+inline fun <reified T : Role> Stage.findRole() : T? {
+    return actors.filter { it.role is T }.map { it.role }.filterIsInstance<T>().firstOrNull()
+}
+
+inline fun <reified T : Role> Stage.findRoles(): List<T> {
     return actors.filter { it.role is T }.map { it.role }.filterIsInstance<T>()
 }

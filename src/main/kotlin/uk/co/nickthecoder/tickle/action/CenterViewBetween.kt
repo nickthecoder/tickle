@@ -4,6 +4,7 @@ import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.action.animation.AnimationAction
 import uk.co.nickthecoder.tickle.action.animation.Ease
 import uk.co.nickthecoder.tickle.action.animation.Eases
+import uk.co.nickthecoder.tickle.action.animation.lerp
 import uk.co.nickthecoder.tickle.stage.StageView
 
 class CenterViewBetween(

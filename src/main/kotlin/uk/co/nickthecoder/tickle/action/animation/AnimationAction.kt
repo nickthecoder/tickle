@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.action.animation
 
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.action.Action
 
@@ -53,9 +54,17 @@ abstract class AnimationAction(
 
     open protected fun ended() {}
 
-    companion object {
-        fun lerp(from: Double, to: Double, t: Double) = (1 - t) * from + t * to
-        fun lerp(from: Float, to: Float, t: Float) = (1 - t) * from + t * to
-    }
+}
 
+fun lerp(from: Vector2d, to: Vector2d, t: Double, dest: Vector2d) {
+    dest.x = lerp(from.x, to.x, t)
+    dest.y = lerp(from.y, to.y, t)
+}
+
+fun lerp(from: Double, to: Double, t: Double) = (1 - t) * from + t * to
+fun lerp(from: Float, to: Float, t: Float) = (1 - t) * from + t * to
+
+fun Vector2d.lerp(from: Vector2d, to: Vector2d, t: Double): Vector2d {
+    lerp(from, to, t, this)
+    return this
 }

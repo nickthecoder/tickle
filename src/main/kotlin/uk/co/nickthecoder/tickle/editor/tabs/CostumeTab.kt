@@ -434,14 +434,13 @@ class CostumeTab(val name: String, val costume: Costume)
                 }
                 addParameters(circleP, boxP, polygonP, filterGroupP, filterCategoriesP, filterMaskP)
 
-                densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
-                frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
                 bodyTypeP.listen {
-                    densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC
-                    frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC
+                    densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC && bodyTypeP.value != BodyType.STATIC
+                    frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC && bodyTypeP.value != BodyType.STATIC
                 }
+                bodyTypeP.parameterListeners.fireValueChanged(bodyTypeP)
 
-                // Show/Hide the raidus based on the boxRoundedEndsP value
+                // Show/Hide the radius based on the boxRoundedEndsP value
                 boxRoundedEndsP.listen {
                     boxCornerRadiusP.hidden = boxRoundedEndsP.value == true
                 }
