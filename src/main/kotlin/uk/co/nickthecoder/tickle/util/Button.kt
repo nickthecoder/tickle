@@ -15,6 +15,9 @@ abstract class Button : AbstractRole(), MouseHandler {
             }
         }
 
+    override fun tick() {
+    }
+
     override fun onMouseButton(event: MouseEvent) {
         if (event.state == ButtonState.PRESSED) {
             event.capture()
@@ -42,6 +45,8 @@ abstract class Button : AbstractRole(), MouseHandler {
 
     open fun onMouseClicked(event: MouseEvent) {}
 
-    open fun stateChanged(down: Boolean) {}
+    open fun stateChanged(down: Boolean) {
+        actor.event(if (down) "down" else "default")
+    }
 
 }
