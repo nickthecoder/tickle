@@ -20,7 +20,6 @@ open class MoveBy(
     override fun storeInitialValue() {
         initialPosition.set(position)
         initialPosition.add(amount, finalPosition)
-        println("Initial position $initialPosition final $finalPosition")
     }
 
     override fun update(t: Double) {

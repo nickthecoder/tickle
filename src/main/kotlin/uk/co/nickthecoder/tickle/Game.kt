@@ -142,7 +142,14 @@ class Game(
         producer.end()
     }
 
-    fun isRunning() = !window.shouldClose()
+
+    var quitting = false
+
+    fun quit() {
+        quitting = true
+    }
+
+    fun isRunning() = !quitting && !window.shouldClose()
 
     fun tick() {
 
