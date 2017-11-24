@@ -8,8 +8,8 @@ class GameInfo(
         var width: Int,
         var height: Int,
         var resizable: Boolean,
-        var initialScenePath: File = File("splash"),
-        var testScenePath: File = File(""),
+        var initialScenePath: File = File("menu"),
+        var testScenePath: File = File("menu"),
         var producerString: String = NoProducer::class.java.name,
         var physicsEngine: Boolean = false) {
 

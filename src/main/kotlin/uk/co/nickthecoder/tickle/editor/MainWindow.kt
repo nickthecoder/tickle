@@ -26,7 +26,6 @@ import uk.co.nickthecoder.tickle.resources.Layout
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.JsonResources
-import java.io.File
 
 class MainWindow(val stage: Stage, val glWindow: Window) {
 
@@ -134,7 +133,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         TaskPrompter(NewResourceTask()).placeOnStage(Stage())
     }
 
-    fun startGame(sceneFile: File = Resources.instance.gameInfo.initialScenePath) {
+    fun startGame(scenePath: String = Resources.instance.sceneFileToPath(Resources.instance.gameInfo.initialScenePath)) {
         stage.hide()
 
         Platform.runLater {
@@ -145,7 +144,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             }
             glWindow.show()
 
-            Game(glWindow, Resources.instance).run(sceneFile)
+            Game(glWindow, Resources.instance).run(scenePath)
 
             println("Game test ended")
             glWindow.hide()
@@ -156,7 +155,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
 
     fun testGame() {
-        startGame(Resources.instance.gameInfo.testScenePath)
+        startGame(Resources.instance.sceneFileToPath(Resources.instance.gameInfo.testScenePath))
     }
 
     fun openTab(dataName: String, data: Any) {

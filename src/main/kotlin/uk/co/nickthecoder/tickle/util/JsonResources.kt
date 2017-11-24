@@ -210,8 +210,8 @@ class JsonResources {
             height = jinfo.getInt("height", 600)
             resizable = jinfo.getBoolean("resizable", true)
 
-            initialScenePath = resources.scenePathToFile(jinfo.getString("initialScene", "splash"))
-            testScenePath = resources.scenePathToFile(jinfo.getString("testScene", "splash"))
+            initialScenePath = resources.scenePathToFile(jinfo.getString("initialScene", "menu"))
+            testScenePath = resources.scenePathToFile(jinfo.getString("testScene", "menu"))
             producerString = jinfo.getString("producer", NoProducer::class.java.name)
         }
 

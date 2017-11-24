@@ -87,9 +87,8 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
     }
 
     fun onTest() {
-        Resources.instance.gameInfo.testScenePath = sceneResource.file!!
         if (save()) {
-            MainWindow.instance.startGame(sceneFile)
+            MainWindow.instance.startGame(Resources.instance.sceneFileToPath(sceneFile))
         }
     }
 

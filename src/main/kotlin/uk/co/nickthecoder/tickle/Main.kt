@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import uk.co.nickthecoder.tickle.graphics.Window
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.SoundManager
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
@@ -46,7 +47,7 @@ fun guessTickleFile(): File? {
 }
 
 
-fun startGame(resourcesFile: File, sceneFile: File? = null) {
+fun startGame(resourcesFile: File, scenePath: String? = null) {
 
     // Setup an error callback.
     GLFWErrorCallback.createPrint(System.err).set()
@@ -65,7 +66,7 @@ fun startGame(resourcesFile: File, sceneFile: File? = null) {
         window.change(title, width, height, resizable)
     }
 
-    Game(window, resources).run(sceneFile ?: resources.gameInfo.initialScenePath)
+    Game(window, resources).run(scenePath ?: Resources.instance.sceneFileToPath(resources.gameInfo.initialScenePath))
 
     // Clean up OpenGL and OpenAL
     window.delete()

@@ -22,6 +22,7 @@ class Game(
 
     var producer: Producer = NoProducer()
     var director: Director = NoDirector()
+    var sceneName: String = ""
     var scene: Scene = Scene()
 
     var gameLoop: GameLoop
@@ -60,9 +61,9 @@ class Game(
         gameLoop.resetStats()
     }
 
-    fun run(sceneFile: File) {
+    fun run(scenePath: String) {
         producer.begin()
-        producer.startScene(sceneFile)
+        producer.startScene(scenePath)
         loop()
         cleanUp()
     }
@@ -99,12 +100,8 @@ class Game(
     }
 
     fun startScene(scenePath: String) {
-        startScene(Resources.instance.scenePathToFile(scenePath))
-    }
-
-    fun startScene(sceneFile: File) {
-        val sr = loadScene(sceneFile)
-        startScene(sr)
+        sceneName = scenePath
+        startScene(loadScene(Resources.instance.scenePathToFile(scenePath)))
     }
 
     private fun startScene(sceneResource: SceneResource) {

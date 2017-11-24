@@ -4,7 +4,6 @@ import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.events.MouseButtonHandler
 import uk.co.nickthecoder.tickle.events.MouseEvent
 import uk.co.nickthecoder.tickle.resources.Resources
-import java.io.File
 import java.util.prefs.Preferences
 
 /**
@@ -25,9 +24,9 @@ interface Producer : MouseButtonHandler {
 
     fun begin()
 
-    fun startScene(sceneFile: File) {
+    fun startScene(scenePath: String) {
         Game.instance.endScene()
-        Game.instance.startScene(sceneFile)
+        Game.instance.startScene(scenePath)
     }
 
     fun sceneLoaded()
