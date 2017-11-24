@@ -4,8 +4,13 @@ Current Work
 Next
 ====
 
+Pose thumbnail
+	Scale, Fit (% along)
+
 PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
-Ditto for CostumeChoiceParameter
+	Ditto for CostumeChoiceParameter
+	Similar for RoleParameter. Add separator for each package.
+
 
 BUGS
 ====

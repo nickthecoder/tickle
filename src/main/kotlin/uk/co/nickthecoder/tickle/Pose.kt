@@ -11,7 +11,7 @@ class Pose(
         val texture: Texture,
         rect: YDownRect = YDownRect(0, 0, texture.width, texture.height))
 
-    : Deletable, Renamable {
+    : Copyable<Pose>, Deletable, Renamable {
 
     var rect: YDownRect = rect
         set(v) {
@@ -89,6 +89,14 @@ class Pose(
         Resources.instance.poses.rename(this, newName)
     }
 
+
+    override fun copy(): Pose {
+        val copy = Pose(texture, YDownRect(rect.left, rect.top, rect.right, rect.bottom))
+        copy.offsetX = offsetX
+        copy.offsetY = offsetY
+        copy.direction.radians = direction.radians
+        return copy
+    }
 
     override fun equals(other: Any?): Boolean {
         if (other !is Pose) {

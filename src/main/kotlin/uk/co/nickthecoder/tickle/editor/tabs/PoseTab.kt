@@ -28,6 +28,11 @@ class PoseTab(name: String, pose: Pose)
 
     init {
         addDeleteButton { pose.delete() }
+
+        addCopyButton(pose, ResourceType.COSTUME) { newName, newPose ->
+            Resources.instance.poses.add(newName, newPose)
+        }
+
         val createCostumeButton = Button("Create Costume")
         createCostumeButton.setOnAction { (task as PoseTask).createCostume() }
         leftButtons.children.add(createCostumeButton)
@@ -73,6 +78,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         positionP.listen {
             updateViewport()
         }
+
         // println("Init LTRB : ${positionP.left},${positionP.top}, ${positionP.right}, ${positionP.bottom}  size : ${positionP.width}, ${positionP.height}")
     }
 
