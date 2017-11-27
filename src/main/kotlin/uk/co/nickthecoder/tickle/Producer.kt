@@ -47,10 +47,10 @@ interface Producer : MouseButtonHandler {
 
     /**
      * Gets the preferences node, for persisting data, such as high-scores, levels unlocked etc.
-     * The default node uses Tickle's package name and the title of your game (as defined in [GameInfo]).
+     * The default node uses Tickle's package name and the id of your game (as defined in [GameInfo]).
      */
     fun preferencesRoot(): Preferences {
-        return Preferences.userNodeForPackage(Game::class.java).node(Resources.instance.gameInfo.title)
+        return Preferences.userNodeForPackage(Game::class.java).node(Resources.instance.gameInfo.id)
     }
 
 }

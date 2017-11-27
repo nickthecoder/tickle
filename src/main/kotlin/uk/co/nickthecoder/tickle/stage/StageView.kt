@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.stage
 
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.resources.ActorResource
 
 interface StageView : View {
@@ -22,7 +23,7 @@ interface StageView : View {
     /**
      * Returns the Actors touching the given [position], the top-most first.
      */
-    fun actorsAt(position: Vector2d): Iterable<Actor> {
+    fun findActorsAt(position: Vector2d): Iterable<Actor> {
         return orderedActors(true).filter { it.touching(position) }
     }
 
@@ -30,8 +31,16 @@ interface StageView : View {
      * Returns the top-most Actor at the given [position], or null, if there are no Actors
      * touching the position.
      */
-    fun actorAt(position: Vector2d): Actor? {
+    fun findActorAt(position: Vector2d): Actor? {
         return orderedActors(true).firstOrNull { it.touching(position) }
     }
 
+}
+
+inline fun <reified T : Role> StageView.findRoleAt(point: Vector2d): T? {
+    return findRolesAt<T>(point).firstOrNull()
+}
+
+inline fun <reified T : Role> StageView.findRolesAt(point: Vector2d): List<T> {
+    return orderedActors(true).map { it.role }.filterIsInstance<T>().filter { it.actor.touching(point) }
 }

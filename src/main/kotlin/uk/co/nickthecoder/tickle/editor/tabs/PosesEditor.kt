@@ -19,11 +19,11 @@ import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.util.ImageCache
+import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
-import uk.co.nickthecoder.tickle.editor.util.ImageCache
-import uk.co.nickthecoder.tickle.editor.MainWindow
-import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.YDownRect
 
 class PosesEditor(val texture: Texture)
@@ -86,7 +86,9 @@ class PosesEditor(val texture: Texture)
         container.onMouseReleased = EventHandler { onMouseReleased(it) }
 
         Resources.instance.poses.items().forEach { name, pose ->
-            includePose(name, pose)
+            if (pose.texture === texture) {
+                includePose(name, pose)
+            }
         }
 
         return splitPane

@@ -105,10 +105,11 @@ class Game(
     }
 
     private fun startScene(sceneResource: SceneResource) {
+        mouseCapturedBy = null
+
         director = Director.createDirector(sceneResource.directorString)
         sceneResource.directorAttributes.applyToObject(director)
         scene = sceneResource.createScene()
-
 
         producer.sceneLoaded()
         director.sceneLoaded()

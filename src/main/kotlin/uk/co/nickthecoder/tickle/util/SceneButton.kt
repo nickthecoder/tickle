@@ -8,7 +8,7 @@ class SceneButton : Button() {
     @Attribute
     var scene = ""
 
-    override fun onMouseClicked(event: MouseEvent) {
+    override fun onClicked(event: MouseEvent) {
         Game.instance.startScene(scene)
     }
 

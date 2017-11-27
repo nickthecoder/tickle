@@ -5,7 +5,7 @@ import uk.co.nickthecoder.tickle.events.MouseEvent
 
 class QuitButton : Button() {
 
-    override fun onMouseClicked(event: MouseEvent) {
+    override fun onClicked(event: MouseEvent) {
         Game.instance.quit()
     }
 

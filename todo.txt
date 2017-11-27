@@ -15,6 +15,8 @@ PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than
 BUGS
 ====
 
+Delete costume doesn't work
+
 CostumeTab costumeGroup parameter not set correcgtly (shows none)
 
 Scene.adjustActors is not being called directly. Should it?

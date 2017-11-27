@@ -27,8 +27,8 @@ interface Stage {
 
 }
 
-inline fun <reified T : Role> Stage.findRole() : T? {
-    return actors.filter { it.role is T }.map { it.role }.filterIsInstance<T>().firstOrNull()
+inline fun <reified T : Role> Stage.findRole(): T? {
+    return findRoles<T>().firstOrNull()
 }
 
 inline fun <reified T : Role> Stage.findRoles(): List<T> {

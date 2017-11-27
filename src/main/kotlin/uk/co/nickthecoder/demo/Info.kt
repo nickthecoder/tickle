@@ -23,7 +23,7 @@ class Info : Button() {
         action.act()
     }
 
-    override fun onMouseClicked(event: MouseEvent) {
+    override fun onClicked(event: MouseEvent) {
         Game.instance.gameLoop.resetStats()
         actor.textAppearance?.text = text()
     }

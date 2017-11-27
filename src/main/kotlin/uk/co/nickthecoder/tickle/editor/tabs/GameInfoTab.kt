@@ -28,6 +28,7 @@ class GameInfoTab
 class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
 
     val titleP = StringParameter("title", value = gameInfo.title)
+    val idP = StringParameter("ID", value = gameInfo.id)
     val windowSizeP = XYiParameter("windowSize")
 
     val initialSceneP = StringParameter("initialScene", value = Resources.instance.sceneFileToPath(gameInfo.initialScenePath))
@@ -50,7 +51,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
             .asBox()
 
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(titleP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, physicsEngineP, physicsDetailsP)
+            .addParameters(titleP, idP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, physicsEngineP, physicsDetailsP)
 
     init {
         windowSizeP.x = gameInfo.width
@@ -87,6 +88,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
 
         with(gameInfo) {
             title = titleP.value
+            id = idP.value
             width = windowSizeP.x!!
             height = windowSizeP.y!!
             initialScenePath = Resources.instance.scenePathToFile(initialSceneP.value)

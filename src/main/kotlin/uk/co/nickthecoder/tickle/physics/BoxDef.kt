@@ -18,6 +18,10 @@ class BoxDef(
 
     : ShapeDef {
 
+    override fun copy(): ShapeDef {
+        return BoxDef(width, height, center, angle, cornerRadius, roundedEnds)
+    }
+
     override fun createShapes(world: TickleWorld): List<Shape> {
 
         if (roundedEnds) {

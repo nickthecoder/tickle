@@ -1,11 +1,12 @@
 {
   "info": {
     "title": "Tickle",
+    "id": "ticklegame",
     "width": 1024,
     "height": 600,
     "resizable": true,
     "initialScene": "level01",
-    "testScene": "isometric",
+    "testScene": "test",
     "producer": "uk.co.nickthecoder.demo.Demo",
     "physics": {
       "gravity_x": 0,
@@ -24,7 +25,7 @@
       "uk.co.nickthecoder.demo"
     ],
     "treeThumbnailSize": 24,
-    "costumePickerThumbnailSize": 100
+    "costumePickerThumbnailSize": 50
   },
   "layouts": [
     {
@@ -165,8 +166,8 @@
       "bottom": 60,
       "right": 188,
       "top": 0,
-      "offsetX": 25,
-      "offsetY": 40,
+      "offsetX": 16,
+      "offsetY": 23,
       "direction": 0
     },
     {
@@ -255,6 +256,17 @@
       "top": 128,
       "offsetX": 36,
       "offsetY": 36,
+      "direction": 0
+    },
+    {
+      "name": "rod",
+      "texture": "sprites",
+      "left": 75,
+      "bottom": 40,
+      "right": 135,
+      "top": 22,
+      "offsetX": 8,
+      "offsetY": 11,
       "direction": 0
     }
   ],
@@ -734,6 +746,22 @@
           ]
         }
       ]
+    },
+    {
+      "name": "rod",
+      "role": "",
+      "canRotate": true,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "poses": [
+            "rod"
+          ]
+        }
+      ]
     }
   ],
   "inputs": [
@@ -893,6 +921,15 @@
       "keys": [
         {
           "key": "W",
+          "state": "PRESSED"
+        }
+      ]
+    },
+    {
+      "name": "touching",
+      "keys": [
+        {
+          "key": "T",
           "state": "PRESSED"
         }
       ]

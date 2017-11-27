@@ -175,6 +175,7 @@ class JsonResources {
 
         with(resources.gameInfo) {
             jinfo.add("title", title)
+            jinfo.add("id", id)
             jinfo.add("width", width)
             jinfo.add("height", height)
             jinfo.add("resizable", resizable)
@@ -206,6 +207,7 @@ class JsonResources {
     fun loadInfo(jinfo: JsonObject) {
         with(resources.gameInfo) {
             title = jinfo.getString("title", "Tickle Game")
+            id = jinfo.getString("id", "ticklegame")
             width = jinfo.getInt("width", 800)
             height = jinfo.getInt("height", 600)
             resizable = jinfo.getBoolean("resizable", true)

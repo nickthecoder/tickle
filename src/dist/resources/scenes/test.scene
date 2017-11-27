@@ -31,7 +31,7 @@
     ]
   },
   "include": [
-    "info"
+    
   ],
   "stages": [
     {
@@ -44,21 +44,30 @@
       "name": "main",
       "actors": [
         {
-          "costume": "bee",
-          "x": 357,
-          "y": 305,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
-          "direction": 0,
-          "scale": 1
-        },
-        {
           "costume": "hand",
           "x": 455,
           "y": 243,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
+          "scale": 1
+        },
+        {
+          "costume": "rod",
+          "x": 149,
+          "y": 252,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1
+        },
+        {
+          "costume": "rod",
+          "x": 502,
+          "y": 302,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 13.000000000000002,
           "scale": 1
         }
       ]

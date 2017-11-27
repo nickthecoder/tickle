@@ -148,6 +148,23 @@ class PoseAppearance(actor: Actor, var pose: Pose)
 
     override fun offsetY() = pose.offsetY
 
+
+    override fun contains(point: Vector2d): Boolean {
+        tempVector.set(point)
+        tempVector.sub(actor.position)
+        if (actor.scale != 1.0) {
+            tempVector.mul(1 / actor.scale)
+        }
+        if (actor.direction.radians != 0.0) {
+            tempVector.rotate(-actor.direction.radians + pose.direction.radians)
+        }
+
+        val offsetX = offsetX()
+        val offsetY = offsetY()
+
+        return tempVector.x >= -offsetX && tempVector.x < width() - offsetX && tempVector.y > -offsetY && tempVector.y < height() - offsetY
+    }
+
     // TODO Implement correctly
     override fun touching(point: Vector2d): Boolean = contains(point)
 

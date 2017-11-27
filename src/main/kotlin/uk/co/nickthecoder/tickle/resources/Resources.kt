@@ -16,7 +16,7 @@ class Resources {
         get() = file.parentFile ?: File(".").absoluteFile
 
 
-    val gameInfo = GameInfo("Tickle", 600, 400, true)
+    val gameInfo = GameInfo("Tickle", "ticklegame", 600, 400, true)
 
     val preferences = EditorPreferences()
 

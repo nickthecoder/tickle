@@ -9,7 +9,7 @@ class URLButton : Button() {
     @Attribute
     var url = ""
 
-    override fun onMouseClicked(event: MouseEvent) {
+    override fun onClicked(event: MouseEvent) {
         val thread = Thread() {
             Desktop.getDesktop().browse(URI(url))
         }

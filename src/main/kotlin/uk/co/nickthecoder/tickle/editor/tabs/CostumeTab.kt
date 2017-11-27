@@ -321,9 +321,9 @@ class CostumeTab(val name: String, val costume: Costume)
         val bodyTypeP = ChoiceParameter("bodyType", required = false, value = costume.bodyDef?.type)
                 .nullableEnumChoices(mixCase = true, nullLabel = "None")
 
-        val linearDampingP = FloatParameter("linearDamping", value = costume.bodyDef?.linearDamping ?: 0f, minValue = 0f, maxValue = 1f)
+        val linearDampingP = FloatParameter("linearDamping", value = costume.bodyDef?.linearDamping ?: 0f, minValue = 0f, maxValue = 10f)
 
-        val angularDampingP = FloatParameter("angularDamping", value = costume.bodyDef?.angularDamping ?: 0f, minValue = 0f, maxValue = 1f)
+        val angularDampingP = FloatParameter("angularDamping", value = costume.bodyDef?.angularDamping ?: 0f, minValue = 0f, maxValue = 10f)
 
         val fixedRotationP = BooleanParameter("fixedRotation", value = costume.bodyDef?.fixedRotation ?: false)
 

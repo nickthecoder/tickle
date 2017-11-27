@@ -12,11 +12,18 @@ class Hand : ActionRole() {
     override fun createAction(): Action = FollowMouse(actor.position, actor.stage!!.firstView()!!)
 
     val overlapKey = Resources.instance.inputs.find("overlap")!!
+    val touchingKey = Resources.instance.inputs.find("touching")!!
 
     val pixelOverlap = PixelOverlapping()
 
     override fun tick() {
         super.tick()
+
+        if (touchingKey.isPressed()) {
+            actor.stage?.firstView()?.let { view ->
+                println("\nActors at ${actor.position} = ${view.findActorsAt(actor.position)}\n\n")
+            }
+        }
 
         if (overlapKey.isPressed()) {
             actor.stage?.actors?.forEach { other ->

@@ -169,6 +169,8 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
             copy.events[eventName] = copyEvent
         }
 
+        copy.bodyDef = bodyDef?.copy()
+
         return copy
     }
 

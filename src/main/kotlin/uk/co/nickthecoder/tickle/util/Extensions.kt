@@ -9,7 +9,7 @@ fun Vector2d.rotate(angle: Angle) = rotate(angle.radians)
 fun Vector2d.rotate(radians: Double) {
     val sin = Math.sin(radians)
     val cos = Math.cos(radians)
-    val rx = x * sin - y * cos
-    val ry = y * sin + x * cos
+    val rx = x * cos - y * sin
+    val ry = y * cos + x * sin
     set(rx, ry)
 }

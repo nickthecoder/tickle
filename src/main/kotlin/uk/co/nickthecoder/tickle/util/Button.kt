@@ -7,6 +7,12 @@ import uk.co.nickthecoder.tickle.events.MouseHandler
 
 abstract class Button : AbstractRole(), MouseHandler {
 
+    var enabled: Boolean = true
+        set(v) {
+            field = v
+            actor.event(if (v) "default" else "disable")
+        }
+
     var down: Boolean = false
         set(v) {
             if (v != field) {
@@ -19,12 +25,14 @@ abstract class Button : AbstractRole(), MouseHandler {
     }
 
     override fun onMouseButton(event: MouseEvent) {
-        if (event.state == ButtonState.PRESSED) {
-            event.capture()
-            onMousePressed(event)
-        } else if (event.state == ButtonState.RELEASED) {
-            event.release()
-            onMouseReleased(event)
+        if (enabled) {
+            if (event.state == ButtonState.PRESSED) {
+                event.capture()
+                onPressed(event)
+            } else if (event.state == ButtonState.RELEASED) {
+                event.release()
+                onReleased(event)
+            }
         }
     }
 
@@ -32,18 +40,18 @@ abstract class Button : AbstractRole(), MouseHandler {
         down = actor.touching(event.viewPosition)
     }
 
-    open fun onMousePressed(event: MouseEvent) {
+    open fun onPressed(event: MouseEvent) {
         down = true
     }
 
-    open fun onMouseReleased(event: MouseEvent) {
+    open fun onReleased(event: MouseEvent) {
         if (down) {
-            onMouseClicked(event)
+            down = false
+            onClicked(event)
         }
-        down = false
     }
 
-    open fun onMouseClicked(event: MouseEvent) {}
+    open fun onClicked(event: MouseEvent) {}
 
     open fun stateChanged(down: Boolean) {
         actor.event(if (down) "down" else "default")

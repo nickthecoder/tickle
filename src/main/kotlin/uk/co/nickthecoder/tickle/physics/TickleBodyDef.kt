@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.physics
 
 import org.jbox2d.dynamics.BodyDef
+import uk.co.nickthecoder.tickle.util.Copyable
 
 /**
  * Holds details of a Costume's body. This differs from the usual [BodyDef], by defining the FixturesDef
@@ -12,8 +13,24 @@ import org.jbox2d.dynamics.BodyDef
  * Therefore, when converting this TickleBodyDef to an actual Body, the [TickleWorld]'s scale is used to convert
  * the units.
  */
-class TickleBodyDef : BodyDef() {
+class TickleBodyDef : BodyDef(), Copyable<TickleBodyDef> {
 
     val fixtureDefs = mutableListOf<TickleFixtureDef>()
 
+    override fun copy(): TickleBodyDef {
+        val copy = TickleBodyDef()
+        copy.bullet = bullet
+        copy.fixedRotation = fixedRotation
+        copy.linearDamping = linearDamping
+        copy.angularDamping = angularDamping
+        copy.position.set(position)
+        copy.type = type
+        copy.allowSleep = allowSleep
+
+        fixtureDefs.forEach { fixtureDef ->
+            copy.fixtureDefs.add(fixtureDef.copy())
+        }
+
+        return copy
+    }
 }

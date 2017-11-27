@@ -10,6 +10,10 @@ class CircleDef(
 
     : ShapeDef {
 
+    override fun copy(): ShapeDef {
+        return CircleDef(center, radius)
+    }
+
     override fun createShapes(world: TickleWorld): List<Shape> {
         val circle = CircleShape()
         world.pixelsToWorld(circle.m_p, center)
