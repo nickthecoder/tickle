@@ -21,6 +21,9 @@ class ActorResource(val isDesigning: Boolean = false) {
         set(v) {
             field = v
             updateAttributesMetaData()
+            Resources.instance.costumes.find(costumeName)?.let { costume ->
+                zOrder = costume.zOrder
+            }
         }
 
     var x: Double = 0.0

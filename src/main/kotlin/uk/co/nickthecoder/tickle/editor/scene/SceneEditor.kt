@@ -10,6 +10,7 @@ import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
+import uk.co.nickthecoder.tickle.editor.util.costume
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
 import uk.co.nickthecoder.tickle.resources.SceneResource
@@ -105,6 +106,11 @@ class SceneEditor(val sceneResource: SceneResource) {
     fun buildContextMenu(): ContextMenu {
         val menu = ContextMenu()
 
+        val resetAllZOrders = MenuItem("Reset Z-Orders")
+        resetAllZOrders.onAction = EventHandler { resetZOrders() }
+
+        menu.items.addAll(resetAllZOrders)
+
         if (selection.isNotEmpty()) {
 
             val deleteText = "Delete " + if (selection.size > 1) {
@@ -119,7 +125,7 @@ class SceneEditor(val sceneResource: SceneResource) {
             val attributes = MenuItem("Attributes")
             attributes.onAction = EventHandler { MainWindow.instance.accordion.expandedPane = attributesPane }
 
-            menu.items.addAll(delete, attributes)
+            menu.items.addAll(SeparatorMenuItem(), delete, attributes)
 
             if (sceneResource.stageResources.size > 1) {
                 val moveToStageMenu = Menu("Move to Stage")
@@ -158,6 +164,16 @@ class SceneEditor(val sceneResource: SceneResource) {
             delete(actorResource)
         }
         selection.clear()
+    }
+
+    fun resetZOrders() {
+        sceneResource.stageResources.forEach { _, stageResource ->
+            stageResource.actorResources.forEach { ar ->
+                ar.costume()?.let {
+                    ar.zOrder = it.zOrder
+                }
+            }
+        }
     }
 
 

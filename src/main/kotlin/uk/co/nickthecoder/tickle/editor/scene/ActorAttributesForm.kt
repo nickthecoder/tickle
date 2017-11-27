@@ -113,6 +113,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
         directionP.value?.let { actorResource.direction.degrees = it }
         scaleP.value?.let { actorResource.scale = it }
         actorResource.text = textP.value
+        actorResource.zOrder = zOrderP.value!!
 
         // Note. We are not updating the dynamic "attributes", because they should ONLY be updated via their
         // Parameters, The scene editor should NOT be changing the string value directly.
@@ -130,6 +131,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
         directionP.value = actorResource.direction.degrees
         scaleP.value = actorResource.scale
         textP.value = actorResource.text
+        zOrderP.value = actorResource.zOrder
 
         textP.hidden = actorResource.pose != null
 
