@@ -10,7 +10,7 @@
   "showMouse": false,
   "layout": "default",
   "snapToGrid": {
-    "enabled": false,
+    "enabled": true,
     "xSpacing": 50,
     "ySpacing": 50,
     "xOffset": 0,
@@ -29,7 +29,7 @@
     ]
   },
   "snapToOthers": {
-    "enabled": false,
+    "enabled": true,
     "xCloseness": 11,
     "yCloseness": 9
   },
@@ -48,8 +48,8 @@
       "actors": [
         {
           "costume": "hand",
-          "x": 455,
-          "y": 243,
+          "x": 450,
+          "y": 112,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
@@ -57,8 +57,8 @@
         },
         {
           "costume": "rod",
-          "x": 350,
-          "y": 202,
+          "x": 400,
+          "y": 100,
           "zOrder": 0,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",

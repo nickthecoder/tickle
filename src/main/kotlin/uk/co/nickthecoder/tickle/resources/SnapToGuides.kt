@@ -8,7 +8,7 @@ import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.paratask.parameters.MultipleParameter
 
-class SnapToGuides {
+class SnapToGuides : SnapTo {
 
     var enabled: Boolean = true
 
@@ -18,31 +18,36 @@ class SnapToGuides {
 
     var closeness = 5.0
 
-    fun snapActor(actorResource: ActorResource): Boolean {
-        if (enabled == false) return false
+    private val adjustment = Adjustment()
+
+    override fun snapActor(actorResource: ActorResource, adjustments: MutableList<Adjustment>) {
+        if (enabled == false) return
 
         var snapped = false
+        adjustment.reset()
 
         xGuides.forEach { xGuide ->
             val dx = xGuide - actorResource.x
             if (dx > -closeness && dx < closeness) {
-                actorResource.x += dx
-                snapped = true
+                adjustment.x = dx
+                adjustment.score = Math.abs(dx) + closeness
             }
         }
 
         yGuides.forEach { yGuide ->
             val dy = yGuide - actorResource.y
             if (dy > -closeness && dy < closeness) {
-                actorResource.y += dy
-                snapped = true
+                adjustment.y = dy
+                adjustment.score = if (adjustment.score == Double.MAX_VALUE) Math.abs(dy) + closeness else adjustment.score + Math.abs(dy)
             }
         }
 
-        return snapped
+        if (adjustment.score != Double.MAX_VALUE) {
+            adjustments.add(adjustment)
+        }
     }
 
-    fun edit() {
+    override fun edit() {
         TaskPrompter(GuidesTask()).placeOnStage(Stage())
     }
 

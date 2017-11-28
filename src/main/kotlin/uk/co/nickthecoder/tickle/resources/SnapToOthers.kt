@@ -9,31 +9,28 @@ import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.asHorizontal
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 
-class SnapToOthers {
+class SnapToOthers : SnapTo {
 
     var enabled = true
 
     var closeness = Vector2d(10.0, 10.0)
 
-    fun snapActor(actorResource: ActorResource): Boolean {
+    override fun snapActor(actorResource: ActorResource, adjustments: MutableList<Adjustment>) {
 
-        if (!enabled) return false
+        if (!enabled) return
 
         actorResource.layer?.stageResource?.actorResources?.forEach { other ->
             if (other !== actorResource) {
                 val dx = actorResource.x - other.x
                 val dy = actorResource.y - other.y
                 if (dx > -closeness.x && dx < closeness.x && dy > -closeness.y && dy < closeness.y) {
-                    actorResource.x -= dx
-                    actorResource.y -= dy
-                    return true
+                    adjustments.add(Adjustment(-dx, -dy, Math.abs(dx) + Math.abs(dy)))
                 }
             }
         }
-        return false
     }
 
-    fun edit() {
+    override fun edit() {
         TaskPrompter(SnapToOthersTask()).placeOnStage(Stage())
     }
 

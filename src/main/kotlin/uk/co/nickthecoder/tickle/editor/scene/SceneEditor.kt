@@ -6,15 +6,13 @@ import javafx.scene.control.*
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
+import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.editor.util.costume
-import uk.co.nickthecoder.tickle.resources.ActorResource
-import uk.co.nickthecoder.tickle.resources.ModificationType
-import uk.co.nickthecoder.tickle.resources.SceneResource
-import uk.co.nickthecoder.tickle.resources.StageResource
+import uk.co.nickthecoder.tickle.resources.*
 
 
 class SceneEditor(val sceneResource: SceneResource) {
@@ -250,12 +248,21 @@ class SceneEditor(val sceneResource: SceneResource) {
         dragging = false
     }
 
+    private val adjustments = mutableListOf<Adjustment>()
+
     fun snapActor(actorResource: ActorResource, isNew: Boolean) {
+
         if (actorResource.layer?.stageConstraint?.snapActor(actorResource, isNew) != true) {
-            if (!sceneResource.snapToGrid.snapActor(actorResource)) {
-                if (!sceneResource.snapToGuides.snapActor(actorResource)) {
-                    sceneResource.snapToOthers.snapActor(actorResource)
-                }
+
+            adjustments.clear()
+
+            sceneResource.snapToGrid.snapActor(actorResource, adjustments)
+            sceneResource.snapToGuides.snapActor(actorResource, adjustments)
+            sceneResource.snapToOthers.snapActor(actorResource, adjustments)
+            if (adjustments.isNotEmpty()) {
+                adjustments.sortBy { it.score }
+                actorResource.x += adjustments.first().x
+                actorResource.y += adjustments.first().y
             }
         }
     }

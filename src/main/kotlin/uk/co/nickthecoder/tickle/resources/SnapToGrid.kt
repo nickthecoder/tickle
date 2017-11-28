@@ -9,7 +9,7 @@ import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.asHorizontal
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 
-class SnapToGrid {
+class SnapToGrid : SnapTo {
 
     var enabled: Boolean = false
 
@@ -19,12 +19,15 @@ class SnapToGrid {
 
     var closeness = Vector2d(10.0, 10.0)
 
+    val adjustment = Adjustment()
 
-    fun snapActor(actorResource: ActorResource): Boolean {
+    override fun snapActor(actorResource: ActorResource, adjustments: MutableList<Adjustment>) {
 
         var snapped = false
 
-        if (enabled == false) return false
+        if (enabled == false) return
+
+        adjustment.reset()
 
         var dx = (actorResource.x - offset.x) % spacing.x
         var dy = (actorResource.y - offset.y) % spacing.y
@@ -33,25 +36,27 @@ class SnapToGrid {
         if (dy < 0) dy += spacing.y
 
         if (dx < closeness.x) {
-            actorResource.x -= dx
-            snapped = true
+            adjustment.x = -dx
+            adjustment.score = closeness.y + Math.abs(adjustment.x)
         } else if (spacing.x - dx < closeness.x) {
-            actorResource.x += spacing.x - dx
-            snapped = true
+            adjustment.x = spacing.x - dx
+            adjustment.score = closeness.y + Math.abs(adjustment.x)
         }
 
         if (dy < closeness.y) {
-            actorResource.y -= dy
-            snapped = true
+            adjustment.y = -dy
+            adjustment.score = if (adjustment.score == Double.MAX_VALUE) Math.abs(adjustment.y) + closeness.x else adjustment.score + Math.abs(adjustment.y)
         } else if (spacing.y - dy < closeness.y) {
-            actorResource.y += spacing.y - dy
-            snapped = true
+            adjustment.y = spacing.y - dy
+            adjustment.score = if (adjustment.score == Double.MAX_VALUE) Math.abs(adjustment.y) + closeness.x else adjustment.score + Math.abs(adjustment.y)
         }
 
-        return snapped
+        if (adjustment.score != Double.MAX_VALUE) {
+            adjustments.add(adjustment)
+        }
     }
 
-    fun edit() {
+    override fun edit() {
         TaskPrompter(GridTask()).placeOnStage(Stage())
     }
 
