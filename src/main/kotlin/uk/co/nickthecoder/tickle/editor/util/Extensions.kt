@@ -86,11 +86,12 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
     var ty = y - this.y
     tx /= scale
     ty /= scale
-    if (direction.radians != 0.0) {
-        val sin = Math.sin(-direction.radians)
-        val cos = Math.cos(-direction.radians)
-        val ttx = sin * ty - cos * tx
-        ty = sin * tx + cos * ty
+    val poseDirection = pose?.direction?.radians ?: 0.0
+    if (poseDirection != direction.radians) {
+        val sin = Math.sin(poseDirection - direction.radians)
+        val cos = Math.cos(poseDirection - direction.radians)
+        val ttx = cos * tx - sin * ty
+        ty = cos * ty + sin * tx
         tx = ttx
     }
     editorPose?.let { pose ->

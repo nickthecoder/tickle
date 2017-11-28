@@ -46,15 +46,6 @@ PixelOverlapping
 New Features
 ------------
 
-Add extra snap points to each pose. It always has a snap point of its origin (the offset)
-	Save data relative to its "origin", in Y upwards coordinates.
-	This will allow rods to be easily joined together (walls, floor etc) at any angle.
-	Allow rotation about any of the snap points.
-		For the (0,0) snap point the rotation arrow is the actor's direction.
-		For all other snap points, maybe point the arrow in the direction of (0,0)
-	Rods can still have their origin in the middle of the image, plus two snap points at the ends.
-	SceneEditor should ask for a LIST of snap adjustments, and then adjust by the smallest (if it is smaller than a threshold).
-
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
 	Also create a GUI suitable for launching from within the game to adjust *existing* inputs.
 	Include "reset"
@@ -63,9 +54,6 @@ Key input to have a "ghosting" test, where multiple key presses are displayed, t
 
 Allow text style to be overriden in the SceneEditor.
 	Only save the overridden values if they differ from the Costume's values.
-
-Add some "solid" objects, and use overlap detection to kill the sparks.
-	Just as a prelude to pixel collision detection.
 
 Allow a Layout to specify a (set of?) scene paths to merge whenever a scene using this layout is started
 	This allows standard stages to be included (such as a "glass" stage, showing score, "pause" etc)

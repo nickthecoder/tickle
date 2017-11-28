@@ -48,8 +48,8 @@
       "actors": [
         {
           "costume": "hand",
-          "x": 654,
-          "y": 301,
+          "x": 569,
+          "y": 284,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
@@ -57,23 +57,23 @@
         },
         {
           "costume": "rod",
-          "x": 550.4622038871141,
-          "y": 358.4970632606319,
+          "x": 535.0296511796643,
+          "y": 345.99584605456397,
           "zOrder": 0,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
-          "direction": 0,
+          "direction": 72,
           "scale": 1
         },
         {
           "costume": "rod",
-          "x": 492,
-          "y": 345,
+          "x": 423,
+          "y": 389,
           "zOrder": 0,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
-          "direction": 13.000000000000002,
-          "scale": 1
+          "direction": 68.99999999999999,
+          "scale": 2
         },
         {
           "costume": "rod",
@@ -86,11 +86,11 @@
         },
         {
           "costume": "rod",
-          "x": 610.4622038871141,
-          "y": 358.4970632606319,
+          "x": 592.0930421573735,
+          "y": 327.4548263920671,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
-          "direction": 0,
+          "direction": 49,
           "scale": 1
         }
       ]
