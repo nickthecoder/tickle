@@ -729,6 +729,9 @@ class JsonResources {
             }
 
             group.add(name, costume)
+            if (group is CostumeGroup) {
+                costume.costumeGroup = group
+            }
             // println("Loaded costume $name : ${costume}")
         }
 
