@@ -45,8 +45,9 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     val costumeHistory = mutableListOf<String>()
 
-    val gridButton = EditorActions.GRID_EDIT.createButton { sceneResource.grid.edit() }
-    val guidesButton = EditorActions.GUIDES_EDIT.createButton { sceneResource.guides.edit() }
+    val gridButton = EditorActions.SNAP_TO_GRID_EDIT.createButton { sceneResource.snapToGrid.edit() }
+    val guidesButton = EditorActions.SNAP_TO_GUIDES_EDIT.createButton { sceneResource.snapToGuides.edit() }
+    val othersButton = EditorActions.SNAP_TO_OTHERS_EDIT.createButton { sceneResource.snapToOthers.edit() }
 
     fun build(): Node {
 
@@ -75,8 +76,9 @@ class SceneEditor(val sceneResource: SceneResource) {
             add(EditorActions.ZOOM_IN1) { layers.scale *= 1.2 }
             add(EditorActions.ZOOM_IN2) { layers.scale *= 1.2 }
             add(EditorActions.ZOOM_OUT) { layers.scale /= 1.2 }
-            add(EditorActions.GRID_TOGGLE) { sceneResource.grid.enabled != sceneResource.grid.enabled }
-            add(EditorActions.GUIDES_TOGGLE) { sceneResource.guides.enabled != sceneResource.guides.enabled }
+            add(EditorActions.SNAP_TO_GRID_TOGGLE) { sceneResource.snapToGrid.enabled != sceneResource.snapToGrid.enabled }
+            add(EditorActions.SNAP_TO_GUIDES_TOGGLE) { sceneResource.snapToGuides.enabled != sceneResource.snapToGuides.enabled }
+            add(EditorActions.SNAP_TO_OTHERS_TOGGLE) { sceneResource.snapToOthers.enabled != sceneResource.snapToOthers.enabled }
         }
 
         EditorActions.STAMPS.forEachIndexed { index, action ->
@@ -250,8 +252,10 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     fun snapActor(actorResource: ActorResource, isNew: Boolean) {
         if (actorResource.layer?.stageConstraint?.snapActor(actorResource, isNew) != true) {
-            if (!sceneResource.grid.snapActor(actorResource)) {
-                sceneResource.guides.snapActor(actorResource)
+            if (!sceneResource.snapToGrid.snapActor(actorResource)) {
+                if (!sceneResource.snapToGuides.snapActor(actorResource)) {
+                    sceneResource.snapToOthers.snapActor(actorResource)
+                }
             }
         }
     }

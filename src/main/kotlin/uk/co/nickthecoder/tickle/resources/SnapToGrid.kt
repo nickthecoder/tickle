@@ -73,12 +73,13 @@ class SnapToGrid {
                 .asHorizontal()
 
         override val taskD = TaskDescription("editGrid")
-                .addParameters(spacingP, closenessP, offsetP, enabledP)
+                .addParameters(enabledP, spacingP, closenessP, offsetP)
 
         override fun run() {
             spacing.set(spacingP.value)
             offset.set(offsetP.value)
             closeness.set(closenessP.value)
+            enabled = enabledP.value!!
 
             if (closeness.x > spacing.x / 2) {
                 closeness.x = spacing.x / 2

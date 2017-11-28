@@ -43,8 +43,8 @@ class JsonScene {
         jroot.add("layout", sceneResource.layoutName)
 
         val jgrid = JsonObject()
-        jroot.add("grid", jgrid)
-        with(sceneResource.grid) {
+        jroot.add("snapToGrid", jgrid)
+        with(sceneResource.snapToGrid) {
             jgrid.add("enabled", enabled == true)
 
             jgrid.add("xSpacing", spacing.x)
@@ -58,8 +58,8 @@ class JsonScene {
         }
 
         val jguides = JsonObject()
-        jroot.add("guides", jguides)
-        with(sceneResource.guides) {
+        jroot.add("snapToGuides", jguides)
+        with(sceneResource.snapToGuides) {
             jguides.add("enabled", enabled)
             jguides.add("closeness", closeness)
 
@@ -70,6 +70,15 @@ class JsonScene {
             val jy = JsonArray()
             yGuides.forEach { jy.add(it) }
             jguides.add("y", jy)
+        }
+
+        val jothers = JsonObject()
+        jroot.add("snapToOthers", jothers)
+        with (sceneResource.snapToOthers) {
+            jothers.add("enabled", enabled)
+
+            jothers.add("xCloseness", closeness.x)
+            jothers.add("yCloseness", closeness.y)
         }
 
         val jincludes = JsonArray()
@@ -101,9 +110,9 @@ class JsonScene {
         sceneResource.background = Color.fromString(jroot.getString("background", "#FFFFFF"))
         sceneResource.showMouse = jroot.getBoolean("showMouse", true)
 
-        jroot.get("grid")?.let {
+        jroot.get("snapToGrid")?.let {
             val jgrid = it.asObject()
-            with(sceneResource.grid) {
+            with(sceneResource.snapToGrid) {
                 enabled = jgrid.getBoolean("enabled", false)
 
                 spacing.x = jgrid.getDouble("xSpacing", 50.0)
@@ -118,9 +127,9 @@ class JsonScene {
             //println("Loaded grid ${sceneResource.grid}")
         }
 
-        jroot.get("guides")?.let {
+        jroot.get("snapToGuides")?.let {
             val jguides = it.asObject()
-            with(sceneResource.guides) {
+            with(sceneResource.snapToGuides) {
                 enabled = jguides.getBoolean("enabled", true)
                 closeness = jguides.getDouble("closeness", 10.0)
 
@@ -136,6 +145,15 @@ class JsonScene {
             //println("Loaded guides ${sceneResource.guides}")
         }
 
+        jroot.get("snapToOthers")?.let {
+            val jothers = it.asObject()
+            with(sceneResource.snapToOthers) {
+                enabled = jothers.getBoolean("enabled", true)
+                closeness.x = jothers.getDouble("xCloseness", 10.0)
+                closeness.y = jothers.getDouble("yCloseness", 10.0)
+            }
+
+        }
         jroot.get("include")?.let {
             val jincludes = it.asArray()
             jincludes.forEach { jinclude ->

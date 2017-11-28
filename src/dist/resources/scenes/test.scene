@@ -9,26 +9,29 @@
   "background": "#4d3399",
   "showMouse": false,
   "layout": "default",
-  "grid": {
-    "enabled": true,
-    "xSpacing": 40,
+  "snapToGrid": {
+    "enabled": false,
+    "xSpacing": 50,
     "ySpacing": 50,
-    "xOffset": 1,
-    "yOffset": 2,
+    "xOffset": 0,
+    "yOffset": 0,
     "xCloseness": 10,
-    "yCloseness": 20
+    "yCloseness": 10
   },
-  "guides": {
+  "snapToGuides": {
     "enabled": true,
     "closeness": 5,
     "x": [
-      0,
-      640,
-      1280
+      
     ],
     "y": [
-      0
+      
     ]
+  },
+  "snapToOthers": {
+    "enabled": false,
+    "xCloseness": 11,
+    "yCloseness": 9
   },
   "include": [
     
@@ -54,8 +57,8 @@
         },
         {
           "costume": "rod",
-          "x": 149,
-          "y": 252,
+          "x": 350,
+          "y": 202,
           "zOrder": 0,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",

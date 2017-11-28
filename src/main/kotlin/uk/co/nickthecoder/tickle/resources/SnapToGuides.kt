@@ -25,22 +25,16 @@ class SnapToGuides {
 
         xGuides.forEach { xGuide ->
             val dx = xGuide - actorResource.x
-            if (dx >= 0 && dx < closeness) {
+            if (dx > -closeness && dx < closeness) {
                 actorResource.x += dx
-                snapped = true
-            } else if (dx < 0 && dx > -closeness) {
-                actorResource.x -= dx
                 snapped = true
             }
         }
 
         yGuides.forEach { yGuide ->
-            val dy = yGuide - actorResource.x
-            if (dy >= 0 && dy < closeness) {
-                actorResource.x += dy
-                snapped = true
-            } else if (dy < 0 && dy > -closeness) {
-                actorResource.x -= dy
+            val dy = yGuide - actorResource.y
+            if (dy > -closeness && dy < closeness) {
+                actorResource.y += dy
                 snapped = true
             }
         }

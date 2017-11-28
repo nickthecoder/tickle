@@ -75,7 +75,7 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
     override fun extraSidePanes() = sceneEditor.sidePanes
 
-    override fun extraButtons() = listOf(sceneEditor.guidesButton, sceneEditor.gridButton, sceneEditor.layers.stageButton)
+    override fun extraButtons() = listOf(sceneEditor.guidesButton, sceneEditor.gridButton, sceneEditor.othersButton, sceneEditor.layers.stageButton)
 
     override fun save(): Boolean {
         if (taskForm.check()) {
@@ -187,7 +187,6 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
             includes.forEach { file ->
                 includesP.addValue(Resources.instance.sceneFileToPath(file))
             }
-            println("Includes = $includes")
         }
 
         updateAttributes()
