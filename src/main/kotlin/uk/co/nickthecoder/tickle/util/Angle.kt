@@ -26,6 +26,14 @@ open class Angle() {
         radians = Math.atan2(vector2d.y, vector2d.x)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other is Angle) {
+            return other.radians == radians
+        } else {
+            return false
+        }
+    }
+
     override fun toString() = "$degrees°"
 
     companion object {

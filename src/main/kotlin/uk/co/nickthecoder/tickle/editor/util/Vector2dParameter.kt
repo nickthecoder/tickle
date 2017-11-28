@@ -9,7 +9,6 @@ import uk.co.nickthecoder.paratask.util.uncamel
 import uk.co.nickthecoder.tickle.vector2dFromString
 import uk.co.nickthecoder.tickle.vector2dToString
 
-
 class Vector2dParameter(
         name: String,
         label: String = name.uncamel(),

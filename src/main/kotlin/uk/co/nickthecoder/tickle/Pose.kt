@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import org.joml.Matrix4f
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Texture
@@ -21,6 +22,11 @@ class Pose(
 
     var offsetX: Double = 0.0
     var offsetY: Double = 0.0
+
+    /**
+     * Points other than the offsetX,Y, which can be snapped to.
+     */
+    var snapPoints = mutableListOf<Vector2d>()
 
     /**
      * The natural direction. i.e. if the Actor moved "forward", which mathematical angle would that be?

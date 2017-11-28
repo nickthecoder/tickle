@@ -166,8 +166,8 @@
       "bottom": 60,
       "right": 188,
       "top": 0,
-      "offsetX": 16,
-      "offsetY": 23,
+      "offsetX": 32,
+      "offsetY": 8,
       "direction": 0
     },
     {
@@ -265,9 +265,15 @@
       "bottom": 40,
       "right": 135,
       "top": 22,
-      "offsetX": 8,
-      "offsetY": 11,
-      "direction": 0
+      "offsetX": 0,
+      "offsetY": 0,
+      "direction": 0,
+      "snapPoints": [
+        {
+          "x": 60,
+          "y": 0
+        }
+      ]
     }
   ],
   "sounds": [

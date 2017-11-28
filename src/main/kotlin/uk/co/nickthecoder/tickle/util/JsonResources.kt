@@ -400,6 +400,17 @@ class JsonResources {
                 jpose.add("offsetY", pose.offsetY)
                 jpose.add("direction", pose.direction.degrees)
 
+                if (pose.snapPoints.isNotEmpty()) {
+                    val jsnaps = JsonArray()
+                    jpose.add("snapPoints", jsnaps)
+                    pose.snapPoints.forEach { point ->
+                        val jpoint = JsonObject()
+                        jpoint.add("x", point.x)
+                        jpoint.add("y", point.y)
+                        jsnaps.add(jpoint)
+                    }
+                }
+
                 jposes.add(jpose)
             }
         }
@@ -424,6 +435,16 @@ class JsonResources {
 
             pose.direction.degrees = jpose.get("direction").asDouble()
             pose.updateRectd()
+
+            jpose.get("snapPoints")?.let {
+                val jsnaps = it.asArray()
+                jsnaps.forEach {
+                    val jsnap = it.asObject()
+                    val x = jsnap.getDouble("x", 0.0)
+                    val y = jsnap.getDouble("y", 0.0)
+                    pose.snapPoints.add(Vector2d(x, y))
+                }
+            }
 
             resources.poses.add(name, pose)
             //println("Loaded pose $name : ${pose}")

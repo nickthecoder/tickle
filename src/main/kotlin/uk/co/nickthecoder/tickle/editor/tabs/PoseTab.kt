@@ -14,10 +14,7 @@ import javafx.scene.paint.Color
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
-import uk.co.nickthecoder.paratask.parameters.ButtonParameter
-import uk.co.nickthecoder.paratask.parameters.DoubleParameter
-import uk.co.nickthecoder.paratask.parameters.InformationParameter
-import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.*
@@ -55,12 +52,16 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
 
     val directionP = DoubleParameter("direction", description = "The direction of the pose in degrees. 0 is to the right, and +ve numbers are anti-clockwise.")
 
-    val infoP = InformationParameter("info", information = "Click the image to set the offsets. Right click to change the background colour.")
-
     val imageP = ImageParameter("image", image = ImageCache.image(pose.texture.file!!)) { PoseImageField(it) }
 
+    val infoP = InformationParameter("info", information = "Click the image to set the offsets. Right click to change the background colour.")
+
+    val snapPointsP = MultipleParameter("snapPoints", isBoxed = true) {
+        Vector2dParameter("snapPoint").asHorizontal()
+    }
+
     override val taskD = TaskDescription("editPose")
-            .addParameters(nameP, textureNameP, positionP, offsetInfoP, offsetP, directionP, imageP, infoP)
+            .addParameters(nameP, textureNameP, positionP, offsetInfoP, offsetP, directionP, imageP, infoP, snapPointsP)
 
     init {
         offsetP.x = pose.offsetX.toDouble()
@@ -72,6 +73,8 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         positionP.bottom = pose.rect.bottom
 
         directionP.value = pose.direction.degrees
+        snapPointsP.clear()
+        pose.snapPoints.forEach { snapPointsP.addValue(it) }
 
         updateViewport()
 
@@ -103,6 +106,9 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         pose.offsetY = offsetP.y!!
 
         pose.direction.degrees = directionP.value!!
+
+        pose.snapPoints.clear()
+        pose.snapPoints.addAll(snapPointsP.value)
     }
 
     fun editTexture() {

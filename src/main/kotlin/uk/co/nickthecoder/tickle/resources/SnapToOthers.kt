@@ -7,7 +7,9 @@ import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.asHorizontal
+import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
+import uk.co.nickthecoder.tickle.util.rotate
 
 class SnapToOthers : SnapTo {
 
@@ -21,12 +23,63 @@ class SnapToOthers : SnapTo {
 
         actorResource.layer?.stageResource?.actorResources?.forEach { other ->
             if (other !== actorResource) {
+
+                // Snap the two actors positions
                 val dx = actorResource.x - other.x
                 val dy = actorResource.y - other.y
                 if (dx > -closeness.x && dx < closeness.x && dy > -closeness.y && dy < closeness.y) {
                     adjustments.add(Adjustment(-dx, -dy, Math.abs(dx) + Math.abs(dy)))
                 }
+
+                // Snap this actor position with the other actor's snap points
+                other.pose?.snapPoints?.forEach { point ->
+                    snapPoint(actorResource, other, point, other.pose!!, adjustments)
+                }
+
+                // Snap this actor' snap points with the other actor's position
+                actorResource.pose?.snapPoints?.forEach { point ->
+                    snapPoint2(actorResource, other, point, actorResource.pose!!, adjustments)
+                }
             }
+        }
+
+    }
+
+    fun snapPoint(actorResource: ActorResource, other: ActorResource, point: Vector2d, pose: Pose, adjustments: MutableList<Adjustment>) {
+        val adjustedPoint = Vector2d(point)
+        adjustedPoint.x -= pose.offsetX
+        adjustedPoint.y -= pose.offsetY
+
+        if (other.scale != 1.0) {
+            adjustedPoint.mul(other.scale)
+        }
+        if (other.direction.radians != pose.direction.radians) {
+            adjustedPoint.rotate(other.direction.radians - pose.direction.radians)
+        }
+
+        val dx = actorResource.x - other.x - adjustedPoint.x
+        val dy = actorResource.y - other.y - adjustedPoint.y
+        if (dx > -closeness.x && dx < closeness.x && dy > -closeness.y && dy < closeness.y) {
+            adjustments.add(Adjustment(-dx, -dy, Math.abs(dx) + Math.abs(dy)))
+        }
+    }
+
+    fun snapPoint2(actorResource: ActorResource, other: ActorResource, point: Vector2d, pose: Pose, adjustments: MutableList<Adjustment>) {
+        val adjustedPoint = Vector2d(point)
+        adjustedPoint.x -= pose.offsetX
+        adjustedPoint.y -= pose.offsetY
+
+        if (actorResource.scale != 1.0) {
+            adjustedPoint.mul(actorResource.scale)
+        }
+        if (actorResource.direction.radians != pose.direction.radians) {
+            adjustedPoint.rotate(actorResource.direction.radians - pose.direction.radians)
+        }
+
+        val dx = other.x - actorResource.x - adjustedPoint.x
+        val dy = other.y - actorResource.y - adjustedPoint.y
+        if (dx > -closeness.x && dx < closeness.x && dy > -closeness.y && dy < closeness.y) {
+            adjustments.add(Adjustment(dx, dy, Math.abs(dx) + Math.abs(dy)))
         }
     }
 

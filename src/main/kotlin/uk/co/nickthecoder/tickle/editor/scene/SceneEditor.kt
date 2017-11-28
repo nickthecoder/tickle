@@ -6,7 +6,6 @@ import javafx.scene.control.*
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
-import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow

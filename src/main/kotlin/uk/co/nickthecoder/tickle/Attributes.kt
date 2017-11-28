@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import org.joml.Vector2d
+import org.joml.Vector2i
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.editor.util.AngleParameter
 import uk.co.nickthecoder.tickle.editor.util.PolarParameter
@@ -282,4 +283,10 @@ fun vector2dToString(vector: Vector2d) = "${vector.x}x${vector.y}"
 fun vector2dFromString(string: String): Vector2d {
     val split = string.split("x")
     return Vector2d(split[0].toDouble(), split[1].toDouble())
+}
+
+fun vector2iToString(vector: Vector2i) = "${vector.x}x${vector.y}"
+fun vector2iFromString(string: String): Vector2i {
+    val split = string.split("x")
+    return Vector2i(split[0].toInt(), split[1].toInt())
 }
