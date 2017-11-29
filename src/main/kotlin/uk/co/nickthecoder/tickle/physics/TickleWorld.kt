@@ -1,9 +1,10 @@
 package uk.co.nickthecoder.tickle.physics
 
+import org.jbox2d.collision.shapes.CircleShape
+import org.jbox2d.collision.shapes.PolygonShape
+import org.jbox2d.collision.shapes.Shape
 import org.jbox2d.common.Vec2
-import org.jbox2d.dynamics.Body
-import org.jbox2d.dynamics.BodyType
-import org.jbox2d.dynamics.World
+import org.jbox2d.dynamics.*
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
@@ -101,4 +102,51 @@ class TickleWorld(
         }
     }
 
+}
+
+fun Body.scale(scale: Float) {
+
+    // We cannot just iterate through the fixtures, because to scale the fixtures, we need to delete the old
+    // ones and create new ones. So get all the fixtures first...
+    val fixtures = mutableListOf<Fixture>()
+    var fixture = fixtureList
+    while (fixture != null) {
+        fixtures.add(fixture)
+        fixture = fixture.next
+    }
+    fixtures.forEach { it.scale(this, scale) }
+    resetMassData()
+    isAwake = true
+}
+
+fun Fixture.scale(body: Body, scale: Float) {
+    val shape = shape
+
+    var newShape: Shape? = null
+
+    when (shape) {
+        is CircleShape -> {
+            shape.m_radius *= scale
+            shape.m_p.mul(scale)
+        }
+        is PolygonShape -> {
+            val points = Array<Vec2>(shape.vertexCount) { Vec2(shape.vertices[it].x * scale, shape.vertices[it].y * scale) }
+
+            newShape = PolygonShape()
+            newShape.set(points, shape.vertexCount)
+        }
+    }
+
+    if (newShape != null) {
+        val fixtureDef = FixtureDef()
+        fixtureDef.filter = m_filter
+        fixtureDef.friction = friction
+        fixtureDef.density = density
+        fixtureDef.restitution = restitution
+        fixtureDef.isSensor = isSensor
+        fixtureDef.userData = userData
+        fixtureDef.shape = newShape
+        body.destroyFixture(this)
+        body.createFixture(fixtureDef)
+    }
 }

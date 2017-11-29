@@ -7,6 +7,7 @@ import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.physics.TickleWorld
+import uk.co.nickthecoder.tickle.physics.scale
 import uk.co.nickthecoder.tickle.resources.ActorXAlignment
 import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 import uk.co.nickthecoder.tickle.sound.SoundManager
@@ -61,8 +62,12 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     var scale: Double = 1.0
         set(v) {
-            field = v
-            dirtyMatrix = true
+            if (field != v) {
+                dirtyMatrix = true
+                body?.scale((v / field).toFloat())
+                field = v
+                updateBody()
+            }
         }
 
     var color: Color = Color.white()
