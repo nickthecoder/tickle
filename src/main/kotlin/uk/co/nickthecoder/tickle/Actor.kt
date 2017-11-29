@@ -7,7 +7,6 @@ import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.physics.TickleWorld
-import uk.co.nickthecoder.tickle.physics.pixelsToWorld
 import uk.co.nickthecoder.tickle.resources.ActorXAlignment
 import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 import uk.co.nickthecoder.tickle.sound.SoundManager
@@ -47,9 +46,18 @@ class Actor(var costume: Costume, val role: Role? = null) {
                 if (field != v) {
                     field = v
                     dirtyMatrix = true
+                    // If the Actor has a Body, this ensures that the body will be updated before JBox2D's calculations
+                    // are applied.
+                    oldPosition.x = Double.MIN_VALUE
                 }
             }
     }
+
+    /**
+     * Used when the Actor has a [Body] to detect when the position has changed by game code, and therefore the Body
+     * needs to be updated.
+     */
+    private val oldPosition = Vector2d(Double.MIN_VALUE, Double.MIN_VALUE)
 
     var scale: Double = 1.0
         set(v) {
@@ -214,9 +222,9 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     fun die() {
         role?.end()
-        body?.let {
-            Game.instance.scene.world?.destroyBody(it)
-            body = null
+        body?.let { body ->
+            body.world.destroyBody(body)
+            this.body = null
         }
         stage?.remove(this)
     }
@@ -237,28 +245,36 @@ class Actor(var costume: Costume, val role: Role? = null) {
     /**
      * Directly changes the position and the angle of the body. Note, this can cause strange behaviour if the body
      * overlaps another body.
-     */
-    fun updateBody(world: TickleWorld) {
-        if (body != null) {
-            world.pixelsToWorld(world.tempVec, position)
-            body?.setTransform(world.tempVec, direction.radians.toFloat())
-        }
-    }
-
-    /**
-     * Directly changes the position and the angle of the body. Note, this can cause strange behaviour if the body
-     * overlaps another body.
      *
      * Note. If your game has multiple worlds (each with its own scale), then use updateBody(TickleWorld) instead,
      * so that the correct scaling factor can be applied.
      */
-    fun updateBody() {
-        if (body != null) {
-            val tempVec = Vec2()
-            pixelsToWorld(tempVec, position)
-            body?.setTransform(tempVec, (direction.radians - (poseAppearance?.directionRadians ?: 0.0)).toFloat())
+    internal fun updateBody() {
+        body?.let { body ->
+            val world = body.world as TickleWorld
+            world.pixelsToWorld(tempVec, position)
+            body.setTransform(tempVec, (direction.radians - (poseAppearance?.directionRadians ?: 0.0)).toFloat())
         }
     }
 
+    internal fun updateFromBody(world: TickleWorld) {
+        body?.let { body ->
+            world.worldToPixels(position, body.position)
+            direction.radians = body.angle.toDouble() + (poseAppearance?.directionRadians ?: 0.0)
+            // Copy the Actor's position, so that we can test is game code has changed the position, and therefore
+            // we will know if the Body needs to be updated. See ensureBodyIsUpToDate.
+            oldPosition.set(position)
+        }
+    }
+
+    internal fun ensureBodyIsUpToDate() {
+        if (position.x != oldPosition.x || position.y != oldPosition.y) {
+            updateBody()
+        }
+    }
+
+    private val tempVec = Vec2()
+
     override fun toString() = "Actor #$id @ $x,$y Role=${role?.javaClass?.simpleName ?: "<none>"}"
+
 }

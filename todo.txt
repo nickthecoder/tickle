@@ -4,19 +4,37 @@ Current Work
 Next
 ====
 
-Pose thumbnail
-	Scale, Fit (% along)
+Allow phyical bodies to be scaled.
+	At first, just do it at creation time.
+	Use this to create smaller skittles.
+	Then maybe allow then to be flipped.
 
 PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
 	Ditto for CostumeChoiceParameter
 	Similar for RoleParameter. Add separator for each package.
 
+
+Undo/Redo in scene editor
+	Changes :
+		New ActorResource
+		Delete ActorResource
+		ActorResource changes stage
+		Edit ActorResource
+			Can be changed by editing Parameters or by dragging
+			When a Parameter change event is fired, store the name of the parameter, and its old and new value.
+			When dragging a handle, just let the above handle it?
+		OR add a new listeners on ActorResource (each field has a set(v) method).
+			When moving an actorResource (or set of), then treat this differently??
+
+		Note. dragging multiple ActorResources may need to be handled in a different way???
+		Ignore snap data for now.
+
+		
+
 BUGS
 ====
 
 Scene.adjustActors is not being called directly. Should it?
-
-Renaming a costume doesn't update ActorResource in scenes that use it.
 
 Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
 	I only want the EDITOR to depend on paratask-core.
@@ -43,6 +61,9 @@ PixelOverlapping
 New Features
 ------------
 
+Pose thumbnail
+	Scale, Fit (% along)
+
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
 	Also create a GUI suitable for launching from within the game to adjust *existing* inputs.
 	Include "reset"
@@ -51,18 +72,6 @@ Key input to have a "ghosting" test, where multiple key presses are displayed, t
 
 Allow text style to be overriden in the SceneEditor.
 	Only save the overridden values if they differ from the Costume's values.
-
-Allow a Layout to specify a (set of?) scene paths to merge whenever a scene using this layout is started
-	This allows standard stages to be included (such as a "glass" stage, showing score, "pause" etc)
-	(i.e. when starting to PLAY the scene, not when designing it).
-	Hmm, Maybe it SHOULD be loaded when designing too (but is never editable)
-Also allow a SceneResource to specify a (set of?) scene paths to be merged.
-	This will allow a "background" scene to be chosen per actual scene.
-
-
-Pose : Allow a "mirrored" version (X,Y or Both)
-	Just make the rectangle have -ve widths/heights???
-	Use this to implement "Bee" without the special transformation
 
 Editor
 	Allow a texture to be reloaded (Texture and ImageCache).
@@ -74,10 +83,6 @@ Editor
 		In a "minor tab"?
 		Or just a button which opens all costumes using that pose.
 
-When renaming an item, who's name is used in a scene, we need to keep track of renamed items,
-	and update all scenes when the resource file is saved.
-	Costume and Font only?
-
 PoseTab should show the whole Texture, with a single shaded rectangle to show the position.
 	Double click to auto adjust the pose's rectangle and offset.
 	Make it a resuable copmonent, which can show one or many shaded rectangles.
@@ -88,19 +93,8 @@ Mouse
 
 Ensure Textures are deleted when removed from resources (Use finalise?).
 
-Add my own "runLater", which will call the code at the end of a tick.
-	I could use this to delete textures (i.e. put the runLater call in Texture.finalize).
-
-
 Later
 =====
-
-Add drag handles to the CostumeTab shape editor.
-
-Allow jBox2D to be optional (i.e. do not need to include the jar (and the logger) if it isn't used by the game.
-
-Allow fonts to have multiple outlines i.e. one myfont.png may have myfont-thinOutline.png and myfont.blurredOutline.png
-	Could specify an outline name in TextStyle, and lazily load the extra texture.
 
 TextStyle to have an extraSpacing property which causes letters to be moved further appart
 	Ditto for extra line height.
@@ -109,17 +103,10 @@ Create a simpler GUI that a "published" game can use to let players change the i
 
 Game based on "flocking" :	https://www.youtube.com/watch?v=M028vafB0l8
 
-Undo/Redo in scene editor
-
 Split the project into multiple modules
 	core
 	demo
 	editor
-
-Load pose meta-data from SVG files.
-	Any objects with a name pose_XXX, where XXX is the pose name.
-	Can get the offesetX,Y from the object's center of rotation.
-	Can still use GIMP, by linking pngs and exporting the pngs from GIMP.
 
 RevealStageView
 	Age Of Empires style outline of actors hidden behind buildings.

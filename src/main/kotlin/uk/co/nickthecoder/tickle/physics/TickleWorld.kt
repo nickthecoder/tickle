@@ -76,13 +76,26 @@ class TickleWorld(
     }
 
     fun tick() {
-        step(Game.instance.tickDuration.toFloat(), velocityIterations, positionIterations)
+        // First make sure that the body is up to date. If the Actor's position or direction have been changed by game code,
+        // then the Body will need to be updated before we can call "step".
         var body = bodyList
         while (body != null) {
             val actor = body.userData
             if (actor is Actor) {
-                worldToPixels(actor.position, body.position)
-                actor.direction.radians = body.angle.toDouble() + (actor.poseAppearance?.directionRadians ?: 0.0)
+                actor.ensureBodyIsUpToDate()
+            }
+            body = body.next
+        }
+
+        // Perform all of the JBox2D calculations
+        step(Game.instance.tickDuration.toFloat(), velocityIterations, positionIterations)
+
+        // Update the actor's positions and directions
+        body = bodyList
+        while (body != null) {
+            val actor = body.userData
+            if (actor is Actor) {
+                actor.updateFromBody(this)
             }
             body = body.next
         }
