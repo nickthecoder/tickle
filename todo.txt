@@ -11,15 +11,12 @@ PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than
 	Ditto for CostumeChoiceParameter
 	Similar for RoleParameter. Add separator for each package.
 
-
 BUGS
 ====
 
 Scene.adjustActors is not being called directly. Should it?
 
 Renaming a costume doesn't update ActorResource in scenes that use it.
-
-findActorAt doesn't work for rotated text that is not bottom? left aligned (as the offset isn't taken into account when doing the rotation maths).
 
 Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
 	I only want the EDITOR to depend on paratask-core.

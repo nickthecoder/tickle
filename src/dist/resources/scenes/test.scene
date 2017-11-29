@@ -56,27 +56,25 @@
           "scale": 1
         },
         {
-          "costume": "rod",
+          "costume": "coinRod",
           "x": 535.0296511796643,
           "y": 345.99584605456397,
-          "zOrder": 0,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 72,
           "scale": 1
         },
         {
-          "costume": "rod",
+          "costume": "coinRod",
           "x": 423,
           "y": 389,
-          "zOrder": 0,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 68.99999999999999,
           "scale": 2
         },
         {
-          "costume": "rod",
+          "costume": "coinRod",
           "x": 277,
           "y": 100,
           "xAlignment": "LEFT",
@@ -85,13 +83,33 @@
           "scale": 1
         },
         {
-          "costume": "rod",
+          "costume": "coinRod",
           "x": 592.0930421573735,
           "y": 327.4548263920671,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 49,
           "scale": 1
+        },
+        {
+          "costume": "plainText",
+          "x": 123,
+          "y": 433,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 10.999999999999998,
+          "scale": 1,
+          "text": "Hello World"
+        },
+        {
+          "costume": "plainText",
+          "x": 122,
+          "y": 363,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1,
+          "text": "Rotated Text"
         }
       ]
     }

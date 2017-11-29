@@ -12,15 +12,18 @@ import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
+import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.CostumeEvent
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.Role
+import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.physics.*
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.Sound
+import uk.co.nickthecoder.tickle.util.JsonScene
 
 class CostumeTab(val name: String, val costume: Costume)
 
@@ -121,10 +124,6 @@ class CostumeTab(val name: String, val costume: Costume)
 
 
         override fun run() {
-            if (nameP.value != name) {
-                Resources.instance.costumes.rename(name, nameP.value)
-            }
-
             costume.roleString = if (roleClassP.value == null) "" else roleClassP.value!!.name
             costume.canRotate = canRotateP.value == true
             costume.zOrder = zOrderP.value!!
@@ -135,7 +134,13 @@ class CostumeTab(val name: String, val costume: Costume)
                 costume.costumeGroup = costumeGroupP.costumeP.value
                 costume.costumeGroup?.add(nameP.value, costume)
             }
+            if (nameP.value != name) {
+                Resources.instance.costumes.rename(name, nameP.value)
+                TaskPrompter(RenameCostumeTask(name, nameP.value)).placeOnStage(Stage())
+            }
+
         }
+
 
         fun chooseCostumeGroup(groupName: String) {
             costumeGroupP.costumeP.value = Resources.instance.costumeGroups.find(groupName)
@@ -606,5 +611,38 @@ class FilterBitsParameter(
                 param.value = (v and bit) != 0
             }
         }
+
+}
+
+class RenameCostumeTask(val oldCostumeName: String, val newCostumeName: String)
+    : AbstractTask() {
+
+    val informationP = InformationParameter("infoP", information = "To rename a costume requires loading and saving all scene.\nThis may take a few seconds.")
+
+    override val taskD = TaskDescription("renameCostume")
+            .addParameters(informationP)
+
+    override fun run() {
+        MainWindow.instance.save()
+        val fileLister = FileLister(extensions = listOf("scene"))
+        fileLister.listFiles(Resources.instance.sceneDirectory).forEach { file ->
+            val json = JsonScene(file)
+            val sceneResource = json.sceneResource
+            var changed = false
+
+            sceneResource.stageResources.forEach { _, stageResource ->
+                stageResource.actorResources.forEach { actorResource ->
+                    if (actorResource.costumeName == oldCostumeName) {
+                        actorResource.costumeName = newCostumeName
+                        changed = true
+                    }
+                }
+            }
+            if (changed) {
+                json.save(file)
+            }
+
+        }
+    }
 
 }

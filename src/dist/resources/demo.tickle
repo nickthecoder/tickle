@@ -648,7 +648,7 @@
     {
       "name": "plainText",
       "role": "",
-      "canRotate": false,
+      "canRotate": true,
       "zOrder": 0,
       "initialEvent": "default",
       "showInSceneEditor": true,
@@ -658,9 +658,9 @@
           "textStyles": [
             {
               "font": "plain22",
-              "halign": "CENTER",
+              "halign": "LEFT",
               "valign": "BOTTOM",
-              "color": "#00000083",
+              "color": "#000000ff",
               "outlineColor": "#ffffff7f"
             }
           ]
@@ -754,7 +754,7 @@
       ]
     },
     {
-      "name": "rod",
+      "name": "coinRod",
       "role": "",
       "canRotate": true,
       "zOrder": 56,
