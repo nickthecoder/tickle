@@ -8,8 +8,6 @@ Re-implement rounded rectangles using just a single polygon
 	A huristic for the number of lines to create a curve based on the radius.
 	Draw using a rounded rod as a rounded rectangle, not a rect and two circles
 
-Implement JBox2D edge fixtures - i.e. just a LINE???
-
 Allow phyical bodies to be scaled.
 	At first, just do it at creation time.
 	Use this to create smaller skittles.

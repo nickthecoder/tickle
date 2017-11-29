@@ -54,6 +54,24 @@
           "yAlignment": "BOTTOM",
           "direction": 0,
           "scale": 1
+        },
+        {
+          "costume": "coinRod",
+          "x": 205,
+          "y": 280,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1
+        },
+        {
+          "costume": "coinRod",
+          "x": 333,
+          "y": 278,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scale": 1
         }
       ]
     }
