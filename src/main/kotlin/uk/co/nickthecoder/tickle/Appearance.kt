@@ -114,12 +114,13 @@ abstract class AbstractAppearance(val actor: Actor) : Appearance {
     override fun contains(point: Vector2d): Boolean {
         tempVector.set(point)
         tempVector.sub(actor.position)
-        if (actor.scale != 1.0) {
-            tempVector.mul(1 / actor.scale)
-        }
+
         if (actor.direction.radians != 0.0) {
             tempVector.rotate(-actor.direction.radians)
         }
+
+        tempVector.x /= actor.scale.x
+        tempVector.y /= actor.scale.y
 
         val offsetX = offsetX()
         val offsetY = offsetY()
@@ -140,9 +141,9 @@ class PoseAppearance(actor: Actor, var pose: Pose)
         pose.draw(renderer, actor)
     }
 
-    override fun width(): Double = pose.rect.width.toDouble() * actor.scale
+    override fun width(): Double = pose.rect.width.toDouble()
 
-    override fun height(): Double = pose.rect.height.toDouble() * actor.scale
+    override fun height(): Double = pose.rect.height.toDouble()
 
     override fun offsetX() = pose.offsetX
 
@@ -151,13 +152,14 @@ class PoseAppearance(actor: Actor, var pose: Pose)
 
     override fun contains(point: Vector2d): Boolean {
         tempVector.set(point)
+
         tempVector.sub(actor.position)
-        if (actor.scale != 1.0) {
-            tempVector.mul(1 / actor.scale)
-        }
+
         if (actor.direction.radians != 0.0) {
             tempVector.rotate(-actor.direction.radians + pose.direction.radians)
         }
+        tempVector.x /= actor.scale.x
+        tempVector.y /= actor.scale.y
 
         val offsetX = offsetX()
         val offsetY = offsetY()
@@ -181,8 +183,8 @@ class TextAppearance(actor: Actor, var text: String, val textStyle: TextStyle)
         textStyle.draw(renderer, text, actor)
     }
 
-    override fun width(): Double = textStyle.width(text) * actor.scale
-    override fun height(): Double = textStyle.height(text) * actor.scale
+    override fun width(): Double = textStyle.width(text)
+    override fun height(): Double = textStyle.height(text)
 
     override fun offsetX(): Double = textStyle.offsetX(text)
     override fun offsetY(): Double = textStyle.height(text) - textStyle.offsetY(text)

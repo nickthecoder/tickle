@@ -65,7 +65,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
                 translate(actorResource.x, actorResource.y)
                 rotate(actorResource.direction.degrees - (actorResource.editorPose?.direction?.degrees ?: 0.0))
-                scale(actorResource.scale, actorResource.scale)
+                scale(actorResource.scale.x, actorResource.scale.y)
 
                 drawOutlined(selectionColor(actorResource === selection.latest())) { drawBoundingBox(actorResource) }
 

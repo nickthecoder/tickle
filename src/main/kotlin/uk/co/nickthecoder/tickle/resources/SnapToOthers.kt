@@ -50,12 +50,12 @@ class SnapToOthers : SnapTo {
         adjustedPoint.x -= pose.offsetX
         adjustedPoint.y -= pose.offsetY
 
-        if (other.scale != 1.0) {
-            adjustedPoint.mul(other.scale)
-        }
         if (other.direction.radians != pose.direction.radians) {
             adjustedPoint.rotate(other.direction.radians - pose.direction.radians)
         }
+
+        adjustedPoint.x *= other.scale.x
+        adjustedPoint.y *= other.scale.y
 
         val dx = actorResource.x - other.x - adjustedPoint.x
         val dy = actorResource.y - other.y - adjustedPoint.y
@@ -69,12 +69,12 @@ class SnapToOthers : SnapTo {
         adjustedPoint.x -= pose.offsetX
         adjustedPoint.y -= pose.offsetY
 
-        if (actorResource.scale != 1.0) {
-            adjustedPoint.mul(actorResource.scale)
-        }
         if (actorResource.direction.radians != pose.direction.radians) {
             adjustedPoint.rotate(actorResource.direction.radians - pose.direction.radians)
         }
+
+        adjustedPoint.x *= actorResource.scale.x
+        adjustedPoint.y *= actorResource.scale.y
 
         val dx = other.x - actorResource.x - adjustedPoint.x
         val dy = other.y - actorResource.y - adjustedPoint.y

@@ -52,7 +52,7 @@ abstract class Layer {
             save()
             translate(actorResource.x.toDouble(), actorResource.y.toDouble())
             rotate(actorResource.direction.degrees - (pose?.direction?.degrees ?: 0.0))
-            scale(actorResource.scale, actorResource.scale)
+            scale(actorResource.scale.x, actorResource.scale.y)
             if (pose == null) {
                 actorResource.textStyle?.let {
                     drawText(it, actorResource.displayText)

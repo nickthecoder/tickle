@@ -7,7 +7,6 @@ import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.physics.TickleWorld
-import uk.co.nickthecoder.tickle.physics.scale
 import uk.co.nickthecoder.tickle.resources.ActorXAlignment
 import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 import uk.co.nickthecoder.tickle.sound.SoundManager
@@ -60,15 +59,21 @@ class Actor(var costume: Costume, val role: Role? = null) {
      */
     private val oldPosition = Vector2d(Double.MIN_VALUE, Double.MIN_VALUE)
 
-    var scale: Double = 1.0
+    var scale = Vector2d(1.0, 1.0)
+
+    /**
+     * A convenience, setting scale.x and scale.y to the same value.
+     * When getting, if scale.x and scale.y differ, then only scale.x is returned.
+     */
+    var scaleXY: Double
+        get() = scale.x
         set(v) {
-            if (field != v) {
-                dirtyMatrix = true
-                body?.scale((v / field).toFloat())
-                field = v
-                updateBody()
-            }
+            scale.x = v
+            scale.y = v
         }
+
+    private val oldScale = Vector2d(Double.MIN_VALUE, Double.MIN_VALUE)
+
 
     var color: Color = Color.white()
 
@@ -76,7 +81,10 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     private val modelMatrix = Matrix4f()
 
-    private var dirtyMatrix: Boolean = false
+    private var dirtyMatrix: Boolean = true
+        get() {
+            return field || oldScale != scale
+        }
 
     var body: Body? = null
 
@@ -109,8 +117,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
      * Return false iff the actor requires special transformations to render it.
      */
     fun isSimpleImage(): Boolean =
-            direction.radians == appearance.directionRadians && scale == 1.0 && !flipX && !flipY && customTransformation == null
-
+            direction.radians == appearance.directionRadians && scale.x == 1.0 && scale.y == 1.0 && !flipX && !flipY && customTransformation == null
 
     fun getModelMatrix(): Matrix4f {
         if (dirtyMatrix) {
@@ -118,8 +125,8 @@ class Actor(var costume: Costume, val role: Role? = null) {
             if (direction.radians != 0.0) {
                 modelMatrix.rotateZ((direction.radians - appearance.directionRadians).toFloat())
             }
-            if (scale != 1.0) {
-                modelMatrix.scale(scale.toFloat())
+            if (scale.x != 1.0 || scale.y != 1.0) {
+                modelMatrix.scale(scale.x.toFloat(), scale.y.toFloat(), 1f)
             }
             if (flipX) {
                 modelMatrix.reflect(1f, 0f, 0f, 0f)

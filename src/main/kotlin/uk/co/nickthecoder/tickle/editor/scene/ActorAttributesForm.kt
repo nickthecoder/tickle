@@ -5,6 +5,7 @@ import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 import uk.co.nickthecoder.tickle.resources.*
 
 
@@ -30,7 +31,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val directionP = DoubleParameter("direction", value = actorResource.direction.degrees)
 
-    val scaleP = DoubleParameter("scale", value = actorResource.scale)
+    val scaleP = Vector2dParameter("scale", value = actorResource.scale)
 
     val textP = StringParameter("text", value = actorResource.text, rows = 3)
 
@@ -111,7 +112,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
         actorResource.yAlignment = yAlignmentP.value!!
 
         directionP.value?.let { actorResource.direction.degrees = it }
-        scaleP.value?.let { actorResource.scale = it }
+        actorResource.scale.set(scaleP.value)
         actorResource.text = textP.value
         actorResource.zOrder = zOrderP.value!!
 
@@ -129,7 +130,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
         yAlignmentP.value = actorResource.yAlignment
 
         directionP.value = actorResource.direction.degrees
-        scaleP.value = actorResource.scale
+        scaleP.value.set(actorResource.scale)
         textP.value = actorResource.text
         zOrderP.value = actorResource.zOrder
 

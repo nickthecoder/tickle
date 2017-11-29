@@ -1,17 +1,31 @@
 Current Work
 ============
 
+Scale as a vector
+	Need to update the body
+	Need to "undirty" Actor.modelMatrix
+
 Next
 ====
+
+Appearance to have a "defaultDirection", which is Pose.direction and 0 for other appearances.
+
+Need to take flip into account when testing for contains.
+	(Scene editor an Appearance).
+
+
+SceneEditor : Snap only when ctrl? is pressed (or other way round).
+	Snap rotation to 15 degree increments. (Maybe make this an option).
+
+Tooltips for snap buttons.
+	Add menu items.
+
+Scaling in one direction only - Very Useful for lines, such as "laser beams".
+	Alternatively implement nine-patches.
 
 Re-implement rounded rectangles using just a single polygon
 	A huristic for the number of lines to create a curve based on the radius.
 	Draw using a rounded rod as a rounded rectangle, not a rect and two circles
-
-Allow phyical bodies to be scaled.
-	At first, just do it at creation time.
-	Use this to create smaller skittles.
-	Then maybe allow then to be flipped.
 
 PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
 	Ditto for CostumeChoiceParameter

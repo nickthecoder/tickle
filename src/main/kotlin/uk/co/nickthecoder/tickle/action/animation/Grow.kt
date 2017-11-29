@@ -1,16 +1,19 @@
 package uk.co.nickthecoder.tickle.action.animation
 
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
 
 class Grow(
         val actor: Actor,
         seconds: Double,
-        val finalScale: Double,
+        val finalScale: Vector2d,
         ease: Ease = LinearEase.instance)
 
     : AnimationAction(seconds, ease) {
 
-    private var initialScale: Double = 0.0
+    constructor(actor: Actor, seconds: Double, finalScale: Double, ease: Ease = LinearEase.instance) : this(actor, seconds, Vector2d(finalScale, finalScale))
+
+    private var initialScale = Vector2d()
 
     override fun storeInitialValue() {
         initialScale = actor.scale
@@ -18,7 +21,7 @@ class Grow(
 
 
     override fun update(t: Double) {
-        actor.scale = lerp(initialScale, finalScale, t)
+        lerp(initialScale, finalScale, t, actor.scale)
     }
 
 }

@@ -267,7 +267,7 @@
       "top": 22,
       "offsetX": 0,
       "offsetY": 0,
-      "direction": 90,
+      "direction": 0,
       "snapPoints": [
         {
           "x": 60,

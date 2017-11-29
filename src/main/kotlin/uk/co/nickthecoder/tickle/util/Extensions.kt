@@ -13,3 +13,5 @@ fun Vector2d.rotate(radians: Double) {
     val ry = y * cos + x * sin
     set(rx, ry)
 }
+
+fun Vector2d.string() = "( $x , $y )"

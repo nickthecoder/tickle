@@ -84,8 +84,6 @@ fun ActorResource.costume(): Costume? = Resources.instance.costumes.find(costume
 fun ActorResource.isAt(x: Double, y: Double): Boolean {
     var tx = x - this.x
     var ty = y - this.y
-    tx /= scale
-    ty /= scale
     val poseDirection = pose?.direction?.radians ?: 0.0
     if (poseDirection != direction.radians) {
         val sin = Math.sin(poseDirection - direction.radians)
@@ -94,6 +92,8 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
         ty = cos * ty + sin * tx
         tx = ttx
     }
+    tx /= scale.x
+    ty /= scale.y
     editorPose?.let { pose ->
         return pose.isOverlapping(tx, ty) && pose.isPixelIsOpaque(tx, ty)
     }

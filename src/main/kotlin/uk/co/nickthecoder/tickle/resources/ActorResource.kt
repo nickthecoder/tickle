@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.resources
 
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Attributes
 import uk.co.nickthecoder.tickle.Pose
@@ -44,7 +45,7 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     val direction = Angle()
 
-    var scale: Double = 1.0
+    var scale = Vector2d(1.0, 1.0)
 
     val attributes = Attributes()
 

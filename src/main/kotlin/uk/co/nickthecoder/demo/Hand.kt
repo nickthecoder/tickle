@@ -21,7 +21,7 @@ class Hand : ActionRole() {
 
         if (touchingKey.isPressed()) {
             actor.stage?.firstView()?.let { view ->
-                println("\nActors at ${actor.position} = ${view.findActorsAt(actor.position)}\n\n")
+                println("\nActors at ${actor.position} = ${view.findActorsAt(actor.position).filter { it != actor }}\n\n")
             }
         }
 

@@ -74,7 +74,7 @@ class JsonScene {
 
         val jothers = JsonObject()
         jroot.add("snapToOthers", jothers)
-        with (sceneResource.snapToOthers) {
+        with(sceneResource.snapToOthers) {
             jothers.add("enabled", enabled)
 
             jothers.add("xCloseness", closeness.x)
@@ -191,7 +191,8 @@ class JsonScene {
             jactor.add("xAlignment", actorResource.xAlignment.name)
             jactor.add("yAlignment", actorResource.yAlignment.name)
             jactor.add("direction", actorResource.direction.degrees)
-            jactor.add("scale", actorResource.scale)
+            jactor.add("scaleX", actorResource.scale.x)
+            jactor.add("scaleY", actorResource.scale.y)
             if (actorResource.pose == null) {
                 jactor.add("text", actorResource.text)
             }
@@ -230,7 +231,14 @@ class JsonScene {
         actorResource.yAlignment = ActorYAlignment.valueOf(jactor.getString("yAlignment", "BOTTOM"))
 
         actorResource.direction.degrees = jactor.getDouble("direction", 0.0)
-        actorResource.scale = jactor.getDouble("scale", 1.0)
+        actorResource.scale.x = jactor.getDouble("scaleX", 1.0)
+        actorResource.scale.y = jactor.getDouble("scaleY", 1.0)
+
+        // Legacy (when scale was a single Double, rather than a Vector2d)
+        jactor.get("scale")?.let {
+            actorResource.scale.x = it.asDouble()
+            actorResource.scale.y = it.asDouble()
+        }
         actorResource.text = jactor.getString("text", "")
 
         stageResource.actorResources.add(actorResource)
