@@ -45,9 +45,10 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     val costumeHistory = mutableListOf<String>()
 
-    val gridButton = EditorActions.SNAP_TO_GRID_EDIT.createButton(shortcuts) { sceneResource.snapToGrid.edit() }
-    val guidesButton = EditorActions.SNAP_TO_GUIDES_EDIT.createButton(shortcuts) { sceneResource.snapToGuides.edit() }
-    val othersButton = EditorActions.SNAP_TO_OTHERS_EDIT.createButton(shortcuts) { sceneResource.snapToOthers.edit() }
+    val snapToGridButton = EditorActions.SNAP_TO_GRID_EDIT.createButton(shortcuts) { sceneResource.snapToGrid.edit() }
+    val snapToGuidesButton = EditorActions.SNAP_TO_GUIDES_EDIT.createButton(shortcuts) { sceneResource.snapToGuides.edit() }
+    val snapToOthersButton = EditorActions.SNAP_TO_OTHERS_EDIT.createButton(shortcuts) { sceneResource.snapToOthers.edit() }
+    val snapRotationButton = EditorActions.SNAP_ROTATION_EDIT.createButton(shortcuts) { sceneResource.snapRotation.edit() }
 
     fun build(): Node {
 
@@ -79,6 +80,7 @@ class SceneEditor(val sceneResource: SceneResource) {
             add(EditorActions.SNAP_TO_GRID_TOGGLE) { sceneResource.snapToGrid.enabled = !sceneResource.snapToGrid.enabled }
             add(EditorActions.SNAP_TO_GUIDES_TOGGLE) { sceneResource.snapToGuides.enabled = !sceneResource.snapToGuides.enabled }
             add(EditorActions.SNAP_TO_OTHERS_TOGGLE) { sceneResource.snapToOthers.enabled = !sceneResource.snapToOthers.enabled }
+            add(EditorActions.SNAP_ROTATION_TOGGLE) { sceneResource.snapRotation.enabled = !sceneResource.snapRotation.enabled }
         }
 
         EditorActions.STAMPS.forEachIndexed { index, action ->
@@ -412,7 +414,7 @@ class SceneEditor(val sceneResource: SceneResource) {
     inner class AdjustDragHandle(val dragHandle: GlassLayer.DragHandle) : MouseHandler {
 
         override fun onMouseDragged(event: MouseEvent) {
-            dragHandle.moveTo(viewX(event), viewY(event), event.isShiftDown)
+            dragHandle.moveTo(viewX(event), viewY(event), !event.isControlDown)
             selection.latest()?.let { sceneResource.fireChange(it, ModificationType.CHANGE) }
         }
 

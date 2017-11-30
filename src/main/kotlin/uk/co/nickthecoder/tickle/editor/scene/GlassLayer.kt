@@ -351,6 +351,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         override fun set(degrees: Double) {
             actorResource.direction.degrees = degrees
             sceneResource.fireChange(actorResource, ModificationType.CHANGE)
+
         }
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
@@ -359,14 +360,15 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             val dy = y - actorResource.y
 
             val atan = Math.atan2(dy, dx)
-            var angle = if (atan < 0) atan + Math.PI * 2 else atan
+            var degrees = Math.toDegrees(if (atan < 0) atan + Math.PI * 2 else atan)
 
-            angle -= angle.rem(Math.toRadians(if (snap) 15.0 else 1.0))
-
-            val degrees = angle - actorResource.direction.radians
+            if (snap) {
+                degrees = sceneResource.snapRotation.snapRotation(degrees)
+            }
+            val diff = degrees - actorResource.direction.degrees
 
             selection.forEach { actor ->
-                actor.direction.radians += degrees
+                actor.direction.degrees += diff
                 sceneResource.fireChange(actor, ModificationType.CHANGE)
             }
         }

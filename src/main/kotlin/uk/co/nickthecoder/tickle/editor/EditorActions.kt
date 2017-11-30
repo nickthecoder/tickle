@@ -35,8 +35,11 @@ object EditorActions {
     val SNAP_TO_GUIDES_EDIT = EditorAction("snap.guides.edit", KeyCode.G, control = true, shift = true, tooltip = "Snap to Guides")
     val SNAP_TO_GUIDES_TOGGLE = EditorAction("snap.guides.toggle", KeyCode.G, control = true, label = "Snap to Guides")
 
-    val SNAP_TO_OTHERS_EDIT = EditorAction("snap.others.edit", KeyCode.O, control = true, shift = true, tooltip = "Snap to other Actors")
-    val SNAP_TO_OTHERS_TOGGLE = EditorAction("snap.others.toggle", KeyCode.O, control = true, label = "Snap to Others")
+    val SNAP_TO_OTHERS_EDIT = EditorAction("snap.others.edit", KeyCode.O, control = true, shift = true, tooltip = "Snap to Other Actors")
+    val SNAP_TO_OTHERS_TOGGLE = EditorAction("snap.others.toggle", KeyCode.O, control = true, label = "Snap to Others Actors")
+
+    val SNAP_ROTATION_EDIT = EditorAction("snap.rotation.edit", KeyCode.R, control = true, shift = true, tooltip = "Snap Rotation")
+    val SNAP_ROTATION_TOGGLE = EditorAction("snap.rotation.toggle", KeyCode.R, control = true, label = "Snap Rotation")
 
     val RESET_ZORDERS = EditorAction("zOrders.reset", KeyCode.Z, control = true, shift = true, label = "Reset All Z-Orders")
 

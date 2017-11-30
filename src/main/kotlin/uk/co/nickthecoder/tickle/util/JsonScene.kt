@@ -81,6 +81,14 @@ class JsonScene {
             jothers.add("yCloseness", closeness.y)
         }
 
+        val jrotation = JsonObject()
+        jroot.add("snapRotation", jrotation)
+        with(sceneResource.snapRotation) {
+            jrotation.add("enabled", enabled)
+            jrotation.add("step", stepDegrees)
+            jrotation.add("closeness", closeness)
+        }
+
         val jincludes = JsonArray()
         jroot.add("include", jincludes)
         sceneResource.includes.forEach { include ->
@@ -154,6 +162,17 @@ class JsonScene {
             }
 
         }
+
+        jroot.get("snapRotation")?.let {
+            val jrotation = it.asObject()
+            with(sceneResource.snapRotation) {
+                enabled = jrotation.getBoolean("enabled", true)
+                stepDegrees = jrotation.getDouble("step", 15.0)
+                closeness = jrotation.getDouble("closeness", 15.0)
+            }
+
+        }
+
         jroot.get("include")?.let {
             val jincludes = it.asArray()
             jincludes.forEach { jinclude ->

@@ -33,6 +33,11 @@
     "xCloseness": 11,
     "yCloseness": 9
   },
+  "snapRotation": {
+    "enabled": true,
+    "step": 45,
+    "closeness": 5
+  },
   "include": [
     
   ],
