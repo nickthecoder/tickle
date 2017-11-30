@@ -53,7 +53,8 @@
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1
+          "scaleX": 1,
+          "scaleY": 1
         },
         {
           "costume": "coinRod",
@@ -62,7 +63,8 @@
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1
+          "scaleX": 1,
+          "scaleY": 1
         },
         {
           "costume": "coinRod",
@@ -71,7 +73,8 @@
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1
+          "scaleX": 1,
+          "scaleY": 1
         }
       ]
     }

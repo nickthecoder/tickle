@@ -47,7 +47,7 @@ class TextStyle(
         if (actor.isSimpleImage()) {
             modelMatrix = null
         } else {
-            modelMatrix = actor.getModelMatrix()
+            modelMatrix = actor.calculateModelMatrix()
         }
 
         if (outlineColor != null && fontResource.outlineFontTexture != null) {

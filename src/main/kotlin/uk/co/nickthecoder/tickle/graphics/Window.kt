@@ -66,7 +66,6 @@ class Window(
     }
 
     fun showMouse(value: Boolean = true) {
-        println( "Window.showMouse $value")
         glfwSetInputMode(handle, GLFW_CURSOR, if (value) GLFW_CURSOR_NORMAL else GLFW_CURSOR_HIDDEN)
     }
 

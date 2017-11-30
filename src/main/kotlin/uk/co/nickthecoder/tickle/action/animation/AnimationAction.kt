@@ -32,6 +32,7 @@ abstract class AnimationAction(
         val s = Math.min(1.0, (now - startTime) / seconds)
 
         val t = ease.ease(s)
+
         update(t)
         previousT = t
 

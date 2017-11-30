@@ -78,7 +78,7 @@ class Pose(
                     left, bottom, left + rect.width, bottom + rect.height,
                     rectd,
                     color = actor.color,
-                    modelMatrix = actor.getModelMatrix())
+                    modelMatrix = actor.calculateModelMatrix())
         }
     }
 

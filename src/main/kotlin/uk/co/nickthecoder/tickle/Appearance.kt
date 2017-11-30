@@ -97,7 +97,7 @@ abstract class AbstractAppearance(val actor: Actor) : Appearance {
             val b = Vector4f(worldRect.left.toFloat(), worldRect.bottom.toFloat(), 0f, 1f)
             val c = Vector4f(worldRect.right.toFloat(), worldRect.top.toFloat(), 0f, 1f)
             val d = Vector4f(worldRect.right.toFloat(), worldRect.bottom.toFloat(), 0f, 1f)
-            val matrix = actor.getModelMatrix()
+            val matrix = actor.calculateModelMatrix()
             a.mul(matrix)
             b.mul(matrix)
             c.mul(matrix)

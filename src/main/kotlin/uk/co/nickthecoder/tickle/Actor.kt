@@ -7,6 +7,7 @@ import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.physics.TickleWorld
+import uk.co.nickthecoder.tickle.physics.scale
 import uk.co.nickthecoder.tickle.resources.ActorXAlignment
 import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 import uk.co.nickthecoder.tickle.sound.SoundManager
@@ -22,6 +23,12 @@ class Actor(var costume: Costume, val role: Role? = null) {
     var stage: Stage? = null
 
     val position = Vector2d(0.0, 0.0)
+
+    /**
+     * Used when the Actor has a [Body] to detect when the position has changed by game code, and therefore the Body
+     * needs to be updated.
+     */
+    private val oldPosition = Vector2d(0.0, 0.0)
 
     /**
      * Gets or sets the x value of position
@@ -53,12 +60,6 @@ class Actor(var costume: Costume, val role: Role? = null) {
             }
     }
 
-    /**
-     * Used when the Actor has a [Body] to detect when the position has changed by game code, and therefore the Body
-     * needs to be updated.
-     */
-    private val oldPosition = Vector2d(Double.MIN_VALUE, Double.MIN_VALUE)
-
     var scale = Vector2d(1.0, 1.0)
 
     /**
@@ -72,7 +73,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
             scale.y = v
         }
 
-    private val oldScale = Vector2d(Double.MIN_VALUE, Double.MIN_VALUE)
+    private val oldScale = Vector2d(1.0, 1.0)
 
 
     var color: Color = Color.white()
@@ -83,7 +84,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     private var dirtyMatrix: Boolean = true
         get() {
-            return field || oldScale != scale
+            return field || position != oldPosition || oldScale != scale
         }
 
     var body: Body? = null
@@ -116,47 +117,51 @@ class Actor(var costume: Costume, val role: Role? = null) {
     /**
      * Return false iff the actor requires special transformations to render it.
      */
-    fun isSimpleImage(): Boolean =
+    internal fun isSimpleImage(): Boolean =
             direction.radians == appearance.directionRadians && scale.x == 1.0 && scale.y == 1.0 && !flipX && !flipY && customTransformation == null
 
-    fun getModelMatrix(): Matrix4f {
+    internal fun calculateModelMatrix(): Matrix4f {
         if (dirtyMatrix) {
-            modelMatrix.identity().translate(x.toFloat(), y.toFloat(), 0f)
-            if (direction.radians != 0.0) {
-                modelMatrix.rotateZ((direction.radians - appearance.directionRadians).toFloat())
-            }
-            if (scale.x != 1.0 || scale.y != 1.0) {
-                modelMatrix.scale(scale.x.toFloat(), scale.y.toFloat(), 1f)
-            }
-            if (flipX) {
-                modelMatrix.reflect(1f, 0f, 0f, 0f)
-            }
-            if (flipY) {
-                modelMatrix.reflect(0f, 1f, 0f, 0f)
-            }
-            customTransformation?.let {
-                modelMatrix.mul(it)
-            }
-            modelMatrix.translate(-x.toFloat(), -y.toFloat(), 0f)
+            recalculateModelMatrix()
         }
         return modelMatrix
     }
 
-    fun changeAppearance(pose: Pose) {
-        val a = appearance
-        if (a is PoseAppearance) {
-            a.pose = pose
-        } else {
-            appearance = PoseAppearance(this, pose)
+    private fun recalculateModelMatrix() {
+        modelMatrix.identity().translate(x.toFloat(), y.toFloat(), 0f)
+        if (direction.radians != 0.0) {
+            modelMatrix.rotateZ((direction.radians - appearance.directionRadians).toFloat())
         }
-    }
+        if (scale.x != 1.0 || scale.y != 1.0) {
+            modelMatrix.scale(scale.x.toFloat(), scale.y.toFloat(), 1f)
+        }
+        if (flipX) {
+            modelMatrix.reflect(1f, 0f, 0f, 0f)
+        }
+        if (flipY) {
+            modelMatrix.reflect(0f, 1f, 0f, 0f)
+        }
+        customTransformation?.let {
+            modelMatrix.mul(it)
+        }
+        modelMatrix.translate(-x.toFloat(), -y.toFloat(), 0f)
 
-    fun changeAppearance(text: String, textStyle: TextStyle) {
-        appearance = TextAppearance(this, text, textStyle)
-    }
+        body?.let { body ->
+            // We need to
+            if (oldScale != scale) {
+                body.scale((scale.x / oldScale.x).toFloat(), (scale.y / oldScale.y).toFloat())
+                oldScale.set(scale)
+                oldPosition.set(position)
+                // TODO Is this needed?
+                updateBody()
+            }
+            if (oldPosition != position) {
+                updateBody()
+                oldPosition.set(position)
+            }
+        }
 
-    fun hide() {
-        appearance = InvisibleAppearance()
+        dirtyMatrix = false
     }
 
     var flipX: Boolean = false
@@ -176,13 +181,31 @@ class Actor(var costume: Costume, val role: Role? = null) {
             }
         }
 
-    var customTransformation: Matrix4f? = null
+    internal var customTransformation: Matrix4f? = null
         set(v) {
             if (field !== v) {
                 field = v
-                dirtyMatrix
+                dirtyMatrix = true
             }
         }
+
+
+    fun changeAppearance(pose: Pose) {
+        val a = appearance
+        if (a is PoseAppearance) {
+            a.pose = pose
+        } else {
+            appearance = PoseAppearance(this, pose)
+        }
+    }
+
+    fun changeAppearance(text: String, textStyle: TextStyle) {
+        appearance = TextAppearance(this, text, textStyle)
+    }
+
+    fun hide() {
+        appearance = InvisibleAppearance()
+    }
 
     fun event(name: String) {
         val pose = costume.choosePose(name)
@@ -257,9 +280,6 @@ class Actor(var costume: Costume, val role: Role? = null) {
     /**
      * Directly changes the position and the angle of the body. Note, this can cause strange behaviour if the body
      * overlaps another body.
-     *
-     * Note. If your game has multiple worlds (each with its own scale), then use updateBody(TickleWorld) instead,
-     * so that the correct scaling factor can be applied.
      */
     internal fun updateBody() {
         body?.let { body ->
@@ -280,12 +300,16 @@ class Actor(var costume: Costume, val role: Role? = null) {
     }
 
     internal fun ensureBodyIsUpToDate() {
-        if (position.x != oldPosition.x || position.y != oldPosition.y) {
-            updateBody()
+        body?.let {
+            // olsPosition and oldScale are both used for two purposes. To know when the body is out of date, and also to know when the
+            // modelMatrix is out of date. So, recalculate the mode matrix, which will also sync the body.
+            if (dirtyMatrix) {
+                recalculateModelMatrix()
+            }
         }
     }
 
-    private val tempVec = Vec2()
+    private val tempVec: Vec2 by lazy { Vec2() }
 
     override fun toString() = "Actor #$id @ $x,$y Role=${role?.javaClass?.simpleName ?: "<none>"}"
 

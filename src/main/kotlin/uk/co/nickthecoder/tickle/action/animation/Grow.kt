@@ -11,12 +11,13 @@ class Grow(
 
     : AnimationAction(seconds, ease) {
 
-    constructor(actor: Actor, seconds: Double, finalScale: Double, ease: Ease = LinearEase.instance) : this(actor, seconds, Vector2d(finalScale, finalScale))
+    constructor(actor: Actor, seconds: Double, finalScale: Double, ease: Ease = LinearEase.instance)
+            : this(actor, seconds = seconds, finalScale = Vector2d(finalScale, finalScale), ease = ease)
 
     private var initialScale = Vector2d()
 
     override fun storeInitialValue() {
-        initialScale = actor.scale
+        initialScale.set(actor.scale)
     }
 
 

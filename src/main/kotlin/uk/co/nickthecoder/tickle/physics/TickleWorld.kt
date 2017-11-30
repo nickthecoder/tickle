@@ -104,7 +104,7 @@ class TickleWorld(
 
 }
 
-fun Body.scale(scale: Float) {
+fun Body.scale(scaleX: Float, scaleY: Float) {
 
     // We cannot just iterate through the fixtures, because to scale the fixtures, we need to delete the old
     // ones and create new ones. So get all the fixtures first...
@@ -114,23 +114,24 @@ fun Body.scale(scale: Float) {
         fixtures.add(fixture)
         fixture = fixture.next
     }
-    fixtures.forEach { it.scale(this, scale) }
+    fixtures.forEach { it.scale(this, scaleX, scaleY) }
     resetMassData()
     isAwake = true
 }
 
-fun Fixture.scale(body: Body, scale: Float) {
+fun Fixture.scale(body: Body, scaleX: Float, scaleY: Float) {
     val shape = shape
 
     var newShape: Shape? = null
 
     when (shape) {
         is CircleShape -> {
-            shape.m_radius *= scale
-            shape.m_p.mul(scale)
+            shape.m_radius *= scaleX
+            shape.m_p.x *= scaleX
+            shape.m_p.y *= scaleY
         }
         is PolygonShape -> {
-            val points = Array<Vec2>(shape.vertexCount) { Vec2(shape.vertices[it].x * scale, shape.vertices[it].y * scale) }
+            val points = Array<Vec2>(shape.vertexCount) { Vec2(shape.vertices[it].x * scaleX, shape.vertices[it].y * scaleY) }
 
             newShape = PolygonShape()
             newShape.set(points, shape.vertexCount)
