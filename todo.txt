@@ -4,12 +4,6 @@ Current Work
 Next
 ====
 
-Appearance to have a "defaultDirection", which is Pose.direction and 0 for other appearances.
-
-Need to take flip into account when testing for contains.
-	(Scene editor an Appearance).
-
-
 SceneEditor : Snap only when ctrl? is pressed (or other way round).
 	Snap rotation to 15 degree increments. (Maybe make this an option).
 

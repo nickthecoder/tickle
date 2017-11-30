@@ -48,8 +48,8 @@
       "actors": [
         {
           "costume": "coinRod",
-          "x": 479.0930421573735,
-          "y": 373.4548263920671,
+          "x": 78,
+          "y": 377,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
@@ -64,7 +64,8 @@
           "yAlignment": "BOTTOM",
           "direction": 0,
           "scaleX": 1,
-          "scaleY": 1
+          "scaleY": 1,
+          "flipX": true
         },
         {
           "costume": "plainText",
@@ -75,7 +76,21 @@
           "direction": 0,
           "scaleX": 2,
           "scaleY": 1,
+          "flipX": true,
+          "flipY": true,
           "text": "Hello World"
+        },
+        {
+          "costume": "bee",
+          "x": 162,
+          "y": 333,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "flipX": true,
+          "flipY": true
         }
       ]
     }

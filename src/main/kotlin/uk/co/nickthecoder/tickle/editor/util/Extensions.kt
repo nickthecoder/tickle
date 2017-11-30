@@ -94,6 +94,9 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
     }
     tx /= scale.x
     ty /= scale.y
+    if (flipX) tx = -tx
+    if (flipY) ty = -ty
+
     editorPose?.let { pose ->
         return pose.isOverlapping(tx, ty) && pose.isPixelIsOpaque(tx, ty)
     }

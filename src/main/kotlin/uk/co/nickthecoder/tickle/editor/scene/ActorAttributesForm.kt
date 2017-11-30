@@ -33,12 +33,15 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val scaleP = Vector2dParameter("scale", value = actorResource.scale)
 
+    val flipXP = BooleanParameter("flipX", value = actorResource.flipX)
+    val flipYP = BooleanParameter("flipY", value = actorResource.flipY)
+
     val textP = StringParameter("text", value = actorResource.text, rows = 3)
 
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, textP)
+            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, flipXP, flipYP, textP)
             .asVertical()
 
     var dirty = false
@@ -106,15 +109,19 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     }
 
     fun updateActorResource() {
-        xP.value?.let { actorResource.x = it }
-        yP.value?.let { actorResource.y = it }
-        actorResource.xAlignment = xAlignmentP.value!!
-        actorResource.yAlignment = yAlignmentP.value!!
+        with(actorResource) {
+            xP.value?.let { x = it }
+            yP.value?.let { y = it }
+            xAlignment = xAlignmentP.value!!
+            yAlignment = yAlignmentP.value!!
 
-        directionP.value?.let { actorResource.direction.degrees = it }
-        actorResource.scale.set(scaleP.value)
-        actorResource.text = textP.value
-        actorResource.zOrder = zOrderP.value!!
+            directionP.value?.let { direction.degrees = it }
+            scale.set(scaleP.value)
+            flipX = flipXP.value == true
+            flipY = flipYP.value == true
+            text = textP.value
+            zOrder = zOrderP.value!!
+        }
 
         // Note. We are not updating the dynamic "attributes", because they should ONLY be updated via their
         // Parameters, The scene editor should NOT be changing the string value directly.
@@ -124,18 +131,21 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     }
 
     fun updateParameters() {
-        yP.value = actorResource.y
-        xP.value = actorResource.x
-        xAlignmentP.value = actorResource.xAlignment
-        yAlignmentP.value = actorResource.yAlignment
+        with(actorResource) {
+            yP.value = y
+            xP.value = x
+            xAlignmentP.value = xAlignment
+            yAlignmentP.value = yAlignment
 
-        directionP.value = actorResource.direction.degrees
-        scaleP.value.set(actorResource.scale)
-        textP.value = actorResource.text
-        zOrderP.value = actorResource.zOrder
+            directionP.value = direction.degrees
+            scaleP.value.set(scale)
+            flipXP.value = flipX
+            flipYP.value = flipY
+            textP.value = text
+            zOrderP.value = zOrder
 
-        textP.hidden = actorResource.pose != null
-
+            textP.hidden = pose != null
+        }
         // Note. We do not update the dynamic "attributes", because they should ONLY be updated via their
         // Parameters, The scene editor should NOT be changing the string value directly.
         dirty = false

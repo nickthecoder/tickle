@@ -182,19 +182,27 @@ class JsonScene {
 
             val jactor = JsonObject()
             jactors.add(jactor)
-            jactor.add("costume", actorResource.costumeName)
-            jactor.add("x", actorResource.x)
-            jactor.add("y", actorResource.y)
-            if (actorResource.zOrder != costume?.zOrder) { // Only save zOrders which are NOT the default zOrder for the Costume.
-                jactor.add("zOrder", actorResource.zOrder)
-            }
-            jactor.add("xAlignment", actorResource.xAlignment.name)
-            jactor.add("yAlignment", actorResource.yAlignment.name)
-            jactor.add("direction", actorResource.direction.degrees)
-            jactor.add("scaleX", actorResource.scale.x)
-            jactor.add("scaleY", actorResource.scale.y)
-            if (actorResource.pose == null) {
-                jactor.add("text", actorResource.text)
+            with(actorResource) {
+                jactor.add("costume", costumeName)
+                jactor.add("x", x)
+                jactor.add("y", y)
+                if (zOrder != costume?.zOrder) { // Only save zOrders which are NOT the default zOrder for the Costume.
+                    jactor.add("zOrder", zOrder)
+                }
+                jactor.add("xAlignment", xAlignment.name)
+                jactor.add("yAlignment", yAlignment.name)
+                jactor.add("direction", direction.degrees)
+                jactor.add("scaleX", scale.x)
+                jactor.add("scaleY", scale.y)
+                if (flipX) {
+                    jactor.add("flipX", true)
+                }
+                if (flipY) {
+                    jactor.add("flipY", true)
+                }
+                if (pose == null) {
+                    jactor.add("text", text)
+                }
             }
 
             JsonUtil.saveAttributes(jactor, actorResource.attributes)
@@ -223,23 +231,27 @@ class JsonScene {
         actorResource.costumeName = jactor.get("costume").asString()
         val costume = Resources.instance.costumes.find(actorResource.costumeName)
 
-        actorResource.x = jactor.getDouble("x", 0.0)
-        actorResource.y = jactor.getDouble("y", 0.0)
-        actorResource.zOrder = jactor.getDouble("zOrder", costume?.zOrder ?: 0.0)
+        with(actorResource) {
+            x = jactor.getDouble("x", 0.0)
+            y = jactor.getDouble("y", 0.0)
+            zOrder = jactor.getDouble("zOrder", costume?.zOrder ?: 0.0)
 
-        actorResource.xAlignment = ActorXAlignment.valueOf(jactor.getString("xAlignment", "LEFT"))
-        actorResource.yAlignment = ActorYAlignment.valueOf(jactor.getString("yAlignment", "BOTTOM"))
+            xAlignment = ActorXAlignment.valueOf(jactor.getString("xAlignment", "LEFT"))
+            yAlignment = ActorYAlignment.valueOf(jactor.getString("yAlignment", "BOTTOM"))
 
-        actorResource.direction.degrees = jactor.getDouble("direction", 0.0)
-        actorResource.scale.x = jactor.getDouble("scaleX", 1.0)
-        actorResource.scale.y = jactor.getDouble("scaleY", 1.0)
+            direction.degrees = jactor.getDouble("direction", 0.0)
+            scale.x = jactor.getDouble("scaleX", 1.0)
+            scale.y = jactor.getDouble("scaleY", 1.0)
 
-        // Legacy (when scale was a single Double, rather than a Vector2d)
-        jactor.get("scale")?.let {
-            actorResource.scale.x = it.asDouble()
-            actorResource.scale.y = it.asDouble()
+            flipX = jactor.getBoolean("flipX", false)
+            flipY = jactor.getBoolean("flipY", false)
+            // Legacy (when scale was a single Double, rather than a Vector2d)
+            jactor.get("scale")?.let {
+                scale.x = it.asDouble()
+                scale.y = it.asDouble()
+            }
+            actorResource.text = jactor.getString("text", "")
         }
-        actorResource.text = jactor.getString("text", "")
 
         stageResource.actorResources.add(actorResource)
     }
