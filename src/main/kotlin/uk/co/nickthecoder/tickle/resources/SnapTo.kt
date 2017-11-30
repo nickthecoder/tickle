@@ -5,6 +5,8 @@ interface SnapTo {
     fun snapActor(actorResource: ActorResource, adjustments: MutableList<Adjustment>)
 
     fun edit()
+
+    fun snapInfo() = "You can temporarily disable snapping by holding down the ctrl key while dragging."
 }
 
 data class Adjustment(var x: Double = 0.0, var y: Double = 0.0, var score: Double = Double.MAX_VALUE) {

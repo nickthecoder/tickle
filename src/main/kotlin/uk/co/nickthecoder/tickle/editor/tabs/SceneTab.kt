@@ -50,7 +50,6 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
     val sceneFile = sceneStub.file
 
-
     init {
         minorTabs.side = Side.BOTTOM
         minorTabs.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
@@ -76,6 +75,8 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
     override fun extraSidePanes() = sceneEditor.sidePanes
 
     override fun extraButtons() = listOf(sceneEditor.guidesButton, sceneEditor.gridButton, sceneEditor.othersButton, sceneEditor.layers.stageButton)
+
+    override fun extraShortcuts() = sceneEditor.shortcuts
 
     override fun save(): Boolean {
         if (taskForm.check()) {

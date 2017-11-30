@@ -47,6 +47,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     private var extraSidePanels: Collection<TitledPane> = emptyList()
     private var extraButtons: Collection<Node> = emptyList()
+    private var extraShortcuts: ShortcutHelper? = null
 
     private val shortcuts = ShortcutHelper("MainWindow", borderPane)
 
@@ -218,6 +219,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         extraButtons.forEach {
             toolBar.items.remove(it)
         }
+        extraShortcuts?.disable()
 
         if (tab is HasExtras) {
             extraSidePanels = tab.extraSidePanes()
@@ -225,10 +227,14 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
                 it.isAnimated = false
                 accordion.panes.add(it)
             }
+
             extraButtons = tab.extraButtons()
             extraButtons.forEach {
                 toolBar.items.add(it)
             }
+
+            extraShortcuts = tab.extraShortcuts()
+            extraShortcuts?.enable()
         }
 
         accordion.expandedPane = resourcesPane

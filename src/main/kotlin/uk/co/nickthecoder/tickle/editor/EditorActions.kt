@@ -29,13 +29,13 @@ object EditorActions {
     val ZOOM_IN2 = EditorAction("zoom.out", KeyCode.EQUALS, control = true)
     val ZOOM_OUT = EditorAction("zoom.out", KeyCode.MINUS, control = true)
 
-    val SNAP_TO_GRID_EDIT = EditorAction("snap.grid.edit", KeyCode.POUND, control = true, shift = true)
-    val SNAP_TO_GRID_TOGGLE = EditorAction("snap.grid.toggle", KeyCode.POUND, control = true)
+    val SNAP_TO_GRID_EDIT = EditorAction("snap.grid.edit", KeyCode.NUMBER_SIGN, control = true, shift = true, tooltip = "Snap to Grid")
+    val SNAP_TO_GRID_TOGGLE = EditorAction("snap.grid.toggle", KeyCode.NUMBER_SIGN, control = true)
 
-    val SNAP_TO_GUIDES_EDIT = EditorAction("snap.guides.edit", KeyCode.G, control = true, shift = true)
+    val SNAP_TO_GUIDES_EDIT = EditorAction("snap.guides.edit", KeyCode.G, control = true, shift = true, tooltip = "Snap to Guides")
     val SNAP_TO_GUIDES_TOGGLE = EditorAction("snap.guides.toggle", KeyCode.G, control = true)
 
-    val SNAP_TO_OTHERS_EDIT = EditorAction("snap.others.edit", KeyCode.G, control = true, shift = true)
+    val SNAP_TO_OTHERS_EDIT = EditorAction("snap.others.edit", KeyCode.O, control = true, shift = true, tooltip = "Snap to other Actors")
     val SNAP_TO_OTHERS_TOGGLE = EditorAction("snap.others.toggle", KeyCode.O, control = true)
 
     val STAMPS = listOf(KeyCode.DIGIT1, KeyCode.DIGIT2, KeyCode.DIGIT3, KeyCode.DIGIT4, KeyCode.DIGIT5, KeyCode.DIGIT6, KeyCode.DIGIT7, KeyCode.DIGIT8, KeyCode.DIGIT9)

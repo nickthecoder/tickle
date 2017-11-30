@@ -26,7 +26,7 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     val layers = Layers(sceneResource, selection)
 
-    val shortcuts = ShortcutHelper("SceneEditor", scrollPane)
+    val shortcuts = ShortcutHelper("SceneEditor", MainWindow.instance.borderPane)
 
     val costumeBox = CostumePickerBox { selectCostumeName(it) }
     val layersBox = LayersBox(layers)
@@ -42,9 +42,9 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     val costumeHistory = mutableListOf<String>()
 
-    val gridButton = EditorActions.SNAP_TO_GRID_EDIT.createButton { sceneResource.snapToGrid.edit() }
-    val guidesButton = EditorActions.SNAP_TO_GUIDES_EDIT.createButton { sceneResource.snapToGuides.edit() }
-    val othersButton = EditorActions.SNAP_TO_OTHERS_EDIT.createButton { sceneResource.snapToOthers.edit() }
+    val gridButton = EditorActions.SNAP_TO_GRID_EDIT.createButton(shortcuts) { sceneResource.snapToGrid.edit() }
+    val guidesButton = EditorActions.SNAP_TO_GUIDES_EDIT.createButton(shortcuts) { sceneResource.snapToGuides.edit() }
+    val othersButton = EditorActions.SNAP_TO_OTHERS_EDIT.createButton(shortcuts) { sceneResource.snapToOthers.edit() }
 
     fun build(): Node {
 
@@ -73,9 +73,9 @@ class SceneEditor(val sceneResource: SceneResource) {
             add(EditorActions.ZOOM_IN1) { layers.scale *= 1.2 }
             add(EditorActions.ZOOM_IN2) { layers.scale *= 1.2 }
             add(EditorActions.ZOOM_OUT) { layers.scale /= 1.2 }
-            add(EditorActions.SNAP_TO_GRID_TOGGLE) { sceneResource.snapToGrid.enabled != sceneResource.snapToGrid.enabled }
-            add(EditorActions.SNAP_TO_GUIDES_TOGGLE) { sceneResource.snapToGuides.enabled != sceneResource.snapToGuides.enabled }
-            add(EditorActions.SNAP_TO_OTHERS_TOGGLE) { sceneResource.snapToOthers.enabled != sceneResource.snapToOthers.enabled }
+            add(EditorActions.SNAP_TO_GRID_TOGGLE) { sceneResource.snapToGrid.enabled = !sceneResource.snapToGrid.enabled }
+            add(EditorActions.SNAP_TO_GUIDES_TOGGLE) { sceneResource.snapToGuides.enabled = !sceneResource.snapToGuides.enabled }
+            add(EditorActions.SNAP_TO_OTHERS_TOGGLE) { sceneResource.snapToOthers.enabled = !sceneResource.snapToOthers.enabled }
         }
 
         EditorActions.STAMPS.forEachIndexed { index, action ->
@@ -249,19 +249,21 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     private val adjustments = mutableListOf<Adjustment>()
 
-    fun snapActor(actorResource: ActorResource, isNew: Boolean) {
+    fun snapActor(actorResource: ActorResource, isNew: Boolean, useSnaps: Boolean) {
 
         if (actorResource.layer?.stageConstraint?.snapActor(actorResource, isNew) != true) {
 
-            adjustments.clear()
+            if (useSnaps) {
+                adjustments.clear()
 
-            sceneResource.snapToGrid.snapActor(actorResource, adjustments)
-            sceneResource.snapToGuides.snapActor(actorResource, adjustments)
-            sceneResource.snapToOthers.snapActor(actorResource, adjustments)
-            if (adjustments.isNotEmpty()) {
-                adjustments.sortBy { it.score }
-                actorResource.x += adjustments.first().x
-                actorResource.y += adjustments.first().y
+                sceneResource.snapToGrid.snapActor(actorResource, adjustments)
+                sceneResource.snapToGuides.snapActor(actorResource, adjustments)
+                sceneResource.snapToOthers.snapActor(actorResource, adjustments)
+                if (adjustments.isNotEmpty()) {
+                    adjustments.sortBy { it.score }
+                    actorResource.x += adjustments.first().x
+                    actorResource.y += adjustments.first().y
+                }
             }
         }
     }
@@ -376,7 +378,7 @@ class SceneEditor(val sceneResource: SceneResource) {
                 selection.selected().forEach { actorResource ->
                     actorResource.draggedX += dragDeltaX
                     actorResource.draggedY -= dragDeltaY
-                    snapActor(actorResource, false)
+                    snapActor(actorResource, false, !event.isControlDown)
                     sceneResource.fireChange(actorResource, ModificationType.CHANGE)
                 }
             }
@@ -420,7 +422,7 @@ class SceneEditor(val sceneResource: SceneResource) {
 
             newActor.draggedX = viewX(event)
             newActor.draggedY = viewY(event)
-            snapActor(newActor, true)
+            snapActor(newActor, true, !event.isControlDown)
             layers.glass.dirty = true
         }
 

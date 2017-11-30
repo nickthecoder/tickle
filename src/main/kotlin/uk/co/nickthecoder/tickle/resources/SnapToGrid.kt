@@ -6,7 +6,9 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.BooleanParameter
+import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.asHorizontal
+import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 
 class SnapToGrid : SnapTo {
@@ -66,6 +68,9 @@ class SnapToGrid : SnapTo {
 
         val enabledP = BooleanParameter("enabled", value = enabled)
 
+        val toggleInfoP = InformationParameter("toggleInfo",
+                information = "Note. You can toggle grid snapping using the keyboard shortcut : ${EditorActions.SNAP_TO_GRID_TOGGLE.shortcutLabel() ?: "<NONE>"}\n${snapInfo()}")
+
         val spacingP = Vector2dParameter("spacing", value = spacing)
                 .asHorizontal()
 
@@ -76,7 +81,7 @@ class SnapToGrid : SnapTo {
                 .asHorizontal()
 
         override val taskD = TaskDescription("editGrid")
-                .addParameters(enabledP, spacingP, closenessP, offsetP)
+                .addParameters(enabledP, toggleInfoP, spacingP, closenessP, offsetP)
 
         override fun run() {
             spacing.set(spacingP.value)

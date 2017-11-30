@@ -10,7 +10,7 @@
   "showMouse": false,
   "layout": "default",
   "snapToGrid": {
-    "enabled": false,
+    "enabled": true,
     "xSpacing": 50,
     "ySpacing": 50,
     "xOffset": 0,
@@ -81,8 +81,8 @@
         },
         {
           "costume": "grenade",
-          "x": 265,
-          "y": 339,
+          "x": 387,
+          "y": 345,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,

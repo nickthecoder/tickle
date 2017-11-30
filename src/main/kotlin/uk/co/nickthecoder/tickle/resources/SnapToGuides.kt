@@ -6,7 +6,9 @@ import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
+import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.MultipleParameter
+import uk.co.nickthecoder.tickle.editor.EditorActions
 
 class SnapToGuides : SnapTo {
 
@@ -58,6 +60,9 @@ class SnapToGuides : SnapTo {
 
         val enabledP = BooleanParameter("enabled", value = enabled)
 
+        val toggleInfoP = InformationParameter("toggleInfo",
+                information = "Note. You can toggle guide snapping using the keyboard shortcut : ${EditorActions.SNAP_TO_GUIDES_TOGGLE.shortcutLabel() ?: "<NONE>"}\n${snapInfo()}")
+
         val xGuidesP = MultipleParameter("xGuides", value = xGuides, isBoxed = true) {
             DoubleParameter("x")
         }
@@ -69,7 +74,7 @@ class SnapToGuides : SnapTo {
         val closenessP = DoubleParameter("closeness", value = closeness)
 
         override val taskD = TaskDescription("editGuides")
-                .addParameters(enabledP, xGuidesP, yGuidesP, closenessP)
+                .addParameters(enabledP, toggleInfoP, xGuidesP, yGuidesP, closenessP)
 
         init {
             xGuidesP.value = xGuides
