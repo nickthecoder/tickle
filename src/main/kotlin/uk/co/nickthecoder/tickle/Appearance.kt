@@ -115,8 +115,8 @@ abstract class AbstractAppearance(val actor: Actor) : Appearance {
         tempVector.set(point)
         tempVector.sub(actor.position)
 
-        if (actor.direction.radians != 0.0) {
-            tempVector.rotate(-actor.direction.radians)
+        if (actor.direction.radians != directionRadians) {
+            tempVector.rotate(-actor.direction.radians + directionRadians)
         }
 
         tempVector.x /= actor.scale.x
@@ -148,24 +148,6 @@ class PoseAppearance(actor: Actor, var pose: Pose)
     override fun offsetX() = pose.offsetX
 
     override fun offsetY() = pose.offsetY
-
-
-    override fun contains(point: Vector2d): Boolean {
-        tempVector.set(point)
-
-        tempVector.sub(actor.position)
-
-        if (actor.direction.radians != 0.0) {
-            tempVector.rotate(-actor.direction.radians + pose.direction.radians)
-        }
-        tempVector.x /= actor.scale.x
-        tempVector.y /= actor.scale.y
-
-        val offsetX = offsetX()
-        val offsetY = offsetY()
-
-        return tempVector.x >= -offsetX && tempVector.x < width() - offsetX && tempVector.y > -offsetY && tempVector.y < height() - offsetY
-    }
 
     // TODO Implement correctly
     override fun touching(point: Vector2d): Boolean = contains(point)

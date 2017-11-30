@@ -6,7 +6,7 @@
     "height": 600,
     "resizable": true,
     "initialScene": "level01",
-    "testScene": "simpleBounce",
+    "testScene": "test",
     "producer": "uk.co.nickthecoder.demo.Demo",
     "physics": {
       "gravity_x": 0,
