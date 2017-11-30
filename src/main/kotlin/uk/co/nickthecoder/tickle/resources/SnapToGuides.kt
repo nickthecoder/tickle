@@ -23,7 +23,6 @@ class SnapToGuides : SnapTo {
     override fun snapActor(actorResource: ActorResource, adjustments: MutableList<Adjustment>) {
         if (enabled == false) return
 
-        var snapped = false
         adjustment.reset()
 
         xGuides.forEach { xGuide ->

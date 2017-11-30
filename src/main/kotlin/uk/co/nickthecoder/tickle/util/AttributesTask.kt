@@ -4,7 +4,7 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.tickle.Attributes
 
-class AttributesTask(classString: String, val attributes: Attributes) : AbstractTask() {
+class AttributesTask(val attributes: Attributes) : AbstractTask() {
 
     override val taskD = TaskDescription("attributes")
 

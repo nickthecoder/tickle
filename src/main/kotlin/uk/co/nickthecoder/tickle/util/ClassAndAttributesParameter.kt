@@ -30,7 +30,7 @@ class ClassAndAttributesParameter(name: String, klass: Class<*>)
     }
 
     fun editAttributes() {
-        val task = AttributesTask(classP.value!!.name, attributes!!)
+        val task = AttributesTask(attributes!!)
         val prompter = TaskPrompter(task)
         prompter.placeOnStage(Stage())
     }

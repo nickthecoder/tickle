@@ -8,8 +8,6 @@ fun Vector2d.distanceSquared(other: Vector2d): Double {
     return dx * dx + dy * dy
 }
 
-fun Vector2d.distance(other: Vector2d) = Math.sqrt(distanceSquared(other))
-
 fun circularCollision(
         positionA: Vector2d, velocityA: Vector2d, massA: Double = 1.0,
         positionB: Vector2d, velocityB: Vector2d, massB: Double = 1.0) {

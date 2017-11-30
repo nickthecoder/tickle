@@ -23,8 +23,6 @@ class SnapToGrid : SnapTo {
 
     override fun snapActor(actorResource: ActorResource, adjustments: MutableList<Adjustment>) {
 
-        var snapped = false
-
         if (enabled == false) return
 
         adjustment.reset()

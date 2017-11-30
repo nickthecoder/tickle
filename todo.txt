@@ -1,9 +1,7 @@
 Current Work
 ============
 
-Scale as a vector
-	Need to update the body
-	Need to "undirty" Actor.modelMatrix
+Look at warning messages.
 
 Next
 ====
