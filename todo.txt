@@ -65,6 +65,9 @@ PixelOverlapping
 	Don't clear the whole overlapTexture
 	Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
 
+StageView.findActorsAt and findRolesAt to use Neighbourhood.
+	Maybe have an interface, and a Slow implementation which iterates over all actors as the default.
+	Any Stage/StageView can then replace the Slow implementation with the Neighbourhood.
 
 New Features
 ------------

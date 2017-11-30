@@ -72,8 +72,7 @@ class PixelOverlapping(val size: Int = 128)
             val width = (right - left).toInt()
             val height = (top - bottom).toInt()
 
-            // Render to the overlapTexture, rather than the regular frame buffer.
-            // Render to our FBO
+            // Render to the overlapTexture, rather than the screen's frame buffer.
             glViewport(0, 0, width, height)
             projection.identity()
             projection.ortho2D(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat())

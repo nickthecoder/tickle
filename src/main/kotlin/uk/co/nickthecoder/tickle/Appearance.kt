@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import org.joml.Vector2d
 import org.joml.Vector4f
+import uk.co.nickthecoder.tickle.collision.PixelTouching
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Rectd
@@ -45,11 +46,32 @@ interface Appearance {
     fun worldRect(): Rectd
 
     /**
-     * Is the point within the actor's rectangular region? Note, this uses a rectangle not aligned
-     * with the x/y axis, and is therefore still useful when the actor is rotated.
+     * Is [point] contained withing the non-axis aligned bounding rectangle.
+     * As this is a non-axis aligned bounding rectangle, it still works well with rotated objects.
+     *
+     * [point] is in Tickle's coordinate system. i.e. (0,0) will be the bottom left of the screen when the view hasn't
+     * been panned.
      */
     fun contains(point: Vector2d): Boolean
 
+    /**
+     * Is the Actor's pixel at [point] opaque.
+     * Note, this uses [PixelTouching.instance], which has a default threshold of 0. If you wish to change this
+     * threshold :
+     *     PixelTouching.instance = PixelTouching( myThreshold )
+     *
+     * [point] is in Tickle's coordinate system. i.e. (0,0) will be the bottom left of the screen when the view hasn't
+     * been panned.
+     */
+    fun pixelTouching(point: Vector2d): Boolean
+
+    /**
+     * Is [point] touching the actor. For TextAppearances, this is the same as [contains]. For PoseAppearance, it
+     * the same as [pixelTouching].
+     *
+     * [point] is in Tickle's coordinate system. i.e. (0,0) will be the bottom left of the screen when the view hasn't
+     * been panned.
+     */
     fun touching(point: Vector2d): Boolean
 }
 
@@ -74,6 +96,8 @@ class InvisibleAppearance : Appearance {
     override fun worldRect() = INVISIBLE_RECT
 
     override fun contains(point: Vector2d): Boolean = false
+
+    override fun pixelTouching(point: Vector2d): Boolean = false
 
     override fun touching(point: Vector2d): Boolean = false
 
@@ -131,6 +155,11 @@ abstract class AbstractAppearance(val actor: Actor) : Appearance {
         return tempVector.x >= -offsetX && tempVector.x < width() - offsetX && tempVector.y > -offsetY && tempVector.y < height() - offsetY
     }
 
+    // TODO Most of the time, this will return false, so if contains is faster than PixelTouching.touching, then
+    // this is the fastest solution. However, I haven't tested if this assumption is true, and maybe
+    // omitting the contains will be faster.
+    override fun pixelTouching(point: Vector2d): Boolean = contains(point) && PixelTouching.instance.touching(actor, point)
+
 }
 
 class PoseAppearance(actor: Actor, var pose: Pose)
@@ -152,8 +181,7 @@ class PoseAppearance(actor: Actor, var pose: Pose)
 
     override fun offsetY() = pose.offsetY
 
-    // TODO Implement correctly
-    override fun touching(point: Vector2d): Boolean = contains(point)
+    override fun touching(point: Vector2d): Boolean = pixelTouching(point)
 
     override fun toString() = "PoseAppearance pose=$pose"
 }

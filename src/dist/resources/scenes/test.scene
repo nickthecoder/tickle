@@ -48,24 +48,13 @@
       "actors": [
         {
           "costume": "coinRod",
-          "x": 78,
-          "y": 377,
+          "x": 120,
+          "y": 384,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
-          "direction": 0,
+          "direction": 335.00000000000006,
           "scaleX": 1,
           "scaleY": 2
-        },
-        {
-          "costume": "hand",
-          "x": 569,
-          "y": 284,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
-          "direction": 0,
-          "scaleX": 1,
-          "scaleY": 1,
-          "flipX": true
         },
         {
           "costume": "plainText",
@@ -73,7 +62,7 @@
           "y": 377,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
-          "direction": 0,
+          "direction": 335.00000000000006,
           "scaleX": 2,
           "scaleY": 1,
           "flipX": true,
@@ -86,11 +75,47 @@
           "y": 333,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
+          "direction": 3,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "grenade",
+          "x": 265,
+          "y": 339,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scaleX": 2,
+          "scaleY": 2,
+          "attributes": [
+            {
+              "name": "exit",
+              "value": "0.0x50.0"
+            },
+            {
+              "name": "hue",
+              "value": "1"
+            },
+            {
+              "name": "maxVelocity",
+              "value": "20.0:12.0"
+            },
+            {
+              "name": "minVelocity",
+              "value": "-20.0:2.0"
+            }
+          ]
+        },
+        {
+          "costume": "hand",
+          "x": 234,
+          "y": 433,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
           "direction": 0,
           "scaleX": 1,
-          "scaleY": 1,
-          "flipX": true,
-          "flipY": true
+          "scaleY": 1
         }
       ]
     }

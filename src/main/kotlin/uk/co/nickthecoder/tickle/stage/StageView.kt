@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.stage
 
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Appearance
 import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.resources.ActorResource
 
@@ -30,6 +31,8 @@ interface StageView : View {
     /**
      * Returns the top-most Actor at the given [position], or null, if there are no Actors
      * touching the position.
+     *
+     * Uses [Appearance.touching]. See [Appearance.pixelTouching] for details on how to change the threshold.
      */
     fun findActorAt(position: Vector2d): Actor? {
         return orderedActors(true).firstOrNull { it.touching(position) }

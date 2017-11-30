@@ -6,6 +6,7 @@ import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.action.movement.polar.*
+import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Polar2d
@@ -29,6 +30,7 @@ class Bee : Controllable() {
                 .and(MovePolar(actor.position, velocity))
 
         movement = turn.and(forwards)
+        actor.color = Color(1f, 1f, 1f, 0.5f)
         super.activated()
     }
 
