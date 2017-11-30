@@ -4,8 +4,6 @@ Current Work
 Next
 ====
 
-Snap rotation to 15 degree increments. (Maybe make this an option).
-
 Tooltips for snap buttons.
 	Add menu items.
 

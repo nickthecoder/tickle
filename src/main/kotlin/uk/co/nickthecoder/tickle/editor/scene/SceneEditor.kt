@@ -147,8 +147,9 @@ class SceneEditor(val sceneResource: SceneResource) {
         val snapToGrid = EditorActions.SNAP_TO_GRID_TOGGLE.createCheckMenuItem(property = sceneResource.snapToGrid::enabled) {}
         val snapToGuides = EditorActions.SNAP_TO_GUIDES_TOGGLE.createCheckMenuItem(property = sceneResource.snapToGuides::enabled) {}
         val snapToOthers = EditorActions.SNAP_TO_OTHERS_TOGGLE.createCheckMenuItem(property = sceneResource.snapToOthers::enabled) {}
+        val snapRotation = EditorActions.SNAP_ROTATION_TOGGLE.createCheckMenuItem(property = sceneResource.snapRotation::enabled) {}
 
-        menu.items.addAll(resetAllZOrders, SeparatorMenuItem(), snapToGrid, snapToGuides, snapToOthers)
+        menu.items.addAll(resetAllZOrders, SeparatorMenuItem(), snapToGrid, snapToGuides, snapToOthers, snapRotation)
 
         return menu
     }
