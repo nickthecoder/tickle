@@ -11,7 +11,10 @@ import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.editor.util.costume
-import uk.co.nickthecoder.tickle.resources.*
+import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.resources.Adjustment
+import uk.co.nickthecoder.tickle.resources.ModificationType
+import uk.co.nickthecoder.tickle.resources.SceneResource
 
 
 class SceneEditor(val sceneResource: SceneResource) {
@@ -105,11 +108,6 @@ class SceneEditor(val sceneResource: SceneResource) {
     fun buildContextMenu(): ContextMenu {
         val menu = ContextMenu()
 
-        val resetAllZOrders = MenuItem("Reset Z-Orders")
-        resetAllZOrders.onAction = EventHandler { resetZOrders() }
-
-        menu.items.addAll(resetAllZOrders)
-
         if (selection.isNotEmpty()) {
 
             val deleteText = "Delete " + if (selection.size > 1) {
@@ -124,25 +122,40 @@ class SceneEditor(val sceneResource: SceneResource) {
             val attributes = MenuItem("Attributes")
             attributes.onAction = EventHandler { MainWindow.instance.accordion.expandedPane = attributesPane }
 
-            menu.items.addAll(SeparatorMenuItem(), delete, attributes)
+            menu.items.addAll(delete, attributes)
 
             if (sceneResource.stageResources.size > 1) {
                 val moveToStageMenu = Menu("Move to Stage")
-                sceneResource.stageResources.forEach { stageName, stage ->
-                    val stageItem = MenuItem(stageName)
-                    stageItem.onAction = EventHandler { moveSelectTo(stage) }
+                layers.stageLayers().forEach { stageLayer ->
+                    val stageItem = CheckMenuItem(stageLayer.stageName)
+                    stageItem.onAction = EventHandler { moveSelectTo(stageLayer) }
                     moveToStageMenu.items.add(stageItem)
+
+                    // Add a tick if ALL of the selected ActorResources are on this layer.
+                    if (selection.filter { it.layer !== stageLayer }.isEmpty()) {
+                        stageItem.isSelected = true
+                    }
                 }
                 menu.items.add(moveToStageMenu)
             }
+            menu.items.addAll(SeparatorMenuItem())
         }
+
+        val resetAllZOrders = EditorActions.RESET_ZORDERS.createMenuItem { resetZOrders() }
+        val snapToGrid = EditorActions.SNAP_TO_GRID_TOGGLE.createCheckMenuItem(property = sceneResource.snapToGrid::enabled) {}
+        val snapToGuides = EditorActions.SNAP_TO_GUIDES_TOGGLE.createCheckMenuItem(property = sceneResource.snapToGuides::enabled) {}
+        val snapToOthers = EditorActions.SNAP_TO_OTHERS_TOGGLE.createCheckMenuItem(property = sceneResource.snapToOthers::enabled) {}
+
+        menu.items.addAll(resetAllZOrders, SeparatorMenuItem(), snapToGrid, snapToGuides, snapToOthers)
+
         return menu
     }
 
-    fun moveSelectTo(stageResource: StageResource) {
+    fun moveSelectTo(layer: StageLayer) {
         selection.forEach { actorResource ->
             delete(actorResource)
-            stageResource.actorResources.add(actorResource)
+            layer.stageResource.actorResources.add(actorResource)
+            actorResource.layer = layer
             sceneResource.fireChange(actorResource, ModificationType.NEW)
         }
     }

@@ -1,6 +1,5 @@
 package uk.co.nickthecoder.tickle
 
-import com.eclipsesource.json.UglyPrint
 import com.eclipsesource.json.WriterConfig
 
 class EditorPreferences {
@@ -19,7 +18,7 @@ class EditorPreferences {
 
     enum class JsonFormat(val writerConfig: WriterConfig) {
         COMPACT(WriterConfig.MINIMAL),
-        UGLY(UglyPrint("  ")),
+        //UGLY(UglyPrint("  ")),
         PRETTY(WriterConfig.PRETTY_PRINT)
     }
 }
