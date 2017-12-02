@@ -77,11 +77,11 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : AbstractAppe
         val scaleXs = listOf(1f, ((width() - ninePatch.left - ninePatch.right) / pieces[1][0].rect.width).toFloat(), 1f)
         val scaleYs = listOf(1f, ((height() - ninePatch.top - ninePatch.bottom) / pieces[1][0].rect.height).toFloat(), 1f)
 
-        val widths = listOf(ninePatch.left, width().toInt() + 1 - ninePatch.left - ninePatch.right, ninePatch.right)
-        val heights = listOf(ninePatch.bottom, height().toInt() + 1 - ninePatch.top - ninePatch.bottom, ninePatch.top)
+        val widths = listOf(ninePatch.left.toDouble(), width() - ninePatch.left - ninePatch.right, ninePatch.right.toDouble())
+        val heights = listOf(ninePatch.bottom.toDouble(), height() - ninePatch.top - ninePatch.bottom, ninePatch.top.toDouble())
 
-        val lefts = listOf(0f, ninePatch.left.toFloat(), (width() - ninePatch.right).toFloat())
-        val bottoms = listOf(0f, ninePatch.bottom.toFloat(), (height() - ninePatch.top).toFloat())
+        val lefts = listOf(0.0, ninePatch.left.toDouble(), (width() - ninePatch.right).toDouble())
+        val bottoms = listOf(0.0, ninePatch.bottom.toDouble(), (height() - ninePatch.top).toDouble())
 
         //println("Drawing nine patch $width , $height widths=$widths heights = $heights")
 
@@ -98,14 +98,14 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : AbstractAppe
 
                     } else {
                         modelMatrix.identity()
-                        val dx = actor.x.toFloat() + lefts[x]
-                        val dy = actor.y.toFloat() + bottoms[y]
-                        modelMatrix.identity().translate(dx, dy, 0f)
+                        val dx = actor.x + lefts[x]
+                        val dy = actor.y + bottoms[y]
+                        modelMatrix.identity().translate(dx.toFloat(), dy.toFloat(), 0f)
                         if (actor.direction.radians != directionRadians) {
                             modelMatrix.rotateZ((actor.direction.radians - directionRadians).toFloat())
                         }
                         modelMatrix.scale(scaleXs[x], scaleYs[y], 1f)
-                        modelMatrix.translate(-dx, -dy, 0f)
+                        modelMatrix.translate(-dx.toFloat(), -dy.toFloat(), 0f)
 
                         val x0 = actor.x - offsetX() + lefts[x]
                         val y0 = actor.y - offsetY() + bottoms[y]
