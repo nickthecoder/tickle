@@ -55,22 +55,20 @@
           "costume": "plainText",
           "x": 138,
           "y": 377,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
+          "textAlignmentX": "LEFT",
+          "textAlignmentY": "BOTTOM",
+          "text": "Hello World",
           "direction": 335.00000000000006,
           "scaleX": 2,
           "scaleY": 1,
           "flipX": true,
-          "flipY": true,
-          "text": "Hello World"
+          "flipY": true
         },
         {
           "costume": "bee",
           "x": 220,
           "y": 274,
           "zOrder": 100,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 3,
           "scaleX": 1,
           "scaleY": 1
@@ -79,44 +77,39 @@
           "costume": "hand",
           "x": 234,
           "y": 433,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1
         },
         {
           "costume": "coinRod",
-          "x": 350,
-          "y": 350,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
+          "x": 400,
+          "y": 400,
           "direction": 0,
           "sizeX": 60,
           "sizeY": 18,
-          "text": ""
+          "alignmentX": 0.5,
+          "alignmentY": 0.5
         },
         {
           "costume": "redOutline",
           "x": 220,
           "y": 274,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
           "sizeX": 172,
           "sizeY": 72,
-          "text": ""
+          "alignmentX": 0.5,
+          "alignmentY": 0.5
         },
         {
           "costume": "redOutline",
-          "x": 421,
-          "y": 228,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
-          "direction": 16.144338780283483,
-          "sizeX": 72,
-          "sizeY": 72,
-          "text": ""
+          "x": 400,
+          "y": 400,
+          "direction": 0,
+          "sizeX": 172,
+          "sizeY": 172,
+          "alignmentX": 0,
+          "alignmentY": 0
         }
       ]
     }

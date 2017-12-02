@@ -98,6 +98,15 @@ class Actor(var costume: Costume, val role: Role? = null) {
             return null
         }
 
+    val ninePatchAppearance: NinePatchAppearance?
+        get() {
+            val app = appearance
+            if (app is NinePatchAppearance) {
+                return app
+            }
+            return null
+        }
+
     val poseAppearance: PoseAppearance?
         get() {
             val app = appearance

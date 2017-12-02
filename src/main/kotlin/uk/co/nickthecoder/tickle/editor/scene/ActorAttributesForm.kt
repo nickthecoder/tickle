@@ -25,7 +25,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     val yAlignmentP = ChoiceParameter<ActorYAlignment>("yAlignment", value = actorResource.yAlignment)
             .enumChoices(true)
 
-    val alignmentGroupP = SimpleGroupParameter("alignment")
+    val alignmentGroupP = SimpleGroupParameter("textAlignment", label = "Alignment")
             .addParameters(xAlignmentP, yAlignmentP)
             .asHorizontal(LabelPosition.NONE)
 
@@ -34,6 +34,12 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     val scaleP = Vector2dParameter("scale", value = actorResource.scale)
 
     val sizeP = Vector2dParameter("size", value = actorResource.size)
+
+    val ninePatchAlignmentP = Vector2dParameter("ninePatchAlignment", label = "Alignment", value = actorResource.alignment)
+
+    val ninePatchGroupP = SimpleGroupParameter("ninePatch")
+            .addParameters(sizeP, ninePatchAlignmentP)
+            .asPlain()
 
     val flipXP = BooleanParameter("flipX", value = actorResource.flipX)
     val flipYP = BooleanParameter("flipY", value = actorResource.flipY)
@@ -44,7 +50,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val groupP = SimpleGroupParameter("actorGroup")
             .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP,
-                    if (actorResource.isNinePatch()) sizeP else scaleP,
+                    if (actorResource.isNinePatch()) ninePatchGroupP else scaleP,
                     flipXP, flipYP, textP)
             .asVertical()
 
@@ -121,6 +127,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             directionP.value?.let { direction.degrees = it }
             if (actorResource.isNinePatch()) {
                 size.set(sizeP.value)
+                alignment.set(ninePatchAlignmentP.value)
             } else {
                 scale.set(scaleP.value)
             }
@@ -147,6 +154,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             directionP.value = direction.degrees
             if (isNinePatch()) {
                 sizeP.value.set(size)
+                ninePatchAlignmentP.value.set(alignment)
             } else {
                 scaleP.value.set(scale)
             }

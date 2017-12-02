@@ -208,13 +208,20 @@ class JsonScene {
                 if (zOrder != costume?.zOrder) { // Only save zOrders which are NOT the default zOrder for the Costume.
                     jactor.add("zOrder", zOrder)
                 }
-                jactor.add("xAlignment", xAlignment.name)
-                jactor.add("yAlignment", yAlignment.name)
+
+                if (isText()) {
+                    jactor.add("textAlignmentX", xAlignment.name)
+                    jactor.add("textAlignmentY", yAlignment.name)
+                    jactor.add("text", text)
+                }
+
                 jactor.add("direction", direction.degrees)
 
                 if (isNinePatch()) {
                     jactor.add("sizeX", size.x)
                     jactor.add("sizeY", size.y)
+                    jactor.add("alignmentX", alignment.x)
+                    jactor.add("alignmentY", alignment.y)
                 } else {
                     jactor.add("scaleX", scale.x)
                     jactor.add("scaleY", scale.y)
@@ -226,9 +233,7 @@ class JsonScene {
                 if (flipY) {
                     jactor.add("flipY", true)
                 }
-                if (pose == null) {
-                    jactor.add("text", text)
-                }
+
             }
 
             JsonUtil.saveAttributes(jactor, actorResource.attributes)
@@ -262,8 +267,9 @@ class JsonScene {
             y = jactor.getDouble("y", 0.0)
             zOrder = jactor.getDouble("zOrder", costume?.zOrder ?: 0.0)
 
-            xAlignment = ActorXAlignment.valueOf(jactor.getString("xAlignment", "LEFT"))
-            yAlignment = ActorYAlignment.valueOf(jactor.getString("yAlignment", "BOTTOM"))
+            // xAlignment was the old name, textAlignmentX is the new name.
+            xAlignment = ActorXAlignment.valueOf(jactor.getString("textAlignmentX", jactor.getString("xAlignment", "LEFT")))
+            yAlignment = ActorYAlignment.valueOf(jactor.getString("textAlignmentY", jactor.getString("yAlignment", "BOTTOM")))
 
             direction.degrees = jactor.getDouble("direction", 0.0)
 
@@ -271,6 +277,8 @@ class JsonScene {
                 val rect = costume?.chooseNinePatch(costume.initialEventName)?.pose?.rect
                 size.x = jactor.getDouble("sizeX", rect?.width?.toDouble() ?: 1.0)
                 size.y = jactor.getDouble("sizeY", rect?.height?.toDouble() ?: 1.0)
+                alignment.x = jactor.getDouble("alignmentX", 0.5)
+                alignment.y = jactor.getDouble("alignmentY", 0.5)
             } else {
                 // Legacy (when scale was a single Double, rather than a Vector2d)
                 jactor.get("scale")?.let {

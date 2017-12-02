@@ -49,9 +49,14 @@ class ActorResource(val isDesigning: Boolean = false) {
     var scale = Vector2d(1.0, 1.0)
 
     /**
-     * For NinePatchAppearance only
+     * For NinePatch only
      */
     var size = Vector2d(1.0, 1.0)
+
+    /**
+     * For NinePatch only
+     */
+    var alignment = Vector2d(0.5, 0.5)
 
     val attributes = Attributes()
 
@@ -88,6 +93,11 @@ class ActorResource(val isDesigning: Boolean = false) {
         return costume?.chooseNinePatch(costume.initialEventName) != null
     }
 
+    fun isText(): Boolean {
+        val costume = costume()
+        return costume?.chooseTextStyle(costume.initialEventName) != null
+    }
+
     fun createActor(): Actor? {
         val costume = costume()
         if (costume == null) {
@@ -103,6 +113,7 @@ class ActorResource(val isDesigning: Boolean = false) {
         val appearance = actor.appearance
         if (appearance is NinePatchAppearance) {
             actor.resize(size.x, size.y)
+            actor.ninePatchAppearance?.alignment?.set(alignment)
         } else {
             actor.scale = scale
         }
