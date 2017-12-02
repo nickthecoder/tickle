@@ -68,3 +68,5 @@ fun createSoundParameter(parameterName: String = "sound"): ChoiceParameter<Sound
     }
     return choice
 }
+
+fun createNinePatchParameter(parameterName: String = "ninePatch", label : String="NinePatch") = NinePatchParameter(parameterName, label)

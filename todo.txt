@@ -1,10 +1,16 @@
 Current Work
 ============
 
+Nine-patches
+	SceneEditor needs to ask for width and height when the Actor uses a NinePatch.
+		Maybe for ALL actors, and it just updates the scale appropriately for non-nine patches.
+		Default size should be the size of the Pose it is based upon.
+	SceneEditor should render the NinePatch too (not the pose)!
+	Also ask for the aligment.
+
 Next
 ====
 
-Nine-patches
 
 Companion actors?
 	An actor has a set of Companion objects, which has an Actor and a CompanionPosition (interface)

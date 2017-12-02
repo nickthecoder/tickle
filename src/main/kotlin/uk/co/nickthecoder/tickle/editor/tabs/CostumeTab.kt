@@ -13,10 +13,7 @@ import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.paratask.util.FileLister
-import uk.co.nickthecoder.tickle.Costume
-import uk.co.nickthecoder.tickle.CostumeEvent
-import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.Role
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.graphics.TextStyle
@@ -222,6 +219,13 @@ class CostumeTab(val name: String, val costume: Costume)
                     inner.soundP.value = sound
                     inner.typeP.value = inner.soundP
                 }
+                println("Event has ${event.ninePatches}")
+                event.ninePatches.forEach { ninePatch ->
+                    val inner = eventsP.newValue()
+                    inner.eventNameP.value = eventName
+                    inner.ninePatchP.from(ninePatch)
+                    inner.typeP.value = inner.ninePatchP
+                }
             }
         }
 
@@ -237,6 +241,7 @@ class CostumeTab(val name: String, val costume: Costume)
                     inner.textStyleP -> addTextStyle(inner.eventNameP.value, inner.textStyleP.createTextStyle())
                     inner.stringP -> addString(inner.eventNameP.value, inner.stringP.value)
                     inner.soundP -> addSound(inner.eventNameP.value, inner.soundP.value!!)
+                    inner.ninePatchP -> addNinePatch(inner.eventNameP.value, inner.ninePatchP.createNinePatch())
                 }
             }
         }
@@ -285,6 +290,15 @@ class CostumeTab(val name: String, val costume: Costume)
             }
             event.sounds.add(sound)
         }
+
+        fun addNinePatch(eventName: String, ninePatch: NinePatch) {
+            var event = costume.events[eventName]
+            if (event == null) {
+                event = CostumeEvent()
+                costume.events[eventName] = event
+            }
+            event.ninePatches.add(ninePatch)
+        }
     }
 
     inner class EventParameter : MultipleGroupParameter("event") {
@@ -292,6 +306,7 @@ class CostumeTab(val name: String, val costume: Costume)
         val eventNameP = StringParameter("eventName")
 
         val poseP = createPoseParameter()
+
         val textStyleP = TextStyleParameter("style")
         val costumeP = createCostumeParameter()
 
@@ -299,11 +314,13 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val soundP = createSoundParameter()
 
+        val ninePatchP = createNinePatchParameter()
+
         val typeP = OneOfParameter("type", value = poseP, choiceLabel = "Type")
-                .addChoices(poseP, costumeP, textStyleP, stringP, soundP)
+                .addChoices(poseP, costumeP, textStyleP, stringP, soundP, ninePatchP)
 
         init {
-            addParameters(eventNameP, typeP, poseP, costumeP, textStyleP, stringP, soundP)
+            addParameters(eventNameP, typeP, poseP, ninePatchP, costumeP, textStyleP, stringP, soundP)
         }
 
         override fun toString(): String {
@@ -315,6 +332,7 @@ class CostumeTab(val name: String, val costume: Costume)
                 textStyleP -> Resources.instance.fontResources.findName(textStyleP.fontP.value)
                 stringP -> stringP.value
                 soundP -> Resources.instance.sounds.findName(soundP.value)
+                ninePatchP -> "Nine Patch (${Resources.instance.poses.findName(ninePatchP.poseP.value)})"
                 else -> ""
             }
             return "$eventName ($type) $dataName"

@@ -18,7 +18,11 @@ class CostumeEvent : Copyable<CostumeEvent> {
 
     var sounds = mutableListOf<Sound>()
 
+    var ninePatches = mutableListOf<NinePatch>()
+
     fun choosePose(): Pose? = if (poses.isEmpty()) null else poses[Random().nextInt(poses.size)]
+
+    fun chooseNinePatch(): NinePatch? = if (ninePatches.isEmpty()) null else ninePatches[Random().nextInt(ninePatches.size)]
 
     fun chooseCostume(): Costume? = if (costumes.isEmpty()) null else costumes[Random().nextInt(costumes.size)]
 

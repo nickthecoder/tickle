@@ -123,13 +123,30 @@ class Actor(var costume: Costume, val role: Role? = null) {
     internal fun calculateModelMatrix(): Matrix4f {
         if (dirtyMatrix) {
             recalculateModelMatrix()
+
+            body?.let { body ->
+                if (oldScale != scale) {
+                    body.scale((scale.x / oldScale.x).toFloat(), (scale.y / oldScale.y).toFloat())
+                    oldScale.set(scale)
+                    oldPosition.set(position)
+                    // TODO Is this needed?
+                    updateBody()
+                }
+                if (oldPosition != position) {
+                    updateBody()
+                    oldPosition.set(position)
+                }
+            }
+
+            dirtyMatrix = false
+
         }
         return modelMatrix
     }
 
     private fun recalculateModelMatrix() {
         modelMatrix.identity().translate(x.toFloat(), y.toFloat(), 0f)
-        if (direction.radians != 0.0) {
+        if (direction.radians != appearance.directionRadians) {
             modelMatrix.rotateZ((direction.radians - appearance.directionRadians).toFloat())
         }
         if (scale.x != 1.0 || scale.y != 1.0) {
@@ -145,23 +162,6 @@ class Actor(var costume: Costume, val role: Role? = null) {
             modelMatrix.mul(it)
         }
         modelMatrix.translate(-x.toFloat(), -y.toFloat(), 0f)
-
-        body?.let { body ->
-            // We need to
-            if (oldScale != scale) {
-                body.scale((scale.x / oldScale.x).toFloat(), (scale.y / oldScale.y).toFloat())
-                oldScale.set(scale)
-                oldPosition.set(position)
-                // TODO Is this needed?
-                updateBody()
-            }
-            if (oldPosition != position) {
-                updateBody()
-                oldPosition.set(position)
-            }
-        }
-
-        dirtyMatrix = false
     }
 
     var flipX: Boolean = false
@@ -192,6 +192,10 @@ class Actor(var costume: Costume, val role: Role? = null) {
     fun resize(width: Double, height: Double) {
         appearance.resize(width, height)
     }
+
+    fun width() = appearance.width()
+
+    fun height() = appearance.height()
 
     fun changeAppearance(pose: Pose) {
         val a = appearance

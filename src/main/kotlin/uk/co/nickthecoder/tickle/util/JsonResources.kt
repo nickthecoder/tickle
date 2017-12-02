@@ -558,7 +558,6 @@ class JsonResources {
                         jevent.add("strings", jstrings)
                     }
 
-
                     if (event.sounds.isNotEmpty()) {
                         val jsounds = JsonArray()
                         event.sounds.forEach { sound ->
@@ -569,6 +568,19 @@ class JsonResources {
                         jevent.add("sounds", jsounds)
                     }
 
+                    if (event.ninePatches.isNotEmpty()) {
+                        val jninePatches = JsonArray()
+                        event.ninePatches.forEach { ninePatch ->
+                            val jninePatch = JsonObject()
+                            jninePatches.add(jninePatch)
+                            jninePatch.add("pose", resources.poses.findName(ninePatch.pose))
+                            jninePatch.add("left", ninePatch.left)
+                            jninePatch.add("bottom", ninePatch.bottom)
+                            jninePatch.add("right", ninePatch.right)
+                            jninePatch.add("top", ninePatch.top)
+                        }
+                        jevent.add("ninePatches", jninePatches)
+                    }
                 }
                 JsonUtil.saveAttributes(jcostume, costume.attributes)
 
@@ -735,6 +747,26 @@ class JsonResources {
                         jsounds.forEach {
                             val soundName = it.asString()
                             resources.sounds.find(soundName)?.let { event.sounds.add(it) }
+                        }
+                    }
+
+                    jevent.get("ninePatches")?.let {
+                        val jninePatches = it.asArray()
+                        jninePatches.forEach {
+                            val jninePatch = it.asObject()
+                            val pose = resources.poses.find(jninePatch.get("pose").asString())
+                            println("Loading nine patch $pose")
+                            if (pose != null) {
+                                val ninePatch = NinePatch(
+                                        pose,
+                                        jninePatch.getInt("left", 0),
+                                        jninePatch.getInt("bottom", 0),
+                                        jninePatch.getInt("right", 0),
+                                        jninePatch.getInt("top", 0)
+                                )
+                                event.ninePatches.add(ninePatch)
+                            }
+
                         }
                     }
 

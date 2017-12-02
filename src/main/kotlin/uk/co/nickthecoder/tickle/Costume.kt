@@ -44,14 +44,22 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
         val actor = Actor(this, role)
         actor.zOrder = zOrder
 
-        val pose = choosePose(initialEventName)
-        if (pose == null) {
-            val textStyle = chooseTextStyle(initialEventName)
-            if (textStyle != null) {
-                actor.changeAppearance(text, textStyle)
+        val ninePatch = chooseNinePatch(initialEventName)
+        if (ninePatch == null) {
+            val pose = choosePose(initialEventName)
+            if (pose == null) {
+                val textStyle = chooseTextStyle(initialEventName)
+                if (textStyle != null) {
+                    actor.changeAppearance(text, textStyle)
+                }
+            } else {
+                actor.changeAppearance(pose)
             }
         } else {
-            actor.changeAppearance(pose)
+            val ninePatchAppearance = NinePatchAppearance(actor, ninePatch)
+            // TODO What should the size be?
+            ninePatchAppearance.resize(ninePatch.pose.rect.width.toDouble(), ninePatch.pose.rect.height.toDouble())
+            actor.appearance = ninePatchAppearance
         }
         return actor
     }
@@ -131,6 +139,7 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
      * This makes is easy to create invisible objects in the game, but visible in the editor.
      */
     fun editorPose(): Pose? = choosePose("editor") ?: choosePose(initialEventName)
+            ?: chooseNinePatch(initialEventName)?.pose
 
     fun pose(): Pose? = choosePose(initialEventName)
 
@@ -190,6 +199,8 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
     }
 
     fun choosePose(eventName: String): Pose? = events[eventName]?.choosePose() ?: inheritEventsFrom?.choosePose(eventName)
+
+    fun chooseNinePatch(eventName: String): NinePatch? = events[eventName]?.chooseNinePatch() ?: inheritEventsFrom?.chooseNinePatch(eventName)
 
     fun chooseCostume(eventName: String): Costume? = events[eventName]?.chooseCostume() ?: inheritEventsFrom?.chooseCostume(eventName)
 

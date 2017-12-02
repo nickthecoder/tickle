@@ -162,12 +162,12 @@
     {
       "name": "hand",
       "texture": "sprites",
-      "left": 138,
-      "bottom": 60,
-      "right": 188,
-      "top": 0,
-      "offsetX": 32,
-      "offsetY": 8,
+      "left": 145,
+      "bottom": 55,
+      "right": 181,
+      "top": 6,
+      "offsetX": 24,
+      "offsetY": 3,
       "direction": 0
     },
     {
@@ -226,17 +226,6 @@
       "direction": 0
     },
     {
-      "name": "redBall",
-      "texture": "sprites",
-      "left": 117,
-      "bottom": 130,
-      "right": 189,
-      "top": 58,
-      "offsetX": 36,
-      "offsetY": 36,
-      "direction": 0
-    },
-    {
       "name": "blueBall",
       "texture": "sprites",
       "left": 46,
@@ -274,6 +263,17 @@
           "y": 0
         }
       ]
+    },
+    {
+      "name": "redOutline",
+      "texture": "sprites",
+      "left": 117,
+      "bottom": 130,
+      "right": 189,
+      "top": 58,
+      "offsetX": 35,
+      "offsetY": 38,
+      "direction": 0
     }
   ],
   "sounds": [
@@ -406,7 +406,7 @@
             {
               "name": "default",
               "poses": [
-                "redBall"
+                "greenBall"
               ]
             }
           ]
@@ -755,7 +755,7 @@
     },
     {
       "name": "coinRod",
-      "role": "",
+      "role": "uk.co.nickthecoder.demo.Rod",
       "canRotate": true,
       "zOrder": 56,
       "initialEvent": "default",
@@ -763,8 +763,36 @@
       "events": [
         {
           "name": "default",
-          "poses": [
-            "rod"
+          "ninePatches": [
+            {
+              "pose": "rod",
+              "left": 5,
+              "bottom": 0,
+              "right": 6,
+              "top": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "redOutline",
+      "role": "uk.co.nickthecoder.demo.Rod",
+      "canRotate": false,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "ninePatches": [
+            {
+              "pose": "redOutline",
+              "left": 18,
+              "bottom": 18,
+              "right": 18,
+              "top": 18
+            }
           ]
         }
       ]

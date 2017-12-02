@@ -8,6 +8,10 @@ import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Rectd
 import uk.co.nickthecoder.tickle.util.rotate
 
+/**
+ * An [Appearance] is responsible for drawing an [Actor]. The most common type of Appearance is a [PoseAppearance],
+ * which draw a single image for each Actor. There are also [NinePatchAppearance], [TextAppearance] and [InvisibleAppearance].
+ */
 interface Appearance {
 
     val directionRadians: Double
@@ -159,9 +163,9 @@ abstract class AbstractAppearance(val actor: Actor) : Appearance {
         return tempVector.x >= -offsetX && tempVector.x < width() - offsetX && tempVector.y > -offsetY && tempVector.y < height() - offsetY
     }
 
-    // TODO Most of the time, this will return false, so if contains is faster than PixelTouching.touching, then
-    // this is the fastest solution. However, I haven't tested if this assumption is true, and maybe
-    // omitting the contains will be faster.
+    // TODO Most of the time, this will return false, so if contains() is faster than PixelTouching.touching(), then
+    // this is the fastest solution. However, I haven't tested if this assumption is correct, so maybe omitting
+    // the contains() will be faster.
     override fun pixelTouching(point: Vector2d): Boolean = contains(point) && PixelTouching.instance.touching(actor, point)
 
     override fun resize(width: Double, height: Double) {

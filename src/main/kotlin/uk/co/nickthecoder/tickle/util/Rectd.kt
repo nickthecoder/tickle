@@ -33,5 +33,5 @@ data class Rectd(
         return other.left == left && other.bottom == bottom && other.right == right && other.top == top
     }
 
-    override fun toString(): String = "($left , $bottom   ,   $right , $top)"
+    override fun toString(): String = "($left , $bottom , $right , $top)"
 }

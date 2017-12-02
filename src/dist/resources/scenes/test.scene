@@ -52,16 +52,6 @@
       "name": "main",
       "actors": [
         {
-          "costume": "coinRod",
-          "x": 120,
-          "y": 384,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
-          "direction": 335.00000000000006,
-          "scaleX": 1,
-          "scaleY": 2
-        },
-        {
           "costume": "plainText",
           "x": 138,
           "y": 377,
@@ -76,41 +66,14 @@
         },
         {
           "costume": "bee",
-          "x": 162,
-          "y": 333,
+          "x": 200,
+          "y": 177,
+          "zOrder": 100,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 3,
           "scaleX": 1,
           "scaleY": 1
-        },
-        {
-          "costume": "grenade",
-          "x": 387,
-          "y": 345,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
-          "direction": 0,
-          "scaleX": 2,
-          "scaleY": 2,
-          "attributes": [
-            {
-              "name": "exit",
-              "value": "0.0x50.0"
-            },
-            {
-              "name": "hue",
-              "value": "1"
-            },
-            {
-              "name": "maxVelocity",
-              "value": "20.0:12.0"
-            },
-            {
-              "name": "minVelocity",
-              "value": "-20.0:2.0"
-            }
-          ]
         },
         {
           "costume": "hand",
@@ -123,32 +86,37 @@
           "scaleY": 1
         },
         {
-          "costume": "shootingStar",
-          "x": 80,
-          "y": 300,
+          "costume": "coinRod",
+          "x": 350,
+          "y": 350,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1,
-          "attributes": [
-            {
-              "name": "curveAngle",
-              "value": "59.99999999999999"
-            },
-            {
-              "name": "headingAndLength",
-              "value": "14.999999999999998:400.0"
-            },
-            {
-              "name": "sideDuration",
-              "value": "1"
-            },
-            {
-              "name": "turnAngle",
-              "value": "190.0"
-            }
-          ]
+          "text": ""
+        },
+        {
+          "costume": "redOutline",
+          "x": 200,
+          "y": 177,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "text": ""
+        },
+        {
+          "costume": "redOutline",
+          "x": 421,
+          "y": 228,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 16.144338780283483,
+          "scaleX": 1,
+          "scaleY": 1,
+          "text": ""
         }
       ]
     }

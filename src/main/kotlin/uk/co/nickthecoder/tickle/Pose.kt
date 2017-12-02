@@ -112,6 +112,6 @@ class Pose(
     }
 
     override fun toString(): String {
-        return "Pose rect=$rect offset=$offsetX,$offsetY direction=$direction.degrees rectd=$rectd"
+        return "Pose rect=$rect offset=($offsetX , $offsetY) direction=$direction rectd=$rectd"
     }
 }

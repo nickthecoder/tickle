@@ -5,8 +5,8 @@ import uk.co.nickthecoder.tickle.Actor
 class Resize(
         val actor: Actor,
         seconds: Double,
-        val finalWidth: Double,
-        val finalHeight: Double,
+        val finalWidth: Double = actor.appearance.width(),
+        val finalHeight: Double = actor.appearance.height(),
         ease: Ease = LinearEase.instance)
 
     : AnimationAction(seconds, ease) {
@@ -16,7 +16,7 @@ class Resize(
 
     override fun storeInitialValue() {
         initialWidth = actor.appearance.width()
-        initialHeight = actor.appearance.width()
+        initialHeight = actor.appearance.height()
     }
 
     override fun update(t: Double) {
