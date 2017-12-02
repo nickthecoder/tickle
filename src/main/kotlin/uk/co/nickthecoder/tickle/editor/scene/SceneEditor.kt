@@ -10,7 +10,6 @@ import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
-import uk.co.nickthecoder.tickle.editor.util.costume
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.Adjustment
 import uk.co.nickthecoder.tickle.resources.ModificationType

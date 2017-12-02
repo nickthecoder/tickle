@@ -33,6 +33,8 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val scaleP = Vector2dParameter("scale", value = actorResource.scale)
 
+    val sizeP = Vector2dParameter("size", value = actorResource.size)
+
     val flipXP = BooleanParameter("flipX", value = actorResource.flipX)
     val flipYP = BooleanParameter("flipY", value = actorResource.flipY)
 
@@ -41,7 +43,9 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, flipXP, flipYP, textP)
+            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP,
+                    if (actorResource.isNinePatch()) sizeP else scaleP,
+                    flipXP, flipYP, textP)
             .asVertical()
 
     var dirty = false
@@ -68,7 +72,6 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
         groupP.parameterListeners.add(this)
         sceneResource.listeners.add(this)
     }
-
 
     fun build(): Node {
         val field = groupP.createField()
@@ -116,7 +119,11 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             yAlignment = yAlignmentP.value!!
 
             directionP.value?.let { direction.degrees = it }
-            scale.set(scaleP.value)
+            if (actorResource.isNinePatch()) {
+                size.set(sizeP.value)
+            } else {
+                scale.set(scaleP.value)
+            }
             flipX = flipXP.value == true
             flipY = flipYP.value == true
             text = textP.value
@@ -138,7 +145,11 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             yAlignmentP.value = yAlignment
 
             directionP.value = direction.degrees
-            scaleP.value.set(scale)
+            if (isNinePatch()) {
+                sizeP.value.set(size)
+            } else {
+                scaleP.value.set(scale)
+            }
             flipXP.value = flipX
             flipYP.value = flipY
             textP.value = text

@@ -66,8 +66,8 @@
         },
         {
           "costume": "bee",
-          "x": 200,
-          "y": 177,
+          "x": 220,
+          "y": 274,
           "zOrder": 100,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
@@ -92,19 +92,19 @@
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
-          "scaleX": 1,
-          "scaleY": 1,
+          "sizeX": 60,
+          "sizeY": 18,
           "text": ""
         },
         {
           "costume": "redOutline",
-          "x": 200,
-          "y": 177,
+          "x": 220,
+          "y": 274,
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 0,
-          "scaleX": 1,
-          "scaleY": 1,
+          "sizeX": 172,
+          "sizeY": 72,
           "text": ""
         },
         {
@@ -114,8 +114,8 @@
           "xAlignment": "LEFT",
           "yAlignment": "BOTTOM",
           "direction": 16.144338780283483,
-          "scaleX": 1,
-          "scaleY": 1,
+          "sizeX": 72,
+          "sizeY": 72,
           "text": ""
         }
       ]

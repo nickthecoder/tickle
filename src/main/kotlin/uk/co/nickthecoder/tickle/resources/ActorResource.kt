@@ -1,9 +1,7 @@
 package uk.co.nickthecoder.tickle.resources
 
 import org.joml.Vector2d
-import uk.co.nickthecoder.tickle.Actor
-import uk.co.nickthecoder.tickle.Attributes
-import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.scene.StageLayer
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Angle
@@ -50,6 +48,11 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     var scale = Vector2d(1.0, 1.0)
 
+    /**
+     * For NinePatchAppearance only
+     */
+    var size = Vector2d(1.0, 1.0)
+
     val attributes = Attributes()
 
     val editorPose: Pose? by lazy { Resources.instance.costumes.find(costumeName)?.editorPose() }
@@ -78,8 +81,15 @@ class ActorResource(val isDesigning: Boolean = false) {
         }
     }
 
+    fun costume(): Costume? = Resources.instance.costumes.find(costumeName)
+
+    fun isNinePatch(): Boolean {
+        val costume = costume()
+        return costume?.chooseNinePatch(costume.initialEventName) != null
+    }
+
     fun createActor(): Actor? {
-        val costume = Resources.instance.costumes.find(costumeName)
+        val costume = costume()
         if (costume == null) {
             System.err.println("ERROR. Costume $costumeName not found in resources.")
             return null
@@ -90,7 +100,12 @@ class ActorResource(val isDesigning: Boolean = false) {
         actor.y = y
         actor.zOrder = zOrder
         actor.direction.degrees = direction.degrees
-        actor.scale = scale
+        val appearance = actor.appearance
+        if (appearance is NinePatchAppearance) {
+            actor.resize(size.x, size.y)
+        } else {
+            actor.scale = scale
+        }
         actor.xAlignment = xAlignment
         actor.yAlignment = yAlignment
         actor.flipX = flipX

@@ -7,11 +7,9 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.CornerRadii
-import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.resources.ActorResource
-import uk.co.nickthecoder.tickle.resources.Resources
 
 /*
  Contains many extension functions, used from within the SceneEditor.
@@ -78,8 +76,6 @@ fun ActorResource.isOverlapping(x: Double, y: Double): Boolean {
     val ty = y - this.y
     return editorPose?.isOverlapping(tx, ty) ?: false
 }
-
-fun ActorResource.costume(): Costume? = Resources.instance.costumes.find(costumeName)
 
 fun ActorResource.isAt(x: Double, y: Double): Boolean {
     var tx = x - this.x

@@ -211,8 +211,15 @@ class JsonScene {
                 jactor.add("xAlignment", xAlignment.name)
                 jactor.add("yAlignment", yAlignment.name)
                 jactor.add("direction", direction.degrees)
-                jactor.add("scaleX", scale.x)
-                jactor.add("scaleY", scale.y)
+
+                if (isNinePatch()) {
+                    jactor.add("sizeX", size.x)
+                    jactor.add("sizeY", size.y)
+                } else {
+                    jactor.add("scaleX", scale.x)
+                    jactor.add("scaleY", scale.y)
+                }
+
                 if (flipX) {
                     jactor.add("flipX", true)
                 }
@@ -259,16 +266,23 @@ class JsonScene {
             yAlignment = ActorYAlignment.valueOf(jactor.getString("yAlignment", "BOTTOM"))
 
             direction.degrees = jactor.getDouble("direction", 0.0)
-            scale.x = jactor.getDouble("scaleX", 1.0)
-            scale.y = jactor.getDouble("scaleY", 1.0)
 
+            if (isNinePatch()) {
+                val rect = costume?.chooseNinePatch(costume.initialEventName)?.pose?.rect
+                size.x = jactor.getDouble("sizeX", rect?.width?.toDouble() ?: 1.0)
+                size.y = jactor.getDouble("sizeY", rect?.height?.toDouble() ?: 1.0)
+            } else {
+                // Legacy (when scale was a single Double, rather than a Vector2d)
+                jactor.get("scale")?.let {
+                    scale.x = it.asDouble()
+                    scale.y = it.asDouble()
+                }
+                // This is the new form of scale.
+                scale.x = jactor.getDouble("scaleX", 1.0)
+                scale.y = jactor.getDouble("scaleY", 1.0)
+            }
             flipX = jactor.getBoolean("flipX", false)
             flipY = jactor.getBoolean("flipY", false)
-            // Legacy (when scale was a single Double, rather than a Vector2d)
-            jactor.get("scale")?.let {
-                scale.x = it.asDouble()
-                scale.y = it.asDouble()
-            }
             actorResource.text = jactor.getString("text", "")
         }
 

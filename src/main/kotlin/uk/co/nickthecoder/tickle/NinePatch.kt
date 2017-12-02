@@ -6,6 +6,13 @@ import uk.co.nickthecoder.tickle.graphics.Renderer
 
 data class NinePatch(var pose: Pose, var left: Int, var bottom: Int, var right: Int, var top: Int)
 
+/**
+ * Draws an [Actor] using a nine-patch, which allows the actor scaled to any size, and the nine patch
+ * will only scale the inner parts. The corners will be draw 1:1.
+ *
+ * Note. when using nine patches, the Actor's scale is ignored. Use [Actor.resize] to resize.
+ * [Actor.flipX] and [Actor.flipY] are also currently ignored.
+ */
 class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : AbstractAppearance(actor) {
 
     private var height: Double = 0.0

@@ -755,7 +755,6 @@ class JsonResources {
                         jninePatches.forEach {
                             val jninePatch = it.asObject()
                             val pose = resources.poses.find(jninePatch.get("pose").asString())
-                            println("Loading nine patch $pose")
                             if (pose != null) {
                                 val ninePatch = NinePatch(
                                         pose,
