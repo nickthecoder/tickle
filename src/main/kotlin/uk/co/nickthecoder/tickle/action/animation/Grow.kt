@@ -20,7 +20,6 @@ class Grow(
         initialScale.set(actor.scale)
     }
 
-
     override fun update(t: Double) {
         lerp(initialScale, finalScale, t, actor.scale)
     }

@@ -189,6 +189,9 @@ class Actor(var costume: Costume, val role: Role? = null) {
             }
         }
 
+    fun resize(width: Double, height: Double) {
+        appearance.resize(width, height)
+    }
 
     fun changeAppearance(pose: Pose) {
         val a = appearance

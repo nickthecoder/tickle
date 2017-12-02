@@ -73,6 +73,8 @@ interface Appearance {
      * been panned.
      */
     fun touching(point: Vector2d): Boolean
+
+    fun resize(width: Double, height: Double)
 }
 
 private val INVISIBLE_RECT = Rectd(0.0, 0.0, 0.0, 0.0)
@@ -100,6 +102,8 @@ class InvisibleAppearance : Appearance {
     override fun pixelTouching(point: Vector2d): Boolean = false
 
     override fun touching(point: Vector2d): Boolean = false
+
+    override fun resize(width: Double, height: Double) {}
 
     override fun toString() = "InvisibleAppearance"
 
@@ -160,6 +164,10 @@ abstract class AbstractAppearance(val actor: Actor) : Appearance {
     // omitting the contains will be faster.
     override fun pixelTouching(point: Vector2d): Boolean = contains(point) && PixelTouching.instance.touching(actor, point)
 
+    override fun resize(width: Double, height: Double) {
+        actor.scale.x = width / this.width()
+        actor.scale.y = height / this.height()
+    }
 }
 
 class PoseAppearance(actor: Actor, var pose: Pose)

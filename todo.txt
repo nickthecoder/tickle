@@ -4,11 +4,17 @@ Current Work
 Next
 ====
 
-Tooltips for snap buttons.
-	Add menu items.
+Nine-patches
 
-Scaling in one direction only - Very Useful for lines, such as "laser beams".
-	Alternatively implement nine-patches.
+Companion actors?
+	An actor has a set of Companion objects, which has an Actor and a CompanionPosition (interface)
+	which update the position and direction of the companion.
+	The CompanionPosition are automatically called after all ticks have taken place.
+		During the drawing of the StageView?
+			Pro : Don't need an extra loop
+			Con : Will be called multiple times when there are multiple views of the same stage.
+	Actor.createChild and createChildOnStage can optionally take a CompanionFollower
+	Have a MarginPosition, which keeps the same direction, and makes the size bigger by the given margins.
 
 Re-implement rounded rectangles using just a single polygon
 	A huristic for the number of lines to create a curve based on the radius.

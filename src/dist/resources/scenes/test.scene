@@ -121,6 +121,34 @@
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1
+        },
+        {
+          "costume": "shootingStar",
+          "x": 80,
+          "y": 300,
+          "xAlignment": "LEFT",
+          "yAlignment": "BOTTOM",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "curveAngle",
+              "value": "59.99999999999999"
+            },
+            {
+              "name": "headingAndLength",
+              "value": "14.999999999999998:400.0"
+            },
+            {
+              "name": "sideDuration",
+              "value": "1"
+            },
+            {
+              "name": "turnAngle",
+              "value": "190.0"
+            }
+          ]
         }
       ]
     }
