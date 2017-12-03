@@ -52,39 +52,9 @@
       "name": "main",
       "actors": [
         {
-          "costume": "plainText",
-          "x": 138,
-          "y": 377,
-          "textAlignmentX": "LEFT",
-          "textAlignmentY": "BOTTOM",
-          "text": "Hello World",
-          "direction": 335.00000000000006,
-          "scaleX": 2,
-          "scaleY": 1,
-          "flipX": true,
-          "flipY": true
-        },
-        {
-          "costume": "bee",
-          "x": 220,
-          "y": 274,
-          "zOrder": 100,
-          "direction": 3,
-          "scaleX": 1,
-          "scaleY": 1
-        },
-        {
-          "costume": "hand",
-          "x": 234,
-          "y": 433,
-          "direction": 0,
-          "scaleX": 1,
-          "scaleY": 1
-        },
-        {
           "costume": "coinRod",
-          "x": 400,
-          "y": 400,
+          "x": 483,
+          "y": 350,
           "direction": 0,
           "sizeX": 60,
           "sizeY": 18,
@@ -93,23 +63,13 @@
         },
         {
           "costume": "redOutline",
-          "x": 220,
-          "y": 274,
-          "direction": 0,
-          "sizeX": 172,
-          "sizeY": 72,
-          "alignmentX": 0.5,
-          "alignmentY": 0.5
-        },
-        {
-          "costume": "redOutline",
-          "x": 400,
+          "x": 233,
           "y": 400,
           "direction": 0,
-          "sizeX": 172,
-          "sizeY": 172,
-          "alignmentX": 0,
-          "alignmentY": 0
+          "sizeX": 147,
+          "sizeY": 127,
+          "alignmentX": 0.5,
+          "alignmentY": 0.5
         }
       ]
     }

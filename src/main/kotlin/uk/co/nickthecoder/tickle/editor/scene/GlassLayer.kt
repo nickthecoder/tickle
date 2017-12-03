@@ -172,15 +172,26 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
     fun drawBoundingBox(actorResource: ActorResource) {
         val margin = 2.0
 
-        actorResource.editorPose?.let { pose ->
+        val ninePatch = actorResource.ninePatch
 
+        if (ninePatch == null) {
+            actorResource.editorPose?.let { pose ->
+
+                canvas.graphicsContext2D.strokeRect(
+                        -pose.offsetX - margin,
+                        -pose.offsetY - margin,
+                        pose.rect.width.toDouble() + margin * 2,
+                        pose.rect.height.toDouble() + margin * 2)
+
+                return
+            }
+        } else {
             canvas.graphicsContext2D.strokeRect(
-                    -pose.offsetX - margin,
-                    -pose.offsetY - margin,
-                    pose.rect.width.toDouble() + margin * 2,
-                    pose.rect.height.toDouble() + margin * 2)
-
-            return
+                    -actorResource.alignment.x * actorResource.size.x,
+                    -actorResource.alignment.y * actorResource.size.y,
+                    actorResource.size.x,
+                    actorResource.size.y
+            )
         }
 
         actorResource.textStyle?.let { textStyle ->

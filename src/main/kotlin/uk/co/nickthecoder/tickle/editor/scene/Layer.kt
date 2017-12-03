@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.scene.canvas.Canvas
+import uk.co.nickthecoder.tickle.NinePatch
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.util.image
 import uk.co.nickthecoder.tickle.graphics.Color
@@ -17,6 +18,8 @@ abstract class Layer {
     var centerX = canvas.width / 2
     var centerY = canvas.height / 2
     var scale: Double = 1.0
+
+    private val WHITE = Color.white()
 
     fun draw() {
         val gc = canvas.graphicsContext2D
@@ -46,34 +49,78 @@ abstract class Layer {
 
     fun drawActor(actorResource: ActorResource) {
 
+        val ninePatch = actorResource.ninePatch
         val pose = actorResource.editorPose
 
         with(canvas.graphicsContext2D) {
             save()
-            translate(actorResource.x.toDouble(), actorResource.y.toDouble())
+            translate(actorResource.x, actorResource.y)
             rotate(actorResource.direction.degrees - (pose?.direction?.degrees ?: 0.0))
-            scale(actorResource.scale.x, actorResource.scale.y)
-            scale(if (actorResource.flipX) -1.0 else 1.0, if (actorResource.flipY) -1.0 else 1.0)
 
-            if (pose == null) {
-                actorResource.textStyle?.let {
-                    drawText(it, actorResource.displayText)
-                }
+            if (ninePatch != null) {
+
+                drawNinePatch(actorResource, ninePatch)
+
             } else {
-                drawPose(pose)
+
+                scale(actorResource.scale.x, actorResource.scale.y)
+                scale(if (actorResource.flipX) -1.0 else 1.0, if (actorResource.flipY) -1.0 else 1.0)
+
+                if (pose == null) {
+                    actorResource.textStyle?.let {
+                        drawText(it, actorResource.displayText)
+                    }
+                } else {
+                    drawPose(pose)
+                }
+            }
+
+            restore()
+        }
+    }
+
+    fun drawNinePatch(actorResource: ActorResource, ninePatch: NinePatch) {
+
+        val pose = ninePatch.pose
+        val rect = pose.rect
+        val size = actorResource.size
+
+        val sourceLefts = listOf(0.0, ninePatch.left.toDouble(), (rect.width - ninePatch.right).toDouble())
+        val sourceBottoms = listOf(0.0, ninePatch.bottom.toDouble(), (rect.width - ninePatch.top).toDouble())
+
+        val sourceWidths = listOf(ninePatch.left.toDouble(), (rect.width - ninePatch.left - ninePatch.right).toDouble(), ninePatch.right.toDouble())
+        val sourceHeights = listOf(ninePatch.bottom.toDouble(), (rect.height - ninePatch.top - ninePatch.bottom).toDouble(), ninePatch.top.toDouble())
+
+        val destLefts = listOf(0.0, ninePatch.left.toDouble(), size.x - ninePatch.right)
+        val destBottoms = listOf(0.0, ninePatch.bottom.toDouble(), size.y - ninePatch.top)
+
+        val destWidths = listOf(ninePatch.left.toDouble(), actorResource.size.x - ninePatch.left - ninePatch.right, ninePatch.right.toDouble())
+        val destHeights = listOf(ninePatch.bottom.toDouble(), actorResource.size.y - ninePatch.top - ninePatch.bottom, ninePatch.top.toDouble())
+
+
+        with(canvas.graphicsContext2D) {
+            save()
+            translate(-actorResource.alignment.x * actorResource.size.x, -actorResource.alignment.y * actorResource.size.y)
+            for (y in 0..2) {
+                for (x in 0..2) {
+                    if (sourceWidths[x] < 0.00001 || sourceHeights[y] < 0.00001) continue
+
+                    drawImage(
+                            pose.image(),
+                            pose.rect.left + sourceLefts[x], pose.rect.bottom - sourceBottoms[y], sourceWidths[x], -sourceHeights[y], // Source rect
+                            destLefts[x], destBottoms[y], destWidths[x], destHeights[y]) // Dest rect
+                }
             }
             restore()
         }
     }
 
-    private val WHITE = Color.white()
-
     fun drawPose(pose: Pose) {
         val image = pose.image()
         canvas.graphicsContext2D.drawImage(
                 image,
-                pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(),
-                -pose.offsetX, -pose.offsetY, pose.rect.width.toDouble(), pose.rect.height.toDouble())
+                pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(), // Source rect
+                -pose.offsetX, -pose.offsetY, pose.rect.width.toDouble(), pose.rect.height.toDouble()) // Dest Rect
     }
 
     fun drawText(textStyle: TextStyle, text: String) {

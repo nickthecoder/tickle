@@ -3,7 +3,7 @@ Current Work
 
 Nine-patches
 	SceneEditor should render the NinePatch too (not the pose)!
-	Also ask for the aligment.
+	Also buggy, as it is using the pose's offsets.
 
 Next
 ====

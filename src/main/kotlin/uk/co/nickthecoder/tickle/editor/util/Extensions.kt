@@ -88,24 +88,37 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
         ty = cos * ty + sin * tx
         tx = ttx
     }
-    tx /= scale.x
-    ty /= scale.y
-    if (flipX) tx = -tx
-    if (flipY) ty = -ty
 
-    editorPose?.let { pose ->
-        return pose.isOverlapping(tx, ty) && pose.isPixelIsOpaque(tx, ty)
-    }
-    textStyle?.let { textStyle ->
-        val offsetX = textStyle.offsetX(displayText)
-        val offsetY = textStyle.offsetY(displayText)
-        val width = textStyle.width(displayText)
-        val height = textStyle.height(displayText)
-        tx += offsetX
-        ty += height - offsetY
-        return tx > 0 && ty > 0 && tx < width && ty < height
+    val ninePatch = ninePatch
 
+    if (ninePatch != null) {
+
+        tx += alignment.x * size.x
+        ty += alignment.y * size.y
+        return tx >= 0 && ty >= 0 && tx < size.x && ty < size.y
+
+    } else {
+
+        tx /= scale.x
+        ty /= scale.y
+        if (flipX) tx = -tx
+        if (flipY) ty = -ty
+
+        editorPose?.let { pose ->
+            return pose.isOverlapping(tx, ty) && pose.isPixelIsOpaque(tx, ty)
+        }
+        textStyle?.let { textStyle ->
+            val offsetX = textStyle.offsetX(displayText)
+            val offsetY = textStyle.offsetY(displayText)
+            val width = textStyle.width(displayText)
+            val height = textStyle.height(displayText)
+            tx += offsetX
+            ty += height - offsetY
+            return tx > 0 && ty > 0 && tx < width && ty < height
+
+        }
     }
+
     return false
 }
 

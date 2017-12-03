@@ -72,6 +72,11 @@ class ActorResource(val isDesigning: Boolean = false) {
         costume?.chooseTextStyle(costume.initialEventName)
     }
 
+    val ninePatch: NinePatch? by lazy {
+        val costume = Resources.instance.costumes.find(costumeName)
+        costume?.chooseNinePatch(costume.initialEventName)
+    }
+
     var text: String = ""
 
     val displayText
