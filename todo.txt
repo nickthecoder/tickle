@@ -1,10 +1,6 @@
 Current Work
 ============
 
-Nine-patches
-	SceneEditor should render the NinePatch too (not the pose)!
-	Also buggy, as it is using the pose's offsets.
-
 Next
 ====
 

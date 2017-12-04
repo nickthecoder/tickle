@@ -427,7 +427,7 @@ class CostumeTab(val name: String, val costume: Costume)
             val boxP = SimpleGroupParameter("box")
                     .addParameters(boxSizeP, boxCenterP, boxAngleP, boxRoundedEndsP, boxCornerRadiusP)
 
-            val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex, and the points ordered clockwise.")
+            val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex. Create more than one fixture to build concave objects.")
             val polygonPointsP = MultipleParameter("polygonPoints", minItems = 2) {
                 Vector2dParameter("point").asHorizontal()
             }

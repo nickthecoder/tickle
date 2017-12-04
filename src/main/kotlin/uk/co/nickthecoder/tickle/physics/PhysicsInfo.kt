@@ -9,6 +9,4 @@ class PhysicsInfo {
     var scale: Double = 100.0
     var filterGroupsString: String = ExampleFilterGroups::class.java.name
     var filterBitsString: String = ExampleFilterBits::class.java.name
-
 }
-

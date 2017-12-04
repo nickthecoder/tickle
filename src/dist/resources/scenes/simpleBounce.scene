@@ -33,6 +33,11 @@
     "xCloseness": 10,
     "yCloseness": 10
   },
+  "snapRotation": {
+    "enabled": true,
+    "step": 15,
+    "closeness": 15
+  },
   "include": [
     "info"
   ],
@@ -50,8 +55,6 @@
           "costume": "bee",
           "x": 390,
           "y": 370,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1
@@ -60,21 +63,21 @@
           "costume": "coinRod",
           "x": 205,
           "y": 280,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scaleX": 1,
-          "scaleY": 1
+          "sizeX": 60,
+          "sizeY": 18,
+          "alignmentX": 0.5,
+          "alignmentY": 0.5
         },
         {
           "costume": "coinRod",
           "x": 333,
           "y": 278,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scaleX": 1,
-          "scaleY": 1
+          "sizeX": 60,
+          "sizeY": 18,
+          "alignmentX": 0.5,
+          "alignmentY": 0.5
         }
       ]
     }

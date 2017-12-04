@@ -28,7 +28,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
      * Used when the Actor has a [Body] to detect when the position has changed by game code, and therefore the Body
      * needs to be updated.
      */
-    private val oldPosition = Vector2d(0.0, 0.0)
+    private val oldPosition = Vector2d(Double.MIN_VALUE, Double.MAX_VALUE)
 
     /**
      * Gets or sets the x value of position
@@ -309,7 +309,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
         body?.let { body ->
             world.worldToPixels(position, body.position)
             direction.radians = body.angle.toDouble() + (poseAppearance?.directionRadians ?: 0.0)
-            // Copy the Actor's position, so that we can test is game code has changed the position, and therefore
+            // Copy the Actor's position, so that we can test if game code has changed the position, and therefore
             // we will know if the Body needs to be updated. See ensureBodyIsUpToDate.
             oldPosition.set(position)
         }
@@ -317,11 +317,12 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     internal fun ensureBodyIsUpToDate() {
         body?.let {
-            // olsPosition and oldScale are both used for two purposes. To know when the body is out of date, and also to know when the
+
+            // oldPosition and oldScale are both used for two purposes. To know when the body is out of date, and also to know when the
             // modelMatrix is out of date. So, recalculate the mode matrix, which will also sync the body.
-            if (dirtyMatrix) {
-                recalculateModelMatrix()
-            }
+            //if (dirtyMatrix) {
+            calculateModelMatrix()
+            //}
         }
     }
 
