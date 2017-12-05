@@ -399,6 +399,9 @@ class JsonResources {
                 jpose.add("offsetX", pose.offsetX)
                 jpose.add("offsetY", pose.offsetY)
                 jpose.add("direction", pose.direction.degrees)
+                if (pose.tiled) {
+                    jpose.add("tiled", true)
+                }
 
                 if (pose.snapPoints.isNotEmpty()) {
                     val jsnaps = JsonArray()
@@ -434,6 +437,8 @@ class JsonResources {
             pose.offsetY = jpose.get("offsetY").asDouble()
 
             pose.direction.degrees = jpose.get("direction").asDouble()
+            pose.tiled = jpose.getBoolean("tiled", false)
+
             pose.updateRectd()
 
             jpose.get("snapPoints")?.let {

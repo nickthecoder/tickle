@@ -93,6 +93,15 @@ class ActorResource(val isDesigning: Boolean = false) {
 
     fun costume(): Costume? = Resources.instance.costumes.find(costumeName)
 
+    fun isSizable(): Boolean {
+        val costume = costume()
+        if (costume?.chooseNinePatch(costume.initialEventName) != null) {
+            return true
+        }
+        val pose = costume?.choosePose(costume.initialEventName)
+        return pose?.tiled == true
+    }
+
     fun isNinePatch(): Boolean {
         val costume = costume()
         return costume?.chooseNinePatch(costume.initialEventName) != null
@@ -116,9 +125,9 @@ class ActorResource(val isDesigning: Boolean = false) {
         actor.zOrder = zOrder
         actor.direction.degrees = direction.degrees
         val appearance = actor.appearance
-        if (appearance is NinePatchAppearance) {
+        if (appearance is ResizeAppearance) {
             actor.resize(size.x, size.y)
-            actor.ninePatchAppearance?.alignment?.set(alignment)
+            appearance.alignment.set(alignment)
         } else {
             actor.scale = scale
         }

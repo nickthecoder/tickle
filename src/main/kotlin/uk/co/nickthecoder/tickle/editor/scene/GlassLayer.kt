@@ -174,7 +174,14 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
         val ninePatch = actorResource.ninePatch
 
-        if (ninePatch == null) {
+        if (actorResource.isSizable()) {
+            canvas.graphicsContext2D.strokeRect(
+                    -actorResource.alignment.x * actorResource.size.x,
+                    -actorResource.alignment.y * actorResource.size.y,
+                    actorResource.size.x,
+                    actorResource.size.y
+            )
+        } else {
             actorResource.editorPose?.let { pose ->
 
                 canvas.graphicsContext2D.strokeRect(
@@ -185,23 +192,16 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
                 return
             }
-        } else {
-            canvas.graphicsContext2D.strokeRect(
-                    -actorResource.alignment.x * actorResource.size.x,
-                    -actorResource.alignment.y * actorResource.size.y,
-                    actorResource.size.x,
-                    actorResource.size.y
-            )
-        }
 
-        actorResource.textStyle?.let { textStyle ->
-            val text = actorResource.displayText
-            val offsetX = textStyle.offsetX(text)
-            val offsetY = textStyle.offsetY(text)
-            val width = textStyle.width(text)
-            val height = textStyle.height(text)
+            actorResource.textStyle?.let { textStyle ->
+                val text = actorResource.displayText
+                val offsetX = textStyle.offsetX(text)
+                val offsetY = textStyle.offsetY(text)
+                val width = textStyle.width(text)
+                val height = textStyle.height(text)
 
-            canvas.graphicsContext2D.strokeRect(-offsetX, offsetY - height, width, height)
+                canvas.graphicsContext2D.strokeRect(-offsetX, offsetY - height, width, height)
+            }
         }
     }
 

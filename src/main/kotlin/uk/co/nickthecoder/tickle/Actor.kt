@@ -107,6 +107,15 @@ class Actor(var costume: Costume, val role: Role? = null) {
             return null
         }
 
+    val tiledAppearance: TiledAppearance?
+        get() {
+            val app = appearance
+            if (app is TiledAppearance) {
+                return app
+            }
+            return null
+        }
+
     val poseAppearance: PoseAppearance?
         get() {
             val app = appearance
@@ -207,11 +216,17 @@ class Actor(var costume: Costume, val role: Role? = null) {
     fun height() = appearance.height()
 
     fun changeAppearance(pose: Pose) {
-        val a = appearance
-        if (a is PoseAppearance) {
-            a.pose = pose
+        if (pose.tiled) {
+            val tiled = TiledAppearance(this, pose)
+            tiled.resize(pose.rect.width.toDouble(), pose.rect.height.toDouble())
+            appearance = tiled
         } else {
-            appearance = PoseAppearance(this, pose)
+            val a = appearance
+            if (a is PoseAppearance) {
+                a.pose = pose
+            } else {
+                appearance = PoseAppearance(this, pose)
+            }
         }
     }
 

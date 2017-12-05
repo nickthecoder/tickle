@@ -63,11 +63,31 @@
         },
         {
           "costume": "redOutline",
-          "x": 233,
-          "y": 400,
+          "x": 200,
+          "y": 450,
           "direction": 0,
           "sizeX": 147,
           "sizeY": 127,
+          "alignmentX": 0.5,
+          "alignmentY": 0.5
+        },
+        {
+          "costume": "blueTile",
+          "x": 300,
+          "y": 230,
+          "direction": 0,
+          "sizeX": 200,
+          "sizeY": 100,
+          "alignmentX": 0.5,
+          "alignmentY": 0.5
+        },
+        {
+          "costume": "blueTile",
+          "x": 500,
+          "y": 487,
+          "direction": 0,
+          "sizeX": 100,
+          "sizeY": 100,
           "alignmentX": 0.5,
           "alignmentY": 0.5
         }

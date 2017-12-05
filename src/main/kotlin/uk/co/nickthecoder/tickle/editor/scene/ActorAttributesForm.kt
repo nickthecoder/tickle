@@ -50,7 +50,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val groupP = SimpleGroupParameter("actorGroup")
             .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP,
-                    if (actorResource.isNinePatch()) ninePatchGroupP else scaleP,
+                    if (actorResource.isSizable()) ninePatchGroupP else scaleP,
                     flipXP, flipYP, textP)
             .asVertical()
 
@@ -125,7 +125,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             yAlignment = yAlignmentP.value!!
 
             directionP.value?.let { direction.degrees = it }
-            if (actorResource.isNinePatch()) {
+            if (actorResource.isSizable()) {
                 size.set(sizeP.value)
                 alignment.set(ninePatchAlignmentP.value)
             } else {
@@ -152,7 +152,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             yAlignmentP.value = yAlignment
 
             directionP.value = direction.degrees
-            if (isNinePatch()) {
+            if (isSizable()) {
                 sizeP.value.set(size)
                 ninePatchAlignmentP.value.set(alignment)
             } else {

@@ -274,6 +274,18 @@
       "offsetX": 35,
       "offsetY": 38,
       "direction": 0
+    },
+    {
+      "name": "blueTile",
+      "texture": "sprites",
+      "left": 67,
+      "bottom": 180,
+      "right": 99,
+      "top": 148,
+      "offsetX": 0,
+      "offsetY": 0,
+      "direction": 0,
+      "tiled": true
     }
   ],
   "sounds": [
@@ -793,6 +805,22 @@
               "right": 18,
               "top": 18
             }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "blueTile",
+      "role": "",
+      "canRotate": true,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "poses": [
+            "blueTile"
           ]
         }
       ]

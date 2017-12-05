@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle
 
 import org.joml.Matrix4f
-import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Renderer
 
 data class NinePatch(var pose: Pose, var left: Int, var bottom: Int, var right: Int, var top: Int)
@@ -13,18 +12,7 @@ data class NinePatch(var pose: Pose, var left: Int, var bottom: Int, var right: 
  * Note. when using nine patches, the Actor's scale is ignored. Use [Actor.resize] to resize.
  * [Actor.flipX] and [Actor.flipY] are also currently ignored.
  */
-class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : AbstractAppearance(actor) {
-
-    private var height: Double = 0.0
-
-    private var width: Double = 0.0
-
-    /**
-     * The alignment, where x,y are both in the range 0..1
-     * (0,0) means the Actor's position is at the bottom left of the NinePatch.
-     * (1,1) means the Actor's position is at the top right of the NinePatch.
-     */
-    val alignment = Vector2d(0.5, 0.5)
+class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppearance(actor) {
 
     /**
      * A 3x3 array of Poses
@@ -68,16 +56,6 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : AbstractAppe
 
     override val directionRadians: Double
         get() = ninePatch.pose.direction.radians
-
-    override fun height() = height
-
-    override fun width() = width
-
-    override fun offsetX() = width * alignment.x
-
-    override fun offsetY() = height * alignment.y
-
-    override fun touching(point: Vector2d) = pixelTouching(point)
 
     override fun draw(renderer: Renderer) {
 
@@ -124,12 +102,6 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : AbstractAppe
         }
     }
 
-    override fun resize(width: Double, height: Double) {
-        this.width = width
-        this.height = height
-        actor.scaleXY = 1.0
-    }
-
-    override fun toString() = "NinePatchAppearance pose=${ninePatch.pose} margins : ${ninePatch.left}, ${ninePatch.bottom}, ${ninePatch.right}, ${ninePatch.top}"
+    override fun toString() = "NinePatchAppearance pose=${ninePatch.pose} size=( $width , $height ) margins : ${ninePatch.left}, ${ninePatch.bottom}, ${ninePatch.right}, ${ninePatch.top}"
 
 }

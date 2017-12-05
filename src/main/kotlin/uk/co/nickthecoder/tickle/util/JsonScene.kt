@@ -217,7 +217,7 @@ class JsonScene {
 
                 jactor.add("direction", direction.degrees)
 
-                if (isNinePatch()) {
+                if (isSizable()) {
                     jactor.add("sizeX", size.x)
                     jactor.add("sizeY", size.y)
                     jactor.add("alignmentX", alignment.x)
@@ -273,7 +273,7 @@ class JsonScene {
 
             direction.degrees = jactor.getDouble("direction", 0.0)
 
-            if (isNinePatch()) {
+            if (isSizable()) {
                 val rect = costume?.chooseNinePatch(costume.initialEventName)?.pose?.rect
                 size.x = jactor.getDouble("sizeX", rect?.width?.toDouble() ?: 1.0)
                 size.y = jactor.getDouble("sizeY", rect?.height?.toDouble() ?: 1.0)

@@ -71,7 +71,11 @@ abstract class Layer {
                         drawText(it, actorResource.displayText)
                     }
                 } else {
-                    drawPose(pose)
+                    if (pose.tiled) {
+                        drawTiled(actorResource, pose)
+                    } else {
+                        drawPose(pose)
+                    }
                 }
             }
 
@@ -111,6 +115,28 @@ abstract class Layer {
                             destLefts[x], destBottoms[y], destWidths[x], destHeights[y]) // Dest rect
                 }
             }
+            restore()
+        }
+    }
+
+    fun drawTiled(actorResource: ActorResource, pose: Pose) {
+        with(canvas.graphicsContext2D) {
+            save()
+            translate(-actorResource.alignment.x * actorResource.size.x, -actorResource.alignment.y * actorResource.size.y)
+
+            val across = Math.ceil(actorResource.size.x / pose.rect.width).toInt()
+            val down = Math.ceil(actorResource.size.y / pose.rect.height).toInt()
+            val w = actorResource.size.x / across
+            val h = actorResource.size.y / down
+
+            for (y in 0..down - 1) {
+                for (x in 0..across - 1) {
+                    drawImage(pose.image(),
+                            pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(),
+                            x * w, y * h, w, h)
+                }
+            }
+
             restore()
         }
     }

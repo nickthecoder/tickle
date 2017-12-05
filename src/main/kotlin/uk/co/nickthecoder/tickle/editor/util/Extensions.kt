@@ -89,9 +89,7 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
         tx = ttx
     }
 
-    val ninePatch = ninePatch
-
-    if (ninePatch != null) {
+    if (isSizable()) {
 
         tx += alignment.x * size.x
         ty += alignment.y * size.y

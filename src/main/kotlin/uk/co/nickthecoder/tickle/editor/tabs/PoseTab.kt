@@ -52,6 +52,8 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
 
     val directionP = DoubleParameter("direction", description = "The direction of the pose in degrees. 0 is to the right, and +ve numbers are anti-clockwise.")
 
+    val tiledP = BooleanParameter("tiled")
+
     val imageP = ImageParameter("image", image = ImageCache.image(pose.texture.file!!)) { PoseImageField(it) }
 
     val infoP = InformationParameter("info", information = "Click the image to set the offsets. Right click to change the background colour.")
@@ -61,7 +63,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
     }
 
     override val taskD = TaskDescription("editPose")
-            .addParameters(nameP, textureNameP, positionP, offsetInfoP, offsetP, directionP, imageP, infoP, snapPointsP)
+            .addParameters(nameP, textureNameP, positionP, offsetInfoP, offsetP, directionP, tiledP, imageP, infoP, snapPointsP)
 
     init {
         offsetP.x = pose.offsetX.toDouble()
@@ -73,6 +75,8 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         positionP.bottom = pose.rect.bottom
 
         directionP.value = pose.direction.degrees
+        tiledP.value = pose.tiled
+
         snapPointsP.clear()
         pose.snapPoints.forEach { snapPointsP.addValue(it) }
 
@@ -106,6 +110,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
         pose.offsetY = offsetP.y!!
 
         pose.direction.degrees = directionP.value!!
+        pose.tiled = tiledP.value == true
 
         pose.snapPoints.clear()
         pose.snapPoints.addAll(snapPointsP.value)
@@ -170,4 +175,5 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
             return stack
         }
     }
+
 }

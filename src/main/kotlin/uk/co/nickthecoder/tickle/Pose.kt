@@ -34,6 +34,10 @@ class Pose(
      */
     val direction = Angle()
 
+    /**
+     * If the pose is tiled, then the actor will use a TiledAppearance, and it can be resized without scaling.
+     */
+    var tiled = false
 
     internal val rectd = Rectd(0.0, 0.0, 1.0, 1.0)
 
