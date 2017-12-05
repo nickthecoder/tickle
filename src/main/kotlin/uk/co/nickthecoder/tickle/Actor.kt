@@ -330,14 +330,17 @@ class Actor(var costume: Costume, val role: Role? = null) {
         }
     }
 
-    internal fun ensureBodyIsUpToDate() {
+    fun ensureBodyIsUpToDate() {
         body?.let {
+            // NinePatchAppearance and TiledAppearance need to scale and/or change the offsets of the fixtures
+            // if the size of alignment has changed.
+            appearance.updateBody()
 
-            // oldPosition and oldScale are both used for two purposes. To know when the body is out of date, and also to know when the
-            // modelMatrix is out of date. So, recalculate the mode matrix, which will also sync the body.
-            //if (dirtyMatrix) {
+            // oldPosition and oldScale are both used for two purposes :
+            // 1) To know when the body is out of date
+            // 2) To know when the modelMatrix is out of date.
+            // So, recalculate the mode matrix, which will also sync the body.
             calculateModelMatrix()
-            //}
         }
     }
 

@@ -172,8 +172,6 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
     fun drawBoundingBox(actorResource: ActorResource) {
         val margin = 2.0
 
-        val ninePatch = actorResource.ninePatch
-
         if (actorResource.isSizable()) {
             canvas.graphicsContext2D.strokeRect(
                     -actorResource.alignment.x * actorResource.size.x,

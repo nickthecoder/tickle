@@ -1,16 +1,17 @@
 Current Work
 ============
 
+TiledAppearance
+	Allow rotated
+	Update the body when it is resized / offset is changed.
+
+	Go through all of RapidRagDoll scenes replacing all tileable costumes.
+		Commit
+		Delete all old costumes and poses.
 Next
 ====
 
-TiledAppearance
-	Repeats a given pose multiple times to fill the size.
-	Create a common interface Resizable with NinePatch.
-	Use this interface when deciding on whether scale or size in ActorAttributesForm and JsonScene
-		How should this relate to resizing a Body?
-	Use it for walls and floor in RapidRagDoll
-		Use a NinePatch for the fence post? (But the physics won't be perfect. Hmmm).
+Resize Handle for Resiable objects
 
 Companion actors?
 	An actor has a set of Companion objects, which has an Actor and a CompanionPosition (interface)

@@ -104,6 +104,54 @@ class TickleWorld(
 
 }
 
+fun Body.offset(dx: Float, dy: Float) {
+
+    // We cannot just iterate through the fixtures, because we need to delete the old
+    // ones and create new ones. So get all the fixtures first...
+    val fixtures = mutableListOf<Fixture>()
+    var fixture = fixtureList
+    while (fixture != null) {
+        fixtures.add(fixture)
+        fixture = fixture.next
+    }
+    fixtures.forEach { it.offset(this, dx, dy) }
+    resetMassData()
+    isAwake = true
+}
+
+
+fun Fixture.offset(body: Body, dx: Float, dy: Float) {
+    val shape = shape
+
+    var newShape: Shape? = null
+
+    when (shape) {
+        is CircleShape -> {
+            shape.m_p.x += dx
+            shape.m_p.y += dy
+        }
+        is PolygonShape -> {
+            val points = Array<Vec2>(shape.vertexCount) { Vec2(shape.vertices[it].x + dx, shape.vertices[it].y + dy) }
+
+            newShape = PolygonShape()
+            newShape.set(points, shape.vertexCount)
+        }
+    }
+
+    if (newShape != null) {
+        val fixtureDef = FixtureDef()
+        fixtureDef.filter = m_filter
+        fixtureDef.friction = friction
+        fixtureDef.density = density
+        fixtureDef.restitution = restitution
+        fixtureDef.isSensor = isSensor
+        fixtureDef.userData = userData
+        fixtureDef.shape = newShape
+        body.destroyFixture(this)
+        body.createFixture(fixtureDef)
+    }
+}
+
 fun Body.scale(scaleX: Float, scaleY: Float) {
 
     // We cannot just iterate through the fixtures, because to scale the fixtures, we need to delete the old

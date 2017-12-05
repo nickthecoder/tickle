@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.util.Rectd
+import uk.co.nickthecoder.tickle.util.string
 
 /**
  * Tiles a single Pose to build an image of the required width and height.
@@ -23,6 +24,16 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
 
     private val partPose = pose.copy()
 
+    init {
+        size.x = pose.rect.width.toDouble()
+        size.y = pose.rect.height.toDouble()
+        oldSize.set(size)
+
+        alignment.x = pose.offsetX / pose.rect.width
+        alignment.y = pose.offsetY / pose.rect.height
+        oldAlignment.set(alignment)
+    }
+
     override fun draw(renderer: Renderer) {
 
         val left = actor.x - alignment.x * width()
@@ -30,9 +41,11 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
 
         var y = 0.0
         var x = 0.0
-        while (y < height - poseHeight) {
+
+        // Draw all of the complete pieces (i.e. where the pose does not need clipping).
+        while (y < size.y - poseHeight) {
             x = 0.0
-            while (x < width - poseWidth) {
+            while (x < size.x - poseWidth) {
                 drawPart(
                         renderer,
                         left + x, bottom + y, left + x + poseWidth, bottom + y + poseHeight,
@@ -45,16 +58,16 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
 
         val rightEdge = x
         val topEdge = y
-        val partWidth = width - rightEdge
-        val partHeight = height - topEdge
+        val partWidth = size.x - rightEdge
+        val partHeight = size.y - topEdge
         // Draw the partial pieces on the right edge
         y = 0.0
         partPose.rect.top = pose.rect.top
         partPose.rect.right = (partPose.rect.left + partWidth).toInt()
         partPose.updateRectd()
-        while (y < height - poseHeight) {
+        while (y < size.y - poseHeight) {
             drawPart(renderer,
-                    left + rightEdge, bottom + y, left + width, bottom + y + poseHeight,
+                    left + rightEdge, bottom + y, left + size.x, bottom + y + poseHeight,
                     partPose.rectd)
             y += poseHeight
         }
@@ -64,9 +77,9 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         partPose.rect.top = (partPose.rect.bottom - partHeight).toInt()
         partPose.rect.right = pose.rect.right
         partPose.updateRectd()
-        while (x < width - poseHeight) {
+        while (x < size.x - poseWidth) {
             drawPart(renderer,
-                    left + x, bottom + topEdge, left + x + poseWidth, bottom + height,
+                    left + x, bottom + topEdge, left + x + poseWidth, bottom + size.y,
                     partPose.rectd)
             x += poseWidth
         }
@@ -75,9 +88,8 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         partPose.rect.right = (partPose.rect.left + partWidth).toInt()
         partPose.updateRectd()
         drawPart(renderer,
-                left + rightEdge, bottom + topEdge, left + width, bottom + height,
+                left + rightEdge, bottom + topEdge, left + size.x, bottom + size.y,
                 partPose.rectd)
-
     }
 
     fun drawPart(renderer: Renderer, x0: Double, y0: Double, x1: Double, y1: Double, srcRect: Rectd) {
@@ -88,5 +100,5 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         }
     }
 
-    override fun toString() = "TiledAppearance pose=$pose size=( $width , $height )"
+    override fun toString() = "TiledAppearance pose=$pose size=${size.string()}"
 }

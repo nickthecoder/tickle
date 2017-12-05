@@ -79,6 +79,8 @@ interface Appearance {
     fun touching(point: Vector2d): Boolean
 
     fun resize(width: Double, height: Double)
+
+    fun updateBody() {}
 }
 
 private val INVISIBLE_RECT = Rectd(0.0, 0.0, 0.0, 0.0)

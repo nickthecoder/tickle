@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle
 
 import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.graphics.Renderer
+import uk.co.nickthecoder.tickle.util.string
 
 data class NinePatch(var pose: Pose, var left: Int, var bottom: Int, var right: Int, var top: Int)
 
@@ -50,6 +51,13 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
                 piecePose.updateRectd()
             }
         }
+        size.x = ninePatch.pose.rect.width.toDouble()
+        size.y = ninePatch.pose.rect.height.toDouble()
+        oldSize.set(size)
+
+        alignment.x = ninePatch.pose.offsetX / ninePatch.pose.rect.width
+        alignment.y = ninePatch.pose.offsetY / ninePatch.pose.rect.height
+        oldAlignment.set(alignment)
     }
 
     private val modelMatrix = Matrix4f()
@@ -102,6 +110,6 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
         }
     }
 
-    override fun toString() = "NinePatchAppearance pose=${ninePatch.pose} size=( $width , $height ) margins : ${ninePatch.left}, ${ninePatch.bottom}, ${ninePatch.right}, ${ninePatch.top}"
+    override fun toString() = "NinePatchAppearance pose=${ninePatch.pose} size=${size.string()} margins : ${ninePatch.left}, ${ninePatch.bottom}, ${ninePatch.right}, ${ninePatch.top}"
 
 }

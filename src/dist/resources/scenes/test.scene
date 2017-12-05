@@ -73,8 +73,8 @@
         },
         {
           "costume": "blueTile",
-          "x": 300,
-          "y": 230,
+          "x": 240,
+          "y": 300,
           "direction": 0,
           "sizeX": 200,
           "sizeY": 100,
