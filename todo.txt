@@ -3,8 +3,6 @@ Current Work
 
 TiledAppearance
 	Allow rotated
-	Update the body when it is resized / offset is changed.
-
 	Go through all of RapidRagDoll scenes replacing all tileable costumes.
 		Commit
 		Delete all old costumes and poses.

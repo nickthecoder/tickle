@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle
 
+import org.joml.Matrix4f
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.util.Rectd
 import uk.co.nickthecoder.tickle.util.string
@@ -24,6 +25,8 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
 
     private val partPose = pose.copy()
 
+    private val modelMatrix = Matrix4f()
+
     init {
         size.x = pose.rect.width.toDouble()
         size.y = pose.rect.height.toDouble()
@@ -39,6 +42,16 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         val left = actor.x - alignment.x * width()
         val bottom = actor.y - alignment.y * height()
 
+        val simple = actor.isSimpleImage()
+        if (!simple) {
+            if (actor.direction.radians != directionRadians) {
+                modelMatrix.identity()
+                modelMatrix.translate(actor.x.toFloat(), actor.y.toFloat(), 0f)
+                modelMatrix.rotateZ((actor.direction.radians - directionRadians).toFloat())
+                modelMatrix.translate(-actor.x.toFloat(), -actor.y.toFloat(), 0f)
+            }
+        }
+
         var y = 0.0
         var x = 0.0
 
@@ -49,7 +62,8 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
                 drawPart(
                         renderer,
                         left + x, bottom + y, left + x + poseWidth, bottom + y + poseHeight,
-                        pose.rectd)
+                        pose.rectd,
+                        simple)
 
                 x += poseWidth
             }
@@ -68,7 +82,8 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         while (y < size.y - poseHeight) {
             drawPart(renderer,
                     left + rightEdge, bottom + y, left + size.x, bottom + y + poseHeight,
-                    partPose.rectd)
+                    partPose.rectd,
+                    simple)
             y += poseHeight
         }
 
@@ -80,7 +95,8 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         while (x < size.x - poseWidth) {
             drawPart(renderer,
                     left + x, bottom + topEdge, left + x + poseWidth, bottom + size.y,
-                    partPose.rectd)
+                    partPose.rectd,
+                    simple)
             x += poseWidth
         }
 
@@ -89,14 +105,15 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         partPose.updateRectd()
         drawPart(renderer,
                 left + rightEdge, bottom + topEdge, left + size.x, bottom + size.y,
-                partPose.rectd)
+                partPose.rectd,
+                simple)
     }
 
-    fun drawPart(renderer: Renderer, x0: Double, y0: Double, x1: Double, y1: Double, srcRect: Rectd) {
-        if (actor.isSimpleImage()) {
-            renderer.drawTexture(pose.texture, x0, y0, x1, y1, srcRect)
+    fun drawPart(renderer: Renderer, x0: Double, y0: Double, x1: Double, y1: Double, srcRect: Rectd, simple: Boolean) {
+        if (simple) {
+            renderer.drawTexture(pose.texture, x0, y0, x1, y1, srcRect, actor.color)
         } else {
-            TODO("Not implemented")
+            renderer.drawTexture(pose.texture, x0, y0, x1, y1, srcRect, actor.color, modelMatrix)
         }
     }
 

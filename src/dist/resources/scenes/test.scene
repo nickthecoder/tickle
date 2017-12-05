@@ -52,44 +52,32 @@
       "name": "main",
       "actors": [
         {
-          "costume": "coinRod",
-          "x": 483,
-          "y": 350,
-          "direction": 0,
-          "sizeX": 60,
-          "sizeY": 18,
-          "alignmentX": 0.5,
-          "alignmentY": 0.5
-        },
-        {
-          "costume": "redOutline",
-          "x": 200,
-          "y": 450,
-          "direction": 0,
-          "sizeX": 147,
-          "sizeY": 127,
-          "alignmentX": 0.5,
-          "alignmentY": 0.5
-        },
-        {
           "costume": "blueTile",
-          "x": 240,
-          "y": 300,
-          "direction": 0,
+          "x": 117,
+          "y": 150,
+          "direction": 71.17528998175993,
           "sizeX": 200,
           "sizeY": 100,
           "alignmentX": 0.5,
           "alignmentY": 0.5
         },
         {
-          "costume": "blueTile",
-          "x": 500,
-          "y": 487,
+          "costume": "coin10",
+          "x": 100,
+          "y": 150,
           "direction": 0,
-          "sizeX": 100,
-          "sizeY": 100,
-          "alignmentX": 0.5,
-          "alignmentY": 0.5
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "turningSpeed",
+              "value": "3.0"
+            },
+            {
+              "name": "velocity",
+              "value": "0.0:2.0"
+            }
+          ]
         }
       ]
     }

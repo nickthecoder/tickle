@@ -5,7 +5,6 @@ import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.scene.StageLayer
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Angle
-import uk.co.nickthecoder.tickle.util.string
 
 enum class ActorXAlignment { LEFT, CENTER, RIGHT, RATIO }
 enum class ActorYAlignment { BOTTOM, CENTER, TOP, RATIO }
