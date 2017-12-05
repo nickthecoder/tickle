@@ -143,17 +143,18 @@ class ActorResource(val isDesigning: Boolean = false) {
         actor.y = y
         actor.zOrder = zOrder
         actor.direction.degrees = direction.degrees
-        val appearance = actor.appearance
-        if (appearance is ResizeAppearance) {
-            actor.resize(size.x, size.y)
-            appearance.alignment.set(alignment)
-        } else {
-            actor.scale = scale
-        }
+        actor.scale = scale
+
         actor.xAlignment = xAlignment
         actor.yAlignment = yAlignment
         actor.flipX = flipX
         actor.flipY = flipY
+
+        val appearance = actor.appearance
+        if (appearance is ResizeAppearance) {
+            actor.resize(size.x, size.y)
+            appearance.alignment.set(alignment)
+        }
 
         actor.role?.let { attributes.applyToObject(it) }
         return actor

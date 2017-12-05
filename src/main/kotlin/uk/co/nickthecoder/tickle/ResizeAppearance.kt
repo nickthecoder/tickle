@@ -40,7 +40,6 @@ abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
     override fun resize(width: Double, height: Double) {
         size.x = width
         size.y = height
-        actor.scaleXY = 1.0
     }
 
     override fun updateBody() {
@@ -52,12 +51,9 @@ abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
         if (oldAlignment != alignment) {
             actor.body?.let { body ->
                 val world = body.world as TickleWorld
-                println("Offsetting tiled by ${(oldAlignment.x - alignment.x) * width()}, ${(oldAlignment.y - alignment.y) * height()}")
                 body.offset(
                         world.pixelsToWorld((oldAlignment.x - alignment.x) * width()),
                         world.pixelsToWorld((oldAlignment.y - alignment.y) * height()))
-                println("Offset tiled")
-
             }
             oldAlignment.set(alignment)
         }

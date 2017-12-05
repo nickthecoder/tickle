@@ -57,15 +57,15 @@ abstract class Layer {
             translate(actorResource.x, actorResource.y)
             rotate(actorResource.direction.degrees - (pose?.direction?.degrees ?: 0.0))
 
+
+            scale(actorResource.scale.x, actorResource.scale.y)
+            scale(if (actorResource.flipX) -1.0 else 1.0, if (actorResource.flipY) -1.0 else 1.0)
+
             if (ninePatch != null) {
 
                 drawNinePatch(actorResource, ninePatch)
 
             } else {
-
-                scale(actorResource.scale.x, actorResource.scale.y)
-                scale(if (actorResource.flipX) -1.0 else 1.0, if (actorResource.flipY) -1.0 else 1.0)
-
                 if (pose == null) {
                     actorResource.textStyle?.let {
                         drawText(it, actorResource.displayText)

@@ -33,25 +33,26 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val scaleP = Vector2dParameter("scale", value = actorResource.scale)
 
-    val sizeP = Vector2dParameter("size", value = actorResource.size)
-
-    val ninePatchAlignmentP = Vector2dParameter("ninePatchAlignment", label = "Alignment", value = actorResource.alignment)
-
-    val ninePatchGroupP = SimpleGroupParameter("ninePatch")
-            .addParameters(sizeP, ninePatchAlignmentP)
-            .asPlain()
-
     val flipXP = BooleanParameter("flipX", value = actorResource.flipX)
     val flipYP = BooleanParameter("flipY", value = actorResource.flipY)
 
     val textP = StringParameter("text", value = actorResource.text, rows = 3)
 
+
+    val sizeP = Vector2dParameter("size", value = actorResource.size)
+
+    val resizeableAlignmentP = Vector2dParameter("resizeableAlignment", label = "Alignment", value = actorResource.alignment)
+
+    val resizableGroupP = SimpleGroupParameter("resizeable")
+            .addParameters(sizeP, resizeableAlignmentP)
+            .asPlain()
+
+
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP,
-                    if (actorResource.isSizable()) ninePatchGroupP else scaleP,
-                    flipXP, flipYP, textP)
+            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, flipXP, flipYP, textP)
+
             .asVertical()
 
     var dirty = false
@@ -62,6 +63,10 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     private var ignoreChanges: Boolean = false
 
     init {
+
+        if (actorResource.isSizable()) {
+            groupP.addParameters(resizableGroupP)
+        }
 
         actorResource.attributes.map().keys.sorted().map { actorResource.attributes.getOrCreateData(it) }.forEach { data ->
             data.parameter?.let { it ->
@@ -125,16 +130,17 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             yAlignment = yAlignmentP.value!!
 
             directionP.value?.let { direction.degrees = it }
-            if (actorResource.isSizable()) {
-                size.set(sizeP.value)
-                alignment.set(ninePatchAlignmentP.value)
-            } else {
-                scale.set(scaleP.value)
-            }
+            scale.set(scaleP.value)
+
             flipX = flipXP.value == true
             flipY = flipYP.value == true
             text = textP.value
             zOrder = zOrderP.value!!
+
+            if (actorResource.isSizable()) {
+                size.set(sizeP.value)
+                alignment.set(resizeableAlignmentP.value)
+            }
         }
 
         // Note. We are not updating the dynamic "attributes", because they should ONLY be updated via their
@@ -154,7 +160,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             directionP.value = direction.degrees
             if (isSizable()) {
                 sizeP.value.set(size)
-                ninePatchAlignmentP.value.set(alignment)
+                resizeableAlignmentP.value.set(alignment)
             } else {
                 scaleP.value.set(scale)
             }

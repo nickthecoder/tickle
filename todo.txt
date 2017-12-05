@@ -2,12 +2,13 @@ Current Work
 ============
 
 TiledAppearance
-	Allow rotated
 	Go through all of RapidRagDoll scenes replacing all tileable costumes.
 		Commit
 		Delete all old costumes and poses.
 Next
 ====
+
+Rename "Grow" Action to "Scale" ?
 
 Resize Handle for Resiable objects
 

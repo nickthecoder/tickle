@@ -25,8 +25,6 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
 
     private val partPose = pose.copy()
 
-    private val modelMatrix = Matrix4f()
-
     init {
         size.x = pose.rect.width.toDouble()
         size.y = pose.rect.height.toDouble()
@@ -43,13 +41,11 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         val bottom = actor.y - alignment.y * height()
 
         val simple = actor.isSimpleImage()
+        val modelMatrix: Matrix4f?
         if (!simple) {
-            if (actor.direction.radians != directionRadians) {
-                modelMatrix.identity()
-                modelMatrix.translate(actor.x.toFloat(), actor.y.toFloat(), 0f)
-                modelMatrix.rotateZ((actor.direction.radians - directionRadians).toFloat())
-                modelMatrix.translate(-actor.x.toFloat(), -actor.y.toFloat(), 0f)
-            }
+            modelMatrix = actor.calculateModelMatrix()
+        } else {
+            modelMatrix = null
         }
 
         var y = 0.0
@@ -63,7 +59,7 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
                         renderer,
                         left + x, bottom + y, left + x + poseWidth, bottom + y + poseHeight,
                         pose.rectd,
-                        simple)
+                        modelMatrix)
 
                 x += poseWidth
             }
@@ -83,7 +79,7 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
             drawPart(renderer,
                     left + rightEdge, bottom + y, left + size.x, bottom + y + poseHeight,
                     partPose.rectd,
-                    simple)
+                    modelMatrix)
             y += poseHeight
         }
 
@@ -96,7 +92,7 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
             drawPart(renderer,
                     left + x, bottom + topEdge, left + x + poseWidth, bottom + size.y,
                     partPose.rectd,
-                    simple)
+                    modelMatrix)
             x += poseWidth
         }
 
@@ -106,11 +102,11 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         drawPart(renderer,
                 left + rightEdge, bottom + topEdge, left + size.x, bottom + size.y,
                 partPose.rectd,
-                simple)
+                modelMatrix)
     }
 
-    fun drawPart(renderer: Renderer, x0: Double, y0: Double, x1: Double, y1: Double, srcRect: Rectd, simple: Boolean) {
-        if (simple) {
+    fun drawPart(renderer: Renderer, x0: Double, y0: Double, x1: Double, y1: Double, srcRect: Rectd, modelMatrix: Matrix4f?) {
+        if (modelMatrix == null) {
             renderer.drawTexture(pose.texture, x0, y0, x1, y1, srcRect, actor.color)
         } else {
             renderer.drawTexture(pose.texture, x0, y0, x1, y1, srcRect, actor.color, modelMatrix)

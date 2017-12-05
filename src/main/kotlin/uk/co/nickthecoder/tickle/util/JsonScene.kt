@@ -216,16 +216,8 @@ class JsonScene {
                 }
 
                 jactor.add("direction", direction.degrees)
-
-                if (isSizable()) {
-                    jactor.add("sizeX", size.x)
-                    jactor.add("sizeY", size.y)
-                    jactor.add("alignmentX", alignment.x)
-                    jactor.add("alignmentY", alignment.y)
-                } else {
-                    jactor.add("scaleX", scale.x)
-                    jactor.add("scaleY", scale.y)
-                }
+                jactor.add("scaleX", scale.x)
+                jactor.add("scaleY", scale.y)
 
                 if (flipX) {
                     jactor.add("flipX", true)
@@ -234,6 +226,12 @@ class JsonScene {
                     jactor.add("flipY", true)
                 }
 
+                if (isSizable()) {
+                    jactor.add("sizeX", size.x)
+                    jactor.add("sizeY", size.y)
+                    jactor.add("alignmentX", alignment.x)
+                    jactor.add("alignmentY", alignment.y)
+                }
             }
 
             JsonUtil.saveAttributes(jactor, actorResource.attributes)
@@ -273,25 +271,27 @@ class JsonScene {
 
             direction.degrees = jactor.getDouble("direction", 0.0)
 
+            // Legacy (when scale was a single Double, rather than a Vector2d)
+            jactor.get("scale")?.let {
+                scale.x = it.asDouble()
+                scale.y = it.asDouble()
+            }
+            // This is the new form of scale.
+            scale.x = jactor.getDouble("scaleX", 1.0)
+            scale.y = jactor.getDouble("scaleY", 1.0)
+
+            flipX = jactor.getBoolean("flipX", false)
+            flipY = jactor.getBoolean("flipY", false)
+            actorResource.text = jactor.getString("text", "")
+
             if (isSizable()) {
                 val rect = costume?.chooseNinePatch(costume.initialEventName)?.pose?.rect ?: costume?.choosePose(costume.initialEventName)?.rect
                 size.x = jactor.getDouble("sizeX", rect?.width?.toDouble() ?: 1.0)
                 size.y = jactor.getDouble("sizeY", rect?.height?.toDouble() ?: 1.0)
                 alignment.x = jactor.getDouble("alignmentX", 0.5)
                 alignment.y = jactor.getDouble("alignmentY", 0.5)
-            } else {
-                // Legacy (when scale was a single Double, rather than a Vector2d)
-                jactor.get("scale")?.let {
-                    scale.x = it.asDouble()
-                    scale.y = it.asDouble()
-                }
-                // This is the new form of scale.
-                scale.x = jactor.getDouble("scaleX", 1.0)
-                scale.y = jactor.getDouble("scaleY", 1.0)
             }
-            flipX = jactor.getBoolean("flipX", false)
-            flipY = jactor.getBoolean("flipY", false)
-            actorResource.text = jactor.getString("text", "")
+
         }
 
         stageResource.actorResources.add(actorResource)

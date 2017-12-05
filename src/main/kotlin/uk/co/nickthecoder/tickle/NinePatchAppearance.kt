@@ -60,8 +60,6 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
         oldAlignment.set(alignment)
     }
 
-    private val modelMatrix = Matrix4f()
-
     override val directionRadians: Double
         get() = ninePatch.pose.direction.radians
 
@@ -78,31 +76,25 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
 
         //println("Drawing nine patch $width , $height widths=$widths heights = $heights")
 
+        val simple = actor.isSimpleImage()
+        val modelMatrix : Matrix4f?
+        if (!simple) {
+            modelMatrix = actor.calculateModelMatrix()
+        } else {
+            modelMatrix = null
+        }
+
         for (y in 0..2) {
             for (x in 0..2) {
                 val piecePose = pieces[x][y]
 
                 if (piecePose.rect.width > 0 && piecePose.rect.height > 0) {
-                    if (actor.isSimpleImage()) {
-                        val x0 = actor.x - offsetX() + lefts[x]
-                        val y0 = actor.y - offsetY() + bottoms[y]
+                    val x0 = actor.x - offsetX() + lefts[x]
+                    val y0 = actor.y - offsetY() + bottoms[y]
+                    if (simple) {
                         //println("Drawing simple piece $x,$y width=${piecePose.rect.width} height=${piecePose.rect.height} at ( $x0, $y0, ${x0 + widths[x]}, ${y0 + heights[y]} ), ${piecePose.rectd}")
                         renderer.drawTexture(ninePatch.pose.texture, x0, y0, x0 + widths[x], y0 + heights[y], piecePose.rectd, actor.color)
-
                     } else {
-                        modelMatrix.identity()
-                        val dx = actor.x + lefts[x]
-                        val dy = actor.y + bottoms[y]
-                        modelMatrix.identity().translate(dx.toFloat(), dy.toFloat(), 0f)
-                        if (actor.direction.radians != directionRadians) {
-                            modelMatrix.rotateZ((actor.direction.radians - directionRadians).toFloat())
-                        }
-                        modelMatrix.scale(scaleXs[x], scaleYs[y], 1f)
-                        modelMatrix.translate(-dx.toFloat(), -dy.toFloat(), 0f)
-
-                        val x0 = actor.x - offsetX() + lefts[x]
-                        val y0 = actor.y - offsetY() + bottoms[y]
-                        //println("Drawing piece $x,$y width=${piecePose.rect.width} height=${piecePose.rect.height} at ( $x0, $y0, ${x0 + widths[x]}, ${y0 + heights[y]} ), ${piecePose.rectd}, ${modelMatrix}")
                         renderer.drawTexture(ninePatch.pose.texture, x0, y0, x0 + widths[x], y0 + heights[y], piecePose.rectd, actor.color, modelMatrix)
                     }
                 }

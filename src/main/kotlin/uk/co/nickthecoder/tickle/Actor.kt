@@ -80,7 +80,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     var appearance: Appearance = InvisibleAppearance()
 
-    private val modelMatrix = Matrix4f()
+    internal val modelMatrix = Matrix4f()
 
     private var dirtyMatrix: Boolean = true
         get() {
