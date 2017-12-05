@@ -5,6 +5,7 @@ import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.scene.StageLayer
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Angle
+import uk.co.nickthecoder.tickle.util.string
 
 enum class ActorXAlignment { LEFT, CENTER, RIGHT, RATIO }
 enum class ActorYAlignment { BOTTOM, CENTER, TOP, RATIO }
@@ -22,6 +23,25 @@ class ActorResource(val isDesigning: Boolean = false) {
             updateAttributesMetaData()
             Resources.instance.costumes.find(costumeName)?.let { costume ->
                 zOrder = costume.zOrder
+
+                // Set the default size for NinePatches and tiled Poses.
+                val pose = costume.pose()
+                if (pose == null) {
+                    val ninePatch = costume.chooseNinePatch(costume.initialEventName)
+                    if (ninePatch != null) {
+                        size.x = ninePatch.pose.rect.width.toDouble()
+                        size.y = ninePatch.pose.rect.height.toDouble()
+                        alignment.x = ninePatch.pose.offsetX / size.x
+                        alignment.y = ninePatch.pose.offsetY / size.y
+                    }
+                } else {
+                    if (pose.tiled) {
+                        size.x = pose.rect.width.toDouble()
+                        size.y = pose.rect.height.toDouble()
+                        alignment.x = pose.offsetX / size.x
+                        alignment.y = pose.offsetY / size.y
+                    }
+                }
             }
         }
 
