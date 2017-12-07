@@ -20,7 +20,8 @@ class Window(
         title: String,
         private var _width: Int,
         private var _height: Int,
-        resizable: Boolean = false) {
+        resizable: Boolean = false,
+        fullScreen: Boolean = false) {
 
     val handle: Long
 
@@ -40,7 +41,8 @@ class Window(
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
 
-        handle = glfwCreateWindow(_width, _height, title, MemoryUtil.NULL, MemoryUtil.NULL)
+        val monitor = if (fullScreen) glfwGetPrimaryMonitor() else MemoryUtil.NULL
+        handle = glfwCreateWindow(_width, _height, title, monitor, MemoryUtil.NULL)
         if (handle == MemoryUtil.NULL) {
             throw RuntimeException("Failed to create the GLFW window")
         }

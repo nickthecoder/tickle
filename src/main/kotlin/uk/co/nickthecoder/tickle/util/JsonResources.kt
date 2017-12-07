@@ -19,7 +19,7 @@ import java.io.*
 
 class JsonResources {
 
-    var resources: Resources
+    private var resources: Resources
 
     /**
      * WHile loading the costumes, one costume event may depend upon a costume that hasn't been loaded yet.
@@ -35,7 +35,7 @@ class JsonResources {
 
     constructor(file: File) {
         this.resources = Resources()
-        load(file)
+        this.resources.file = file
     }
 
     constructor(resources: Resources) {
@@ -70,9 +70,17 @@ class JsonResources {
         }
     }
 
-    fun load(file: File) {
-        resources.file = file
-        val jroot = Json.parse(InputStreamReader(FileInputStream(file))).asObject()
+    fun loadGameInfo(): GameInfo {
+        val jroot = Json.parse(InputStreamReader(FileInputStream(resources.file))).asObject()
+
+        jroot.get("info")?.let {
+            loadInfo(it as JsonObject)
+        }
+        return resources.gameInfo
+    }
+
+    fun loadResources(): Resources {
+        val jroot = Json.parse(InputStreamReader(FileInputStream(resources.file))).asObject()
 
         val jinfo = jroot.get("info")
         val jpreferences = jroot.get("preferences")
@@ -128,6 +136,8 @@ class JsonResources {
                 from.inheritEventsFrom = to
             }
         }
+
+        return resources
     }
 
     // EDITOR PREFERENCES
@@ -179,6 +189,7 @@ class JsonResources {
             jinfo.add("width", width)
             jinfo.add("height", height)
             jinfo.add("resizable", resizable)
+            jinfo.add("fullScreen", fullScreen)
 
             jinfo.add("initialScene", resources.sceneFileToPath(initialScenePath))
             jinfo.add("testScene", resources.sceneFileToPath(testScenePath))
@@ -211,6 +222,7 @@ class JsonResources {
             width = jinfo.getInt("width", 800)
             height = jinfo.getInt("height", 600)
             resizable = jinfo.getBoolean("resizable", true)
+            fullScreen = jinfo.getBoolean("fullScreen", false)
 
             initialScenePath = resources.scenePathToFile(jinfo.getString("initialScene", "menu"))
             testScenePath = resources.scenePathToFile(jinfo.getString("testScene", "menu"))

@@ -8,6 +8,7 @@ class GameInfo(
         var id: String, /* simple text - no spaces or punctuation, will NOT be translated if I18N is implemented */
         var width: Int,
         var height: Int,
+        var fullScreen : Boolean,
         var resizable: Boolean,
         var initialScenePath: File = File("menu"),
         var testScenePath: File = File("menu"),

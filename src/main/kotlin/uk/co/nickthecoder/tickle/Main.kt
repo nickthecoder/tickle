@@ -56,16 +56,14 @@ fun startGame(resourcesFile: File, scenePath: String? = null) {
         throw IllegalStateException("Unable to initialize GLFW")
     }
 
-    val window = Window("Loading", 220, 50)
+    val json = JsonResources(resourcesFile)
+    val gameInfo = json.loadGameInfo()
+
+    val window = Window(gameInfo.title, gameInfo.width, gameInfo.height, fullScreen = gameInfo.fullScreen)
     window.show()
     GL.createCapabilities()
 
-    val resources = JsonResources(resourcesFile).resources
-
-    with(resources.gameInfo) {
-        window.change(title, width, height, resizable)
-    }
-
+    val resources = json.loadResources()
     Game(window, resources).run(scenePath ?: Resources.instance.sceneFileToPath(resources.gameInfo.initialScenePath))
 
     // Clean up OpenGL and OpenAL

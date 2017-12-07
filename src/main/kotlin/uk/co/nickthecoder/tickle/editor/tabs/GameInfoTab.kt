@@ -30,11 +30,12 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val titleP = StringParameter("title", value = gameInfo.title)
     val idP = StringParameter("ID", value = gameInfo.id)
     val windowSizeP = XYiParameter("windowSize")
+    val fullScreenP = BooleanParameter("fullScreen", value = gameInfo.fullScreen)
+    val resizableP = BooleanParameter("resizable", value = gameInfo.resizable)
 
     val initialSceneP = StringParameter("initialScene", value = Resources.instance.sceneFileToPath(gameInfo.initialScenePath))
     val testSceneP = StringParameter("testScene", value = Resources.instance.sceneFileToPath(gameInfo.testScenePath))
 
-    val resizableP = BooleanParameter("resizable", value = gameInfo.resizable)
     val producerP = ChoiceParameter<Class<*>>("producer", value = NoProducer::class.java)
 
     val physicsEngineP = BooleanParameter("physicsEngine", value = gameInfo.physicsEngine)
@@ -51,7 +52,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
             .asBox()
 
     override val taskD = TaskDescription("editGameInfo")
-            .addParameters(titleP, idP, windowSizeP, resizableP, initialSceneP, testSceneP, producerP, physicsEngineP, physicsDetailsP)
+            .addParameters(titleP, idP, windowSizeP, resizableP, fullScreenP, initialSceneP, testSceneP, producerP, physicsEngineP, physicsDetailsP)
 
     init {
         windowSizeP.x = gameInfo.width
@@ -91,6 +92,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
             id = idP.value
             width = windowSizeP.x!!
             height = windowSizeP.y!!
+            fullScreen = fullScreenP.value == true
             initialScenePath = Resources.instance.scenePathToFile(initialSceneP.value)
             testScenePath = Resources.instance.scenePathToFile(testSceneP.value)
             resizable = resizableP.value!!
