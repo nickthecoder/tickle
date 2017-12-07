@@ -8,6 +8,8 @@ TiledAppearance
 Next
 ====
 
+All grid dialogs in one window. Buttons become the toggles + One more to edit.
+
 Rename "Grow" Action to "Scale" ?
 
 Resize Handle for Resiable objects

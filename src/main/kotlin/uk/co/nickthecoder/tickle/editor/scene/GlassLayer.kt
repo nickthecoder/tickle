@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle.editor.scene
 import javafx.application.Platform
 import javafx.scene.paint.Color
 import javafx.scene.shape.StrokeLineCap
+import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
@@ -11,6 +12,8 @@ import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
 import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.resources.SceneResourceListener
+import uk.co.nickthecoder.tickle.util.rotate
+import uk.co.nickthecoder.tickle.util.string
 
 class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
@@ -30,6 +33,8 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         }
 
     var newActor: ActorResource? = null
+
+    private val dragHandles = mutableListOf<DragHandle>()
 
     init {
         selection.listeners.add(this)
@@ -123,6 +128,13 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         if (latest != null) {
             if (latest.costume()?.canRotate == true) {
                 dragHandles.add(RotateArrow("Direction", latest))
+            }
+
+            if (latest.isSizable()) {
+                dragHandles.add(SizeHandle(latest, true, true))
+                dragHandles.add(SizeHandle(latest, true, false))
+                dragHandles.add(SizeHandle(latest, false, true))
+                dragHandles.add(SizeHandle(latest, false, false))
             }
 
             latest.attributes.map().forEach { name, data ->
@@ -241,6 +253,13 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         }
     }
 
+    fun drawCornerHandle() {
+        with(canvas.graphicsContext2D) {
+            strokeRect(1.0, -3.5 / scale, 2.0 / scale, 6.0 / scale)
+            strokeRect(-3.5, 1.0 / scale, 6.0 / scale, 2.0 / scale)
+        }
+    }
+
     fun drawOutlined(color: Color, shape: () -> Unit) {
         with(canvas.graphicsContext2D) {
             stroke = Color.BLACK
@@ -271,8 +290,6 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         fun selectionColor(latest: Boolean) = if (latest) latestColor else selectionColor
 
     }
-
-    private val dragHandles = mutableListOf<DragHandle>()
 
     fun findDragHandle(x: Double, y: Double): DragHandle? {
         return dragHandles.firstOrNull { it.isNear(x, y) }
@@ -387,6 +404,88 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         }
 
     }
+
+    inner class SizeHandle(val actorResource: ActorResource, val isLeft: Boolean, val isBottom: Boolean)
+        : AbstractDragHandle("Resize") {
+
+        override fun draw() {
+            with(canvas.graphicsContext2D) {
+                save()
+                translate(x(), y())
+                rotate(actorResource.direction.degrees - (actorResource.editorPose?.direction?.degrees ?: 0.0))
+                if (isLeft) scale(-1.0, 1.0)
+                if (isBottom) scale(1.0, -1.0)
+                drawOutlined(handleColor(hovering)) { drawCornerHandle() }
+
+                restore()
+            }
+        }
+
+        override fun moveTo(x: Double, y: Double, snap: Boolean) {
+
+            val now = Vector2d(x, y)
+            viewToActor(actorResource, now)
+            println("*** Sent $x, $y Converted to ${now.string()}")
+
+            val was = Vector2d(x(), y())
+            viewToActor(actorResource, was)
+
+            println("--- Now  ${x()}, ${y()} Converted to ${was.string()}")
+            val dx = now.x - was.x
+            val dy = now.y - was.y
+
+            if (isLeft) {
+                actorResource.x += dx * (1 - actorResource.alignment.x)
+                actorResource.size.x -= dx
+            } else {
+                actorResource.x += dx * actorResource.alignment.x
+                actorResource.size.x += dx
+            }
+
+            if (isBottom) {
+                actorResource.y += dy * (1 - actorResource.alignment.y)
+                actorResource.size.y -= dy
+            } else {
+                actorResource.y += dy * actorResource.alignment.y
+                actorResource.size.y += dy
+            }
+            actorResource.draggedX = actorResource.x
+            actorResource.draggedY = actorResource.y
+            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
+            println("=== Set to ${x()} , ${y()}")
+        }
+
+        override fun x(): Double {
+
+            val vector = Vector2d(
+                    (if (isLeft) 0.0 else actorResource.size.x) - actorResource.alignment.x * actorResource.size.x,
+                    (if (isBottom) 0.0 else actorResource.size.y) - actorResource.alignment.y * actorResource.size.y)
+
+            actorToView(actorResource, vector)
+            return vector.x
+        }
+
+        override fun y(): Double {
+            val vector = Vector2d(
+                    (if (isLeft) 0.0 else actorResource.size.x) - actorResource.alignment.x * actorResource.size.x,
+                    (if (isBottom) 0.0 else actorResource.size.y) - actorResource.alignment.y * actorResource.size.y)
+
+            actorToView(actorResource, vector)
+            return vector.y
+        }
+
+        fun actorToView(actorResource: ActorResource, vector: Vector2d) {
+            vector.rotate(actorResource.direction.radians - (actorResource.editorPose?.direction?.radians ?: 0.0))
+            vector.add(actorResource.x, actorResource.y)
+        }
+
+        fun viewToActor(actorResource: ActorResource, vector: Vector2d) {
+            println("view to actor angle = ${-actorResource.direction.radians + (actorResource.editorPose?.direction?.radians ?: 0.0)}")
+            vector.add(-actorResource.x, -actorResource.y)
+            vector.rotate(-actorResource.direction.radians + (actorResource.editorPose?.direction?.radians ?: 0.0))
+        }
+    }
+
 
     inner class DirectionArrow(name: String, actorResource: ActorResource, val data: AttributeData, distance: Int)
 

@@ -37,6 +37,7 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
 
     override fun draw(renderer: Renderer) {
 
+        //println("Drawing tiled")
         val left = actor.x - alignment.x * width()
         val bottom = actor.y - alignment.y * height()
 
@@ -48,13 +49,12 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
             modelMatrix = null
         }
 
-        var y = 0.0
-        var x = 0.0
-
         // Draw all of the complete pieces (i.e. where the pose does not need clipping).
+        var y = 0.0
         while (y < size.y - poseHeight) {
-            x = 0.0
+            var x = 0.0
             while (x < size.x - poseWidth) {
+                //println("Drawing whole part from ${pose.rect}")
                 drawPart(
                         renderer,
                         left + x, bottom + y, left + x + poseWidth, bottom + y + poseHeight,
@@ -66,16 +66,19 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
             y += poseHeight
         }
 
-        val rightEdge = x
+        val rightEdge = size.x - size.x % poseWidth
         val topEdge = y
         val partWidth = size.x - rightEdge
         val partHeight = size.y - topEdge
+
+        //println("Size.x = ${size.x} rightEdge = $rightEdge partWidth = ${partWidth} topEdge = ")
         // Draw the partial pieces on the right edge
         y = 0.0
         partPose.rect.top = pose.rect.top
-        partPose.rect.right = (partPose.rect.left + partWidth).toInt()
+        partPose.rect.right = (pose.rect.left + partWidth).toInt()
         partPose.updateRectd()
         while (y < size.y - poseHeight) {
+            //println("Drawing right edge from ${partPose.rect}")
             drawPart(renderer,
                     left + rightEdge, bottom + y, left + size.x, bottom + y + poseHeight,
                     partPose.rectd,
@@ -84,11 +87,12 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         }
 
         // Draw the partial pieces on the top edge
-        x = 0.0
-        partPose.rect.top = (partPose.rect.bottom - partHeight).toInt()
+        var x = 0.0
+        partPose.rect.top = (pose.rect.bottom - partHeight).toInt()
         partPose.rect.right = pose.rect.right
         partPose.updateRectd()
         while (x < size.x - poseWidth) {
+            //println("Drawing top edge from ${partPose.rect}")
             drawPart(renderer,
                     left + x, bottom + topEdge, left + x + poseWidth, bottom + size.y,
                     partPose.rectd,
@@ -97,12 +101,18 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         }
 
         // Draw the partial piece in the top right corner
-        partPose.rect.right = (partPose.rect.left + partWidth).toInt()
-        partPose.updateRectd()
-        drawPart(renderer,
-                left + rightEdge, bottom + topEdge, left + size.x, bottom + size.y,
-                partPose.rectd,
-                modelMatrix)
+        if (rightEdge < size.x && topEdge < size.y) {
+            partPose.rect.right = (pose.rect.left + partWidth).toInt()
+            partPose.rect.top = (pose.rect.bottom - partHeight).toInt()
+            partPose.updateRectd()
+            // println("Drawing corner from ${partPose.rect}")
+            drawPart(renderer,
+                    left + rightEdge, bottom + topEdge, left + size.x, bottom + size.y,
+                    partPose.rectd,
+                    modelMatrix)
+        }
+
+        // println("Done tiled\n")
     }
 
     fun drawPart(renderer: Renderer, x0: Double, y0: Double, x1: Double, y1: Double, srcRect: Rectd, modelMatrix: Matrix4f?) {

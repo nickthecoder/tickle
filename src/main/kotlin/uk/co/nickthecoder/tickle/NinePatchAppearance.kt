@@ -65,9 +65,6 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
 
     override fun draw(renderer: Renderer) {
 
-        val scaleXs = listOf(1f, ((width() - ninePatch.left - ninePatch.right) / pieces[1][0].rect.width).toFloat(), 1f)
-        val scaleYs = listOf(1f, ((height() - ninePatch.top - ninePatch.bottom) / pieces[1][0].rect.height).toFloat(), 1f)
-
         val widths = listOf(ninePatch.left.toDouble(), width() - ninePatch.left - ninePatch.right, ninePatch.right.toDouble())
         val heights = listOf(ninePatch.bottom.toDouble(), height() - ninePatch.top - ninePatch.bottom, ninePatch.top.toDouble())
 

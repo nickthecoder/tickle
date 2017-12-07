@@ -10,7 +10,7 @@
   "showMouse": false,
   "layout": "default",
   "snapToGrid": {
-    "enabled": true,
+    "enabled": false,
     "xSpacing": 50,
     "ySpacing": 50,
     "xOffset": 0,
@@ -29,12 +29,12 @@
     ]
   },
   "snapToOthers": {
-    "enabled": true,
+    "enabled": false,
     "xCloseness": 11,
     "yCloseness": 9
   },
   "snapRotation": {
-    "enabled": true,
+    "enabled": false,
     "step": 45,
     "closeness": 5
   },
@@ -53,32 +53,32 @@
       "actors": [
         {
           "costume": "blueTile",
-          "x": 500,
-          "y": 230,
-          "direction": 9.246112745563252,
-          "scaleX": 3,
+          "x": 363,
+          "y": 203,
+          "direction": 10.784297867562598,
+          "scaleX": 1,
           "scaleY": 1,
-          "sizeX": 200,
-          "sizeY": 100,
+          "sizeX": 164,
+          "sizeY": 154,
           "alignmentX": 0.5,
           "alignmentY": 0.5
         },
         {
           "costume": "redOutline",
-          "x": 180,
-          "y": 532,
-          "direction": 301.50426671920417,
-          "scaleX": 3,
+          "x": 288.29926351901855,
+          "y": 433.5204696388699,
+          "direction": 18.43494882292201,
+          "scaleX": 1,
           "scaleY": 1,
-          "sizeX": 172,
-          "sizeY": 272,
+          "sizeX": 245.2343009609292,
+          "sizeY": 146.5111726571979,
           "alignmentX": 0.4861111111111111,
           "alignmentY": 0.5277777777777778
         },
         {
           "costume": "bee",
-          "x": 200,
-          "y": 234,
+          "x": 215,
+          "y": 262,
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1
