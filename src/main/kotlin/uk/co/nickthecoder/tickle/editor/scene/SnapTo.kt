@@ -1,10 +1,17 @@
-package uk.co.nickthecoder.tickle.resources
+package uk.co.nickthecoder.tickle.editor.scene
 
-interface SnapTo {
+import uk.co.nickthecoder.paratask.Task
+import uk.co.nickthecoder.tickle.resources.ActorResource
+
+interface HasTask {
+
+    fun task(): Task
+
+}
+
+interface SnapTo : HasTask {
 
     fun snapActor(actorResource: ActorResource, adjustments: MutableList<Adjustment>)
-
-    fun edit()
 
     fun snapInfo() = "You can temporarily disable snapping by holding down the ctrl key while dragging."
 }

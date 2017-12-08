@@ -74,8 +74,9 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
     override fun extraSidePanes() = sceneEditor.sidePanes
 
-    override fun extraButtons() = listOf(sceneEditor.snapToGuidesButton, sceneEditor.snapToGridButton,
-            sceneEditor.snapToOthersButton, sceneEditor.snapRotationButton, sceneEditor.layers.stageButton)
+    override fun extraButtons() = listOf(sceneEditor.editSnapsButton,
+            sceneEditor.toggleGridButton, sceneEditor.toggleGuidesButton, sceneEditor.toggleSnapToOThersButton, sceneEditor.toggleSnapRotationButton,
+            sceneEditor.layers.stageButton)
 
     override fun extraShortcuts() = sceneEditor.shortcuts
 

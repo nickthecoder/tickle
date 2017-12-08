@@ -1,13 +1,11 @@
-package uk.co.nickthecoder.tickle.resources
+package uk.co.nickthecoder.tickle.editor.scene
 
-import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
-import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 
-class SnapRotation {
+class SnapRotation : HasTask {
 
     var enabled = true
 
@@ -28,10 +26,8 @@ class SnapRotation {
         }
     }
 
-    fun edit() {
-        TaskPrompter(SnapRotationTask()).placeOnStage(Stage())
+    override fun task() = SnapRotationTask()
 
-    }
 
     inner class SnapRotationTask() : AbstractTask() {
 

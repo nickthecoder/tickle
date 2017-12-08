@@ -124,6 +124,7 @@ class Game(
         scene.activated()
         director.activated()
         producer.sceneActivated()
+        seconds = System.nanoTime() / 1_000_000_000.0
         System.gc()
     }
 

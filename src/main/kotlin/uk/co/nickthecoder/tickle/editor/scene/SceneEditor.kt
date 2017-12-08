@@ -11,7 +11,6 @@ import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.resources.ActorResource
-import uk.co.nickthecoder.tickle.resources.Adjustment
 import uk.co.nickthecoder.tickle.resources.ModificationType
 import uk.co.nickthecoder.tickle.resources.SceneResource
 
@@ -44,10 +43,11 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     val costumeHistory = mutableListOf<String>()
 
-    val snapToGridButton = EditorActions.SNAP_TO_GRID_EDIT.createButton(shortcuts) { sceneResource.snapToGrid.edit() }
-    val snapToGuidesButton = EditorActions.SNAP_TO_GUIDES_EDIT.createButton(shortcuts) { sceneResource.snapToGuides.edit() }
-    val snapToOthersButton = EditorActions.SNAP_TO_OTHERS_EDIT.createButton(shortcuts) { sceneResource.snapToOthers.edit() }
-    val snapRotationButton = EditorActions.SNAP_ROTATION_EDIT.createButton(shortcuts) { sceneResource.snapRotation.edit() }
+    val editSnapsButton = EditorActions.SNAPS_EDIT.createButton { onEditSnaps() }
+    val toggleGridButton = EditorActions.SNAP_TO_GRID_TOGGLE.createToggleButton { sceneResource.snapToGrid.enabled = !sceneResource.snapToGrid.enabled }
+    val toggleGuidesButton = EditorActions.SNAP_TO_GUIDES_TOGGLE.createToggleButton { sceneResource.snapToGuides.enabled = !sceneResource.snapToGuides.enabled }
+    val toggleSnapToOThersButton = EditorActions.SNAP_TO_OTHERS_TOGGLE.createToggleButton { sceneResource.snapToOthers.enabled = !sceneResource.snapToOthers.enabled }
+    val toggleSnapRotationButton = EditorActions.SNAP_ROTATION_TOGGLE.createToggleButton { sceneResource.snapRotation.enabled = !sceneResource.snapRotation.enabled }
 
     fun build(): Node {
 
@@ -76,10 +76,6 @@ class SceneEditor(val sceneResource: SceneResource) {
             add(EditorActions.ZOOM_IN1) { layers.scale *= 1.2 }
             add(EditorActions.ZOOM_IN2) { layers.scale *= 1.2 }
             add(EditorActions.ZOOM_OUT) { layers.scale /= 1.2 }
-            add(EditorActions.SNAP_TO_GRID_TOGGLE) { sceneResource.snapToGrid.enabled = !sceneResource.snapToGrid.enabled }
-            add(EditorActions.SNAP_TO_GUIDES_TOGGLE) { sceneResource.snapToGuides.enabled = !sceneResource.snapToGuides.enabled }
-            add(EditorActions.SNAP_TO_OTHERS_TOGGLE) { sceneResource.snapToOthers.enabled = !sceneResource.snapToOthers.enabled }
-            add(EditorActions.SNAP_ROTATION_TOGGLE) { sceneResource.snapRotation.enabled = !sceneResource.snapRotation.enabled }
         }
 
         EditorActions.STAMPS.forEachIndexed { index, action ->
@@ -143,12 +139,8 @@ class SceneEditor(val sceneResource: SceneResource) {
         }
 
         val resetAllZOrders = EditorActions.RESET_ZORDERS.createMenuItem { resetZOrders() }
-        val snapToGrid = EditorActions.SNAP_TO_GRID_TOGGLE.createCheckMenuItem(property = sceneResource.snapToGrid::enabled) {}
-        val snapToGuides = EditorActions.SNAP_TO_GUIDES_TOGGLE.createCheckMenuItem(property = sceneResource.snapToGuides::enabled) {}
-        val snapToOthers = EditorActions.SNAP_TO_OTHERS_TOGGLE.createCheckMenuItem(property = sceneResource.snapToOthers::enabled) {}
-        val snapRotation = EditorActions.SNAP_ROTATION_TOGGLE.createCheckMenuItem(property = sceneResource.snapRotation::enabled) {}
 
-        menu.items.addAll(resetAllZOrders, SeparatorMenuItem(), snapToGrid, snapToGuides, snapToOthers, snapRotation)
+        menu.items.addAll(resetAllZOrders, SeparatorMenuItem())
 
         return menu
     }
@@ -160,6 +152,15 @@ class SceneEditor(val sceneResource: SceneResource) {
             actorResource.layer = layer
             sceneResource.fireChange(actorResource, ModificationType.NEW)
         }
+    }
+
+    fun onEditSnaps() {
+        SnapEditor(mapOf(
+                "Grid" to sceneResource.snapToGrid,
+                "Guides" to sceneResource.snapToGuides,
+                "Others" to sceneResource.snapToOthers,
+                "Rotation" to sceneResource.snapRotation
+        )).show()
     }
 
     fun onEscape() {

@@ -29,17 +29,12 @@ object EditorActions {
     val ZOOM_IN2 = EditorAction("zoom.out", KeyCode.EQUALS, control = true)
     val ZOOM_OUT = EditorAction("zoom.out", KeyCode.MINUS, control = true)
 
-    val SNAP_TO_GRID_EDIT = EditorAction("snap.grid.edit", KeyCode.NUMBER_SIGN, control = true, shift = true, tooltip = "Snap to Grid")
-    val SNAP_TO_GRID_TOGGLE = EditorAction("snap.grid.toggle", KeyCode.NUMBER_SIGN, control = true, label = "Snap to Grid")
+    val SNAPS_EDIT = EditorAction("snaps.edit", KeyCode.NUMBER_SIGN, control = true, shift = true, tooltip = "Edit Snapping")
 
-    val SNAP_TO_GUIDES_EDIT = EditorAction("snap.guides.edit", KeyCode.G, control = true, shift = true, tooltip = "Snap to Guides")
-    val SNAP_TO_GUIDES_TOGGLE = EditorAction("snap.guides.toggle", KeyCode.G, control = true, label = "Snap to Guides")
-
-    val SNAP_TO_OTHERS_EDIT = EditorAction("snap.others.edit", KeyCode.O, control = true, shift = true, tooltip = "Snap to Other Actors")
-    val SNAP_TO_OTHERS_TOGGLE = EditorAction("snap.others.toggle", KeyCode.O, control = true, label = "Snap to Others Actors")
-
-    val SNAP_ROTATION_EDIT = EditorAction("snap.rotation.edit", KeyCode.R, control = true, shift = true, tooltip = "Snap Rotation")
-    val SNAP_ROTATION_TOGGLE = EditorAction("snap.rotation.toggle", KeyCode.R, control = true, label = "Snap Rotation")
+    val SNAP_TO_GRID_TOGGLE = EditorAction("snap.grid.toggle", KeyCode.NUMBER_SIGN, control = true)
+    val SNAP_TO_GUIDES_TOGGLE = EditorAction("snap.guides.toggle", KeyCode.G, control = true)
+    val SNAP_TO_OTHERS_TOGGLE = EditorAction("snap.others.toggle", KeyCode.O, control = true)
+    val SNAP_ROTATION_TOGGLE = EditorAction("snap.rotation.toggle", KeyCode.R, control = true)
 
     val RESET_ZORDERS = EditorAction("zOrders.reset", KeyCode.Z, control = true, shift = true, label = "Reset All Z-Orders")
 

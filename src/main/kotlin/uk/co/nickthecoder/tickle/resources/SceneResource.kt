@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle.resources
 import uk.co.nickthecoder.tickle.Attributes
 import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.Scene
+import uk.co.nickthecoder.tickle.editor.scene.*
 import uk.co.nickthecoder.tickle.graphics.Color
 import java.io.File
 
@@ -44,13 +45,13 @@ class SceneResource {
 
     val listeners = mutableSetOf<SceneResourceListener>()
 
-    var snapToGrid = SnapToGrid()
+    val snapToGrid = SnapToGrid()
 
-    var snapToGuides = SnapToGuides()
+    val snapToGuides = SnapToGuides()
 
-    var snapToOthers = SnapToOthers()
+    val snapToOthers = SnapToOthers()
 
-    var snapRotation = SnapRotation()
+    val snapRotation = SnapRotation()
 
     /**
      * Gets the Layout to create the scene, and then populates the Stages with Actors.

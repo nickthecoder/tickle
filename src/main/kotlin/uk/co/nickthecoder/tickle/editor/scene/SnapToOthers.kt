@@ -1,16 +1,15 @@
-package uk.co.nickthecoder.tickle.resources
+package uk.co.nickthecoder.tickle.editor.scene
 
-import javafx.stage.Stage
 import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
-import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.asHorizontal
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
+import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.util.rotate
 
 class SnapToOthers : SnapTo {
@@ -85,9 +84,7 @@ class SnapToOthers : SnapTo {
         }
     }
 
-    override fun edit() {
-        TaskPrompter(SnapToOthersTask()).placeOnStage(Stage())
-    }
+    override fun task() = SnapToOthersTask()
 
 
     inner class SnapToOthersTask : AbstractTask() {

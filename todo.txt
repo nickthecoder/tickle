@@ -1,11 +1,6 @@
 Current Work
 ============
 
-
-TiledAppearance
-	Go through all of RapidRagDoll scenes replacing all tileable costumes.
-		Commit
-		Delete all old costumes and poses.
 Next
 ====
 

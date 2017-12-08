@@ -1,14 +1,13 @@
-package uk.co.nickthecoder.tickle.resources
+package uk.co.nickthecoder.tickle.editor.scene
 
-import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
-import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.MultipleParameter
 import uk.co.nickthecoder.tickle.editor.EditorActions
+import uk.co.nickthecoder.tickle.resources.ActorResource
 
 class SnapToGuides : SnapTo {
 
@@ -48,9 +47,7 @@ class SnapToGuides : SnapTo {
         }
     }
 
-    override fun edit() {
-        TaskPrompter(GuidesTask()).placeOnStage(Stage())
-    }
+    override fun task() = GuidesTask()
 
     override fun toString(): String {
         return "Guides enabled=$enabled closeness=$closeness x=$xGuides y=$yGuides"

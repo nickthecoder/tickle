@@ -1,15 +1,14 @@
-package uk.co.nickthecoder.tickle.resources
+package uk.co.nickthecoder.tickle.editor.scene
 
-import javafx.stage.Stage
 import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
-import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.InformationParameter
 import uk.co.nickthecoder.paratask.parameters.asHorizontal
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
+import uk.co.nickthecoder.tickle.resources.ActorResource
 
 class SnapToGrid : SnapTo {
 
@@ -56,9 +55,7 @@ class SnapToGrid : SnapTo {
         }
     }
 
-    override fun edit() {
-        TaskPrompter(GridTask()).placeOnStage(Stage())
-    }
+    override fun task() = GridTask()
 
     override fun toString(): String {
         return "Grid spacing=(${spacing.x},${spacing.y}) offset=(${offset.x}, ${offset.y}) closeness=(${closeness.x},${closeness.y}) enabled=$enabled"
