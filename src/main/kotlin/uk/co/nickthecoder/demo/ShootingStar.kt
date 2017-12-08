@@ -5,7 +5,7 @@ import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.animation.Eases
 import uk.co.nickthecoder.tickle.action.animation.Forwards
-import uk.co.nickthecoder.tickle.action.animation.Grow
+import uk.co.nickthecoder.tickle.action.animation.Scale
 import uk.co.nickthecoder.tickle.action.animation.Turn
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Attribute
@@ -27,7 +27,7 @@ class ShootingStar() : ActionRole() {
 
     override fun createAction(): Action {
 
-        val growShrink = (Grow(actor, 1.0, 2.0).then(Grow(actor, 1.0, 1.0)).forever())
+        val growShrink = (Scale(actor, 1.0, 2.0).then(Scale(actor, 1.0, 1.0)).forever())
 
         val edge = (Forwards(actor.position, headingAndLength.magnitude, headingAndLength.angle, sideDuration, Eases.easeInOutExpo)
                 .and(Turn(headingAndLength.angle, curveAngle, sideDuration, Eases.easeInOutExpo)))

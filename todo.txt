@@ -4,6 +4,8 @@ Current Work
 Next
 ====
 
+Message Button, calls Director or Producer .message(message : String)
+
 Scale Mike to 1.2
 	Write a script to scale a doll.
 

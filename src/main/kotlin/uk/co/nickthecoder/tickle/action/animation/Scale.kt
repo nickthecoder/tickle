@@ -3,7 +3,7 @@ package uk.co.nickthecoder.tickle.action.animation
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
 
-class Grow(
+class Scale(
         val actor: Actor,
         seconds: Double,
         val finalScale: Vector2d,
