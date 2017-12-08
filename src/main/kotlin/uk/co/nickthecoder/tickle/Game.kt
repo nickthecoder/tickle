@@ -1,7 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import org.joml.Vector2d
-import org.lwjgl.glfw.GLFW
+import org.lwjgl.glfw.GLFW.*
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
@@ -72,7 +72,7 @@ class Game(
         while (isRunning()) {
             gameLoop.tick()
 
-            GLFW.glfwPollEvents()
+            glfwPollEvents()
 
             val now = System.nanoTime() / 1_000_000_000.0
             tickCount++
@@ -166,7 +166,16 @@ class Game(
                 Window.instance?.mousePosition(currentScreenMousePosition)
                 if (currentScreenMousePosition != previousScreenMousePosition) {
                     previousScreenMousePosition.set(currentScreenMousePosition)
-                    val event = MouseEvent(Window.instance!!, 0, ButtonState.UNKNOWN, 0)
+
+                    var button = -1
+                    for (b in 0..2) {
+                        val state = glfwGetMouseButton(window.handle, b);
+                        if (state == GLFW_PRESS) {
+                            button = b
+                        }
+                    }
+                    val event = MouseEvent(Window.instance!!, button, if (button == -1) ButtonState.UNKNOWN else ButtonState.PRESSED, 0)
+
                     event.screenPosition.set(currentScreenMousePosition)
                     event.captured = true
                     capturedBy.onMouseMove(event)

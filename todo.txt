@@ -1,6 +1,7 @@
 Current Work
 ============
 
+
 TiledAppearance
 	Go through all of RapidRagDoll scenes replacing all tileable costumes.
 		Commit
@@ -8,11 +9,12 @@ TiledAppearance
 Next
 ====
 
+Scale Mike to 1.2
+	Write a script to scale a doll.
+
 All grid dialogs in one window. Buttons become the toggles + One more to edit.
 
 Rename "Grow" Action to "Scale" ?
-
-Resize Handle for Resiable objects
 
 Companion actors?
 	An actor has a set of Companion objects, which has an Actor and a CompanionPosition (interface)
@@ -25,7 +27,7 @@ Companion actors?
 	Have a MarginPosition, which keeps the same direction, and makes the size bigger by the given margins.
 
 Re-implement rounded rectangles using just a single polygon
-	A huristic for the number of lines to create a curve based on the radius.
+	A heuristic for the number of lines to create a curve based on the radius.
 	Draw using a rounded rod as a rounded rectangle, not a rect and two circles
 
 PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
