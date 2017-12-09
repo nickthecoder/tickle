@@ -66,7 +66,7 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
             y += poseHeight
         }
 
-        val rightEdge = size.x - size.x % poseWidth
+        val rightEdge = size.x - if (size.x % poseWidth == 0.0) poseWidth.toDouble() else size.x % poseWidth
         val topEdge = y
         val partWidth = size.x - rightEdge
         val partHeight = size.y - topEdge
