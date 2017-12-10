@@ -82,6 +82,23 @@
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1
+        },
+        {
+          "costume": "messageButton",
+          "x": 123,
+          "y": 620,
+          "textAlignmentX": "LEFT",
+          "textAlignmentY": "BOTTOM",
+          "text": "Click to send message",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "message",
+              "value": "hello"
+            }
+          ]
         }
       ]
     }

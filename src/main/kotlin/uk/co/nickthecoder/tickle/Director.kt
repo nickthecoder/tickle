@@ -41,6 +41,8 @@ interface Director : MouseButtonHandler {
 
     fun onKey(event: KeyEvent)
 
+    fun message(message: String)
+
     companion object {
         fun createDirector(directorString: String): Director {
             try {
@@ -76,6 +78,8 @@ abstract class AbstractDirector : Director {
     override fun postTick() {}
 
     override fun preTick() {}
+
+    override fun message(message: String) {}
 }
 
 class NoDirector : AbstractDirector()

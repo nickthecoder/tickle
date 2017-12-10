@@ -825,6 +825,34 @@
           ]
         }
       ]
+    },
+    {
+      "name": "messageButton",
+      "role": "uk.co.nickthecoder.tickle.util.MessageButton",
+      "canRotate": true,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "textStyles": [
+            {
+              "font": "plain22",
+              "halign": "LEFT",
+              "valign": "BOTTOM",
+              "color": "#000000ff",
+              "outlineColor": "#ffffff7f"
+            }
+          ]
+        }
+      ],
+      "attributes": [
+        {
+          "name": "message",
+          "value": ""
+        }
+      ]
     }
   ],
   "inputs": [

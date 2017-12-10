@@ -9,23 +9,8 @@ Message Button, calls Director or Producer .message(message : String)
 Scale Mike to 1.2
 	Write a script to scale a doll.
 
-All grid dialogs in one window. Buttons become the toggles + One more to edit.
-
-Rename "Grow" Action to "Scale" ?
-
-Companion actors?
-	An actor has a set of Companion objects, which has an Actor and a CompanionPosition (interface)
-	which update the position and direction of the companion.
-	The CompanionPosition are automatically called after all ticks have taken place.
-		During the drawing of the StageView?
-			Pro : Don't need an extra loop
-			Con : Will be called multiple times when there are multiple views of the same stage.
-	Actor.createChild and createChildOnStage can optionally take a CompanionFollower
-	Have a MarginPosition, which keeps the same direction, and makes the size bigger by the given margins.
-
 Re-implement rounded rectangles using just a single polygon
-	A heuristic for the number of lines to create a curve based on the radius.
-	Draw using a rounded rod as a rounded rectangle, not a rect and two circles
+	OR Just bin it!!! Are rounded rectangles desired, and if so, let the coder draw the polygon!!!
 
 PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
 	Ditto for CostumeChoiceParameter
@@ -47,10 +32,34 @@ Undo/Redo in scene editor
 		Note. dragging multiple ActorResources may need to be handled in a different way???
 		Ignore snap data for now.
 
-		
+
+Where should TickleWorld live? Currently on Scene, but perhaps it should be on Stage.		
+
+Edit Shape to be always on top.
+	Be enclosed in a scroll pane, and Pose can be scaled.
 
 BUGS
 ====
+
+When scaling by -ve values, the pose's direction needs to change its effect.
+	e.g. A 30 degree pose direction become 180-30 when scaled by -ve x
+	Ensure that nothing uses Pose's direction directly, but goes through the Appearance or the SceneActor
+		SceneActor needs a new poseDirection method for the SceneEditor???
+	Once Bee works without the customTransformation, can then remove it.
+
+Either remove custom transformation or make it not external.
+	Simply making it not external won't work, because the game coder could change the matrix without Tickle knowing.
+	And therefore the modelMatrix will be wrong.
+
+Window is always resizable (despite the value in GameInfo)
+	Resizing doesn't adjust the views, or the viewport. Just get empty rectangles.
+	The default behaviour should adjust the views
+		Can be overriden in Producer though.
+
+Scaling by a -ve value screws up physics.
+	Need to ensure polygons points are still ordered correctly.
+	Allow circles to work with -ve scaling of one axis.
+	Consider removing flipX and flipY in favour of -ve scales.
 
 Scene.adjustActors is not being called directly. Should it?
 
@@ -67,6 +76,8 @@ InputPicker :
 	"Windows" is this meta?
 	Shift, Control, alt etc don't work either.
 
+Box and Circle don't have sensible default values when the offset isn't in the center of the pose.
+
 
 Possible Optimisatins
 ---------------------
@@ -78,9 +89,12 @@ PixelOverlapping
 StageView.findActorsAt and findRolesAt to use Neighbourhood.
 	Maybe have an interface, and a Slow implementation which iterates over all actors as the default.
 	Any Stage/StageView can then replace the Slow implementation with the Neighbourhood.
+	Maybe Stage should (optionally) have a Neighbourhood.
 
 New Features
 ------------
+
+Handle box2d sensors and/or custom collision callback.
 
 Pose thumbnail
 	Scale, Fit (% along)
@@ -90,6 +104,13 @@ Key input to have a "ghosting" test, where multiple key presses are displayed, t
 	Include "reset"
 	Save to a separate file in user's config directory.
 		<aybe make it part of the (un-coded) "Preferences" class
+
+In-Game input mapper, allowing user to change existing inputs (but not add new ones).
+	JavaFX or OpenGL?
+	OpenGL
+		Game is not reliant on JavaFX or Paratask
+		Can use LWJGL's input stuff, therefore no confusion over keyboard mappings.
+		Harder to code though.
 
 Allow text style to be overriden in the SceneEditor.
 	Only save the overridden values if they differ from the Costume's values.
@@ -119,8 +140,6 @@ Later
 
 TextStyle to have an extraSpacing property which causes letters to be moved further appart
 	Ditto for extra line height.
-
-Create a simpler GUI that a "published" game can use to let players change the input mappings.
 
 Game based on "flocking" :	https://www.youtube.com/watch?v=M028vafB0l8
 

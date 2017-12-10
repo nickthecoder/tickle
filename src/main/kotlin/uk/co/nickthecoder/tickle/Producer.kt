@@ -45,6 +45,8 @@ interface Producer : MouseButtonHandler {
 
     fun onKey(event: KeyEvent)
 
+    fun message(message: String)
+
     /**
      * Gets the preferences node, for persisting data, such as high-scores, levels unlocked etc.
      * The default node uses Tickle's package name and the id of your game (as defined in [GameInfo]).
@@ -76,6 +78,8 @@ abstract class AbstractProducer : Producer {
     override fun onKey(event: KeyEvent) {}
 
     override fun onMouseButton(event: MouseEvent) {}
+
+    override fun message(message: String) {}
 
 }
 
