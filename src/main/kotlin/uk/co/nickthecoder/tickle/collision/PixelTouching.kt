@@ -59,8 +59,6 @@ class PixelTouching(val threshold: Int = 0) {
         // Stop using the pixel frame buffer, and return to rendering on the screen's frame buffer.
         EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, 0)
 
-        pixelTexture.dumpAlpha()
-
         val pixels = pixelTexture.read()
         // Get the alpha channel byte of the first and only pixel. (i.e. pixels[3], which is the 4th byte)
         // and with 0xff to convert to unsigned.

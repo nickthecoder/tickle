@@ -82,6 +82,7 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
      * I used it a lot when debugging the PixelOverlap code
      */
     fun dumpAlpha() {
+        println("Texture. Dumping alpha channel")
         val pixels = read()
         for (y in height - 1 downTo 0) {
             for (x in 0..width - 1) {
