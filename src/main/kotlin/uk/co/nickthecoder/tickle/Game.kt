@@ -49,6 +49,7 @@ class Game(
 
     init {
         Game.instance = this
+        window.enableVSync()
         Resources.instance = resources
         producer = resources.gameInfo.createProducer()
 

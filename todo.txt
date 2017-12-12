@@ -4,10 +4,8 @@ Current Work
 Next
 ====
 
-Message Button, calls Director or Producer .message(message : String)
-
-Scale Mike to 1.2
-	Write a script to scale a doll.
+Support enums as attributes.
+	Message Button, calls Director or Producer
 
 Re-implement rounded rectangles using just a single polygon
 	OR Just bin it!!! Are rounded rectangles desired, and if so, let the coder draw the polygon!!!
