@@ -13,6 +13,8 @@ class RandomFactory(seed: Long? = null) {
 
     val random = if (seed == null) Random() else Random(seed)
 
+    fun nextInt(max: Int) = random.nextInt(max)
+
     fun nextDouble(ease: Ease = LinearEase.instance) = ease.ease(random.nextDouble())
 
     fun nextFloat(ease: Ease = LinearEase.instance) = ease.ease(random.nextDouble()).toFloat()
@@ -50,10 +52,16 @@ class RandomFactory(seed: Long? = null) {
 
 }
 
+inline fun <reified T> RandomFactory.item(list: List<T>): T {
+    return list[nextInt(list.size)]
+}
+
 /**
  * Static methods using a shared instance of RandomFactory
  */
 object Rand {
+    inline fun <reified T> item(list: List<T>) = RandomFactory.instance.item(list)
+
     fun plusMinus(limit: Double, ease: Ease = LinearEase.instance) = RandomFactory.instance.plusMinus(limit, ease)
     fun plusMinus(limit: Float, ease: Ease = LinearEase.instance) = RandomFactory.instance.plusMinus(limit, ease)
 
