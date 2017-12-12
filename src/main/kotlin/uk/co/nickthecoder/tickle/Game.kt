@@ -112,12 +112,13 @@ class Game(
         sceneResource.directorAttributes.applyToObject(director)
         scene = sceneResource.createScene()
 
-        producer.sceneLoaded()
-        director.sceneLoaded()
 
         sceneResource.includes.forEach { include ->
             mergeScene(include)
         }
+
+        producer.sceneLoaded()
+        director.sceneLoaded()
 
         producer.sceneBegin()
         director.begin()

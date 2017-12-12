@@ -35,17 +35,16 @@ class RandomFactory(seed: Long? = null) {
 
     fun between(from: Polar2d, to: Polar2d, ease: Ease = LinearEase.instance) = Polar2d(from).lerp(to, nextDouble(ease))
 
-    fun between(from: Vector2d, to: Vector2d, ease: Ease = LinearEase.instance) = Vector2d(from).lerp(to, nextDouble(ease))
+    fun between(from: Vector2d, to: Vector2d, ease: Ease = LinearEase.instance): Vector2d = Vector2d(from).lerp(to, nextDouble(ease))
 
-    fun between(from: Vector3d, to: Vector3d, ease: Ease = LinearEase.instance) = Vector3d(from).lerp(to, nextDouble(ease))
+    fun between(from: Vector3d, to: Vector3d, ease: Ease = LinearEase.instance): Vector3d = Vector3d(from).lerp(to, nextDouble(ease))
 
-    fun between(from: Vector4d, to: Vector4d, ease: Ease = LinearEase.instance) = Vector4d(from).lerp(to, nextDouble(ease))
+    fun between(from: Vector4d, to: Vector4d, ease: Ease = LinearEase.instance): Vector4d = Vector4d(from).lerp(to, nextDouble(ease))
 
     companion object {
 
         /**
-         * A shared instance. This is a deliberately short name, looks like "Rand.om" when combined with the
-         * class name!
+         * A shared instance.
          */
         val instance = RandomFactory()
     }
