@@ -97,6 +97,14 @@ class ResourcesTree()
             renameMenuItem()?.let { menu.items.add(it) }
             deleteMenuItem()?.let { menu.items.add(it) }
 
+            if (resourceType.canCreate) {
+                val newItem = MenuItem("New ${resourceType.label}")
+                newItem.onAction = EventHandler {
+                    TaskPrompter(NewResourceTask(resourceType)).placeOnStage(Stage())
+                }
+                menu.items.add(newItem)
+            }
+
             val newMenu = Menu("New")
             ResourceType.values().filter { it.canCreate() }.forEach { resourceType ->
                 val newItem = MenuItem(resourceType.label)
