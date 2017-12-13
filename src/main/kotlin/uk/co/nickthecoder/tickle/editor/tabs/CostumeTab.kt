@@ -450,9 +450,9 @@ class CostumeTab(val name: String, val costume: Costume)
                 costume.pose()?.let { pose ->
                     addParameters(shapeEditorButtonP)
 
-                    circleRadiusP.value = Math.min(pose.rect.width, pose.rect.height).toDouble()
-                    boxSizeP.xP.value = pose.rect.width.toDouble()
-                    boxSizeP.yP.value = pose.rect.height.toDouble()
+                    circleRadiusP.value = 15.0
+                    boxSizeP.xP.value = 15.0
+                    boxSizeP.yP.value = 15.0
                 }
                 addParameters(circleP, boxP, polygonP, filterGroupP, filterCategoriesP, filterMaskP)
 
