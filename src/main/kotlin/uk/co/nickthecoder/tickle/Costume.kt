@@ -110,6 +110,7 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
         if (newCostume != null) {
             val role = newCostume.createRole()
             childActor = Actor(newCostume, role)
+            childActor.zOrder = newCostume.zOrder
 
             // Set the appearance. Either a Pose or a TextStyle (Pose takes precedence if it has both)
             val pose = newCostume.choosePose(newCostume.initialEventName)

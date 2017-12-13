@@ -19,6 +19,7 @@ class PolygonDef(points: List<Vector2d> = mutableListOf<Vector2d>()) : ShapeDef 
             val j = (i + 1) % points.size
             total += points[j].x * points[i].y - points[i].x * points[j].y
         }
+        // Do we need to reverse the order of the polygon points to make them anti-clockwise?
         if (total > 0.0) {
             val reversed = points.reversed()
             points.clear()
