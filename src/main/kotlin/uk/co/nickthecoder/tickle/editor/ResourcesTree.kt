@@ -3,10 +3,7 @@ package uk.co.nickthecoder.tickle.editor
 import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.Node
-import javafx.scene.control.ContextMenu
-import javafx.scene.control.MenuItem
-import javafx.scene.control.TreeItem
-import javafx.scene.control.TreeView
+import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
@@ -97,23 +94,19 @@ class ResourcesTree()
 
         fun createContextMenu(): ContextMenu {
             val menu = ContextMenu()
-            newMenuItem()?.let { menu.items.add(it) }
             renameMenuItem()?.let { menu.items.add(it) }
             deleteMenuItem()?.let { menu.items.add(it) }
 
-            return menu
-        }
-
-        open fun newMenuItem(): MenuItem? {
-            if (resourceType.canCreate) {
-                val menuItem = MenuItem("New ${resourceType.label}")
-                menuItem.onAction = EventHandler {
+            val newMenu = Menu("New")
+            ResourceType.values().filter { it.canCreate() }.forEach { resourceType ->
+                val newItem = MenuItem(resourceType.label)
+                newItem.onAction = EventHandler {
                     TaskPrompter(NewResourceTask(resourceType)).placeOnStage(Stage())
                 }
-                return menuItem
-            } else {
-                return null
+                newMenu.items.add(newItem)
             }
+            menu.items.add(newMenu)
+            return menu
         }
 
         open fun deleteMenuItem(): MenuItem? = null

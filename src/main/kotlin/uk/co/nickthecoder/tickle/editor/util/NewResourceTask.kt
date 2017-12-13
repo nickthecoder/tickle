@@ -72,6 +72,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
     init {
 
         val parameter = when (type) {
+            ResourceType.TEXTURE -> textureP
             ResourceType.POSE -> poseP
             ResourceType.COSTUME -> costumeP
             ResourceType.COSTUME_GROUP -> costumeGroupP
