@@ -66,10 +66,10 @@ class TickleWorld(
 
         val body = createBody(bodyDef)
         bodyDef.fixtureDefs.forEach { fixtureDef ->
-            fixtureDef.shapeDef.createShapes(this).forEach { shape ->
-                fixtureDef.shape = shape
-                body.createFixture(fixtureDef)
-            }
+            val shape = fixtureDef.shapeDef.createShape(this)
+            fixtureDef.shape = shape
+            body.createFixture(fixtureDef)
+
         }
         actor.body = body
         body.userData = actor

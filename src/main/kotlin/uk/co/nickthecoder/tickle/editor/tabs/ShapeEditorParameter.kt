@@ -218,27 +218,7 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
                     translate(shapeDef.center.x, shapeDef.center.y)
                     rotate(shapeDef.angle.degrees)
                     drawOutlined(shapeColor) {
-                        if (shapeDef.roundedEnds) {
-                            if (shapeDef.width > shapeDef.height) {
-                                val radius = shapeDef.height / 2
-
-                                strokeRect(-shapeDef.width / 2 + radius, -shapeDef.height / 2, shapeDef.width - radius * 2, shapeDef.height)
-                                strokeOval(shapeDef.width / 2 - radius * 2, -radius, radius * 2, radius * 2)
-                                strokeOval(-shapeDef.width / 2, -radius, radius * 2, radius * 2)
-                            } else {
-                                val radius = shapeDef.width / 2
-
-                                strokeRect(-shapeDef.width / 2, -shapeDef.height / 2 + radius, shapeDef.width, shapeDef.height - radius * 2)
-                                strokeOval(-radius, shapeDef.height / 2 - radius * 2, radius * 2, radius * 2)
-                                strokeOval(-radius, -shapeDef.height / 2, radius * 2, radius * 2)
-                            }
-                        } else {
-                            if (shapeDef.cornerRadius == 0.0) {
-                                strokeRect(-shapeDef.width / 2, -shapeDef.height / 2, shapeDef.width, shapeDef.height)
-                            } else {
-                                strokeRoundRect(-shapeDef.width / 2, -shapeDef.height / 2, shapeDef.width, shapeDef.height, shapeDef.cornerRadius * 2, shapeDef.cornerRadius * 2)
-                            }
-                        }
+                        strokeRect(-shapeDef.width / 2, -shapeDef.height / 2, shapeDef.width, shapeDef.height)
                     }
                 }
                 is PolygonDef -> {

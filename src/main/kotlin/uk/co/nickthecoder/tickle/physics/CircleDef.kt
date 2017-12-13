@@ -14,11 +14,11 @@ class CircleDef(
         return CircleDef(center, radius)
     }
 
-    override fun createShapes(world: TickleWorld): List<Shape> {
+    override fun createShape(world: TickleWorld): Shape {
         val circle = CircleShape()
         world.pixelsToWorld(circle.m_p, center)
         circle.m_radius = world.pixelsToWorld(radius)
 
-        return listOf(circle)
+        return circle
     }
 }

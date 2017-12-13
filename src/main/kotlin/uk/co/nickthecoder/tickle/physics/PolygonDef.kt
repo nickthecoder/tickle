@@ -13,7 +13,7 @@ class PolygonDef(points: List<Vector2d> = mutableListOf<Vector2d>()) : ShapeDef 
         return PolygonDef(points)
     }
 
-    override fun createShapes(world: TickleWorld): List<Shape> {
+    override fun createShape(world: TickleWorld): Shape {
         var total = 0.0
         for (i in 0..points.size - 1) {
             val j = (i + 1) % points.size
@@ -32,7 +32,7 @@ class PolygonDef(points: List<Vector2d> = mutableListOf<Vector2d>()) : ShapeDef 
 
         val polygon = PolygonShape()
         polygon.set(Array(points.size) { i -> points.map { world.pixelsToWorld(it) }[i] }, points.size)
-        return listOf(polygon)
+        return polygon
     }
 
 }

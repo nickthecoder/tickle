@@ -658,12 +658,6 @@ class JsonResources {
                         jbox.add("width", width)
                         jbox.add("height", height)
                         jbox.add("angle", angle.degrees)
-                        jbox.add("roundedEnds", roundedEnds)
-                        if (!roundedEnds && cornerRadius != 0.0) {
-                            jbox.add("cornerRadius", cornerRadius)
-                        } else {
-                            // Compile bug? Doesn't like the last statement in the "when" not having a value. Therefore an "else" is required. Grr.
-                        }
                     }
 
                     is PolygonDef -> {
@@ -835,9 +829,7 @@ class JsonResources {
                     val width = jbox.getDouble("width", 0.0)
                     val height = jbox.getDouble("height", 0.0)
                     val angle = jbox.getDouble("angle", 0.0)
-                    val roundedEnds = jbox.getBoolean("roundedEnds", false)
-                    val cornerRadius = jbox.getDouble("cornerRadius", 0.0)
-                    val box = BoxDef(width, height, Vector2d(x, y), Angle.degrees(angle), roundedEnds = roundedEnds, cornerRadius = cornerRadius)
+                    val box = BoxDef(width, height, Vector2d(x, y), Angle.degrees(angle))
                     shape = box
                 }
                 jfixture.get("polygon")?.let {

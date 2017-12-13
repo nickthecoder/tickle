@@ -421,11 +421,9 @@ class CostumeTab(val name: String, val costume: Costume)
             val boxSizeP = Vector2dParameter("boxSize", showXY = false).asHorizontal()
             val boxCenterP = Vector2dParameter("boxCenter", label = "Center", showXY = false).asHorizontal()
             val boxAngleP = AngleParameter("boxAngle", label = "Angle")
-            val boxRoundedEndsP = BooleanParameter("roundedEnds", value = false)
-            val boxCornerRadiusP = DoubleParameter("cornerRadius", value = 0.0)
 
             val boxP = SimpleGroupParameter("box")
-                    .addParameters(boxSizeP, boxCenterP, boxAngleP, boxRoundedEndsP, boxCornerRadiusP)
+                    .addParameters(boxSizeP, boxCenterP, boxAngleP)
 
             val polygonInfo = InformationParameter("polygonInfo", information = "Note. The polygon must be convex. Create more than one fixture to build concave objects.")
             val polygonPointsP = MultipleParameter("polygonPoints", minItems = 2) {
@@ -462,12 +460,6 @@ class CostumeTab(val name: String, val costume: Costume)
                     frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC && bodyTypeP.value != BodyType.STATIC
                 }
                 bodyTypeP.parameterListeners.fireValueChanged(bodyTypeP)
-
-                // Show/Hide the radius based on the boxRoundedEndsP value
-                boxRoundedEndsP.listen {
-                    boxCornerRadiusP.hidden = boxRoundedEndsP.value == true
-                }
-                boxCornerRadiusP.hidden = boxRoundedEndsP.value == true
             }
 
             fun initParameters(fixtureDef: TickleFixtureDef) {
@@ -494,8 +486,6 @@ class CostumeTab(val name: String, val costume: Costume)
                             boxSizeP.yP.value = height
                             boxCenterP.value = center
                             boxAngleP.value = angle
-                            boxRoundedEndsP.value = roundedEnds
-                            boxCornerRadiusP.value = cornerRadius
                         }
                         is PolygonDef -> {
                             shapeP.value = polygonP
@@ -515,7 +505,7 @@ class CostumeTab(val name: String, val costume: Costume)
                             return CircleDef(Vector2d(circleCenterP.x!!, circleCenterP.y!!), circleRadiusP.value!!)
                         }
                         boxP -> {
-                            return BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value, roundedEnds = boxRoundedEndsP.value == true, cornerRadius = boxCornerRadiusP.value ?: 0.0)
+                            return BoxDef(boxSizeP.xP.value!!, boxSizeP.yP.value!!, boxCenterP.value, boxAngleP.value)
                         }
                         polygonP -> {
                             return PolygonDef(polygonPointsP.value)

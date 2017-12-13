@@ -476,14 +476,37 @@
                 "group": 0,
                 "category": 65535,
                 "mask": 65535,
-                "box": {
-                  "x": 3,
-                  "y": -1.5,
-                  "width": 39,
-                  "height": 57,
-                  "angle": 0,
-                  "roundedEnds": false,
-                  "cornerRadius": 16
+                "polygon": {
+                  "points": [
+                    {
+                      "x": 11,
+                      "y": 25
+                    },
+                    {
+                      "x": -7,
+                      "y": 22
+                    },
+                    {
+                      "x": -16,
+                      "y": 4
+                    },
+                    {
+                      "x": -13,
+                      "y": -22
+                    },
+                    {
+                      "x": 1,
+                      "y": -30
+                    },
+                    {
+                      "x": 18,
+                      "y": -24
+                    },
+                    {
+                      "x": 21,
+                      "y": 8
+                    }
+                  ]
                 }
               }
             ]
@@ -601,8 +624,7 @@
               "y": -0.5,
               "width": 22,
               "height": 23,
-              "angle": 0,
-              "roundedEnds": false
+              "angle": 0
             }
           }
         ]
@@ -743,8 +765,7 @@
               "y": 0,
               "width": 16,
               "height": 28,
-              "angle": 0,
-              "roundedEnds": true
+              "angle": 0
             }
           }
         ]
