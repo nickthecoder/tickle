@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.geometry.Side
 import javafx.scene.control.TabPane
+import javafx.stage.Modality
 import javafx.stage.Stage
 import org.jbox2d.dynamics.BodyType
 import org.joml.Vector2d
@@ -539,7 +540,12 @@ class CostumeTab(val name: String, val costume: Costume)
             fun onEditShape() {
                 costume.pose()?.let {
                     val task = ShapeEditorTask(it, this)
-                    TaskPrompter(task, showCancel = false).placeOnStage(Stage())
+                    val stage = Stage()
+                    // always on top didn't work for me (on linux using open jdk and the open javafx.
+                    // stage.isAlwaysOnTop = true
+                    // So using a modal dialog instead (not what I wanted. grrr).
+                    stage.initModality(Modality.APPLICATION_MODAL)
+                    TaskPrompter(task, showCancel = false).placeOnStage(stage)
 
                     task.shapeEditorP.update(createShapeDef())
                     listen { task.shapeEditorP.update(createShapeDef()) }

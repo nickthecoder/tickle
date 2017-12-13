@@ -53,11 +53,7 @@ class ShapeEditorTask(pose: Pose, val fixtureParameter: CostumeTab.PhysicsTask.F
     override val taskD = TaskDescription("editShape")
             .addParameters(shapeEditorP)
 
-    override fun run() {
-        Platform.runLater {
-
-        }
-    }
+    override fun run() {}
 }
 
 class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterField(shapeEditorParameter) {
