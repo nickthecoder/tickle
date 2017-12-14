@@ -27,3 +27,48 @@ open class MoveBy(
     }
 
 }
+
+
+open class MoveXBy(
+        val position: Vector2d,
+        val amount: Double,
+        seconds: Double,
+        ease: Ease = LinearEase.instance)
+
+    : AnimationAction(seconds, ease) {
+
+    var initialPosition = 0.0
+    var finalPosition = 0.0
+
+    override fun storeInitialValue() {
+        initialPosition = position.x
+        finalPosition = initialPosition + amount
+    }
+
+    override fun update(t: Double) {
+        position.x = lerp(initialPosition, finalPosition, t)
+    }
+
+}
+
+open class MoveYBy(
+        val position: Vector2d,
+        val amount: Double,
+        seconds: Double,
+        ease: Ease = LinearEase.instance)
+
+    : AnimationAction(seconds, ease) {
+
+    var initialPosition = 0.0
+    var finalPosition = 0.0
+
+    override fun storeInitialValue() {
+        initialPosition = position.y
+        finalPosition = initialPosition + amount
+    }
+
+    override fun update(t: Double) {
+        position.y = lerp(initialPosition, finalPosition, t)
+    }
+
+}

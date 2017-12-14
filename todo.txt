@@ -70,9 +70,6 @@ InputPicker :
 	"Windows" is this meta?
 	Shift, Control, alt etc don't work either.
 
-Box and Circle don't have sensible default values when the offset isn't in the center of the pose.
-
-
 Possible Optimisatins
 ---------------------
 	
@@ -88,10 +85,11 @@ StageView.findActorsAt and findRolesAt to use Neighbourhood.
 New Features
 ------------
 
-Handle box2d sensors and/or custom collision callback.
+Option to load textures only when needed.
+	Texture
+Editor to allow resources to be reloaded.
 
-Pose thumbnail
-	Scale, Fit (% along)
+Handle box2d sensors and/or custom collision callback.
 
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
 	Also create a GUI suitable for launching from within the game to adjust *existing* inputs.

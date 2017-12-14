@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.physics
 
+import org.jbox2d.callbacks.ContactListener
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.collision.shapes.PolygonShape
 import org.jbox2d.collision.shapes.Shape
@@ -99,6 +100,32 @@ class TickleWorld(
                 actor.updateFromBody(this)
             }
             body = body.next
+        }
+    }
+
+    fun addContactListener(contactListener: ContactListener) {
+        val existingListener = m_contactManager.m_contactListener
+        if (existingListener == null) {
+            setContactListener(contactListener)
+        } else if (existingListener is CompoundContactListener) {
+            existingListener.listeners.add(contactListener)
+        } else {
+            val compound = CompoundContactListener()
+            compound.listeners.add(existingListener)
+            compound.listeners.add(contactListener)
+            setContactListener(compound)
+        }
+    }
+
+    fun removeContactListener(contactListener: ContactListener) {
+        val existingListener = m_contactManager.m_contactListener
+        if (existingListener === contactListener) {
+            setContactListener(null)
+        } else if (existingListener is CompoundContactListener) {
+            existingListener.listeners.remove(contactListener)
+            if (existingListener.listeners.isEmpty()) {
+                setContactListener(null)
+            }
         }
     }
 
