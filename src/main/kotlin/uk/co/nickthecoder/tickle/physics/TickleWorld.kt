@@ -41,6 +41,15 @@ class TickleWorld(
 
     : World(pixelsToWorld(gravity), true) {
 
+    val maxTimeStep = 1.0 / 30.0 // 30 frames per second
+
+    /** If the time step interval is more than maxTimeStep, should multiple steps be calculated, or just one?
+     * When true, a single step is calculated, and the remaining time is ignored.
+     * When false, multiple steps are calculated to fill the actual elapsed time. This will be more acurate, but
+     * will take more time.
+     */
+    val truncate = false
+
     val tempVec = Vec2()
 
     fun pixelsToWorld(pixels: Double) = pixels.toFloat() / scale
@@ -90,7 +99,14 @@ class TickleWorld(
         }
 
         // Perform all of the JBox2D calculations
-        step(Game.instance.tickDuration.toFloat(), velocityIterations, positionIterations)
+        var interval = Game.instance.tickDuration
+        if (interval > maxTimeStep && truncate) {
+            interval = maxTimeStep
+        }
+        while (interval > 0.0) {
+            step(interval.toFloat(), velocityIterations, positionIterations)
+            interval -= maxTimeStep
+        }
 
         // Update the actor's positions and directions
         body = bodyList

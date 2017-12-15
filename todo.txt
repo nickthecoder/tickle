@@ -70,8 +70,8 @@ InputPicker :
 	"Windows" is this meta?
 	Shift, Control, alt etc don't work either.
 
-Possible Optimisatins
----------------------
+Possible Optimisations
+----------------------
 	
 PixelOverlapping
 	Don't clear the whole overlapTexture
@@ -88,8 +88,6 @@ New Features
 Option to load textures only when needed.
 	Texture
 Editor to allow resources to be reloaded.
-
-Handle box2d sensors and/or custom collision callback.
 
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
 	Also create a GUI suitable for launching from within the game to adjust *existing* inputs.
@@ -121,10 +119,6 @@ PoseTab should show the whole Texture, with a single shaded rectangle to show th
 	Double click to auto adjust the pose's rectangle and offset.
 	Make it a resuable copmonent, which can show one or many shaded rectangles.
 
-Mouse
-	Find Actors at a point
-		Overlapping, or using pixel data
-
 Ensure Textures are deleted when removed from resources (Use finalise?).
 
 Later
@@ -142,6 +136,7 @@ Split the project into multiple modules
 
 RevealStageView
 	Age Of Empires style outline of actors hidden behind buildings.
+		Use a z buffer?
 	Render all buildings and movables in one pass as a normal IsometricStageView (ordered based on Actor's Y position)
 		Render all movables to an off-screen buffer using their outline images. (Tagged "REVEAL")
 		Render all buildings to an off-screen buffer using just their masks (Tagged "HIDES")
