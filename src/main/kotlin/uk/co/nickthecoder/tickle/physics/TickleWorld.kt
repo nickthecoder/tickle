@@ -104,7 +104,7 @@ class TickleWorld(
             interval = maxTimeStep
         }
         while (interval > 0.0) {
-            step(interval.toFloat(), velocityIterations, positionIterations)
+            step(Math.min(interval, maxTimeStep).toFloat(), velocityIterations, positionIterations)
             interval -= maxTimeStep
         }
 
