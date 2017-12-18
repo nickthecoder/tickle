@@ -1,7 +1,9 @@
 package uk.co.nickthecoder.tickle
 
 import org.joml.Matrix4f
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Renderer
+import uk.co.nickthecoder.tickle.util.radians
 import uk.co.nickthecoder.tickle.util.string
 
 data class NinePatch(var pose: Pose, var left: Int, var bottom: Int, var right: Int, var top: Int)
@@ -27,6 +29,8 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
 
         }
     }
+
+    private val tempVector = Vector2d()
 
     init {
         val w = ninePatch.pose.rect.width
@@ -74,7 +78,7 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
         //println("Drawing nine patch $width , $height widths=$widths heights = $heights")
 
         val simple = actor.isSimpleImage()
-        val modelMatrix : Matrix4f?
+        val modelMatrix: Matrix4f?
         if (!simple) {
             modelMatrix = actor.calculateModelMatrix()
         } else {
@@ -97,6 +101,30 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
                 }
             }
         }
+    }
+
+    /**
+     * Use a NinePatch as a line, from the Actor's position to an arbitrary point.
+     * The Actor's direction is calculated from the angle between these to points. The nine patch's x size is resized to
+     * the magnitude of the line, and the height remains the same.
+     * Therefore, the NinePatch should be drawn with the line pointing along the X axis.
+     */
+    fun lineTo(x: Double, y: Double) {
+        tempVector.set(x - actor.position.x, y - actor.position.y)
+        actor.direction.radians = tempVector.radians()
+        size.x = tempVector.length()
+    }
+
+    /**
+     * Use a NinePatch as a line, from the Actor's position to an arbitrary point.
+     * The Actor's direction is calculated from the angle between these to points. The nine patch's x size is resized to
+     * the magnitude of the line, and the height remains the same.
+     * Therefore, the NinePatch should be drawn with the line pointing along the X axis.
+     */
+    fun lineTo(point: Vector2d) {
+        point.sub(actor.position, tempVector)
+        actor.direction.radians = tempVector.radians()
+        size.x = tempVector.length()
     }
 
     override fun toString() = "NinePatchAppearance pose=${ninePatch.pose} size=${size.string()} margins : ${ninePatch.left}, ${ninePatch.bottom}, ${ninePatch.right}, ${ninePatch.top}"

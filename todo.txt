@@ -72,7 +72,7 @@ InputPicker :
 
 Possible Optimisations
 ----------------------
-	
+
 PixelOverlapping
 	Don't clear the whole overlapTexture
 	Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.

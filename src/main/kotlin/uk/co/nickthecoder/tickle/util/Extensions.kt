@@ -14,4 +14,8 @@ fun Vector2d.rotate(radians: Double) {
     set(rx, ry)
 }
 
+fun Vector2d.radians() = Math.atan2(y, x)
+
+fun Vector2d.degrees() = Math.toDegrees(Math.atan2(y, x))
+
 fun Vector2d.string() = "( $x , $y )"
