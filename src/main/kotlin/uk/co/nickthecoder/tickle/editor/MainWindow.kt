@@ -82,6 +82,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
             add(EditorActions.RUN.createButton(shortcuts) { startGame() })
             add(EditorActions.TEST.createButton(shortcuts) { testGame() })
+            add(EditorActions.FXCODER.createButton(shortcuts) { fxcoder() })
             add(toolBarPadding)
         }
 
@@ -157,6 +158,10 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     fun testGame() {
         startGame(Resources.instance.sceneFileToPath(Resources.instance.gameInfo.testScenePath))
+    }
+
+    fun fxcoder() {
+        FXCoder(Stage())
     }
 
     fun openTab(dataName: String, data: Any) {

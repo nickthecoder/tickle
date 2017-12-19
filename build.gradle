@@ -75,6 +75,11 @@ dependencies {
     compile 'uk.co.nickthecoder:paratask-core:0.1'
     compile 'org.reflections:reflections:0.9.11'
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    // For kotlin scripting in the FX Coder in the editor.
+    //compile "org.jetbrains.kotlin:kotlin-compiler:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-script-util:$kotlin_version"
+
 }
 
 compileKotlin {
