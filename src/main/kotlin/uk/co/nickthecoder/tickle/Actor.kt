@@ -230,6 +230,15 @@ class Actor(var costume: Costume, val role: Role? = null) {
         }
     }
 
+    fun changeAppearance(ninePatch: NinePatch) {
+        val oldAppearance = appearance
+        val newAppearance = NinePatchAppearance(this, ninePatch)
+        appearance = newAppearance
+        if (oldAppearance is ResizeAppearance) {
+            newAppearance.size.set(oldAppearance.size)
+        }
+    }
+
     fun changeAppearance(text: String, textStyle: TextStyle) {
         appearance = TextAppearance(this, text, textStyle)
     }
@@ -246,6 +255,13 @@ class Actor(var costume: Costume, val role: Role? = null) {
             val textStyle = costume.chooseTextStyle(name) ?: textAppearance?.textStyle
             if (newText != null && textStyle != null) {
                 changeAppearance(newText, textStyle)
+            } else {
+
+                val ninePatch = costume.chooseNinePatch(name)
+                if (ninePatch != null) {
+                    changeAppearance(ninePatch)
+                }
+
             }
 
         } else {
