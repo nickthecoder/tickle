@@ -35,6 +35,8 @@ Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 BUGS
 ====
 
+NinePatchAppearance not scaling the body correctly when first created.
+
 When scaling by -ve values, the pose's direction needs to change its effect.
 	e.g. A 30 degree pose direction become 180-30 when scaled by -ve x
 	Ensure that nothing uses Pose's direction directly, but goes through the Appearance or the SceneActor

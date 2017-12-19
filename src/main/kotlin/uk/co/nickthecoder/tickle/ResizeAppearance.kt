@@ -10,7 +10,7 @@ import uk.co.nickthecoder.tickle.physics.scale
  */
 abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
 
-    val size = Vector2d(0.0, 0.0)
+    val size = Vector2d(1.0, 1.0)
 
     /**
      * The alignment, where x,y are both in the range 0..1
@@ -19,7 +19,7 @@ abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
      */
     val alignment = Vector2d(0.5, 0.5)
 
-    internal val oldSize = Vector2d(0.0, 0.0)
+    internal val oldSize = Vector2d(1.0, 1.0)
 
     protected val oldAlignment = Vector2d(0.5, 0.5)
 
