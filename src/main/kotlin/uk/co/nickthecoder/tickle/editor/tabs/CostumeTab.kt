@@ -88,7 +88,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val nameP = StringParameter("name", value = name)
 
-        val roleClassP = ChoiceParameter<Class<*>?>("role", required = false, value = null)
+        val roleClassP = GroupedChoiceParameter<Class<*>?>("role", required = false, value = null, allowSingleItemSubMenus = true)
 
         val canRotateP = BooleanParameter("canRotate")
 

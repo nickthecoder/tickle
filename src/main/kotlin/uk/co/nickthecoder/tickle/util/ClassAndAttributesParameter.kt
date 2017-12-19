@@ -10,7 +10,7 @@ class ClassAndAttributesParameter(name: String, klass: Class<*>)
 
     : SimpleGroupParameter(name) {
 
-    val classP = ChoiceParameter(name + "_class", value = klass)
+    val classP = GroupedChoiceParameter(name + "_class", value = klass)
     val attributesP = ButtonParameter(name + "_attributes", buttonText = "Attributes") { editAttributes() }
 
     var attributes: Attributes? = null

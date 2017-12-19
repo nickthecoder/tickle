@@ -7,9 +7,7 @@ Next
 Support enums as attributes.
 	Message Button, calls Director or Producer
 
-PoseChoiceParameter, which is a MenuButton with a hierarchical menu, rather than a simple ChoiceParameter.
-	Ditto for CostumeChoiceParameter
-	Similar for RoleParameter. Add separator for each package.
+Similar for RoleParameter. Add separator for each package.
 
 
 Undo/Redo in scene editor

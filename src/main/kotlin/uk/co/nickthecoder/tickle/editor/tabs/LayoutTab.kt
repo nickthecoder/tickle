@@ -210,7 +210,7 @@ class LayoutTab(val name: String, val layout: Layout)
     inner class LayoutStageParameter() : MultipleGroupParameter("stage") {
 
         val stageNameP = StringParameter("stageName")
-        val stageClassP = ChoiceParameter<Class<*>>("class", value = GameStage::class.java)
+        val stageClassP = GroupedChoiceParameter<Class<*>>("class", value = GameStage::class.java, allowSingleItemSubMenus = true)
         val stageConstraintP = ClassAndAttributesParameter("contraint", StageConstraint::class.java)
         val createViewP = ButtonParameter("createView", label = "", buttonText = "Create Whole Screen View") { createView() }
 
@@ -236,7 +236,7 @@ class LayoutTab(val name: String, val layout: Layout)
 
         val viewNameP = StringParameter("viewName")
         val stageNameP = StringParameter("stageName")
-        val viewClassP = ChoiceParameter<Class<*>>("class", value = ZOrderStageView::class.java)
+        val viewClassP = GroupedChoiceParameter<Class<*>>("class", value = ZOrderStageView::class.java, allowSingleItemSubMenus = true)
         val zOrderP = IntParameter("zOrder")
 
         // X

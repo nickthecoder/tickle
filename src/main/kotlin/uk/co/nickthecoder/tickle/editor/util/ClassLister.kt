@@ -1,7 +1,7 @@
 package uk.co.nickthecoder.tickle.editor.util
 
 import org.reflections.Reflections
-import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
+import uk.co.nickthecoder.paratask.parameters.GroupedChoiceParameter
 import java.lang.reflect.Modifier
 
 
@@ -39,21 +39,28 @@ object ClassLister {
         return results
     }
 
-    fun setChoices(choiceParameter: ChoiceParameter<Class<*>>, type: Class<*>) {
+    fun setChoices(choiceParameter: GroupedChoiceParameter<Class<*>>, type: Class<*>) {
         val value = choiceParameter.value
         choiceParameter.clear()
-        subTypes(type).forEach { klass ->
-            choiceParameter.addChoice(klass.name, klass, klass.simpleName)
+        subTypes(type).groupBy { it.`package` }.forEach { pack, list ->
+            val group = choiceParameter.group(pack.name)
+            list.forEach { klass ->
+                group.choice(klass.name, klass, klass.simpleName)
+            }
         }
         choiceParameter.value = value
     }
 
-    fun setNullableChoices(choiceParameter: ChoiceParameter<Class<*>?>, type: Class<*>) {
+    fun setNullableChoices(choiceParameter: GroupedChoiceParameter<Class<*>?>, type: Class<*>) {
         val value = choiceParameter.value
         choiceParameter.clear()
         choiceParameter.addChoice("", null, "<none>")
-        subTypes(type).forEach { klass ->
-            choiceParameter.addChoice(klass.name, klass, klass.simpleName)
+
+        subTypes(type).groupBy { it.`package` }.forEach { pack, list ->
+            val group = choiceParameter.group(pack.name)
+            list.forEach { klass ->
+                group.choice(klass.name, klass, klass.simpleName)
+            }
         }
         choiceParameter.value = value
     }

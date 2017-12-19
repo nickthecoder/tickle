@@ -36,7 +36,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val initialSceneP = StringParameter("initialScene", value = Resources.instance.sceneFileToPath(gameInfo.initialScenePath))
     val testSceneP = StringParameter("testScene", value = Resources.instance.sceneFileToPath(gameInfo.testScenePath))
 
-    val producerP = ChoiceParameter<Class<*>>("producer", value = NoProducer::class.java)
+    val producerP = GroupedChoiceParameter<Class<*>>("producer", value = NoProducer::class.java, allowSingleItemSubMenus = true)
 
     val physicsEngineP = BooleanParameter("physicsEngine", value = gameInfo.physicsEngine)
     val gravityP = Vector2dParameter("gravity", value = gameInfo.physicsInfo.gravity).asHorizontal()
@@ -44,8 +44,8 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val velocityIterationsP = IntParameter("velocityIterations", value = gameInfo.physicsInfo.velocityIterations)
     val positionIterationsP = IntParameter("positionIterations", value = gameInfo.physicsInfo.positionIterations)
 
-    val filterGroupsP = ChoiceParameter<Class<*>>("filterGroups", value = NoFilterGroups::class.java)
-    val filterBitsP = ChoiceParameter<Class<*>>("filterBits", value = NoFilterBits::class.java)
+    val filterGroupsP = GroupedChoiceParameter<Class<*>>("filterGroups", value = NoFilterGroups::class.java, allowSingleItemSubMenus = true)
+    val filterBitsP = GroupedChoiceParameter<Class<*>>("filterBits", value = NoFilterBits::class.java, allowSingleItemSubMenus = true)
 
     val physicsDetailsP = SimpleGroupParameter("physicsDetails")
             .addParameters(gravityP, scaleP, velocityIterationsP, positionIterationsP, filterGroupsP, filterBitsP)
