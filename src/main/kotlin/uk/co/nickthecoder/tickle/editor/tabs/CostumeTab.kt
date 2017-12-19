@@ -447,13 +447,14 @@ class CostumeTab(val name: String, val costume: Costume)
 
             init {
                 addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP)
-                costume.pose()?.let { pose ->
+                costume.pose() ?: costume.chooseNinePatch("default")?.pose?.let {
                     addParameters(shapeEditorButtonP)
 
                     circleRadiusP.value = 15.0
                     boxSizeP.xP.value = 15.0
                     boxSizeP.yP.value = 15.0
                 }
+
                 addParameters(circleP, boxP, polygonP, filterGroupP, filterCategoriesP, filterMaskP)
 
                 bodyTypeP.listen {
@@ -538,8 +539,8 @@ class CostumeTab(val name: String, val costume: Costume)
             }
 
             fun onEditShape() {
-                costume.pose()?.let {
-                    val task = ShapeEditorTask(it, this)
+                costume.pose() ?: costume.chooseNinePatch("default")?.pose?.let { pose ->
+                    val task = ShapeEditorTask(pose, this)
                     val stage = Stage()
                     // always on top didn't work for me (on linux using open jdk and the open javafx.
                     // stage.isAlwaysOnTop = true

@@ -235,6 +235,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
         val newAppearance = NinePatchAppearance(this, ninePatch)
         appearance = newAppearance
         if (oldAppearance is ResizeAppearance) {
+            newAppearance.oldSize.set(oldAppearance.size)
             newAppearance.size.set(oldAppearance.size)
         }
     }

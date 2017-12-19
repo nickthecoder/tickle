@@ -19,7 +19,7 @@ abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
      */
     val alignment = Vector2d(0.5, 0.5)
 
-    protected val oldSize = Vector2d(0.0, 0.0)
+    internal val oldSize = Vector2d(0.0, 0.0)
 
     protected val oldAlignment = Vector2d(0.5, 0.5)
 
