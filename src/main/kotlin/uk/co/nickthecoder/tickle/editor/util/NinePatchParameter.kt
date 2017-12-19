@@ -18,7 +18,6 @@ class NinePatchParameter(name: String, label: String)
     val topP = IntParameter("${name}_top", label = "Top", value = 0)
 
     init {
-        println("Adding nine patch parameters")
         addParameters(poseP, leftP, bottomP, rightP, topP)
     }
 

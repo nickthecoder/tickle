@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.editor.util
 
 import uk.co.nickthecoder.paratask.parameters.ChoiceParameter
+import uk.co.nickthecoder.paratask.parameters.GroupedChoiceParameter
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.graphics.Texture
@@ -20,17 +21,21 @@ fun createTextureParameter(parameterName: String = "texture"): ChoiceParameter<T
 }
 
 
-fun createPoseParameter(parameterName: String = "pose", label: String = "Pose", required: Boolean = true): ChoiceParameter<Pose?> {
+fun createPoseParameter(parameterName: String = "pose", label: String = "Pose", required: Boolean = true): GroupedChoiceParameter<Pose?> {
 
-    val choice = ChoiceParameter<Pose?>(parameterName, label = label, required = required, value = null)
+    val choiceParameter = GroupedChoiceParameter<Pose?>(parameterName, label = label, required = required, value = null)
 
     if (!required) {
-        choice.addChoice("", null, "None")
+        choiceParameter.addChoice("", null, "None")
     }
-    Resources.instance.poses.items().forEach { poseName, pose ->
-        choice.addChoice(poseName, pose, poseName)
+    Resources.instance.textures.items().forEach { textureName, texture ->
+        val group = choiceParameter.group(textureName)
+        Resources.instance.poses.items().filter { it.value.texture === texture }.forEach { poseName, pose ->
+            group.choice(poseName, pose, poseName)
+        }
+
     }
-    return choice
+    return choiceParameter
 }
 
 
@@ -45,17 +50,25 @@ fun createFontParameter(parameterName: String = "font", label: String = "Font"):
 }
 
 
-fun createCostumeParameter(parameterName: String = "costume", required: Boolean = true, value: Costume? = null): ChoiceParameter<Costume?> {
+fun createCostumeParameter(parameterName: String = "costume", required: Boolean = true, value: Costume? = null): GroupedChoiceParameter<Costume?> {
 
-    val choice = ChoiceParameter<Costume?>(parameterName, required = required, value = value)
+    val choiceParameter = GroupedChoiceParameter<Costume?>(parameterName, required = required, value = value)
 
     if (!required) {
-        choice.addChoice("", null, "None")
+        choiceParameter.addChoice("", null, "None")
     }
-    Resources.instance.costumes.items().forEach { costumeName, costume ->
-        choice.addChoice(costumeName, costume, costumeName)
+
+    val defaultGroup = choiceParameter.group("")
+    Resources.instance.costumes.items().filter { value?.costumeGroup !== Resources.instance.costumes && value?.costumeGroup != null }.forEach { costumeName, costume ->
+        defaultGroup.choice(costumeName, costume, costumeName)
     }
-    return choice
+    Resources.instance.costumeGroups.items().forEach { groupName, costumeGroup ->
+        val group = choiceParameter.group(groupName)
+        costumeGroup.items().forEach { costumeName, costume ->
+            group.choice(costumeName, costume, costumeName)
+        }
+    }
+    return choiceParameter
 }
 
 
@@ -69,4 +82,4 @@ fun createSoundParameter(parameterName: String = "sound"): ChoiceParameter<Sound
     return choice
 }
 
-fun createNinePatchParameter(parameterName: String = "ninePatch", label : String="NinePatch") = NinePatchParameter(parameterName, label)
+fun createNinePatchParameter(parameterName: String = "ninePatch", label: String = "NinePatch") = NinePatchParameter(parameterName, label)

@@ -220,7 +220,6 @@ class CostumeTab(val name: String, val costume: Costume)
                     inner.soundP.value = sound
                     inner.typeP.value = inner.soundP
                 }
-                println("Event has ${event.ninePatches}")
                 event.ninePatches.forEach { ninePatch ->
                     val inner = eventsP.newValue()
                     inner.eventNameP.value = eventName
@@ -309,6 +308,7 @@ class CostumeTab(val name: String, val costume: Costume)
         val poseP = createPoseParameter()
 
         val textStyleP = TextStyleParameter("style")
+
         val costumeP = createCostumeParameter()
 
         val stringP = StringParameter("string")
@@ -317,7 +317,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         val ninePatchP = createNinePatchParameter()
 
-        val typeP = OneOfParameter("type", value = poseP, choiceLabel = "Type")
+        val typeP = OneOfParameter("type", value = null, choiceLabel = "Type")
                 .addChoices(poseP, costumeP, textStyleP, stringP, soundP, ninePatchP)
 
         init {
@@ -342,7 +342,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
     inner class PhysicsTask : AbstractTask() {
 
-        val bodyTypeP = ChoiceParameter("bodyType", required = false, value = costume.bodyDef?.type)
+        val bodyTypeP = ChoiceParameter<BodyType?>("bodyType", required = false, value = costume.bodyDef?.type)
                 .nullableEnumChoices(mixCase = true, nullLabel = "None")
 
         val linearDampingP = FloatParameter("linearDamping", value = costume.bodyDef?.linearDamping ?: 0f, minValue = 0f, maxValue = 10f)
