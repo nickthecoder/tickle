@@ -33,9 +33,6 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val scaleP = Vector2dParameter("scale", value = actorResource.scale)
 
-    val flipXP = BooleanParameter("flipX", value = actorResource.flipX)
-    val flipYP = BooleanParameter("flipY", value = actorResource.flipY)
-
     val textP = StringParameter("text", value = actorResource.text, rows = 3)
 
 
@@ -51,7 +48,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, flipXP, flipYP, textP)
+            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, textP)
 
             .asVertical()
 
@@ -132,8 +129,6 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             directionP.value?.let { direction.degrees = it }
             scale.set(scaleP.value)
 
-            flipX = flipXP.value == true
-            flipY = flipYP.value == true
             text = textP.value
             zOrder = zOrderP.value!!
 
@@ -164,8 +159,6 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             } else {
                 scaleP.value.set(scale)
             }
-            flipXP.value = flipX
-            flipYP.value = flipY
             textP.value = text
             zOrderP.value = zOrder
 

@@ -48,9 +48,6 @@ class ActorResource(val isDesigning: Boolean = false) {
     var y: Double = 0.0
     var zOrder: Double = 0.0
 
-    var flipX = false
-    var flipY = false
-
     var xAlignment: ActorXAlignment = ActorXAlignment.LEFT
     var yAlignment: ActorYAlignment = ActorYAlignment.BOTTOM
 
@@ -147,8 +144,6 @@ class ActorResource(val isDesigning: Boolean = false) {
 
         actor.xAlignment = xAlignment
         actor.yAlignment = yAlignment
-        actor.flipX = flipX
-        actor.flipY = flipY
 
         val appearance = actor.appearance
         if (appearance is ResizeAppearance) {

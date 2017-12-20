@@ -156,9 +156,6 @@ abstract class AbstractAppearance(val actor: Actor) : Appearance {
         tempVector.x /= actor.scale.x
         tempVector.y /= actor.scale.y
 
-        if (actor.flipX) tempVector.x = -tempVector.x
-        if (actor.flipY) tempVector.y = -tempVector.y
-
         val offsetX = offsetX()
         val offsetY = offsetY()
 

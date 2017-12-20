@@ -59,7 +59,6 @@ abstract class Layer {
 
 
             scale(actorResource.scale.x, actorResource.scale.y)
-            scale(if (actorResource.flipX) -1.0 else 1.0, if (actorResource.flipY) -1.0 else 1.0)
 
             if (ninePatch != null) {
 

@@ -84,7 +84,7 @@ class SimpleBounce : Bounce() {
 
 }
 
-class NeighbourhoodBounce : Bounce() { 
+class NeighbourhoodBounce : Bounce() {
 
     lateinit var occupant: Occupant
 

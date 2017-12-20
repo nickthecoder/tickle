@@ -219,13 +219,6 @@ class JsonScene {
                 jactor.add("scaleX", scale.x)
                 jactor.add("scaleY", scale.y)
 
-                if (flipX) {
-                    jactor.add("flipX", true)
-                }
-                if (flipY) {
-                    jactor.add("flipY", true)
-                }
-
                 if (isSizable()) {
                     jactor.add("sizeX", size.x)
                     jactor.add("sizeY", size.y)
@@ -280,8 +273,6 @@ class JsonScene {
             scale.x = jactor.getDouble("scaleX", 1.0)
             scale.y = jactor.getDouble("scaleY", 1.0)
 
-            flipX = jactor.getBoolean("flipX", false)
-            flipY = jactor.getBoolean("flipY", false)
             actorResource.text = jactor.getString("text", "")
 
             if (isSizable()) {
