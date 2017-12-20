@@ -54,7 +54,7 @@ interface Attributes {
 
     fun applyToObject(obj: Any)
 
-    fun updateAttributesMetaData(className: String, isDesigning: Boolean)
+    fun updateAttributesMetaData(className: String)
 }
 
 open class RuntimeAttributes : Attributes {
@@ -169,7 +169,7 @@ open class RuntimeAttributes : Attributes {
         }.joinToString()
     }
 
-    override fun updateAttributesMetaData(className: String, isDesigning: Boolean) {
+    override fun updateAttributesMetaData(className: String) {
     }
 
 }
@@ -185,13 +185,13 @@ class DesignAttributes : RuntimeAttributes() {
      * we can find the default value the field has immediately after creation. In this way, we can show the default
      * value in the Editor/SceneEditor.
      */
-    override fun updateAttributesMetaData(className: String, isDesigning: Boolean) {
+    override fun updateAttributesMetaData(className: String) {
 
         val kClass: KClass<*>
         var instance: Any? = null
         try {
             kClass = Class.forName(className).kotlin
-            if (isDesigning && className.isNotBlank()) {
+            if (className.isNotBlank()) {
                 instance = kClass.java.newInstance()
             }
         } catch (e: Exception) {

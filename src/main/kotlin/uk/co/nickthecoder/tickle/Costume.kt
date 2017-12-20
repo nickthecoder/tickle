@@ -15,7 +15,7 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
         set(v) {
             if (field != v) {
                 field = v
-                attributes.updateAttributesMetaData(v, false)
+                attributes.updateAttributesMetaData(v)
             }
         }
 

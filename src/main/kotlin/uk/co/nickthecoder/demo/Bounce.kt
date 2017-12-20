@@ -84,11 +84,16 @@ class SimpleBounce : Bounce() {
 
 }
 
-class NeighbourhoodBounce : Bounce() {
+class NeighbourhoodBounce : Bounce() { 
 
-    val occupant = Occupant(Play.instance.neighbourhood, this)
+    lateinit var occupant: Occupant
 
     private val worldRect = Rectd()
+
+    override fun activated() {
+        super.activated()
+        occupant = Occupant(uk.co.nickthecoder.demo.Play.instance.neighbourhood, this)
+    }
 
     override fun tick() {
         super.tick()

@@ -15,10 +15,10 @@ class Bee : Controllable() {
 
     val velocity = Polar2d()
 
-    val ejectNoBounce = Resources.instance.inputs.find("ejectNoBounce")!!
-    val ejectSimple = Resources.instance.inputs.find("ejectSimple")!!
-    val ejectNeighbourhood = Resources.instance.inputs.find("ejectNeighbourhood")!!
-    val ejectWorld = Resources.instance.inputs.find("ejectWorld")!!
+    val ejectNoBounce = Resources.instance.inputs.find("ejectNoBounce")
+    val ejectSimple = Resources.instance.inputs.find("ejectSimple")
+    val ejectNeighbourhood = Resources.instance.inputs.find("ejectNeighbourhood")
+    val ejectWorld = Resources.instance.inputs.find("ejectWorld")
 
     override fun activated() {
 
@@ -48,16 +48,16 @@ class Bee : Controllable() {
         }
         actor.customTransformation = if (angle > 90 && angle < 270) flipMatrix else null
 
-        if (ejectNoBounce.isPressed()) {
+        if (ejectNoBounce?.isPressed() == true) {
             eject(NoBounce())
         }
-        if (ejectSimple.isPressed()) {
+        if (ejectSimple?.isPressed() == true) {
             eject(SimpleBounce())
         }
-        if (ejectNeighbourhood.isPressed()) {
+        if (ejectNeighbourhood?.isPressed() == true) {
             eject(NeighbourhoodBounce())
         }
-        if (ejectWorld.isPressed()) {
+        if (ejectWorld?.isPressed() == true) {
             val newActor = actor.createChildOnStage("ejectWorld")
             newActor.body?.let { body ->
                 body.linearVelocity = Vec2(-3f, -3f)

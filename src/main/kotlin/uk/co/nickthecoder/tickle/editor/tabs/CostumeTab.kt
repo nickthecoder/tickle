@@ -147,7 +147,7 @@ class CostumeTab(val name: String, val costume: Costume)
         fun updateAttributes() {
 
             roleClassP.value?.name?.let {
-                costume.attributes.updateAttributesMetaData(it, true)
+                costume.attributes.updateAttributesMetaData(it)
             }
 
             attributesP.children.toList().forEach {

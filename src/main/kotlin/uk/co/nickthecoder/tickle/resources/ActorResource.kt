@@ -163,7 +163,7 @@ class ActorResource(val isDesigning: Boolean = false) {
     private fun updateAttributesMetaData() {
         val roleString = Resources.instance.costumes.find(costumeName)?.roleString
         if (roleString != null && roleString.isNotBlank()) {
-            attributes.updateAttributesMetaData(roleString, isDesigning)
+            attributes.updateAttributesMetaData(roleString)
         }
     }
 

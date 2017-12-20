@@ -17,7 +17,7 @@ class ClassAndAttributesParameter(name: String, klass: Class<*>)
         set(v) {
             field = v
             v?.let { attributes ->
-                attributes.updateAttributesMetaData(classP.value!!.name, isDesigning = true)
+                attributes.updateAttributesMetaData(classP.value!!.name)
                 attributesP.hidden = attributes.data().firstOrNull { it.parameter != null } == null
             }
         }

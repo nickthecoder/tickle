@@ -213,7 +213,7 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
     }
 
     fun updateAttributes() {
-        sceneResource.directorAttributes.updateAttributesMetaData(directorP.value!!.name, true)
+        sceneResource.directorAttributes.updateAttributesMetaData(directorP.value!!.name)
         attributesP.children.toList().forEach {
             attributesP.remove(it)
         }
