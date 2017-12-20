@@ -223,7 +223,10 @@ fun Fixture.scale(body: Body, scaleX: Float, scaleY: Float) {
         }
         is PolygonShape -> {
             val points = Array<Vec2>(shape.vertexCount) { Vec2(shape.vertices[it].x * scaleX, shape.vertices[it].y * scaleY) }
-
+            // If one scale is negative, then we need to reverse the points in order to preserve the anti-clockwise order of the points.
+            if ((scaleX < 0).xor(scaleY < 0)) {
+                points.reverse()
+            }
             newShape = PolygonShape()
             newShape.set(points, shape.vertexCount)
         }
