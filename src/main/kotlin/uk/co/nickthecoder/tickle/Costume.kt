@@ -23,7 +23,7 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
 
     var zOrder: Double = 0.0
 
-    val attributes = Attributes()
+    val attributes = Resources.instance.createAttributes()
 
     val events = mutableMapOf<String, CostumeEvent>()
 

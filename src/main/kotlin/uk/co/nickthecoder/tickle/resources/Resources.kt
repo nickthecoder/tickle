@@ -8,7 +8,7 @@ import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
-class Resources {
+class Resources(val editing: Boolean = false) {
 
     var file: File = File("")
 
@@ -44,6 +44,18 @@ class Resources {
         get() = File(file.parentFile, "images").absoluteFile
 
     val listeners = mutableListOf<ResourcesListener>()
+
+    init {
+        instance = this
+    }
+
+    fun createAttributes(): Attributes {
+        if (editing) {
+            return DesignAttributes()
+        } else {
+            return RuntimeAttributes()
+        }
+    }
 
     fun findName(resource: Any): String? {
         return when (resource) {

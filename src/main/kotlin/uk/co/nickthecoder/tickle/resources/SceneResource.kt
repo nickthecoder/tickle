@@ -16,7 +16,7 @@ class SceneResource {
 
     var directorString: String = NoDirector::class.java.name
 
-    val directorAttributes = Attributes()
+    val directorAttributes = Resources.instance.createAttributes()
 
     var layoutName: String = ""
         set(v) {

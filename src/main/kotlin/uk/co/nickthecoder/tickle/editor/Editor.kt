@@ -20,9 +20,8 @@ class Editor : Application() {
 
         AutoExit.disable()
         window = Window("Tickle Editor Hidden Window", 100, 100)
-        val json = JsonResources(resourceFile!!)
+        val json = JsonResources(resourceFile!!, editing = true)
         val resources = if (resourceFile == null) Resources() else json.loadResources()
-        Resources.instance = resources
         Game(window, resources)
 
         println("Loaded resource, creating main window")

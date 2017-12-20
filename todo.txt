@@ -7,9 +7,6 @@ Next
 Support enums as attributes.
 	Message Button, calls Director or Producer
 
-Similar for RoleParameter. Add separator for each package.
-
-
 Undo/Redo in scene editor
 	Changes :
 		New ActorResource
@@ -32,8 +29,6 @@ Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 
 BUGS
 ====
-
-NinePatchAppearance not scaling the body correctly when first created.
 
 When scaling by -ve values, the pose's direction needs to change its effect.
 	e.g. A 30 degree pose direction become 180-30 when scaled by -ve x
@@ -63,7 +58,6 @@ Attributes now depends on paratask-core, and therefore a running game also depen
 		It either returns Attributes (which has no parameter stuff) of DesignAttributes
 		Then cast wherever they are used in the editor.
 		Add an extension function : SceneActor.designAttributes() which does the cast. Ditto for Costume
-	Also, "UglyPrint" is in paratask-core.
 
 InputPicker :
 	Java FX key code name "Number Sign" does not map to anything in enum class Key

@@ -1,6 +1,5 @@
 package uk.co.nickthecoder.tickle.resources
 
-import uk.co.nickthecoder.tickle.Attributes
 import uk.co.nickthecoder.tickle.Scene
 import uk.co.nickthecoder.tickle.stage.*
 import uk.co.nickthecoder.tickle.util.Deletable
@@ -55,7 +54,7 @@ class LayoutStage {
 
     var stageConstraintString: String = NoStageConstraint::class.java.name
 
-    var constraintAttributes = Attributes()
+    var constraintAttributes = Resources.instance.createAttributes()
 
     fun createStage(): Stage {
 

@@ -77,7 +77,7 @@ class ActorResource(val isDesigning: Boolean = false) {
      */
     var alignment = Vector2d(0.5, 0.5)
 
-    val attributes = Attributes()
+    val attributes = Resources.instance.createAttributes()
 
     val editorPose: Pose? by lazy { Resources.instance.costumes.find(costumeName)?.editorPose() }
 

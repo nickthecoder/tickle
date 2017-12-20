@@ -40,23 +40,40 @@ import kotlin.reflect.jvm.jvmErasure
  * We can then set the speed for each collectable item from within the SceneEditor.
  *
  */
-class Attributes {
+interface Attributes {
 
-    private val map = mutableMapOf<String, AttributeData>()
+    fun clear()
 
-    fun clear() {
+    fun setValue(name: String, value: String)
+
+    fun map(): Map<String, AttributeData>
+
+    fun data(): Collection<AttributeData>
+
+    fun getOrCreateData(name: String): AttributeData
+
+    fun applyToObject(obj: Any)
+
+    fun updateAttributesMetaData(className: String, isDesigning: Boolean)
+}
+
+open class RuntimeAttributes : Attributes {
+
+    protected val map = mutableMapOf<String, AttributeData>()
+
+    override fun clear() {
         map.clear()
     }
 
-    fun setValue(name: String, value: String) {
+    override fun setValue(name: String, value: String) {
         getOrCreateData(name).value = value
     }
 
-    fun map(): Map<String, AttributeData> = map
+    override fun map(): Map<String, AttributeData> = map
 
-    fun data(): Collection<AttributeData> = map.values
+    override fun data(): Collection<AttributeData> = map.values
 
-    fun getOrCreateData(name: String): AttributeData {
+    override fun getOrCreateData(name: String): AttributeData {
         map[name]?.let { return it }
         val data = AttributeData()
         map[name] = data
@@ -67,7 +84,7 @@ class Attributes {
      * Updates the Role's fields (or other class's fields that uses Attributes) with the stored attribute values.
      *
      */
-    fun applyToObject(obj: Any) {
+    override fun applyToObject(obj: Any) {
         val klass = obj.javaClass.kotlin
 
         map.toMap().forEach { name, data ->
@@ -96,6 +113,7 @@ class Attributes {
             System.err.println("ERROR. Failed to set property '$name' on class '$klass'. Reason : $e")
         }
     }
+
 
     /**
      * Class fields tagged with @Attribute can either be simple mutable ('var') values, such as a Double, or 'val's
@@ -129,6 +147,35 @@ class Attributes {
         }
     }
 
+    fun fromString(value: String, klass: KClass<*>): Any {
+        return when (klass) {
+            Boolean::class -> value.toBoolean()
+            Int::class -> value.toInt()
+            Float::class -> value.toFloat()
+            Double::class -> value.toDouble()
+            String::class -> value
+            Polar2d::class -> Polar2d.fromString(value)
+            Vector2d::class -> vector2dFromString(value)
+            Angle::class -> Angle.degrees(value.toDouble())
+            Color::class -> Color.fromString(value)
+            else -> throw IllegalArgumentException("Type $klass is not currently supported.")
+        }
+    }
+
+
+    override fun toString(): String {
+        return "Attributes : " + map.map { (name, data) ->
+            "$name=${data.value}"
+        }.joinToString()
+    }
+
+    override fun updateAttributesMetaData(className: String, isDesigning: Boolean) {
+    }
+
+}
+
+class DesignAttributes : RuntimeAttributes() {
+
     /**
      * Uses reflection to scan the Class for fields using the @Attribute or @CostumeAttribute annotations.
      * Creates Parameters for each annotated field. The Parameter is given a ParameterListener which updates the
@@ -138,7 +185,7 @@ class Attributes {
      * we can find the default value the field has immediately after creation. In this way, we can show the default
      * value in the Editor/SceneEditor.
      */
-    fun updateAttributesMetaData(className: String, isDesigning: Boolean) {
+    override fun updateAttributesMetaData(className: String, isDesigning: Boolean) {
 
         val kClass: KClass<*>
         var instance: Any? = null
@@ -247,27 +294,6 @@ class Attributes {
         }
     }
 
-    fun fromString(value: String, klass: KClass<*>): Any {
-        return when (klass) {
-            Boolean::class -> value.toBoolean()
-            Int::class -> value.toInt()
-            Float::class -> value.toFloat()
-            Double::class -> value.toDouble()
-            String::class -> value
-            Polar2d::class -> Polar2d.fromString(value)
-            Vector2d::class -> vector2dFromString(value)
-            Angle::class -> Angle.degrees(value.toDouble())
-            Color::class -> Color.fromString(value)
-            else -> throw IllegalArgumentException("Type $klass is not currently supported.")
-        }
-    }
-
-
-    override fun toString(): String {
-        return "Attributes : " + map.map { (name, data) ->
-            "$name=${data.value}"
-        }.joinToString()
-    }
 }
 
 data class AttributeData(

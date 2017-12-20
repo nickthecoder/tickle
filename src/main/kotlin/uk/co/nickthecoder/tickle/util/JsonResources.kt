@@ -22,19 +22,19 @@ class JsonResources {
     private var resources: Resources
 
     /**
-     * WHile loading the costumes, one costume event may depend upon a costume that hasn't been loaded yet.
+     * While loading the costumes, one costume event may depend upon a costume that hasn't been loaded yet.
      * So we store the events in a list, and process them once all costumes have been loaded.
      */
-    val costumeEvents = mutableListOf<CostumeEventData>()
+    private val costumeEvents = mutableListOf<CostumeEventData>()
 
     /**
      * When a costume inherits events from another costume, store the costume names in this map, and then
      * update the costume once all of the costumes have been loaded.
      */
-    val inherritedCostumeEvents = mutableMapOf<String, String>()
+    private val inheritedCostumeEvents = mutableMapOf<String, String>()
 
-    constructor(file: File) {
-        this.resources = Resources()
+    constructor(file: File, editing: Boolean = false) {
+        this.resources = Resources(editing)
         this.resources.file = file
     }
 
@@ -129,7 +129,7 @@ class JsonResources {
             data.costumeEvent.costumes.add(resources.costumes.find(data.costumeName)!!)
         }
 
-        inherritedCostumeEvents.forEach { costumeName, inheritsFromCostumeName ->
+        inheritedCostumeEvents.forEach { costumeName, inheritsFromCostumeName ->
             val from = resources.costumes.find(costumeName)
             val to = resources.costumes.find(inheritsFromCostumeName)
             if (from != null && to != null) {
@@ -169,7 +169,9 @@ class JsonResources {
                     packages.add(it.asString())
                 }
             }
-            ClassLister.packages(packages)
+            if (resources.editing) {
+                ClassLister.packages(packages)
+            }
 
             outputFormat = EditorPreferences.JsonFormat.valueOf(jpreferences.getString("outputFormat", "PRETTY"))
             treeThumnailSize = jpreferences.getInt("treeThumbnailSize", 24)
@@ -701,7 +703,7 @@ class JsonResources {
 
             val inheritsFrom: String? = jcostume.getString("inheritsEventsFrom", null)
             if (inheritsFrom != null) {
-                inherritedCostumeEvents[name] = inheritsFrom
+                inheritedCostumeEvents[name] = inheritsFrom
             }
 
             jcostume.get("events")?.let {
