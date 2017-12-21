@@ -267,6 +267,9 @@ class JsonResources {
                 jstages.add(jstage)
 
                 jstage.add("name", stageName)
+                if (layoutStage.isDefault) {
+                    jstage.add("isDEfault", true)
+                }
                 jstage.add("stage", layoutStage.stageString)
                 jstage.add("constraint", layoutStage.stageConstraintString)
                 JsonUtil.saveAttributes(jstage, layoutStage.constraintAttributes, "constraintAttributes")
@@ -323,6 +326,7 @@ class JsonResources {
                     val jstage = it.asObject()
                     val layoutStage = LayoutStage()
                     val stageName = jstage.get("name").asString()
+                    layoutStage.isDefault = jstage.getBoolean("isDefault", false)
                     layoutStage.stageString = jstage.get("stage").asString()
                     layoutStage.stageConstraintString = jstage.getString("constraint", NoStageConstraint::class.java.name)
                     JsonUtil.loadAttributes(jstage, layoutStage.constraintAttributes, "constraintAttributes")

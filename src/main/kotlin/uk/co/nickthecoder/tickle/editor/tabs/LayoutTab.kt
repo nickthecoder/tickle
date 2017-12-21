@@ -73,6 +73,7 @@ class LayoutTab(val name: String, val layout: Layout)
             layout.layoutStages.forEach { name, layoutStage ->
                 val inner = stagesP.newValue()
                 inner.stageNameP.value = name
+                inner.defaultStageP.value = layout.defaultLayoutStage === layoutStage
                 inner.stageClassP.value = Class.forName(layoutStage.stageString)
                 inner.stageConstraintP.classP.value = Class.forName(layoutStage.stageConstraintString)
                 inner.stageConstraintP.attributes = layoutStage.constraintAttributes
@@ -98,6 +99,9 @@ class LayoutTab(val name: String, val layout: Layout)
             stagesP.innerParameters.forEach { inner ->
                 val layoutStage = LayoutStage()
                 layout.layoutStages[inner.stageNameP.value] = layoutStage
+                if (inner.defaultStageP.value == true) {
+                    layout.defaultLayoutStage = layoutStage
+                }
 
                 layoutStage.stageString = inner.stageClassP.value!!.name
                 layoutStage.stageConstraintString = inner.stageConstraintP.classP.value!!.name
@@ -210,12 +214,13 @@ class LayoutTab(val name: String, val layout: Layout)
     inner class LayoutStageParameter() : MultipleGroupParameter("stage") {
 
         val stageNameP = StringParameter("stageName")
+        val defaultStageP = BooleanParameter("defaultStage")
         val stageClassP = GroupedChoiceParameter<Class<*>>("class", value = GameStage::class.java, allowSingleItemSubMenus = true)
         val stageConstraintP = ClassAndAttributesParameter("contraint", StageConstraint::class.java)
         val createViewP = ButtonParameter("createView", label = "", buttonText = "Create Whole Screen View") { createView() }
 
         init {
-            addParameters(stageNameP, stageClassP, stageConstraintP, createViewP)
+            addParameters(stageNameP, defaultStageP, stageClassP, stageConstraintP, createViewP)
             ClassLister.setChoices(stageClassP, Stage::class.java)
         }
 

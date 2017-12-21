@@ -10,6 +10,14 @@ class Layout : Deletable, Renamable {
     val layoutStages = mutableMapOf<String, LayoutStage>()
     val layoutViews = mutableMapOf<String, LayoutView>()
 
+    var defaultLayoutStage: LayoutStage?
+        get() {
+            return layoutStages.values.firstOrNull { it.isDefault == true } ?: layoutStages.values.firstOrNull()
+        }
+        set(v) {
+            layoutStages.values.forEach { it.isDefault = (it === v) }
+        }
+
     fun createScene(): Scene {
         val scene = Scene()
         layoutStages.forEach { stageName, layoutStage ->
@@ -46,11 +54,14 @@ class Layout : Deletable, Renamable {
     override fun rename(newName: String) {
         Resources.instance.layouts.rename(this, newName)
     }
+
 }
 
 class LayoutStage {
 
     var stageString: String = GameStage::class.java.name
+
+    var isDefault: Boolean = false
 
     var stageConstraintString: String = NoStageConstraint::class.java.name
 

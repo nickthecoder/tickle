@@ -64,13 +64,17 @@ class Layers(val sceneResource: SceneResource, selection: Selection) {
 
         loadIncludes()
 
+        val layout = Resources.instance.layouts.find(sceneResource.layoutName)
+
         createStageLayers(sceneResource).forEach { layer ->
             add(layer)
             stageLayers.add(layer)
             map[layer.stageName] = layer
 
             stageButton.items.add(createMenuItem(layer))
-            currentLayer = layer
+            if (layout?.layoutStages?.get(layer.stageName)?.isDefault == true) {
+                currentLayer = layer
+            }
 
         }
 

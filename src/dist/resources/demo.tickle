@@ -39,6 +39,7 @@
         },
         {
           "name": "main",
+          "isDEfault": true,
           "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
           "constraint": "uk.co.nickthecoder.tickle.resources.NoStageConstraint"
         }
@@ -421,6 +422,12 @@
               "poses": [
                 "greenBall"
               ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "velocity",
+              "value": "0.0x0.0"
             }
           ]
         },

@@ -30,12 +30,6 @@ Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 BUGS
 ====
 
-When scaling by -ve values, the pose's direction needs to change its effect.
-	e.g. A 30 degree pose direction become 180-30 when scaled by -ve x
-	Ensure that nothing uses Pose's direction directly, but goes through the Appearance or the SceneActor
-		SceneActor needs a new poseDirection method for the SceneEditor???
-	Once Bee works without the customTransformation, can then remove it.
-
 Either remove custom transformation or make it not external.
 	Simply making it not external won't work, because the game coder could change the matrix without Tickle knowing.
 	And therefore the modelMatrix will be wrong.
@@ -45,19 +39,9 @@ Window is always resizable (despite the value in GameInfo)
 	The default behaviour should adjust the views
 		Can be overriden in Producer though.
 
-Scaling by a -ve value screws up physics.
-	Need to ensure polygons points are still ordered correctly.
-	Allow circles to work with -ve scaling of one axis.
-	Consider removing flipX and flipY in favour of -ve scales.
+Allow scaling of circles - convert to a polygon if the scales factors are different
 
 Scene.adjustActors is not being called directly. Should it?
-
-Attributes now depends on paratask-core, and therefore a running game also depends upon it. Grr.
-	I only want the EDITOR to depend on paratask-core.
-	Have a factory method for Attributes, which checks Class.forName( "uk...paratask...Parameter" )
-		It either returns Attributes (which has no parameter stuff) of DesignAttributes
-		Then cast wherever they are used in the editor.
-		Add an extension function : SceneActor.designAttributes() which does the cast. Ditto for Costume
 
 InputPicker :
 	Java FX key code name "Number Sign" does not map to anything in enum class Key
