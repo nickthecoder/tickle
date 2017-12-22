@@ -136,7 +136,7 @@ class Actor(var costume: Costume, val role: Role? = null) {
      * Return false iff the actor requires special transformations to render it.
      */
     internal fun isSimpleImage(): Boolean =
-            direction.radians == appearance.directionRadians && scale.x == 1.0 && scale.y == 1.0 && customTransformation == null
+            direction.radians == appearance.directionRadians && scale.x == 1.0 && scale.y == 1.0
 
     internal fun calculateModelMatrix(): Matrix4f {
         if (dirtyMatrix) {
@@ -170,19 +170,8 @@ class Actor(var costume: Costume, val role: Role? = null) {
         if (scale.x != 1.0 || scale.y != 1.0) {
             modelMatrix.scale(scale.x.toFloat(), scale.y.toFloat(), 1f)
         }
-        customTransformation?.let {
-            modelMatrix.mul(it)
-        }
         modelMatrix.translate(-x.toFloat(), -y.toFloat(), 0f)
     }
-
-    internal var customTransformation: Matrix4f? = null
-        set(v) {
-            if (field !== v) {
-                field = v
-                dirtyMatrix = true
-            }
-        }
 
     fun resize(width: Double, height: Double) {
         appearance.resize(width, height)

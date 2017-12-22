@@ -39,7 +39,6 @@
         },
         {
           "name": "main",
-          "isDEfault": true,
           "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
           "constraint": "uk.co.nickthecoder.tickle.resources.NoStageConstraint"
         }
@@ -142,10 +141,10 @@
     {
       "name": "bee",
       "texture": "sprites",
-      "left": 0,
-      "bottom": 60,
+      "left": 3,
+      "bottom": 58,
       "right": 75,
-      "top": 0,
+      "top": 4,
       "offsetX": 38,
       "offsetY": 29,
       "direction": 24
@@ -288,6 +287,17 @@
       "offsetY": 0,
       "direction": 0,
       "tiled": true
+    },
+    {
+      "name": "bee-flipX",
+      "texture": "sprites",
+      "left": 181,
+      "bottom": 58,
+      "right": 253,
+      "top": 4,
+      "offsetX": 34,
+      "offsetY": 29,
+      "direction": 156
     }
   ],
   "sounds": [
@@ -542,6 +552,12 @@
           "name": "ejectWorld",
           "costumes": [
             "worldBounce"
+          ]
+        },
+        {
+          "name": "flipped",
+          "poses": [
+            "bee-flipX"
           ]
         }
       ]

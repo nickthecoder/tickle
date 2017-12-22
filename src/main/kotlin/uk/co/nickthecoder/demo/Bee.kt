@@ -20,6 +20,8 @@ class Bee : Controllable() {
     val ejectNeighbourhood = Resources.instance.inputs.find("ejectNeighbourhood")
     val ejectWorld = Resources.instance.inputs.find("ejectWorld")
 
+    var flipped = false
+
     override fun activated() {
 
         val turn = GradualTurnInput(velocity.angle, Angle.degrees(1.0), Angle.degrees(5.0), drag = 0.07)
@@ -46,7 +48,18 @@ class Bee : Controllable() {
             // "rem" can return positive and negative numbers, so adjust the negative numbers, so they become positive.
             angle = 360 + angle
         }
-        actor.customTransformation = if (angle > 90 && angle < 270) flipMatrix else null
+        if (flipped) {
+            if (angle > 90 && angle < 270) {
+                flipped = false
+                actor.event("flipped")
+            }
+        } else {
+            if (angle < 90 || angle > 270) {
+                flipped = true
+                actor.event("default")
+            }
+
+        }
 
         if (ejectNoBounce?.isPressed() == true) {
             eject(NoBounce())

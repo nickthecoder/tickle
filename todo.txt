@@ -23,8 +23,6 @@ Undo/Redo in scene editor
 		Ignore snap data for now.
 
 
-Where should TickleWorld live? Currently on Scene, but perhaps it should be on Stage.		
-
 Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 
 BUGS
