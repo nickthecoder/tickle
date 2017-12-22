@@ -2,12 +2,15 @@ package uk.co.nickthecoder.tickle.stage
 
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Role
+import uk.co.nickthecoder.tickle.physics.TickleWorld
 
 interface Stage {
 
     val views: List<StageView>
 
     val actors: Set<Actor>
+
+    var world: TickleWorld?
 
     fun begin()
 

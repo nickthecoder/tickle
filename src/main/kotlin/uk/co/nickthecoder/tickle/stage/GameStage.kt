@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.stage
 
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.physics.TickleWorld
 
 
 class GameStage() : Stage {
@@ -9,37 +10,53 @@ class GameStage() : Stage {
 
     override val views: List<StageView> = mutableViews
 
+    override var world: TickleWorld? = null
+
     private val mutableActors = mutableSetOf<Actor>()
 
     override val actors: Set<Actor> = mutableActors
 
 
     override fun begin() {
-        actors.map { it.role }.forEach { role ->
+        actors.forEach { actor ->
+            val role = actor.role
             role?.begin()
         }
     }
 
     override fun activated() {
-        actors.map { it.role }.forEach { role ->
+        actors.forEach { actor ->
+            val role = actor.role
             role?.activated()
         }
     }
 
     override fun end() {
-        actors.map { it.role }.forEach { role ->
+        actors.forEach { actor ->
+            val role = actor.role
             role?.end()
         }
         mutableActors.clear()
     }
 
-    override fun tick() {
-        actors.map { it.role }.forEach { role ->
+    protected fun tickRoles() {
+        actors.forEach { actor ->
+            val role = actor.role
             role?.tick()
         }
     }
 
+    override fun tick() {
+        tickRoles()
+        world?.tick()
+    }
+
     override fun add(actor: Actor, activate: Boolean) {
+
+        actor.costume.bodyDef?.let { bodyDef ->
+            world?.createBody(bodyDef, actor)
+        }
+
         mutableActors.add(actor)
         actor.stage = this
         actor.role?.begin()
@@ -49,6 +66,10 @@ class GameStage() : Stage {
     }
 
     override fun remove(actor: Actor) {
+        actor.body?.let {
+            world?.destroyBody(it)
+            actor.body = null
+        }
         mutableActors.remove(actor)
         actor.role?.end()
     }

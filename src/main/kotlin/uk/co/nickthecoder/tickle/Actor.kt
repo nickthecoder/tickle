@@ -282,10 +282,6 @@ class Actor(var costume: Costume, val role: Role? = null) {
 
     fun die() {
         role?.end()
-        body?.let { body ->
-            body.world.destroyBody(body)
-            this.body = null
-        }
         stage?.remove(this)
     }
 

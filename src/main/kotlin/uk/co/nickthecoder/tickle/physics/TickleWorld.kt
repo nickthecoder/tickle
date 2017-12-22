@@ -9,27 +9,6 @@ import org.jbox2d.dynamics.*
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
-import uk.co.nickthecoder.tickle.resources.Resources
-
-fun worldScale() = Game.instance.scene.world?.scale ?: Resources.instance.gameInfo.physicsInfo.scale.toFloat()
-
-fun pixelsToWorld(pixels: Double) = pixels.toFloat() / worldScale()
-
-fun worldToPixels(world: Float) = (world * worldScale()).toDouble()
-
-fun pixelsToWorld(vector2d: Vector2d) = Vec2(pixelsToWorld(vector2d.x), pixelsToWorld(vector2d.y))
-
-fun worldToPixels(vec2: Vec2) = Vector2d(worldToPixels(vec2.x), worldToPixels(vec2.y))
-
-fun pixelsToWorld(vec2: Vec2, vector2d: Vector2d) {
-    vec2.x = pixelsToWorld(vector2d.x)
-    vec2.y = pixelsToWorld(vector2d.y)
-}
-
-fun worldToPixels(vector2d: Vector2d, vec2: Vec2) {
-    vector2d.x = worldToPixels(vec2.x)
-    vector2d.y = worldToPixels(vec2.y)
-}
 
 fun BodyType.hasFixtures() = this == BodyType.DYNAMIC || this == BodyType.STATIC
 
@@ -39,7 +18,7 @@ class TickleWorld(
         val velocityIterations: Int = 8,
         val positionIterations: Int = 3)
 
-    : World(pixelsToWorld(gravity), true) {
+    : World(Vec2(gravity.x.toFloat() / scale, gravity.y.toFloat() / scale), true) {
 
     val maxTimeStep = 1.0 / 30.0 // 30 frames per second
 

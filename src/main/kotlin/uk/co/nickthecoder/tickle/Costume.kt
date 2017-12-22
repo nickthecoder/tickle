@@ -124,10 +124,6 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
                 childActor.changeAppearance(pose)
             }
 
-            newCostume.bodyDef?.let { bodyDef ->
-                Game.instance.scene.world?.createBody(bodyDef, childActor)
-            }
-
         } else {
             childActor = Actor(this)
             childActor.event(eventName)
