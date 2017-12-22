@@ -6,6 +6,7 @@ import org.jbox2d.collision.shapes.PolygonShape
 import org.jbox2d.collision.shapes.Shape
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.*
+import org.jbox2d.dynamics.joints.Joint
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
@@ -231,4 +232,18 @@ fun Fixture.scale(body: Body, scaleX: Float, scaleY: Float) {
         body.destroyFixture(this)
         body.createFixture(fixtureDef)
     }
+}
+
+private val tempVec2 = Vec2()
+
+fun Joint.anchorA(out: Vector2d) {
+    val world = this.bodyA.world as TickleWorld
+    getAnchorA(tempVec2)
+    world.worldToPixels(out, tempVec2)
+}
+
+fun Joint.anchorB(out: Vector2d) {
+    val world = this.bodyB.world as TickleWorld
+    getAnchorB(tempVec2)
+    world.worldToPixels(out, tempVec2)
 }
