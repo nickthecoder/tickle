@@ -68,15 +68,15 @@ interface Director : MouseButtonHandler {
 abstract class AbstractDirector : Director {
 
     /**
-     * The default behaviour is to create a separate world on every Stage when GameInfo.physicsEngine is true.
+     * The default behaviour is to create a single shared world attached to every Stage.
      * It is quite common to override this method, and create a single world on just one stage.
-     * It is also possible to share a single TickleWorld between 2 or more Stages.
      */
     override fun createWorlds() {
         if (Resources.instance.gameInfo.physicsEngine) {
+            val pi = Resources.instance.gameInfo.physicsInfo
+            val world: TickleWorld = TickleWorld(pi.gravity, pi.scale.toFloat(), velocityIterations = pi.velocityIterations, positionIterations = pi.positionIterations)
             Game.instance.scene.stages.values.forEach { stage ->
-                val pi = Resources.instance.gameInfo.physicsInfo
-                stage.world = TickleWorld(pi.gravity, pi.scale.toFloat(), velocityIterations = pi.velocityIterations, positionIterations = pi.positionIterations)
+                stage.world = world
             }
         }
     }
