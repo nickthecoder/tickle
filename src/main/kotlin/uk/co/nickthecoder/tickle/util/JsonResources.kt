@@ -268,7 +268,7 @@ class JsonResources {
 
                 jstage.add("name", stageName)
                 if (layoutStage.isDefault) {
-                    jstage.add("isDEfault", true)
+                    jstage.add("isDefault", true)
                 }
                 jstage.add("stage", layoutStage.stageString)
                 jstage.add("constraint", layoutStage.stageConstraintString)
