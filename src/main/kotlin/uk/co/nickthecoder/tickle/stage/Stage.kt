@@ -18,6 +18,12 @@ interface Stage {
 
     fun end()
 
+    /**
+     * Calls tick on all of the Actors' Roles on this stage. Note that if the Stage has a TickleWorld, then do NOT
+     * call world.tick from within this method. Instead, Scene will call stage.world.tick for all stages after
+     * ALL of the stage's tick methods have been called. i.e. all the Roles' tick methods are called, then all
+     * lf the worlds' tick methods.
+     */
     fun tick()
 
     fun add(actor: Actor, activate: Boolean = true)

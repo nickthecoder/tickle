@@ -3,6 +3,8 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.events.MouseButtonHandler
 import uk.co.nickthecoder.tickle.events.MouseEvent
+import uk.co.nickthecoder.tickle.physics.TickleWorld
+import uk.co.nickthecoder.tickle.resources.Resources
 
 /**
  * Looks after a single Scene. A game will typically have at least two Directors, one to handle the menu or splash
@@ -26,6 +28,8 @@ interface Director : MouseButtonHandler {
     fun sceneLoaded()
 
     fun begin()
+
+    fun createWorlds()
 
     fun activated()
 
@@ -62,6 +66,20 @@ interface Director : MouseButtonHandler {
 }
 
 abstract class AbstractDirector : Director {
+
+    /**
+     * The default behaviour is to create a separate world on every Stage when GameInfo.physicsEngine is true.
+     * It is quite common to override this method, and create a single world on just one stage.
+     * It is also possible to share a single TickleWorld between 2 or more Stages.
+     */
+    override fun createWorlds() {
+        if (Resources.instance.gameInfo.physicsEngine) {
+            Game.instance.scene.stages.values.forEach { stage ->
+                val pi = Resources.instance.gameInfo.physicsInfo
+                stage.world = TickleWorld(pi.gravity, pi.scale.toFloat(), velocityIterations = pi.velocityIterations, positionIterations = pi.positionIterations)
+            }
+        }
+    }
 
     override fun sceneLoaded() {}
 

@@ -18,37 +18,44 @@ class GameStage() : Stage {
 
 
     override fun begin() {
-        actors.forEach { actor ->
-            val role = actor.role
-            role?.begin()
+        // Note. We create a new list (of Role), so that there is no concurrent modification exception if an actor is
+        // removed from the stage.
+        actors.map { it.role }.forEach { role ->
+            if (role?.actor?.stage != null) {
+                role.begin()
+            }
         }
     }
 
     override fun activated() {
-        actors.forEach { actor ->
-            val role = actor.role
-            role?.activated()
+        // Note. We create a new list (of Role), so that there is no concurrent modification exception if an actor is
+        // removed from the stage.
+        actors.map { it.role }.forEach { role ->
+            if (role?.actor?.stage != null) {
+                role.activated()
+            }
         }
     }
 
     override fun end() {
-        actors.forEach { actor ->
-            val role = actor.role
-            role?.end()
+        // Note. We create a new list (of Role), so that there is no concurrent modification exception if an actor is
+        // removed from the stage.
+        actors.map { it.role }.forEach { role ->
+            if (role?.actor?.stage != null) {
+                role.end()
+            }
         }
         mutableActors.clear()
     }
 
-    protected fun tickRoles() {
-        actors.forEach { actor ->
-            val role = actor.role
-            role?.tick()
-        }
-    }
-
     override fun tick() {
-        tickRoles()
-        world?.tick()
+        // Note. We create a new list (of Role), so that there is no concurrent modification exception if an actor is
+        // removed from the stage.
+        actors.map { it.role }.forEach { role ->
+            if (role?.actor?.stage != null) {
+                role.tick()
+            }
+        }
     }
 
     override fun add(actor: Actor, activate: Boolean) {

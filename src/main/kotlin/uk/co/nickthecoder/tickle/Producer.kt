@@ -3,7 +3,6 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.events.MouseButtonHandler
 import uk.co.nickthecoder.tickle.events.MouseEvent
-import uk.co.nickthecoder.tickle.physics.TickleWorld
 import uk.co.nickthecoder.tickle.resources.Resources
 import java.util.prefs.Preferences
 
@@ -24,8 +23,6 @@ import java.util.prefs.Preferences
 interface Producer : MouseButtonHandler {
 
     fun begin()
-
-    fun createWorlds()
 
     fun startScene(scenePath: String) {
         Game.instance.endScene()
@@ -61,15 +58,6 @@ interface Producer : MouseButtonHandler {
 }
 
 abstract class AbstractProducer : Producer {
-
-    override fun createWorlds() {
-        if (Resources.instance.gameInfo.physicsEngine) {
-            Game.instance.scene.stages.values.forEach { stage ->
-                val pi = Resources.instance.gameInfo.physicsInfo
-                stage.world = TickleWorld(pi.gravity, pi.scale.toFloat(), velocityIterations = pi.velocityIterations, positionIterations = pi.positionIterations)
-            }
-        }
-    }
 
     override fun sceneLoaded() {}
 

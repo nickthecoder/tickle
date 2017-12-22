@@ -29,7 +29,9 @@ class TickleWorld(
      */
     val truncate = false
 
-    val tempVec = Vec2()
+    private val tempVec = Vec2()
+
+    private var previousTickSeconds: Double = 0.0
 
     fun pixelsToWorld(pixels: Double) = pixels.toFloat() / scale
 
@@ -66,6 +68,12 @@ class TickleWorld(
     }
 
     fun tick() {
+        if (previousTickSeconds == Game.instance.seconds) {
+            // If the world is shared by multiple stages, then ignore the 2nd (and 3rd...) ticks
+            return
+        }
+        previousTickSeconds = Game.instance.seconds
+
         // First make sure that the body is up to date. If the Actor's position or direction have been changed by game code,
         // then the Body will need to be updated before we can call "step".
         var body = bodyList

@@ -98,7 +98,7 @@ class Scene {
 
     fun begin() {
         Game.instance.window.showMouse(showMouse)
-        Game.instance.producer.createWorlds()
+        Game.instance.director.createWorlds()
         stages.values.forEach { stage ->
             val world = stage.world
             if (world != null) {
@@ -130,6 +130,9 @@ class Scene {
         }
         stages.values.forEach { stage ->
             stage.tick()
+        }
+        stages.values.forEach { stage ->
+            stage.world?.tick()
         }
     }
 
