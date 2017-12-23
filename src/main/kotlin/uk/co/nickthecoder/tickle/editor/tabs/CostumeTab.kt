@@ -1,6 +1,9 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
+import javafx.event.EventHandler
 import javafx.geometry.Side
+import javafx.scene.control.MenuButton
+import javafx.scene.control.MenuItem
 import javafx.scene.control.TabPane
 import javafx.stage.Modality
 import javafx.stage.Stage
@@ -42,6 +45,8 @@ class CostumeTab(val name: String, val costume: Costume)
     val eventsTab = MyTab("Events", eventsForm.build())
     val physicsTab = MyTab("Physics", physicsForm.build())
 
+    val posesButton = MenuButton("Poses")
+
     init {
         minorTabs.side = Side.BOTTOM
         minorTabs.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
@@ -61,8 +66,32 @@ class CostumeTab(val name: String, val costume: Costume)
             Resources.instance.costumes.add(newName, newCostume)
             newCostume.costumeGroup?.add(newName, newCostume)
         }
+        buildPosesButton()
     }
 
+    private fun buildPosesButton() {
+        val poses = mutableSetOf<Pose>()
+        costume.events.values.forEach { event ->
+            poses.addAll(event.poses)
+            poses.addAll(event.ninePatches.map { it.pose })
+        }
+
+        if (poses.isEmpty()) {
+            leftButtons.children.remove(posesButton)
+        } else {
+            posesButton.items.clear()
+            poses.forEach { pose ->
+                Resources.instance.poses.findName(pose)?.let { name ->
+                    val menuItem = MenuItem(name)
+                    posesButton.items.add(menuItem)
+                    menuItem.onAction = EventHandler { MainWindow.instance.openTab(name, pose) }
+                }
+            }
+            if (!leftButtons.children.contains(posesButton)) {
+                leftButtons.children.add(posesButton)
+            }
+        }
+    }
 
     override fun save(): Boolean {
         if (detailsForm.check()) {

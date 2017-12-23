@@ -1,9 +1,12 @@
 package uk.co.nickthecoder.tickle.editor.tabs
 
+import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.geometry.Rectangle2D
 import javafx.scene.Node
 import javafx.scene.control.Button
+import javafx.scene.control.MenuButton
+import javafx.scene.control.MenuItem
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Background
@@ -15,13 +18,16 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.Resources
 
-class PoseTab(name: String, pose: Pose)
+class PoseTab(name: String, val pose: Pose)
     : EditTaskTab(PoseTask(name, pose), name, pose, graphicName = "pose.png") {
+
+    val costumesButton = MenuButton("Costumes")
 
     init {
         addDeleteButton { pose.delete() }
@@ -33,6 +39,31 @@ class PoseTab(name: String, pose: Pose)
         val createCostumeButton = Button("Create Costume")
         createCostumeButton.setOnAction { (task as PoseTask).createCostume() }
         leftButtons.children.add(createCostumeButton)
+
+        buildCostumesButton()
+    }
+
+    private fun buildCostumesButton() {
+        val costumes = mutableMapOf<String, Costume>()
+        Resources.instance.costumes.items().forEach { name, costume ->
+            if (costume.uses(pose)) {
+                costumes[name] = costume
+            }
+        }
+
+        if (costumes.isEmpty()) {
+            leftButtons.children.remove(costumesButton)
+        } else {
+            costumesButton.items.clear()
+            costumes.forEach { costumeName, costume ->
+                val menuItem = MenuItem(costumeName)
+                costumesButton.items.add(menuItem)
+                menuItem.onAction = EventHandler { MainWindow.instance.openTab(costumeName, costume) }
+            }
+            if (!leftButtons.children.contains(costumesButton)) {
+                leftButtons.children.add(costumesButton)
+            }
+        }
     }
 
 }

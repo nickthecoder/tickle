@@ -28,10 +28,6 @@ Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 BUGS
 ====
 
-Either remove custom transformation or make it not external.
-	Simply making it not external won't work, because the game coder could change the matrix without Tickle knowing.
-	And therefore the modelMatrix will be wrong.
-
 Window is always resizable (despite the value in GameInfo)
 	Resizing doesn't adjust the views, or the viewport. Just get empty rectangles.
 	The default behaviour should adjust the views
@@ -93,7 +89,6 @@ Editor
 
 PoseTab should show the whole Texture, with a single shaded rectangle to show the position.
 	Double click to auto adjust the pose's rectangle and offset.
-	Make it a resuable copmonent, which can show one or many shaded rectangles.
 
 Ensure Textures are deleted when removed from resources (Use finalise?).
 

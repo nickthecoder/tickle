@@ -145,6 +145,9 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
             if (event.poses.contains(pose)) {
                 return true
             }
+            if (event.ninePatches.map { it.pose }.contains(pose)) {
+                return true
+            }
         }
         return false
     }
