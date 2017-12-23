@@ -33,13 +33,22 @@ interface Director : MouseButtonHandler {
 
     fun activated()
 
-    fun preTick()
-
-    fun tick() {
-        Game.instance.scene.tick()
+    fun preTick() {
+        Game.instance.scene.views.values.forEach { view ->
+            view.tick()
+        }
+        Game.instance.scene.stages.values.forEach { stage ->
+            stage.tick()
+        }
     }
 
-    fun postTick()
+    fun tick()
+
+    fun postTick() {
+        Game.instance.scene.stages.values.forEach { stage ->
+            stage.world?.tick()
+        }
+    }
 
     fun end()
 
@@ -68,6 +77,12 @@ interface Director : MouseButtonHandler {
 abstract class AbstractDirector : Director {
 
     /**
+     * When true, prevent all stage, views and roles from receiving tick events.
+     * You can override this behaviour by changing the implementation of [preTick] and [postTick]
+     */
+    var paused: Boolean = false
+
+    /**
      * The default behaviour is to create a single shared world attached to every Stage.
      * It is quite common to override this method, and create a single world on just one stage.
      */
@@ -81,22 +96,62 @@ abstract class AbstractDirector : Director {
         }
     }
 
+    /**
+     * The default implementation does nothing.
+     */
     override fun sceneLoaded() {}
 
+    /**
+     * The default implementation does nothing.
+     */
     override fun begin() {}
 
+    /**
+     * The default implementation does nothing.
+     */
     override fun activated() {}
 
+    /**
+     * The default implementation does nothing.
+     */
     override fun end() {}
 
+    /**
+     * The default implementation does nothing.
+     */
     override fun onKey(event: KeyEvent) {}
 
+    /**
+     * The default implementation does nothing.
+     */
     override fun onMouseButton(event: MouseEvent) {}
 
-    override fun postTick() {}
+    /**
+     * If [paused] is true, does nothing, otherwise it calls tick on all views, then calls tick on all stages.
+     */
+    override fun preTick() {
+        if (!paused) {
+            super.preTick()
+        }
+    }
 
-    override fun preTick() {}
+    /**
+     * The default implementation does nothing.
+     */
+    override fun tick() {}
 
+    /**
+     * If [paused] is true, does nothing, otherwise it calls tick on each stage's TickleWorld (the physics engine).
+     */
+    override fun postTick() {
+        if (!paused) {
+            super.postTick()
+        }
+    }
+
+    /**
+     * The default implementation does nothing.
+     */
     override fun message(message: String) {}
 }
 

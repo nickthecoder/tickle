@@ -124,18 +124,6 @@ class Scene {
         }
     }
 
-    fun tick() {
-        views.values.forEach { view ->
-            view.tick()
-        }
-        stages.values.forEach { stage ->
-            stage.tick()
-        }
-        stages.values.forEach { stage ->
-            stage.world?.tick()
-        }
-    }
-
     fun end() {
         stages.values.forEach { stage ->
             stage.end()
