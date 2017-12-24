@@ -476,7 +476,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
             init {
                 addParameters(densityP, frictionP, restitutionP, isSensorP, shapeP)
-                costume.pose() ?: costume.chooseNinePatch("default")?.pose?.let {
+                (costume.pose() ?: costume.chooseNinePatch("default")?.pose)?.let {
                     addParameters(shapeEditorButtonP)
 
                     circleRadiusP.value = 15.0
