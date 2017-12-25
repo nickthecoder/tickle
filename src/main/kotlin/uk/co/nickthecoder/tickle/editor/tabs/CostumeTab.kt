@@ -568,7 +568,7 @@ class CostumeTab(val name: String, val costume: Costume)
             }
 
             fun onEditShape() {
-                costume.pose() ?: costume.chooseNinePatch("default")?.pose?.let { pose ->
+                (costume.pose() ?: costume.chooseNinePatch("default")?.pose)?.let { pose ->
                     val task = ShapeEditorTask(pose, this)
                     val stage = Stage()
                     // always on top didn't work for me (on linux using open jdk and the open javafx.
