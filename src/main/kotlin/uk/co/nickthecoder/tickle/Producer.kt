@@ -46,6 +46,8 @@ interface Producer : MouseButtonListener {
 
     fun onKey(event: KeyEvent)
 
+    fun layout()
+
     fun onResize(event: ResizeEvent)
 
     fun message(message: String)
@@ -83,11 +85,22 @@ abstract class AbstractProducer : Producer {
     override fun onMouseButton(event: MouseEvent) {}
 
     /**
-     * The default implementation resizes all views according to the definitions in the Layout
-     * (which is defined in the Editor).
+     * The default implementation calls [layout].
      */
     override fun onResize(event: ResizeEvent) {
-        Game.instance.scene.layout(event.width, event.height)
+        layout()
+    }
+
+    /**
+     * If in full-screen mode the views are letterboxed to the gameInfo's size.
+     * Otherwise, the views are expanded to fit the new window size (using the layout definitions defined in the editor)
+     */
+    override fun layout() {
+        if (Game.instance.window.fullScreen) {
+            Game.instance.scene.layoutLetterboxed()
+        } else {
+            Game.instance.scene.layoutToFit()
+        }
     }
 
     override fun message(message: String) {}

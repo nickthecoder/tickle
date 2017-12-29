@@ -45,6 +45,8 @@ class Play : AbstractDirector() {
     }
 
     override fun begin() {
+        super.begin()
+
         stage = Game.instance.scene.findStage("main")!!
         stageView = Game.instance.scene.findStageView("main")!! as AbstractStageView
     }

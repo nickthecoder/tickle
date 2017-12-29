@@ -5,6 +5,7 @@ import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
+import org.lwjgl.glfw.GLFWVidMode
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryStack
@@ -17,7 +18,7 @@ class Window(
         width: Int,
         height: Int,
         resizable: Boolean = false,
-        fullScreen: Boolean = false) {
+        val fullScreen: Boolean = false) {
 
     val handle: Long
 
@@ -44,7 +45,16 @@ class Window(
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE)
 
         val monitor = if (fullScreen) glfwGetPrimaryMonitor() else MemoryUtil.NULL
-        handle = glfwCreateWindow(_width, _height, title, monitor, MemoryUtil.NULL)
+        val mode = findBestMode(monitor, width, height)
+
+        handle = if (mode == null) {
+            glfwCreateWindow(_width, _height, title, monitor, MemoryUtil.NULL)
+        } else {
+            _width = mode.width()
+            _height = mode.height()
+            glfwCreateWindow(mode.width(), mode.height(), title, monitor, MemoryUtil.NULL)
+        }
+
         if (handle == MemoryUtil.NULL) {
             throw RuntimeException("Failed to create the GLFW window")
         }
@@ -60,12 +70,14 @@ class Window(
         }
 
         glfwSetWindowSizeCallback(handle) { _, newWidth, newHeight ->
-            if (newWidth != _width || newHeight != _height) {
-                val event = ResizeEvent(this, _width, _height, newWidth, newHeight)
-                _width = newWidth
-                _height = newHeight
-                listeners.forEach {
-                    it.onResize(event)
+            if (!fullScreen) {
+                if (newWidth != _width || newHeight != _height) {
+                    val event = ResizeEvent(this, _width, _height, newWidth, newHeight)
+                    _width = newWidth
+                    _height = newHeight
+                    listeners.forEach {
+                        it.onResize(event)
+                    }
                 }
             }
         }
@@ -79,6 +91,29 @@ class Window(
         }
 
     }
+
+    fun findBestMode(monitor: Long, width: Int, height: Int): GLFWVidMode? {
+
+        if (monitor == MemoryUtil.NULL) return null
+
+        fun scoreMode(mode: GLFWVidMode): Int {
+            return Math.abs(width - mode.width()) + Math.abs(height - mode.height()) +
+                    if (mode.width() < width || mode.height() < height) 1000 else 0
+        }
+
+        var bestMode: GLFWVidMode? = null
+        var bestScore = Int.MAX_VALUE
+        val modes = glfwGetVideoModes(monitor)
+        modes.forEach { mode ->
+            val score = scoreMode(mode)
+            if (score < bestScore) {
+                bestScore = score
+                bestMode = mode
+            }
+        }
+        return bestMode
+    }
+
 
     fun showMouse(value: Boolean = true) {
         glfwSetInputMode(handle, GLFW_CURSOR, if (value) GLFW_CURSOR_NORMAL else GLFW_CURSOR_HIDDEN)
@@ -116,34 +151,40 @@ class Window(
             val titleEncoded = stack.UTF8(title)
 
             glfwSetWindowTitle(handle, titleEncoded)
-            glfwSetWindowSize(handle, width, height)
         }
 
-        _width = width
-        _height = height
-        // Center the window
-        val vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor())
-        glfwSetWindowPos(handle, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2)
+        if (!fullScreen) {
+            glfwSetWindowSize(handle, width, height)
 
-        glfwSetWindowAttrib(handle, GLFW_RESIZABLE, if (resizable) GLFW_TRUE else GLFW_FALSE)
+            _width = width
+            _height = height
+            // Center the window
+            val vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor())
+            glfwSetWindowPos(handle, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2)
+            glfwSetWindowAttrib(handle, GLFW_RESIZABLE, if (resizable) GLFW_TRUE else GLFW_FALSE)
+        }
     }
 
     fun resize(width: Int, height: Int) {
-        glfwSetWindowSize(handle, width, height)
-        _width = width
-        _height = height
+        if (!fullScreen) {
+            glfwSetWindowSize(handle, width, height)
+            _width = width
+            _height = height
+        }
     }
 
     // Center the window
     fun center() {
-        // Get the resolution of the primary monitor
-        val vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor())
+        if (!fullScreen) {
+            // Get the resolution of the primary monitor
+            val vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor())
 
-        glfwSetWindowPos(
-                handle,
-                (vidmode.width() - width) / 2,
-                (vidmode.height() - height) / 2
-        )
+            glfwSetWindowPos(
+                    handle,
+                    (vidmode.width() - width) / 2,
+                    (vidmode.height() - height) / 2
+            )
+        }
     }
 
     fun wholeViewport() {

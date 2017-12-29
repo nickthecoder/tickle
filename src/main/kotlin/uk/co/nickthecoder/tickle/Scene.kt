@@ -4,6 +4,7 @@ import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.resources.ActorXAlignment
 import uk.co.nickthecoder.tickle.resources.ActorYAlignment
+import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.stage.FlexPosition
 import uk.co.nickthecoder.tickle.stage.Stage
 import uk.co.nickthecoder.tickle.stage.StageView
@@ -44,6 +45,28 @@ class Scene {
         autoPositions.forEach { name, position ->
             views[name]?.let { view ->
                 view.rect = position.rect(width, height)
+            }
+        }
+    }
+
+    fun layoutToFit() {
+        val window = Game.instance.window
+        layout(window.width, window.height)
+    }
+
+    fun layoutLetterboxed() {
+        val gameInfo = Resources.instance.gameInfo
+        val window = Game.instance.window
+        val dx = (window.width - gameInfo.width) / 2
+        val dy = (window.height - gameInfo.height) / 2
+        autoPositions.forEach { name, position ->
+            views[name]?.let { view ->
+                val rect = position.rect(gameInfo.width, gameInfo.height)
+                rect.left += dx
+                rect.right += dx
+                rect.top += dy
+                rect.bottom += dy
+                view.rect = rect
             }
         }
     }
@@ -110,11 +133,7 @@ class Scene {
             }
             stage.begin()
         }
-
-        with(Game.instance.renderer) {
-            layout(window.width, window.height)
-        }
-
+        Game.instance.producer.layout()
         orderedViews = views.values.sortedBy { it.zOrder }
     }
 

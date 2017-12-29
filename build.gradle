@@ -18,7 +18,7 @@ apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'maven'
 
-mainClassName = "uk.co.nickthecoder.tickle.editor.EditorKt"
+mainClassName = "uk.co.nickthecoder.tickle.MainKt"
 
 defaultTasks 'installApp'
 
