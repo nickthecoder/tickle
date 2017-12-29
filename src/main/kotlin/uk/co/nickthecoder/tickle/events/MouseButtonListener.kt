@@ -1,10 +1,10 @@
 package uk.co.nickthecoder.tickle.events
 
-interface MouseButtonHandler {
+interface MouseButtonListener {
     fun onMouseButton(event: MouseEvent)
 }
 
-interface MouseHandler : MouseButtonHandler {
+interface MouseListener : MouseButtonListener {
 
     fun onMouseMove(event: MouseEvent)
 

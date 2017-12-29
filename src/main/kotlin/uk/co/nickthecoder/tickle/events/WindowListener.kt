@@ -1,6 +1,6 @@
 package uk.co.nickthecoder.tickle.events
 
-interface WindowListener : MouseButtonHandler {
+interface WindowListener : MouseButtonListener {
 
     fun onKey(event: KeyEvent)
 

@@ -40,7 +40,7 @@ class Game(
      */
     var tickDuration: Double = 1.0 / 60.0
 
-    private var mouseCapturedBy: MouseButtonHandler? = null
+    private var mouseCapturedBy: MouseButtonListener? = null
 
     private val previousScreenMousePosition = Vector2d(-1.0, -1.0)
 
@@ -165,7 +165,7 @@ class Game(
         processRunLater()
 
         mouseCapturedBy?.let { capturedBy ->
-            if (capturedBy is MouseHandler) {
+            if (capturedBy is MouseListener) {
                 Window.instance?.mousePosition(currentScreenMousePosition)
                 if (currentScreenMousePosition != previousScreenMousePosition) {
                     previousScreenMousePosition.set(currentScreenMousePosition)
@@ -233,7 +233,7 @@ class Game(
         producer.onResize(event)
     }
 
-    private fun sendMouseButtonEvent(event: MouseEvent, to: MouseButtonHandler): Boolean {
+    private fun sendMouseButtonEvent(event: MouseEvent, to: MouseButtonListener): Boolean {
         to.onMouseButton(event)
         if (event.captured) {
             event.captured = false

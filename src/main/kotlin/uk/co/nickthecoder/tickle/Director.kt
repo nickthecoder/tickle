@@ -1,9 +1,8 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.events.KeyEvent
-import uk.co.nickthecoder.tickle.events.MouseButtonHandler
+import uk.co.nickthecoder.tickle.events.MouseButtonListener
 import uk.co.nickthecoder.tickle.events.MouseEvent
-import uk.co.nickthecoder.tickle.events.ResizeEvent
 import uk.co.nickthecoder.tickle.physics.TickleWorld
 import uk.co.nickthecoder.tickle.resources.Resources
 
@@ -24,7 +23,7 @@ import uk.co.nickthecoder.tickle.resources.Resources
  *
  * There are many more things that Director can do!
  */
-interface Director : MouseButtonHandler {
+interface Director : MouseButtonListener {
 
     fun sceneLoaded()
 

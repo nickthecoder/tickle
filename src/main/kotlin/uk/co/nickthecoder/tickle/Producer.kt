@@ -1,7 +1,7 @@
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.events.KeyEvent
-import uk.co.nickthecoder.tickle.events.MouseButtonHandler
+import uk.co.nickthecoder.tickle.events.MouseButtonListener
 import uk.co.nickthecoder.tickle.events.MouseEvent
 import uk.co.nickthecoder.tickle.events.ResizeEvent
 import uk.co.nickthecoder.tickle.resources.Resources
@@ -21,7 +21,7 @@ import java.util.prefs.Preferences
  *
  * See [Director]
  */
-interface Producer : MouseButtonHandler {
+interface Producer : MouseButtonListener {
 
     fun begin()
 

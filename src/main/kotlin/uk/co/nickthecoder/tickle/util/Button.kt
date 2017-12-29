@@ -3,9 +3,9 @@ package uk.co.nickthecoder.tickle.util
 import uk.co.nickthecoder.tickle.AbstractRole
 import uk.co.nickthecoder.tickle.events.ButtonState
 import uk.co.nickthecoder.tickle.events.MouseEvent
-import uk.co.nickthecoder.tickle.events.MouseHandler
+import uk.co.nickthecoder.tickle.events.MouseListener
 
-abstract class Button : AbstractRole(), MouseHandler {
+abstract class Button : AbstractRole(), MouseListener {
 
     var enabled: Boolean = true
         set(v) {

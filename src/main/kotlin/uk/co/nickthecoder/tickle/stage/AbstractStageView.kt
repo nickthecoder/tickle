@@ -3,9 +3,9 @@ package uk.co.nickthecoder.tickle.stage
 import org.joml.Matrix4f
 import org.joml.Vector2d
 import org.lwjgl.opengl.GL11
-import uk.co.nickthecoder.tickle.events.MouseButtonHandler
+import uk.co.nickthecoder.tickle.events.MouseButtonListener
 import uk.co.nickthecoder.tickle.events.MouseEvent
-import uk.co.nickthecoder.tickle.events.MouseHandler
+import uk.co.nickthecoder.tickle.events.MouseListener
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.resources.Resources
@@ -14,7 +14,7 @@ import uk.co.nickthecoder.tickle.util.Recti
 
 
 abstract class AbstractStageView
-    : StageView, MouseHandler {
+    : StageView, MouseListener {
 
     override var zOrder = 0
 
@@ -70,7 +70,7 @@ abstract class AbstractStageView
 
     override var handleMouseButtons: Boolean = true
 
-    var mouseCapturedBy: MouseButtonHandler? = null
+    var mouseCapturedBy: MouseButtonListener? = null
 
 
     override fun screenToView(screen: Vector2d, into: Vector2d) {
@@ -136,7 +136,7 @@ abstract class AbstractStageView
             if (rect.contains(event.screenPosition)) {
                 orderedActors(true).forEach { actor ->
                     val role = actor.role
-                    if (role is MouseButtonHandler) {
+                    if (role is MouseButtonListener) {
                         if (role.actor.touching(event.viewPosition)) {
                             role.onMouseButton(event)
                             if (event.consumed) {
@@ -155,8 +155,8 @@ abstract class AbstractStageView
 
     override fun onMouseMove(event: MouseEvent) {
         screenToView(event.screenPosition, event.viewPosition)
-        if (mouseCapturedBy is MouseHandler) {
-            (mouseCapturedBy as MouseHandler).onMouseMove(event)
+        if (mouseCapturedBy is MouseListener) {
+            (mouseCapturedBy as MouseListener).onMouseMove(event)
         }
     }
 

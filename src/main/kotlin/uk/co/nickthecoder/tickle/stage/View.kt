@@ -1,12 +1,12 @@
 package uk.co.nickthecoder.tickle.stage
 
 import org.joml.Vector2d
-import uk.co.nickthecoder.tickle.events.MouseButtonHandler
+import uk.co.nickthecoder.tickle.events.MouseButtonListener
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.util.Recti
 
-interface View : MouseButtonHandler {
+interface View : MouseButtonListener {
 
     var zOrder: Int
 
