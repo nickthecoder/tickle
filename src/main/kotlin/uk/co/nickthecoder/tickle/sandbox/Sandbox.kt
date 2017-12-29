@@ -4,14 +4,15 @@ import org.joml.Matrix4f
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
-import uk.co.nickthecoder.tickle.events.Key
-import uk.co.nickthecoder.tickle.events.KeyEvent
+import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
 import uk.co.nickthecoder.tickle.graphics.Window
 
 
-abstract class Sandbox(title: String = "Sandbox", width: Int = 800, height: Int = 400) {
+abstract class Sandbox(title: String = "Sandbox", width: Int = 800, height: Int = 400)
+
+    : WindowListener {
 
     val window = Window(title, width, height)
 
@@ -36,7 +37,7 @@ abstract class Sandbox(title: String = "Sandbox", width: Int = 800, height: Int 
         window.enableVSync()
         window.wholeViewport()
         renderer.clearColor(Color.black())
-        window.keyboardEvents { onKey(it) }
+        window.listeners.add(this)
 
         println("Projection Center @ $centerX, $centerY in window ${window.width}x${window.height}")
         projection.identity()
@@ -66,10 +67,16 @@ abstract class Sandbox(title: String = "Sandbox", width: Int = 800, height: Int 
         GLFW.glfwSetErrorCallback(null).free()
     }
 
-    fun onKey(event: KeyEvent) {
+    override fun onKey(event: KeyEvent) {
         println("Key pressed $event")
         if (event.key == Key.ESCAPE) {
             window.close()
         }
+    }
+
+    override fun onMouseButton(event: MouseEvent) {
+    }
+
+    override fun onResize(event: ResizeEvent) {
     }
 }

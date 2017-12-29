@@ -16,7 +16,9 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 class Game(
         val window: Window,
-        val resources: Resources) {
+        val resources: Resources)
+
+    : WindowListener {
 
     var renderer = Renderer(window)
 
@@ -54,8 +56,7 @@ class Game(
 
         instance = this
         seconds = System.nanoTime() / 1_000_000_000.0
-        window.keyboardEvents { onKeyEvent(it) }
-        window.mouseButtonEvents { onMouseButtonEvent(it) }
+        window.listeners.add(this)
 
         gameLoop = FullSpeedGameLoop(this)
         gameLoop.resetStats()
@@ -191,7 +192,7 @@ class Game(
         scene.draw(renderer)
     }
 
-    fun onKeyEvent(event: KeyEvent) {
+    override fun onKey(event: KeyEvent) {
         producer.onKey(event)
         if (event.consumed) {
             return
@@ -199,7 +200,7 @@ class Game(
         director.onKey(event)
     }
 
-    fun onMouseButtonEvent(event: MouseEvent) {
+    override fun onMouseButton(event: MouseEvent) {
         mouseCapturedBy?.let {
             event.captured = true
             it.onMouseButton(event)
@@ -226,6 +227,10 @@ class Game(
             }
 
         }
+    }
+
+    override fun onResize(event: ResizeEvent) {
+        producer.onResize(event)
     }
 
     private fun sendMouseButtonEvent(event: MouseEvent, to: MouseButtonHandler): Boolean {

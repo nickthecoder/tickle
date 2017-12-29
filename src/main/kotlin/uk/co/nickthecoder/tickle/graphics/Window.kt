@@ -5,31 +5,33 @@ import org.lwjgl.BufferUtils
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
-import org.lwjgl.glfw.GLFWWindowSizeCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
-import uk.co.nickthecoder.tickle.events.ButtonState
-import uk.co.nickthecoder.tickle.events.Key
-import uk.co.nickthecoder.tickle.events.KeyEvent
-import uk.co.nickthecoder.tickle.events.MouseEvent
+import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.stage.View
 
 class Window(
         title: String,
-        private var _width: Int,
-        private var _height: Int,
+        width: Int,
+        height: Int,
         resizable: Boolean = false,
         fullScreen: Boolean = false) {
 
     val handle: Long
+
+    private var _width = width
+
+    private var _height = height
 
     val width: Int
         get() = _width
 
     val height: Int
         get() = _height
+
+    val listeners = mutableListOf<WindowListener>()
 
     init {
 
@@ -47,24 +49,35 @@ class Window(
             throw RuntimeException("Failed to create the GLFW window")
         }
         glfwMakeContextCurrent(handle)
+        glfwSetWindowAttrib(handle, GLFW_RESIZABLE, if (resizable) GLFW_TRUE else GLFW_FALSE)
         GL.createCapabilities()
-    }
 
-
-    fun keyboardEvents(keyHandler: (KeyEvent) -> Unit) {
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(handle) { _, keyCode, scanCode, action, mods ->
-            keyHandler(KeyEvent(this, Key.forCode(keyCode), scanCode, ButtonState.of(action), mods))
+            val event = KeyEvent(this, Key.forCode(keyCode), scanCode, ButtonState.of(action), mods)
+            listeners.forEach {
+                it.onKey(event)
+            }
         }
-    }
 
-    fun mouseButtonEvents(mouseHandler: (MouseEvent) -> Unit) {
-        // Setup a key callback. It will be called every time a mouse buttons is pressed or released.
+        glfwSetWindowSizeCallback(handle) { _, newWidth, newHeight ->
+            if (newWidth != _width || newHeight != _height) {
+                val event = ResizeEvent(this, _width, _height, newWidth, newHeight)
+                _width = newWidth
+                _height = newHeight
+                listeners.forEach {
+                    it.onResize(event)
+                }
+            }
+        }
+
         glfwSetMouseButtonCallback(handle) { _, button, action, mods ->
             val event = MouseEvent(this, button, ButtonState.of(action), mods)
             mousePosition(event.screenPosition)
-            mouseHandler(event)
+            listeners.forEach {
+                it.onMouseButton(event)
+            }
         }
+
     }
 
     fun showMouse(value: Boolean = true) {
@@ -91,13 +104,6 @@ class Window(
         // Make the window visible
         glfwShowWindow(handle)
 
-        val resizeCallback = object : GLFWWindowSizeCallback() {
-            override fun invoke(window: Long, newWidth: Int, newHeight: Int) {
-                _width = newWidth
-                _height = newHeight
-            }
-        }
-        glfwSetWindowSizeCallback(handle, resizeCallback)
     }
 
     fun hide() {

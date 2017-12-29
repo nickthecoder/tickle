@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.events.MouseButtonHandler
 import uk.co.nickthecoder.tickle.events.MouseEvent
+import uk.co.nickthecoder.tickle.events.ResizeEvent
 import uk.co.nickthecoder.tickle.resources.Resources
 import java.util.prefs.Preferences
 
@@ -45,6 +46,8 @@ interface Producer : MouseButtonHandler {
 
     fun onKey(event: KeyEvent)
 
+    fun onResize(event: ResizeEvent)
+
     fun message(message: String)
 
     /**
@@ -78,6 +81,14 @@ abstract class AbstractProducer : Producer {
     override fun onKey(event: KeyEvent) {}
 
     override fun onMouseButton(event: MouseEvent) {}
+
+    /**
+     * The default implementation resizes all views according to the definitions in the Layout
+     * (which is defined in the Editor).
+     */
+    override fun onResize(event: ResizeEvent) {
+        Game.instance.scene.layout(event.width, event.height)
+    }
 
     override fun message(message: String) {}
 

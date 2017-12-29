@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.events.KeyEvent
 import uk.co.nickthecoder.tickle.events.MouseButtonHandler
 import uk.co.nickthecoder.tickle.events.MouseEvent
+import uk.co.nickthecoder.tickle.events.ResizeEvent
 import uk.co.nickthecoder.tickle.physics.TickleWorld
 import uk.co.nickthecoder.tickle.resources.Resources
 
