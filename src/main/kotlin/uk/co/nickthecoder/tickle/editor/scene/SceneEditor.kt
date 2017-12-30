@@ -330,7 +330,7 @@ class SceneEditor(val sceneResource: SceneResource) {
                 } else {
                     val ignoreLock = event.isAltDown // On my system Mouse + Alt moves a window, but Mouse + Alt + Shift works fine ;-)
                     val actors = findActorsAt(wx, wy, ignoreLock)
-                    val highestActor = actors.lastOrNull()
+                    val highestActor = actors.firstOrNull()
 
                     if (event.isControlDown) {
                         // Add or remove the top-most actor to/from the selection
@@ -342,13 +342,13 @@ class SceneEditor(val sceneResource: SceneResource) {
 
                     } else if (event.isShiftDown) {
                         if (actors.contains(selection.latest())) {
-                            // Select the actor below the currently selected actor. This is useful when there are many
-                            // actors on top of each other. We can get to any of them, by repeatedly shift-clicking
+                            // Select the actor below the currently selected actor (i.e. with a higher index)
+                            // This is useful when there are many actors on top of each other. We can get to any of them, by repeatedly shift-clicking
                             val i = actors.indexOf(selection.latest())
-                            if (i == 0) {
+                            if (i == actors.size - 1) {
                                 selection.clearAndSelect(highestActor)
                             } else {
-                                selection.clearAndSelect(actors[i - 1])
+                                selection.clearAndSelect(actors[i + 1])
                             }
 
                         } else {

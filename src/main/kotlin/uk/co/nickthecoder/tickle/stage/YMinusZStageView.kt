@@ -1,7 +1,6 @@
 package uk.co.nickthecoder.tickle.stage
 
-import uk.co.nickthecoder.tickle.Actor
-import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.ActorDetails
 
 /**
  * Useful for isometric games. For all ground based objects, set the Actor's zOrder to 0.0.
@@ -19,12 +18,8 @@ import uk.co.nickthecoder.tickle.resources.ActorResource
 class YMinusZStageView
     : AbstractStageView() {
 
-    override val comparator = Comparator<Actor> { o1, o2 ->
+    override val comparator = Comparator<ActorDetails> { o1, o2 ->
         Math.signum(o1.y - o1.zOrder - (o2.y - o2.zOrder)).toInt()
-    }
-
-    override fun orderActors(actorResources: List<ActorResource>, topFirst: Boolean): Iterable<ActorResource> {
-        return if (topFirst) actorResources.sortedBy { it.y - it.zOrder } else actorResources.sortedBy { it.zOrder - it.y }
     }
 
 }

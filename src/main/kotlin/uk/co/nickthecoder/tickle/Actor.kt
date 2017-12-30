@@ -16,7 +16,9 @@ import uk.co.nickthecoder.tickle.util.Angle
 
 private var nextId: Int = 0
 
-class Actor(var costume: Costume, val role: Role? = null) {
+class Actor(var costume: Costume, val role: Role? = null)
+
+    : ActorDetails {
 
     val id = nextId++
 
@@ -33,19 +35,19 @@ class Actor(var costume: Costume, val role: Role? = null) {
     /**
      * Gets or sets the x value of position
      */
-    var x: Double
+    override var x: Double
         get() = position.x
         set(v) {
             position.x = v
         }
 
-    var y: Double
+    override var y: Double
         get() = position.y
         set(v) {
             position.y = v
         }
 
-    var zOrder: Double = 0.0
+    override var zOrder: Double = 0.0
 
     val direction: Angle = object : Angle() {
         override var radians = 0.0

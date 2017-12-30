@@ -2,10 +2,10 @@ package uk.co.nickthecoder.tickle.stage
 
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.ActorDetails
 import uk.co.nickthecoder.tickle.Appearance
 import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.editor.util.sortedBackwardsWith
-import uk.co.nickthecoder.tickle.resources.ActorResource
 
 interface StageView : View {
 
@@ -15,12 +15,7 @@ interface StageView : View {
 
     var centerY: Double
 
-    val comparator: Comparator<Actor>
-
-    /**
-     * Used by the SceneEditor to draw the Actors in the correct order.
-     */
-    fun orderActors(actorResources: List<ActorResource>, topFirst: Boolean): Iterable<ActorResource>
+    val comparator: Comparator<ActorDetails>
 
     /**
      * Returns the Actors touching the given [position], the top-most first.true

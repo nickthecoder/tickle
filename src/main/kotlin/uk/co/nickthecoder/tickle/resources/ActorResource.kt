@@ -14,7 +14,9 @@ enum class ActorYAlignment { BOTTOM, CENTER, TOP, RATIO }
  * Used when loading and editing a Scene. Not used during actual game play.
  */
 
-class ActorResource(val isDesigning: Boolean = false) {
+class ActorResource(val isDesigning: Boolean = false)
+
+    : ActorDetails {
 
     var costumeName: String = ""
         set(v) {
@@ -44,9 +46,9 @@ class ActorResource(val isDesigning: Boolean = false) {
             }
         }
 
-    var x: Double = 0.0
-    var y: Double = 0.0
-    var zOrder: Double = 0.0
+    override var x: Double = 0.0
+    override var y: Double = 0.0
+    override var zOrder: Double = 0.0
 
     var xAlignment: ActorXAlignment = ActorXAlignment.LEFT
     var yAlignment: ActorYAlignment = ActorYAlignment.BOTTOM

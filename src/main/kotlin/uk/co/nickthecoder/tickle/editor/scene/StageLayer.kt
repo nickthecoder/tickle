@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.editor.scene
 
 import javafx.application.Platform
 import uk.co.nickthecoder.tickle.editor.util.isAt
+import uk.co.nickthecoder.tickle.editor.util.sortedBackwardsWith
 import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.stage.StageView
 
@@ -49,12 +50,12 @@ class StageLayer(
     }
 
     fun actorsAt(x: Double, y: Double): Iterable<ActorResource> {
-        return stageView.orderActors(stageResource.actorResources, true).filter { it.isAt(x, y) }
+        return stageResource.actorResources.filter { it.isAt(x, y) }.sortedBackwardsWith(stageView.comparator)
     }
 
     override fun drawContent() {
 
-        stageView.orderActors(stageResource.actorResources, false).forEach { actorResource ->
+        stageResource.actorResources.sortedWith(stageView.comparator).forEach { actorResource ->
             drawActor(actorResource)
         }
         dirty = false
