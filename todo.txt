@@ -47,22 +47,8 @@ PixelOverlapping
 	Don't clear the whole overlapTexture
 	Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
 
-StageView.findActorsAt and findRolesAt to use Neighbourhood.
-	Maybe have an interface, and a Slow implementation which iterates over all actors as the default.
-	Any Stage/StageView can then replace the Slow implementation with the Neighbourhood.
-	Maybe Stage should (optionally) have a Neighbourhood.
-
 Stage to have a Map of ClassName -> List of Actors with a Role of that class.
 	This will give quicker access to Stage.findRole(s)
-	Put it in a separate class, and delegate it from Stage.
-	interface RoleFinder
-	implementations
-		SlowRoleFinder (iterates over all Actors on the stage)
-		InclusiveRoleFinder - has a list of classes to INCLUDE in the map
-		ExclusiveRoleFinder - has a list of classes to EXCLUDE from the map
-			In either case, delegate to SlowRoleFinder if the class is not in the map.
-	!!Ahh!! This won't work for super classes. e.g. findRoles<Scenery>
-	!!Also!! How can this work, given that Stage.findRole is an extension function?
 
 New Features
 ------------

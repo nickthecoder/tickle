@@ -4,18 +4,20 @@ import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.physics.TickleWorld
 
 
+/**
+ * The standard implementation of [Stage].
+ */
 open class GameStage() : Stage {
 
-    private val mutableViews = mutableListOf<StageView>()
+    protected val mutableViews = mutableListOf<StageView>()
 
     override val views: List<StageView> = mutableViews
 
     override var world: TickleWorld? = null
 
-    private val mutableActors = mutableSetOf<Actor>()
+    protected val mutableActors = mutableSetOf<Actor>()
 
     override val actors: Set<Actor> = mutableActors
-
 
     override fun begin() {
         // Note. We create a new list (of Role), so that there is no concurrent modification exception if an actor is
