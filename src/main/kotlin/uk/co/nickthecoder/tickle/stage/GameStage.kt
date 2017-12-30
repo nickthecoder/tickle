@@ -4,7 +4,7 @@ import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.physics.TickleWorld
 
 
-class GameStage() : Stage {
+open class GameStage() : Stage {
 
     private val mutableViews = mutableListOf<StageView>()
 

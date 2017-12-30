@@ -40,10 +40,6 @@ InputPicker :
 	"Windows" is this meta?
 	Shift, Control, alt etc don't work either.
 
-Create Stage.findActorsAt and Stage.findRolesAt
-	Then StageView implementation uses Stage's version, but ordered according to the view's ordering.
-	For completeness create Stage.findActorAt and findRoleAt, which returns the first (ignoring order).
-
 Possible Optimisations
 ----------------------
 
