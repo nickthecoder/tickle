@@ -3,7 +3,8 @@ package uk.co.nickthecoder.tickle.stage
 import org.joml.Matrix4f
 import org.joml.Vector2d
 import org.lwjgl.opengl.GL11
-import uk.co.nickthecoder.tickle.editor.util.sortedBackwardsWith
+import uk.co.nickthecoder.tickle.ActorDetails
+import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.events.MouseButtonListener
 import uk.co.nickthecoder.tickle.events.MouseEvent
 import uk.co.nickthecoder.tickle.events.MouseListener
@@ -13,9 +14,15 @@ import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Recti
 
+// Note, this is marked as abstract, so that the Editor will NOT show it in the list of possible StageViews,
+// as it requires a zero argument constructor.
 
-abstract class AbstractStageView
+abstract class AbstractStageView(override val comparator: Comparator<ActorDetails>)
     : StageView, MouseListener {
+
+    override val roleComparator: Comparator<Role> = Comparator { o1, o2 ->
+        comparator.compare(o1.actor, o2.actor)
+    }
 
     override var zOrder = 0
 
@@ -135,18 +142,17 @@ abstract class AbstractStageView
             }
 
             if (rect.contains(event.screenPosition)) {
-                stage.actors.sortedBackwardsWith(comparator).forEach { actor ->
+                findActorsAt(event.viewPosition).forEach { actor ->
                     val role = actor.role
                     if (role is MouseButtonListener) {
-                        if (role.actor.touching(event.viewPosition)) {
-                            role.onMouseButton(event)
-                            if (event.consumed) {
-                                if (event.captured) {
-                                    mouseCapturedBy = role
-                                }
-                                return
+                        role.onMouseButton(event)
+                        if (event.consumed) {
+                            if (event.captured) {
+                                mouseCapturedBy = role
                             }
+                            return
                         }
+
                     }
                 }
             }

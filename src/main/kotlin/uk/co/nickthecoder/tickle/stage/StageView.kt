@@ -17,11 +17,13 @@ interface StageView : View {
 
     val comparator: Comparator<ActorDetails>
 
+    val roleComparator: Comparator<Role>
+
     /**
      * Returns the Actors touching the given [position], the top-most first.true
      */
     fun findActorsAt(point: Vector2d): Iterable<Actor> {
-        return stage.findActorsAt(point).sortedWith(comparator)
+        return topFirst(stage.findActorsAt(point))
     }
 
     /**
@@ -34,16 +36,15 @@ interface StageView : View {
         return findActorsAt(point).firstOrNull()
     }
 
+    fun topFirst(actors: Collection<Actor>) = actors.sortedBackwardsWith(comparator)
+
+    fun bottomFirst(actors: Iterable<Actor>) = actors.sortedWith(comparator)
 }
 
-inline fun <reified T : Role> StageView.findRoleAt(point: Vector2d, topFirst: Boolean = true): T? {
-    return findRolesAt<T>(point, topFirst).firstOrNull()
+inline fun <reified T : Role> StageView.findRoleAt(point: Vector2d): T? {
+    return findRolesAt<T>(point).firstOrNull()
 }
 
-inline fun <reified T : Role> StageView.findRolesAt(point: Vector2d, topFirst: Boolean = true): List<T> {
-    return if (topFirst) {
-        stage.findActorsAt(point).filter { it.role is T }.sortedBackwardsWith(comparator).map { it.role }.filterIsInstance<T>()
-    } else {
-        stage.findActorsAt(point).filter { it.role is T }.sortedWith(comparator).map { it.role }.filterIsInstance<T>()
-    }
+inline fun <reified T : Role> StageView.findRolesAt(point: Vector2d): List<T> {
+    return stage.findRolesAt<T>(point).sortedBackwardsWith(roleComparator)
 }

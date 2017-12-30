@@ -2,6 +2,10 @@ package uk.co.nickthecoder.tickle.stage
 
 import uk.co.nickthecoder.tickle.ActorDetails
 
+class YMinusZComparator : Comparator<ActorDetails> {
+    override fun compare(o1: ActorDetails, o2: ActorDetails): Int = Math.signum(o1.y - o1.zOrder - (o2.y - o2.zOrder)).toInt()
+}
+
 /**
  * Useful for isometric games. For all ground based objects, set the Actor's zOrder to 0.0.
  * For flying objects, the Actor's y and zOrder must be changed together. As the actor rises upwards, increase both
@@ -16,10 +20,5 @@ import uk.co.nickthecoder.tickle.ActorDetails
  * Do NOT use the center of the Pose's image as the Pose's offsets!
  */
 class YMinusZStageView
-    : AbstractStageView() {
-
-    override val comparator = Comparator<ActorDetails> { o1, o2 ->
-        Math.signum(o1.y - o1.zOrder - (o2.y - o2.zOrder)).toInt()
-    }
-
+    : AbstractStageView(YMinusZComparator()) {
 }
