@@ -31,11 +31,6 @@ Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 BUGS
 ====
 
-Window is always resizable (despite the value in GameInfo)
-	Resizing doesn't adjust the views, or the viewport. Just get empty rectangles.
-	The default behaviour should adjust the views
-		Can be overriden in Producer though.
-
 Allow scaling of circles - convert to a polygon if the scales factors are different
 
 Scene.adjustActors is not being called directly. Should it?
@@ -44,6 +39,10 @@ InputPicker :
 	Java FX key code name "Number Sign" does not map to anything in enum class Key
 	"Windows" is this meta?
 	Shift, Control, alt etc don't work either.
+
+Create Stage.findActorsAt and Stage.findRolesAt
+	Then StageView implementation uses Stage's version, but ordered according to the view's ordering.
+	For completeness create Stage.findActorAt and findRoleAt, which returns the first (ignoring order).
 
 Possible Optimisations
 ----------------------
@@ -56,6 +55,18 @@ StageView.findActorsAt and findRolesAt to use Neighbourhood.
 	Maybe have an interface, and a Slow implementation which iterates over all actors as the default.
 	Any Stage/StageView can then replace the Slow implementation with the Neighbourhood.
 	Maybe Stage should (optionally) have a Neighbourhood.
+
+Stage to have a Map of ClassName -> List of Actors with a Role of that class.
+	This will give quicker access to Stage.findRole(s)
+	Put it in a separate class, and delegate it from Stage.
+	interface RoleFinder
+	implementations
+		SlowRoleFinder (iterates over all Actors on the stage)
+		InclusiveRoleFinder - has a list of classes to INCLUDE in the map
+		ExclusiveRoleFinder - has a list of classes to EXCLUDE from the map
+			In either case, delegate to SlowRoleFinder if the class is not in the map.
+	!!Ahh!! This won't work for super classes. e.g. findRoles<Scenery>
+	!!Also!! How can this work, given that Stage.findRole is an extension function?
 
 New Features
 ------------

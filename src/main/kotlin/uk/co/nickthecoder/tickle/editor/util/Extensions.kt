@@ -153,3 +153,19 @@ private val squareCorners = CornerRadii(0.0)
 private val noInsets = Insets(0.0)
 
 fun Color.background() = Background(BackgroundFill(toJavaFX(), squareCorners, noInsets))
+
+
+/**
+ * Returns a list of all elements sorted according to the specified [comparator].
+ */
+public fun <T> Iterable<T>.sortedBackwardsWith(comparator: Comparator<in T>): List<T> {
+    if (this is Collection) {
+        if (size <= 1) return this.toList()
+        @Suppress("UNCHECKED_CAST")
+        val array = (toTypedArray<Any?>() as Array<T>)
+        array.sortWith(comparator)
+        array.reverse()
+        return array.asList()
+    }
+    return toMutableList().apply { sortedBackwardsWith(comparator) }
+}

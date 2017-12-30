@@ -18,12 +18,12 @@ import uk.co.nickthecoder.tickle.resources.ActorResource
 class YOrderStageView
     : AbstractStageView() {
 
-    override fun orderActors(actorResources: List<ActorResource>, topFirst: Boolean): Iterable<ActorResource> {
-        return if (topFirst) actorResources.sortedBy { it.y } else actorResources.sortedBy { -it.y }
+    override val comparator = Comparator<Actor> { o1, o2 ->
+        Math.signum(o1.y - o2.y).toInt()
     }
 
-    override fun orderedActors(topFirst: Boolean): Iterable<Actor> {
-        return if (topFirst) stage.actors.sortedBy { it.y } else stage.actors.sortedBy { -it.y }
+    override fun orderActors(actorResources: List<ActorResource>, topFirst: Boolean): Iterable<ActorResource> {
+        return if (topFirst) actorResources.sortedBy { it.y } else actorResources.sortedBy { -it.y }
     }
 
 }

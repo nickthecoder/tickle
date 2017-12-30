@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.stage
 
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.physics.TickleWorld
@@ -34,6 +35,14 @@ interface Stage {
 
     fun firstView(): StageView? = views.firstOrNull()
 
+    fun findActorsAt(point: Vector2d): List<Actor> {
+        return actors.filter { it.touching(point) }
+    }
+
+    fun findActorAt(point: Vector2d): Actor? {
+        return findActorsAt(point).firstOrNull()
+    }
+
 }
 
 inline fun <reified T : Role> Stage.findRole(): T? {
@@ -42,4 +51,13 @@ inline fun <reified T : Role> Stage.findRole(): T? {
 
 inline fun <reified T : Role> Stage.findRoles(): List<T> {
     return actors.filter { it.role is T }.map { it.role }.filterIsInstance<T>()
+}
+
+
+inline fun <reified T : Role> Stage.findRoleAt(point: Vector2d): T? {
+    return findRolesAt<T>(point).firstOrNull()
+}
+
+inline fun <reified T : Role> Stage.findRolesAt(point: Vector2d): List<T> {
+    return findRoles<T>().filter { it.actor.touching(point) }
 }
