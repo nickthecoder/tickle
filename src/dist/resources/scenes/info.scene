@@ -1,12 +1,55 @@
-{ "director": "uk.co.nickthecoder.tickle.NoDirector", "background": "#000000", "showMouse": true, "layout": "glass", "stages": 
-  [
-    { "name": "glass", "actors": 
-      [
-        { "costume": "info", "x": 1000, "y": 600, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1, "text": "Info"},
-        { "costume": "eye", "x": 80, "y": 560, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
-        { "costume": "eye", "x": 120, "y": 560, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
-        { "costume": "eye", "x": 960, "y": 40, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1},
-        { "costume": "eye", "x": 1000, "y": 40, "xAlignment": "LEFT", "yAlignment": "BOTTOM", "direction": 0, "scale": 1}
+{
+  "director": "uk.co.nickthecoder.tickle.NoDirector",
+  "background": "#000000",
+  "showMouse": true,
+  "layout": "glass",
+  "snapToGrid": {
+    "enabled": false,
+    "xSpacing": 50,
+    "ySpacing": 50,
+    "xOffset": 0,
+    "yOffset": 0,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "snapToGuides": {
+    "enabled": true,
+    "closeness": 5,
+    "x": [
+      
+    ],
+    "y": [
+      
+    ]
+  },
+  "snapToOthers": {
+    "enabled": true,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "snapRotation": {
+    "enabled": true,
+    "step": 15,
+    "closeness": 15
+  },
+  "include": [
+    
+  ],
+  "stages": [
+    {
+      "name": "glass",
+      "actors": [
+        {
+          "costume": "info",
+          "x": 1000,
+          "y": 760,
+          "textAlignmentX": "LEFT",
+          "textAlignmentY": "BOTTOM",
+          "text": "Info",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        }
       ]
     }
   ]

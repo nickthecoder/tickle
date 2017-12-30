@@ -96,7 +96,7 @@ open class OptimisedStage : GameStage() {
             actors.forEach { v.add(it) }
         }
 
-    override fun <T : Role> findRoles(type: Class<T>): List<T> {
+    override fun <T : Role> findRolesByClass(type: Class<T>): List<T> {
         return findRolesStrategy.findRoles(this, type)
     }
 

@@ -47,9 +47,6 @@ PixelOverlapping
 	Don't clear the whole overlapTexture
 	Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
 
-Stage to have a Map of ClassName -> List of Actors with a Role of that class.
-	This will give quicker access to Stage.findRole(s)
-
 New Features
 ------------
 

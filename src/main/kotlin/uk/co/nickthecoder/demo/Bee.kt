@@ -16,7 +16,8 @@ class Bee : Controllable() {
     val velocity = Polar2d()
 
     val ejectNoBounce = Resources.instance.inputs.find("ejectNoBounce")
-    val ejectSimple = Resources.instance.inputs.find("ejectSimple")
+    val ejectFind = Resources.instance.inputs.find("ejectFind")
+    val ejectTagged = Resources.instance.inputs.find("ejectTagged")
     val ejectNeighbourhood = Resources.instance.inputs.find("ejectNeighbourhood")
     val ejectWorld = Resources.instance.inputs.find("ejectWorld")
 
@@ -61,8 +62,11 @@ class Bee : Controllable() {
         if (ejectNoBounce?.isPressed() == true) {
             eject(NoBounce())
         }
-        if (ejectSimple?.isPressed() == true) {
-            eject(SimpleBounce())
+        if (ejectFind?.isPressed() == true) {
+            eject(FindBounce())
+        }
+        if (ejectTagged?.isPressed() == true) {
+            eject(TaggedBounce())
         }
         if (ejectNeighbourhood?.isPressed() == true) {
             eject(NeighbourhoodBounce())

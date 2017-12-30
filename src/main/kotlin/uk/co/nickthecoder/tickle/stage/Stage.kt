@@ -55,15 +55,15 @@ interface Stage {
      * Note, the default implementation is slow, as it iterates over all actors. If you call this often and/or the stage
      * has hundreds of Actors, consider creating a subclass, with a map of the actors by their class.
      *
-     * Do not call this directly, instead use the inline reified version without the Class<T> parameter.
+     * Do not call this directly, instead use the inline reified [findRoles]
      */
-    fun <T : Role> findRoles(type: Class<T>): List<T> {
+    fun <T : Role> findRolesByClass(type: Class<T>): List<T> {
         @Suppress("UNCHECKED_CAST")
         return actors.filter { type.isInstance(it.role) }.map { it.role as T }
     }
 
-    fun <T : Role> findRole(type: Class<T>): T? {
-        return findRoles(type).firstOrNull()
+    fun <T : Role> findRoleByClass(type: Class<T>): T? {
+        return findRolesByClass(type).firstOrNull()
     }
 
     /**
@@ -72,10 +72,10 @@ interface Stage {
      * Note, the default implementation is slow, as it iterates over all actors. If you call this often and/or the stage
      * has hundreds of Actors, consider creating a subclass, optimised using a Neighbourhood.
      *
-     * Do not call this directly, instead use the the inline reified version without the Class<T> parameter.
+     * Do not call this directly, instead use the the inline reified [findRoles]
      */
-    fun <T : Role> findRolesAt(type: Class<T>, point: Vector2d): List<T> {
-        return findRolesAt(type, point).filter { it.actor.touching(point) }
+    fun <T : Role> findRolesByClassAt(type: Class<T>, point: Vector2d): List<T> {
+        return findRolesByClassAt(type, point).filter { it.actor.touching(point) }
     }
 }
 
@@ -83,7 +83,7 @@ interface Stage {
  * An idiomatic version of findRoles(Class<T>)
  */
 inline fun <reified T : Role> Stage.findRoles(): List<T> {
-    return findRoles(T::class.java).filterIsInstance<T>()
+    return findRolesByClass(T::class.java).filterIsInstance<T>()
 }
 
 /**

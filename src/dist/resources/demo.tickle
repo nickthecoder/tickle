@@ -7,7 +7,7 @@
     "resizable": true,
     "fullScreen": true,
     "initialScene": "level01",
-    "testScene": "test",
+    "testScene": "bounceTest",
     "producer": "uk.co.nickthecoder.demo.Demo",
     "physics": {
       "gravity_x": 0,
@@ -39,7 +39,8 @@
         },
         {
           "name": "main",
-          "stage": "uk.co.nickthecoder.tickle.stage.GameStage",
+          "isDefault": true,
+          "stage": "uk.co.nickthecoder.tickle.stage.OptimisedStage",
           "constraint": "uk.co.nickthecoder.tickle.resources.NoStageConstraint"
         }
       ],
@@ -419,50 +420,6 @@
     {
       "name": "balls",
       "costumes": [
-        {
-          "name": "neighbourhoodBounce",
-          "role": "uk.co.nickthecoder.demo.NeighbourhoodBounce",
-          "canRotate": false,
-          "zOrder": 0,
-          "initialEvent": "default",
-          "showInSceneEditor": false,
-          "events": [
-            {
-              "name": "default",
-              "poses": [
-                "greenBall"
-              ]
-            }
-          ],
-          "attributes": [
-            {
-              "name": "velocity",
-              "value": "0.0x0.0"
-            }
-          ]
-        },
-        {
-          "name": "simpleBounce",
-          "role": "uk.co.nickthecoder.demo.SimpleBounce",
-          "canRotate": false,
-          "zOrder": 0,
-          "initialEvent": "default",
-          "showInSceneEditor": false,
-          "events": [
-            {
-              "name": "default",
-              "poses": [
-                "blueBall"
-              ]
-            }
-          ],
-          "attributes": [
-            {
-              "name": "velocity",
-              "value": "0.0x0.0"
-            }
-          ]
-        },
         {
           "name": "worldBounce",
           "role": "uk.co.nickthecoder.demo.WorldBound",
@@ -1016,15 +973,6 @@
       ]
     },
     {
-      "name": "ejectSimple",
-      "keys": [
-        {
-          "key": "S",
-          "state": "PRESSED"
-        }
-      ]
-    },
-    {
       "name": "ejectNeighbourhood",
       "keys": [
         {
@@ -1037,7 +985,7 @@
       "name": "ejectNoBounce",
       "keys": [
         {
-          "key": "C",
+          "key": "Z",
           "state": "PRESSED"
         }
       ]
@@ -1065,6 +1013,24 @@
       "keys": [
         {
           "key": "T",
+          "state": "PRESSED"
+        }
+      ]
+    },
+    {
+      "name": "ejectTagged",
+      "keys": [
+        {
+          "key": "T",
+          "state": "PRESSED"
+        }
+      ]
+    },
+    {
+      "name": "ejectFind",
+      "keys": [
+        {
+          "key": "F",
           "state": "PRESSED"
         }
       ]
