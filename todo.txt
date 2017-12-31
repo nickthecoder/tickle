@@ -1,7 +1,6 @@
 Current Work
 ============
 
-Rename MouseButtonHandler to Listener. Ditto for mousemove.
 
 
 Next
@@ -55,10 +54,6 @@ Option to load textures only when needed.
 Editor to allow resources to be reloaded.
 
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
-	Also create a GUI suitable for launching from within the game to adjust *existing* inputs.
-	Include "reset"
-	Save to a separate file in user's config directory.
-		<aybe make it part of the (un-coded) "Preferences" class
 
 In-Game input mapper, allowing user to change existing inputs (but not add new ones).
 	JavaFX or OpenGL?
@@ -79,9 +74,6 @@ Editor
 	Pose tab to have a list of costumes using it
 		In a "minor tab"?
 		Or just a button which opens all costumes using that pose.
-
-PoseTab should show the whole Texture, with a single shaded rectangle to show the position.
-	Double click to auto adjust the pose's rectangle and offset.
 
 Ensure Textures are deleted when removed from resources (Use finalise?).
 

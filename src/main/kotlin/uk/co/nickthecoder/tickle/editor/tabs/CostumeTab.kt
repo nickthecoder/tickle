@@ -10,6 +10,7 @@ import javafx.stage.Stage
 import org.jbox2d.dynamics.BodyType
 import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.AbstractTask
+import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
@@ -526,6 +527,40 @@ class CostumeTab(val name: String, val costume: Costume)
                             }
                         }
                     }
+                }
+            }
+
+            override fun check() {
+                super.check()
+
+                // Check if the shape is concave.
+                // Compute the dot product of the each line with the previous line's normal. For a convex shape
+                // the dot products should all be positive or all be negative.
+                // BTW, despite what people think, maths isn't my strong suit, so there may be a more efficient method.
+                var negativeCount = 0
+                val points = polygonPointsP.innerParameters
+                if (shapeP.value == polygonP) {
+                    points.forEachIndexed { index, pointP ->
+                        val point = pointP.value
+                        val prev = points[if (index == 0) points.size - 1 else index - 1].value
+                        val next = points[if (index == points.size - 1) 0 else index + 1].value
+                        val line1 = Vector2d()
+                        val line2 = Vector2d()
+                        prev.sub(point, line1)
+                        next.sub(point, line2)
+                        val normal1 = Vector2d(line1.y, -line1.x)
+                        val dotProduct = normal1.dot(line2)
+                        if (dotProduct < 0.0) {
+                            negativeCount++
+                        }
+                        // If any lines are straight the dot product will be zero. That is redundant point and will just a waste of CPU!
+                        if (dotProduct == 0.0) {
+                            throw ParameterException(shapeP, "Contains a redundant point #$index")
+                        }
+                    }
+                }
+                if (negativeCount > 0 && negativeCount != points.size) {
+                    throw ParameterException(shapeP, "The shape is concave. Create 2 (or more) fixtures which are all convex.")
                 }
             }
 

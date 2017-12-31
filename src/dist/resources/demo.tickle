@@ -787,7 +787,41 @@
             }
           ]
         }
-      ]
+      ],
+      "body": {
+        "bodyType": "STATIC",
+        "fixtures": [
+          {
+            "friction": 0,
+            "density": 1,
+            "restitution": 1,
+            "isSensor": false,
+            "group": 0,
+            "category": 65535,
+            "mask": 65535,
+            "polygon": {
+              "points": [
+                {
+                  "x": 34,
+                  "y": 23
+                },
+                {
+                  "x": 63,
+                  "y": -6
+                },
+                {
+                  "x": 33,
+                  "y": -9
+                },
+                {
+                  "x": 0,
+                  "y": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "name": "redOutline",
