@@ -58,13 +58,13 @@ interface StageView : View {
 
             stage.actors.forEach { actor ->
 
-                when (actor.xAlignment) {
+                when (actor.viewAlignmentX) {
                     ActorXAlignment.LEFT -> Unit // Do nothing
                     ActorXAlignment.CENTER -> actor.x += deltaX / 2
                     ActorXAlignment.RIGHT -> actor.x += deltaX
                     ActorXAlignment.RATIO -> actor.x = actor.x * ratioX
                 }
-                when (actor.yAlignment) {
+                when (actor.viewAlignmentY) {
                     ActorYAlignment.BOTTOM -> Unit // Do nothing
                     ActorYAlignment.CENTER -> actor.y += deltaY / 2
                     ActorYAlignment.TOP -> actor.y += deltaY

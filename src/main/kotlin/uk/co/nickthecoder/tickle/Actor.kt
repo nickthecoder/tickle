@@ -127,8 +127,8 @@ class Actor(var costume: Costume, val role: Role? = null)
             return null
         }
 
-    var xAlignment: ActorXAlignment = ActorXAlignment.LEFT
-    var yAlignment: ActorYAlignment = ActorYAlignment.BOTTOM
+    var viewAlignmentX: ActorXAlignment = ActorXAlignment.LEFT
+    var viewAlignmentY: ActorYAlignment = ActorYAlignment.BOTTOM
 
     init {
         role?.actor = this

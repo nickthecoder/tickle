@@ -144,8 +144,8 @@ class ActorResource(val isDesigning: Boolean = false)
         actor.direction.degrees = direction.degrees
         actor.scale = scale
 
-        actor.xAlignment = viewAlignmentX
-        actor.yAlignment = viewAlignmentY
+        actor.viewAlignmentX = viewAlignmentX
+        actor.viewAlignmentY = viewAlignmentY
 
         val appearance = actor.appearance
         if (appearance is ResizeAppearance) {
