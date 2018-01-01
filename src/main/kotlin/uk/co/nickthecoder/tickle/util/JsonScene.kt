@@ -222,9 +222,9 @@ class JsonScene {
                 if (isSizable()) {
                     jactor.add("sizeX", size.x)
                     jactor.add("sizeY", size.y)
-                    jactor.add("alignmentX", alignment.x)
-                    jactor.add("alignmentY", alignment.y)
                 }
+                jactor.add("alignmentX", alignment.x)
+                jactor.add("alignmentY", alignment.y)
             }
 
             JsonUtil.saveAttributes(jactor, actorResource.attributes)

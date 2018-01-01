@@ -2,8 +2,6 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Renderer
-import uk.co.nickthecoder.tickle.resources.ActorXAlignment
-import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.stage.FlexPosition
 import uk.co.nickthecoder.tickle.stage.Stage
@@ -41,6 +39,16 @@ class Scene {
         }
     }
 
+    /**
+     * Changes the size of the view based on the size in GameInfo. This is done when the scene is first loaded.
+     * Note that [View.changeRect] is NOT called, so the actors are NOT adjusted based on their alignment.
+     */
+    private fun layoutToGameInfo() {
+        val gi = Resources.instance.gameInfo
+        autoPositions.forEach { name, position ->
+            views[name]?.rect = position.calculateRectangle(gi.width, gi.height)
+        }
+    }
 
     /**
      * Lays out the Views, expanding, or contracting them to fit into the window without margins and without scaling.
@@ -48,9 +56,7 @@ class Scene {
     fun layoutToFit() {
         val window = Game.instance.window
         autoPositions.forEach { name, position ->
-            views[name]?.let { view ->
-                view.rect = position.calculateRectangle(window.width, window.height)
-            }
+            views[name]?.changeRect(position.calculateRectangle(window.width, window.height))
         }
     }
 
@@ -70,45 +76,11 @@ class Scene {
                 rect.right += dx
                 rect.top += dy
                 rect.bottom += dy
-                view.rect = rect
+
+                view.changeRect(rect)
             }
         }
     }
-
-    /**
-     * Adjusts any actors who's position is not relative to the bottom left.
-     * This is useful for games with resizable windows, and actors need to be aligned with the right edge for example.
-     *
-     * Call this when the window is resized, and also after loading a scene where the size of the window isn't the
-     * same as that defined in GameInfo.
-     */
-    fun adjustActors(deltaX: Double, deltaY: Double) {
-
-        stages.values.forEach { stage ->
-            stage.firstView()?.let { view ->
-
-                val ratioX = view.rect.width / (view.rect.width - deltaX)
-                val ratioY = view.rect.height / (view.rect.height - deltaY)
-
-                stage.actors.forEach { actor ->
-
-                    when (actor.xAlignment) {
-                        ActorXAlignment.LEFT -> Unit // Do nothing
-                        ActorXAlignment.CENTER -> actor.x += deltaX / 2
-                        ActorXAlignment.RIGHT -> actor.x += deltaX
-                        ActorXAlignment.RATIO -> actor.x = actor.x * ratioX
-                    }
-                    when (actor.yAlignment) {
-                        ActorYAlignment.BOTTOM -> Unit // Do nothing
-                        ActorYAlignment.CENTER -> actor.y += deltaY / 2
-                        ActorYAlignment.TOP -> actor.y += deltaY
-                        ActorYAlignment.RATIO -> actor.y = actor.y * ratioY
-                    }
-                }
-            }
-        }
-    }
-
 
     fun addView(name: String, view: View, position: FlexPosition? = null) {
         views[name] = view
@@ -136,6 +108,7 @@ class Scene {
             }
             stage.begin()
         }
+        layoutToGameInfo()
         Game.instance.producer.layout()
         orderedViews = views.values.sortedBy { it.zOrder }
     }

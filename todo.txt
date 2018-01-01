@@ -1,6 +1,14 @@
 Current Work
 ============
 
+Resizing is broken!
+	Actors need to be adjusted according to their alignments when the window is resized, but each VIEW will be
+	resized by a different amount.
+	Currently, the adjustment happens in Producer.onResize and manually by PillPopper when a scene starts.
+	This should happen automatically whenever a layout is performed.
+	Also, the adjustment needs to be in relation to the change in size of the VIEW
+		This should ONLY be done when the view is the FIRST view of its Stage (otherwise it could be done twice!)
+
 Next
 ====
 

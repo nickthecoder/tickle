@@ -91,13 +91,10 @@ abstract class AbstractProducer : Producer {
     override fun onMouseButton(event: MouseEvent) {}
 
     /**
-     * The default implementation calls [Scene.layoutToFit] and [Scene.adjustActors], so that the views fit into the
-     * available space, all actors are re-positioned according to their alignment.
-     * e.g. if an Actor is right aligned and the window is expanded, then the actor will move to the right.
+     * The default implementation calls [layout].
      */
     override fun onResize(event: ResizeEvent) {
-        Game.instance.scene.layoutToFit()
-        Game.instance.scene.adjustActors(event.width - event.oldWidth.toDouble(), event.height - event.oldHeight.toDouble())
+        layout()
     }
 
     /**

@@ -50,4 +50,8 @@ interface View : MouseButtonListener {
         result.set(0.0, 0.0)
     }
 
+    fun changeRect(newRect: Recti) {
+        rect = newRect
+    }
+
 }
