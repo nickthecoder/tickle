@@ -43,9 +43,9 @@
           "costume": "info",
           "x": 1000,
           "y": 760,
-          "textAlignmentX": "RIGHT",
-          "textAlignmentY": "TOP",
           "text": "Info",
+          "viewAlignmentX": "RIGHT",
+          "viewAlignmentY": "TOP",
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1

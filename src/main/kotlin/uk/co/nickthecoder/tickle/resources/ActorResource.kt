@@ -32,15 +32,15 @@ class ActorResource(val isDesigning: Boolean = false)
                     if (ninePatch != null) {
                         size.x = ninePatch.pose.rect.width.toDouble()
                         size.y = ninePatch.pose.rect.height.toDouble()
-                        alignment.x = ninePatch.pose.offsetX / size.x
-                        alignment.y = ninePatch.pose.offsetY / size.y
+                        sizeAlignment.x = ninePatch.pose.offsetX / size.x
+                        sizeAlignment.y = ninePatch.pose.offsetY / size.y
                     }
                 } else {
                     if (pose.tiled) {
                         size.x = pose.rect.width.toDouble()
                         size.y = pose.rect.height.toDouble()
-                        alignment.x = pose.offsetX / size.x
-                        alignment.y = pose.offsetY / size.y
+                        sizeAlignment.x = pose.offsetX / size.x
+                        sizeAlignment.y = pose.offsetY / size.y
                     }
                 }
             }
@@ -50,8 +50,8 @@ class ActorResource(val isDesigning: Boolean = false)
     override var y: Double = 0.0
     override var zOrder: Double = 0.0
 
-    var xAlignment: ActorXAlignment = ActorXAlignment.LEFT
-    var yAlignment: ActorYAlignment = ActorYAlignment.BOTTOM
+    var viewAlignmentX: ActorXAlignment = ActorXAlignment.LEFT
+    var viewAlignmentY: ActorYAlignment = ActorYAlignment.BOTTOM
 
     /**
      * Used by SceneEditor in conjunction with StageConstraint. This is where the actor was dragged to, but [x],[y]
@@ -67,14 +67,14 @@ class ActorResource(val isDesigning: Boolean = false)
     var scale = Vector2d(1.0, 1.0)
 
     /**
-     * For NinePatch only
+     * For resizable actors only (nine patch and tiled)
      */
     var size = Vector2d(1.0, 1.0)
 
     /**
      * For NinePatch only
      */
-    var alignment = Vector2d(0.5, 0.5)
+    var sizeAlignment = Vector2d(0.5, 0.5)
 
     val attributes = Resources.instance.createAttributes()
 
@@ -144,13 +144,13 @@ class ActorResource(val isDesigning: Boolean = false)
         actor.direction.degrees = direction.degrees
         actor.scale = scale
 
-        actor.xAlignment = xAlignment
-        actor.yAlignment = yAlignment
+        actor.xAlignment = viewAlignmentX
+        actor.yAlignment = viewAlignmentY
 
         val appearance = actor.appearance
         if (appearance is ResizeAppearance) {
             actor.resize(size.x, size.y)
-            appearance.alignment.set(alignment)
+            appearance.sizeAlignment.set(sizeAlignment)
         }
 
         actor.role?.let { attributes.applyToObject(it) }

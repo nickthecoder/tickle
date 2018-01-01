@@ -17,7 +17,7 @@ abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
      * (0,0) means the Actor's position is at the bottom left of the NinePatch.
      * (1,1) means the Actor's position is at the top right of the NinePatch.
      */
-    val alignment = Vector2d(0.5, 0.5)
+    val sizeAlignment = Vector2d(0.5, 0.5)
 
     internal val oldSize = Vector2d(1.0, 1.0)
 
@@ -31,9 +31,9 @@ abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
     override fun width() = size.x
 
 
-    override fun offsetX() = size.x * alignment.x
+    override fun offsetX() = size.x * sizeAlignment.x
 
-    override fun offsetY() = size.y * alignment.y
+    override fun offsetY() = size.y * sizeAlignment.y
 
     override fun touching(point: Vector2d) = pixelTouching(point)
 
@@ -48,14 +48,14 @@ abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
 
             oldSize.set(size)
         }
-        if (oldAlignment != alignment) {
+        if (oldAlignment != sizeAlignment) {
             actor.body?.let { body ->
                 val world = body.world as TickleWorld
                 body.offset(
-                        world.pixelsToWorld((oldAlignment.x - alignment.x) * width()),
-                        world.pixelsToWorld((oldAlignment.y - alignment.y) * height()))
+                        world.pixelsToWorld((oldAlignment.x - sizeAlignment.x) * width()),
+                        world.pixelsToWorld((oldAlignment.y - sizeAlignment.y) * height()))
             }
-            oldAlignment.set(alignment)
+            oldAlignment.set(sizeAlignment)
         }
     }
 

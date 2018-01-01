@@ -19,14 +19,14 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val zOrderP = DoubleParameter("zOrder", value = actorResource.zOrder)
 
-    val xAlignmentP = ChoiceParameter<ActorXAlignment>("xAlignment", value = actorResource.xAlignment)
+    val viewAlignmentXP = ChoiceParameter<ActorXAlignment>("viewAlignmentX", value = actorResource.viewAlignmentX)
             .enumChoices(true)
 
-    val yAlignmentP = ChoiceParameter<ActorYAlignment>("yAlignment", value = actorResource.yAlignment)
+    val viewAlignmentYP = ChoiceParameter<ActorYAlignment>("viewAlignmentY", value = actorResource.viewAlignmentY)
             .enumChoices(true)
 
     val alignmentGroupP = SimpleGroupParameter("textAlignment", label = "Alignment")
-            .addParameters(xAlignmentP, yAlignmentP)
+            .addParameters(viewAlignmentXP, viewAlignmentYP)
             .asHorizontal(LabelPosition.NONE)
 
     val directionP = DoubleParameter("direction", value = actorResource.direction.degrees)
@@ -38,7 +38,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val sizeP = Vector2dParameter("size", value = actorResource.size)
 
-    val resizeableAlignmentP = Vector2dParameter("resizeableAlignment", label = "Alignment", value = actorResource.alignment)
+    val resizeableAlignmentP = Vector2dParameter("resizeableAlignment", label = "Alignment", value = actorResource.sizeAlignment)
 
     val resizableGroupP = SimpleGroupParameter("resizeable")
             .addParameters(sizeP, resizeableAlignmentP)
@@ -123,8 +123,8 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
         with(actorResource) {
             xP.value?.let { x = it }
             yP.value?.let { y = it }
-            xAlignment = xAlignmentP.value!!
-            yAlignment = yAlignmentP.value!!
+            viewAlignmentX = viewAlignmentXP.value!!
+            viewAlignmentY = viewAlignmentYP.value!!
 
             directionP.value?.let { direction.degrees = it }
             scale.set(scaleP.value)
@@ -134,7 +134,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
             if (actorResource.isSizable()) {
                 size.set(sizeP.value)
-                alignment.set(resizeableAlignmentP.value)
+                sizeAlignment.set(resizeableAlignmentP.value)
             }
         }
 
@@ -149,13 +149,13 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
         with(actorResource) {
             yP.value = y
             xP.value = x
-            xAlignmentP.value = xAlignment
-            yAlignmentP.value = yAlignment
+            viewAlignmentXP.value = viewAlignmentX
+            viewAlignmentYP.value = viewAlignmentY
 
             directionP.value = direction.degrees
             if (isSizable()) {
                 sizeP.value.set(size)
-                resizeableAlignmentP.value.set(alignment)
+                resizeableAlignmentP.value.set(sizeAlignment)
             } else {
                 scaleP.value.set(scale)
             }

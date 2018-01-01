@@ -59,9 +59,9 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
         size.y = ninePatch.pose.rect.height.toDouble()
         oldSize.set(size)
 
-        alignment.x = ninePatch.pose.offsetX / ninePatch.pose.rect.width
-        alignment.y = ninePatch.pose.offsetY / ninePatch.pose.rect.height
-        oldAlignment.set(alignment)
+        sizeAlignment.x = ninePatch.pose.offsetX / ninePatch.pose.rect.width
+        sizeAlignment.y = ninePatch.pose.offsetY / ninePatch.pose.rect.height
+        oldAlignment.set(sizeAlignment)
     }
 
     override val directionRadians: Double

@@ -185,8 +185,8 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
         if (actorResource.isSizable()) {
             canvas.graphicsContext2D.strokeRect(
-                    -actorResource.alignment.x * actorResource.size.x,
-                    -actorResource.alignment.y * actorResource.size.y,
+                    -actorResource.sizeAlignment.x * actorResource.size.x,
+                    -actorResource.sizeAlignment.y * actorResource.size.y,
                     actorResource.size.x,
                     actorResource.size.y
             )
@@ -434,18 +434,18 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             val dy = now.y - was.y
 
             if (isLeft) {
-                actorResource.x += dx * (1 - actorResource.alignment.x)
+                actorResource.x += dx * (1 - actorResource.sizeAlignment.x)
                 actorResource.size.x -= dx
             } else {
-                actorResource.x += dx * actorResource.alignment.x
+                actorResource.x += dx * actorResource.sizeAlignment.x
                 actorResource.size.x += dx
             }
 
             if (isBottom) {
-                actorResource.y += dy * (1 - actorResource.alignment.y)
+                actorResource.y += dy * (1 - actorResource.sizeAlignment.y)
                 actorResource.size.y -= dy
             } else {
-                actorResource.y += dy * actorResource.alignment.y
+                actorResource.y += dy * actorResource.sizeAlignment.y
                 actorResource.size.y += dy
             }
             actorResource.draggedX = actorResource.x
@@ -457,8 +457,8 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         override fun x(): Double {
 
             val vector = Vector2d(
-                    (if (isLeft) 0.0 else actorResource.size.x) - actorResource.alignment.x * actorResource.size.x,
-                    (if (isBottom) 0.0 else actorResource.size.y) - actorResource.alignment.y * actorResource.size.y)
+                    (if (isLeft) 0.0 else actorResource.size.x) - actorResource.sizeAlignment.x * actorResource.size.x,
+                    (if (isBottom) 0.0 else actorResource.size.y) - actorResource.sizeAlignment.y * actorResource.size.y)
 
             actorToView(actorResource, vector)
             return vector.x
@@ -466,8 +466,8 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
         override fun y(): Double {
             val vector = Vector2d(
-                    (if (isLeft) 0.0 else actorResource.size.x) - actorResource.alignment.x * actorResource.size.x,
-                    (if (isBottom) 0.0 else actorResource.size.y) - actorResource.alignment.y * actorResource.size.y)
+                    (if (isLeft) 0.0 else actorResource.size.x) - actorResource.sizeAlignment.x * actorResource.size.x,
+                    (if (isBottom) 0.0 else actorResource.size.y) - actorResource.sizeAlignment.y * actorResource.size.y)
 
             actorToView(actorResource, vector)
             return vector.y

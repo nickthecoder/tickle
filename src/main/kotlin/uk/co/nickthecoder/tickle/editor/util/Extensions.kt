@@ -94,8 +94,8 @@ fun ActorResource.isAt(x: Double, y: Double): Boolean {
 
     if (isSizable()) {
 
-        tx += alignment.x * size.x
-        ty += alignment.y * size.y
+        tx += sizeAlignment.x * size.x
+        ty += sizeAlignment.y * size.y
         return tx >= 0 && ty >= 0 && tx < size.x && ty < size.y
 
     } else {

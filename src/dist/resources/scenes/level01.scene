@@ -9,7 +9,7 @@
   "background": "#661a33",
   "showMouse": true,
   "layout": "default",
-  "grid": {
+  "snapToGrid": {
     "enabled": false,
     "xSpacing": 50,
     "ySpacing": 50,
@@ -18,7 +18,7 @@
     "xCloseness": 10,
     "yCloseness": 10
   },
-  "guides": {
+  "snapToGuides": {
     "enabled": true,
     "closeness": 5,
     "x": [
@@ -27,6 +27,16 @@
     "y": [
       
     ]
+  },
+  "snapToOthers": {
+    "enabled": true,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "snapRotation": {
+    "enabled": true,
+    "step": 15,
+    "closeness": 15
   },
   "include": [
     "info"
@@ -45,19 +55,17 @@
           "costume": "bee",
           "x": 207,
           "y": 325,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1
+          "scaleX": 1,
+          "scaleY": 1
         },
         {
           "costume": "grenade",
           "x": 226,
           "y": 83,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1,
+          "scaleX": 1,
+          "scaleY": 1,
           "attributes": [
             {
               "name": "hue",
@@ -81,10 +89,9 @@
           "costume": "coin",
           "x": 512,
           "y": 333,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 20,
-          "scale": 1,
+          "scaleX": 1,
+          "scaleY": 1,
           "attributes": [
             {
               "name": "velocity",
@@ -100,10 +107,9 @@
           "costume": "coin10",
           "x": 85,
           "y": 310,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1,
+          "scaleX": 1,
+          "scaleY": 1,
           "attributes": [
             {
               "name": "velocity",
@@ -119,10 +125,9 @@
           "costume": "coin100",
           "x": 544,
           "y": 432,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 329,
-          "scale": 1,
+          "scaleX": 1,
+          "scaleY": 1,
           "attributes": [
             {
               "name": "velocity",
@@ -138,19 +143,17 @@
           "costume": "bee",
           "x": 598,
           "y": 501,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1
+          "scaleX": 1,
+          "scaleY": 1
         },
         {
           "costume": "grenade",
           "x": 418,
           "y": 82,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1,
+          "scaleX": 1,
+          "scaleY": 1,
           "attributes": [
             {
               "name": "hue",
@@ -174,10 +177,9 @@
           "costume": "grenade",
           "x": 578,
           "y": 81,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1,
+          "scaleX": 1,
+          "scaleY": 1,
           "attributes": [
             {
               "name": "hue",
@@ -201,10 +203,9 @@
           "costume": "grenade",
           "x": 739,
           "y": 82,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1,
+          "scaleX": 1,
+          "scaleY": 1,
           "attributes": [
             {
               "name": "hue",
@@ -228,10 +229,9 @@
           "costume": "grenade",
           "x": 920,
           "y": 85,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1,
+          "scaleX": 1,
+          "scaleY": 1,
           "attributes": [
             {
               "name": "hue",
@@ -255,10 +255,9 @@
           "costume": "shootingStar",
           "x": 148,
           "y": 510,
-          "xAlignment": "LEFT",
-          "yAlignment": "BOTTOM",
           "direction": 0,
-          "scale": 1,
+          "scaleX": 1,
+          "scaleY": 1,
           "attributes": [
             {
               "name": "curveAngle",

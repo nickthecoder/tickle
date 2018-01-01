@@ -30,16 +30,16 @@ class TiledAppearance(actor: Actor, val pose: Pose) : ResizeAppearance(actor) {
         size.y = pose.rect.height.toDouble()
         oldSize.set(size)
 
-        alignment.x = pose.offsetX / pose.rect.width
-        alignment.y = pose.offsetY / pose.rect.height
-        oldAlignment.set(alignment)
+        sizeAlignment.x = pose.offsetX / pose.rect.width
+        sizeAlignment.y = pose.offsetY / pose.rect.height
+        oldAlignment.set(sizeAlignment)
     }
 
     override fun draw(renderer: Renderer) {
 
         //println("Drawing tiled")
-        val left = actor.x - alignment.x * width()
-        val bottom = actor.y - alignment.y * height()
+        val left = actor.x - sizeAlignment.x * width()
+        val bottom = actor.y - sizeAlignment.y * height()
 
         val simple = actor.isSimpleImage()
         val modelMatrix: Matrix4f?

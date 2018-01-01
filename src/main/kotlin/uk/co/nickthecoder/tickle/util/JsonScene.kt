@@ -210,9 +210,16 @@ class JsonScene {
                 }
 
                 if (isText()) {
-                    jactor.add("textAlignmentX", xAlignment.name)
-                    jactor.add("textAlignmentY", yAlignment.name)
+                    //jactor.add("textAlignmentX", textAlignmentX.name)
+                    //jactor.add("textAlignmentY", yAlignment.name)
                     jactor.add("text", text)
+                }
+
+                if (viewAlignmentX != ActorXAlignment.LEFT) {
+                    jactor.add("viewAlignmentX", viewAlignmentX.name)
+                }
+                if (viewAlignmentY != ActorYAlignment.BOTTOM) {
+                    jactor.add("viewAlignmentY", viewAlignmentY.name)
                 }
 
                 jactor.add("direction", direction.degrees)
@@ -222,9 +229,9 @@ class JsonScene {
                 if (isSizable()) {
                     jactor.add("sizeX", size.x)
                     jactor.add("sizeY", size.y)
+                    jactor.add("alignmentX", sizeAlignment.x)
+                    jactor.add("alignmentY", sizeAlignment.y)
                 }
-                jactor.add("alignmentX", alignment.x)
-                jactor.add("alignmentY", alignment.y)
             }
 
             JsonUtil.saveAttributes(jactor, actorResource.attributes)
@@ -258,9 +265,11 @@ class JsonScene {
             y = jactor.getDouble("y", 0.0)
             zOrder = jactor.getDouble("zOrder", costume?.zOrder ?: 0.0)
 
-            // xAlignment was the old name, textAlignmentX is the new name.
-            xAlignment = ActorXAlignment.valueOf(jactor.getString("textAlignmentX", jactor.getString("xAlignment", "LEFT")))
-            yAlignment = ActorYAlignment.valueOf(jactor.getString("textAlignmentY", jactor.getString("yAlignment", "BOTTOM")))
+            // xAlignment was the old name. textAlignmentX was used by mistake. viewAlignment is the CORRECT name.
+            //viewAlignmentX = ActorXAlignment.valueOf(jactor.getString("viewAlignmentX", jactor.getString("textAlignmentX", jactor.getString("xAlignment", "LEFT"))))
+            //viewAlignmentY = ActorYAlignment.valueOf(jactor.getString("viewAlignmentY", jactor.getString("textAlignmentY", jactor.getString("yAlignment", "BOTTOM"))))
+            viewAlignmentX = ActorXAlignment.valueOf(jactor.getString("viewAlignmentX", jactor.getString("xAlignment", "LEFT")))
+            viewAlignmentY = ActorYAlignment.valueOf(jactor.getString("viewAlignmentY", jactor.getString("yAlignment", "BOTTOM")))
 
             direction.degrees = jactor.getDouble("direction", 0.0)
 
@@ -279,8 +288,8 @@ class JsonScene {
                 val rect = costume?.chooseNinePatch(costume.initialEventName)?.pose?.rect ?: costume?.choosePose(costume.initialEventName)?.rect
                 size.x = jactor.getDouble("sizeX", rect?.width?.toDouble() ?: 1.0)
                 size.y = jactor.getDouble("sizeY", rect?.height?.toDouble() ?: 1.0)
-                alignment.x = jactor.getDouble("alignmentX", 0.5)
-                alignment.y = jactor.getDouble("alignmentY", 0.5)
+                sizeAlignment.x = jactor.getDouble("alignmentX", 0.5)
+                sizeAlignment.y = jactor.getDouble("alignmentY", 0.5)
             }
 
         }

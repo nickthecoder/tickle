@@ -103,7 +103,7 @@ abstract class Layer {
 
         with(canvas.graphicsContext2D) {
             save()
-            translate(-actorResource.alignment.x * actorResource.size.x, -actorResource.alignment.y * actorResource.size.y)
+            translate(-actorResource.sizeAlignment.x * actorResource.size.x, -actorResource.sizeAlignment.y * actorResource.size.y)
             for (y in 0..2) {
                 for (x in 0..2) {
                     if (sourceWidths[x] < 0.00001 || sourceHeights[y] < 0.00001) continue
@@ -121,7 +121,7 @@ abstract class Layer {
     fun drawTiled(actorResource: ActorResource, pose: Pose) {
         with(canvas.graphicsContext2D) {
             save()
-            translate(-actorResource.alignment.x * actorResource.size.x, -actorResource.alignment.y * actorResource.size.y)
+            translate(-actorResource.sizeAlignment.x * actorResource.size.x, -actorResource.sizeAlignment.y * actorResource.size.y)
 
             val across = Math.ceil(actorResource.size.x / pose.rect.width).toInt()
             val down = Math.ceil(actorResource.size.y / pose.rect.height).toInt()
