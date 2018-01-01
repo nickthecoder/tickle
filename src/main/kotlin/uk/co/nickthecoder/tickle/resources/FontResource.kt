@@ -2,7 +2,9 @@ package uk.co.nickthecoder.tickle.resources
 
 import uk.co.nickthecoder.tickle.graphics.FontTexture
 import uk.co.nickthecoder.tickle.graphics.FontTextureFactoryViaAWT
+import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.JsonResources
 import uk.co.nickthecoder.tickle.util.Renamable
 import java.awt.Font
 import java.io.File
@@ -56,6 +58,10 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
             }
         }
 
+    private var pngFile: File? = null
+    private var outlineFile: File? = null
+    private var metricsFile: File? = null
+
     var fontTexture: FontTexture
         get() {
             cached?.let { return it }
@@ -69,8 +75,33 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
 
     var outlineFontTexture: FontTexture? = null
 
+    fun reload() {
+        pngFile?.let { pngFile ->
+            metricsFile?.let { metricsFile ->
+                loadFromFile(pngFile, metricsFile)
+            }
+        }
+        outlineFile?.let {
+            loadOutline(it)
+        }
+    }
+
     fun clearCache() {
         cached = null
+    }
+
+    fun loadFromFile(pngFile: File, metricsFile: File) {
+        val texture = Texture.create(pngFile)
+        fontTexture = JsonResources.loadFontMetrics(metricsFile, texture)
+        this.pngFile = pngFile
+        this.metricsFile = metricsFile
+    }
+
+    fun loadOutline(outlinePngFile: File) {
+        val outlineTexture = Texture.create(outlinePngFile)
+        outlineFontTexture = FontTexture(JsonResources.copyGlyphs(outlineTexture, fontTexture.glyphs), fontTexture.lineHeight,
+                leading = fontTexture.leading, ascent = fontTexture.ascent, descent = fontTexture.descent)
+        this.outlineFile = outlinePngFile
     }
 
     private fun createFontTexture(): FontTexture {
@@ -81,7 +112,6 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
             val loadedFont = Font.createFont(java.awt.Font.TRUETYPE_FONT, file)
             font = loadedFont.deriveFont(size.toFloat())
         }
-        println("Creating font texture using padding of $xPadding, $yPadding")
         return FontTextureFactoryViaAWT(font, xPadding = xPadding, yPadding = yPadding).create()
     }
 

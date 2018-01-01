@@ -136,6 +136,15 @@ class Resources(val editing: Boolean = false) {
         JsonResources(this).save(this.file)
     }
 
+    /**
+     * Reloads the textures, sounds and fonts.
+     */
+    fun reload() {
+        textures.items().values.forEach { it.reload() }
+        sounds.items().values.forEach { it.reload() }
+        fontResources.items().values.forEach { it.reload() }
+    }
+
     companion object {
         /**
          * A convenience, so that game scripts can easily get access to the resources.

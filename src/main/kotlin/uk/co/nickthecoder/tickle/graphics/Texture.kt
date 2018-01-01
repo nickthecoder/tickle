@@ -12,16 +12,31 @@ import java.io.IOException
 import java.nio.ByteBuffer
 
 
-class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuffer?, val file: File? = null)
+class Texture(val width: Int, val height: Int, val pixelFormat: Int, buffer: ByteBuffer?, val file: File? = null)
 
     : Deletable, Renamable {
 
-    val handle: Int = glGenTextures()
+    var privateHandle: Int = glGenTextures()
+
+    val handle: Int
+        get() = privateHandle
 
     init {
         glBindTexture(GL_TEXTURE_2D, handle)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, buffer)
+    }
+
+    fun reload() {
+        file?.let {
+            val loadedImage = load(it)
+            unbind()
+            glDeleteTextures(handle)
+            privateHandle = glGenTextures()
+            glBindTexture(GL_TEXTURE_2D, handle)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, loadedImage.buffer)
+        }
     }
 
     fun bind() {
@@ -95,11 +110,13 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
 
     override fun toString() = "Texture $width x $height handle=$handle"
 
+    private data class LoadedImage(val width: Int, val height: Int, val buffer: ByteBuffer)
+
     companion object {
 
         private var boundHandle: Int? = null
 
-        fun create(file: File): Texture {
+        private fun load(file: File): LoadedImage {
 
             MemoryStack.stackPush().use { stack ->
 
@@ -110,11 +127,14 @@ class Texture(val width: Int, val height: Int, pixelFormat: Int, buffer: ByteBuf
                 STBImage.stbi_set_flip_vertically_on_load(true)
                 val buffer = stbi_load(file.path, width, height, channels, 4)
                 buffer ?: throw IOException("Failed to load texture from ${file.absoluteFile}")
-
-                return Texture(width.get(), height.get(), GL_RGBA, buffer, file)
+                return LoadedImage(width.get(), height.get(), buffer)
             }
         }
 
+        fun create(file: File): Texture {
+            val loadedImage = load(file)
+            return Texture(loadedImage.width, loadedImage.height, GL_RGBA, loadedImage.buffer, file)
+        }
     }
 
 }

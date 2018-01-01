@@ -27,10 +27,16 @@ class Sound {
     constructor(file: File) {
         this.file = file
 
-        when (file.extension) {
-            "ogg" -> readOgg(file)
-        // TODO Support wav files too (and update soundP."extensions" in NewResourcesTask).
-            else -> throw IllegalArgumentException("Only ogg files supported.")
+        reload()
+    }
+
+    fun reload() {
+        file?.let {
+            when (file.extension) {
+                "ogg" -> readOgg(file)
+            // TODO Support wav files too (and update soundP."extensions" in NewResourcesTask).
+                else -> throw IllegalArgumentException("Only ogg files supported.")
+            }
         }
     }
 

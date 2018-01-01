@@ -12,6 +12,7 @@ object EditorActions {
     val NEW = EditorAction("new", KeyCode.N, control = true, label = "New", tooltip = "Create a New Resource")
     val RUN = EditorAction("run", KeyCode.R, control = true, label = "Run", tooltip = "Run the game")
     val TEST = EditorAction("test", KeyCode.T, control = true, label = "Test", tooltip = "Test the game")
+    val RELOAD = EditorAction("reload", KeyCode.F5, label = "Reload", tooltip = "Reload textures, fonts & sounds")
 
     val ACCORDION_ONE = EditorAction("accordion.one", KeyCode.F4)
     val ACCORDION_TWO = EditorAction("accordion.two", KeyCode.F5)

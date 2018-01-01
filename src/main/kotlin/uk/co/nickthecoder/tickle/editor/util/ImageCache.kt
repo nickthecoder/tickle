@@ -26,6 +26,10 @@ object ImageCache {
 
     private val textureCache = mutableMapOf<Int, Image>()
 
+    fun clear() {
+        cache.clear()
+    }
+
     fun image(texture: Texture): Image {
         textureCache[texture.handle]?.let { return it }
 

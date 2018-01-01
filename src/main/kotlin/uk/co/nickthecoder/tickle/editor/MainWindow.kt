@@ -17,6 +17,7 @@ import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.tabs.*
+import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.util.NewResourceTask
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
@@ -79,6 +80,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         HBox.setHgrow(toolBarPadding, Priority.ALWAYS);
         with(toolBar.items) {
             add(EditorActions.RESOURCES_SAVE.createButton(shortcuts) { save() })
+            add(EditorActions.RELOAD.createButton(shortcuts) { reload() })
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
             add(EditorActions.RUN.createButton(shortcuts) { startGame() })
             add(EditorActions.TEST.createButton(shortcuts) { testGame() })
@@ -129,6 +131,11 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             }
         }
         JsonResources(Resources.instance).save(Resources.instance.file)
+    }
+
+    fun reload() {
+        Resources.instance.reload()
+        ImageCache.clear()
     }
 
     fun newResource() {

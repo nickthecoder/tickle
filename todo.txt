@@ -1,31 +1,10 @@
 Current Work
 ============
 
-
+Manual reload of resources.
 
 Next
 ====
-
-Support enums as attributes.
-	Message Button, calls Director or Producer
-
-Undo/Redo in scene editor
-	Changes :
-		New ActorResource
-		Delete ActorResource
-		ActorResource changes stage
-		Edit ActorResource
-			Can be changed by editing Parameters or by dragging
-			When a Parameter change event is fired, store the name of the parameter, and its old and new value.
-			When dragging a handle, just let the above handle it?
-		OR add a new listeners on ActorResource (each field has a set(v) method).
-			When moving an actorResource (or set of), then treat this differently??
-
-		Note. dragging multiple ActorResources may need to be handled in a different way???
-		Ignore snap data for now.
-
-
-Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 
 BUGS
 ====
@@ -48,6 +27,28 @@ PixelOverlapping
 
 New Features
 ------------
+
+
+Support enums as attributes.
+	Message Button, calls Director or Producer
+
+Undo/Redo in scene editor
+	Changes :
+		New ActorResource
+		Delete ActorResource
+		ActorResource changes stage
+		Edit ActorResource
+			Can be changed by editing Parameters or by dragging
+			When a Parameter change event is fired, store the name of the parameter, and its old and new value.
+			When dragging a handle, just let the above handle it?
+		OR add a new listeners on ActorResource (each field has a set(v) method).
+			When moving an actorResource (or set of), then treat this differently??
+
+		Note. dragging multiple ActorResources may need to be handled in a different way???
+		Ignore snap data for now.
+
+
+Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 
 Option to load textures only when needed.
 	Texture
@@ -98,7 +99,7 @@ RevealStageView
 		Render all buildings to an off-screen buffer using just their masks (Tagged "HIDES")
 		Combine the two using logical AND
 		Render the result to the window.
-	Note. when rendering the outlines, it would be nice to do this is two stages, one for a white outline,
+	Note. when rendering the outlines, it would be nice to do this in two stages, one for a white outline,
 	and again for a coloured thinner image coloured based on who's side the character belongs to.
 	Rather than have multiple overlapping views, have one compound view, so that we only need to scroll the compound view.
 FogOfWarStageView

@@ -1077,14 +1077,10 @@ class JsonResources {
                 val metricsFile = File(resources.texturesDirectory, "$name.metrics")
 
                 if (pngFile.exists() && metricsFile.exists()) {
-                    val texture = Texture.create(pngFile)
-                    val fontTexture = loadFontMetrics(metricsFile, texture)
-                    fontResource.fontTexture = fontTexture
+                    fontResource.loadFromFile(pngFile, metricsFile)
 
                     if (outlinePngFile.exists()) {
-                        val outlineTexture = Texture.create(outlinePngFile)
-                        fontResource.outlineFontTexture = FontTexture(copyGlyphs(outlineTexture, fontTexture.glyphs), fontTexture.lineHeight,
-                                leading = fontTexture.leading, ascent = fontTexture.ascent, descent = fontTexture.descent)
+                        fontResource.loadOutline(outlinePngFile)
                     }
                 }
 
