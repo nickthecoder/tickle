@@ -41,20 +41,24 @@ class Scene {
         }
     }
 
-    fun layout(width: Int, height: Int) {
+
+    /**
+     * Lays out the Views, expanding, or contracting them to fit into the window without margins and without scaling.
+     */
+    fun layoutToFit() {
+        val window = Game.instance.window
         autoPositions.forEach { name, position ->
             views[name]?.let { view ->
-                view.rect = position.rect(width, height)
+                view.rect = position.rect(window.width, window.height)
             }
         }
     }
 
-    fun layoutToFit() {
-        val window = Game.instance.window
-        layout(window.width, window.height)
-    }
-
-    fun layoutLetterboxed() {
+    /**
+     * Lays out the Views, keeping them at the size defined in GameInfo centered in the middle of the screen.
+     * Therefore if the size in GameInfo is smaller than the window size, then there will be blank margins.
+     */
+    fun layoutWithMargins() {
         val gameInfo = Resources.instance.gameInfo
         val window = Game.instance.window
         val dx = (window.width - gameInfo.width) / 2

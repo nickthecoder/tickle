@@ -85,7 +85,9 @@ abstract class AbstractProducer : Producer {
     override fun onMouseButton(event: MouseEvent) {}
 
     /**
-     * The default implementation calls [Scene.layoutToFit] and [Scene.adjustActors].
+     * The default implementation calls [Scene.layoutToFit] and [Scene.adjustActors], so that the views fit into the
+     * available space, all actors are re-positioned according to their alignment.
+     * e.g. if an Actor is right aligned and the window is expanded, then the actor will move to the right.
      */
     override fun onResize(event: ResizeEvent) {
         Game.instance.scene.layoutToFit()
@@ -93,12 +95,21 @@ abstract class AbstractProducer : Producer {
     }
 
     /**
-     * If in full-screen mode the views are letterboxed to the gameInfo's size.
-     * Otherwise, the views are expanded to fit the new window size (using the layout definitions defined in the editor)
+     * If [GameInfo.fullScreen] == true, and [GameInfo.resizable] == false, then uses [Scene.layoutWithMargins].
+     * This is needed, because the window may not be the same size as that in GameInfo (when the monitor does not support
+     * the GameInfo size). In this case, the next-highest screen size will have been picked, and we center the views and
+     * add margins to fill the remaining space.
+     * If the monitor only supports smaller sizes, then the views will end up being cropped.
+     * Cropping is the "safest" option, because when [GameInfo.resizable] == false, it is likely that the game hasn't been
+     * designed to support resizing.
+     * TODO If/when Tickle supports automatic scaling, then this default behaviour will change, so that cropping never happens.
+     *
+     * In all other cases, it calls [Scene.layoutToFit].
      */
     override fun layout() {
-        if (Game.instance.window.fullScreen) {
-            Game.instance.scene.layoutLetterboxed()
+        val gameInfo = Resources.instance.gameInfo
+        if (gameInfo.fullScreen && gameInfo.resizable == false) {
+            Game.instance.scene.layoutWithMargins()
         } else {
             Game.instance.scene.layoutToFit()
         }

@@ -1,8 +1,6 @@
 Current Work
 ============
 
-Manual reload of resources.
-
 Next
 ====
 
@@ -10,8 +8,6 @@ BUGS
 ====
 
 Allow scaling of circles - convert to a polygon if the scales factors are different
-
-Scene.adjustActors is not being called directly. Should it?
 
 InputPicker :
 	Java FX key code name "Number Sign" does not map to anything in enum class Key
