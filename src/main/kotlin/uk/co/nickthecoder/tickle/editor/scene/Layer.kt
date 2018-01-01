@@ -22,6 +22,12 @@ abstract class Layer {
     private val WHITE = Color.white()
 
     fun draw() {
+        draw {
+            drawContent()
+        }
+    }
+
+    fun draw(drawing: () -> Unit) {
         val gc = canvas.graphicsContext2D
 
         gc.clearRect(0.0, 0.0, canvas.width, canvas.height)
@@ -30,7 +36,7 @@ abstract class Layer {
         gc.scale(scale, scale)
         gc.translate((-centerX + canvas.width / scale / 2), (-centerY + canvas.height / scale / 2))
 
-        drawContent()
+        drawing()
         gc.restore()
     }
 

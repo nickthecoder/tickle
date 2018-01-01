@@ -6,6 +6,7 @@ import javafx.scene.control.*
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
+import javafx.scene.paint.Color
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
@@ -332,52 +333,57 @@ class SceneEditor(val sceneResource: SceneResource) {
                     val actors = findActorsAt(wx, wy, ignoreLock)
                     val highestActor = actors.firstOrNull()
 
-                    if (event.isControlDown) {
-                        // Add or remove the top-most actor to/from the selection
-                        if (selection.contains(highestActor)) {
-                            selection.remove(highestActor)
-                        } else {
-                            selection.add(highestActor)
-                        }
+                    if (highestActor == null) {
+                        mouseHandler = SelectArea(wx, wy)
+                    } else {
 
-                    } else if (event.isShiftDown) {
-                        if (actors.contains(selection.latest())) {
-                            // Select the actor below the currently selected actor (i.e. with a higher index)
-                            // This is useful when there are many actors on top of each other. We can get to any of them, by repeatedly shift-clicking
-                            val i = actors.indexOf(selection.latest())
-                            if (i == actors.size - 1) {
-                                selection.clearAndSelect(highestActor)
+                        if (event.isControlDown) {
+                            // Add or remove the top-most actor to/from the selection
+                            if (selection.contains(highestActor)) {
+                                selection.remove(highestActor)
                             } else {
-                                selection.clearAndSelect(actors[i + 1])
+                                selection.add(highestActor)
+                            }
+
+                        } else if (event.isShiftDown) {
+                            if (actors.contains(selection.latest())) {
+                                // Select the actor below the currently selected actor (i.e. with a higher index)
+                                // This is useful when there are many actors on top of each other. We can get to any of them, by repeatedly shift-clicking
+                                val i = actors.indexOf(selection.latest())
+                                if (i == actors.size - 1) {
+                                    selection.clearAndSelect(highestActor)
+                                } else {
+                                    selection.clearAndSelect(actors[i + 1])
+                                }
+
+                            } else {
+                                selection.clearAndSelect(highestActor)
                             }
 
                         } else {
-                            selection.clearAndSelect(highestActor)
-                        }
+                            if (event.clickCount == 2) {
 
-                    } else {
-                        if (event.clickCount == 2) {
+                                MainWindow.instance.accordion.expandedPane = attributesPane
 
-                            MainWindow.instance.accordion.expandedPane = attributesPane
-
-                        } else {
-                            if (actors.contains(selection.latest())) {
-
-                                // Do nothing
-
-                            } else if (selection.contains(highestActor)) {
-                                // Already in the selection, but this makes it the "latest" one
-                                // So it is shown in the details dialog, and you can see/edit its direction arrow.
-                                selection.add(highestActor)
                             } else {
-                                selection.clearAndSelect(highestActor)
+                                if (actors.contains(selection.latest())) {
+
+                                    // Do nothing
+
+                                } else if (selection.contains(highestActor)) {
+                                    // Already in the selection, but this makes it the "latest" one
+                                    // So it is shown in the details dialog, and you can see/edit its direction arrow.
+                                    selection.add(highestActor)
+                                } else {
+                                    selection.clearAndSelect(highestActor)
+                                }
                             }
                         }
                     }
-                }
-                selection.latest()?.let { latest ->
-                    offsetX = latest.x - wx
-                    offsetY = latest.y - wy
+                    selection.latest()?.let { latest ->
+                        offsetX = latest.x - wx
+                        offsetY = latest.y - wy
+                    }
                 }
 
             } else if (event.button == MouseButton.MIDDLE || event.isAltDown) {
@@ -400,6 +406,42 @@ class SceneEditor(val sceneResource: SceneResource) {
             }
         }
 
+    }
+
+    inner class SelectArea(val startX: Double, val startY: Double) : MouseHandler {
+
+        override fun onMouseDragged(event: MouseEvent) {
+            val wx = viewX(event)
+            val wy = viewY(event)
+
+            val fromX = Math.min(wx, startX)
+            val fromY = Math.min(wy, startY)
+            val toX = Math.max(wx, startX)
+            val toY = Math.max(wy, startY)
+
+            selection.clear()
+            layers.currentLayer?.stageResource?.actorResources?.forEach { actorResource ->
+
+                if (actorResource.x >= fromX && actorResource.y >= fromY && actorResource.x <= toX && actorResource.y <= toY) {
+                    selection.add(actorResource)
+                }
+
+            }
+            layers.glass.draw {
+                layers.glass.drawContent()
+                with(layers.glass.canvas.graphicsContext2D) {
+                    stroke = Color.RED
+                    setLineDashes(3.0, 10.0)
+
+                    strokeRect(fromX, fromY, toX - fromX, toY - fromY)
+                }
+            }
+        }
+
+        override fun onMouseReleased(event: MouseEvent) {
+            layers.glass.draw()
+            mouseHandler = Select()
+        }
     }
 
     inner class Pan : MouseHandler {
