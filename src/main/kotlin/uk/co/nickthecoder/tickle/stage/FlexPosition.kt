@@ -64,7 +64,7 @@ class FlexPosition {
         }
     }
 
-    fun rect(totalWidth: Int, totalHeight: Int) = Recti(left(totalWidth), bottom(totalHeight), right(totalWidth), top(totalHeight))
+    fun calculateRectangle(totalWidth: Int, totalHeight: Int) = Recti(left(totalWidth), bottom(totalHeight), right(totalWidth), top(totalHeight))
 
     override fun toString(): String {
         return "hAlign=$hAlignment hPosition=$hPosition leftRightMargin=$leftRightMargin width=$width widthRatio=$widthRatio\n" +

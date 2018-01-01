@@ -49,7 +49,7 @@ class Scene {
         val window = Game.instance.window
         autoPositions.forEach { name, position ->
             views[name]?.let { view ->
-                view.rect = position.rect(window.width, window.height)
+                view.rect = position.calculateRectangle(window.width, window.height)
             }
         }
     }
@@ -65,7 +65,7 @@ class Scene {
         val dy = (window.height - gameInfo.height) / 2
         autoPositions.forEach { name, position ->
             views[name]?.let { view ->
-                val rect = position.rect(gameInfo.width, gameInfo.height)
+                val rect = position.calculateRectangle(gameInfo.width, gameInfo.height)
                 rect.left += dx
                 rect.right += dx
                 rect.top += dy

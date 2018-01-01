@@ -46,8 +46,14 @@ interface Producer : MouseButtonListener {
 
     fun onKey(event: KeyEvent)
 
+    /**
+     * Layout the views when a scene is started.
+     */
     fun layout()
 
+    /**
+     * Called when the window is resized.
+     */
     fun onResize(event: ResizeEvent)
 
     fun message(message: String)
