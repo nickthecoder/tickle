@@ -138,7 +138,7 @@ class Window(
 
         // Make the window visible
         glfwShowWindow(handle)
-
+        glfwFocusWindow(handle)
     }
 
     fun hide() {

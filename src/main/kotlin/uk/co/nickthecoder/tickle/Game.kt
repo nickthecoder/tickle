@@ -140,6 +140,7 @@ class Game(
     fun cleanUp() {
         processRunLater()
         renderer.delete()
+        window.listeners.remove(this)
         producer.end()
     }
 

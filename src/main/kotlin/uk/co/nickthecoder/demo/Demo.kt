@@ -13,14 +13,6 @@ class Demo : AbstractProducer() {
         Game.instance.window.enableVSync(1)
     }
 
-    override fun layout() {
-        if (Game.instance.window.fullScreen) {
-            Game.instance.scene.layoutLetterboxed()
-        } else {
-            Game.instance.scene.layoutToFit()
-        }
-    }
-
     companion object {
         /**
          * A convenience, so that game scripts can easily get access to the game.

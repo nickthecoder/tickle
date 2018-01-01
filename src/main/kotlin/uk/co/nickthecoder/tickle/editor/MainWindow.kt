@@ -138,14 +138,16 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     fun startGame(scenePath: String = Resources.instance.sceneFileToPath(Resources.instance.gameInfo.initialScenePath)) {
         stage.hide()
 
+        // Give this window the opportunity to hide before the UI hangs
         Platform.runLater {
-            // Give this window the opportunity to hide before the UI hangs
             println("Game test started")
             with(Resources.instance.gameInfo) {
                 glWindow.change(title, width, height, resizable)
             }
             glWindow.show()
 
+            // Clean up the old Game instance, and create a new one.
+            Game.instance.cleanUp()
             Game(glWindow, Resources.instance).run(scenePath)
 
             println("Game test ended")

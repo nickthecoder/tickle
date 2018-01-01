@@ -72,12 +72,11 @@ class Scene {
     }
 
     /**
-     * Called after the scene has been loaded, and producer.sceneLoaded and director.sceneLoaded have been called.
      * Adjusts any actors who's position is not relative to the bottom left.
      * This is useful for games with resizable windows, and actors need to be aligned with the right edge for example.
      *
-     * When/If dynamic window resizing is implemented in Tickle, adjustment will also need to take place when a window
-     * is resized during the game.
+     * Call this when the window is resized, and also after loading a scene where the size of the window isn't the
+     * same as that defined in GameInfo.
      */
     fun adjustActors(deltaX: Double, deltaY: Double) {
 

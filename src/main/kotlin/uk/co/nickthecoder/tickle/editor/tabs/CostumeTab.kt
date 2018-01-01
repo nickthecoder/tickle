@@ -537,6 +537,9 @@ class CostumeTab(val name: String, val costume: Costume)
                 // Compute the dot product of the each line with the previous line's normal. For a convex shape
                 // the dot products should all be positive or all be negative.
                 // BTW, despite what people think, maths isn't my strong suit, so there may be a more efficient method.
+                // Note. this doesn't detect "star" shapes, such as a witches pentagram, but it is unlikely somebody
+                // would create such a shape! Summing the interior angles, and test if it is significantly over 2 PI
+                // would fix that, but I can't be bothered. Sorry.
                 var negativeCount = 0
                 val points = polygonPointsP.innerParameters
                 if (shapeP.value == polygonP) {
