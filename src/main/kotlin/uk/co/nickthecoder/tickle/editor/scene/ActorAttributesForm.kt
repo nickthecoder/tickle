@@ -5,6 +5,7 @@ import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.tickle.editor.util.TextStyleParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 import uk.co.nickthecoder.tickle.resources.*
 
@@ -35,6 +36,8 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
 
     val textP = StringParameter("text", value = actorResource.text, rows = 3)
 
+    val textStyleP = TextStyleParameter("textStyle")
+            .asVertical()
 
     val sizeP = Vector2dParameter("size", value = actorResource.size)
 
@@ -48,8 +51,7 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, textP)
-
+            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, textP, textStyleP)
             .asVertical()
 
     var dirty = false
@@ -60,6 +62,8 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     private var ignoreChanges: Boolean = false
 
     init {
+
+        actorResource.textStyle?.let { textStyleP.from(it) }
 
         if (actorResource.isSizable()) {
             groupP.addParameters(resizableGroupP)
@@ -130,6 +134,8 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
             scale.set(scaleP.value)
 
             text = textP.value
+            textStyle?.let { textStyleP.update(it) }
+
             zOrder = zOrderP.value!!
 
             if (actorResource.isSizable()) {
@@ -160,9 +166,12 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
                 scaleP.value.set(scale)
             }
             textP.value = text
+            textStyle?.let { textStyleP.from(it) }
+
             zOrderP.value = zOrder
 
             textP.hidden = pose != null
+            textStyleP.hidden = textStyle == null
         }
         // Note. We do not update the dynamic "attributes", because they should ONLY be updated via their
         // Parameters, The scene editor should NOT be changing the string value directly.

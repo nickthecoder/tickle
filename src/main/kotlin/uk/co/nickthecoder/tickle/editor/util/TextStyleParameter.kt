@@ -2,9 +2,9 @@ package uk.co.nickthecoder.tickle.editor.util
 
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.graphics.HAlignment
+import uk.co.nickthecoder.tickle.graphics.TextHAlignment
 import uk.co.nickthecoder.tickle.graphics.TextStyle
-import uk.co.nickthecoder.tickle.graphics.VAlignment
+import uk.co.nickthecoder.tickle.graphics.TextVAlignment
 
 class TextStyleParameter(name: String)
 
@@ -13,8 +13,8 @@ class TextStyleParameter(name: String)
     val fontP = createFontParameter("font")
     val colorP = AlphaColorParameter("color", label = "Colour")
     val outlineColorP = AlphaColorParameter("outlineColor", label = "Outline Colour")
-    val hAlignmentP = ChoiceParameter<HAlignment>("xAlignment", value = HAlignment.LEFT).enumChoices(mixCase = true)
-    val vAlignmentP = ChoiceParameter<VAlignment>("yAlignment", value = VAlignment.TOP).enumChoices(mixCase = true)
+    val hAlignmentP = ChoiceParameter<TextHAlignment>("xAlignment", value = TextHAlignment.LEFT).enumChoices(mixCase = true)
+    val vAlignmentP = ChoiceParameter<TextVAlignment>("yAlignment", value = TextVAlignment.TOP).enumChoices(mixCase = true)
 
     init {
         addParameters(fontP, colorP, outlineColorP, hAlignmentP, vAlignmentP)

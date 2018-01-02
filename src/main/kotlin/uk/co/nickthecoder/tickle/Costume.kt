@@ -50,7 +50,7 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
             if (pose == null) {
                 val textStyle = chooseTextStyle(initialEventName)
                 if (textStyle != null) {
-                    actor.changeAppearance(text, textStyle)
+                    actor.changeAppearance(text, textStyle.copy())
                 }
             } else {
                 actor.changeAppearance(pose)

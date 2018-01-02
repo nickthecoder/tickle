@@ -67,12 +67,12 @@ class ActorResource(val isDesigning: Boolean = false)
     var scale = Vector2d(1.0, 1.0)
 
     /**
-     * For resizable actors only (nine patch and tiled)
+     * For resizable actors only (nine patch and tiled poses)
      */
     var size = Vector2d(1.0, 1.0)
 
     /**
-     * For NinePatch only
+     * For NinePatch only and Tiled?
      */
     var sizeAlignment = Vector2d(0.5, 0.5)
 
@@ -85,9 +85,19 @@ class ActorResource(val isDesigning: Boolean = false)
         costume?.choosePose(costume.initialEventName)
     }
 
-    val textStyle: TextStyle? by lazy {
+    /**
+     * The text style as defined in the Costume
+     */
+    val costumeTextStyle: TextStyle? by lazy {
         val costume = Resources.instance.costumes.find(costumeName)
         costume?.chooseTextStyle(costume.initialEventName)
+    }
+
+    /**
+     * The text style, which can override the stlye from the costume.
+     */
+    val textStyle: TextStyle? by lazy {
+        costumeTextStyle?.copy()
     }
 
     val ninePatch: NinePatch? by lazy {
@@ -126,8 +136,7 @@ class ActorResource(val isDesigning: Boolean = false)
     }
 
     fun isText(): Boolean {
-        val costume = costume()
-        return costume?.chooseTextStyle(costume.initialEventName) != null
+        return costumeTextStyle != null
     }
 
     fun createActor(): Actor? {
@@ -151,6 +160,8 @@ class ActorResource(val isDesigning: Boolean = false)
         if (appearance is ResizeAppearance) {
             actor.resize(size.x, size.y)
             appearance.sizeAlignment.set(sizeAlignment)
+        } else if (appearance is TextAppearance) {
+            textStyle?.let { appearance.textStyle = it }
         }
 
         actor.role?.let { attributes.applyToObject(it) }

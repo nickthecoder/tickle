@@ -152,7 +152,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
                     }
                 } else if (costumePoseOrFontP.value == costumeFontP) {
                     costumeFontP.value?.let { font ->
-                        val textStyle = TextStyle(font, HAlignment.LEFT, VAlignment.BOTTOM, Color.white())
+                        val textStyle = TextStyle(font, TextHAlignment.LEFT, TextVAlignment.BOTTOM, Color.white())
                         costume.addTextStyle("default", textStyle)
                     }
                 }

@@ -5,6 +5,8 @@ import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.graphics.TextHAlignment
+import uk.co.nickthecoder.tickle.graphics.TextVAlignment
 import uk.co.nickthecoder.tickle.resources.*
 import java.io.*
 
@@ -209,10 +211,24 @@ class JsonScene {
                     jactor.add("zOrder", zOrder)
                 }
 
-                if (isText()) {
-                    //jactor.add("textAlignmentX", textAlignmentX.name)
-                    //jactor.add("textAlignmentY", yAlignment.name)
+                textStyle?.let { textStyle ->
+
                     jactor.add("text", text)
+                    if (textStyle.fontResource != costumeTextStyle?.fontResource) {
+                        jactor.add("font", Resources.instance.fontResources.findName(textStyle.fontResource))
+                    }
+                    if (textStyle.halignment != costumeTextStyle?.halignment) {
+                        jactor.add("textHAlignment", textStyle.halignment.name)
+                    }
+                    if (textStyle.valignment != costumeTextStyle?.valignment) {
+                        jactor.add("textVAlignment", textStyle.valignment.name)
+                    }
+                    if (textStyle.color != costumeTextStyle?.color) {
+                        jactor.add("textColor", textStyle.color.toHashRGBA())
+                    }
+                    if (textStyle.outlineColor != null && textStyle.outlineColor != costumeTextStyle?.outlineColor) {
+                        jactor.add("textOutlineColor", textStyle.outlineColor!!.toHashRGBA())
+                    }
                 }
 
                 if (viewAlignmentX != ActorXAlignment.LEFT) {
@@ -266,8 +282,6 @@ class JsonScene {
             zOrder = jactor.getDouble("zOrder", costume?.zOrder ?: 0.0)
 
             // xAlignment was the old name. textAlignmentX was used by mistake. viewAlignment is the CORRECT name.
-            //viewAlignmentX = ActorXAlignment.valueOf(jactor.getString("viewAlignmentX", jactor.getString("textAlignmentX", jactor.getString("xAlignment", "LEFT"))))
-            //viewAlignmentY = ActorYAlignment.valueOf(jactor.getString("viewAlignmentY", jactor.getString("textAlignmentY", jactor.getString("yAlignment", "BOTTOM"))))
             viewAlignmentX = ActorXAlignment.valueOf(jactor.getString("viewAlignmentX", jactor.getString("xAlignment", "LEFT")))
             viewAlignmentY = ActorYAlignment.valueOf(jactor.getString("viewAlignmentY", jactor.getString("yAlignment", "BOTTOM")))
 
@@ -282,7 +296,16 @@ class JsonScene {
             scale.x = jactor.getDouble("scaleX", 1.0)
             scale.y = jactor.getDouble("scaleY", 1.0)
 
-            actorResource.text = jactor.getString("text", "")
+            text = jactor.getString("text", "")
+            textStyle?.let { textStyle ->
+                jactor.get("textColor")?.let { textStyle.color = Color.fromString(it.asString()) }
+                jactor.get("textOutlineColor")?.let { textStyle.outlineColor = Color.fromString(it.asString()) }
+                jactor.get("textHAlignment")?.let { textStyle.halignment = TextHAlignment.valueOf(it.asString()) }
+                jactor.get("textVAlignment")?.let { textStyle.valignment = TextVAlignment.valueOf(it.asString()) }
+                jactor.get("font")?.let {
+                    Resources.instance.fontResources.find(it.asString())?.let { textStyle.fontResource = it }
+                }
+            }
 
             if (isSizable()) {
                 val rect = costume?.chooseNinePatch(costume.initialEventName)?.pose?.rect ?: costume?.choosePose(costume.initialEventName)?.rect

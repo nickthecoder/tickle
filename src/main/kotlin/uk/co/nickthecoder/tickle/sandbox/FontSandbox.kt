@@ -2,9 +2,9 @@ package uk.co.nickthecoder.tickle.sandbox
 
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.graphics.HAlignment
+import uk.co.nickthecoder.tickle.graphics.TextHAlignment
 import uk.co.nickthecoder.tickle.graphics.TextStyle
-import uk.co.nickthecoder.tickle.graphics.VAlignment
+import uk.co.nickthecoder.tickle.graphics.TextVAlignment
 import uk.co.nickthecoder.tickle.resources.FontResource
 import java.awt.Font
 
@@ -49,12 +49,12 @@ class FontSandbox : Sandbox(height = 700) {
         font.drawOutlined(renderer, "$text - Blurred outline, thickness 6, alpha 0.05", 20.0, 220.0, outline = Color(0.0f, 0.0f, 0.0f, 0.05f), thickness = 6)
         font.drawOutlined(renderer, "$text - Blurred outline, thickness 6, alpha 0.025", 20.0, 250.0, outline = Color(0.0f, 0.0f, 0.0f, 0.025f), thickness = 6)
 
-        val topLeft = TextStyle(fontResource, HAlignment.LEFT, VAlignment.TOP, white)
-        val topRight = TextStyle(fontResource, HAlignment.RIGHT, VAlignment.TOP, white)
-        val bottomLeft = TextStyle(fontResource, HAlignment.LEFT, VAlignment.BOTTOM, white)
-        val bottomRight = TextStyle(fontResource, HAlignment.RIGHT, VAlignment.BOTTOM, white)
-        val baselineCenter = TextStyle(fontResource, HAlignment.CENTER, VAlignment.BASELINE, white)
-        val center = TextStyle(fontResource, HAlignment.CENTER, VAlignment.CENTER, white)
+        val topLeft = TextStyle(fontResource, TextHAlignment.LEFT, TextVAlignment.TOP, white)
+        val topRight = TextStyle(fontResource, TextHAlignment.RIGHT, TextVAlignment.TOP, white)
+        val bottomLeft = TextStyle(fontResource, TextHAlignment.LEFT, TextVAlignment.BOTTOM, white)
+        val bottomRight = TextStyle(fontResource, TextHAlignment.RIGHT, TextVAlignment.BOTTOM, white)
+        val baselineCenter = TextStyle(fontResource, TextHAlignment.CENTER, TextVAlignment.BASELINE, white)
+        val center = TextStyle(fontResource, TextHAlignment.CENTER, TextVAlignment.CENTER, white)
 
         topLeft.draw(renderer, "Top\nLeft", 0.0, window.height.toDouble())
         topRight.draw(renderer, "Top\nRight\n", window.width.toDouble(), window.height.toDouble())

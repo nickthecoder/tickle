@@ -6,25 +6,25 @@ import uk.co.nickthecoder.tickle.resources.FontResource
 
 class TextStyle(
         var fontResource: FontResource,
-        var halignment: HAlignment,
-        var valignment: VAlignment,
+        var halignment: TextHAlignment,
+        var valignment: TextVAlignment,
         var color: Color,
         var outlineColor: Color? = null) {
 
     fun offsetX(text: CharSequence): Double {
         return when (halignment) {
-            HAlignment.LEFT -> 0.0
-            HAlignment.RIGHT -> width(text)
-            HAlignment.CENTER -> width(text) / 2.0
+            TextHAlignment.LEFT -> 0.0
+            TextHAlignment.RIGHT -> width(text)
+            TextHAlignment.CENTER -> width(text) / 2.0
         }
     }
 
     fun offsetY(text: CharSequence): Double {
         return when (valignment) {
-            VAlignment.TOP -> 0.0
-            VAlignment.CENTER -> height(text) / 2.0
-            VAlignment.BASELINE -> height(text) - fontResource.fontTexture.descent
-            VAlignment.BOTTOM -> height(text)
+            TextVAlignment.TOP -> 0.0
+            TextVAlignment.CENTER -> height(text) / 2.0
+            TextVAlignment.BASELINE -> height(text) - fontResource.fontTexture.descent
+            TextVAlignment.BOTTOM -> height(text)
         }
     }
 
@@ -60,19 +60,19 @@ class TextStyle(
     private fun draw(renderer: Renderer, fontTexture: FontTexture, color: Color, text: CharSequence, x: Double, y: Double, modelMatrix: Matrix4f? = null) {
 
         val dy = when (valignment) {
-            VAlignment.TOP -> 0.0
-            VAlignment.CENTER -> height(text) / 2
-            VAlignment.BASELINE -> height(text) - fontTexture.descent
-            VAlignment.BOTTOM -> height(text)
+            TextVAlignment.TOP -> 0.0
+            TextVAlignment.CENTER -> height(text) / 2
+            TextVAlignment.BASELINE -> height(text) - fontTexture.descent
+            TextVAlignment.BOTTOM -> height(text)
         }
         var lineY = y + dy
 
         text.split('\n').forEach { line ->
 
             val dx = when (halignment) {
-                HAlignment.LEFT -> 0.0
-                HAlignment.CENTER -> fontTexture.width(line) / 2
-                HAlignment.RIGHT -> fontTexture.width(line)
+                TextHAlignment.LEFT -> 0.0
+                TextHAlignment.CENTER -> fontTexture.width(line) / 2
+                TextHAlignment.RIGHT -> fontTexture.width(line)
             }
 
             fontTexture.draw(renderer, line, x - dx, lineY, color, modelMatrix)
@@ -80,7 +80,9 @@ class TextStyle(
         }
 
     }
+
+    fun copy(): TextStyle = TextStyle(fontResource, halignment, valignment, color, outlineColor)
 }
 
-enum class HAlignment { LEFT, CENTER, RIGHT }
-enum class VAlignment { BOTTOM, BASELINE, CENTER, TOP }
+enum class TextHAlignment { LEFT, CENTER, RIGHT }
+enum class TextVAlignment { BOTTOM, BASELINE, CENTER, TOP }

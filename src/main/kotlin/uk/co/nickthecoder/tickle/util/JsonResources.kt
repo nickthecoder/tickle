@@ -740,8 +740,8 @@ class JsonResources {
                         jtextStyles.forEach {
                             val jtextStyle = it.asObject()
                             val fontResource = resources.fontResources.find(jtextStyle.get("font").asString())!!
-                            val halign = HAlignment.valueOf(jtextStyle.getString("halign", HAlignment.LEFT.name))
-                            val valign = VAlignment.valueOf(jtextStyle.getString("valign", VAlignment.BASELINE.name))
+                            val halign = TextHAlignment.valueOf(jtextStyle.getString("halign", TextHAlignment.LEFT.name))
+                            val valign = TextVAlignment.valueOf(jtextStyle.getString("valign", TextVAlignment.BASELINE.name))
                             val color = Color.fromString(jtextStyle.getString("color", "#FFFFFF"))
                             val textStyle = TextStyle(fontResource, halign, valign, color)
                             if (textStyle.fontResource.outlineFontTexture != null) {

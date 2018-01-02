@@ -197,7 +197,7 @@ class PoseAppearance(actor: Actor, var pose: Pose)
     override fun toString() = "PoseAppearance pose=$pose"
 }
 
-class TextAppearance(actor: Actor, var text: String, val textStyle: TextStyle)
+class TextAppearance(actor: Actor, var text: String, var textStyle: TextStyle)
 
     : AbstractAppearance(actor) {
 

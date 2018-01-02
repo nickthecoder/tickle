@@ -44,6 +44,7 @@
           "x": 1000,
           "y": 760,
           "text": "Info",
+          "textOutlineColor": "#001a80ff",
           "viewAlignmentX": "RIGHT",
           "viewAlignmentY": "TOP",
           "direction": 0,

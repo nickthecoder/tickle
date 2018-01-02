@@ -1,11 +1,11 @@
 Current Work
 ============
 
-Alignment is broken for Pose based actors
-	SceneActor says alignment is ONLY used for NinePatches.
-
 Add textAlignment x&y to ActorResource?
 	Remove it from Style?
+	But what about color and outlineColor? And font?
+	Probably best for Costume to store a "default" style, and allow each actor to override it.
+		Only save values that differ from the costume.
 
 Next
 ====
