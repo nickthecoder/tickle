@@ -53,8 +53,8 @@ interface StageView : View {
         val deltaY = newRect.height - rect.height
 
         if (deltaX != 0 || deltaY != 0) {
-            val ratioX = rect.width / (rect.width - deltaX)
-            val ratioY = rect.height / (rect.height - deltaY)
+            val ratioX = newRect.width.toDouble() / rect.width
+            val ratioY = newRect.height.toDouble() / rect.height
 
             stage.actors.forEach { actor ->
 
@@ -62,13 +62,13 @@ interface StageView : View {
                     ActorXAlignment.LEFT -> Unit // Do nothing
                     ActorXAlignment.CENTER -> actor.x += deltaX / 2
                     ActorXAlignment.RIGHT -> actor.x += deltaX
-                    ActorXAlignment.RATIO -> actor.x = actor.x * ratioX
+                    ActorXAlignment.RATIO -> actor.x *= ratioX
                 }
                 when (actor.viewAlignmentY) {
                     ActorYAlignment.BOTTOM -> Unit // Do nothing
                     ActorYAlignment.CENTER -> actor.y += deltaY / 2
                     ActorYAlignment.TOP -> actor.y += deltaY
-                    ActorYAlignment.RATIO -> actor.y = actor.y * ratioY
+                    ActorYAlignment.RATIO -> actor.y *= ratioY
                 }
             }
         }
