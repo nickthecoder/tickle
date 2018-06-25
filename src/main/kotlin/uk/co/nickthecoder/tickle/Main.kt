@@ -3,6 +3,7 @@ package uk.co.nickthecoder.tickle
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
+import uk.co.nickthecoder.tickle.editor.Editor
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.SoundManager
@@ -11,27 +12,37 @@ import java.io.File
 
 
 /**
- * The main entry point to run a game.
- * With no arguments, the resources files is found by looking for a ".tickle" file in
+ * The main entry point.
+ *
+ * Usage : Main [--editor] [RESOURCE_FILE]
+ *
+ * If RESOURCE_FILE is not given, then it is found by looking for a ".tickle" file in
  * "./src/dist/resources/" or "./resources/"
  *
- * However, if you do not want this automatic behaviour, you can pass the filename as an argument.
+ * With the --editor flag, the editor is started, otherwise the game is started.
  */
 fun main(args: Array<String>) {
 
     val file: File?
+    val startEditor = args.isNotEmpty() && args[0] == "--editor"
 
-    if (args.isEmpty()) {
+    if (args.isEmpty() || args.size == 1 && startEditor) {
         file = guessTickleFile()
     } else {
-        file = File(args[0]).absoluteFile
+        file = File(args.last()).absoluteFile
         if (file == null) {
             System.err.println("No tickle file found. Exiting")
             System.exit(1)
         }
     }
 
-    file?.let { startGame(it) }
+    if (startEditor) {
+        println( "Starting editor using resources file : $file")
+        file?.let { Editor.start(it) }
+    } else {
+        println( "Starting game using resources file : $file")
+        file?.let { startGame(it) }
+    }
 }
 
 fun guessTickleFile(): File? {
@@ -45,7 +56,6 @@ fun guessTickleFile(): File? {
     }
     return resourceDir.listFiles().filter { it.extension == "tickle" }.sortedBy { it.lastModified() }.lastOrNull()
 }
-
 
 fun startGame(resourcesFile: File, scenePath: String? = null) {
 

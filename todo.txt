@@ -13,7 +13,7 @@ Next
 BUGS
 ====
 
-Allow scaling of circles - convert to a polygon if the scales factors are different
+Allow scaling of circles - convert to a polygon if the scale factors are different
 
 InputPicker :
 	Java FX key code name "Number Sign" does not map to anything in enum class Key
@@ -29,7 +29,6 @@ PixelOverlapping
 
 New Features
 ------------
-
 
 Support enums as attributes.
 	Message Button, calls Director or Producer
@@ -53,7 +52,7 @@ Undo/Redo in scene editor
 Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 
 Option to load textures only when needed.
-	Texture
+
 Editor to allow resources to be reloaded.
 
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
@@ -104,12 +103,28 @@ RevealStageView
 	Note. when rendering the outlines, it would be nice to do this in two stages, one for a white outline,
 	and again for a coloured thinner image coloured based on who's side the character belongs to.
 	Rather than have multiple overlapping views, have one compound view, so that we only need to scroll the compound view.
-FogOfWarStageView
+
+Fog of War
 	Filter which objects to render based on their proximity to friendly units.
-UncharteredStageView
-	Draw the scenery to off-screen buffer
-	Draw white blobs on revealed places
+	Note, this should NOT be a StageView, but a new interface RoleFilter.
+	The default filter should be NoFilter, which always returns true.
+
+ChartedStageView
+	Draw the scenery to an off-screen buffer (no alpha channel?)
+	Keep a "charted" image (scaled so that it isn't HUGE) : white blobs on a black background.
+	Keep track of all roles' positions given by a RoleFilter.
+	If they have moved since the last frame, draw to the charted image.
+	If the role is of type CircularSight, then get the radius, otherwise use a default radius.
+	Later, I could check for CustomeSight, and let the Role do the drawing (So objects can "see" in given directions for example).
 	Merge using logical AND
+
+Chart
+    Add support for creating a chart (a mini view of the world)
+    Updated every N frames.
+    If the Role is of type Chartable, then get the image using Chartable.chartPose(), otherwise ignore it.
+    Uses a RoleFilter to decide which roles are included on the chart.
+    Maybe have a ChartableRoleFilter, so that it can only return Chartable Roles.
+    If not, then emit a warning the first time a non-chartable role is returned.
 
 Much Later
 ==========
@@ -119,4 +134,4 @@ New Game Wizard
 	Hello World will have a font, a Play director and a Splash director
 		Splash will display some simple text and a button to lauch "level01"
 		Maybe also have a "Player" Role
-
+    Create an intellij project automatically?
