@@ -8,6 +8,7 @@ import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.editor.scene.history.ChangeDoubleParameter
+import uk.co.nickthecoder.tickle.editor.scene.history.ChangePolarParameter
 import uk.co.nickthecoder.tickle.editor.scene.history.Rotate
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.ActorResource
@@ -521,9 +522,7 @@ class GlassLayer(private val sceneEditor: SceneEditor)
         val parameter = data.parameter!! as PolarParameter
 
         fun set(angleRadians: Double, magnitude: Double) {
-            parameter.angle = Math.toDegrees(angleRadians)
-            parameter.magnitude = magnitude
-            sceneEditor.sceneResource.fireChange(actorResource, ModificationType.CHANGE)
+            sceneEditor.history.makeChange(ChangePolarParameter(actorResource, parameter, Math.toDegrees(angleRadians), magnitude))
         }
 
         override fun x() = actorResource.x + parameter.value.vector().x * data.scale
