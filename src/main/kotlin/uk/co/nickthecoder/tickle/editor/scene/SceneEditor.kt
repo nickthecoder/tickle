@@ -13,6 +13,7 @@ import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.scene.history.AddActor
 import uk.co.nickthecoder.tickle.editor.scene.history.DeleteActors
 import uk.co.nickthecoder.tickle.editor.scene.history.History
+import uk.co.nickthecoder.tickle.editor.scene.history.MoveToLayer
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
@@ -156,12 +157,11 @@ class SceneEditor(val sceneResource: SceneResource) {
     }
 
     fun moveSelectTo(layer: StageLayer) {
-        selection.forEach { actorResource ->
-            delete(actorResource)
-            layer.stageResource.actorResources.add(actorResource)
-            actorResource.layer = layer
-            sceneResource.fireChange(actorResource, ModificationType.NEW)
+        history.beginBatch()
+        selection.toList().forEach { actorResource ->
+            history.makeChange(MoveToLayer(actorResource, layer))
         }
+        history.endBatch()
     }
 
     fun onEditSnaps() {
