@@ -17,12 +17,12 @@ class Batch {
 
     fun makeChange(sceneEditor: SceneEditor, change: Change) {
         change.redo(sceneEditor)
-        val last = changes.lastOrNull()
-        if (last != null && change.mergeWith(last)) {
-            // Do nothing
-        } else {
-            changes.add(change)
+        changes.forEach { existingChange ->
+            if (change.mergeWith(existingChange)) {
+                return
+            }
         }
+        changes.add(change)
     }
 
     override fun toString(): String {

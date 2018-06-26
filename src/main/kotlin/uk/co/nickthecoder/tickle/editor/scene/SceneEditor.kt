@@ -347,11 +347,25 @@ class SceneEditor(val sceneResource: SceneResource) {
         var offsetX: Double = 0.0
         var offsetY: Double = 0.0
 
+        override fun onMouseReleased(event: MouseEvent) {
+            history.endBatch()
+            super.onMouseReleased(event)
+        }
+
         override fun onMousePressed(event: MouseEvent) {
             val wx = viewX(event)
             val wy = viewY(event)
 
+            // If we drag an actor, put all of the MoveActor Changes into one Batch.
+            // onMouseRelease ends the batch.
+            history.beginBatch()
+
             if (event.button == MouseButton.PRIMARY) {
+
+                selection.forEach { ar ->
+                    ar.draggedX = ar.x
+                    ar.draggedY = ar.y
+                }
 
                 val handle = layers.glass.findDragHandle(wx, wy)
                 if (handle != null) {
@@ -424,13 +438,16 @@ class SceneEditor(val sceneResource: SceneResource) {
             layers.glass.hover(viewX(event), viewY(event))
         }
 
+        // Move the selected actors
         override fun onMouseDragged(event: MouseEvent) {
             if (event.button == MouseButton.PRIMARY) {
                 selection.selected().forEach { actorResource ->
                     actorResource.draggedX += dragDeltaX
                     actorResource.draggedY -= dragDeltaY
+                    val oldX = actorResource.x
+                    val oldY = actorResource.y
                     snapActor(actorResource, false, !event.isControlDown)
-                    sceneResource.fireChange(actorResource, ModificationType.CHANGE)
+                    history.makeChange(MoveActor(actorResource, oldX, oldY))
                 }
             }
         }
