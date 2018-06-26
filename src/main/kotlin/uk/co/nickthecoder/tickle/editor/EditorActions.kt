@@ -25,6 +25,9 @@ object EditorActions {
     val ESCAPE = EditorAction("escape", KeyCode.ESCAPE)
     val DELETE = EditorAction("delete", KeyCode.DELETE)
 
+    val UNDO = EditorAction("undo", KeyCode.Z, control = true)
+    val REDO = EditorAction("redo", KeyCode.Z, control = true, shift = true)
+
     val ZOOM_RESET = EditorAction("zoom.reset", KeyCode.DIGIT0, control = true)
     val ZOOM_IN1 = EditorAction("zoom.in", KeyCode.PLUS, control = true)
     val ZOOM_IN2 = EditorAction("zoom.out", KeyCode.EQUALS, control = true)

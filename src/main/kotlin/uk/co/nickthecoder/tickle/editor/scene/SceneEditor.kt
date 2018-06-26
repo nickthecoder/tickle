@@ -10,13 +10,19 @@ import javafx.scene.paint.Color
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.scene.history.AddActor
+import uk.co.nickthecoder.tickle.editor.scene.history.History
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
 import uk.co.nickthecoder.tickle.resources.SceneResource
 
-
 class SceneEditor(val sceneResource: SceneResource) {
+
+    /**
+     * Stores the changes made to the scene to allow undo/redo.
+     */
+    val history = History(this)
 
     val scrollPane = ScrollPane()
 
@@ -73,6 +79,8 @@ class SceneEditor(val sceneResource: SceneResource) {
         with(shortcuts) {
             add(EditorActions.ESCAPE) { onEscape() }
             add(EditorActions.DELETE) { onDelete() }
+            add(EditorActions.UNDO) { onUndo() }
+            add(EditorActions.REDO) { onRedo() }
             add(EditorActions.ZOOM_RESET) { layers.scale = 1.0 }
             add(EditorActions.ZOOM_IN1) { layers.scale *= 1.2 }
             add(EditorActions.ZOOM_IN2) { layers.scale *= 1.2 }
@@ -170,16 +178,36 @@ class SceneEditor(val sceneResource: SceneResource) {
         mouseHandler = Select()
     }
 
+    fun onUndo() {
+        if (history.canUndo()) {
+            history.undo()
+        }
+    }
+
+    fun onRedo() {
+        if (history.canRedo()) {
+            history.redo()
+        }
+    }
+
+    fun addActor( actorResource: ActorResource) {
+        layers.currentLayer()?.stageConstraint?.addActorResource(actorResource)
+        layers.currentLayer()?.stageResource?.actorResources?.add(actorResource)
+        actorResource.layer = layers.currentLayer()
+
+        sceneResource.fireChange(actorResource, ModificationType.NEW)
+    }
+
     fun delete(actorResource: ActorResource) {
         actorResource.layer?.stageResource?.actorResources?.remove(actorResource)
         sceneResource.fireChange(actorResource, ModificationType.DELETE)
+        selection.remove(actorResource)
     }
 
     fun onDelete() {
         selection.selected().forEach { actorResource ->
             delete(actorResource)
         }
-        selection.clear()
     }
 
     fun resetZOrders() {
@@ -486,25 +514,21 @@ class SceneEditor(val sceneResource: SceneResource) {
 
         override fun onMousePressed(event: MouseEvent) {
 
-            if (layers.currentLayer()?.stageConstraint?.addActorResource(newActor) == true) {
-                layers.currentLayer()?.stageResource?.actorResources?.add(newActor)
-                newActor.layer = layers.currentLayer()
+            val change = AddActor(newActor)
 
-                if (event.isShiftDown) {
+            if (event.isShiftDown) {
 
-                    newActor = ActorResource()
-                    newActor.costumeName = costumeName
-                    layers.glass.newActor = newActor
+                newActor = ActorResource()
+                newActor.costumeName = costumeName
+                layers.glass.newActor = newActor
 
-                } else {
-                    layers.glass.newActor = null
-                    selection.clearAndSelect(newActor)
-                    mouseHandler = Select()
-                }
-                sceneResource.fireChange(newActor, ModificationType.NEW)
-
+            } else {
+                layers.glass.newActor = null
+                selection.clearAndSelect(newActor)
+                mouseHandler = Select()
             }
 
+            history.makeChange(change)
         }
 
     }

@@ -8,7 +8,7 @@ interface StageConstraint {
 
     fun forStage(stageName: String, stageResource: StageResource)
 
-    fun addActorResource(actorResource: ActorResource): Boolean
+    fun addActorResource(actorResource: ActorResource)
 
     fun removeActorResource(actorResource: ActorResource)
 
@@ -25,7 +25,7 @@ open class NoStageConstraint : StageConstraint {
 
     override fun forStage(stageName: String, stageResource: StageResource) {}
 
-    override fun addActorResource(actorResource: ActorResource) = true
+    override fun addActorResource(actorResource: ActorResource) {}
 
     override fun removeActorResource(actorResource: ActorResource) {}
 

@@ -13,9 +13,8 @@ class GridConstraint : NoStageConstraint() {
     @Attribute
     var ySpacing: Double = 40.0
 
-    override fun addActorResource(actorResource: ActorResource): Boolean {
+    override fun addActorResource(actorResource: ActorResource) {
         adjust(actorResource)
-        return true
     }
 
     override fun snapActor(actorResource: ActorResource, isNew: Boolean): Boolean {
