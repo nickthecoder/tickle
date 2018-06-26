@@ -9,6 +9,7 @@ import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.editor.scene.history.ChangeDoubleParameter
 import uk.co.nickthecoder.tickle.editor.scene.history.ChangePolarParameter
+import uk.co.nickthecoder.tickle.editor.scene.history.ChangeVector2dParameter
 import uk.co.nickthecoder.tickle.editor.scene.history.Rotate
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.ActorResource
@@ -567,9 +568,7 @@ class GlassLayer(private val sceneEditor: SceneEditor)
         val parameter = data.parameter!! as Vector2dParameter
 
         fun set(x: Double, y: Double) {
-            parameter.x = x
-            parameter.y = y
-            sceneEditor.sceneResource.fireChange(actorResource, ModificationType.CHANGE)
+            sceneEditor.history.makeChange(ChangeVector2dParameter(actorResource, parameter, x, y))
         }
 
         override fun x() = parameter.x!!
