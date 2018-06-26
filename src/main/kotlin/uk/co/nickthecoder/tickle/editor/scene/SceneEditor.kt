@@ -11,6 +11,7 @@ import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.scene.history.AddActor
+import uk.co.nickthecoder.tickle.editor.scene.history.DeleteActors
 import uk.co.nickthecoder.tickle.editor.scene.history.History
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.resources.ActorResource
@@ -190,10 +191,10 @@ class SceneEditor(val sceneResource: SceneResource) {
         }
     }
 
-    fun addActor( actorResource: ActorResource) {
-        layers.currentLayer()?.stageConstraint?.addActorResource(actorResource)
-        layers.currentLayer()?.stageResource?.actorResources?.add(actorResource)
-        actorResource.layer = layers.currentLayer()
+    fun addActor(actorResource: ActorResource, layer: StageLayer) {
+        layer.stageConstraint.addActorResource(actorResource)
+        layer.stageResource.actorResources.add(actorResource)
+        actorResource.layer = layer
 
         sceneResource.fireChange(actorResource, ModificationType.NEW)
     }
@@ -205,9 +206,7 @@ class SceneEditor(val sceneResource: SceneResource) {
     }
 
     fun onDelete() {
-        selection.selected().forEach { actorResource ->
-            delete(actorResource)
-        }
+        history.makeChange(DeleteActors(selection))
     }
 
     fun resetZOrders() {
@@ -514,21 +513,23 @@ class SceneEditor(val sceneResource: SceneResource) {
 
         override fun onMousePressed(event: MouseEvent) {
 
-            val change = AddActor(newActor)
+            layers.currentLayer?.let { layer ->
+                val change = AddActor(newActor, layer)
 
-            if (event.isShiftDown) {
+                if (event.isShiftDown) {
 
-                newActor = ActorResource()
-                newActor.costumeName = costumeName
-                layers.glass.newActor = newActor
+                    newActor = ActorResource()
+                    newActor.costumeName = costumeName
+                    layers.glass.newActor = newActor
 
-            } else {
-                layers.glass.newActor = null
-                selection.clearAndSelect(newActor)
-                mouseHandler = Select()
+                } else {
+                    layers.glass.newActor = null
+                    selection.clearAndSelect(newActor)
+                    mouseHandler = Select()
+                }
+
+                history.makeChange(change)
             }
-
-            history.makeChange(change)
         }
 
     }
