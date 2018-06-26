@@ -277,6 +277,18 @@
               "value": "190.0"
             }
           ]
+        },
+        {
+          "costume": "redOutline",
+          "x": 247,
+          "y": 478,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "sizeX": 72,
+          "sizeY": 72,
+          "alignmentX": 0.4861111111111111,
+          "alignmentY": 0.5277777777777778
         }
       ]
     }

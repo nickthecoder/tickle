@@ -7,10 +7,7 @@ import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
-import uk.co.nickthecoder.tickle.editor.scene.history.ChangeDoubleParameter
-import uk.co.nickthecoder.tickle.editor.scene.history.ChangePolarParameter
-import uk.co.nickthecoder.tickle.editor.scene.history.ChangeVector2dParameter
-import uk.co.nickthecoder.tickle.editor.scene.history.Rotate
+import uk.co.nickthecoder.tickle.editor.scene.history.*
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
@@ -423,6 +420,11 @@ class GlassLayer(private val sceneEditor: SceneEditor)
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
 
+            val oldX = actorResource.x
+            val oldY = actorResource.y
+            val oldSizeX = actorResource.size.x
+            val oldSizeY = actorResource.size.y
+
             val now = Vector2d(x, y)
             viewToActor(actorResource, now)
 
@@ -449,7 +451,8 @@ class GlassLayer(private val sceneEditor: SceneEditor)
             }
             actorResource.draggedX = actorResource.x
             actorResource.draggedY = actorResource.y
-            sceneEditor.sceneResource.fireChange(actorResource, ModificationType.CHANGE)
+
+            sceneEditor.history.makeChange(Resize(actorResource, oldX, oldY, oldSizeX, oldSizeY))
         }
 
         override fun x(): Double {
