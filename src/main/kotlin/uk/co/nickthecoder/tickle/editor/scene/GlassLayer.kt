@@ -7,15 +7,16 @@ import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.parameters.DoubleParameter
 import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
+import uk.co.nickthecoder.tickle.editor.scene.history.ChangeDoubleParameter
+import uk.co.nickthecoder.tickle.editor.scene.history.Rotate
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
 import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.resources.SceneResourceListener
 import uk.co.nickthecoder.tickle.util.rotate
-import uk.co.nickthecoder.tickle.util.string
 
-class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
+class GlassLayer(private val sceneEditor: SceneEditor)
 
     : Layer(), SelectionListener, SceneResourceListener {
 
@@ -37,8 +38,8 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
     private val dragHandles = mutableListOf<DragHandle>()
 
     init {
-        selection.listeners.add(this)
-        sceneResource.listeners.add(this)
+        sceneEditor.selection.listeners.add(this)
+        sceneEditor.sceneResource.listeners.add(this)
     }
 
     override fun drawContent() {
@@ -65,21 +66,21 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             save()
             setLineDashes(3.0, 10.0)
 
-            selection.selected().forEach { actorResource ->
+            sceneEditor.selection.selected().forEach { actorResource ->
                 save()
 
                 translate(actorResource.x, actorResource.y)
                 rotate(actorResource.direction.degrees - (actorResource.editorPose?.direction?.degrees ?: 0.0))
                 scale(actorResource.scale.x, actorResource.scale.y)
 
-                drawOutlined(selectionColor(actorResource === selection.latest())) { drawBoundingBox(actorResource) }
+                drawOutlined(selectionColor(actorResource === sceneEditor.selection.latest())) { drawBoundingBox(actorResource) }
 
                 restore()
             }
             restore()
         }
         // Name of the 'latest' actor
-        selection.latest()?.let { actor ->
+        sceneEditor.selection.latest()?.let { actor ->
             drawCostumeName(actor)
         }
 
@@ -123,7 +124,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
     override fun selectionChanged() {
         dragHandles.clear()
-        val latest = selection.latest()
+        val latest = sceneEditor.selection.latest()
         if (latest != null) {
             if (latest.costume()?.canRotate == true) {
                 dragHandles.add(RotateArrow("Direction", latest))
@@ -374,9 +375,8 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         override fun get() = actorResource.direction.degrees
 
         override fun set(degrees: Double) {
-            actorResource.direction.degrees = degrees
-            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
-
+            // I don't think this is used! ???
+            sceneEditor.history.makeChange(Rotate(actorResource, degrees))
         }
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
@@ -388,13 +388,12 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             var degrees = Math.toDegrees(if (atan < 0) atan + Math.PI * 2 else atan)
 
             if (snap) {
-                degrees = sceneResource.snapRotation.snapRotation(degrees)
+                degrees = sceneEditor.sceneResource.snapRotation.snapRotation(degrees)
             }
             val diff = degrees - actorResource.direction.degrees
 
-            selection.forEach { actor ->
-                actor.direction.degrees += diff
-                sceneResource.fireChange(actor, ModificationType.CHANGE)
+            sceneEditor.selection.forEach { actor ->
+                sceneEditor.history.makeChange(Rotate(actorResource, actor.direction.degrees + diff))
             }
         }
 
@@ -424,12 +423,10 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
 
             val now = Vector2d(x, y)
             viewToActor(actorResource, now)
-            println("*** Sent $x, $y Converted to ${now.string()}")
 
             val was = Vector2d(x(), y())
             viewToActor(actorResource, was)
 
-            println("--- Now  ${x()}, ${y()} Converted to ${was.string()}")
             val dx = now.x - was.x
             val dy = now.y - was.y
 
@@ -450,8 +447,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
             }
             actorResource.draggedX = actorResource.x
             actorResource.draggedY = actorResource.y
-            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
-            println("=== Set to ${x()} , ${y()}")
+            sceneEditor.sceneResource.fireChange(actorResource, ModificationType.CHANGE)
         }
 
         override fun x(): Double {
@@ -479,7 +475,6 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         }
 
         fun viewToActor(actorResource: ActorResource, vector: Vector2d) {
-            println("view to actor angle = ${-actorResource.direction.radians + (actorResource.editorPose?.direction?.radians ?: 0.0)}")
             vector.add(-actorResource.x, -actorResource.y)
             vector.rotate(-actorResource.direction.radians + (actorResource.editorPose?.direction?.radians ?: 0.0))
         }
@@ -498,8 +493,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         override fun get() = parameter.value ?: 0.0
 
         override fun set(degrees: Double) {
-            parameter.value = degrees
-            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
+            sceneEditor.history.makeChange(ChangeDoubleParameter(actorResource, parameter, degrees))
         }
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
@@ -529,7 +523,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         fun set(angleRadians: Double, magnitude: Double) {
             parameter.angle = Math.toDegrees(angleRadians)
             parameter.magnitude = magnitude
-            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
+            sceneEditor.sceneResource.fireChange(actorResource, ModificationType.CHANGE)
         }
 
         override fun x() = actorResource.x + parameter.value.vector().x * data.scale
@@ -576,7 +570,7 @@ class GlassLayer(val sceneResource: SceneResource, val selection: Selection)
         fun set(x: Double, y: Double) {
             parameter.x = x
             parameter.y = y
-            sceneResource.fireChange(actorResource, ModificationType.CHANGE)
+            sceneEditor.sceneResource.fireChange(actorResource, ModificationType.CHANGE)
         }
 
         override fun x() = parameter.x!!

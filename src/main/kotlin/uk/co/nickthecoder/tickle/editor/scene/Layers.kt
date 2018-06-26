@@ -17,7 +17,7 @@ import uk.co.nickthecoder.tickle.stage.ZOrderStageView
 
 /**
  */
-class Layers(val sceneResource: SceneResource, selection: Selection) {
+class Layers(val sceneEditor: SceneEditor) {
 
     val stack = StackPane()
 
@@ -27,7 +27,7 @@ class Layers(val sceneResource: SceneResource, selection: Selection) {
 
     private val includedLayers = mutableMapOf<String, List<StageLayer>>()
 
-    val glass = GlassLayer(sceneResource, selection)
+    val glass = GlassLayer(sceneEditor)
 
     private val map = mutableMapOf<String, StageLayer>()
 
@@ -64,9 +64,9 @@ class Layers(val sceneResource: SceneResource, selection: Selection) {
 
         loadIncludes()
 
-        val layout = Resources.instance.layouts.find(sceneResource.layoutName)
+        val layout = Resources.instance.layouts.find(sceneEditor.sceneResource.layoutName)
 
-        createStageLayers(sceneResource).forEach { layer ->
+        createStageLayers(sceneEditor.sceneResource).forEach { layer ->
             add(layer)
             stageLayers.add(layer)
             map[layer.stageName] = layer
@@ -108,7 +108,7 @@ class Layers(val sceneResource: SceneResource, selection: Selection) {
     }
 
     private fun loadIncludes() {
-        sceneResource.includes.forEach { include ->
+        sceneEditor.sceneResource.includes.forEach { include ->
             val includedSR = Game.instance.loadScene(include)
 
             val layers = mutableListOf<StageLayer>()

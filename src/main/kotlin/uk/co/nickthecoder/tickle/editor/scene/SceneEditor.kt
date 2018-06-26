@@ -31,7 +31,7 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     val selection = Selection()
 
-    val layers = Layers(sceneResource, selection)
+    val layers = Layers(this)
 
     val shortcuts = ShortcutHelper("SceneEditor", MainWindow.instance.borderPane)
 
@@ -318,47 +318,46 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     fun viewY(event: MouseEvent) = layers.viewY(event)
 
-    interface MouseHandler {
-        fun onMousePressed(event: MouseEvent) {
+    open inner class MouseHandler {
+
+        open fun onMousePressed(event: MouseEvent) {
+            event.consume()
+            // If we drag an actor, put all of the MoveActor Changes into one Batch.
+            // onMouseRelease ends the batch.
+            history.beginBatch()
+        }
+
+        open fun onDragDetected(event: MouseEvent) {
             event.consume()
         }
 
-        fun onDragDetected(event: MouseEvent) {
+        open fun onMouseMoved(event: MouseEvent) {
             event.consume()
         }
 
-        fun onMouseMoved(event: MouseEvent) {
+        open fun onMouseDragged(event: MouseEvent) {
             event.consume()
         }
 
-        fun onMouseDragged(event: MouseEvent) {
+        open fun onMouseReleased(event: MouseEvent) {
             event.consume()
+            history.endBatch()
         }
 
-        fun onMouseReleased(event: MouseEvent) {
-            event.consume()
-        }
-
-        fun escape() {}
+        open fun escape() {}
     }
 
-    inner class Select : MouseHandler {
+    inner class Select : MouseHandler() {
 
         var offsetX: Double = 0.0
         var offsetY: Double = 0.0
 
-        override fun onMouseReleased(event: MouseEvent) {
-            history.endBatch()
-            super.onMouseReleased(event)
-        }
-
         override fun onMousePressed(event: MouseEvent) {
+            super.onMousePressed(event)
+
             val wx = viewX(event)
             val wy = viewY(event)
 
-            // If we drag an actor, put all of the MoveActor Changes into one Batch.
-            // onMouseRelease ends the batch.
-            history.beginBatch()
 
             if (event.button == MouseButton.PRIMARY) {
 
@@ -454,7 +453,7 @@ class SceneEditor(val sceneResource: SceneResource) {
 
     }
 
-    inner class SelectArea(val startX: Double, val startY: Double) : MouseHandler {
+    inner class SelectArea(val startX: Double, val startY: Double) : MouseHandler() {
 
         override fun onMouseDragged(event: MouseEvent) {
             val wx = viewX(event)
@@ -485,22 +484,24 @@ class SceneEditor(val sceneResource: SceneResource) {
         }
 
         override fun onMouseReleased(event: MouseEvent) {
+            super.onMouseReleased(event)
             layers.glass.draw()
             mouseHandler = Select()
         }
     }
 
-    inner class Pan : MouseHandler {
+    inner class Pan : MouseHandler() {
         override fun onMouseDragged(event: MouseEvent) {
             layers.panBy(dragDeltaX, -dragDeltaY)
         }
 
         override fun onMouseReleased(event: MouseEvent) {
+            super.onMouseReleased(event)
             mouseHandler = Select()
         }
     }
 
-    inner class AdjustDragHandle(val dragHandle: GlassLayer.DragHandle) : MouseHandler {
+    inner class AdjustDragHandle(val dragHandle: GlassLayer.DragHandle) : MouseHandler() {
 
         override fun onMouseDragged(event: MouseEvent) {
             dragHandle.moveTo(viewX(event), viewY(event), !event.isControlDown)
@@ -508,11 +509,12 @@ class SceneEditor(val sceneResource: SceneResource) {
         }
 
         override fun onMouseReleased(event: MouseEvent) {
+            super.onMouseReleased(event)
             mouseHandler = Select()
         }
     }
 
-    inner class Stamp(val costumeName: String) : MouseHandler {
+    inner class Stamp(val costumeName: String) : MouseHandler() {
 
         var newActor = ActorResource(true)
 
