@@ -143,6 +143,7 @@
           "costume": "bee",
           "x": 598,
           "y": 501,
+          "zOrder": 10,
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1

@@ -11,9 +11,10 @@ class ActorAttributesBox(val sceneEditor: SceneEditor)
 
     var actorAttributesForm: ActorAttributesForm? = null
 
-    var actorResource: ActorResource? = null
+    var actorResource: ActorResource?
+        get() = actorAttributesForm?.actorResource
         set(v) {
-            if (field != v) {
+            if (actorAttributesForm?.actorResource != v) {
                 actorAttributesForm?.cleanUp()
                 stack.children.clear()
                 if (v != null) {

@@ -10,10 +10,7 @@ import javafx.scene.paint.Color
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
-import uk.co.nickthecoder.tickle.editor.scene.history.AddActor
-import uk.co.nickthecoder.tickle.editor.scene.history.DeleteActors
-import uk.co.nickthecoder.tickle.editor.scene.history.History
-import uk.co.nickthecoder.tickle.editor.scene.history.MoveToLayer
+import uk.co.nickthecoder.tickle.editor.scene.history.*
 import uk.co.nickthecoder.tickle.editor.util.background
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.ModificationType
@@ -41,9 +38,10 @@ class SceneEditor(val sceneResource: SceneResource) {
     val costumeBox = CostumePickerBox { selectCostumeName(it) }
     val layersBox = LayersBox(layers)
     val actorsBox = ActorsBox(this)
+    val actorAttributesBox = ActorAttributesBox(this)
 
     val costumesPane = TitledPane("Costume Picker", costumeBox.build())
-    val attributesPane = TitledPane("Attributes", ActorAttributesBox(this).build())
+    val attributesPane = TitledPane("Attributes", actorAttributesBox.build())
     val stagesPane = TitledPane("Actors", actorsBox.build())
     val layersPane = TitledPane("Layers", layersBox.build())
 
@@ -149,7 +147,7 @@ class SceneEditor(val sceneResource: SceneResource) {
             menu.items.addAll(SeparatorMenuItem())
         }
 
-        val resetAllZOrders = EditorActions.RESET_ZORDERS.createMenuItem { resetZOrders() }
+        val resetAllZOrders = EditorActions.RESET_ZORDERS.createMenuItem { onResetZOrders() }
 
         menu.items.addAll(resetAllZOrders, SeparatorMenuItem())
 
@@ -209,14 +207,18 @@ class SceneEditor(val sceneResource: SceneResource) {
         history.makeChange(DeleteActors(selection))
     }
 
-    fun resetZOrders() {
+    fun onResetZOrders() {
+        history.beginBatch()
         sceneResource.stageResources.forEach { _, stageResource ->
             stageResource.actorResources.forEach { ar ->
-                ar.costume()?.let {
-                    ar.zOrder = it.zOrder
+                ar.costume()?.let { costume ->
+                    if (ar.zOrder != costume.zOrder) {
+                        history.makeChange(ChangeZOrder(ar, costume.zOrder))
+                    }
                 }
             }
         }
+        history.endBatch()
     }
 
 
