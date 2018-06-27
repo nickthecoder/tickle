@@ -5,7 +5,8 @@ import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.tickle.editor.scene.history.ChangedDoubleParameter
+import uk.co.nickthecoder.tickle.editor.scene.history.ChangedParameter
+import uk.co.nickthecoder.tickle.editor.scene.history.ChangedValueParameter
 import uk.co.nickthecoder.tickle.editor.util.TextStyleParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 import uk.co.nickthecoder.tickle.resources.*
@@ -111,12 +112,16 @@ class ActorAttributesForm(
 
                 val inner = event.innerParameter
                 val oldValue = event.oldValue
-                when (inner) {
-                    is DoubleParameter -> {
-                        if (oldValue is Double) {
-                            sceneEditor.history.makeChange(ChangedDoubleParameter(actorResource, inner, oldValue))
-                        }
-                    }
+
+                if (inner is DoubleParameter && oldValue is Double) {
+                    sceneEditor.history.makeChange(ChangedParameter(actorResource, inner, oldValue))
+                } else if (inner is StringParameter && oldValue is String) {
+                    sceneEditor.history.makeChange(ChangedParameter(actorResource, inner, oldValue))
+                } else if (inner is IntParameter && oldValue is Int) {
+                    sceneEditor.history.makeChange(ChangedParameter(actorResource, inner, oldValue))
+                } else if (inner is ValueParameter<*>) {
+                    // This uses ValueParameter.coerce, which isn't type safe, and throws if the type of oldValue doesn't match.
+                    sceneEditor.history.makeChange(ChangedValueParameter(actorResource, inner, oldValue))
                 }
             }
 
