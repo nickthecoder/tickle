@@ -56,7 +56,7 @@ class ActorAttributesForm(
     val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
     val groupP = SimpleGroupParameter("actorGroup")
-            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP, textP, textStyleP)
+            .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP)
             .asVertical()
 
     var dirty = false
@@ -69,6 +69,10 @@ class ActorAttributesForm(
     init {
 
         actorResource.textStyle?.let { textStyleP.from(it) }
+
+        if (actorResource.isText()) {
+            groupP.addParameters(textP, textStyleP)
+        }
 
         if (actorResource.isSizable()) {
             groupP.addParameters(resizableGroupP)

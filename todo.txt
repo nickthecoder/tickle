@@ -1,18 +1,17 @@
 Current Work
 ============
 
-Undo/Redo in scene editor
-		Attributes in form
 
+Next
+====
+
+Remove "text" stuff from the ActorAttributesBox for actors which aren't text-based.
 
 Add textAlignment x&y to ActorResource?
 	Remove it from Style?
 	But what about color and outlineColor? And font?
 	Probably best for Costume to store a "default" style, and allow each actor to override it.
 		Only save values that differ from the costume.
-
-Next
-====
 
 BUGS
 ====
