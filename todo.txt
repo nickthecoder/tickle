@@ -1,6 +1,10 @@
 Current Work
 ============
 
+Undo/Redo in scene editor
+		Attributes in form
+
+
 Add textAlignment x&y to ActorResource?
 	Remove it from Style?
 	But what about color and outlineColor? And font?
@@ -32,21 +36,6 @@ New Features
 
 Support enums as attributes.
 	Message Button, calls Director or Producer
-
-Undo/Redo in scene editor
-	Changes :
-		New ActorResource
-		Delete ActorResource
-		ActorResource changes stage
-		Edit ActorResource
-			Can be changed by editing Parameters or by dragging
-			When a Parameter change event is fired, store the name of the parameter, and its old and new value.
-			When dragging a handle, just let the above handle it?
-		OR add a new listeners on ActorResource (each field has a set(v) method).
-			When moving an actorResource (or set of), then treat this differently??
-
-		Note. dragging multiple ActorResources may need to be handled in a different way???
-		Ignore snap data for now.
 
 
 Edit Shape enclosed in a scroll pane, and Pose can be scaled.

@@ -5,12 +5,16 @@ import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
 import uk.co.nickthecoder.paratask.parameters.*
+import uk.co.nickthecoder.tickle.editor.scene.history.ChangedDoubleParameter
 import uk.co.nickthecoder.tickle.editor.util.TextStyleParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 import uk.co.nickthecoder.tickle.resources.*
 
 
-class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: SceneResource)
+class ActorAttributesForm(
+        val sceneEditor: SceneEditor,
+        val actorResource: ActorResource,
+        val sceneResource: SceneResource)
 
     : SceneResourceListener, ParameterListener {
 
@@ -102,6 +106,20 @@ class ActorAttributesForm(val actorResource: ActorResource, val sceneResource: S
     override fun parameterChanged(event: ParameterEvent) {
         if (!ignoreChanges) {
             dirty = true
+
+            if (!sceneEditor.history.updating) {
+
+                val inner = event.innerParameter
+                val oldValue = event.oldValue
+                when (inner) {
+                    is DoubleParameter -> {
+                        if (oldValue is Double) {
+                            sceneEditor.history.makeChange(ChangedDoubleParameter(actorResource, inner, oldValue))
+                        }
+                    }
+                }
+            }
+
             Platform.runLater {
                 if (dirty) {
                     updateActorResource()

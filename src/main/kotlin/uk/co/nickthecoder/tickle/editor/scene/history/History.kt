@@ -37,6 +37,10 @@ class History(private val sceneEditor: SceneEditor) {
      */
     private var savedIndex = 0
 
+    /**
+     * Set to true during undo and redo so that ParameterListeners don't cause ANOTHER Change to be added to the history.
+     */
+    var updating = false
 
     fun canUndo() = currentIndex > 0 || currentBatch != null
 
@@ -51,6 +55,7 @@ class History(private val sceneEditor: SceneEditor) {
 
     fun undo() {
         if (canUndo()) {
+            updating = true
             if (currentBatch == null) {
                 currentIndex--
                 val batch = history[currentIndex]
@@ -58,14 +63,17 @@ class History(private val sceneEditor: SceneEditor) {
             } else {
                 abandonBatch()
             }
+            updating = false
         }
     }
 
     fun redo() {
         if (canRedo()) {
+            updating = true
             val batch = history[currentIndex]
             currentIndex++
             batch.redo(sceneEditor)
+            updating = false
         }
     }
 

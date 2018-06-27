@@ -491,7 +491,8 @@ class CostumeTab(val name: String, val costume: Costume)
                     densityP.hidden = bodyTypeP.value != BodyType.DYNAMIC && bodyTypeP.value != BodyType.STATIC
                     frictionP.hidden = bodyTypeP.value != BodyType.DYNAMIC && bodyTypeP.value != BodyType.STATIC
                 }
-                bodyTypeP.parameterListeners.fireValueChanged(bodyTypeP)
+                // TODO Why are we firing a change event?
+                bodyTypeP.parameterListeners.fireValueChanged(bodyTypeP, bodyTypeP.value)
             }
 
             fun initParameters(fixtureDef: TickleFixtureDef) {

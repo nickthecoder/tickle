@@ -18,7 +18,7 @@ class ActorAttributesBox(val sceneEditor: SceneEditor)
                 actorAttributesForm?.cleanUp()
                 stack.children.clear()
                 if (v != null) {
-                    actorAttributesForm = ActorAttributesForm(v, sceneEditor.sceneResource)
+                    actorAttributesForm = ActorAttributesForm(sceneEditor, v, sceneEditor.sceneResource)
                     stack.children.add(actorAttributesForm!!.build())
                 }
             }
