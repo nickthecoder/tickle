@@ -204,7 +204,12 @@ class SceneEditor(val sceneResource: SceneResource) {
     }
 
     fun onDelete() {
-        history.makeChange(DeleteActors(selection))
+        val focus = scrollPane.scene.focusOwner
+        if (focus is TextInputControl || focus is Spinner<*>) {
+            ShortcutHelper.ignore()
+        } else {
+            history.makeChange(DeleteActors(selection))
+        }
     }
 
     fun onResetZOrders() {
