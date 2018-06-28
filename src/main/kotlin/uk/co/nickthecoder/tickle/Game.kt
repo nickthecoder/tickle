@@ -12,6 +12,7 @@ import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.util.AutoFlushPreferences
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
+import java.io.FileNotFoundException
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class Game(
@@ -101,8 +102,17 @@ class Game(
     }
 
     fun startScene(scenePath: String) {
+        val oldSceneName = sceneName
         sceneName = scenePath
-        startScene(loadScene(Resources.instance.scenePathToFile(scenePath)))
+        try {
+            startScene(loadScene(Resources.instance.scenePathToFile(scenePath)))
+        } catch (e: FileNotFoundException) {
+            sceneName = oldSceneName
+            println("Scene $scenePath not found. Ignoring.")
+        } catch (e: Exception) {
+            sceneName = oldSceneName
+            println("Failed to load scene $scenePath. Ignoring. $e")
+        }
     }
 
     private fun startScene(sceneResource: SceneResource) {

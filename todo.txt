@@ -12,8 +12,6 @@ Copy existing levels, and make the original easier
 Restart button always visible???
 And Exit button???
 
-Don't delete the object when delete key pressed while editing parameters.
-
 BUGS
 ====
 

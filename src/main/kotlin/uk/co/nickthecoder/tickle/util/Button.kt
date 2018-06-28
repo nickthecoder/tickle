@@ -46,9 +46,9 @@ abstract class Button : AbstractRole(), MouseListener {
 
     open fun onReleased(event: MouseEvent) {
         if (down) {
-            down = false
             onClicked(event)
         }
+        down = false
     }
 
     open fun onClicked(event: MouseEvent) {}
