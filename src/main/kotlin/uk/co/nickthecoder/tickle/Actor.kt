@@ -62,6 +62,15 @@ class Actor(var costume: Costume, val role: Role? = null)
             }
     }
 
+    /**
+     * Scales the Actor, if this Actor the JBox2d physics engine, then the shapes and the joints between them will
+     * also be scaled. However, if the actor is scaled by different x and y values, and circular shapes are used,
+     * then these will be converted to polygons, because JBox2d doesn't support ellipses.
+     * So make sure that you only scale by scalars (equal x and y values) if this would cause problems
+     * (polygons are slower than circles, and polygons won't roll as nicely due to their pointy nature).
+     * Also note that once a circle has been converted to a polygon, resetting the scale will NOT return to
+     * using circles.
+     */
     var scale = Vector2d(1.0, 1.0)
 
     /**

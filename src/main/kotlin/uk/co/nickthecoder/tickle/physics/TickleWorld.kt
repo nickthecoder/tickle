@@ -198,6 +198,10 @@ fun Body.scale(scaleX: Float, scaleY: Float) {
     isAwake = true
 }
 
+/**
+ * Note. If scaleX != scaleY, then any CircleShapes will be converted to polygons
+ * (because ellipses aren't supported by JBox2d).
+ */
 fun Fixture.scale(body: Body, scaleX: Float, scaleY: Float) {
     val shape = shape
 
@@ -205,9 +209,20 @@ fun Fixture.scale(body: Body, scaleX: Float, scaleY: Float) {
 
     when (shape) {
         is CircleShape -> {
-            shape.m_radius *= scaleX
-            shape.m_p.x *= scaleX
-            shape.m_p.y *= scaleY
+            if (scaleX == scaleY) {
+                shape.m_radius *= scaleX
+                shape.m_p.x *= scaleX
+                shape.m_p.y *= scaleY
+            } else {
+                // Ellipses aren't supported, so lets convert the circle to a polygon
+                val count = 8
+                val points = Array<Vec2>(count) {
+                    val angle = it * Math.PI * 2 / count
+                    Vec2((Math.cos(angle) * shape.m_radius * scaleX).toFloat(), (Math.sin(angle) * shape.m_radius * scaleY).toFloat())
+                }
+                newShape = PolygonShape()
+                newShape.set(points, count)
+            }
         }
         is PolygonShape -> {
             val points = Array<Vec2>(shape.vertexCount) { Vec2(shape.vertices[it].x * scaleX, shape.vertices[it].y * scaleY) }
@@ -246,4 +261,11 @@ fun Joint.anchorB(out: Vector2d) {
     val world = this.bodyB.world as TickleWorld
     getAnchorB(tempVec2)
     world.worldToPixels(out, tempVec2)
+}
+
+/**
+ * Vec2 class only has a scalar multiply method, so this adds a vector multiplication.
+ */
+fun Vec2.mul(scaleX: Float, scaleY: Float): Vec2 {
+    return Vec2(x * scaleX, y * scaleY)
 }

@@ -4,13 +4,8 @@ Current Work
 Next
 ====
 
-Don't crash when starting a scene which doesn't exist.
-
 More levels in puzzle picnic.
 Copy existing levels, and make the original easier
-
-Restart button always visible???
-And Exit button???
 
 BUGS
 ====
