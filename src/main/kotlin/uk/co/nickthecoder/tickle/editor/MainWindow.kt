@@ -4,9 +4,8 @@ import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.Scene
-import javafx.scene.control.Accordion
-import javafx.scene.control.TitledPane
-import javafx.scene.control.ToolBar
+import javafx.scene.control.*
+import javafx.scene.control.ButtonBar.ButtonData
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -28,7 +27,7 @@ import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Layout
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.Sound
-import uk.co.nickthecoder.tickle.util.JsonResources
+
 
 class MainWindow(val stage: Stage, val glWindow: Window) {
 
@@ -81,7 +80,6 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         val toolBarPadding = HBox()
         HBox.setHgrow(toolBarPadding, Priority.ALWAYS);
         with(toolBar.items) {
-            add(EditorActions.RESOURCES_SAVE.createButton(shortcuts) { save() })
             add(EditorActions.RELOAD.createButton(shortcuts) { reload() })
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
             add(EditorActions.RUN.createButton(shortcuts) { startGame() })
@@ -115,21 +113,51 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
         stage.show()
         instance = this
-        stage.onCloseRequest = EventHandler<WindowEvent> { onCloseRequest() }
+        stage.onCloseRequest = EventHandler<WindowEvent> { onCloseRequest(it) }
 
     }
 
-    fun onCloseRequest() {
-        // TODO Check if there are tabs open, and if so, ask if they should be saved.
+    fun onCloseRequest(event: WindowEvent) {
+        // Check if there are tabs open, and if so, ask if they should be saved.
+        if (tabPane.tabs.filterIsInstance<EditTab>().isNotEmpty()) {
+            val alert = Alert(Alert.AlertType.CONFIRMATION)
+            alert.title = "Save Changes?"
+            alert.contentText = "Save changes before closing?"
+            val save = ButtonType("Save")
+            val ignore = ButtonType("Ignore")
+            val cancel = ButtonType("Cancel", ButtonData.CANCEL_CLOSE)
+            alert.buttonTypes.setAll(save, ignore, cancel)
+
+            when (alert.showAndWait().get()) {
+                save -> {
+                    // Note. this is inefficient, as the resources are saved to disk for every opened tab.
+                    // It is quick though, so I haven't bothered to make it save only once.
+                    tabPane.tabs.forEach { tab ->
+                        if (tab is EditTab) {
+                            if (!tab.save()) {
+                                tab.isSelected = true
+                                // Tab not saved, so abort the closing of the main window.
+                                event.consume()
+                                return
+                            }
+                        }
+                    }
+                }
+                cancel -> {
+                    event.consume()
+                    return
+                }
+            }
+        }
 
         with(resourcesTree.resources.preferences) {
             isMaximized = stage.isMaximized
             if (!isMaximized) {
-                windowWidth = stage.width
-                windowHeight = stage.height
+                windowWidth = scene.width
+                windowHeight = scene.height
             }
         }
-        save()
+        resourcesTree.resources.save()
     }
 
     fun accordionPane(n: Int) {
@@ -140,17 +168,6 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     fun findTab(data: Any): EditorTab? {
         return tabPane.tabs.firstOrNull { it.data == data }
-    }
-
-    fun save() {
-        tabPane.tabs.forEach { tab ->
-            if (tab is EditTab) {
-                if (!tab.save()) {
-                    tab.isSelected = true
-                }
-            }
-        }
-        JsonResources(Resources.instance).save(Resources.instance.file)
     }
 
     fun reload() {

@@ -706,7 +706,6 @@ class RenameCostumeTask(val oldCostumeName: String, val newCostumeName: String)
             .addParameters(informationP)
 
     override fun run() {
-        MainWindow.instance.save()
         val fileLister = FileLister(extensions = listOf("scene"))
         fileLister.listFiles(Resources.instance.sceneDirectory).forEach { file ->
             val json = JsonScene(file)
