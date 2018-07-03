@@ -4,18 +4,16 @@ Current Work
 Next
 ====
 
-Reload resources while in the editor.
-    Update the thumbnails
-
-Double click an existing Pose within a Teture to 
+Double click an existing Pose within a Texture to recreate its bounds.
+    Maybe a context menu, with double click to open the Pose's tab.
 
 More levels in puzzle picnic.
-Copy existing levels, and make the original easier
+
+Clear "level complete" preferences, to test Doll's House.
+    Shortcut key on the main menu / route menu.
 
 BUGS
 ====
-
-Allow scaling of circles - convert to a polygon if the scale factors are different
 
 InputPicker :
 	Java FX key code name "Number Sign" does not map to anything in enum class Key
@@ -32,9 +30,12 @@ PixelOverlapping
 New Features
 ------------
 
+Key combos, such as Shift+XXX and Ctrl+XXX
+
 Support enums as attributes.
 
 Message Button, calls Director or Producer
+    Maybe use this for the "Exit" button in Rag Doll
 
 Edit Shape enclosed in a scroll pane, and Pose can be scaled.
 

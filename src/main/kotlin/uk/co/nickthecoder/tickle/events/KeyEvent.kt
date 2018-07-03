@@ -7,11 +7,6 @@ class KeyEvent(
         val key: Key,
         val scanCode: Int,
         val state: ButtonState,
-        val mods: Int) {
-
-    var consumed: Boolean = false
-
-    fun consume() {
-        consumed = true
-    }
+        val mods: Int)
+    : Event() {
 }

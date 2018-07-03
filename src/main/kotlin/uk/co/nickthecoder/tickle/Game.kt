@@ -205,7 +205,7 @@ class Game(
 
     override fun onKey(event: KeyEvent) {
         producer.onKey(event)
-        if (event.consumed) {
+        if (event.isConsumed()) {
             return
         }
         director.onKey(event)
@@ -251,7 +251,7 @@ class Game(
             mouseCapturedBy = to
             previousScreenMousePosition.set(event.screenPosition)
         }
-        return event.consumed
+        return event.isConsumed()
     }
 
     private var runLaters = ConcurrentLinkedQueue<() -> Unit>()

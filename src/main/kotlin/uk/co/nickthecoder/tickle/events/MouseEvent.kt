@@ -8,25 +8,20 @@ class MouseEvent(
         val button: Int,
         val state: ButtonState,
         val mods: Int
-) {
+) :Event() {
+
     val screenPosition = Vector2d()
 
     val viewPosition = Vector2d()
 
-    internal var consumed: Boolean = false
-
     internal var captured: Boolean = false
-
-    fun consume() {
-        consumed = true
-    }
 
     /**
      * Capture the mouse, so that only the caller receives future mouse events until [release] is called.
      */
     fun capture() {
         captured = true
-        consumed = true
+        consume()
     }
 
     /**
@@ -34,7 +29,7 @@ class MouseEvent(
      */
     fun release() {
         captured = false
-        consumed = true
+        consume()
     }
 
 }

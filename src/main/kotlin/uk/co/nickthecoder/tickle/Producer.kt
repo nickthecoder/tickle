@@ -9,17 +9,15 @@ import java.util.prefs.Preferences
 
 /**
  * Looks at the big picture, and shouldn't be involved in the minor details.
- * Your Producer class (if you have one) should named after your game. e.g. "SpaceInvaders"
- * Many games don't need a Producer, and therefore use the class NoProducer.
+ * Your Producer class (if you have one) should be named after your game. e.g. "SpaceInvaders"
+ * Many games don't need a Producer, and therefore use the class [NoProducer].
  *
  * Example responsibilities of a Producer :
+ * * Perform actions when the game first starts and when it ends.
+ * * Add additional auto-generated resources to the Resources class at the beginning of the game.
+ * * To hold information carried forward from one scene to the next, such as score and lives remaining.
  *
- * Perform actions when the game first starts and when it ends.
- * Add additional auto-generated resources to the Resources class at the beginning of the game.
- * Take a snapshot of the screen when a particular key is pressed.
- * To hold information carried forward from one level to the next, such as score and lives remaining.
- *
- * See [Director]
+ * See also [Director].
  */
 interface Producer : MouseButtonListener {
 
@@ -68,6 +66,10 @@ interface Producer : MouseButtonListener {
 
 }
 
+/**
+ * This is a convenient base class, as it contains default implementations for all methods defined in [Producer].
+ * All are empty, except for [layout] and [onResize].
+ */
 abstract class AbstractProducer : Producer {
 
     override fun sceneLoaded() {}
@@ -111,7 +113,7 @@ abstract class AbstractProducer : Producer {
      */
     override fun layout() {
         val gameInfo = Resources.instance.gameInfo
-        if (gameInfo.fullScreen && gameInfo.resizable == false) {
+        if (gameInfo.fullScreen && !gameInfo.resizable) {
             Game.instance.scene.layoutWithMargins()
         } else {
             Game.instance.scene.layoutToFit()
@@ -122,4 +124,7 @@ abstract class AbstractProducer : Producer {
 
 }
 
+/**
+ * Used by games which need no special Producer.
+ */
 class NoProducer : AbstractProducer()

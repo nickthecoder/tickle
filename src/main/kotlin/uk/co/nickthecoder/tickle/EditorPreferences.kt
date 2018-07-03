@@ -12,10 +12,20 @@ class EditorPreferences {
 
     var costumePickerThumbnailSize: Int = 40
 
+    /**
+     * The size of the scene used by the editor's MainWindow.
+     * This allows the window to be the same size as the last time the editor was run.
+     * Note, the size and isMaximized are NOT shown in the EditorPreferencesTask, and therefore
+     * cannot be edited directly by the user.
+     */
     var windowWidth = 1000.0
 
     var windowHeight = 600.0
 
+    /**
+     * Is the editor's MainWindow maximized? When true, the windowWidth and windowHeight are NOT
+     * updated when the window closes
+     */
     var isMaximized = false
 
     override fun toString(): String {

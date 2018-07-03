@@ -139,7 +139,7 @@ abstract class AbstractStageView(override val comparator: Comparator<ActorDetail
             mouseCapturedBy?.let {
                 event.captured = true
                 it.onMouseButton(event)
-                if (event.consumed) {
+                if (event.isConsumed()) {
                     if (!event.captured) {
                         mouseCapturedBy = null
                     }
@@ -153,7 +153,7 @@ abstract class AbstractStageView(override val comparator: Comparator<ActorDetail
                     val role = actor.role
                     if (role is MouseButtonListener) {
                         role.onMouseButton(event)
-                        if (event.consumed) {
+                        if (event.isConsumed()) {
                             if (event.captured) {
                                 mouseCapturedBy = role
                             } else {
