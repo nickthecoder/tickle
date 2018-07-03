@@ -155,6 +155,9 @@ class JsonResources {
             jpreferences.add("packages", jpackages)
             jpreferences.add("treeThumbnailSize", treeThumnailSize)
             jpreferences.add("costumePickerThumbnailSize", costumePickerThumbnailSize)
+            jpreferences.add("isMaximized", isMaximized)
+            jpreferences.add("windowWidth", windowWidth)
+            jpreferences.add("windowHeight", windowHeight)
             return jpreferences
         }
     }
@@ -173,9 +176,12 @@ class JsonResources {
                 ClassLister.packages(packages)
             }
 
-            outputFormat = EditorPreferences.JsonFormat.valueOf(jpreferences.getString("outputFormat", "PRETTY"))
-            treeThumnailSize = jpreferences.getInt("treeThumbnailSize", 24)
-            costumePickerThumbnailSize = jpreferences.getInt("costumePickerThumbnailSize", 40)
+            outputFormat = EditorPreferences.JsonFormat.valueOf(jpreferences.getString("outputFormat", outputFormat.name))
+            treeThumnailSize = jpreferences.getInt("treeThumbnailSize", treeThumnailSize)
+            costumePickerThumbnailSize = jpreferences.getInt("costumePickerThumbnailSize", costumePickerThumbnailSize)
+            isMaximized = jpreferences.getBoolean("isMaximized", false)
+            windowWidth = jpreferences.getDouble("windowWidth", windowWidth)
+            windowHeight = jpreferences.getDouble("windowHeight", windowHeight)
             // println("Loaded preferences : ${resources.preferences}")
         }
     }

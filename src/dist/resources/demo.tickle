@@ -26,7 +26,10 @@
       "uk.co.nickthecoder.demo"
     ],
     "treeThumbnailSize": 24,
-    "costumePickerThumbnailSize": 50
+    "costumePickerThumbnailSize": 50,
+    "isMaximized": false,
+    "windowWidth": 757,
+    "windowHeight": 754
   },
   "layouts": [
     {

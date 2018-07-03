@@ -12,6 +12,12 @@ class EditorPreferences {
 
     var costumePickerThumbnailSize: Int = 40
 
+    var windowWidth = 1000.0
+
+    var windowHeight = 600.0
+
+    var isMaximized = false
+
     override fun toString(): String {
         return "outputFormat=$outputFormat packages=$packages"
     }

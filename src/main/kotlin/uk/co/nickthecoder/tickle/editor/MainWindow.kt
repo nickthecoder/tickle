@@ -1,6 +1,7 @@
 package uk.co.nickthecoder.tickle.editor
 
 import javafx.application.Platform
+import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.control.Accordion
@@ -10,6 +11,7 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.stage.Stage
+import javafx.stage.WindowEvent
 import uk.co.nickthecoder.paratask.ParaTask
 import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.MyTabPane
@@ -44,7 +46,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     val tabPane = MyTabPane<EditorTab>()
 
-    val scene = Scene(borderPane, 1000.0, 650.0)
+    val scene = Scene(borderPane, resourcesTree.resources.preferences.windowWidth, resourcesTree.resources.preferences.windowHeight)
 
     private var extraSidePanels: Collection<TitledPane> = emptyList()
     private var extraButtons: Collection<Node> = emptyList()
@@ -108,8 +110,26 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         val resource = MainWindow::class.java.getResource("tickle.css")
         scene.stylesheets.add(resource.toExternalForm())
 
+        if (resourcesTree.resources.preferences.isMaximized) {
+            stage.isMaximized = true
+        }
         stage.show()
         instance = this
+        stage.onCloseRequest = EventHandler<WindowEvent> { onCloseRequest() }
+
+    }
+
+    fun onCloseRequest() {
+        // TODO Check if there are tabs open, and if so, ask if they should be saved.
+
+        with(resourcesTree.resources.preferences) {
+            isMaximized = stage.isMaximized
+            if (!isMaximized) {
+                windowWidth = stage.width
+                windowHeight = stage.height
+            }
+        }
+        save()
     }
 
     fun accordionPane(n: Int) {

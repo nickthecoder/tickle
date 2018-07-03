@@ -4,6 +4,11 @@ Current Work
 Next
 ====
 
+Reload resources while in the editor.
+    Update the thumbnails
+
+Double click an existing Pose within a Teture to 
+
 More levels in puzzle picnic.
 Copy existing levels, and make the original easier
 
