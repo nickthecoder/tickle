@@ -16,6 +16,9 @@ interface Appearance {
 
     val directionRadians: Double
 
+    val directionDegrees
+        get() = Math.toDegrees(directionRadians)
+
     /**
      * The natural direction. i.e. if the Actor moved "forward", which mathematical angle would that be?
      * For the default value of 0, the image is pointing to the right.
