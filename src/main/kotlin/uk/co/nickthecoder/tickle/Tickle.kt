@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle
 
+import javafx.application.Application
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
@@ -34,11 +35,13 @@ fun namedMain(programName: String, args: Array<String>) {
     var showHelp = false
     var sceneName: String? = null
     var fullScreen: Boolean? = null
+    var newWizard = false
 
     var i = 0
     while (i < args.size) {
         when (args[i]) {
             "--help" -> showHelp = true
+            "--new" -> newWizard = true
             "--editor" -> startEditor = true
             "--fullscreen" -> fullScreen = true
             "--windowed" -> fullScreen = false
@@ -65,6 +68,10 @@ fun namedMain(programName: String, args: Array<String>) {
 
     if (showHelp) {
         help(programName)
+
+    } else if (newWizard) {
+        Application.launch(NewGameWizardApp::class.java)
+
     } else {
 
         if (resourcesFile == null) {
