@@ -5,7 +5,7 @@
     "width": 1024,
     "height": 800,
     "resizable": true,
-    "fullScreen": true,
+    "fullScreen": false,
     "initialScene": "level01",
     "testScene": "bounceTest",
     "producer": "uk.co.nickthecoder.demo.Demo",

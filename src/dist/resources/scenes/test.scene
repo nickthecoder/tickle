@@ -7,7 +7,7 @@
     }
   ],
   "background": "#4d3399",
-  "showMouse": false,
+  "showMouse": true,
   "layout": "default",
   "snapToGrid": {
     "enabled": false,
