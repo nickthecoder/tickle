@@ -6,10 +6,7 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
-import uk.co.nickthecoder.paratask.parameters.BooleanParameter
-import uk.co.nickthecoder.paratask.parameters.FileParameter
-import uk.co.nickthecoder.paratask.parameters.IntParameter
-import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.util.child
 import uk.co.nickthecoder.paratask.util.process.Exec
 import uk.co.nickthecoder.paratask.util.process.OSCommand
@@ -59,14 +56,19 @@ class NewGameWizard : AbstractTask() {
     val initialSceneName = StringParameter("initialSceneName", required = true, value = "menu")
 
     val width = IntParameter("width", value = 640)
+    val cross = LabelParameter("cross", "x")
     val height = IntParameter("height", value = 480)
+
+    val size = SimpleGroupParameter("size")
+            .addParameters(width, cross, height)
+            .asHorizontal(LabelPosition.NONE)
 
     val intellij = BooleanParameter("createIntelliJProject", value = true)
 
     val git = BooleanParameter("initialiseGit", value = true)
 
     init {
-        taskD.addParameters(gameName, parentDirectory, packagePrefix, width, height, initialSceneName, intellij, git)
+        taskD.addParameters(gameName, parentDirectory, packagePrefix, size, initialSceneName, intellij, git)
     }
 
     override fun check() {
