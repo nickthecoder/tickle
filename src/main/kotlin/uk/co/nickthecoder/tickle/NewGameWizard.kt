@@ -6,6 +6,7 @@ import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
+import uk.co.nickthecoder.paratask.parameters.BooleanParameter
 import uk.co.nickthecoder.paratask.parameters.FileParameter
 import uk.co.nickthecoder.paratask.parameters.IntParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
@@ -26,14 +27,22 @@ class NewGameWizardApp : Application() {
     }
 }
 
+fun main(vararg args: String) {
+    Application.launch(NewGameWizardApp::class.java)
+}
+
 /**
  * Creates a new project (for a new game).
- * It creates the directory hierarchy as well as four files :
+ * It creates the directory hierarchy including the files :
  *
- * - The build.gradle file
+ * - build.gradle
  * - The resource file (file type .tickle)
  * - The Producer class (file type .kt). This also contains the game's 'main' entry point
  * - A scene (file type .scene), with no actors.
+ * - .gitignore (if git option is chosen)
+ *
+ * It then optionally initialises git (including the first commit) and creates IntelliJ IDEA project files.
+ * Finally the Tickle editor is launched.
  *
  * This uses a JavaFX GUI. Use [NewGameWizardApp] to launch.
  */
@@ -41,25 +50,29 @@ class NewGameWizard : AbstractTask() {
 
     override val taskD = TaskDescription("New Game Wizard")
 
-    val gameName = StringParameter("gameName", required = true)
+    val gameName = StringParameter("gameName", hint = "Only letters, numbers, spaces and underscores are allowed. e.g. Space Invaders", required = true)
 
-    val parentDirectory = FileParameter("parentDirectory", mustExist = true, expectFile = false)
+    val parentDirectory = FileParameter("parentDirectory", hint = "Do NOT include the name of the game (it will be added automatically)", mustExist = true, expectFile = false)
 
-    val packagePrefix = StringParameter("packagePrefix", required = false)
+    val packagePrefix = StringParameter("packagePrefix", hint = "Blank, or your domain name reversed. e.g. com.example", required = false)
 
     val initialSceneName = StringParameter("initialSceneName", required = true, value = "menu")
 
     val width = IntParameter("width", value = 640)
     val height = IntParameter("height", value = 480)
 
+    val intellij = BooleanParameter("createIntelliJProject", value = true)
+
+    val git = BooleanParameter("initialiseGit", value = true)
+
     init {
-        taskD.addParameters(gameName, parentDirectory, packagePrefix, width, height, initialSceneName)
+        taskD.addParameters(gameName, parentDirectory, packagePrefix, width, height, initialSceneName, intellij, git)
     }
 
     override fun check() {
         super.check()
         if (!gameName.value.matches(Regex("[a-zA-Z0-9 _]*"))) {
-            throw ParameterException(gameName, "Only alpha numeric, space and underscore characters allowed")
+            throw ParameterException(gameName, "Only letters, numbers, spaces and underscores are allowed")
         }
         if (gameDirectory().exists()) {
             throw ParameterException(gameName, "Directory '${gameDirectory().name}' already exists")
@@ -116,22 +129,34 @@ class NewGameWizard : AbstractTask() {
         println("Creating $gradleFile")
         gradleFile.writeText(gradleContents())
 
+        if (git.value == true) {
+            val gitIgnoreFile = File(directory, ".gitignore")
+            println("Creating $gitIgnoreFile")
+            gitIgnoreFile.writeText(gitIgnoreContents())
+            println("Initialising git")
+            exec(directory, "git", "init")
+            println("Performing first git commit")
+            exec(directory, "git", "add", ".")
+            exec(directory, "git", "commit", "-m", "Project created using NewGameWizard")
+        }
+
         println("\nProject Created.\n")
 
         if (exec(directory, "gradle", "installApp")) {
-            println("\nBuild OK\n")
+            println("\n\nBuild OK\n")
+            if (intellij.value == true) {
+                exec(directory, "gradle", "idea")
+            }
             exec(directory, "build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()}", "--editor")
         }
 
-        println("To build the game, : ")
+        println("\nTo build the game : ")
         println("cd '$directory'")
         println("gradle installApp")
         println("\nTo run the game : ")
         println("build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()}")
-        println("\nTo lauch the editor : ")
+        println("\nTo launch the editor : ")
         println("build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()} --editor")
-        println("To create an Intellij IDEA project for the game : ")
-        println("gradle idea")
     }
 
     fun exec(dir: File, program: String, vararg args: String): Boolean {
@@ -151,7 +176,7 @@ class NewGameWizard : AbstractTask() {
     /*
     The following functions are templates for each of the files to be generated.
      */
-    
+
     fun gradleContents() = """
 project.ext.lwjglVersion = "3.1.3"
 project.ext.jomlVersion = "1.9.4"
@@ -279,5 +304,17 @@ class ${identifier()} : AbstractProducer()
 }
 """
 
-}
+    fun gitIgnoreContents() = """
+/.gradle
+/.idea
+/build
+/gradle
+/gradlew
+/gradlew.bat
+/out
+/${identifier().toLowerCase()}.iml
+/${identifier().toLowerCase()}.ipr
+/${identifier().toLowerCase()}.iws
+"""
 
+}
