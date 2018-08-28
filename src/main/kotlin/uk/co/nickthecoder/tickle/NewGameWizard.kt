@@ -10,7 +10,21 @@ import uk.co.nickthecoder.paratask.parameters.FileParameter
 import uk.co.nickthecoder.paratask.parameters.IntParameter
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.paratask.util.child
+import uk.co.nickthecoder.paratask.util.process.Exec
+import uk.co.nickthecoder.paratask.util.process.OSCommand
+import uk.co.nickthecoder.paratask.util.process.PrintErrSink
+import uk.co.nickthecoder.paratask.util.process.PrintOutSink
 import java.io.File
+
+/**
+ * The JavaFX Application to launch the NewGameWizard Task.
+ * Usage : Application.launch(NewGameWizardApp::class.java)
+ */
+class NewGameWizardApp : Application() {
+    override fun start(stage: Stage?) {
+        TaskPrompter(NewGameWizard()).placeOnStage(stage ?: Stage())
+    }
+}
 
 /**
  * Creates a new project (for a new game).
@@ -21,6 +35,7 @@ import java.io.File
  * - The Producer class (file type .kt). This also contains the game's 'main' entry point
  * - A scene (file type .scene), with no actors.
  *
+ * This uses a JavaFX GUI. Use [NewGameWizardApp] to launch.
  */
 class NewGameWizard : AbstractTask() {
 
@@ -103,6 +118,11 @@ class NewGameWizard : AbstractTask() {
 
         println("\nProject Created.\n")
 
+        if (exec(directory, "gradle", "installApp")) {
+            println("\nBuild OK\n")
+            exec(directory, "build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()}", "--editor")
+        }
+
         println("To build the game, : ")
         println("cd '$directory'")
         println("gradle installApp")
@@ -114,6 +134,24 @@ class NewGameWizard : AbstractTask() {
         println("gradle idea")
     }
 
+    fun exec(dir: File, program: String, vararg args: String): Boolean {
+        println("Running $program ${args.joinToString(separator = " ")} (dir=$dir)")
+        val cmd = OSCommand(program, * args)
+        cmd.directory = dir
+        val exec = Exec(cmd)
+        exec.outSink = PrintOutSink()
+        exec.errSink = PrintErrSink()
+        val result = exec.start().waitFor(30) // Run, and abort if the command takes more than 30 seconds.
+        if (result != 0) {
+            println("Exit code : $result")
+        }
+        return result == 0
+    }
+
+    /*
+    The following functions are templates for each of the files to be generated.
+     */
+    
     fun gradleContents() = """
 project.ext.lwjglVersion = "3.1.3"
 project.ext.jomlVersion = "1.9.4"
@@ -243,9 +281,3 @@ class ${identifier()} : AbstractProducer()
 
 }
 
-class NewGameWizardApp : Application() {
-
-    override fun start(stage: Stage?) {
-        TaskPrompter(NewGameWizard()).placeOnStage(stage ?: Stage())
-    }
-}
