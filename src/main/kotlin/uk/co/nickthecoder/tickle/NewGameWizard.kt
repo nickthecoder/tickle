@@ -33,6 +33,7 @@ fun main(vararg args: String) {
  * It creates the directory hierarchy including the files :
  *
  * - build.gradle
+ * - README.md
  * - The resource file (file type .tickle)
  * - The Producer class (file type .kt). This also contains the game's 'main' entry point
  * - A scene (file type .scene), with no actors.
@@ -44,8 +45,6 @@ fun main(vararg args: String) {
  * This uses a JavaFX GUI. Use [NewGameWizardApp] to launch.
  */
 class NewGameWizard : AbstractTask() {
-
-    override val taskD = TaskDescription("New Game Wizard")
 
     val gameName = StringParameter("gameName", hint = "Only letters, numbers, spaces and underscores are allowed. e.g. Space Invaders", required = true)
 
@@ -67,9 +66,9 @@ class NewGameWizard : AbstractTask() {
 
     val git = BooleanParameter("initialiseGit", value = true)
 
-    init {
-        taskD.addParameters(gameName, parentDirectory, packagePrefix, size, initialSceneName, intellij, git)
-    }
+    override val taskD = TaskDescription("New Game Wizard")
+            .addParameters(gameName, parentDirectory, packagePrefix, size, initialSceneName, intellij, git)
+
 
     override fun check() {
         super.check()
@@ -130,6 +129,10 @@ class NewGameWizard : AbstractTask() {
         val gradleFile = File(directory, "build.gradle")
         println("Creating $gradleFile")
         gradleFile.writeText(gradleContents())
+
+        val readmeFile = File(directory, "README.md")
+        println("Creating $readmeFile")
+        readmeFile.writeText(readMeContents())
 
         if (git.value == true) {
             val gitIgnoreFile = File(directory, ".gitignore")
@@ -319,4 +322,9 @@ class ${identifier()} : AbstractProducer()
 /${identifier().toLowerCase()}.iws
 """
 
+
+    fun readMeContents() = """#${gameName.value}
+
+[Powered by Tickle](https://github.com/nickthecoder/tickle)
+"""
 }

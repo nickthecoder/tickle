@@ -67,8 +67,88 @@ Editor
 
 Ensure Textures are deleted when removed from resources (Use finalise?).
 
-Later
-=====
+
+## Block Based Programming
+
+I'd really like to avoid "tick", and instead be one big block of code, that has init stuff at the top,
+and a while loop afterwards.
+Either :
+  Every Role has its own Thread
+    blocks during the redraw phase
+    synchronises when updating/accessing attributes, such as x, y, angle etc to avoid weirdness.
+  Round robin through each Role, performing a single action
+     Use "delay" blocks to govern the speed
+The down side of removing "tick" is that it cannot be nicely converted to "real" code :-(
+
+If I create a special base class for these roles, then I could use Threads, and each action calls code
+which does the synchronize (hidden from the programmer).
+
+Like Scratch, except without the anti-patterns!
+Start off with Role only, then extend it to Director and Producer.
+
+Block types :
+
+Move By (dx,dy), Move To (x,y), Rotate By (degrees), Rotate To (degrees), Rotate Towards ( x, y )
+HeadTowards( x, y ), Set Heading (degrees), Adjust Heading (degrees), Forwards (distance) etc.
+
+(Note that all have a direction, so that Forwards can be implemented).
+
+While, Until (no for)
+
+If (condition), else
+
+### Plan
+
+Create a game using gradle scripting language (scripts to be listed within the editor)
+Automatically reload the classes when the file changes.
+Must ensure that these classes can be found by the combo boxes in the editor.
+
+Note. Can be run using existing Tickle project (maybe a sub-module, or a different project).
+i.e. no need for a separate project. No compiling.
+Create a file association, so that the .tickle file can be run from the File Manager.
+Maybe use a different file type (.tickleg ???) (especially if I create a new project for this!)
+
+If no resources file given, then display a dialog to choose one
+(and give an option to open the editor, or play the game).
+
+At first, use gradle to subclass Role in the usual fashion.
+Then create a new sub-class of Role, which doesn't use tick(), and uses Threads instead, with
+synchronization on each method to avoid weirdness.
+Also synchronize the redraw part of Tickle (on the same object - Game?).
+wait() method waits 1 tick
+wait( seconds ) waits any time you like.
+
+die() must interrupt the thread, allowing it to end prematurely.
+
+Only then, do we can create diagrams, which get translated into gradle threads.
+
+### A simplified editor
+To go with a "simpler" block-based language, the resources editor should also be easier.
+No "Inputs", no "Layouts", no separation of "Pose" and "Costume", No "Events" etc.
+
+Limited to a single window, which cannot be resized (but the size CAN be chosen).
+A single Layout with a single Stage, and a single View.
+Sounds are added by simply dragging a sound file into the editor
+   A window appears, where you give it a unique name (which defaults to the filename without the extension).
+Likewise, a Pose/Costume is created by dragging an image into the editor.
+   All such Pose/Costumes can act as both a Pose and a Costume.
+   These can have a "Hide" boolean, which prevents them appearing in the Scene Editor.
+       We could include ALL such things, but order favouring those with the most code (so complex items
+       will naturally be at the top of the list!)
+   Maybe all images are automatically combined into a single Texture, or a separate Texture is created for each.
+   But Textures are never mentioned in any way!
+Include one or more fonts by default
+Editor Preferences are hidden
+No Physics engine
+How Producer/Director is handled can be left till later!
+   Can easily have a single Producer (which is initially empty)
+   Maybe do away with Director, and if we want resuable code appearing on multiple scenes, then use a
+       "Role", which is made invisible (or just off-screen).
+
+The Scene Editor can display the Attributes panel, and the "Costume Picker" at the same time.
+The "Actors" and the "Layers" panels can be ignored.
+
+# Later
 
 TextStyle to have an extraSpacing property which causes letters to be moved further appart
 	Ditto for extra line height.
@@ -114,8 +194,7 @@ Chart
     Maybe have a ChartableRoleFilter, so that it can only return Chartable Roles.
     If not, then emit a warning the first time a non-chartable role is returned.
 
-Much Later
-==========
+# Much Later
 
 New Game Wizard
 	Choice of a completely blank project, or a "Hello World"
