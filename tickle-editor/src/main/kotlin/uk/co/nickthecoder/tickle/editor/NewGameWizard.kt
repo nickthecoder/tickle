@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-package uk.co.nickthecoder.tickle
+package uk.co.nickthecoder.tickle.editor
 
 import javafx.application.Application
 import javafx.stage.Stage
@@ -306,7 +306,7 @@ import uk.co.nickthecoder.tickle.namedMain
  * See [namedMain] for usage information.
  */
 fun main(args: Array<String>) {
-    namedMain("${identifier().toLowerCase()}", args)
+    EditorMain("${identifier().toLowerCase()}", args).start()
 }
 
 class ${identifier()} : AbstractProducer()

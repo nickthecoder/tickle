@@ -16,14 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-package uk.co.nickthecoder.tickle.util
+package uk.co.nickthecoder.tickle.editor.util
 
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
-import uk.co.nickthecoder.tickle.editor.util.ClassLister
-import uk.co.nickthecoder.tickle.editor.util.DesignAttributeData
-import uk.co.nickthecoder.tickle.editor.util.DesignAttributes
 
 class ClassAndAttributesParameter(name: String, klass: Class<*>)
 

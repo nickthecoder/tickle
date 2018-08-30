@@ -16,12 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-package uk.co.nickthecoder.tickle.util
+package uk.co.nickthecoder.tickle.editor.util
 
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
-import uk.co.nickthecoder.tickle.editor.util.DesignAttributeData
-import uk.co.nickthecoder.tickle.editor.util.DesignAttributes
 
 class AttributesTask(val attributes: DesignAttributes) : AbstractTask() {
 

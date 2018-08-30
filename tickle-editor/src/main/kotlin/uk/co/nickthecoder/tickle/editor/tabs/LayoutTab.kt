@@ -13,7 +13,7 @@ import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.DesignAttributes
 import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.stage.*
-import uk.co.nickthecoder.tickle.util.ClassAndAttributesParameter
+import uk.co.nickthecoder.tickle.editor.util.ClassAndAttributesParameter
 
 class LayoutTab(val name: String, val layout: Layout)
 

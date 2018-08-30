@@ -17,20 +17,28 @@ apply plugin: 'kotlin'
 apply plugin: 'idea'
 apply plugin: 'application'
 
-mainClassName = "uk.co.nickthecoder.tickle.TickleKt"
-
 defaultTasks 'installApp'
+mainClassName = "uk.co.nickthecoder.tickle.demo.DemoKt"
 
+dependencies {
+    compile project(':tickle-core')
+    compile project(':tickle-editor')
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
 
 import org.gradle.internal.os.OperatingSystem
 
-switch ( OperatingSystem.current() ) {
+switch (OperatingSystem.current()) {
     case OperatingSystem.WINDOWS:
         project.ext.lwjglNatives = "natives-windows"
         break
     case OperatingSystem.LINUX:
         project.ext.lwjglNatives = "natives-linux"
-    break
+        break
     case OperatingSystem.MAC_OS:
         project.ext.lwjglNatives = "natives-macos"
         break
@@ -47,19 +55,12 @@ subprojects {
     group = 'uk.co.nickthecoder'
 }
 
-dependencies {
-    compile project(':tickle-core')
-    compile project(':tickle-editor')
-}
-
 project(':tickle-core') {
 
-    apply plugin: 'application'
     apply plugin: 'kotlin'
     apply plugin: 'maven'
 
-    defaultTasks 'installApp'
-    mainClassName = "uk.co.nickthecoder.tickle.TickleKt"
+    defaultTasks 'install'
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
