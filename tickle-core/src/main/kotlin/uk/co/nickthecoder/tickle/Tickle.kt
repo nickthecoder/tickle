@@ -121,7 +121,7 @@ fun guessTickleFile(): File? {
     } else {
         File("resources")
     }
-    return resourceDir.listFiles().filter { it.extension == "tickle" }.sortedBy { it.lastModified() }.lastOrNull()
+    return resourceDir.listFiles()?.filter { it.extension == "tickle" }?.sortedBy { it.lastModified() }?.lastOrNull()
 }
 
 /**
