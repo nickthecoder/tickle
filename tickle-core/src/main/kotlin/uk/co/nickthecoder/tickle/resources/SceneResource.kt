@@ -1,16 +1,14 @@
 package uk.co.nickthecoder.tickle.resources
 
-import uk.co.nickthecoder.tickle.Attributes
 import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.Scene
-import uk.co.nickthecoder.tickle.editor.scene.*
 import uk.co.nickthecoder.tickle.graphics.Color
 import java.io.File
 
 /**
  * Used when loading and editing a Scene. Not used during actual game play.
  */
-class SceneResource {
+open class SceneResource {
 
     var file: File? = null
 
@@ -42,16 +40,6 @@ class SceneResource {
      * Keyed on the name of the stage
      */
     val stageResources = mutableMapOf<String, StageResource>()
-
-    val listeners = mutableSetOf<SceneResourceListener>()
-
-    val snapToGrid = SnapToGrid()
-
-    val snapToGuides = SnapToGuides()
-
-    val snapToOthers = SnapToOthers()
-
-    val snapRotation = SnapRotation()
 
     /**
      * Gets the Layout to create the scene, and then populates the Stages with Actors.
@@ -105,9 +93,4 @@ class SceneResource {
         }
     }
 
-    fun fireChange(actorResource: ActorResource, type: ModificationType) {
-        listeners.toList().forEach {
-            it.actorModified(this, actorResource, type)
-        }
-    }
 }

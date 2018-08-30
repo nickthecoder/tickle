@@ -63,6 +63,7 @@ project(':tickle-core') {
     mainClassName = "uk.co.nickthecoder.tickle.TickleKt"
 
     dependencies {
+        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
         compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
         compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
@@ -87,13 +88,6 @@ project(':tickle-core') {
         compile "org.jbox2d:jbox2d-library:2.1.2.2"
         testCompile 'junit:junit:4.11'
 
-        // Only needed for the editor
-        compile 'uk.co.nickthecoder:paratask-core:0.2'
-        compile 'org.reflections:reflections:0.9.11'
-        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-
-        // For kotlin scripting in the FX Coder in the editor.
-        compile "org.jetbrains.kotlin:kotlin-script-util:$kotlin_version"
     }
 }
 
@@ -106,6 +100,12 @@ project(':tickle-editor') {
 
     dependencies {
         compile project(':tickle-core')
+
+        compile 'uk.co.nickthecoder:paratask-core:0.2'
+        compile 'org.reflections:reflections:0.9.11'
+
+        // For kotlin scripting in the FX Coder.
+        compile "org.jetbrains.kotlin:kotlin-script-util:$kotlin_version"
     }
 }
 

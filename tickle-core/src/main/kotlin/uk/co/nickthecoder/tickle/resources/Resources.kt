@@ -5,10 +5,9 @@ import uk.co.nickthecoder.tickle.editor.util.ResourceType
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.sound.Sound
-import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
-class Resources(val editing: Boolean = false) {
+open class Resources {
 
     var file: File = File("")
 
@@ -49,12 +48,8 @@ class Resources(val editing: Boolean = false) {
         instance = this
     }
 
-    fun createAttributes(): Attributes {
-        if (editing) {
-            return DesignAttributes()
-        } else {
-            return RuntimeAttributes()
-        }
+    open fun createAttributes(): Attributes {
+        return RuntimeAttributes()
     }
 
     fun findName(resource: Any): String? {
@@ -130,10 +125,6 @@ class Resources(val editing: Boolean = false) {
         listeners.toList().forEach {
             it.resourceChanged(resource)
         }
-    }
-
-    fun save() {
-        JsonResources(this).save(this.file)
     }
 
     /**

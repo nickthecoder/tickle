@@ -3,11 +3,9 @@ package uk.co.nickthecoder.tickle.util
 import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
-import com.eclipsesource.json.PrettyPrint
 import org.jbox2d.dynamics.BodyType
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.physics.*
@@ -15,26 +13,28 @@ import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
 import uk.co.nickthecoder.tickle.stage.FlexVAlignment
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStreamReader
 
-class JsonResources {
+open class JsonResources {
 
-    private var resources: Resources
+    protected var resources: Resources
 
     /**
      * While loading the costumes, one costume event may depend upon a costume that hasn't been loaded yet.
      * So we store the events in a list, and process them once all costumes have been loaded.
      */
-    private val costumeEvents = mutableListOf<CostumeEventData>()
+    protected val costumeEvents = mutableListOf<CostumeEventData>()
 
     /**
      * When a costume inherits events from another costume, store the costume names in this map, and then
      * update the costume once all of the costumes have been loaded.
      */
-    private val inheritedCostumeEvents = mutableMapOf<String, String>()
+    protected val inheritedCostumeEvents = mutableMapOf<String, String>()
 
-    constructor(file: File, editing: Boolean = false) {
-        this.resources = Resources(editing)
+    constructor(file: File) {
+        this.resources = Resources()
         this.resources.file = file
     }
 
@@ -42,27 +42,6 @@ class JsonResources {
         this.resources = resources
     }
 
-
-    fun save(file: File) {
-
-        resources.file = file.absoluteFile
-
-        val jroot = JsonObject()
-        jroot.add("info", saveInfo())
-        jroot.add("preferences", savePreferences())
-        addArray(jroot, "layouts", saveLayouts())
-        addArray(jroot, "textures", saveTextures())
-        addArray(jroot, "fonts", saveFonts())
-        addArray(jroot, "poses", savePoses())
-        addArray(jroot, "sounds", saveSounds())
-        addArray(jroot, "costumeGroups", saveCostumeGroups())
-        addArray(jroot, "costumes", saveCostumes(resources.costumes, false))
-        addArray(jroot, "inputs", saveInputs())
-
-        BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
-            jroot.writeTo(it, resources.preferences.outputFormat.writerConfig)
-        }
-    }
 
     fun addArray(obj: JsonObject, name: String, array: JsonArray) {
         if (!array.isEmpty) {
@@ -142,27 +121,7 @@ class JsonResources {
 
     // EDITOR PREFERENCES
 
-    fun savePreferences(): JsonObject {
-        val jpreferences = JsonObject()
-        with(resources.preferences) {
-
-            jpreferences.add("outputFormat", outputFormat.name)
-
-            val jpackages = JsonArray()
-            packages.forEach {
-                jpackages.add(it)
-            }
-            jpreferences.add("packages", jpackages)
-            jpreferences.add("treeThumbnailSize", treeThumnailSize)
-            jpreferences.add("costumePickerThumbnailSize", costumePickerThumbnailSize)
-            jpreferences.add("isMaximized", isMaximized)
-            jpreferences.add("windowWidth", windowWidth)
-            jpreferences.add("windowHeight", windowHeight)
-            return jpreferences
-        }
-    }
-
-    fun loadPreferences(jpreferences: JsonObject) {
+    open fun loadPreferences(jpreferences: JsonObject) {
         with(resources.preferences) {
 
             jpreferences.get("packages")?.let {
@@ -171,9 +130,6 @@ class JsonResources {
                 newPackages.forEach {
                     packages.add(it.asString())
                 }
-            }
-            if (resources.editing) {
-                ClassLister.packages(packages)
             }
 
             outputFormat = EditorPreferences.JsonFormat.valueOf(jpreferences.getString("outputFormat", outputFormat.name))
@@ -187,41 +143,6 @@ class JsonResources {
     }
 
     // INFO
-
-    fun saveInfo(): JsonObject {
-        val jinfo = JsonObject()
-
-        with(resources.gameInfo) {
-            jinfo.add("title", title)
-            jinfo.add("id", id)
-            jinfo.add("width", width)
-            jinfo.add("height", height)
-            jinfo.add("resizable", resizable)
-            jinfo.add("fullScreen", fullScreen)
-
-            jinfo.add("initialScene", resources.sceneFileToPath(initialScenePath))
-            jinfo.add("testScene", resources.sceneFileToPath(testScenePath))
-
-            jinfo.add("producer", producerString)
-        }
-
-        if (resources.gameInfo.physicsEngine) {
-            val jphysics = JsonObject()
-            jinfo.add("physics", jphysics)
-            with(resources.gameInfo.physicsInfo) {
-                jphysics.add("gravity_x", gravity.x)
-                jphysics.add("gravity_y", gravity.y)
-                jphysics.add("velocityIterations", velocityIterations)
-                jphysics.add("positionIterations", positionIterations)
-                jphysics.add("scale", scale)
-                jphysics.add("filterGroups", filterGroupsString)
-                jphysics.add("filterBits", filterBitsString)
-            }
-
-        }
-
-        return jinfo
-    }
 
     fun loadInfo(jinfo: JsonObject) {
         with(resources.gameInfo) {
@@ -257,68 +178,6 @@ class JsonResources {
 
 
     // LAYOUTS
-
-    fun saveLayouts(): JsonArray {
-        val jlayouts = JsonArray()
-        resources.layouts.items().forEach { name, layout ->
-            val jlayout = JsonObject()
-            jlayouts.add(jlayout)
-            jlayout.add("name", name)
-
-            val jstages = JsonArray()
-            jlayout.add("stages", jstages)
-
-            layout.layoutStages.forEach { stageName, layoutStage ->
-                val jstage = JsonObject()
-                jstages.add(jstage)
-
-                jstage.add("name", stageName)
-                if (layoutStage.isDefault) {
-                    jstage.add("isDefault", true)
-                }
-                jstage.add("stage", layoutStage.stageString)
-                jstage.add("constraint", layoutStage.stageConstraintString)
-                JsonUtil.saveAttributes(jstage, layoutStage.constraintAttributes, "constraintAttributes")
-            }
-
-            val jviews = JsonArray()
-            jlayout.add("views", jviews)
-
-            layout.layoutViews.forEach { viewName, layoutView ->
-                val jview = JsonObject()
-                jviews.add(jview)
-
-                jview.add("name", viewName)
-                jview.add("view", layoutView.viewString)
-                if (layoutView.stageName.isNotBlank()) {
-                    jview.add("stage", layoutView.stageName)
-                }
-                jview.add("zOrder", layoutView.zOrder)
-
-                with(layoutView.position) {
-                    jview.add("hAlignment", hAlignment.name)
-                    if (hAlignment == FlexHAlignment.MIDDLE) {
-                        jview.add("hPosition", hPosition)
-                    } else {
-                        jview.add("leftRightMargin", leftRightMargin)
-                    }
-                    width?.let { jview.add("width", it) }
-                    widthRatio?.let { jview.add("widthRatio", it) }
-
-                    jview.add("vAlignment", vAlignment.name)
-                    if (vAlignment == FlexVAlignment.MIDDLE) {
-                        jview.add("vPosition", vPosition)
-                    } else {
-                        jview.add("topBottomMargin", topBottomMargin)
-                    }
-                    height?.let { jview.add("height", it) }
-                    heightRatio?.let { jview.add("heightRatio", it) }
-                }
-            }
-        }
-        // println("Created jlayouts $jlayouts")
-        return jlayouts
-    }
 
     fun loadLayouts(jlayouts: JsonArray) {
         jlayouts.forEach { jele ->
@@ -383,19 +242,6 @@ class JsonResources {
 
     // TEXTURES
 
-    fun saveTextures(): JsonArray {
-        val jtextures = JsonArray()
-        resources.textures.items().forEach { name, texture ->
-            texture.file?.let { file ->
-                val jtexture = JsonObject()
-                jtexture.add("name", name)
-                jtexture.add("file", resources.toPath(file))
-                jtextures.add(jtexture)
-            }
-        }
-        return jtextures
-    }
-
     fun loadTextures(jtextures: JsonArray) {
         jtextures.forEach { jele ->
             val jtexture = jele.asObject()
@@ -408,42 +254,6 @@ class JsonResources {
     }
 
     // POSES
-
-    fun savePoses(): JsonArray {
-        val jposes = JsonArray()
-        resources.poses.items().forEach { name, pose ->
-            resources.textures.findName(pose.texture)?.let { textureName ->
-                val jpose = JsonObject()
-                jpose.add("name", name)
-                jpose.add("texture", textureName)
-                jpose.add("left", pose.rect.left)
-                jpose.add("bottom", pose.rect.bottom)
-                jpose.add("right", pose.rect.right)
-                jpose.add("top", pose.rect.top)
-                jpose.add("offsetX", pose.offsetX)
-                jpose.add("offsetY", pose.offsetY)
-                jpose.add("direction", pose.direction.degrees)
-                if (pose.tiled) {
-                    jpose.add("tiled", true)
-                }
-
-                if (pose.snapPoints.isNotEmpty()) {
-                    val jsnaps = JsonArray()
-                    jpose.add("snapPoints", jsnaps)
-                    pose.snapPoints.forEach { point ->
-                        val jpoint = JsonObject()
-                        jpoint.add("x", point.x)
-                        jpoint.add("y", point.y)
-                        jsnaps.add(jpoint)
-                    }
-                }
-
-                jposes.add(jpose)
-            }
-        }
-        return jposes
-
-    }
 
     fun loadPoses(jposes: JsonArray) {
         jposes.forEach { jele ->
@@ -482,20 +292,6 @@ class JsonResources {
 
     // Costume Groups
 
-    fun saveCostumeGroups(): JsonArray {
-        val jgroups = JsonArray()
-
-        resources.costumeGroups.items().forEach { name, group ->
-            val jgroup = JsonObject()
-            jgroup.add("name", name)
-            jgroup.add("costumes", saveCostumes(group, true))
-
-            jgroup.add("showInSceneEditor", group.showInSceneEditor)
-            jgroups.add(jgroup)
-        }
-        return jgroups
-    }
-
     fun loadCostumeGroups(jgroups: JsonArray) {
 
         jgroups.forEach {
@@ -515,111 +311,6 @@ class JsonResources {
     }
 
     // COSTUMES
-
-    fun saveCostumes(costumes: ResourceMap<Costume>, all: Boolean): JsonArray {
-        val jcostumes = JsonArray()
-
-        costumes.items().forEach { name, costume ->
-
-            if (all || resources.findCostumeGroup(name) == null) {
-
-                val jcostume = JsonObject()
-                jcostume.add("name", name)
-                jcostume.add("role", costume.roleString)
-                jcostume.add("canRotate", costume.canRotate)
-                jcostume.add("zOrder", costume.zOrder)
-                jcostume.add("initialEvent", costume.initialEventName)
-                jcostume.add("showInSceneEditor", costume.showInSceneEditor)
-                if (costume.inheritEventsFrom != null) {
-                    jcostume.add("inheritsEventsFrom", resources.costumes.findName(costume.inheritEventsFrom))
-                }
-
-                val jevents = JsonArray()
-                jcostume.add("events", jevents)
-                costume.events.forEach { eventName, event ->
-                    val jevent = JsonObject()
-                    jevents.add(jevent)
-                    jevent.add("name", eventName)
-
-                    if (event.poses.isNotEmpty()) {
-                        val jposes = JsonArray()
-                        event.poses.forEach { pose ->
-                            resources.poses.findName(pose)?.let { poseName ->
-                                jposes.add(poseName)
-                            }
-                        }
-                        jevent.add("poses", jposes)
-                    }
-
-                    if (event.costumes.isNotEmpty()) {
-                        val jcos = JsonArray()
-                        event.costumes.forEach { cos ->
-                            resources.costumes.findName(cos)?.let { cosName ->
-                                jcos.add(cosName)
-                            }
-                        }
-                        jevent.add("costumes", jcos)
-                    }
-
-                    if (event.textStyles.isNotEmpty()) {
-                        val jtextStyles = JsonArray()
-                        event.textStyles.forEach { textStyle ->
-                            val jtextStyle = JsonObject()
-                            jtextStyles.add(jtextStyle)
-                            jtextStyle.add("font", resources.fontResources.findName(textStyle.fontResource))
-                            jtextStyle.add("halign", textStyle.halignment.name)
-                            jtextStyle.add("valign", textStyle.valignment.name)
-                            jtextStyle.add("color", textStyle.color.toHashRGBA())
-                            if (textStyle.fontResource.outlineFontTexture != null) {
-                                textStyle.outlineColor?.let {
-                                    jtextStyle.add("outlineColor", it.toHashRGBA())
-                                }
-                            }
-                        }
-                        jevent.add("textStyles", jtextStyles)
-                    }
-
-                    if (event.strings.isNotEmpty()) {
-                        val jstrings = JsonArray()
-                        event.strings.forEach { str ->
-                            jstrings.add(str)
-                        }
-                        jevent.add("strings", jstrings)
-                    }
-
-                    if (event.sounds.isNotEmpty()) {
-                        val jsounds = JsonArray()
-                        event.sounds.forEach { sound ->
-                            resources.sounds.findName(sound)?.let { soundName ->
-                                jsounds.add(soundName)
-                            }
-                        }
-                        jevent.add("sounds", jsounds)
-                    }
-
-                    if (event.ninePatches.isNotEmpty()) {
-                        val jninePatches = JsonArray()
-                        event.ninePatches.forEach { ninePatch ->
-                            val jninePatch = JsonObject()
-                            jninePatches.add(jninePatch)
-                            jninePatch.add("pose", resources.poses.findName(ninePatch.pose))
-                            jninePatch.add("left", ninePatch.left)
-                            jninePatch.add("bottom", ninePatch.bottom)
-                            jninePatch.add("right", ninePatch.right)
-                            jninePatch.add("top", ninePatch.top)
-                        }
-                        jevent.add("ninePatches", jninePatches)
-                    }
-                }
-                JsonUtil.saveAttributes(jcostume, costume.attributes)
-
-                jcostumes.add(jcostume)
-                costume.bodyDef?.let { saveBody(jcostume, it) }
-            }
-        }
-
-        return jcostumes
-    }
 
     fun saveBody(jcostume: JsonObject, bodyDef: TickleBodyDef) {
         val jbody = JsonObject()
@@ -879,56 +570,6 @@ class JsonResources {
 
     // INPUTS
 
-    fun saveInputs(): JsonArray {
-        val jinputs = JsonArray()
-        resources.inputs.items().forEach { name, input ->
-            val jinput = JsonObject()
-            jinput.add("name", name)
-
-            val jkeys = JsonArray()
-            addKeyInputs(input, jkeys)
-            if (!jkeys.isEmpty) {
-                jinput.add("keys", jkeys)
-            }
-
-            val jmouseButtons = JsonArray()
-            addMouseInputs(input, jmouseButtons)
-            if (!jmouseButtons.isEmpty) {
-                jinput.add("mouse", jmouseButtons)
-            }
-
-            val jjoystickButtons = JsonArray()
-            addJoystickButtonInputs(input, jjoystickButtons)
-            if (!jjoystickButtons.isEmpty) {
-                jinput.add("joystick", jjoystickButtons)
-            }
-
-            val jjoystickAxis = JsonArray()
-            addJoystickAxisInputs(input, jjoystickAxis)
-            if (!jjoystickAxis.isEmpty) {
-                jinput.add("joystickAxis", jjoystickAxis)
-            }
-
-            jinputs.add(jinput)
-        }
-        return jinputs
-    }
-
-    fun addKeyInputs(input: Input, toArray: JsonArray) {
-
-        if (input is KeyInput) {
-            val jkey = JsonObject()
-            jkey.add("key", input.key.label)
-            jkey.add("state", input.state.name)
-            toArray.add(jkey)
-
-        } else if (input is CompoundInput) {
-            input.inputs.forEach {
-                addKeyInputs(it, toArray)
-            }
-        }
-    }
-
     fun addMouseInputs(input: Input, toArray: JsonArray) {
 
         if (input is MouseInput) {
@@ -944,37 +585,6 @@ class JsonResources {
         }
     }
 
-    fun addJoystickButtonInputs(input: Input, toArray: JsonArray) {
-
-        if (input is JoystickButtonInput) {
-            val jjoystick = JsonObject()
-            jjoystick.add("joystickID", input.joystickID)
-            jjoystick.add("button", input.button.name)
-            toArray.add(jjoystick)
-
-        } else if (input is CompoundInput) {
-            input.inputs.forEach {
-                addJoystickButtonInputs(it, toArray)
-            }
-        }
-    }
-
-    fun addJoystickAxisInputs(input: Input, toArray: JsonArray) {
-
-        if (input is JoystickAxisInput) {
-            val jjoystick = JsonObject()
-            jjoystick.add("joystickID", input.joystickID)
-            jjoystick.add("axis", input.axis.name)
-            jjoystick.add("positive", input.positive)
-            jjoystick.add("threshold", input.threshold)
-            toArray.add(jjoystick)
-
-        } else if (input is CompoundInput) {
-            input.inputs.forEach {
-                addJoystickAxisInputs(it, toArray)
-            }
-        }
-    }
 
     fun loadInputs(jinputs: JsonArray) {
         jinputs.forEach { jele ->
@@ -1036,27 +646,6 @@ class JsonResources {
 
     // FONTS
 
-    fun saveFonts(): JsonArray {
-        val jfonts = JsonArray()
-        resources.fontResources.items().forEach { name, fontResource ->
-            val jfont = JsonObject()
-            jfont.add("name", name)
-            if (fontResource.file == null) {
-                jfont.add("fontName", fontResource.fontName)
-                jfont.add("style", fontResource.style.name)
-            } else {
-                jfont.add("file", resources.toPath(fontResource.file!!))
-            }
-            jfont.add("size", fontResource.size)
-            jfont.add("xPadding", fontResource.xPadding)
-            jfont.add("yPadding", fontResource.yPadding)
-            jfonts.add(jfont)
-        }
-
-        return jfonts
-
-    }
-
     fun loadFonts(jfonts: JsonArray) {
         jfonts.forEach { jele ->
             val jfont = jele.asObject()
@@ -1099,19 +688,6 @@ class JsonResources {
 
     // SOUNDS
 
-    fun saveSounds(): JsonArray {
-        val jsounds = JsonArray()
-        resources.sounds.items().forEach { name, sound ->
-            sound.file?.let { file ->
-                val jsound = JsonObject()
-                jsound.add("name", name)
-                jsound.add("file", resources.toPath(file))
-                jsounds.add(jsound)
-            }
-        }
-        return jsounds
-    }
-
     fun loadSounds(jsounds: JsonArray) {
         jsounds.forEach {
             val jsound = it.asObject()
@@ -1134,34 +710,6 @@ class JsonResources {
                 result[c] = Glyph(pose, glyph.advance)
             }
             return result
-        }
-
-        fun saveFontMetrics(file: File, fontResource: FontResource) {
-            val fontTexture = fontResource.fontTexture
-            val jroot = JsonObject()
-            jroot.add("lineHeight", fontTexture.lineHeight)
-            jroot.add("leading", fontTexture.leading)
-            jroot.add("ascent", fontTexture.ascent)
-            jroot.add("descent", fontTexture.descent)
-            jroot.add("xPadding", fontResource.xPadding)
-            jroot.add("yPadding", fontResource.yPadding)
-            val jglyphs = JsonArray()
-            jroot.add("glyphs", jglyphs)
-            fontTexture.glyphs.forEach { c, data ->
-                val jglyph = JsonObject()
-                jglyph.add("c", c.toString())
-                jglyph.add("left", data.pose.rect.left)
-                jglyph.add("top", data.pose.rect.top)
-                jglyph.add("right", data.pose.rect.right)
-                jglyph.add("bottom", data.pose.rect.bottom)
-                jglyph.add("advance", data.advance)
-
-                jglyphs.add(jglyph)
-            }
-
-            BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
-                jroot.writeTo(it, PrettyPrint.indentWithSpaces(4))
-            }
         }
 
         fun loadFontMetrics(file: File, texture: Texture): FontTexture {

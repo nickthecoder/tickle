@@ -2,10 +2,10 @@ package uk.co.nickthecoder.tickle.stage
 
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.editor.util.sortedBackwardsWith
 import uk.co.nickthecoder.tickle.resources.ActorXAlignment
 import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 import uk.co.nickthecoder.tickle.util.Recti
+import uk.co.nickthecoder.tickle.util.sortedBackwardsWith
 
 interface StageView : View {
 
@@ -20,14 +20,14 @@ interface StageView : View {
     val roleComparator: Comparator<Role>
 
     /**
-     * Returns the Actors touching the given [position], the top-most first.true
+     * Returns the Actors touching the given position, the top-most first.true
      */
     fun findActorsAt(point: Vector2d): Iterable<Actor> {
         return topFirst(stage.findActorsAt(point))
     }
 
     /**
-     * Returns the top-most Actor at the given [position], or null, if there are no Actors
+     * Returns the top-most Actor at the given position, or null, if there are no Actors
      * touching the position.
      *
      * Uses [Appearance.touching]. See [Appearance.pixelTouching] for details on how to change the threshold.

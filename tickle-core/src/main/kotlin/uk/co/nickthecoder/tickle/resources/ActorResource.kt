@@ -2,7 +2,6 @@ package uk.co.nickthecoder.tickle.resources
 
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.editor.scene.StageLayer
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.util.Angle
 
@@ -14,7 +13,7 @@ enum class ActorYAlignment { BOTTOM, CENTER, TOP, RATIO }
  * Used when loading and editing a Scene. Not used during actual game play.
  */
 
-class ActorResource(val isDesigning: Boolean = false)
+open class ActorResource(val isDesigning: Boolean = false)
 
     : ActorDetails {
 
@@ -109,8 +108,6 @@ class ActorResource(val isDesigning: Boolean = false)
 
     val displayText
         get() = if (text.isBlank()) "<no text>" else text
-
-    var layer: StageLayer? = null
 
     init {
         if (isDesigning) {
