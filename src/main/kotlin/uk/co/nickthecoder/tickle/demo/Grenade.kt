@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.demo
+package uk.co.nickthecoder.tickle.demo
 
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.*

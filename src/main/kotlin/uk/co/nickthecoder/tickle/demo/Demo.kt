@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.demo
+package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.AbstractProducer
 import uk.co.nickthecoder.tickle.Game

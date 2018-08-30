@@ -61,6 +61,32 @@ At any of these stages, you can switch from using the simplified editor to the f
 Offering the more complex features, such as "costume events" and "layouts" for multiple views per scene.
 
 
+Resources Editor
+----------------
+
+Tickle includes a GUI to manage resources, such as graphics and sounds etc.
+Loading and saving resources is done automatically (saved as simple json strings)
+
+It also let's you edit custom properties unique to your game.
+For example a shoot-em-up game may have an object called "Ship", but this ship can have different "Costumes".
+Not only will each costume look different, but it can have different properties,
+such as the speed of the ship, its maximum health etc.
+
+
+Scene Editor
+------------
+
+Tickle has a built-in scene editor, allowing game levels to be created quickly.
+Saving and loading scenes is done for you. (They are saved a simple json strings).
+
+As with the Resources Editor, objects placed in a scene can have custom properties.
+For example, keys and doors can share a property, so that picking up a key
+opens a particular door (or a set of doors).
+
+You could also use custom properties within the Scene Editor so that every ship has their own speed and maximum health etc.
+(though it is more common to do so per Costume, from within the Resources Editor).
+
+
 Compiling
 ---------
 
@@ -100,30 +126,21 @@ To run the editor :
     build/install/tickle/bin/tickle --editor
 
 
-Resources Editor
-----------------
+Structure
+---------
 
-Tickle includes a GUI to manage resources, such as graphics and sounds etc.
-Loading and saving resources is done automatically (saved as simple json strings)
+Tickle is split into modules...
 
-It also let's you edit custom properties unique to your game.
-For example a shoot-em-up game may have an object called "Ship", but this ship can have different "Costumes".
-Not only will each costume look different, but it can have different properties,
-such as the speed of the ship, its maximum health etc.
+**tickle-core** contains everything needed during actual game-play
 
+**tickle-editor** contains additional classes needed for the editor (to edit game resources, and game leveals (aka Scenes).
 
-Scene Editor
-------------
+The top-level **tickle** module contains a demo game (which doesn't have any decent game play),
+its only there to help me test things as I develop them,
+and is also useful for you, to check that compiling tickle worked!
 
-Tickle has a built-in scene editor, allowing game levels to be created quickly.
-Saving and loading scenes is done for you. (They are saved a simple json strings).
-
-As with the Resources Editor, objects placed in a scene can have custom properties.
-For example, keys and doors can share a property, so that picking up a key
-opens a particular door (or a set of doors).
-
-You could also use custom properties within the Scene Editor so that every ship has their own speed and maximum health etc.
-(though it is more common to do so per Costume, from within the Resources Editor).
+Your own games should depend on *tickle-core* and *tickle-editor*, but not *tickle* itself (as it doesn't need any of that
+demo code).
 
 Why is it called Tickle?
 ------------------------

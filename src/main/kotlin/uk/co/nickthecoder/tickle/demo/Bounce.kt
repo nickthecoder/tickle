@@ -1,4 +1,4 @@
-package uk.co.nickthecoder.demo
+package uk.co.nickthecoder.tickle.demo
 
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.AbstractRole
@@ -146,7 +146,7 @@ class NeighbourhoodBounce : Bounce() {
 
     override fun activated() {
         super.activated()
-        occupant = Occupant(uk.co.nickthecoder.demo.Play.instance.neighbourhood, this)
+        occupant = Occupant(Play.instance.neighbourhood, this)
     }
 
     override fun tick() {

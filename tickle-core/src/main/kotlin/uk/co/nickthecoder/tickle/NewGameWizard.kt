@@ -215,7 +215,8 @@ repositories {
 }
 
 dependencies {
-    compile 'uk.co.nickthecoder:tickle:0.1'
+    compile 'uk.co.nickthecoder:tickle-core:0.1'
+    compile 'uk.co.nickthecoder:tickle-editor:0.1'
     compile 'org.reflections:reflections:0.9.11'
 }
 

@@ -8,7 +8,7 @@
     "fullScreen": false,
     "initialScene": "level01",
     "testScene": "bounceTest",
-    "producer": "uk.co.nickthecoder.demo.Demo",
+    "producer": "uk.co.nickthecoder.tickle.demo.Demo",
     "physics": {
       "gravity_x": 0,
       "gravity_y": 0,
@@ -23,7 +23,7 @@
     "outputFormat": "PRETTY",
     "packages": [
       "uk.co.nickthecoder.tickle",
-      "uk.co.nickthecoder.demo"
+      "uk.co.nickthecoder.tickle.demo"
     ],
     "treeThumbnailSize": 24,
     "costumePickerThumbnailSize": 50,
@@ -316,7 +316,7 @@
       "costumes": [
         {
           "name": "coin10",
-          "role": "uk.co.nickthecoder.demo.Coin",
+          "role": "uk.co.nickthecoder.tickle.demo.Coin",
           "canRotate": true,
           "zOrder": 0,
           "initialEvent": "default",
@@ -351,7 +351,7 @@
         },
         {
           "name": "coin",
-          "role": "uk.co.nickthecoder.demo.Coin",
+          "role": "uk.co.nickthecoder.tickle.demo.Coin",
           "canRotate": true,
           "zOrder": 0,
           "initialEvent": "default",
@@ -385,7 +385,7 @@
         },
         {
           "name": "coin100",
-          "role": "uk.co.nickthecoder.demo.Coin",
+          "role": "uk.co.nickthecoder.tickle.demo.Coin",
           "canRotate": true,
           "zOrder": 0,
           "initialEvent": "default",
@@ -425,7 +425,7 @@
       "costumes": [
         {
           "name": "worldBounce",
-          "role": "uk.co.nickthecoder.demo.WorldBound",
+          "role": "uk.co.nickthecoder.tickle.demo.WorldBound",
           "canRotate": false,
           "zOrder": 0,
           "initialEvent": "default",
@@ -496,7 +496,7 @@
   "costumes": [
     {
       "name": "bee",
-      "role": "uk.co.nickthecoder.demo.Bee",
+      "role": "uk.co.nickthecoder.tickle.demo.Bee",
       "canRotate": true,
       "zOrder": 0,
       "initialEvent": "default",
@@ -524,7 +524,7 @@
     },
     {
       "name": "grenade",
-      "role": "uk.co.nickthecoder.demo.Grenade",
+      "role": "uk.co.nickthecoder.tickle.demo.Grenade",
       "canRotate": true,
       "zOrder": 0,
       "initialEvent": "default",
@@ -558,7 +558,7 @@
     },
     {
       "name": "hand",
-      "role": "uk.co.nickthecoder.demo.Hand",
+      "role": "uk.co.nickthecoder.tickle.demo.Hand",
       "canRotate": false,
       "zOrder": 0,
       "initialEvent": "default",
@@ -615,7 +615,7 @@
     },
     {
       "name": "shootingStar",
-      "role": "uk.co.nickthecoder.demo.ShootingStar",
+      "role": "uk.co.nickthecoder.tickle.demo.ShootingStar",
       "canRotate": false,
       "zOrder": 0,
       "initialEvent": "default",
@@ -687,7 +687,7 @@
     },
     {
       "name": "info",
-      "role": "uk.co.nickthecoder.demo.Info",
+      "role": "uk.co.nickthecoder.tickle.demo.Info",
       "canRotate": false,
       "zOrder": 0,
       "initialEvent": "default",
@@ -709,7 +709,7 @@
     },
     {
       "name": "eye",
-      "role": "uk.co.nickthecoder.demo.Eye",
+      "role": "uk.co.nickthecoder.tickle.demo.Eye",
       "canRotate": false,
       "zOrder": 0,
       "initialEvent": "default",
@@ -772,7 +772,7 @@
     },
     {
       "name": "coinRod",
-      "role": "uk.co.nickthecoder.demo.Rod",
+      "role": "uk.co.nickthecoder.tickle.demo.Rod",
       "canRotate": true,
       "zOrder": 56,
       "initialEvent": "default",
@@ -828,7 +828,7 @@
     },
     {
       "name": "redOutline",
-      "role": "uk.co.nickthecoder.demo.Rod",
+      "role": "uk.co.nickthecoder.tickle.demo.Rod",
       "canRotate": true,
       "zOrder": 0,
       "initialEvent": "default",
