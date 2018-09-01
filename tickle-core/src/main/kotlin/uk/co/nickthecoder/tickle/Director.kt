@@ -23,6 +23,7 @@ import uk.co.nickthecoder.tickle.events.MouseButtonListener
 import uk.co.nickthecoder.tickle.events.MouseEvent
 import uk.co.nickthecoder.tickle.physics.TickleWorld
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 
 /**
  * Looks after a single Scene. A game will typically have at least two Directors, one to handle the menu or splash
@@ -77,7 +78,7 @@ interface Director : MouseButtonListener {
     companion object {
         fun createDirector(directorString: String): Director {
             try {
-                val klass = Class.forName(directorString)
+                val klass = ScriptManager.classForName(directorString)
                 val newDirector = klass.newInstance()
                 if (newDirector is Director) {
                     return newDirector

@@ -135,9 +135,18 @@ Tickle is split into modules...
 
 **tickle-editor** contains additional classes needed for the editor (to edit game resources, and game leveals (aka Scenes).
 
-The top-level **tickle** module contains a demo game (which doesn't have any decent game play),
-its only there to help me test things as I develop them,
-and is also useful for you, to check that compiling tickle worked!
+**tickle-groovy** Adds support for groovy to be used as a scripting language for game development
+
+**tickle-kotlin** Adds support for kotlin to be used as a scripting language for game development.
+However, I'm not sure I'll continue using Kotlin as a scripting language.
+It is slow. It requires a bodge to get the Class defined in the script.
+Worst of all, it doesn't support setting a path, and therefore I don't think there's a good way to
+allow a base class to be defined in one file, and use that base class from another file.
+
+The top-level **tickle** module contains a demo game (which doesn't have any decent game play).
+It helps me test things as I develop Tickle.
+It is also useful for you, to check that compiling tickle worked!
+It may also be helpful as example code.
 
 Your own games should depend on *tickle-core* and *tickle-editor*, but not *tickle* itself (as it doesn't need any of that
 demo code).

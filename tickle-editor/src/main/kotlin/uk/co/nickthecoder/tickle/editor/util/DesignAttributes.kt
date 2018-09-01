@@ -6,6 +6,7 @@ import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.RuntimeAttributes
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
@@ -31,10 +32,8 @@ class DesignAttributes : RuntimeAttributes() {
         val kClass: KClass<*>
         var instance: Any? = null
         try {
-            kClass = Class.forName(className).kotlin
-            if (className.isNotBlank()) {
-                instance = kClass.java.newInstance()
-            }
+            kClass = ScriptManager.classForName(className).kotlin
+            instance = kClass.java.newInstance()
         } catch (e: Exception) {
             e.printStackTrace()
             // Do nothing

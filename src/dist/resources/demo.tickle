@@ -7,7 +7,7 @@
     "resizable": true,
     "fullScreen": false,
     "initialScene": "level01",
-    "testScene": "bounceTest",
+    "testScene": "test",
     "producer": "uk.co.nickthecoder.tickle.demo.Demo",
     "physics": {
       "gravity_x": 0,
@@ -828,7 +828,7 @@
     },
     {
       "name": "redOutline",
-      "role": "uk.co.nickthecoder.tickle.demo.Rod",
+      "role": "scripts.Line_1$ExampleKotlinRole",
       "canRotate": true,
       "zOrder": 0,
       "initialEvent": "default",
@@ -850,7 +850,7 @@
     },
     {
       "name": "blueTile",
-      "role": "",
+      "role": "ExampleGroovyRole",
       "canRotate": true,
       "zOrder": 0,
       "initialEvent": "default",

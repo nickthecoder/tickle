@@ -9,6 +9,10 @@
 /tickle-core/out
 /tickle-editor/build
 /tickle-editor/out
+/tickle-groovy/build
+/tickle-groovy/out
+/tickle-kotlin/build
+/tickle-kotlin/out
 /tickle.iml
 /tickle.ipr
 /tickle.iws

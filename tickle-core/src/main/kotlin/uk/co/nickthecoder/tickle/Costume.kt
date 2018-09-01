@@ -22,6 +22,7 @@ import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.physics.TickleBodyDef
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.Copyable
 import uk.co.nickthecoder.tickle.util.Deletable
@@ -103,7 +104,7 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
         if (roleString.isBlank()) return null
 
         try {
-            return Class.forName(roleString)
+            return ScriptManager.classForName(roleString)
         } catch (e: Exception) {
             System.err.println("Warning. Costume '${Resources.instance.costumes.findName(this)}' couldn't create role '$roleString'. $e")
             return null

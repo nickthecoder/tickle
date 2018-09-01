@@ -80,12 +80,14 @@ class NewGameWizard : AbstractTask() {
             .addParameters(width, cross, height)
             .asHorizontal(LabelPosition.NONE)
 
+    val groovy = BooleanParameter("enableGroovyScripts", value = true)
+
     val intellij = BooleanParameter("createIntelliJProject", value = true)
 
     val git = BooleanParameter("initialiseGit", value = true)
 
     override val taskD = TaskDescription("New Game Wizard")
-            .addParameters(gameName, parentDirectory, packagePrefix, size, initialSceneName, intellij, git)
+            .addParameters(gameName, parentDirectory, packagePrefix, size, initialSceneName, groovy, intellij, git)
 
 
     override fun check() {
@@ -123,7 +125,7 @@ class NewGameWizard : AbstractTask() {
         val packageDir = mainPackageDir()
         val resourcesDir = directory.child("src", "dist", "resources")
 
-        println("Creating directory structure at : ${directory}")
+        println("Creating directory structure at : $directory")
 
         directory.mkdir()
         packageDir.mkdirs()
@@ -131,6 +133,9 @@ class NewGameWizard : AbstractTask() {
         resourcesDir.child("scenes").mkdir()
         resourcesDir.child("images").mkdir()
         resourcesDir.child("sounds").mkdir()
+        if (groovy.value == true) {
+            File(resourcesDir, "scripts").mkdir()
+        }
 
         val resourcesFile = File(resourcesDir, id + ".tickle")
         println("Creating $resourcesFile")
@@ -213,6 +218,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${'$'}kotlin_version"
+        ${if (groovy.value == true) "compile 'org.codehaus.groovy:groovy-all:2.4.5'" else ""}
     }
 }
 
@@ -306,6 +312,7 @@ import uk.co.nickthecoder.tickle.namedMain
  * See [namedMain] for usage information.
  */
 fun main(args: Array<String>) {
+    ${if (groovy.value == true) "GroovyLanguage().register()" else ""}
     EditorMain("${identifier().toLowerCase()}", args).start()
 }
 

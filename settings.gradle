@@ -1,2 +1,4 @@
 include 'tickle-core'
 include 'tickle-editor'
+include 'tickle-groovy'
+include 'tickle-kotlin'

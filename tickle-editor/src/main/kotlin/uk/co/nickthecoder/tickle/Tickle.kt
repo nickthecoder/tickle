@@ -23,12 +23,21 @@ import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.SoundManager
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 
 /**
- * See [help] for command line usage information.
+ * Parses command line arguments, and then starts the game.
+ * Note, in the -editor module, EditorMain subclasses this, giving more options,
+ * including starting the editor, or the new game wizard.
+ *
+ * See [help] for command line usage information (or use --help from the command line).
+ *
+ * Note, I could have chosen to use Paratask to parse and run the command, but
+ * I want to keep open the option of running tickle games without the JavaFX dependency
+ * that paratask requires.
  */
 open class Tickle(val programName: String, val args: Array<String>) {
 
@@ -54,6 +63,12 @@ open class Tickle(val programName: String, val args: Array<String>) {
 
         if (resourcesFile == null) {
             resourcesFile = guessTickleFile()
+        }
+        println("Resource file = $resourcesFile")
+        resourcesFile?.let {
+            val path = File(it.parent, "scripts")
+            println("Adding path $path")
+            ScriptManager.addPath(path)
         }
 
         launch()

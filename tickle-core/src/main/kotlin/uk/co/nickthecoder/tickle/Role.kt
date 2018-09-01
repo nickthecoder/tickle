@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle
 
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.util.distanceSquared
 
 interface Role {
@@ -77,7 +78,7 @@ interface Role {
 
         fun create(roleString: String): Role? {
             try {
-                val klass = Class.forName(roleString)
+                val klass = ScriptManager.classForName(roleString)
                 val newRole = klass.newInstance()
                 if (newRole is Role) {
                     return newRole
