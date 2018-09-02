@@ -29,12 +29,15 @@ import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.CostumeGroup
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.ScriptStub
 import uk.co.nickthecoder.tickle.editor.resources.DesignJsonScene
 import uk.co.nickthecoder.tickle.editor.resources.DesignSceneResource
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.resources.*
+import uk.co.nickthecoder.tickle.scripts.Language
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 import java.io.File
 
@@ -70,6 +73,14 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
 
     val soundP = FileParameter("soundFile", label = "File", value = File(Resources.instance.file.parentFile, "sounds").absoluteFile, extensions = listOf("ogg"))
 
+    val scriptLanguageP = ChoiceParameter<Language>("language")
+
+    init {
+        ScriptManager.languages().forEach { language ->
+            scriptLanguageP.addChoice(language.name, language, language.name)
+        }
+    }
+
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
 
 
@@ -102,6 +113,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
             ResourceType.SCENE_DIRECTORY -> sceneDirectoryP
             ResourceType.SCENE -> sceneP
             ResourceType.SOUND -> soundP
+            ResourceType.SCRIPT -> scriptLanguageP
             else -> null
 
         }
@@ -116,8 +128,10 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
                     "Input" to inputP,
                     "Scene Directory" to sceneDirectoryP,
                     "Scene" to sceneP,
-                    "Sound" to soundP)
-            taskD.addParameters(textureP, poseP, fontP, costumeP, costumeGroupP, layoutP, inputP, sceneDirectoryP, sceneP, soundP)
+                    "Sound" to soundP,
+                    "Script" to scriptLanguageP)
+
+            taskD.addParameters(textureP, poseP, fontP, costumeP, costumeGroupP, layoutP, inputP, sceneDirectoryP, sceneP, soundP, scriptLanguageP)
         } else {
             resourceTypeP.hidden = true
             resourceTypeP.value = parameter
@@ -139,6 +153,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
             soundP -> Resources.instance.sounds
             sceneDirectoryP -> null
             sceneP -> null
+            scriptLanguageP -> null
             else -> null
         }
 
@@ -147,7 +162,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
                 throw ParameterException(nameP, "Already exists")
             }
         }
-        // TODO Do similar tests for sceneDirectory name and scene name.
+        // TODO Do similar tests for sceneDirectory name, scene name and script name.
     }
 
     override fun run() {
@@ -227,10 +242,16 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
                 Resources.instance.sounds.add(nameP.value, sound)
                 data = sound
             }
+            scriptLanguageP -> {
+                scriptLanguageP.value?.createScript(Resources.instance.scriptDirectory(), nameP.value)?.let { file ->
+                    data = ScriptStub(file)
+                    Resources.instance.fireAdded(file, nameP.value)
+                }
+            }
         }
 
-        if (data != null) {
-            MainWindow.instance.openTab(nameP.value, data)
+        data?.let {
+            MainWindow.instance.openTab(nameP.value, it)
         }
     }
 

@@ -18,10 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.editor.resources
 
-enum class ResourceType(val label: String, val graphicName: String, val canCreate: Boolean = true) {
+enum class ResourceType(val label: String, val graphicName: String) {
     ANY("Resource", "folder2.png"),
-    GAME_INFO("Game Info", "gameInfo.png", canCreate = false),
-    PREFERENCES("Preferences", "preferences.png", canCreate = false),
+    GAME_INFO("Game Info", "gameInfo.png"),
+    PREFERENCES("Preferences", "preferences.png"),
     TEXTURE("Texture", "texture.png"),
     POSE("Pose", "pose.png"),
     COSTUME("Costume", "costume.png"),

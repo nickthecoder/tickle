@@ -153,6 +153,8 @@ open class Resources {
         fontResources.items().values.forEach { it.reload() }
     }
 
+    fun scriptDirectory() = File(file.parent, "scripts")
+
     companion object {
         /**
          * A convenience, so that game scripts can easily get access to the resources.

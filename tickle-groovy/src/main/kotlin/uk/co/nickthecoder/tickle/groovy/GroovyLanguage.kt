@@ -29,6 +29,8 @@ class GroovyLanguage : Language() {
 
     override val fileExtension = "groovy"
 
+    override val name = "Groovy"
+
     override fun addPath(directory: File) {
         groovyClassLoader.addClasspath(directory.path)
     }
@@ -36,5 +38,16 @@ class GroovyLanguage : Language() {
     override fun loadScript(file: File) : Class<*> {
         return groovyClassLoader.parseClass(file)
     }
+
+    override fun generateBlankScript(name : String) = """import uk.co.nickthecoder.tickle.*
+
+class ${name} extends AbstractRole {
+
+   def void tick() {
+   }
+
+}
+
+"""
 
 }

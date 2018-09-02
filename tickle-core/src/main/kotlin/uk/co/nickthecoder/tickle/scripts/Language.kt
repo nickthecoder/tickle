@@ -38,6 +38,8 @@ abstract class Language {
 
     abstract val fileExtension: String
 
+    abstract val name: String
+
     /**
      * Key is the name of the filename without extension.
      * Value is the Class contained in that file.
@@ -91,4 +93,12 @@ abstract class Language {
             !it.value.isInterface && !Modifier.isAbstract(it.value.modifiers) && type.isAssignableFrom(it.value)
         }.toSortedMap().map { it.value }
     }
+
+    fun createScript(scriptDirectory: File, scriptName: String): File {
+        val file = File(scriptDirectory, scriptName + ".${fileExtension}")
+        file.writeText(generateBlankScript(scriptName))
+        return file
+    }
+
+    abstract fun generateBlankScript(name: String): String
 }

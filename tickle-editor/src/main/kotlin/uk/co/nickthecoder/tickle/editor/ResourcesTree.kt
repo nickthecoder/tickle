@@ -113,15 +113,17 @@ class ResourcesTree()
 
         open fun removed() {}
 
+        open val newResourceType: ResourceType? = resourceType
+
         fun createContextMenu(): ContextMenu {
             val menu = ContextMenu()
             renameMenuItem()?.let { menu.items.add(it) }
             deleteMenuItem()?.let { menu.items.add(it) }
 
-            if (resourceType.canCreate) {
-                val newItem = MenuItem("New ${resourceType.label}")
+            newResourceType?.let { newResourceType ->
+                val newItem = MenuItem("New ${newResourceType.label}")
                 newItem.onAction = EventHandler {
-                    TaskPrompter(NewResourceTask(resourceType)).placeOnStage(Stage())
+                    TaskPrompter(NewResourceTask(newResourceType)).placeOnStage(Stage())
                 }
                 menu.items.add(newItem)
             }
@@ -184,17 +186,25 @@ class ResourcesTree()
                     ScriptsItem())
         }
 
+        override val newResourceType = null
+
         override fun isLeaf() = false
     }
 
     inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo, ResourceType.GAME_INFO) {
 
         override fun data(): GameInfo = resources.gameInfo
+
+        override val newResourceType = null
+
     }
 
     inner class EditorPreferencesItem() : DataItem("Editor Preferences", resources.gameInfo, ResourceType.PREFERENCES) {
 
         override fun data(): EditorPreferences = resources.preferences
+
+        override val newResourceType = null
+
     }
 
     open inner class DataItem(var name: String, val data: Any, resourceType: ResourceType, graphic: Node? = null)
@@ -569,6 +579,8 @@ class ResourcesTree()
 
         override fun isLeaf() = false
 
+        override val newResourceType = ResourceType.SCRIPT
+
     }
 
     inner class SceneItem(val file: File)
@@ -605,7 +617,7 @@ class ResourcesTree()
 
     inner class ScriptsItem : TopLevelItem("Scripts", ResourceType.SCRIPT_DIRECTORY) {
 
-        var scriptDirectory = File(resources.file.parentFile, "scripts")
+        var scriptDirectory = resources.scriptDirectory()
 
         init {
             val lister = FileLister(extensions = ScriptManager.languages().map { it.fileExtension })
@@ -621,6 +633,10 @@ class ResourcesTree()
                 updateLabel()
             }
         }
+
+        override val newResourceType = ResourceType.SCRIPT
+
+        override fun isLeaf() = false
 
         override fun toString() = "Scripts (${children.size})"
 

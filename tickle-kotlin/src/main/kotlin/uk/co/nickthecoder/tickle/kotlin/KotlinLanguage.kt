@@ -22,12 +22,22 @@ import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngineFactor
 import uk.co.nickthecoder.tickle.scripts.Language
 import java.io.File
 
-
+/**
+ * Allows Kotlin to be used as a scripting language.
+ *
+ * I don't think this works very well though, so for now, I will stick with Groovy as the default scripting language.
+ *
+ * The error messages returned by the kotlin script interpreter are dreadful.
+ * The class names are weird (such as Line_3$ExampleRole). I have bodged this though, by using the filename instead
+ * of the class name.
+ */
 class KotlinLanguage : Language() {
 
     val engine = KotlinJsr223JvmLocalScriptEngineFactory().scriptEngine
 
     override val fileExtension = "kts"
+
+    override val name = "Kotlin"
 
     override fun addPath(directory: File) {
         // TODO  Hmm, we don't seem to have a way to add the scripts directory to the script engine's path.
@@ -39,4 +49,13 @@ class KotlinLanguage : Language() {
         return engine.eval("${file.nameWithoutExtension}::class.java") as Class<*>
     }
 
+    override fun generateBlankScript(name: String) = """import uk.co.nickthecoder.tickle.*
+
+class $name : AbstractRole() {
+
+    override fun tick() {
+    }
+
+}
+"""
 }
