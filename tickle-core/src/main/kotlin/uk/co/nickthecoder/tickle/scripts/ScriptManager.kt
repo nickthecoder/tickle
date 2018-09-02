@@ -46,12 +46,11 @@ object ScriptManager {
     fun scan(directory: File) {
         println("Scanning directory $directory")
         directory.listFiles().forEach { file ->
-            val ext = file.extension
-            languages[ext]?.addScript(file)
+            load(file)
         }
     }
 
-    fun reload(file: File) {
+    fun load(file: File) {
         languages[file.extension]?.addScript(file)
     }
 

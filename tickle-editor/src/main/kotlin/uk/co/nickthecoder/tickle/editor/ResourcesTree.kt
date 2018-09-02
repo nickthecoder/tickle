@@ -182,8 +182,11 @@ class ResourcesTree()
                     CostumesItem(),
                     InputsItem(),
                     LayoutsItem(),
-                    ScenesDirectoryItem("Scenes", resources.sceneDirectory.absoluteFile),
-                    ScriptsItem())
+                    ScenesDirectoryItem("Scenes", resources.sceneDirectory.absoluteFile))
+
+            if (ScriptManager.languages().isNotEmpty()) {
+                children.add(ScriptsItem())
+            }
         }
 
         override val newResourceType = null
@@ -650,6 +653,7 @@ class ResourcesTree()
             if (resource is File && resource == file) {
                 parent?.let {
                     (it as ResourceItem).remove(this)
+                    updateLabel()
                 }
             } else {
                 super.resourceRemoved(resource, name)
@@ -659,8 +663,12 @@ class ResourcesTree()
         override fun deleteMenuItem(): MenuItem? {
             val menuItem = MenuItem("Delete")
             menuItem.onAction = EventHandler {
-                println("Delete script not yet implemented")
-                // TODO Delete the script
+                val name = file.nameWithoutExtension
+                resources.costumes.items().values.filter { it.roleString == name }.forEach {
+                    it.roleString = ""
+                }
+                file.delete()
+                resources.fireRemoved(file, name)
             }
             return menuItem
         }
@@ -668,8 +676,7 @@ class ResourcesTree()
         override fun renameMenuItem(): MenuItem? {
             val menuItem = MenuItem("Rename")
             menuItem.onAction = EventHandler {
-                println("Rename script not yet implemented")
-                // TODO Rename the script
+                TaskPrompter(RenameScriptTask(file)).placeOnStage(Stage())
             }
             return menuItem
         }

@@ -96,6 +96,9 @@ abstract class Language {
 
     fun createScript(scriptDirectory: File, scriptName: String): File {
         val file = File(scriptDirectory, scriptName + ".${fileExtension}")
+        if (!scriptDirectory.exists()) {
+            scriptDirectory.mkdirs()
+        }
         file.writeText(generateBlankScript(scriptName))
         return file
     }

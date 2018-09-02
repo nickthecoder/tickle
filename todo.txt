@@ -3,6 +3,10 @@ Current Work
 
 Get a full game working with Groovy as the scripting language.
 
+Allow scripts to be deleted
+    Should look for all Costumes etc that use this script, and change them.
+    Saving the resources if found.
+
 Allow roles to be renamed (changing all Costumes, as well as the filename and class name)
 CostumeTab has "new script" button next to the drop down box (only if languages is not empty).
 

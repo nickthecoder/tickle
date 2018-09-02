@@ -21,11 +21,15 @@ package uk.co.nickthecoder.tickle.editor.tabs
 import javafx.scene.control.TextArea
 import uk.co.nickthecoder.tickle.editor.ScriptStub
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.ResourcesListener
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
+import java.io.File
 
 class ScriptTab(val scriptStub: ScriptStub)
 
-    : EditTab(scriptStub.file.nameWithoutExtension, scriptStub, graphicName = ResourceType.SCRIPT.graphicName) {
+    : EditTab(scriptStub.file.nameWithoutExtension, scriptStub, graphicName = ResourceType.SCRIPT.graphicName),
+        ResourcesListener {
 
     val textArea = TextArea()
     val file = scriptStub.file
@@ -34,11 +38,18 @@ class ScriptTab(val scriptStub: ScriptStub)
         textArea.text = file.readText()
         textArea.styleClass.add("script")
         borderPane.center = textArea
+        Resources.instance.listeners.add(this)
     }
 
     override fun save(): Boolean {
         file.writeText(textArea.text)
-        ScriptManager.reload(file)
+        ScriptManager.load(file)
         return true
+    }
+
+    override fun resourceRemoved(resource: Any, name: String) {
+        if (resource is File && resource == scriptStub.file) {
+            close()
+        }
     }
 }
