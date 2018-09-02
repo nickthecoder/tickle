@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.resources
 
-import uk.co.nickthecoder.tickle.editor.util.ResourceType
+import uk.co.nickthecoder.tickle.util.ResourceType
 
 open class ResourceMap<T : Any>(val resources: Resources, val resourceType : ResourceType) {
 

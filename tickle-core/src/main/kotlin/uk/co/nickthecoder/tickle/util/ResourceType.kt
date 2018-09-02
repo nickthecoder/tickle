@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-package uk.co.nickthecoder.tickle.editor.util
+package uk.co.nickthecoder.tickle.util
 
 enum class ResourceType(val label: String, val graphicName: String, val canCreate: Boolean = true) {
     ANY("Resource", "folder2.png"),
@@ -31,7 +31,8 @@ enum class ResourceType(val label: String, val graphicName: String, val canCreat
     FONT("Font", "font.png"),
     SOUND("Sound", "sound.png"),
     SCENE_DIRECTORY("Scene Directory", "folder.png"),
-    SCENE("Scene", "scene.png");
+    SCENE("Scene", "scene.png"),
+    SCRIPT("Script", "script.png");
 
     fun canCreate(): Boolean = this != ANY && this != GAME_INFO && this != PREFERENCES
 }

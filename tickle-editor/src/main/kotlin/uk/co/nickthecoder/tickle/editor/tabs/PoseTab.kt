@@ -23,6 +23,7 @@ import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.util.ResourceType
 
 class PoseTab(name: String, val pose: Pose)
     : EditTaskTab(PoseTask(name, pose), name, pose, graphicName = "pose.png") {

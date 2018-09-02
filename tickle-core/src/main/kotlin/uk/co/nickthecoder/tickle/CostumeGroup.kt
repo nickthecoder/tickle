@@ -18,11 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle
 
-import uk.co.nickthecoder.tickle.editor.util.ResourceType
 import uk.co.nickthecoder.tickle.resources.ResourceMap
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Renamable
+import uk.co.nickthecoder.tickle.util.ResourceType
 
 class CostumeGroup(resources: Resources)
     : ResourceMap<Costume>(resources, ResourceType.COSTUME), Deletable, Renamable {

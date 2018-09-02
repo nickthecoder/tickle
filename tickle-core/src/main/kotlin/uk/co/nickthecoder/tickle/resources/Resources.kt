@@ -19,10 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.resources
 
 import uk.co.nickthecoder.tickle.*
-import uk.co.nickthecoder.tickle.editor.util.ResourceType
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.sound.Sound
+import uk.co.nickthecoder.tickle.util.ResourceType
 import java.io.File
 
 open class Resources {

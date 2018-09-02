@@ -18,10 +18,10 @@ import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.editor.EditorAction
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.DesignResources
-import uk.co.nickthecoder.tickle.editor.util.ResourceType
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
 import uk.co.nickthecoder.tickle.util.Copyable
+import uk.co.nickthecoder.tickle.util.ResourceType
 
 
 abstract class EditTab(

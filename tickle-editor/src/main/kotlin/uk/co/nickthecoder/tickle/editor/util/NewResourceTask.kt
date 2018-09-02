@@ -18,6 +18,7 @@ import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.JsonScene
+import uk.co.nickthecoder.tickle.util.ResourceType
 import java.io.File
 
 

@@ -39,9 +39,11 @@ import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Layout
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Renamable
+import uk.co.nickthecoder.tickle.util.ResourceType
 import java.io.File
 
 class ResourcesTree()
@@ -161,7 +163,7 @@ class ResourcesTree()
             value = toString()
         }
 
-        override fun toString() = value
+        override fun toString(): String = value
     }
 
 
@@ -178,7 +180,8 @@ class ResourcesTree()
                     CostumesItem(),
                     InputsItem(),
                     LayoutsItem(),
-                    ScenesDirectoryItem("Scenes", resources.sceneDirectory.absoluteFile))
+                    ScenesDirectoryItem("Scenes", resources.sceneDirectory.absoluteFile),
+                    ScriptsItem())
         }
 
         override fun isLeaf() = false
@@ -496,7 +499,8 @@ class ResourcesTree()
         }
     }
 
-    inner class LayoutsItem() : TopLevelItem("Layout", ResourceType.LAYOUT) {
+    inner class LayoutsItem
+        : TopLevelItem("Layout", ResourceType.LAYOUT) {
 
         init {
             resources.layouts.items().map { it }.sortedBy { it.key }.forEach { (name, layout) ->
@@ -516,7 +520,8 @@ class ResourcesTree()
 
     }
 
-    inner class InputsItem() : TopLevelItem("Inputs", ResourceType.INPUT) {
+    inner class InputsItem
+        : TopLevelItem("Inputs", ResourceType.INPUT) {
 
         init {
             resources.inputs.items().map { it }.sortedBy { it.key }.forEach { (name, input) ->
@@ -537,6 +542,7 @@ class ResourcesTree()
     }
 
     inner class ScenesDirectoryItem(label: String, val directory: File)
+
         : TopLevelItem(label, ResourceType.SCENE_DIRECTORY) {
 
         init {
@@ -565,7 +571,9 @@ class ResourcesTree()
 
     }
 
-    inner class SceneItem(val file: File) : DataItem(file.nameWithoutExtension, SceneStub(file), ResourceType.SCENE) {
+    inner class SceneItem(val file: File)
+        : DataItem(file.nameWithoutExtension, SceneStub(file), ResourceType.SCENE) {
+
         override fun resourceRemoved(resource: Any, name: String) {
             if (resource is File && resource == file) {
                 parent?.let {
@@ -593,11 +601,76 @@ class ResourcesTree()
         }
 
     }
+
+
+    inner class ScriptsItem : TopLevelItem("Scripts", ResourceType.SCRIPT) {
+
+        var scriptDirectory = File(resources.file.parentFile, "scripts")
+
+        init {
+            val lister = FileLister(extensions = ScriptManager.languages().map { it.fileExtension })
+            lister.listFiles(scriptDirectory).forEach { file ->
+                children.add(ScriptItem(file))
+            }
+        }
+
+        override fun resourceAdded(resource: Any, name: String) {
+            if (resource is File && resource.parentFile == scriptDirectory) {
+                children.add(ScriptItem(resource))
+                updateLabel()
+            }
+        }
+
+        override fun toString() = "Scripts (${children.size})"
+
+    }
+
+    inner class ScriptItem(val file: File)
+
+        : DataItem(file.nameWithoutExtension, ScriptStub(file), ResourceType.SCRIPT) {
+
+        override fun resourceRemoved(resource: Any, name: String) {
+            if (resource is File && resource == file) {
+                parent?.let {
+                    (it as ResourceItem).remove(this)
+                }
+            } else {
+                super.resourceRemoved(resource, name)
+            }
+        }
+
+        override fun deleteMenuItem(): MenuItem? {
+            val menuItem = MenuItem("Delete")
+            menuItem.onAction = EventHandler {
+                println("Delete script not yet implemented")
+                // TODO Delete the script
+            }
+            return menuItem
+        }
+
+        override fun renameMenuItem(): MenuItem? {
+            val menuItem = MenuItem("Rename")
+            menuItem.onAction = EventHandler {
+                println("Rename script not yet implemented")
+                // TODO Rename the script
+            }
+            return menuItem
+        }
+    }
 }
 
 class SceneStub(val file: File) {
     override fun equals(other: Any?): Boolean {
         if (other is SceneStub) {
+            return file == other.file
+        }
+        return false
+    }
+}
+
+class ScriptStub(val file: File) {
+    override fun equals(other: Any?): Boolean {
+        if (other is ScriptStub) {
             return file == other.file
         }
         return false

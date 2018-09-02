@@ -31,6 +31,8 @@ object ScriptManager {
 
     private val languages = mutableMapOf<String, Language>()
 
+    fun languages() = languages.values
+
     fun register(language: Language) {
         println("Registering language ${language.fileExtension}")
         languages[language.fileExtension] = language
@@ -45,10 +47,12 @@ object ScriptManager {
         println("Scanning directory $directory")
         directory.listFiles().forEach { file ->
             val ext = file.extension
-            languages[ext]?.let { language ->
-                val klass = language.addScript(file)
-            }
+            languages[ext]?.addScript(file)
         }
+    }
+
+    fun reload(file: File) {
+        languages[file.extension]?.addScript(file)
     }
 
     fun subTypes(type: Class<*>): List<Class<*>> {

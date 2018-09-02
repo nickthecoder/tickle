@@ -82,7 +82,7 @@ class NewGameWizard : AbstractTask() {
 
     val groovy = BooleanParameter("enableGroovyScripts", value = true)
 
-    val intellij = BooleanParameter("createIntelliJProject", value = true)
+    val intellij = BooleanParameter("createIntellijProject", value = true)
 
     val git = BooleanParameter("initialiseGit", value = true)
 

@@ -244,41 +244,22 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     fun createTab(name: String, data: Any): EditorTab? {
 
-        if (data is GameInfo) {
-            return GameInfoTab()
+        when (data) {
+            is GameInfo -> return GameInfoTab()
 
-        } else if (data is EditorPreferences) {
-            return EditorPreferencesTab()
-
-        } else if (data is Texture) {
-            return TextureTab(name, data)
-
-        } else if (data is Pose) {
-            return PoseTab(name, data)
-
-        } else if (data is Layout) {
-            return LayoutTab(name, data)
-
-        } else if (data is CompoundInput) {
-            return InputTab(name, data)
-
-        } else if (data is Costume) {
-            return CostumeTab(name, data)
-
-        } else if (data is CostumeGroup) {
-            return CostumeGroupTab(name, data)
-
-        } else if (data is SceneStub) {
-            return SceneTab(name, data)
-
-        } else if (data is FontResource) {
-            return FontTab(name, data)
-
-        } else if (data is Sound) {
-            return SoundTab(name, data)
+            is EditorPreferences -> return EditorPreferencesTab()
+            is Texture -> return TextureTab(name, data)
+            is Pose -> return PoseTab(name, data)
+            is Layout -> return LayoutTab(name, data)
+            is CompoundInput -> return InputTab(name, data)
+            is Costume -> return CostumeTab(name, data)
+            is CostumeGroup -> return CostumeGroupTab(name, data)
+            is SceneStub -> return SceneTab(name, data)
+            is FontResource -> return FontTab(name, data)
+            is Sound -> return SoundTab(name, data)
+            is ScriptStub -> return ScriptTab(data)
+            else -> return null
         }
-
-        return null
     }
 
     fun onTabChanged(tab: EditorTab?) {
