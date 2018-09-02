@@ -4,8 +4,8 @@ import javafx.application.Platform
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.util.Renamable
-import uk.co.nickthecoder.tickle.util.ResourceType
 
 class RenameResourceTask(val resource: Renamable, type: ResourceType = ResourceType.ANY, oldName: String)
 

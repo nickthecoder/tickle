@@ -26,7 +26,7 @@ import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.physics.*
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.Sound
-import uk.co.nickthecoder.tickle.util.ResourceType
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 
 class CostumeTab(val name: String, val costume: Costume)
 

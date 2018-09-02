@@ -13,12 +13,11 @@ import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.DesignJsonScene
 import uk.co.nickthecoder.tickle.editor.resources.DesignSceneResource
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.sound.Sound
-import uk.co.nickthecoder.tickle.util.JsonScene
-import uk.co.nickthecoder.tickle.util.ResourceType
 import java.io.File
 
 

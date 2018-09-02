@@ -21,7 +21,7 @@ import uk.co.nickthecoder.tickle.editor.resources.DesignResources
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
 import uk.co.nickthecoder.tickle.util.Copyable
-import uk.co.nickthecoder.tickle.util.ResourceType
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 
 
 abstract class EditTab(

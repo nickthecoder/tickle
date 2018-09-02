@@ -4,9 +4,9 @@ import javafx.application.Platform
 import uk.co.nickthecoder.paratask.TaskListener
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.CostumeGroup
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
-import uk.co.nickthecoder.tickle.util.ResourceType
 
 class CostumeGroupParameter(name: String = "group", val newGroupCallback: (String) -> Unit)
 

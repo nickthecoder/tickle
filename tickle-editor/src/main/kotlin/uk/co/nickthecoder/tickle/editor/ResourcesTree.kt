@@ -43,7 +43,7 @@ import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Renamable
-import uk.co.nickthecoder.tickle.util.ResourceType
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import java.io.File
 
 class ResourcesTree()

@@ -22,10 +22,9 @@ import uk.co.nickthecoder.tickle.resources.ResourceMap
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Renamable
-import uk.co.nickthecoder.tickle.util.ResourceType
 
 class CostumeGroup(resources: Resources)
-    : ResourceMap<Costume>(resources, ResourceType.COSTUME), Deletable, Renamable {
+    : ResourceMap<Costume>(resources), Deletable, Renamable {
 
     var showInSceneEditor: Boolean = true
 
