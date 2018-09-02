@@ -19,6 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.scene.control.TextArea
+import javafx.scene.control.TitledPane
+import uk.co.nickthecoder.paratask.gui.ShortcutHelper
+import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.ScriptStub
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.resources.Resources
@@ -29,10 +32,12 @@ import java.io.File
 class ScriptTab(val scriptStub: ScriptStub)
 
     : EditTab(scriptStub.file.nameWithoutExtension, scriptStub, graphicName = ResourceType.SCRIPT.graphicName),
-        ResourcesListener {
+        ResourcesListener, HasExtras {
 
     val textArea = TextArea()
     val file = scriptStub.file
+
+    val shortcuts = ShortcutHelper("ScriptEditor", MainWindow.instance.borderPane)
 
     init {
         textArea.text = file.readText()
@@ -40,6 +45,11 @@ class ScriptTab(val scriptStub: ScriptStub)
         borderPane.center = textArea
         Resources.instance.listeners.add(this)
     }
+
+    val classHelpPane = TitledPane("Class Help", ClassHelpBox())
+    override fun extraSidePanes() = listOf(classHelpPane)
+
+    override fun extraShortcuts() = shortcuts
 
     override fun save(): Boolean {
         file.writeText(textArea.text)

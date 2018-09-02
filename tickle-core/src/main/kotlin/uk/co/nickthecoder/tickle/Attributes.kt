@@ -64,7 +64,11 @@ interface Attributes {
     fun applyToObject(obj: Any)
 
     fun updateAttributesMetaData(name: String) {
-        updateAttributesMetaData(ScriptManager.classForName(name))
+        if (name.isBlank()) {
+            updateAttributesMetaData(javaClass)
+        } else {
+            updateAttributesMetaData(ScriptManager.classForName(name))
+        }
     }
 
     fun updateAttributesMetaData(klass: Class<*>)

@@ -4,6 +4,7 @@ import javafx.application.Platform
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
 import uk.co.nickthecoder.paratask.parameters.StringParameter
+import uk.co.nickthecoder.tickle.editor.resources.DesignResources
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import java.io.File
@@ -33,6 +34,7 @@ class RenameScriptTask(private val oldFile: File)
             Resources.instance.fireRemoved(oldFile, oldName)
             Resources.instance.fireAdded(newFile, newNameP.value)
             ScriptManager.load(newFile)
+            (Resources.instance as DesignResources).save() // In case a Costume was changed
         }
     }
 }

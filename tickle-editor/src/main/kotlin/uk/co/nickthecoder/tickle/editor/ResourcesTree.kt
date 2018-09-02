@@ -669,6 +669,7 @@ class ResourcesTree()
                 }
                 file.delete()
                 resources.fireRemoved(file, name)
+                resources.save() // In case a costume was altered due to the delete.
             }
             return menuItem
         }
