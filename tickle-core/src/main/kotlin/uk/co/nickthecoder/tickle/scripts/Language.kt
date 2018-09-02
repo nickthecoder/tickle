@@ -38,9 +38,20 @@ abstract class Language {
 
     abstract val fileExtension: String
 
-    val classes = mutableMapOf<String, Class<*>>()
+    /**
+     * Key is the name of the filename without extension.
+     * Value is the Class contained in that file.
+     * Note. the filename is used, rather than the Class.name, because Kotlin creates classes with names like :
+     * Line_3$ExampleRole. Grr.
+     */
+    private val classes = mutableMapOf<String, Class<*>>()
 
-    val classToName = mutableMapOf<WeakReference<Class<*>>, String>()
+    /**
+     * Note, when a script is reloaded, this map will contain the old and new classes,
+     * and therefore will grow larger than [classes] map.
+     * A WeakReference is used so that old (unused) classes can be garbage collected.
+     */
+    private val classToName = mutableMapOf<WeakReference<Class<*>>, String>()
 
     open fun register() {
         ScriptManager.register(this)
@@ -52,16 +63,23 @@ abstract class Language {
 
     fun addScript(file: File) {
         val klass = loadScript(file)
-        classes[klass.name] = klass
-        classToName[WeakReference(klass)] = file.name
+        val name = file.nameWithoutExtension
+        classes.remove(name)
+        classes[name] = klass
+        classToName[WeakReference(klass)] = name
     }
 
-    fun nameOf(klass: Class<*>): String? {
-        return classToName.filter { it.key.get() === klass }.map { it.value }.firstOrNull()
+    fun classForName(name: String): Class<*>? {
+        return classes[name]
     }
 
-    fun classForName(className: String): Class<*>? {
-        return classes[className]
+    fun nameForClass(klass: Class<*>): String? {
+        for ((weakKlass, name) in classToName) {
+            if (weakKlass.get() === klass) {
+                return name
+            }
+        }
+        return null
     }
 
     /**
@@ -69,7 +87,8 @@ abstract class Language {
      * For example, it can be used to find all the scripted Roles, or scripted Directors etc.
      */
     fun subTypes(type: Class<*>): List<Class<*>> {
-        return classes.values.filter { !it.isInterface && !Modifier.isAbstract(it.modifiers) && type.isAssignableFrom(it) }
-                .sortedBy { it.name }
+        return classes.filter {
+            !it.value.isInterface && !Modifier.isAbstract(it.value.modifiers) && type.isAssignableFrom(it.value)
+        }.toSortedMap().map { it.value }
     }
 }

@@ -20,3 +20,7 @@
     -fx-pref-width: 176px;
     -fx-alignment: center-left;
 }
+
+TextArea.script {
+    -fx-font-family: monospaced;
+}

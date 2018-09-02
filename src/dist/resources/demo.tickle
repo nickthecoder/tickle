@@ -828,7 +828,7 @@
     },
     {
       "name": "redOutline",
-      "role": "scripts.Line_1$ExampleKotlinRole",
+      "role": "ExampleKotlinRole",
       "canRotate": true,
       "zOrder": 0,
       "initialEvent": "default",

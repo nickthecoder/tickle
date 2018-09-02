@@ -1,5 +1,3 @@
-package scripts
-
 import uk.co.nickthecoder.tickle.AbstractRole
 
 class ExampleKotlinRole : AbstractRole() {
@@ -8,3 +6,5 @@ class ExampleKotlinRole : AbstractRole() {
         actor.x += 1
     }
 }
+
+

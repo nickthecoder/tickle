@@ -20,6 +20,7 @@ package uk.co.nickthecoder.tickle
 
 import org.joml.Vector2d
 import org.joml.Vector2i
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 
 /**
  * Holds a set of user-definable attributes.
@@ -62,7 +63,11 @@ interface Attributes {
 
     fun applyToObject(obj: Any)
 
-    fun updateAttributesMetaData(className: String)
+    fun updateAttributesMetaData(name: String) {
+        updateAttributesMetaData(ScriptManager.classForName(name))
+    }
+
+    fun updateAttributesMetaData(klass: Class<*>)
 }
 
 

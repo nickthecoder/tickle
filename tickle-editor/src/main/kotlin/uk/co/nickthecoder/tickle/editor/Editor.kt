@@ -66,26 +66,3 @@ class Editor : Application() {
         }
     }
 }
-
-/**
- * A main entry point, which launches the editor.
- * Note, EditorMain is the usual main entry point.
- * This is only here as a convenience, so that the Editor can be easily launched from an IDE,
- * without having to use EditorMain, and setting the --editor flag.
- */
-fun main(args: Array<String>) {
-
-    val file: File?
-    if (args.isEmpty()) {
-        file = guessTickleFile()
-    } else {
-        file = File(args[0]).absoluteFile
-        if (file == null) {
-            System.err.println("No tickle file found. Exiting")
-            System.exit(1)
-        }
-    }
-
-    Editor.start(file)
-
-}

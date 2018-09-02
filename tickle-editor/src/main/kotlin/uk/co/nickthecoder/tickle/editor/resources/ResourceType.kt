@@ -32,6 +32,7 @@ enum class ResourceType(val label: String, val graphicName: String, val canCreat
     SOUND("Sound", "sound.png"),
     SCENE_DIRECTORY("Scene Directory", "folder.png"),
     SCENE("Scene", "scene.png"),
+    SCRIPT_DIRECTORY("Script Directory", "folder.png"),
     SCRIPT("Script", "script.png");
 
     fun canCreate(): Boolean = this != ANY && this != GAME_INFO && this != PREFERENCES

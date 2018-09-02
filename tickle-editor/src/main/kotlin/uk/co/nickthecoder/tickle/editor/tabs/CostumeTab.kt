@@ -21,12 +21,13 @@ import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.DesignJsonScene
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.physics.*
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
-import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 
 class CostumeTab(val name: String, val costume: Costume)
 
@@ -153,7 +154,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
 
         override fun run() {
-            costume.roleString = if (roleClassP.value == null) "" else roleClassP.value!!.name
+            costume.roleString = if (roleClassP.value == null) "" else ScriptManager.nameForClass(roleClassP.value!!)
             costume.canRotate = canRotateP.value == true
             costume.zOrder = zOrderP.value!!
             costume.showInSceneEditor = showInSceneEditorP.value == true
@@ -177,7 +178,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         fun updateAttributes() {
 
-            roleClassP.value?.name?.let {
+            roleClassP.value?.let {
                 costume.attributes.updateAttributesMetaData(it)
             }
 

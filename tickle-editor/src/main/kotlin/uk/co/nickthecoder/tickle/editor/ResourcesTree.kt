@@ -32,6 +32,7 @@ import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.util.FileLister
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.resources.DesignResources
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
@@ -43,7 +44,6 @@ import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Renamable
-import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import java.io.File
 
 class ResourcesTree()
@@ -603,7 +603,7 @@ class ResourcesTree()
     }
 
 
-    inner class ScriptsItem : TopLevelItem("Scripts", ResourceType.SCRIPT) {
+    inner class ScriptsItem : TopLevelItem("Scripts", ResourceType.SCRIPT_DIRECTORY) {
 
         var scriptDirectory = File(resources.file.parentFile, "scripts")
 
@@ -612,6 +612,7 @@ class ResourcesTree()
             lister.listFiles(scriptDirectory).forEach { file ->
                 children.add(ScriptItem(file))
             }
+            updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {

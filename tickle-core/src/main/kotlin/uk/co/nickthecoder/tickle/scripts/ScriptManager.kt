@@ -77,5 +77,12 @@ object ScriptManager {
         }
         throw ClassNotFoundException(className)
     }
+
+    fun nameForClass(klass: Class<*>): String {
+        for (language in languages.values) {
+            language.nameForClass(klass)?.let { return it }
+        }
+        return klass.name
+    }
 }
 

@@ -6,7 +6,6 @@ import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.RuntimeAttributes
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.CostumeAttribute
@@ -27,13 +26,12 @@ class DesignAttributes : RuntimeAttributes() {
      * we can find the default value the field has immediately after creation. In this way, we can show the default
      * value in the Editor/SceneEditor.
      */
-    override fun updateAttributesMetaData(className: String) {
+    override fun updateAttributesMetaData(klass: Class<*>) {
 
-        val kClass: KClass<*>
+        val kClass = klass.kotlin
         var instance: Any? = null
         try {
-            kClass = ScriptManager.classForName(className).kotlin
-            instance = kClass.java.newInstance()
+            instance = klass.newInstance()
         } catch (e: Exception) {
             e.printStackTrace()
             // Do nothing
@@ -86,7 +84,7 @@ class DesignAttributes : RuntimeAttributes() {
         }
 
         toDiscard.forEach { name ->
-            System.err.println("Warning. Removing attribute : $name. Not used by class '$className'.")
+            System.err.println("Warning. Removing attribute : $name. Not used by class '$klass'.")
             map.remove(name)
         }
 

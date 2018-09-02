@@ -140,7 +140,7 @@ open class RuntimeAttributes : Attributes {
         }.joinToString()
     }
 
-    override fun updateAttributesMetaData(className: String) {
+    override fun updateAttributesMetaData(klass: Class<*>) {
     }
 
 }
