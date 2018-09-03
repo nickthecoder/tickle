@@ -30,20 +30,21 @@ import uk.co.nickthecoder.tickle.resources.Resources
 class APITab : EditTab("API Documentation", APIStub, graphicName = ResourceType.API_Documentation.graphicName),
         HasExtras {
 
-    private val classHelpPane = TitledPane("Class Help", ClassHelpBox())
+    private val webView = WebView()
+    val webEngine = webView.getEngine()
+
+    private val classHelpPane = TitledPane("Classes", ClassHelpBox(webView))
     override fun extraSidePanes() = listOf(classHelpPane)
 
     private val shortcuts = ShortcutHelper("API Documentation", MainWindow.instance.borderPane)
     override fun extraShortcuts() = shortcuts
-
-    private val webView = WebView()
-    val webEngine = webView.getEngine()
 
     init {
         webEngine.load(Resources.instance.preferences.apiURL)
         borderPane.center = webView
         okButton.isVisible = false
         applyButton.isVisible = false
+        cancelButton.text = "Close"
     }
 
     override fun save() = true
