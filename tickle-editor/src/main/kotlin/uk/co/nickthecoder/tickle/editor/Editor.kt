@@ -25,7 +25,6 @@ import uk.co.nickthecoder.paratask.util.AutoExit
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.editor.resources.DesignJsonResources
 import uk.co.nickthecoder.tickle.graphics.Window
-import uk.co.nickthecoder.tickle.guessTickleFile
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.SoundManager
 import java.io.File

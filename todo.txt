@@ -166,17 +166,19 @@ The "Actors" and the "Layers" panels can be ignored.
 
 # Later
 
-TextStyle to have an extraSpacing property which causes letters to be moved further appart
+Move NewGameWizard into its own module.
+
+Add all native code (not only the current OS) into tickle-core
+(otherwise it will only work on one platform when distributed).
+Or maybe, create tickle-natives-linux etc AND tickle-natives-all
+    Demo can then depend on the 'current' OS, and 3rd party games can choose
+
+TextStyle to have an extraSpacing property which causes letters to be moved further apart
 	Ditto for extra line height.
 
 Game based on "flocking" :	https://www.youtube.com/watch?v=M028vafB0l8
 
-Split the project into multiple modules
-	core
-	demo
-	editor
-
-RevealStageView
+XRayStageView
 	Age Of Empires style outline of actors hidden behind buildings.
 		Use a z buffer?
 	Render all buildings and movables in one pass as a normal IsometricStageView (ordered based on Actor's Y position)
@@ -188,22 +190,31 @@ RevealStageView
 	and again for a coloured thinner image coloured based on who's side the character belongs to.
 	Rather than have multiple overlapping views, have one compound view, so that we only need to scroll the compound view.
 
-Fog of War
+I may also need to use Kotlin AND java annotations to look for attributes (assuming Groovy supports java annotations).
+I may need a new interface for script languages which do not conform to the way I search for properties/attributes.
+    If the class implements ScriptedAttributes, then use ScriptedAttributes.listAttributes() and
+    ScriptedAttributes.listCostumeAttributes() ???
+    How well will JPython work with Tickle???
+
+
+Fog of War (FogOfWarFilter???)
 	Filter which objects to render based on their proximity to friendly units.
 	Note, this should NOT be a StageView, but a new interface RoleFilter.
 	The default filter should be NoFilter, which always returns true.
+	Problem. Cannot use nearest "friendly", because the nearest may have a short range, whereas a
+	further "friendly" with a greater range WILL see it. Hmm. Tricky.
 
-ChartedStageView
-	Draw the scenery to an off-screen buffer (no alpha channel?)
-	Keep a "charted" image (scaled so that it isn't HUGE) : white blobs on a black background.
-	Keep track of all roles' positions given by a RoleFilter.
-	If they have moved since the last frame, draw to the charted image.
-	If the role is of type CircularSight, then get the radius, otherwise use a default radius.
-	Later, I could check for CustomeSight, and let the Role do the drawing (So objects can "see" in given directions for example).
-	Merge using logical AND
+Fog of War 2 (FogOfWarMap)
+    Only render places corresponding to places that can be seen.
+    Create a scaled image corresponding to the whole map.
+    Every n frames (if they have moved) draw circles from each observer (friendly units and buildings) onto the map
+    Render the scene to an off-screen buffer, and combine the alpha with the map to form the final image.
+    Note, later, roles could be specialised to see in non-circular shapes (cones in a given direction).
 
-Chart
-    Add support for creating a chart (a mini view of the world)
+These two fog of wars can be used together!
+
+MiniMap
+    A mini view of the world
     Updated every N frames.
     If the Role is of type Chartable, then get the image using Chartable.chartPose(), otherwise ignore it.
     Uses a RoleFilter to decide which roles are included on the chart.
@@ -211,10 +222,3 @@ Chart
     If not, then emit a warning the first time a non-chartable role is returned.
 
 # Much Later
-
-New Game Wizard
-	Choice of a completely blank project, or a "Hello World"
-	Hello World will have a font, a Play director and a Splash director
-		Splash will display some simple text and a button to lauch "level01"
-		Maybe also have a "Player" Role
-    Create an intellij project automatically?

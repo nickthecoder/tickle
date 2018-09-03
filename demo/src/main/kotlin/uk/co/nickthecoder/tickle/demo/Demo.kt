@@ -22,7 +22,6 @@ import uk.co.nickthecoder.tickle.AbstractProducer
 import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.editor.EditorMain
 import uk.co.nickthecoder.tickle.groovy.GroovyLanguage
-import uk.co.nickthecoder.tickle.kotlin.KotlinLanguage
 
 class Demo : AbstractProducer() {
 
@@ -52,7 +51,6 @@ class Demo : AbstractProducer() {
  * (which is simply the name of the directory that the build.gradle script is contained within).
  */
 fun main(args: Array<String>) {
-    KotlinLanguage().register()
     GroovyLanguage().register()
-    EditorMain("tickle", args).start()
+    EditorMain("demo", args).start()
 }

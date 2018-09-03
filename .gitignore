@@ -13,6 +13,8 @@
 /tickle-groovy/out
 /tickle-kotlin/build
 /tickle-kotlin/out
+/demo/build
+/demo/out
 /tickle.iml
 /tickle.ipr
 /tickle.iws

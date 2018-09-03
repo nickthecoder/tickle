@@ -52,7 +52,7 @@ fun main(vararg args: String) {
  *
  * - build.gradle
  * - README.md
- * - The resource file (file type .tickle)
+ * - The resources file (file type .tickle)
  * - The Producer class (file type .kt). This also contains the game's 'main' entry point
  * - A scene (file type .scene), with no actors.
  * - .gitignore (if git option is chosen)
@@ -64,30 +64,30 @@ fun main(vararg args: String) {
  */
 class NewGameWizard : AbstractTask() {
 
-    val gameName = StringParameter("gameName", hint = "Only letters, numbers, spaces and underscores are allowed. e.g. Space Invaders", required = true)
+    private val gameName = StringParameter("gameName", hint = "Only letters, numbers, spaces and underscores are allowed. e.g. Space Invaders", required = true)
 
-    val parentDirectory = FileParameter("parentDirectory", hint = "Do NOT include the name of the game (it will be added automatically)", mustExist = true, expectFile = false)
+    private val parentDirectory = FileParameter("parentDirectory", hint = "Do NOT include the name of the game (it will be added automatically)", mustExist = true, expectFile = false)
 
-    val packagePrefix = StringParameter("packagePrefix", hint = "Blank, or your domain name reversed. e.g. com.example", required = false)
+    private val initialSceneName = StringParameter("initialSceneName", required = true, value = "menu")
 
-    val initialSceneName = StringParameter("initialSceneName", required = true, value = "menu")
+    private val width = IntParameter("width", value = 640)
+    private val cross = LabelParameter("cross", "x")
+    private val height = IntParameter("height", value = 480)
 
-    val width = IntParameter("width", value = 640)
-    val cross = LabelParameter("cross", "x")
-    val height = IntParameter("height", value = 480)
-
-    val size = SimpleGroupParameter("size")
+    private val size = SimpleGroupParameter("size")
             .addParameters(width, cross, height)
             .asHorizontal(LabelPosition.NONE)
 
-    val groovy = BooleanParameter("enableGroovyScripts", value = true)
+    private val packageBase = StringParameter("packageBase", hint = "Blank, or your domain name backwards (e.g. com.example)", required = false)
 
-    val intellij = BooleanParameter("createIntellijProject", value = true)
+    private val groovy = BooleanParameter("enableGroovyScripts", value = true)
 
-    val git = BooleanParameter("initialiseGit", value = true)
+    private val intellij = BooleanParameter("createIntellijProject", value = true)
+
+    private val git = BooleanParameter("initialiseGit", value = true)
 
     override val taskD = TaskDescription("New Game Wizard")
-            .addParameters(gameName, parentDirectory, packagePrefix, size, initialSceneName, groovy, intellij, git)
+            .addParameters(gameName, parentDirectory, size, initialSceneName, packageBase, groovy, intellij, git)
 
 
     override fun check() {
@@ -98,8 +98,8 @@ class NewGameWizard : AbstractTask() {
         if (gameDirectory().exists()) {
             throw ParameterException(gameName, "Directory '${gameDirectory().name}' already exists")
         }
-        if (!packagePrefix.value.matches(Regex("[a-zA-Z0-9.]*"))) {
-            throw ParameterException(packagePrefix, "Only letters, numbers and periods allowed")
+        if (!packageBase.value.matches(Regex("[a-zA-Z0-9.]*"))) {
+            throw ParameterException(packageBase, "Only letters, numbers and periods allowed")
         }
     }
 
@@ -108,10 +108,10 @@ class NewGameWizard : AbstractTask() {
     fun gameDirectory() = File(parentDirectory.value, identifier().toLowerCase())
 
     fun packageName(): String {
-        return if (packagePrefix.value.isBlank())
+        return if (packageBase.value.isBlank())
             identifier().toLowerCase()
         else
-            "${packagePrefix.value}.${identifier().toLowerCase()}"
+            "${packageBase.value}.${identifier().toLowerCase()}"
     }
 
     fun mainPackageDir(): File {
@@ -170,7 +170,7 @@ class NewGameWizard : AbstractTask() {
 
         println("\nProject Created.\n")
 
-        if (exec(directory, "gradle", "installApp")) {
+        if (exec(directory, "gradle", "installDist")) {
             println("\n\nBuild OK\n")
             if (intellij.value == true) {
                 exec(directory, "gradle", "idea")
@@ -180,7 +180,7 @@ class NewGameWizard : AbstractTask() {
 
         println("\nTo build the game : ")
         println("cd '$directory'")
-        println("gradle installApp")
+        println("gradle installDist")
         println("\nTo run the game : ")
         println("build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()}")
         println("\nTo launch the editor : ")
@@ -206,9 +206,6 @@ class NewGameWizard : AbstractTask() {
      */
 
     fun gradleContents() = """
-project.ext.lwjglVersion = "3.1.3"
-project.ext.jomlVersion = "1.9.4"
-
 buildscript {
     ext.kotlin_version = '1.1.3-2'
 
@@ -218,7 +215,6 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${'$'}kotlin_version"
-        ${if (groovy.value == true) "compile 'org.codehaus.groovy:groovy-all:2.4.5'" else ""}
     }
 }
 
@@ -228,10 +224,10 @@ apply plugin: 'application'
 
 mainClassName = "${packageName()}.${identifier()}Kt"
 
-defaultTasks 'installApp'
+defaultTasks 'installDist'
 
 version = '0.1'
-group = '${packagePrefix.value}'
+group = '${packageBase.value}'
 
 repositories {
     mavenCentral()
@@ -239,21 +235,12 @@ repositories {
 }
 
 dependencies {
-    compile 'uk.co.nickthecoder:tickle-core:0.1'
-    compile 'uk.co.nickthecoder:tickle-editor:0.1'
-    compile 'org.reflections:reflections:0.9.11'
+    compile 'uk.co.nickthecoder:tickle-core:$tickleVersion'
+    compile 'uk.co.nickthecoder:tickle-editor:$tickleVersion'
+    //compile 'org.reflections:reflections:0.9.11'
+    ${if (groovy.value == true) "compile 'uk.co.nickthecoder:tickle-groovy:$tickleVersion'" else ""}
 }
 
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
 """
 
     fun resourceContents() = """
@@ -264,7 +251,7 @@ compileTestKotlin {
     "height": ${height.value},
     "initialScene": "${initialSceneName.value}",
     "testScene": "${initialSceneName.value}",
-    "producer": "${packageName()}.${identifier()}"
+    "producer": "uk.co.nickthecoder.tickle.NoProducer"
   },
   "preferences": {
     "outputFormat": "PRETTY",
@@ -305,18 +292,17 @@ compileTestKotlin {
 package ${packageName()}
 
 import uk.co.nickthecoder.tickle.AbstractProducer
-import uk.co.nickthecoder.tickle.namedMain
+import uk.co.nickthecoder.tickle.editor.EditorMain
+${if (groovy.value == true) "import uk.co.nickthecoder.tickle.groovy.GroovyLanguage" else ""}
 
 /**
  * The main entry point for the game.
- * See [namedMain] for usage information.
  */
 fun main(args: Array<String>) {
     ${if (groovy.value == true) "GroovyLanguage().register()" else ""}
     EditorMain("${identifier().toLowerCase()}", args).start()
 }
 
-class ${identifier()} : AbstractProducer()
 """
 
     fun mainSceneContents() = """
@@ -351,6 +337,26 @@ class ${identifier()} : AbstractProducer()
 
     fun readMeContents() = """#${gameName.value}
 
-[Powered by Tickle](https://github.com/nickthecoder/tickle)
+
+To build the game :
+
+    gradle installDist
+
+To run the game :
+
+    build/install/foo/bin/foo
+
+To launch the editor :
+
+    build/install/foo/bin/foo --editor
+
+To create a zip file, ready for distribution :
+
+    gradle distZip
+
+
+Powered by [Tickle](https://github.com/nickthecoder/tickle) and [LWJGL](https://www.lwjgl.org/).
 """
 }
+
+private var tickleVersion = "0.1"

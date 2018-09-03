@@ -35,11 +35,11 @@ class GroovyLanguage : Language() {
         groovyClassLoader.addClasspath(directory.path)
     }
 
-    override fun loadScript(file: File) : Class<*> {
+    override fun loadScript(file: File): Class<*> {
         return groovyClassLoader.parseClass(file)
     }
 
-    override fun generateBlankScript(name : String) = """import uk.co.nickthecoder.tickle.*
+    override fun generateBlankScript(name: String) = """import uk.co.nickthecoder.tickle.*
 
 class ${name} extends AbstractRole {
 

@@ -67,7 +67,6 @@ open class Tickle(val programName: String, val args: Array<String>) {
         println("Resource file = $resourcesFile")
         resourcesFile?.let {
             val path = File(it.parent, "scripts")
-            println("Adding path $path")
             ScriptManager.addPath(path)
         }
 
@@ -133,7 +132,7 @@ open class Tickle(val programName: String, val args: Array<String>) {
         } else {
 
             if (resourcesFile == null) {
-                System.err.println("No '.tickle' file found in directory './resources' or './src/dist/resources'")
+                System.err.println("No '.tickle' file found in ${searchDirs.joinToString(separator = " or ")}")
                 System.err.println()
                 help()
                 System.exit(1)
@@ -161,24 +160,29 @@ open class Tickle(val programName: String, val args: Array<String>) {
         println()
         println("Note. There is normally no need to specify the RESOURCE_FILE")
         println("Instead, let tickle find it automatically, which it does by looking for the first '.tickle' file in : ")
-        println("'./src/dist/resources/'\nor\n './resources/'")
+        println(searchDirs.joinToString())
         println()
     }
-}
 
-/**
- * Looks for a file with an extension of '.tickle' within "./src/dist/resources" or "./resources".
- */
-fun guessTickleFile(): File? {
-    // When running from dev environment, the resources are in src/dist/resources, but will be in resources
-    // when running from an install application.
-    val srcDist = File(File("src"), "dist")
-    val resourceDir = if (srcDist.exists()) {
-        File(srcDist, "resources")
-    } else {
-        File("resources")
+    val searchDirs = listOf(
+            File("."),
+            File(File("src"), "dist"),
+            File(File(File(programName), "src"), "dist"))
+            .map { File(it, "resources") }
+
+    /**
+     * Looks for a file with an extension of '.tickle' within "./src/dist/resources" or "./resources".
+     */
+    fun guessTickleFile(): File? {
+
+        for (dir in searchDirs) {
+            val file = dir.listFiles()?.filter { it.extension == "tickle" }?.sortedBy { it.lastModified() }?.firstOrNull()
+            if (file != null) {
+                return file
+            }
+        }
+        return null
     }
-    return resourceDir.listFiles()?.filter { it.extension == "tickle" }?.sortedBy { it.lastModified() }?.lastOrNull()
 }
 
 /**
