@@ -26,14 +26,20 @@ import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.resources.Resources
 
-
+/**
+ * Shows the API documentation using HTML pages from the web.
+ * The main content of the tab contains a [WebView] (which you can think of as a web browser.
+ * In addition, a side panel (to the left of the main content) shows a list of packages and classes.
+ * This is implemented in the [APIBox] and [APITree] classes.
+ * Clicking on a class or a package from the list updates the [WebView] to show the appropriate content.
+ */
 class APITab : EditTab("API Documentation", APIStub, graphicName = ResourceType.API_Documentation.graphicName),
         HasExtras {
 
     private val webView = WebView()
-    val webEngine = webView.getEngine()
+    private val webEngine = webView.getEngine()
 
-    private val classHelpPane = TitledPane("Classes", ClassHelpBox(webView))
+    private val classHelpPane = TitledPane("Classes", APIBox(webView))
     override fun extraSidePanes() = listOf(classHelpPane)
 
     private val shortcuts = ShortcutHelper("API Documentation", MainWindow.instance.borderPane)

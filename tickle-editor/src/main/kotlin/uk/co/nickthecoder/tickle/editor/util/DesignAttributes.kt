@@ -47,7 +47,7 @@ class DesignAttributes : RuntimeAttributes() {
     override fun updateAttributesMetaData(klass: Class<*>) {
 
         val kClass = klass.kotlin
-        var instance: Any? = null
+        val instance: Any?
         try {
             instance = klass.newInstance()
         } catch (e: Exception) {

@@ -9,9 +9,15 @@ import org.reflections.scanners.SubTypesScanner
 import uk.co.nickthecoder.tickle.editor.EditorAction
 import uk.co.nickthecoder.tickle.resources.Resources
 
+/**
+ * Lists packages and classes which make up Tickle.
+ * The tree is placed inside an [APIBox], which is in turn used by the [APITab].
+ * Clicking on one of the package or classes in the list shows the appropriate API documentation
+ * via the web (the API documentation is NOT stored locally).
+ */
 class APITree(val webView: WebView) : TreeView<String>() {
 
-    val baseUrl = Resources.instance.preferences.apiURL
+    private val baseUrl = Resources.instance.preferences.apiURL
 
     init {
         isEditable = false
@@ -43,9 +49,15 @@ class APITree(val webView: WebView) : TreeView<String>() {
         }
 
         fun accept(className: String): Boolean {
-            if (className.contains('$')) return false // Ignore inner classes
+            // Ignore inner classes
+            if (className.contains('$')) {
+                return false
+            }
+            // Ignore classes from certain packages (which are of no use to game programmers).
             for (pack in excludePackages) {
-                if (className.startsWith(pack)) return false
+                if (className.startsWith(pack)) {
+                    return false
+                }
             }
             return true
         }
