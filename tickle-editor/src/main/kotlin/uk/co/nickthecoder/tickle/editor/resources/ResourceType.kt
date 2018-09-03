@@ -22,6 +22,7 @@ enum class ResourceType(val label: String, val graphicName: String) {
     ANY("Resource", "folder2.png"),
     GAME_INFO("Game Info", "gameInfo.png"),
     PREFERENCES("Preferences", "preferences.png"),
+    API_Documentation("API Documentation", "api.png"),
     TEXTURE("Texture", "texture.png"),
     POSE("Pose", "pose.png"),
     COSTUME("Costume", "costume.png"),

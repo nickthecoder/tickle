@@ -175,6 +175,7 @@ class ResourcesTree()
             children.addAll(
                     GameInfoItem(),
                     EditorPreferencesItem(),
+                    APIDocumentationItem(),
                     TexturesItem(),
                     PosesItem(),
                     FontResourcesItem(),
@@ -197,6 +198,12 @@ class ResourcesTree()
     inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo, ResourceType.GAME_INFO) {
 
         override fun data(): GameInfo = resources.gameInfo
+
+        override val newResourceType = null
+
+    }
+
+    inner class APIDocumentationItem() : DataItem("API Documentation", APIStub, ResourceType.API_Documentation) {
 
         override val newResourceType = null
 
@@ -628,6 +635,7 @@ class ResourcesTree()
                 children.add(ScriptItem(file))
             }
             updateLabel()
+            isExpanded = true
         }
 
         override fun resourceAdded(resource: Any, name: String) {
@@ -701,3 +709,5 @@ class ScriptStub(val file: File) {
         return false
     }
 }
+
+object APIStub {}

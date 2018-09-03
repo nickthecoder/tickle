@@ -7,9 +7,13 @@ Automatically reload scripts after saved (externally).
 New "Reload Classes" button to reload all scripts.
 
 A split pane/side panel, with help for each class.
-   List attributes and methods available, with its javadoc content.
+   Show as an item in the ResourcesTree (i.e. only one instance).
+       Double click to show the javadocs the main area
+   Only populate the children when expanded (i.e. lazy)
+   Give a list of package names, not classes
+       (Classes also added lazily)
    Filter the list and/or the methods/attributes.
-   It defaults to only showing the most common classes, and most common attributes/methods.
+       It defaults to only showing the most common classes, and most common attributes/methods.
 
 Get a full game working with Groovy as the scripting language.
 

@@ -34,8 +34,7 @@ import uk.co.nickthecoder.tickle.Director
 import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.SceneStub
-import uk.co.nickthecoder.tickle.editor.resources.DesignJsonScene
-import uk.co.nickthecoder.tickle.editor.resources.DesignSceneResource
+import uk.co.nickthecoder.tickle.editor.resources.*
 import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.Resources
@@ -45,11 +44,11 @@ import java.io.File
 class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
     : EditTab(sceneName, sceneStub, graphicName = "scene.png"),
-        HasExtras {
+        HasExtras, SceneResourceListener {
 
     val sceneResource = DesignJsonScene(sceneStub.file).sceneResource as DesignSceneResource
 
-    private val task = SceneDetailsTask(sceneName, sceneResource)
+    private val task = SceneDetailsTask(this, sceneName, sceneResource)
     private val taskForm = TaskForm(task)
 
     private val sceneEditor = SceneEditor(sceneResource)
@@ -89,6 +88,11 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
         copyButton.onAction = EventHandler { onCopy() }
         deleteButton.onAction = EventHandler { onDelete() }
         renameButton.onAction = EventHandler { onRename() }
+        sceneResource.listeners.add(this)
+    }
+
+    override fun actorModified(sceneResource: DesignSceneResource, actorResource: DesignActorResource, type: ModificationType) {
+        needsSaving = true
     }
 
     override fun extraSidePanes() = sceneEditor.sidePanes
@@ -169,7 +173,7 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 }
 
 
-class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : AbstractTask() {
+class SceneDetailsTask(val sceneTab: SceneTab, val name: String, val sceneResource: SceneResource) : AbstractTask() {
 
     val directorP = GroupedChoiceParameter<Class<*>>("director", required = false, value = NoDirector::class.java, allowSingleItemSubMenus = true)
 
@@ -215,6 +219,7 @@ class SceneDetailsTask(val name: String, val sceneResource: SceneResource) : Abs
         directorP.listen {
             updateAttributes()
         }
+        taskD.root.listen { sceneTab.needsSaving = true }
     }
 
 

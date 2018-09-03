@@ -25,14 +25,15 @@ open class EditTaskTab(
         val task: Task,
         dataName: String,
         data: Any,
-        graphicName : String? = null)
+        graphicName: String? = null)
 
-    : EditTab(dataName, data, graphicName=graphicName) {
+    : EditTab(dataName, data, graphicName = graphicName) {
 
     val taskForm = TaskForm(task)
 
     init {
         borderPane.center = taskForm.build()
+        task.taskD.root.listen { needsSaving = true }
     }
 
     override fun save(): Boolean {

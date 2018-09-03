@@ -32,6 +32,7 @@ import uk.co.nickthecoder.tickle.editor.resources.DesignActorResource
 import uk.co.nickthecoder.tickle.editor.resources.DesignSceneResource
 import uk.co.nickthecoder.tickle.editor.resources.ModificationType
 import uk.co.nickthecoder.tickle.editor.scene.history.*
+import uk.co.nickthecoder.tickle.editor.tabs.SceneTab
 import uk.co.nickthecoder.tickle.editor.util.background
 
 class SceneEditor(val sceneResource: DesignSceneResource) {

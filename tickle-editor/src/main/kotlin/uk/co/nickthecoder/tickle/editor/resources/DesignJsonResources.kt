@@ -86,6 +86,7 @@ class DesignJsonResources : JsonResources {
             jpreferences.add("isMaximized", isMaximized)
             jpreferences.add("windowWidth", windowWidth)
             jpreferences.add("windowHeight", windowHeight)
+            jpreferences.add("apiURL", apiURL)
             return jpreferences
         }
     }

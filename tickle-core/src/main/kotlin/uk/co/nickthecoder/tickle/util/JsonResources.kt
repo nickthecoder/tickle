@@ -156,6 +156,7 @@ open class JsonResources {
             isMaximized = jpreferences.getBoolean("isMaximized", false)
             windowWidth = jpreferences.getDouble("windowWidth", windowWidth)
             windowHeight = jpreferences.getDouble("windowHeight", windowHeight)
+            apiURL = jpreferences.getString("apiIRL", apiURL)
             // println("Loaded preferences : ${resources.preferences}")
         }
     }

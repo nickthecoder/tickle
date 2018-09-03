@@ -46,6 +46,11 @@ class EditorPreferences {
      */
     var isMaximized = false
 
+    /**
+     * The URL for the Tickle API documentation.
+     */
+    var apiURL : String = "http://nickthecoder.co.uk/public/tickle/api-0.1/tickle-core/"
+
     override fun toString(): String {
         return "outputFormat=$outputFormat packages=$packages"
     }

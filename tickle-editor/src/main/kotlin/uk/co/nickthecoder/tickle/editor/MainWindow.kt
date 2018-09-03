@@ -137,7 +137,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     fun onCloseRequest(event: WindowEvent) {
         // Check if there are tabs open, and if so, ask if they should be saved.
-        if (tabPane.tabs.filterIsInstance<EditTab>().isNotEmpty()) {
+        if (tabPane.tabs.filterIsInstance<EditTab>().filter{ it.needsSaving }.isNotEmpty()) {
             val alert = Alert(Alert.AlertType.CONFIRMATION)
             alert.title = "Save Changes?"
             alert.contentText = "Save changes before closing?"
@@ -258,6 +258,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             is FontResource -> return FontTab(name, data)
             is Sound -> return SoundTab(name, data)
             is ScriptStub -> return ScriptTab(data)
+            APIStub -> return APITab()
             else -> return null
         }
     }

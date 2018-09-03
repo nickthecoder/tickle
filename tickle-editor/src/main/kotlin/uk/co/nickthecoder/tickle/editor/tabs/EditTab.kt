@@ -36,10 +36,10 @@ import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.editor.EditorAction
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.DesignResources
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
 import uk.co.nickthecoder.tickle.util.Copyable
-import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 
 
 abstract class EditTab(
@@ -63,7 +63,16 @@ abstract class EditTab(
 
     protected val cancelButton = Button("Cancel")
 
+    var needsSaving = false
+        set(v) {
+            okButton.isDisable = !v
+            applyButton.isDisable = !v
+            field = v
+        }
+
     init {
+        okButton.isDisable = true
+        applyButton.isDisable = true
 
         graphicName?.let { graphic = ImageView(EditorAction.imageResource(graphicName)) }
 
@@ -105,6 +114,7 @@ abstract class EditTab(
 
         Resources.instance.listeners.add(this)
     }
+
 
     override fun resourceRemoved(resource: Any, name: String) {
         if (resource === data) {
@@ -151,17 +161,15 @@ abstract class EditTab(
 
     protected fun onApply() {
         if (save()) {
+            needsSaving = false
             Resources.instance.fireChanged(data)
             (Resources.instance as DesignResources).save()
         }
     }
 
     protected fun onOk() {
-        if (save()) {
-            Resources.instance.fireChanged(data)
-            (Resources.instance as DesignResources).save()
-            close()
-        }
+        onApply()
+        close()
     }
 
     class CopyResourceTask<T>(val resource: Copyable<T>, resourceType: ResourceType, val action: (String, T) -> Unit)
