@@ -88,6 +88,10 @@ class CostumeTab(val name: String, val costume: Costume)
             newCostume.costumeGroup?.add(newName, newCostume)
         }
         buildPosesButton()
+
+        detailsTask.taskD.root.listen { needsSaving = true }
+        eventsTask.taskD.root.listen { needsSaving = true }
+        physicsTask.taskD.root.listen { needsSaving = true }
     }
 
     private fun buildPosesButton() {
@@ -134,30 +138,28 @@ class CostumeTab(val name: String, val costume: Costume)
         return false
     }
 
-    inner class CostumeDetailsTask() : AbstractTask() {
+    inner class CostumeDetailsTask : AbstractTask() {
 
-        val nameP = StringParameter("name", value = name)
+        private val nameP = StringParameter("name", value = name)
 
-        val roleClassP = GroupedChoiceParameter<Class<*>?>("role", required = false, value = null, allowSingleItemSubMenus = true)
+        private val roleClassP = ClassParameter("role", Role::class.java)
 
-        val canRotateP = BooleanParameter("canRotate")
+        private val canRotateP = BooleanParameter("canRotate")
 
-        val zOrderP = DoubleParameter("zOrder")
+        private val zOrderP = DoubleParameter("zOrder")
 
-        val costumeGroupP = CostumeGroupParameter { chooseCostumeGroup(it) }
+        private val costumeGroupP = CostumeGroupParameter { chooseCostumeGroup(it) }
 
-        val showInSceneEditorP = BooleanParameter("showInSceneEditor", value = costume.showInSceneEditor)
+        private val showInSceneEditorP = BooleanParameter("showInSceneEditor", value = costume.showInSceneEditor)
 
-        val infoP = InformationParameter("info",
+        private val infoP = InformationParameter("info",
                 information = "The role has no fields with the '@CostumeAttribute' annotation, and therefore, this costume has no attributes.")
-        val attributesP = SimpleGroupParameter("attributes")
+        private val attributesP = SimpleGroupParameter("attributes")
 
         override val taskD = TaskDescription("costumeDetails")
                 .addParameters(nameP, roleClassP, canRotateP, zOrderP, costumeGroupP, showInSceneEditorP, attributesP)
 
         init {
-            ClassLister.setNullableChoices(roleClassP, Role::class.java)
-
             nameP.value = name
             roleClassP.value = costume.roleClass()
             canRotateP.value = costume.canRotate
@@ -169,7 +171,6 @@ class CostumeTab(val name: String, val costume: Costume)
                 updateAttributes()
             }
         }
-
 
         override fun run() {
             costume.roleString = if (roleClassP.value == null) "" else ScriptManager.nameForClass(roleClassP.value!!)

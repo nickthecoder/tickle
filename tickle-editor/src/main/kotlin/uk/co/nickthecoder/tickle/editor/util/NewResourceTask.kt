@@ -78,6 +78,9 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
     init {
         ScriptManager.languages().forEach { language ->
             scriptLanguageP.addChoice(language.name, language, language.name)
+            if (scriptLanguageP.value == null) {
+                scriptLanguageP.value = language
+            }
         }
     }
 

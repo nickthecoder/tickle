@@ -830,7 +830,7 @@
     {
       "name": "redOutline",
       "role": "",
-      "canRotate": true,
+      "canRotate": false,
       "zOrder": 0,
       "initialEvent": "default",
       "showInSceneEditor": true,

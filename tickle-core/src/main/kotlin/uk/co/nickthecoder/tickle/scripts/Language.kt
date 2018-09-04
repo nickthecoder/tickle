@@ -100,6 +100,7 @@ abstract class Language {
             scriptDirectory.mkdirs()
         }
         file.writeText(generateBlankScript(scriptName))
+        ScriptManager.load(file)
         return file
     }
 

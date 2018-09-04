@@ -46,21 +46,21 @@ object ClassLister {
 
     fun subTypes(type: Class<*>): List<Class<*>> {
         val cached = cache[type]
-        if (cached != null) {
-            return cached
-        }
-
         val results = mutableListOf<Class<*>>()
 
-        // Find all compiled classes of the given type. i.e. NOT scripted languages.
-        reflectionsMap.values.forEach {
-            results.addAll(it.getSubTypesOf(type).filter { !it.isInterface && !Modifier.isAbstract(it.modifiers) }.sortedBy { it.name })
+        if (cached != null) {
+            results.addAll(cached)
+        } else {
+
+            // Find all compiled classes of the given type. i.e. NOT scripted languages.
+            reflectionsMap.values.forEach {
+                results.addAll(it.getSubTypesOf(type).filter { !it.isInterface && !Modifier.isAbstract(it.modifiers) }.sortedBy { it.name })
+            }
+            cache[type] = results.toList()
         }
 
         // Find all scripted class of the given type
         results.addAll(ScriptManager.subTypes(type))
-
-        cache[type] = results
         return results
     }
 
@@ -89,6 +89,11 @@ object ClassLister {
         }
         choiceParameter.value = value
     }
+
+    fun clearCache() {
+        cache.clear()
+    }
+
 }
 
 
