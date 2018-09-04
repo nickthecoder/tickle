@@ -672,9 +672,28 @@ class ResourcesTree()
             val menuItem = MenuItem("Delete")
             menuItem.onAction = EventHandler {
                 val name = file.nameWithoutExtension
-                resources.costumes.items().values.filter { it.roleString == name }.forEach {
-                    it.roleString = ""
+
+                var scriptKlass: Class<*>? = null
+                try {
+                    scriptKlass = ScriptManager.classForName(name)
+                } catch (e: ClassNotFoundException) {
                 }
+
+                if (scriptKlass != null) {
+                    if (Role::class.java.isAssignableFrom(scriptKlass)) {
+                        resources.costumes.items().values.filter { it.roleString == name }.forEach {
+                            it.roleString = ""
+                        }
+                    } else if (Producer::class.java.isAssignableFrom(scriptKlass)) {
+
+                        if (resources.gameInfo.producerString == name) {
+                            resources.gameInfo.producerString = NoProducer::class.java.name
+                        }
+                    } else if (Director::class.java.isAssignableFrom(scriptKlass)) {
+                        // TODO Iterate over all scenes, and reset matching Directors to NoDirector`
+                    }
+                }
+
                 file.delete()
                 resources.fireRemoved(file, name)
                 resources.save() // In case a costume was altered due to the delete.

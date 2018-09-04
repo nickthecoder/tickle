@@ -25,6 +25,7 @@ import uk.co.nickthecoder.tickle.GameInfo
 import uk.co.nickthecoder.tickle.NoProducer
 import uk.co.nickthecoder.tickle.Producer
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
+import uk.co.nickthecoder.tickle.editor.util.ClassParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
 import uk.co.nickthecoder.tickle.editor.util.XYiParameter
 import uk.co.nickthecoder.tickle.physics.FilterBits
@@ -54,7 +55,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val initialSceneP = StringParameter("initialScene", value = Resources.instance.sceneFileToPath(gameInfo.initialScenePath))
     val testSceneP = StringParameter("testScene", value = Resources.instance.sceneFileToPath(gameInfo.testScenePath))
 
-    val producerP = GroupedChoiceParameter<Class<*>>("producer", value = NoProducer::class.java, allowSingleItemSubMenus = true)
+    val producerP = ClassParameter("producer", Producer::class.java, value = NoProducer::class.java)
 
     val physicsEngineP = BooleanParameter("physicsEngine", value = gameInfo.physicsEngine)
     val gravityP = Vector2dParameter("gravity", value = gameInfo.physicsInfo.gravity).asHorizontal()
@@ -76,7 +77,6 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
         windowSizeP.x = gameInfo.width
         windowSizeP.y = gameInfo.height
 
-        ClassLister.setChoices(producerP, Producer::class.java)
         ClassLister.setChoices(filterGroupsP, FilterGroups::class.java)
         ClassLister.setChoices(filterBitsP, FilterBits::class.java)
 
@@ -103,7 +103,6 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     }
 
     override fun run() {
-        ClassLister.setChoices(producerP, Producer::class.java)
 
         with(gameInfo) {
             title = titleP.value

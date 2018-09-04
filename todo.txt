@@ -1,8 +1,6 @@
 Current Work
 ============
 
-CostumeTab has "new script" button next to the drop down box (only if languages is not empty).
-
 Filter the list list of classes
     Using search
     Showing only the most relevant classes

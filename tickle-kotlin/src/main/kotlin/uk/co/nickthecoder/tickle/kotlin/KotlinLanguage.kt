@@ -42,6 +42,8 @@ class KotlinLanguage : Language() {
     override fun addPath(directory: File) {
         // TODO  Hmm, we don't seem to have a way to add the scripts directory to the script engine's path.
         // Which means there is no way to create an abstract Role in one file, and extend it in another.
+        // Nor is it possible to use another user-defined class from within multiple Role subtypes.
+        // Grr. It looks like Kotlin isn't suitable as a scripting language (yet?).
     }
 
     override fun loadScript(file: File): Class<*> {
@@ -49,12 +51,9 @@ class KotlinLanguage : Language() {
         return engine.eval("${file.nameWithoutExtension}::class.java") as Class<*>
     }
 
-    override fun generateBlankScript(name: String) = """import uk.co.nickthecoder.tickle.*
+    override fun generateScript(name: String, type: Class<*>?) = """import uk.co.nickthecoder.tickle.*
 
-class $name : AbstractRole() {
-
-    override fun tick() {
-    }
+class $name {
 
 }
 """

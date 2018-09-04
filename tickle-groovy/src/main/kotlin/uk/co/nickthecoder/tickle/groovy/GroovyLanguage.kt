@@ -19,6 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.groovy
 
 import groovy.lang.GroovyClassLoader
+import uk.co.nickthecoder.tickle.Director
+import uk.co.nickthecoder.tickle.Producer
+import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.scripts.Language
 import java.io.File
 
@@ -39,15 +42,107 @@ class GroovyLanguage : Language() {
         return groovyClassLoader.parseClass(file)
     }
 
-    override fun generateBlankScript(name: String) = """import uk.co.nickthecoder.tickle.*
+    override fun generateScript(name: String, type: Class<*>?): String {
+        return when (type) {
+            Role::class.java -> generateRole(name)
+            Director::class.java -> generateDirector(name)
+            Producer::class.java -> generateProducer(name)
+            else -> generatePlainScript(name, type)
+        }
+    }
 
-class ${name} extends AbstractRole {
+    fun generatePlainScript(name: String, type: Class<*>?) = """import uk.co.nickthecoder.tickle.*
+${if (type == null || type.`package`.name == "uk.co.nickthecoder.tickle") "" else "import ${type.name}"}
 
-   def void tick() {
-   }
+class $name ${if (type == null) "" else (if (type.isInterface) "implements" else "extends") + " ${type.simpleName}"}{
 
 }
 
 """
+
+    fun generateRole(name: String) = """import uk.co.nickthecoder.tickle.*
+
+class $name extends AbstractRole {
+
+    // NOTE. Some common methods were automatically generated.
+    // These may be removed if you don't need them.
+
+    def void begin() {
+    }
+
+    def void activated() {
+    }
+
+    def void tick() {
+    }
+
+}
+
+"""
+
+    fun generateDirector(name: String) = """import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.events.*
+
+class $name extends AbstractDirector {
+
+    // NOTE. Some common methods were automatically generated.
+    // These may be removed if you don't need them.
+
+    def void sceneLoaded() {
+    }
+
+    def void begin() {
+    }
+
+    def void activated() {
+    }
+
+    def void() {
+    }
+
+    def void onKey(KeyEvent event) {
+    }
+
+    def void onMouseButton(MouseEvent event) {
+    }
+}
+
+"""
+
+    fun generateProducer(name: String) = """import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.events.*
+
+class $name extends AbstractProducer {
+
+    // NOTE. Some common methods were automatically generated.
+    // These may be removed if you don't need them.
+
+    def void begin() {
+    }
+
+    def void sceneLoaded() {
+    }
+
+    def void sceneBegin() {
+    }
+
+    def void sceneEnd() {
+    }
+
+    def void sceneActivated() {
+    }
+
+    def void tick() {
+    }
+
+    def void onKey(KeyEvent event) {
+    }
+
+    def void onMouseButton(MouseEvent event) {
+    }
+}
+
+"""
+
 
 }

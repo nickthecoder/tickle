@@ -4,7 +4,6 @@ import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.util.uncamel
-import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 
@@ -37,11 +36,11 @@ class ClassParameter(
     }
 
     private fun newScript() {
-        val task = NewResourceTask(type = ResourceType.SCRIPT)
+        val task = NewResourceTask(resourceType = ResourceType.SCRIPT, newScriptType = type)
         task.taskRunner.listen { cancelled ->
             if (!cancelled) {
                 try {
-                    ClassLister.setNullableChoices(classP, Role::class.java)
+                    ClassLister.setNullableChoices(classP, type)
                     classP.value = ScriptManager.classForName(task.nameP.value)
                 } catch (e: ClassNotFoundException) {
                 }

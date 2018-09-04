@@ -42,9 +42,11 @@ import uk.co.nickthecoder.tickle.sound.Sound
 import java.io.File
 
 
-class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String = "") : AbstractTask() {
+class NewResourceTask(resourceType: ResourceType = ResourceType.ANY, defaultName: String = "", val newScriptType: Class<*>? = null)
 
-    val nameP = StringParameter("name", label = "${type.label} Name", value = defaultName)
+    : AbstractTask() {
+
+    val nameP = StringParameter("name", label = "${resourceType.label} Name", value = defaultName)
 
     val textureP = FileParameter("textureFile", label = "File", value = File(Resources.instance.file.parentFile, "images").absoluteFile)
 
@@ -87,7 +89,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
     val resourceTypeP = OneOfParameter("resourceType", label = "Resource", choiceLabel = "Type")
 
 
-    override val taskD = TaskDescription("newResource", label = "New ${type.label}", height = if (type == ResourceType.ANY) 300 else null)
+    override val taskD = TaskDescription("newResource", label = "New ${resourceType.label}", height = if (resourceType == ResourceType.ANY) 300 else null)
             .addParameters(nameP, resourceTypeP)
 
     override val taskRunner = UnthreadedTaskRunner(this)
@@ -105,7 +107,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
 
     init {
 
-        val parameter = when (type) {
+        val parameter = when (resourceType) {
             ResourceType.TEXTURE -> textureP
             ResourceType.POSE -> poseP
             ResourceType.COSTUME -> costumeP
@@ -246,7 +248,7 @@ class NewResourceTask(type: ResourceType = ResourceType.ANY, defaultName: String
                 data = sound
             }
             scriptLanguageP -> {
-                scriptLanguageP.value?.createScript(Resources.instance.scriptDirectory(), nameP.value)?.let { file ->
+                scriptLanguageP.value?.createScript(Resources.instance.scriptDirectory(), nameP.value, newScriptType)?.let { file ->
                     data = ScriptStub(file)
                     Resources.instance.fireAdded(file, nameP.value)
                 }

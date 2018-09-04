@@ -94,15 +94,15 @@ abstract class Language {
         }.toSortedMap().map { it.value }
     }
 
-    fun createScript(scriptDirectory: File, scriptName: String): File {
+    fun createScript(scriptDirectory: File, scriptName: String, type: Class<*>? = null): File {
         val file = File(scriptDirectory, scriptName + ".${fileExtension}")
         if (!scriptDirectory.exists()) {
             scriptDirectory.mkdirs()
         }
-        file.writeText(generateBlankScript(scriptName))
+        file.writeText(generateScript(scriptName, type))
         ScriptManager.load(file)
         return file
     }
 
-    abstract fun generateBlankScript(name: String): String
+    abstract fun generateScript(name: String, type: Class<*>?): String
 }

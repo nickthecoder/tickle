@@ -175,7 +175,7 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
 class SceneDetailsTask(val sceneTab: SceneTab, val name: String, val sceneResource: SceneResource) : AbstractTask() {
 
-    val directorP = GroupedChoiceParameter<Class<*>>("director", required = false, value = NoDirector::class.java, allowSingleItemSubMenus = true)
+    val directorP = ClassParameter("director", Director::class.java, required = false, value = NoDirector::class.java)
 
     val backgroundColorP = ColorParameter("backgroundColor")
 
@@ -196,7 +196,6 @@ class SceneDetailsTask(val sceneTab: SceneTab, val name: String, val sceneResour
             .addParameters(directorP, backgroundColorP, showMouseP, layoutP, includesP, attributesP)
 
     init {
-        ClassLister.setChoices(directorP, Director::class.java)
         Resources.instance.layouts.items().forEach { name, _ ->
             layoutP.choice(name, name, name)
         }
