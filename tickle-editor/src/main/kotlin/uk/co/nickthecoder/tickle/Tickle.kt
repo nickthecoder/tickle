@@ -67,7 +67,7 @@ open class Tickle(val programName: String, val args: Array<String>) {
         println("Resource file = $resourcesFile")
         resourcesFile?.let {
             val path = File(it.parent, "scripts")
-            ScriptManager.addPath(path)
+            ScriptManager.setClasspath(path)
         }
 
         launch()

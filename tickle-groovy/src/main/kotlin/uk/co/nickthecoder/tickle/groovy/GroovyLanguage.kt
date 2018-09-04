@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.groovy
 
-import groovy.lang.GroovyClassLoader
+import groovy.util.GroovyScriptEngine
 import uk.co.nickthecoder.tickle.Director
 import uk.co.nickthecoder.tickle.Producer
 import uk.co.nickthecoder.tickle.Role
@@ -28,18 +28,20 @@ import java.io.File
 
 class GroovyLanguage : Language() {
 
-    val groovyClassLoader = GroovyClassLoader(javaClass.classLoader)
+    private lateinit var engine: GroovyScriptEngine
+
 
     override val fileExtension = "groovy"
 
     override val name = "Groovy"
 
-    override fun addPath(directory: File) {
-        groovyClassLoader.addClasspath(directory.path)
+    override fun setClasspath(directory: File) {
+        engine = GroovyScriptEngine(directory.path)
+        engine.config.minimumRecompilationInterval = 0
     }
 
     override fun loadScript(file: File): Class<*> {
-        return groovyClassLoader.parseClass(file)
+        return engine.groovyClassLoader.parseClass(file)
     }
 
     override fun generateScript(name: String, type: Class<*>?): String {
@@ -53,6 +55,7 @@ class GroovyLanguage : Language() {
 
     fun generatePlainScript(name: String, type: Class<*>?) = """import uk.co.nickthecoder.tickle.*
 ${if (type == null || type.`package`.name == "uk.co.nickthecoder.tickle") "" else "import ${type.name}"}
+import uk.co.nickthecoder.tickle.resources.*
 
 class $name ${if (type == null) "" else (if (type.isInterface) "implements" else "extends") + " ${type.simpleName}"}{
 
@@ -61,6 +64,7 @@ class $name ${if (type == null) "" else (if (type.isInterface) "implements" else
 """
 
     fun generateRole(name: String) = """import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.resources.*
 
 class $name extends AbstractRole {
 
@@ -81,8 +85,8 @@ class $name extends AbstractRole {
 """
 
     fun generateDirector(name: String) = """import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.events.*
-
 class $name extends AbstractDirector {
 
     // NOTE. Some common methods were automatically generated.
@@ -110,6 +114,7 @@ class $name extends AbstractDirector {
 """
 
     fun generateProducer(name: String) = """import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.events.*
 
 class $name extends AbstractProducer {

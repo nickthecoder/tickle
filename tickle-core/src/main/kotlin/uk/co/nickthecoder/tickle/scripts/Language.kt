@@ -32,7 +32,7 @@ import java.lang.reflect.Modifier
  * Also, you must add the path(s) where script files are located.
  * However, the default launchers: Tickle and EditorMain will do the following automatically :
  *
- *    ScriptManager.addPath(File(resourcesFile.parent, "scripts"))
+ *    ScriptManager.setClasspath(File(resourcesFile.parent, "scripts"))
  */
 abstract class Language {
 
@@ -59,16 +59,20 @@ abstract class Language {
         ScriptManager.register(this)
     }
 
-    abstract fun addPath(directory: File)
+    abstract fun setClasspath(directory: File)
 
     abstract fun loadScript(file: File): Class<*>
 
     fun addScript(file: File) {
-        val klass = loadScript(file)
-        val name = file.nameWithoutExtension
-        classes.remove(name)
-        classes[name] = klass
-        classToName[WeakReference(klass)] = name
+        try {
+            val oldClass = classes[name]
+            val klass = loadScript(file)
+            val name = file.nameWithoutExtension
+            classes[name] = klass
+            classToName[WeakReference(klass)] = name
+        } catch (e: Exception) { // TODO Change to a ScriptException, and handle the error, sending events to listeners
+            System.err.println("Failed to load script $file :\n$e")
+        }
     }
 
     fun classForName(name: String): Class<*>? {

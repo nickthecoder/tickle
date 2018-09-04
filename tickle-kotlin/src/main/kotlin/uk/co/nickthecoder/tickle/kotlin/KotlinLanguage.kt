@@ -39,7 +39,7 @@ class KotlinLanguage : Language() {
 
     override val name = "Kotlin"
 
-    override fun addPath(directory: File) {
+    override fun setClasspath(directory: File) {
         // TODO  Hmm, we don't seem to have a way to add the scripts directory to the script engine's path.
         // Which means there is no way to create an abstract Role in one file, and extend it in another.
         // Nor is it possible to use another user-defined class from within multiple Role subtypes.

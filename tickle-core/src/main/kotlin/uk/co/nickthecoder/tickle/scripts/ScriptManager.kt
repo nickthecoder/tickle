@@ -38,8 +38,8 @@ object ScriptManager {
         languages[language.fileExtension] = language
     }
 
-    fun addPath(directory: File) {
-        languages.values.forEach { it.addPath(directory) }
+    fun setClasspath(directory: File) {
+        languages.values.forEach { it.setClasspath(directory) }
         scan(directory)
     }
 
