@@ -666,41 +666,41 @@ open class JsonResources {
     // FONTS
 
     fun loadFonts(jfonts: JsonArray) {
+
         jfonts.forEach { jele ->
             val jfont = jele.asObject()
             val name = jfont.get("name").asString()
-            if (jfont.get("fontName") != null) {
-                val fontResource = FontResource()
+            val fontResource = FontResource()
 
-                val fontPath = jfont.getString("file", "")
+            val fontPath = jfont.getString("file", "")
 
-                if (fontPath.isBlank()) {
-                    fontResource.fontName = jfont.get("fontName").asString()
-                    val styleString = jfont.getString("style", "PLAIN")
-                    fontResource.style = FontResource.FontStyle.valueOf(styleString)
-                } else {
-                    fontResource.file = resources.fromPath(fontPath)
-                }
-
-                fontResource.size = jfont.getDouble("size", 22.0)
-                fontResource.xPadding = jfont.getInt("xPadding", 1)
-                fontResource.yPadding = jfont.getInt("yPadding", 1)
-
-                val pngFile = File(resources.texturesDirectory, "$name.png")
-                val outlinePngFile = File(resources.texturesDirectory, "$name-outline.png")
-                val metricsFile = File(resources.texturesDirectory, "$name.metrics")
-
-                if (pngFile.exists() && metricsFile.exists()) {
-                    fontResource.loadFromFile(pngFile, metricsFile)
-
-                    if (outlinePngFile.exists()) {
-                        fontResource.loadOutline(outlinePngFile)
-                    }
-                }
-
-                resources.fontResources.add(name, fontResource)
+            if (fontPath.isBlank()) {
+                fontResource.fontName = jfont.get("fontName").asString()
+                val styleString = jfont.getString("style", "PLAIN")
+                fontResource.style = FontResource.FontStyle.valueOf(styleString)
+            } else {
+                fontResource.file = resources.fromPath(fontPath)
             }
-            //println("Loaded pose $name : ${pose}")
+
+            fontResource.size = jfont.getDouble("size", 22.0)
+            fontResource.xPadding = jfont.getInt("xPadding", 1)
+            fontResource.yPadding = jfont.getInt("yPadding", 1)
+
+            val pngFile = File(resources.texturesDirectory, "$name.png")
+            val outlinePngFile = File(resources.texturesDirectory, "$name-outline.png")
+            val metricsFile = File(resources.texturesDirectory, "$name.metrics")
+
+            if (pngFile.exists() && metricsFile.exists()) {
+                fontResource.loadFromFile(pngFile, metricsFile)
+
+                if (outlinePngFile.exists()) {
+                    fontResource.loadOutline(outlinePngFile)
+                }
+            }
+
+            resources.fontResources.add(name, fontResource)
+            // println("Loaded font $name : ${fontResource}")
+
         }
     }
 
