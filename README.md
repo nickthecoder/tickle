@@ -131,7 +131,7 @@ Building a Game
 
 Use the new game wizard to create a bare-bones project.
 
-    demo/build/install/demo/bin/demo --new
+    wizard/build/install/wizard/bin/wizard
 
 If we called the new game "Foo" :
 
@@ -176,6 +176,8 @@ It is slow. It requires a bodge to get the Class defined in the script.
 Worst of all, it doesn't support setting a path, and therefore I don't think there's a good way to
 allow a base class to be defined in one file, and use that base class from another file.
 
+**wizard** A simple application to help set up a project for a new game.
+
 **demo** Contains a demo game (which doesn't have any decent game play).
 It helps me test things as I develop Tickle.
 It is also useful for you, to check that compiling tickle worked!
@@ -204,8 +206,8 @@ Writing a Game
 
 First, use the "new game wizard" :
 
-    cd tickle
-    build/install/tickle/bin/tickle --new
+    cd tickle (Wherever you have installed Tickle)
+    wizard/build/install/wizard/bin/wizard
 
 You can test your new game (if you called it foo) :
 

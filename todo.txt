@@ -1,14 +1,32 @@
 Current Work
 ============
 
+Improve script editor (e.g. tab and shift-tab do sensible things!)
+
+ScriptManager has listeners which it informs about reloads (including errors).
+    Use this to position cursor to errors
+    New tab type, which lists errors during scan().
+New tab type Script Log.
+    A message whenever a script is (re)loaded.
+    Double click to open the script.
+    "Clear" button next to "Save"
+New ScriptException, which includes line number and column number (both? optional)
+
+Get a full game working with Groovy as the scripting language.
+
 Filter the list list of classes
     Using search
     Showing only the most relevant classes
 
-Automatically reload scripts after saved (externally).
-New "Reload Classes" button to reload all scripts.
+Automatically reload scripts after saved (in which case, don't manually reload the script when saved)
+New "Reload Classes" button to reload all scripts?
 
-Get a full game working with Groovy as the scripting language.
+Remove groovy dependency from paratask-core. And maybe json too.
+
+Can I dynamically load a (set of) jar files, so that the editor doesn't need to be re-started
+when writing in compiled kotlin?
+If so, then kotlin code could ALSO be edited in the editor???
+
 
 Next
 ====
@@ -159,7 +177,18 @@ The "Actors" and the "Layers" panels can be ignored.
 
 # Later
 
-Move NewGameWizard into its own module.
+Create a test suite "game".
+    Each scene tests stuff, (e.g. tests Actions)
+    If it passes, then the next scene is started.
+    A successful test should end with the "success" scene.
+    Failure will stop at the scene which failed.
+    Split the tests into groups (each in their own directory). Allow all groups, or a single group to be tested.
+
+Create a test suite for the editor too.
+    Much of this will need the help of paratask
+
+Create a test suite for the NewGameWizard.
+    The tests can just test the contents of the generated files.
 
 Add all native code (not only the current OS) into tickle-core
 (otherwise it will only work on one platform when distributed).

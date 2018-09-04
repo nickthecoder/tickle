@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.wizard
 
 import javafx.application.Application
 import javafx.stage.Stage
@@ -82,9 +82,9 @@ class NewGameWizard : AbstractTask() {
 
     private val groovy = BooleanParameter("enableGroovyScripts", value = true)
 
-    private val intellij = BooleanParameter("createIntellijProject", value = true)
+    private val intellij = BooleanParameter("createIntellijProject", value = false, hint = "Most useful when writing the game in Kotlin")
 
-    private val git = BooleanParameter("initialiseGit", value = true)
+    private val git = BooleanParameter("initialiseGit", value = true, hint="If you don't know what git is, google it! It's very useful.")
 
     override val taskD = TaskDescription("New Game Wizard")
             .addParameters(gameName, parentDirectory, size, initialSceneName, packageBase, groovy, intellij, git)

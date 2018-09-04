@@ -103,6 +103,21 @@ project(':tickle-editor') {
     }
 }
 
+project(':wizard') {
+
+    apply plugin: 'kotlin'
+    apply plugin: 'application'
+    apply plugin: 'maven'
+
+    defaultTasks 'run'
+    mainClassName = "uk.co.nickthecoder.tickle.wizard.NewGameWizardKt"
+
+    dependencies {
+        compile 'uk.co.nickthecoder:paratask-core:0.2'
+        compile 'org.reflections:reflections:0.9.11'
+    }
+}
+
 
 project(':tickle-groovy') {
 

@@ -18,28 +18,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.editor
 
-import javafx.application.Application
 import uk.co.nickthecoder.tickle.Tickle
 
 /**
- * Extends the [Tickle] entry point class, adding options --editor and --new.
+ * Extends the [Tickle] entry point class, adding options --editor.
  *
  * Note. The [Tickle] entry point is in the 'core' module, which does NOT depend on paratask,
- * or JavaFX, and therefore cannot launch the editor, or the [NewGameWizardApp].
+ * or JavaFX, and therefore cannot launch the editor.
  */
 class EditorMain(programName: String, args: Array<String>) : Tickle(programName, args) {
 
     var startEditor = false
-    var newWizard = false
 
     override fun parseArg(i: Int): Int {
         when (args[i]) {
             "--editor" -> {
                 startEditor = true
-                return 1
-            }
-            "--new" -> {
-                newWizard = true
                 return 1
             }
         }
@@ -53,9 +47,6 @@ class EditorMain(programName: String, args: Array<String>) : Tickle(programName,
             println("Starting editor using resources file : $resourcesFile")
             resourcesFile?.let { Editor.start(it) }
 
-        } else if (newWizard) {
-            Application.launch(NewGameWizardApp::class.java)
-
         } else {
             super.launch()
         }
@@ -64,7 +55,5 @@ class EditorMain(programName: String, args: Array<String>) : Tickle(programName,
     override fun helpStart() {
         super.helpStart()
         println("Or    : $programName --editor [RESOURCE_FILE] (Starts the editor)")
-        println("Or    : $programName --new (Starts a wizard to aid creating a new game)")
-
     }
 }
