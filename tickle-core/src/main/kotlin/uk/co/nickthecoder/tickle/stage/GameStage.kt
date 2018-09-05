@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.stage
 
 import uk.co.nickthecoder.tickle.Actor
+import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.physics.TickleWorld
 
 
@@ -42,7 +43,11 @@ open class GameStage() : Stage {
         // removed from the stage.
         actors.map { it.role }.forEach { role ->
             if (role?.actor?.stage != null) {
-                role.begin()
+                try {
+                    role.begin()
+                } catch (e: Exception) {
+                    Game.instance.errorHandler.roleError(role, e)
+                }
             }
         }
     }
@@ -52,7 +57,11 @@ open class GameStage() : Stage {
         // removed from the stage.
         actors.map { it.role }.forEach { role ->
             if (role?.actor?.stage != null) {
-                role.activated()
+                try {
+                    role.activated()
+                } catch (e: Exception) {
+                    Game.instance.errorHandler.roleError(role, e)
+                }
             }
         }
     }
@@ -62,7 +71,11 @@ open class GameStage() : Stage {
         // removed from the stage.
         actors.map { it.role }.forEach { role ->
             if (role?.actor?.stage != null) {
-                role.end()
+                try {
+                    role.end()
+                } catch (e: Exception) {
+                    Game.instance.errorHandler.roleError(role, e)
+                }
             }
         }
         mutableActors.clear()
@@ -73,7 +86,11 @@ open class GameStage() : Stage {
         // removed from the stage.
         actors.map { it.role }.forEach { role ->
             if (role?.actor?.stage != null) {
-                role.tick()
+                try {
+                    role.tick()
+                } catch (e: Exception) {
+                    Game.instance.errorHandler.roleError(role, e)
+                }
             }
         }
     }
@@ -88,7 +105,13 @@ open class GameStage() : Stage {
         actor.stage = this
         actor.role?.begin()
         if (activate) {
-            actor.role?.activated()
+            actor.role?.let { role ->
+                try {
+                    role.activated()
+                } catch (e: Exception) {
+                    Game.instance.errorHandler.roleError(role, e)
+                }
+            }
         }
     }
 
@@ -98,7 +121,7 @@ open class GameStage() : Stage {
             actor.body = null
         }
         mutableActors.remove(actor)
-        actor.role?.end()
+        actor.stage = null
     }
 
     override fun addView(view: StageView) {

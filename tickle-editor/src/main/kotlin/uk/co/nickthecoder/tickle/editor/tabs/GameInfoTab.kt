@@ -33,6 +33,7 @@ import uk.co.nickthecoder.tickle.physics.FilterGroups
 import uk.co.nickthecoder.tickle.physics.NoFilterBits
 import uk.co.nickthecoder.tickle.physics.NoFilterGroups
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 
 class GameInfoTab
 
@@ -81,19 +82,19 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
         ClassLister.setChoices(filterBitsP, FilterBits::class.java)
 
         try {
-            producerP.value = Class.forName(gameInfo.producerString)
+            producerP.value = ScriptManager.classForName(gameInfo.producerString)
         } catch (e: Exception) {
             System.err.println("Couldn't find class ${gameInfo.producerString}, defaulting to NoProducer")
         }
 
         try {
-            filterGroupsP.value = Class.forName(gameInfo.physicsInfo.filterGroupsString)
+            filterGroupsP.value = ScriptManager.classForName(gameInfo.physicsInfo.filterGroupsString)
         } catch (e: Exception) {
             System.err.println("Couldn't find class ${gameInfo.physicsInfo.filterGroupsString}, defaulting to NoFilterGroups")
         }
 
         try {
-            filterBitsP.value = Class.forName(gameInfo.physicsInfo.filterBitsString)
+            filterBitsP.value = ScriptManager.classForName(gameInfo.physicsInfo.filterBitsString)
         } catch (e: Exception) {
             System.err.println("Couldn't find class ${gameInfo.physicsInfo.filterBitsString}, defaulting to NoFilterBits")
         }

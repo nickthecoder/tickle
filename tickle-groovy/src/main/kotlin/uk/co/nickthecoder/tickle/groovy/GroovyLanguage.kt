@@ -41,7 +41,7 @@ class GroovyLanguage : Language() {
     }
 
     override fun loadScript(file: File): Class<*> {
-        return engine.groovyClassLoader.parseClass(file)
+        return engine.loadScriptByName(file.name)
     }
 
     override fun generateScript(name: String, type: Class<*>?): String {

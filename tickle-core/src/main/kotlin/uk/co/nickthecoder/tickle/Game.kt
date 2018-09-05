@@ -47,6 +47,7 @@ class Game(
     var scene: Scene = Scene()
 
     var gameLoop: GameLoop
+    var errorHandler: ErrorHandler = SimpleErrorHandler()
 
     /**
      * A measure of time in seconds. Updated once per frame, It is actually just System.nano converted to
@@ -298,6 +299,7 @@ class Game(
         fun runLater(func: () -> Unit) {
             instance.runLater(func)
         }
+
     }
 
 }

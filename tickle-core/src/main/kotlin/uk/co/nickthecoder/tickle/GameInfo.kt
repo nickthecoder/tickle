@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.physics.PhysicsInfo
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import java.io.File
 
 class GameInfo(
@@ -26,7 +27,7 @@ class GameInfo(
         var id: String, /* simple text - no spaces or punctuation, will NOT be translated if I18N is implemented */
         var width: Int,
         var height: Int,
-        var fullScreen : Boolean,
+        var fullScreen: Boolean,
         var resizable: Boolean,
         var initialScenePath: File = File("menu"),
         var testScenePath: File = File("menu"),
@@ -37,7 +38,7 @@ class GameInfo(
 
     fun createProducer(): Producer {
         try {
-            val klass = Class.forName(producerString)
+            val klass = ScriptManager.classForName(producerString)
             val newProducer = klass.newInstance()
             if (newProducer is Producer) {
                 return newProducer
@@ -45,7 +46,7 @@ class GameInfo(
                 System.err.println("'$producerString' is not a type of Producer")
             }
         } catch (e: Exception) {
-            System.err.println("Failed to create a Producer from : '$producerString'")
+            System.err.println("Failed to create a Producer from : '$producerString'\n$e")
         }
         return NoProducer()
     }

@@ -67,7 +67,7 @@ class Actor(var costume: Costume, val role: Role? = null)
 
     override var zOrder: Double = 0.0
 
-    val direction: Angle = object : Angle() {
+    var direction: Angle = object : Angle() {
         override var radians = 0.0
             set(v) {
                 if (field != v) {
@@ -353,6 +353,14 @@ class Actor(var costume: Costume, val role: Role? = null)
     }
 
     private val tempVec: Vec2 by lazy { Vec2() }
+
+    fun moveForwards(amount: Double) {
+        position.add(direction.vector().mul(amount))
+    }
+
+    fun moveSidewards(amount: Double) {
+        position.add(direction.vector().perpendicular().mul(amount))
+    }
 
     override fun toString() = "Actor #$id @ $x,$y Role=${role?.javaClass?.simpleName ?: "<none>"}"
 
