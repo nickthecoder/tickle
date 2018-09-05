@@ -44,6 +44,7 @@ import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Layout
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 
 
@@ -103,6 +104,9 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             add(EditorActions.RUN.createButton(shortcuts) { startGame() })
             add(EditorActions.TEST.createButton(shortcuts) { testGame() })
             add(EditorActions.FXCODER.createButton(shortcuts) { fxcoder() })
+            if (ScriptManager.languages().isNotEmpty()) {
+                add(EditorActions.RELOAD_SCRIPTS.createButton(shortcuts) { ScriptManager.reloadAll() })
+            }
             add(toolBarPadding)
         }
 
@@ -137,7 +141,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     fun onCloseRequest(event: WindowEvent) {
         // Check if there are tabs open, and if so, ask if they should be saved.
-        if (tabPane.tabs.filterIsInstance<EditTab>().filter{ it.needsSaving }.isNotEmpty()) {
+        if (tabPane.tabs.filterIsInstance<EditTab>().filter { it.needsSaving }.isNotEmpty()) {
             val alert = Alert(Alert.AlertType.CONFIRMATION)
             alert.title = "Save Changes?"
             alert.contentText = "Save changes before closing?"
@@ -198,6 +202,9 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     }
 
     fun startGame(scenePath: String = Resources.instance.sceneFileToPath(Resources.instance.gameInfo.initialScenePath)) {
+
+        ScriptManager.reloadAll()
+
         stage.hide()
 
         // Give this window the opportunity to hide before the UI hangs

@@ -33,7 +33,7 @@ import java.io.File
  */
 class KotlinLanguage : Language() {
 
-    val engine = KotlinJsr223JvmLocalScriptEngineFactory().scriptEngine
+    private var engine = KotlinJsr223JvmLocalScriptEngineFactory().scriptEngine
 
     override val fileExtension = "kts"
 
@@ -44,6 +44,11 @@ class KotlinLanguage : Language() {
         // Which means there is no way to create an abstract Role in one file, and extend it in another.
         // Nor is it possible to use another user-defined class from within multiple Role subtypes.
         // Grr. It looks like Kotlin isn't suitable as a scripting language (yet?).
+    }
+
+    override fun clear() {
+        super.clear()
+        engine = KotlinJsr223JvmLocalScriptEngineFactory().scriptEngine
     }
 
     override fun loadScript(file: File): Class<*> {

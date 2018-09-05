@@ -61,6 +61,14 @@ abstract class Language {
 
     abstract fun setClasspath(directory: File)
 
+    /**
+     * Clear all classes, ready for them to be reloaded
+     */
+    open fun clear() {
+        classes.clear()
+        classToName.clear()
+    }
+
     abstract fun loadScript(file: File): Class<*>
 
     fun addScript(file: File) {

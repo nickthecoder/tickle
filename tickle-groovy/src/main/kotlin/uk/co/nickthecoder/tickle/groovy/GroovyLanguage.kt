@@ -30,18 +30,31 @@ class GroovyLanguage : Language() {
 
     private lateinit var engine: GroovyScriptEngine
 
-
     override val fileExtension = "groovy"
 
     override val name = "Groovy"
 
+    private lateinit var path : File
+
     override fun setClasspath(directory: File) {
-        engine = GroovyScriptEngine(directory.path)
+        path = directory
+        createEngine()
+    }
+
+    private fun createEngine() {
+        engine = GroovyScriptEngine(path.path)
         engine.config.minimumRecompilationInterval = 0
     }
 
     override fun loadScript(file: File): Class<*> {
         return engine.loadScriptByName(file.name)
+    }
+
+    override fun clear() {
+        super.clear()
+        // By creating a new engine, I hope that the classes used by the previous engine's
+        // classloader can be garbage collected.
+        createEngine()
     }
 
     override fun generateScript(name: String, type: Class<*>?): String {

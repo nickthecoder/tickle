@@ -31,6 +31,8 @@ object ScriptManager {
 
     private val languages = mutableMapOf<String, Language>()
 
+    private lateinit var classpath: File
+
     fun languages() = languages.values
 
     fun register(language: Language) {
@@ -38,18 +40,29 @@ object ScriptManager {
         languages[language.fileExtension] = language
     }
 
+    /**
+     * Note, only one directory is currently supported. All script class must be only
+     * within that directory.
+     * Also, packages are NOT supported, so there are no subdirectories.
+     */
     fun setClasspath(directory: File) {
-        languages.values.forEach { it.setClasspath(directory) }
-        scan(directory)
+        classpath = directory
+        scan()
     }
 
-    fun scan(directory: File) {
+    fun scan() {
+        languages.values.forEach { it.setClasspath(classpath) }
         if (languages.isNotEmpty()) {
-            println("Scanning script directory $directory")
-            directory.listFiles()?.forEach { file ->
+            println("Scanning script directory $classpath")
+            classpath.listFiles()?.forEach { file ->
                 load(file)
             }
         }
+    }
+
+    fun reloadAll() {
+        languages.values.forEach { it.clear() }
+        scan()
     }
 
     fun load(file: File) {
