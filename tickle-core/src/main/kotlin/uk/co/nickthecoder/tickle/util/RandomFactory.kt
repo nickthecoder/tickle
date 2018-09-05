@@ -152,7 +152,7 @@ class RandomFactory(seed: Long?) {
 /**
  * Returns a randomly selected item from the list.
  */
-inline fun <reified T> RandomFactory.from(list: List<T>): T {
+inline fun <reified T> RandomFactory.randomListItem(list: List<T>): T {
     return list[randomInt(list.size)]
 }
 

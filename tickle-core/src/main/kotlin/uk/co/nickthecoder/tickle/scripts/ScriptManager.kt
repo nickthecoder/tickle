@@ -44,9 +44,11 @@ object ScriptManager {
     }
 
     fun scan(directory: File) {
-        println("Scanning directory $directory")
-        directory.listFiles().forEach { file ->
-            load(file)
+        if (languages.isNotEmpty()) {
+            println("Scanning script directory $directory")
+            directory.listFiles()?.forEach { file ->
+                load(file)
+            }
         }
     }
 
