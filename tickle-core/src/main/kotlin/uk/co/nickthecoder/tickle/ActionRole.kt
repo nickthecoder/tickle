@@ -29,7 +29,7 @@ open class ActionRole : Role {
 
     private var finished: Boolean = false
 
-    var action: Action = NoAction()
+    private var action: Action = NoAction()
         set(v) {
             field = v
             finished = v.begin()

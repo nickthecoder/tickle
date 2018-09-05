@@ -1,6 +1,12 @@
 Current Work
 ============
 
+Bug : Editing Dying does not reload the class. Ah, I need to reload the class that uses it. Grr.
+
+Bug : Collisions not working correctly when pose is rotated.
+
+Bug : Tree -> New Script, does not appear in the tree. (Does from New.. in CostumeTab???)
+
 Improve script editor (e.g. tab and shift-tab do sensible things!)
 
 ScriptManager has listeners which it informs about reloads (including errors).

@@ -34,11 +34,35 @@ import uk.co.nickthecoder.tickle.util.Angle
 
 private var nextId: Int = 0
 
-class Actor(var costume: Costume, val role: Role? = null)
+class Actor(var costume: Costume, role: Role? = null)
 
     : ActorDetails {
 
     val id = nextId++
+
+    /**
+     * The role defines the behaviour of this Actor (how it moves etc).
+     *
+     * Usually, an actor keeps the same Role forever.
+     * However, in rare cases, the role of an Actor can be changed.
+     * If you do change the actor's Role, ensure that the role has not been used by another Actor,
+     * otherwise bad things will happen!
+     *
+     * You may re-use a role (that was previously assigned to the same actor). Note, the role's
+     * [Role.begin] and [Role.activated] methods will be called each time the role is changed.
+     * So if you want to run code only once, then you'll need to set a flag, and have an "if"
+     * in your [Role.begin] and [Role.activated] methods.
+     */
+    var role: Role? = role
+        set(v) {
+            field?.end()
+            field = v
+            v?.actor = this
+            if (stage != null) {
+                v?.begin()
+                v?.activated()
+            }
+        }
 
     var stage: Stage? = null
 
@@ -269,35 +293,47 @@ class Actor(var costume: Costume, val role: Role? = null)
         }
     }
 
+    /**
+     * Creates a new Actor, whose Costume is defined by looking at this Actor's events of type "Costume".
+     * The role for the new Actor is defined by the new Actor's Costume.
+     *
+     * The new Actor is placed on the same Stage, and at the same position as this Actor.
+     *
+     * The new Actor is placed on the same stage as this Actor.
+     */
     fun createChild(eventName: String): Actor {
         val childActor = costume.createChild(eventName)
         childActor.x = x
         childActor.y = y
         updateBody()
 
-        return childActor
-    }
-
-    fun createChildOnStage(eventName: String): Actor {
-        val childActor = createChild(eventName)
         stage?.add(childActor)
         return childActor
     }
 
-    fun createChild(costume: Costume, eventName: String = "default"): Actor {
-        val childActor = costume.createActor(eventName)
+    /**
+     * Creates a new Actor, using the Costume provided.
+     * The role for the new Actor is defined by the [costume].
+     *
+     * The new Actor is placed on the same Stage, and at the same position as this Actor.
+     */
+    fun createChild(costume: Costume): Actor {
+        val childActor = costume.createActor()
         childActor.x = x
         childActor.y = y
         updateBody()
-        return childActor
-    }
 
-    fun createChildOnStage(costume: Costume, eventName: String = "default"): Actor {
-        val childActor = createChild(costume, eventName)
         stage?.add(childActor)
         return childActor
     }
 
+    /**
+     * Calls [Role.end], and removes the actor from the [Stage].
+     *
+     * If you want to test if an Actor is dead, the best you can do is check if [stage] == null.
+     * However, this isn't perfect, because it is possible for an Actor to be removed from a Stage
+     * without the [Role.end] being called.
+     */
     fun die() {
         role?.end()
         stage?.remove(this)

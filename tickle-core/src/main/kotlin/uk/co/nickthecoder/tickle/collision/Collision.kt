@@ -28,7 +28,7 @@ fun Vector2d.distanceSquared(other: Vector2d): Double {
 
 fun circularCollision(
         positionA: Vector2d, velocityA: Vector2d, massA: Double = 1.0,
-        positionB: Vector2d, velocityB: Vector2d, massB: Double = 1.0) {
+        positionB: Vector2d, velocityB: Vector2d, massB: Double = 1.0) : Double {
 
     val dx = positionA.x - positionB.x
     val dy = positionA.y - positionB.y
@@ -43,7 +43,7 @@ fun circularCollision(
 
     if (collision < 0) {
         // They are moving away from each other
-        return
+        return 0.0
     }
 
     val massSum = massA + massB
@@ -54,4 +54,5 @@ fun circularCollision(
     velocityA.y += dy / dist * collision * 2.0 * massB / massSum
     velocityB.y -= dy / dist * collision * 2.0 * massB / massSum
 
+    return collision
 }
