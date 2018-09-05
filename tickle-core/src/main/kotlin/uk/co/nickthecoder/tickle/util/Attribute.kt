@@ -20,7 +20,7 @@ package uk.co.nickthecoder.tickle.util
 
 import uk.co.nickthecoder.tickle.AttributeType
 
-@Target(AnnotationTarget.PROPERTY)
+@Target(AnnotationTarget.PROPERTY, AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Attribute(
         val attributeType: AttributeType = AttributeType.NORMAL,
@@ -29,7 +29,7 @@ annotation class Attribute(
         val hasAlpha: Boolean = true /*For Color attributes only */
 )
 
-@Target(AnnotationTarget.PROPERTY)
+@Target(AnnotationTarget.PROPERTY, AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class CostumeAttribute(
         val order: Int = 1,

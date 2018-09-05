@@ -71,13 +71,15 @@ class $name extends AbstractRole {
     // NOTE. Some common methods were automatically generated.
     // These may be removed if you don't need them.
 
-    def void begin() {
+    void begin() {
     }
 
-    def void activated() {
+    void activated() {
     }
 
-    def void tick() {
+    // tick is called 60 times per second (a Role MUST have a tick method).
+
+    void tick() {
     }
 
 }
@@ -92,22 +94,19 @@ class $name extends AbstractDirector {
     // NOTE. Some common methods were automatically generated.
     // These may be removed if you don't need them.
 
-    def void sceneLoaded() {
+    void sceneLoaded() {
     }
 
-    def void begin() {
+    void begin() {
     }
 
-    def void activated() {
+    void activated() {
     }
 
-    def void() {
+    void onKey(KeyEvent event) {
     }
 
-    def void onKey(KeyEvent event) {
-    }
-
-    def void onMouseButton(MouseEvent event) {
+    void onMouseButton(MouseEvent event) {
     }
 }
 
@@ -122,28 +121,28 @@ class $name extends AbstractProducer {
     // NOTE. Some common methods were automatically generated.
     // These may be removed if you don't need them.
 
-    def void begin() {
+    void begin() {
     }
 
-    def void sceneLoaded() {
+    void sceneLoaded() {
     }
 
-    def void sceneBegin() {
+    void sceneBegin() {
     }
 
-    def void sceneEnd() {
+    void sceneEnd() {
     }
 
-    def void sceneActivated() {
+    void sceneActivated() {
     }
 
-    def void tick() {
+    void tick() {
     }
 
-    def void onKey(KeyEvent event) {
+    void onKey(KeyEvent event) {
     }
 
-    def void onMouseButton(MouseEvent event) {
+    void onMouseButton(MouseEvent event) {
     }
 }
 

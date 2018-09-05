@@ -9,6 +9,13 @@ Bug : Tree -> New Script, does not appear in the tree. (Does from New.. in Costu
 
 Improve script editor (e.g. tab and shift-tab do sensible things!)
 
+Create a "launcher" module, so that Groovy based games don't need a compilation step.
+Same as the existing "main", but it REQUIRES a resources file, rather than searching from the current directory.
+Also consider allowing resources opened from a zip file (with a custom file extension),
+so that a game can be distributed easily).
+Hmm, version problems. The API will change, and therefore it will only work when the tickle runtime matches
+that of the game.
+
 ScriptManager has listeners which it informs about reloads (including errors).
     Use this to position cursor to errors
     New tab type, which lists errors during scan().
@@ -18,14 +25,7 @@ New tab type Script Log.
     "Clear" button next to "Save"
 New ScriptException, which includes line number and column number (both? optional)
 
-Get a full game working with Groovy as the scripting language.
-
-Filter the list list of classes
-    Using search
-    Showing only the most relevant classes
-
-Automatically reload scripts after saved (in which case, don't manually reload the script when saved)
-New "Reload Classes" button to reload all scripts?
+Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickle)
 
 Remove groovy dependency from paratask-core. And maybe json too.
 

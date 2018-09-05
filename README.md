@@ -242,29 +242,42 @@ All of the key features have been written, but there is still a huge number of f
 
 I've not found any bugs for quite a while now (but I'm sure you can find some for me to fix ;-)
 
+I've written my first Tickle-powered, fully-featured game (called [Rapid Rag Doll](https://github.com/nickthecoder/rapidragdoll)).
+I think its quite slick (though not finished - no sound, and not enough levels).
+
 Documentation is sparse / non-existent. Sorry.
-If you contact me, that will help spur me on to do this less than glamourous work.
+If you contact me, that will help spur me on to do this less than glamorous work.
 
 For the type of games I intend to write, I've had no problems with performance, even on my clunky old laptop,
-whose graphics card doesn't work for most 3d games I've thrown at it.
+whose graphics card can't handle most games I've thrown at it.
+
+Support for scripting language is a little patchy at the moment (some features only work with Kotlin).
+I'm working on it! So I advise you to use only Kotlin for now.
 
 The Scene Editor is a little rough in places, but no show-stoppers AFAIK.
 
 I've only tested it on Linux. I hope it will work on Windows and MacOS, but I've never tried.
 I don't own a windows box or a Mac. Feel free to send me an old Mac if you have one gathering dust.
 I don't want a windows machine though! The thought of reverting to a machine with a C: drive
-gives me nightmares. Do you know that it's called "C:" because "A:" and "B:" are reserved floppy disk drives!?
-Do you still have to press the "start" button to stop the machine?
-FYI I gave up on windows back in the Windows 98 era, so maybe things have improved.
+gives me nightmares. Do you know that it's called "C:" because "A:" and "B:" are reserved for floppy disk drives!?
+How quaint!
 
-I've written my first Tickle-powered, fully-featured game (called [Rapid Rag Doll](https://github.com/nickthecoder/rapidragdoll)).
-I think its quite slick (though not finished - no sound, and not enough levels).
+Note, I haven't created a stable release yet. This is mainly because I'm the only one (to my knowledge) that is
+using Tickle.
+
 
 Planned Additional Features
 ---------------------------
 
-Have a look in the todo.txt for a bucket load of ideas.
+Have a look in the todo.txt file for a bucket load of ideas.
 
+I'm currently working on improving Groovy support.
+
+Once that is done, I may turn my attention to writing something similar to Age of Empires II
+(a game I loved, and is the only thing I miss, having given up on Window many years ago).
+
+This will force me to write some tricky OpenGL code, which will be handy for anybody else wanting to an
+isometric game, with "Fog of War", and "X-ray" views (so that people can be seen when otherwise hidden behind buildings).
 
 Notable Limitations
 -------------------
@@ -272,7 +285,6 @@ Notable Limitations
 No support for destructive changes to game sprites (e.g. for games such as Lemmings).
 
 No out-of-the-box support for isometric (or other 2.5D games), such as Age of Empires I and II.
-However, a competent programmer could implement their own StageView, so I don't see this as a show-stopper.
 
 I have no idea how robust my support for game pads is. I've barely tested it. Sorry.
 
@@ -284,7 +296,7 @@ Maybe you would be kind enough to send me a few quid to put towards a new monito
 Rendering is simplistic. There's no "fog-of-war", nor other more specialised rendering features
 (such as outlining objects hidden behind buildings as seen in Age of Empires I and II).
 It is *possible* to implement these using Tickle, but you will need to get your hands dirty, talking to OpenGL,
-and that breaks two of my key ideals. It isn't easy or fun!
+and that breaks two of my key ideals. OpenGL isn't easy or fun!
 
 No path-finding. You could write your own, but this is such a common feature for certain game genres,
 that Tickle should do much of the hard work for you.
@@ -299,6 +311,7 @@ I may introduce multi-threading to a limited extent.
 For example, I could render the scene in a separate thread from the game logic's thread.
 e.g. by caching the position and other states of each game object at the start of each frame,
 and then let the renderer and game logic run run in parallel.
+
 Note, using synchronized methods rather than caching isn't as easy as it sounds. I don't want to game logic
 to have to deal with synchronization, and doing it externally to the game logic will either cause too much blocking
 (and therefore make the process essentially serial), or a scene could render incorrectly.
@@ -306,11 +319,14 @@ e.g. if a piece of game logic moves two related Actors by the same amount,
 then the renderer may render them after the first is changed, but before the second is changed.
 This would show them the wrong distance apart (e.g. a head disjoint from the body).
 That's hard to debug, and impossible to fix. Not fun or easy!
-I've yet to run into performance problems, even on old hardware. If it aint broke, don't fix it.
+Timing issues could cause them to appear to giggle about with respect to each other.
+
+I've yet to run into performance problems, even on old hardware.
+If it aint broke, don't fix it, so Tickle remains single threaded for now.
 
 I may allow CPU intensive tasks, such as route finding to be run in separate threads.
 But these threads will be forbidden from changing the state of the game objects.
 
-In this way, a four core machine could be saturated much of the time without giving up my ideals
+Combining these strategies, a four core machine could be saturated much of the time without giving up my ideals
 of fun and easy to write.
 

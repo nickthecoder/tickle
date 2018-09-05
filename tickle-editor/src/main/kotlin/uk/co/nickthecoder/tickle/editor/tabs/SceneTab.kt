@@ -39,6 +39,7 @@ import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import java.io.File
 
 class SceneTab(val sceneName: String, sceneStub: SceneStub)
@@ -201,7 +202,7 @@ class SceneDetailsTask(val sceneTab: SceneTab, val name: String, val sceneResour
         }
 
         try {
-            directorP.value = Class.forName(sceneResource.directorString)
+            directorP.value = ScriptManager.classForName(sceneResource.directorString)
         } catch (e: Exception) {
             //
         }
@@ -236,7 +237,7 @@ class SceneDetailsTask(val sceneTab: SceneTab, val name: String, val sceneResour
     }
 
     fun updateAttributes() {
-        sceneResource.directorAttributes.updateAttributesMetaData(directorP.value!!.name)
+        sceneResource.directorAttributes.updateAttributesMetaData(directorP.value!!)
         attributesP.children.toList().forEach {
             attributesP.remove(it)
         }
