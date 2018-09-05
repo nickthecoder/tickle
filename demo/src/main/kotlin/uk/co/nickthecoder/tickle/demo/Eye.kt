@@ -33,7 +33,7 @@ class Eye : AbstractRole() {
     private val mouse = Vector2d()
 
     override fun activated() {
-        pupilA = actor.createChildOnStage("pupil")
+        pupilA = actor.createChild("pupil")
     }
 
     override fun tick() {

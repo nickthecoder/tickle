@@ -90,7 +90,7 @@ class Bee : Controllable() {
             eject(NeighbourhoodBounce())
         }
         if (ejectWorld?.isPressed() == true) {
-            val newActor = actor.createChildOnStage("ejectWorld")
+            val newActor = actor.createChild("ejectWorld")
             newActor.body?.let { body ->
                 body.linearVelocity = Vec2(-3f, -3f)
             }
