@@ -19,8 +19,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.scene.control.TextArea
+import uk.co.nickthecoder.paratask.gui.ShortcutHelper
+import uk.co.nickthecoder.tickle.editor.EditorActions
+import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.ScriptStub
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
+import uk.co.nickthecoder.tickle.editor.util.CodeTextArea
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
@@ -29,10 +33,12 @@ import java.io.File
 class ScriptTab(val scriptStub: ScriptStub)
 
     : EditTab(scriptStub.file.nameWithoutExtension, scriptStub, graphicName = ResourceType.SCRIPT.graphicName),
-        ResourcesListener {
+        ResourcesListener, HasExtras {
 
-    val textArea = TextArea()
-    val file = scriptStub.file
+    private val textArea = CodeTextArea()
+    private val file = scriptStub.file
+
+    private val shortcuts = ShortcutHelper("API Documentation", MainWindow.instance.borderPane)
 
     init {
         textArea.text = file.readText()
@@ -43,7 +49,13 @@ class ScriptTab(val scriptStub: ScriptStub)
         textArea.textProperty().addListener { _ ->
             needsSaving = true
         }
+
+        with(shortcuts) {
+            add(EditorActions.SAVE) { onApply() }
+        }
     }
+
+    override fun extraShortcuts() = shortcuts
 
     override fun save(): Boolean {
         file.writeText(textArea.text)

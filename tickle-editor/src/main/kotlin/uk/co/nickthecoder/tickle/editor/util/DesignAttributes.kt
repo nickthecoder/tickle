@@ -72,7 +72,11 @@ class DesignAttributes : RuntimeAttributes() {
                 data.order = annotation.order
                 data.scale = annotation.scale
 
-                createParameter(property.name, property.returnType.jvmErasure, hasAlpha = annotation.hasAlpha)?.let { parameter ->
+                createParameter(
+                        property.name, property.returnType.jvmErasure,
+                        hasAlpha = annotation.hasAlpha,
+                        rows = annotation.rows)?.let { parameter ->
+
                     data.parameter = parameter
                     parameter.listen { data.value = parameter.stringValue }
 
@@ -92,7 +96,12 @@ class DesignAttributes : RuntimeAttributes() {
             }
             property.annotations.filterIsInstance<CostumeAttribute>().firstOrNull()?.let { annotation ->
                 val data = getOrCreateData(property.name)
-                createParameter(property.name, property.returnType.jvmErasure, hasAlpha = annotation.hasAlpha)?.let { parameter ->
+                createParameter(
+                        property.name,
+                        property.returnType.jvmErasure,
+                        hasAlpha = annotation.hasAlpha,
+                        rows = annotation.rows)?.let { parameter ->
+
                     data.costumeParameter = parameter
                     data.order = annotation.order
                     parameter.listen { data.value = parameter.stringValue }
@@ -108,7 +117,7 @@ class DesignAttributes : RuntimeAttributes() {
 
     }
 
-    private fun createParameter(name: String, klass: KClass<*>, hasAlpha: Boolean): ValueParameter<*>? {
+    private fun createParameter(name: String, klass: KClass<*>, hasAlpha: Boolean, rows: Int): ValueParameter<*>? {
 
         return when (klass) {
 
@@ -125,7 +134,7 @@ class DesignAttributes : RuntimeAttributes() {
                 DoubleParameter("attribute_$name", required = false, minValue = -Double.MAX_VALUE, label = name)
             }
             String::class -> {
-                StringParameter("attribute_$name", required = false, label = name)
+                StringParameter("attribute_$name", required = false, label = name, rows = rows)
             }
             Polar2d::class -> {
                 PolarParameter("attribute_$name", label = name)

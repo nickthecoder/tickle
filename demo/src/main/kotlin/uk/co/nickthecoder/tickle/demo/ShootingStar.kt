@@ -48,9 +48,9 @@ class ShootingStar() : ActionRole() {
         val growShrink = (Scale(actor, 1.0, 2.0).then(Scale(actor, 1.0, 1.0)).forever())
 
         val edge = (Forwards(actor.position, headingAndLength.magnitude, headingAndLength.angle, sideDuration, Eases.easeInOutExpo)
-                .and(Turn(headingAndLength.angle, curveAngle, sideDuration, Eases.easeInOutExpo)))
+                .and(Turn(headingAndLength.angle, sideDuration, curveAngle, Eases.easeInOutExpo)))
 
-                .then(Turn(headingAndLength.angle, turnAngle, 0.0))
+                .then(Turn(headingAndLength.angle, 0.0, turnAngle))
                 .then { actor.event("changeDirection") }
 
         return growShrink.and(edge.forever())

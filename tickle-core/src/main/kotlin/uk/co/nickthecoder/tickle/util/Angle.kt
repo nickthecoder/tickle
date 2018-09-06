@@ -44,6 +44,39 @@ open class Angle() {
         radians = Math.atan2(vector2d.y, vector2d.x)
     }
 
+    operator fun plus(other: Angle): Angle {
+        return Angle.radians(radians + other.radians)
+    }
+
+    operator fun minus(other: Angle): Angle {
+        return Angle.radians(radians - other.radians)
+    }
+
+    operator fun plusAssign(other: Angle) {
+        radians += other.radians
+    }
+
+    operator fun minusAssign(other: Angle) {
+        radians += other.radians
+    }
+
+    operator fun times(by: Double): Angle {
+        return Angle.radians(radians * by)
+    }
+
+    operator fun timesAssign(by: Double) {
+        radians *= by
+    }
+
+    operator fun div(by: Double): Angle {
+        return Angle.radians(radians / by)
+    }
+
+    operator fun divAssign(by: Double) {
+        radians /= by
+    }
+
+
     override fun equals(other: Any?): Boolean {
         if (other is Angle) {
             return other.radians == radians
@@ -52,9 +85,14 @@ open class Angle() {
         }
     }
 
+    override fun hashCode(): Int {
+        return radians.hashCode() + 170
+    }
+
     override fun toString() = "$degrees°"
 
     companion object {
+
         @JvmStatic fun degrees(degrees: Double) = Angle().apply { this.degrees = degrees }
 
         @JvmStatic fun radians(radians: Double) = Angle().apply { this.radians = radians }

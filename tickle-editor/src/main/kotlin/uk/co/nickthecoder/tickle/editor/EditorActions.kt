@@ -31,6 +31,8 @@ object EditorActions {
     val TEST = EditorAction("test", KeyCode.T, control = true, label = "Test", tooltip = "Test the game")
     val RELOAD = EditorAction("reload", KeyCode.F5, label = "Reload", tooltip = "Reload textures, fonts & sounds")
 
+    val SAVE = EditorAction("save", KeyCode.S, control = true, label = "Save")
+
     val ACCORDION_ONE = EditorAction("accordion.one", KeyCode.F4)
     val ACCORDION_TWO = EditorAction("accordion.two", KeyCode.F5)
     val ACCORDION_THREE = EditorAction("accordion.three", KeyCode.F6)

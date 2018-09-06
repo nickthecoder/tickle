@@ -138,6 +138,11 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
                 if (style != null) {
                     val text = newCostume.chooseString(newCostume.initialEventName) ?: ""
                     childActor.changeAppearance(text, style)
+                } else {
+                    val ninePatch = newCostume.chooseNinePatch(newCostume.initialEventName)
+                    if (ninePatch != null) {
+                        childActor.changeAppearance(ninePatch)
+                    }
                 }
             } else {
                 childActor.changeAppearance(pose)

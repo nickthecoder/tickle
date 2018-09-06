@@ -1,16 +1,19 @@
 Current Work
 ============
 
-Bug : Editing Dying does not reload the class. Ah, I need to reload the class that uses it. Grr.
+Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickle)
+    Battlegrounds scene (using "Preferences")
+        Pictures of Earth, the moon and mars with markers. Ticked when completed.
+    More levels
+    Mother-ship
+    Sounds
+    Final battle(s) - make the world BIG, and pan around.
+        Have moons to smash into the alien formations
+        Maybe gravity too (so that everything tends to orbit)
+        Your ship moves like "thrust" - maybe a new sprite too (similar, but more pointy)
+    Cease fire. Save the aliens, by dragging them (thrust style)
 
 Bug : Collisions not working correctly when pose is rotated.
-
-Bug : Tree -> New Script, does not appear in the tree. (Does from New.. in CostumeTab???)
-
-Improve script editor (e.g. tab and shift-tab do sensible things!)
-F4 on a class name opens the help window at the appropriate place.
-    If there are multiple matches, then popup the package names.
-
 
 Create a "launcher" module, so that Groovy based games don't need a compilation step.
 Same as the existing "main", but it REQUIRES a resources file, rather than searching from the current directory.
@@ -28,15 +31,14 @@ New tab type Script Log.
     "Clear" button next to "Save"
 New ScriptException, which includes line number and column number (both? optional)
 
-Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickle)
-    Battlegrounds scene
-        Pictures of Earth, the moon and mars with markers. Ticked when completed.
-
 Remove groovy dependency from paratask-core. And maybe json too.
 
 Can I dynamically load a (set of) jar files, so that the editor doesn't need to be re-started
 when writing in compiled kotlin?
 If so, then kotlin code could ALSO be edited in the editor???
+
+F4 on a class name opens the help window at the appropriate place.
+    If there are multiple matches, then popup the package names.
 
 
 Next

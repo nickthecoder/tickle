@@ -23,28 +23,14 @@ import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Polar2d
 
-open class AcceleratePolarInput(
+open class AcceleratePolar(
         val velocity: Polar2d,
-        var acceleration: Double,
-        var deceleration: Double = -acceleration,
-        var autoSlow: Double = 0.0,
-        accelerate: String = "up",
-        decelerate: String = "down")
-
+        var acceleration: Double
+)
     : Action {
 
-    val accelerate = Resources.instance.inputs.find(accelerate) ?: Input.dummyInput
-    val decelerate = Resources.instance.inputs.find(decelerate) ?: Input.dummyInput
-
     override fun act(): Boolean {
-        if (accelerate.isPressed()) {
-            velocity.magnitude += acceleration
-        } else if (decelerate.isPressed()) {
-            velocity.magnitude += deceleration
-        } else {
-            // Automatically slow down (gradually), when no keys are pressed
-            velocity.magnitude -= autoSlow
-        }
+        velocity.magnitude += acceleration
         return false
     }
 }

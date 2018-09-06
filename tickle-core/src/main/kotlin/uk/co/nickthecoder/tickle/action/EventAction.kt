@@ -1,7 +1,6 @@
-package uk.co.nickthecoder.tickle.action.animation
+package uk.co.nickthecoder.tickle.action
 
 import uk.co.nickthecoder.tickle.Actor
-import uk.co.nickthecoder.tickle.action.Action
 
 class EventAction(val actor: Actor, val eventName: String)
     : Action {

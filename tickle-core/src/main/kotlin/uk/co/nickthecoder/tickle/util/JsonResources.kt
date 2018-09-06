@@ -415,7 +415,11 @@ open class JsonResources {
             val jcostume = it.asObject()
             val name = jcostume.get("name").asString()
             val costume = Costume()
-            costume.roleString = jcostume.getString("role", "")
+            try {
+                costume.roleString = jcostume.getString("role", "")
+            } catch (e: Exception) {
+                error(e, "Failed to create role : ${jcostume.getString("role", "")}")
+            }
             costume.canRotate = jcostume.getBoolean("canRotate", false)
             costume.zOrder = jcostume.getDouble("zOrder", 0.0)
             costume.initialEventName = jcostume.getString("initialEvent", "default")
@@ -718,6 +722,11 @@ open class JsonResources {
         }
     }
 
+    fun error(e: Exception, message: String) {
+        System.err.println(message)
+        e.printStackTrace()
+    }
+
     companion object {
 
         fun copyGlyphs(texture: Texture, glyphs: Map<Char, Glyph>): Map<Char, Glyph> {
@@ -763,4 +772,5 @@ open class JsonResources {
             return FontTexture(glyphs, lineHeight, leading = leading, ascent = ascent, descent = descent)
         }
     }
+
 }

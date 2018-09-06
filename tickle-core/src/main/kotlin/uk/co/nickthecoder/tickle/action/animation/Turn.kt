@@ -22,9 +22,9 @@ import uk.co.nickthecoder.tickle.util.Angle
 
 class Turn(
         val heading: Angle,
-        val angle: Angle,
         seconds: Double,
-        ease: Ease = Eases.linear)
+        val angle: Angle,
+        ease: Ease = LinearEase.instance)
 
     : AnimationAction(seconds, ease) {
 
@@ -39,5 +39,17 @@ class Turn(
 
     override fun update(t: Double) {
         heading.radians = lerp(initialRadians, finalRadians, t)
+    }
+
+    companion object {
+        @JvmStatic fun turnTo(
+                heading: Angle,
+                seconds: Double,
+                finalAngle: Angle,
+                ease: Ease = LinearEase.instance): Turn {
+
+            val angle = Angle.radians(finalAngle.radians - heading.radians)
+            return Turn(heading, seconds, angle, ease)
+        }
     }
 }

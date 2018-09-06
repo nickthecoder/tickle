@@ -26,12 +26,14 @@ annotation class Attribute(
         val attributeType: AttributeType = AttributeType.NORMAL,
         val order: Int = 1,
         val scale: Double = 1.0,
-        val hasAlpha: Boolean = true /*For Color attributes only */
+        val rows: Int = 1, // For strings only
+        val hasAlpha: Boolean = true // For Color only
 )
 
 @Target(AnnotationTarget.PROPERTY, AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class CostumeAttribute(
         val order: Int = 1,
-        val hasAlpha: Boolean = true /*For Color attributes only */
+        val rows: Int = 1, // For strings only
+        val hasAlpha: Boolean = true // For Color attributes only
 )

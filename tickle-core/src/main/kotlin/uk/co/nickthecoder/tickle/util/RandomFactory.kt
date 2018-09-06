@@ -152,7 +152,7 @@ class RandomFactory(seed: Long?) {
 /**
  * Returns a randomly selected item from the list.
  */
-inline fun <reified T> RandomFactory.randomListItem(list: List<T>): T {
+inline fun <reified T> RandomFactory.listItem(list: List<T>): T {
     return list[randomInt(list.size)]
 }
 
@@ -160,19 +160,42 @@ inline fun <reified T> RandomFactory.randomListItem(list: List<T>): T {
  * Static methods using a shared instance of RandomFactory
  */
 object Rand {
-    inline fun <reified T> item(list: List<T>) = RandomFactory.instance.item(list)
 
-    @JvmStatic fun nextInt(max: Int) = RandomFactory.instance.randomInt(max)
+    @JvmStatic fun randomInt(max: Int) = RandomFactory.instance.randomInt(max)
+    @JvmStatic fun randomDouble(max: Double) = RandomFactory.instance.randomDouble(max)
+    @JvmStatic fun randomFloat(max: Float) = RandomFactory.instance.randomFloat(max)
+
     @JvmStatic fun oneIn(n: Int) = RandomFactory.instance.oneIn(n)
 
-    @JvmStatic fun plusMinus(limit: Double, ease: Ease = LinearEase.instance) = RandomFactory.instance.plusMinus(limit, ease)
-    @JvmStatic fun plusMinus(limit: Float, ease: Ease = LinearEase.instance) = RandomFactory.instance.plusMinus(limit, ease)
+    @JvmStatic fun plusMinus(limit: Double) = RandomFactory.instance.plusMinus(limit)
+    @JvmStatic fun plusMinus(limit: Double, ease: Ease) = RandomFactory.instance.plusMinus(limit, ease)
 
-    @JvmStatic fun between(from: Double, to: Double, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
-    @JvmStatic fun between(from: Float, to: Float, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
-    @JvmStatic fun between(from: Color, to: Color, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
-    @JvmStatic fun between(from: Polar2d, to: Polar2d, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
-    @JvmStatic fun between(from: Vector2d, to: Vector2d, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
-    @JvmStatic fun between(from: Vector3d, to: Vector3d, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
-    @JvmStatic fun between(from: Vector4d, to: Vector4d, ease: Ease = LinearEase.instance) = RandomFactory.instance.between(from, to, ease)
+    @JvmStatic fun plusMinus(limit: Float) = RandomFactory.instance.plusMinus(limit)
+    @JvmStatic fun plusMinus(limit: Float, ease: Ease) = RandomFactory.instance.plusMinus(limit, ease)
+
+    @JvmStatic fun between(from: Double, to: Double) = RandomFactory.instance.between(from, to)
+    @JvmStatic fun between(from: Double, to: Double, ease: Ease) = RandomFactory.instance.between(from, to, ease)
+
+    @JvmStatic fun between(from: Float, to: Float) = RandomFactory.instance.between(from, to)
+    @JvmStatic fun between(from: Float, to: Float, ease: Ease) = RandomFactory.instance.between(from, to, ease)
+
+    @JvmStatic fun between(from: Color, to: Color) = RandomFactory.instance.between(from, to)
+    @JvmStatic fun between(from: Color, to: Color, ease: Ease) = RandomFactory.instance.between(from, to, ease)
+
+    @JvmStatic fun between(from: Polar2d, to: Polar2d) = RandomFactory.instance.between(from, to)
+    @JvmStatic fun between(from: Polar2d, to: Polar2d, ease: Ease) = RandomFactory.instance.between(from, to, ease)
+
+    @JvmStatic fun between(from: Vector2d, to: Vector2d) = RandomFactory.instance.between(from, to)
+    @JvmStatic fun between(from: Vector2d, to: Vector2d, ease: Ease) = RandomFactory.instance.between(from, to, ease)
+
+    @JvmStatic fun between(from: Vector3d, to: Vector3d) = RandomFactory.instance.between(from, to)
+    @JvmStatic fun between(from: Vector3d, to: Vector3d, ease: Ease) = RandomFactory.instance.between(from, to, ease)
+
+    @JvmStatic fun between(from: Vector4d, to: Vector4d) = RandomFactory.instance.between(from, to)
+    @JvmStatic fun between(from: Vector4d, to: Vector4d, ease: Ease) = RandomFactory.instance.between(from, to, ease)
+
+    inline fun <reified T> listItem(list: List<T>) = RandomFactory.instance.listItem(list)
+
+    fun item(list: List<*>) = RandomFactory.instance.item(list)
+
 }
