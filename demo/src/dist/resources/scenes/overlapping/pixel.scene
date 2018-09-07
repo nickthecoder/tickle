@@ -359,7 +359,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "410.0x350.0"
+              "value": "408.0x350.0"
             },
             {
               "name": "message",
@@ -381,7 +381,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "410.0x250.0"
+              "value": "412.0x250.0"
             },
             {
               "name": "message",
@@ -474,6 +474,16 @@
           "x": 450,
           "y": 50,
           "direction": 225,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 286,
+          "y": 314,
+          "text": "Note, the fuzzy ones don't appear to touch,\nbecause we are using a threshold of 0",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
           "scaleX": 1,
           "scaleY": 1
         }

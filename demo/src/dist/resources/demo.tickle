@@ -372,6 +372,27 @@
           "value": ""
         }
       ]
+    },
+    {
+      "name": "smallText",
+      "role": "",
+      "canRotate": false,
+      "zOrder": 0,
+      "initialEvent": "default",
+      "showInSceneEditor": true,
+      "events": [
+        {
+          "name": "default",
+          "textStyles": [
+            {
+              "font": "small",
+              "halign": "LEFT",
+              "valign": "TOP",
+              "color": "#ffffffff"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

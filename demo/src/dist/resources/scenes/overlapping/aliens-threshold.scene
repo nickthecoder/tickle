@@ -1,6 +1,6 @@
 {
   "director": "uk.co.nickthecoder.tickle.demo.overlapping.ThresholdDirector",
-  "background": "#80334d",
+  "background": "#4d804d",
   "showMouse": true,
   "layout": "default",
   "snapToGrid": {
@@ -105,7 +105,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "94.0x400.0"
+              "value": "92.0x400.0"
             },
             {
               "name": "message",
@@ -127,7 +127,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "80.0x250.0"
+              "value": "76.0x250.0"
             },
             {
               "name": "message",
@@ -149,7 +149,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "77.0x100.0"
+              "value": "93.0x100.0"
             },
             {
               "name": "message",

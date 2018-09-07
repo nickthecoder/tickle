@@ -1,6 +1,6 @@
 {
   "director": "uk.co.nickthecoder.tickle.demo.overlapping.ThresholdDirector",
-  "background": "#80334d",
+  "background": "#4d804d",
   "showMouse": true,
   "layout": "default",
   "snapToGrid": {
@@ -89,7 +89,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "77.0x100.0"
+              "value": "93.0x100.0"
             },
             {
               "name": "message",
@@ -100,6 +100,15 @@
               "value": "1.0x0.0"
             }
           ]
+        },
+        {
+          "costume": "smallText",
+          "x": 50,
+          "y": 421,
+          "text": "When the TARGET is rotated, then PixelOverlapping sometimes failed.\nIt would detect collisions when there were none.\n\nUsing a threshold made no difference.\n\nIt used to collide at (77, 100) instead of (91, 100)",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
         }
       ]
     }

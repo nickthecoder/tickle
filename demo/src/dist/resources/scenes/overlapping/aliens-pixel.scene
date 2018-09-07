@@ -1,6 +1,6 @@
 {
   "director": "uk.co.nickthecoder.tickle.demo.overlapping.OverlappingDirector",
-  "background": "#cc3333",
+  "background": "#4d804d",
   "showMouse": true,
   "layout": "default",
   "snapToGrid": {
@@ -127,7 +127,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "69.0x250.0"
+              "value": "67.0x250.0"
             },
             {
               "name": "message",
@@ -149,7 +149,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "72.0x100.0"
+              "value": "82.0x100.0"
             },
             {
               "name": "message",
@@ -160,6 +160,15 @@
               "value": "1.0x0.0"
             }
           ]
+        },
+        {
+          "costume": "smallText",
+          "x": 367,
+          "y": 386,
+          "text": "Note, these don't appear to touch,\nbecause we aren't using a suitable\nthreshold.\n\nSo, we see when the fuzzy edges\nof the images touch.\n\nThe edges are so fuzzy, we can't\nsee just how far out the fuzz gets!",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
         }
       ]
     }

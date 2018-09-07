@@ -125,7 +125,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "40.0x250.0"
+              "value": "42.0x250.0"
             },
             {
               "name": "message",
@@ -359,7 +359,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "417.0x350.0"
+              "value": "413.0x350.0"
             },
             {
               "name": "message",
@@ -381,7 +381,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "413.0x250.0"
+              "value": "417.0x250.0"
             },
             {
               "name": "message",
@@ -403,7 +403,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "404.0x150.0"
+              "value": "407.0x150.0"
             },
             {
               "name": "message",
@@ -425,7 +425,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "407.0x50.0"
+              "value": "410.0x50.0"
             },
             {
               "name": "message",
@@ -474,6 +474,16 @@
           "x": 450,
           "y": 50,
           "direction": 135,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 287,
+          "y": 316,
+          "text": "Hmm, is it weird that the onese above and below\nthis text look so different.",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
           "scaleX": 1,
           "scaleY": 1
         }

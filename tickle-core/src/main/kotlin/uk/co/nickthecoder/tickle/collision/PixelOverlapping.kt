@@ -28,7 +28,11 @@ import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.Rectd
 
-private val dump = true
+/**
+ * I use this during debugging, so that I can see the alpha channel for each of the buffer.
+ * Please keep the "if (dump) ... code in place. It is really handy when things go wrong!
+ */
+private val dump = false
 
 /**
  * Tests if any overlapping pixels have an alpha value greater than zero. For many images, this isn't very good,
@@ -40,8 +44,11 @@ class PixelOverlapping(val size: Int = 128)
 
     : Overlapping {
 
-    private val overlapFrameBufferId = glGenFramebuffersEXT()
-    private val overlapTexture = Texture(size, size, GL_RGBA, null)
+    private val aFrameBufferId = glGenFramebuffersEXT()
+    private val aTexture = Texture(size, size, GL_RGBA, null)
+
+    private val bFrameBufferId = glGenFramebuffersEXT()
+    private val bTexture = Texture(size, size, GL_RGBA, null)
 
     private val lineFrameBufferId = glGenFramebuffersEXT()
     private val lineTexture = Texture(size, 1, GL_RGBA, null)
@@ -51,9 +58,13 @@ class PixelOverlapping(val size: Int = 128)
     private val projection = Matrix4f()
 
     init {
-        // Create a Texture, which holds the overlap of the the two actors
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, overlapFrameBufferId)
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, overlapTexture.handle, 0)
+        println("*** GL Extensions available : " + glGetString(GL_EXTENSIONS))
+
+        // Create a Texture, for each of the two actors
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bFrameBufferId)
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, bTexture.handle, 0)
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, aFrameBufferId)
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, aTexture.handle, 0)
 
         // Create a Texture, which is a 1 pixel high line
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, lineFrameBufferId)
@@ -69,6 +80,23 @@ class PixelOverlapping(val size: Int = 128)
         return overlapping(actorA, actorB, 0)
     }
 
+    /**
+     * Finds the axis aligned rectangles (in world coordinates) for both actors.
+     * If they don't intersect, we return false straight away.
+     * Otherwise, render A and B to their own off-screen buffers.
+     * Then use GL_MIN_EXT to render B's buffer onto A's buffer.
+     * At this point, we could check the whole of A's buffer for any alpha channel values over the given threshold.
+     * If there WERE high alpha channel values, then the actors overlap.
+     *
+     * However, an optimisation step is done...
+     *
+     * Take each line of A's buffer and render it using GL_MAX_EXT to ANOTHER buffer (which is only 1 pixel high)
+     * Now, we only need to tests the alpha channel values for this much smaller, 1 pixel high buffer.
+     *
+     * Note, it's possible to perform a similar trick again, to create a single pixel, which holds the maximum
+     * alpha channel. Is it worth it? I don't know, I haven't done performance tests.
+     * The gains would be MUCH less though, so I haven't bothered to investigate further.
+     */
     fun overlapping(actorA: Actor, actorB: Actor, threshold: Int): Boolean {
 
         val poseA = actorA.poseAppearance?.pose
@@ -90,57 +118,86 @@ class PixelOverlapping(val size: Int = 128)
             val width = (right - left).toInt()
             val height = (top - bottom).toInt()
 
-            // Render to the overlapTexture, rather than the screen's frame buffer.
+
+            // Prepare to render B to a buffer, rather than the screen's frame buffer.
             glViewport(0, 0, width, height)
             projection.identity()
             projection.ortho2D(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat())
             renderer.changeProjection(projection)
             glBindTexture(GL_TEXTURE_2D, 0)
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, overlapFrameBufferId)
-
-            // Clear the overlap texture
-            // TODO, If we are keeping a single large texture for all collisions, then we don't want to clear the whole buffer. We only need to clear the overlap area.
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bFrameBufferId)
+            // Clear
             renderer.clearColor(transparent)
             renderer.clear()
+            // Draw actor B "normally"
+            renderer.begin()
+            actorB.appearance.draw(renderer)
+            renderer.end()
 
+            // Stop rendering to the buffer. Many not needed?
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+            glBindTexture(GL_TEXTURE_2D, 0)
+
+            // Prepare to render A to a buffer, rather than the screen's frame buffer.
+            glViewport(0, 0, width, height)
+            projection.identity()
+            projection.ortho2D(left.toFloat(), right.toFloat(), bottom.toFloat(), top.toFloat())
+            renderer.changeProjection(projection)
+            glBindTexture(GL_TEXTURE_2D, 0)
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, aFrameBufferId)
+            // Clear
+            renderer.clearColor(transparent)
+            renderer.clear()
             // Draw actor A "normally"
             renderer.begin()
             actorA.appearance.draw(renderer)
             renderer.end()
 
+            // We've now rendered A and B to their own buffer
+
             if (dump) {
+                println("Actor B $actorB")
+                bTexture.dumpAlpha()
+                actorA.poseAppearance?.pose?.texture?.bind()
+
                 println("Actor A $actorA")
-                overlapTexture.dumpAlpha()
-                // The following line is WEIRD. If I comment it out, then it changes behaviour.
-                // But if I ALSO comment out the line ABOVE, then it "works" again.
-                // Note, it doesn't seem to matter WHICH texture I bind either. Hmm. I wish I knew OpenGL better,
-                // but it is the kind of code I detest. Side effects EVERYWHERE. Grr.
-                actorB.poseAppearance?.pose?.texture?.bind()
+                aTexture.dumpAlpha()
+                actorA.poseAppearance?.pose?.texture?.bind()
             }
 
-            // Now, let's prepare to render actorB.
-            // Use MIN blending, as we only care about the least opaque of the two pixels.
+            // Stop rendering to the buffer. Many not needed?
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+            glBindTexture(GL_TEXTURE_2D, 0)
 
-            // NOTE. I've now spotted a fatal flaw. This only works if objectB is aligned with the xy axis.
-            // i.e. rotations of 90° are ok, but other rotations will fail.
-            // This is because a rotated B will only change PART of the rectangle we care about,
-            // so if A is opaque anywhere else, those pixels will be unchanged, and therefore we get a false positive.
-            // Possible solutions :
-            // Render B to ANOTHER buffer, which is first cleared, and then render the whole of that buffer onto this
-            // on, using GL_MIN_EXT.
-            // Clear the pixels that B's rectangle doesn't touch. How?
-            // Only test the pixels that B's rectangle does touch.
+            // Now merge the two using the MINIMUM values of each.
+            // This will result in opaque pixels where they overlap, and transparent everywhere else.
+            glViewport(0, 0, width, height)
+            projection.identity()
+            projection.ortho2D(0f, width.toFloat(), 0f, height.toFloat())
+            renderer.changeProjection(projection)
+
+            glBindTexture(GL_TEXTURE_2D, 0)
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, aFrameBufferId)
+            val bothSourceRect = Rectd()
+            bothSourceRect.right = width.toDouble() / size
+            bothSourceRect.top = height.toDouble() / size
+
+            // Use GL_MIN_EXT, as we want transparent (low) alpha values wherever EITHER A or B are transparent.
             glBlendEquationEXT(GL_MIN_EXT)
 
             renderer.begin()
-            actorB.appearance.draw(renderer)
+            renderer.drawTexture(bTexture, 0.0, 0.0, width.toDouble(), height.toDouble(), bothSourceRect)
             renderer.end()
+
+            // Maybe remove these two?
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+            glBlendEquationEXT(GL_FUNC_ADD_EXT)
 
             // Now we have opaque pixels where the actors overlap, and transparent everywhere else.
             if (dump) {
                 println("Overlap")
-                overlapTexture.dumpAlpha()
-                actorB.poseAppearance?.pose?.texture?.bind()
+                aTexture.dumpAlpha()
+                actorA.poseAppearance?.pose?.texture?.bind()
             }
 
             // Render each line of the overlapTexture onto the lineTexture
@@ -164,7 +221,7 @@ class PixelOverlapping(val size: Int = 128)
                 //for (y in 10..10) {
                 sourceRect.bottom = ratio * y
                 sourceRect.top = ratio * (y + 1)
-                renderer.drawTexture(overlapTexture, 0.0, 0.0, width.toDouble(), 1.0, sourceRect)
+                renderer.drawTexture(aTexture, 0.0, 0.0, width.toDouble(), 1.0, sourceRect)
             }
             renderer.end()
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)

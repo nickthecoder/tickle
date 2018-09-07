@@ -1,6 +1,6 @@
 {
   "director": "uk.co.nickthecoder.tickle.demo.overlapping.ThresholdDirector",
-  "background": "#80334d",
+  "background": "#4d804d",
   "showMouse": true,
   "layout": "default",
   "snapToGrid": {
@@ -81,7 +81,7 @@
         },
         {
           "costume": "overlapping-moving4",
-          "x": 78,
+          "x": 70,
           "y": 250,
           "direction": 29.999999999999996,
           "scaleX": 1,
@@ -89,7 +89,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "80.0x250.0"
+              "value": "75.0x250.0"
             },
             {
               "name": "message",
@@ -100,6 +100,15 @@
               "value": "1.0x0.0"
             }
           ]
+        },
+        {
+          "costume": "smallText",
+          "x": 62,
+          "y": 424,
+          "text": "This has always worked. However, it was handy to compare this scene\nwith bug-1 (which used to fail)\nNote. the difference is that the TARGET is not rotated.",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
         }
       ]
     }
