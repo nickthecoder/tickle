@@ -167,7 +167,7 @@ class Scene {
                 }
                 // TODO Add warning if they have different StageConstraints when StageConstraints are implemented.
                 extraStage.actors.forEach { actor ->
-                    existingStage.add(actor, false)
+                    existingStage.add(actor)
                 }
             }
         }

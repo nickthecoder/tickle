@@ -1,0 +1,124 @@
+{
+  "director": "uk.co.nickthecoder.tickle.NoDirector",
+  "background": "#000000",
+  "showMouse": true,
+  "layout": "default",
+  "snapToGrid": {
+    "enabled": true,
+    "xSpacing": 50,
+    "ySpacing": 20,
+    "xOffset": 0,
+    "yOffset": 0,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "snapToGuides": {
+    "enabled": false,
+    "closeness": 5,
+    "x": [
+      50
+    ],
+    "y": [
+      
+    ]
+  },
+  "snapToOthers": {
+    "enabled": true,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "snapRotation": {
+    "enabled": true,
+    "step": 15,
+    "closeness": 15
+  },
+  "include": [
+    
+  ],
+  "stages": [
+    {
+      "name": "main",
+      "actors": [
+        {
+          "costume": "sceneButton",
+          "x": 50,
+          "y": 440,
+          "text": "Pixel",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "overlapping/pixel"
+            }
+          ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 501,
+          "y": 9,
+          "text": "Back to Main Menu",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "menu"
+            }
+          ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 50,
+          "y": 400,
+          "text": "Threshold",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "overlapping/threshold"
+            }
+          ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 50,
+          "y": 320,
+          "text": "aliens-threshold",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "overlapping/aliens-threshold"
+            }
+          ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 50,
+          "y": 360,
+          "text": "aliens-pixel",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "overlapping/aliens-pixel"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

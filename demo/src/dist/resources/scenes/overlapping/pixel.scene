@@ -1,0 +1,483 @@
+{
+  "director": "uk.co.nickthecoder.tickle.demo.overlapping.OverlappingDirector",
+  "background": "#000000",
+  "showMouse": true,
+  "layout": "default",
+  "snapToGrid": {
+    "enabled": true,
+    "xSpacing": 50,
+    "ySpacing": 50,
+    "xOffset": 0,
+    "yOffset": 0,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "snapToGuides": {
+    "enabled": false,
+    "closeness": 5,
+    "x": [
+      
+    ],
+    "y": [
+      
+    ]
+  },
+  "snapToOthers": {
+    "enabled": true,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "snapRotation": {
+    "enabled": true,
+    "step": 15,
+    "closeness": 15
+  },
+  "include": [
+    
+  ],
+  "stages": [
+    {
+      "name": "main",
+      "actors": [
+        {
+          "costume": "sceneButton",
+          "x": 550,
+          "y": 50,
+          "text": "menu",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "overlapping/menu"
+            }
+          ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 550,
+          "y": 25,
+          "text": "pixel",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "overlapping/pixel"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-moving1",
+          "x": 22,
+          "y": 450,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "71.0x450.0"
+            },
+            {
+              "name": "message",
+              "value": "Simple"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-moving1",
+          "x": 32,
+          "y": 350,
+          "direction": 0,
+          "scaleX": 2,
+          "scaleY": 2,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "55.0x350.0"
+            },
+            {
+              "name": "message",
+              "value": "Scale 1"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-moving1",
+          "x": 29,
+          "y": 250,
+          "direction": 0,
+          "scaleX": 2,
+          "scaleY": 2,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "40.0x250.0"
+            },
+            {
+              "name": "message",
+              "value": "Scale 2"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-target1",
+          "x": 100,
+          "y": 450,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target1",
+          "x": 100,
+          "y": 350,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target1",
+          "x": 100,
+          "y": 250,
+          "direction": 0,
+          "scaleX": 2,
+          "scaleY": 2
+        },
+        {
+          "costume": "overlapping-moving1",
+          "x": 21,
+          "y": 150,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "64.0x150.0"
+            },
+            {
+              "name": "message",
+              "value": "Rotated 1"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-target1",
+          "x": 100,
+          "y": 150,
+          "direction": 315,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-moving1",
+          "x": 31,
+          "y": 50,
+          "direction": 315,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "64.0x50.0"
+            },
+            {
+              "name": "message",
+              "value": "Rotated 2"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-target1",
+          "x": 100,
+          "y": 50,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target2",
+          "x": 250,
+          "y": 450,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-moving2",
+          "x": 186,
+          "y": 450,
+          "direction": 0,
+          "scaleX": 2,
+          "scaleY": 2,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "205.0x450.0"
+            },
+            {
+              "name": "message",
+              "value": "Offset 1"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-target2",
+          "x": 250,
+          "y": 350,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target2",
+          "x": 250,
+          "y": 250,
+          "direction": 345,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target2",
+          "x": 250,
+          "y": 150,
+          "direction": 119.99999999999999,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target2",
+          "x": 250,
+          "y": 50,
+          "direction": 255,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-moving2",
+          "x": 187,
+          "y": 350,
+          "direction": 345,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "226.0x350.0"
+            },
+            {
+              "name": "message",
+              "value": "Offset 2"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-moving2",
+          "x": 190,
+          "y": 250,
+          "direction": 315,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "225.0x250.0"
+            },
+            {
+              "name": "message",
+              "value": "Offset 3"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-moving3",
+          "x": 350,
+          "y": 450,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "415.0x450.0"
+            },
+            {
+              "name": "message",
+              "value": "Fuzzy1"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-moving3",
+          "x": 350,
+          "y": 350,
+          "direction": 315,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "410.0x350.0"
+            },
+            {
+              "name": "message",
+              "value": "Fuzzy2"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-moving3",
+          "x": 350,
+          "y": 250,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "410.0x250.0"
+            },
+            {
+              "name": "message",
+              "value": "Fuzzy3"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-moving3",
+          "x": 350,
+          "y": 150,
+          "direction": 315,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "405.0x150.0"
+            },
+            {
+              "name": "message",
+              "value": "Fuzzy4"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-moving3",
+          "x": 350,
+          "y": 50,
+          "direction": 135,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "expected",
+              "value": "405.0x50.0"
+            },
+            {
+              "name": "message",
+              "value": "Fuzzy5"
+            },
+            {
+              "name": "velocity",
+              "value": "1.0x0.0"
+            }
+          ]
+        },
+        {
+          "costume": "overlapping-target3",
+          "x": 450,
+          "y": 450,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target3",
+          "x": 450,
+          "y": 350,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target3",
+          "x": 450,
+          "y": 250,
+          "direction": 315,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target3",
+          "x": 450,
+          "y": 150,
+          "direction": 315,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "overlapping-target3",
+          "x": 450,
+          "y": 50,
+          "direction": 225,
+          "scaleX": 1,
+          "scaleY": 1
+        }
+      ]
+    }
+  ]
+}

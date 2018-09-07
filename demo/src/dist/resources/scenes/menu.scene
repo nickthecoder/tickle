@@ -2,7 +2,7 @@
   "director": "uk.co.nickthecoder.tickle.NoDirector",
   "background": "#000000",
   "showMouse": true,
-  "layout": "glass",
+  "layout": "default",
   "snapToGrid": {
     "enabled": false,
     "xSpacing": 50,
@@ -37,19 +37,22 @@
   ],
   "stages": [
     {
-      "name": "glass",
+      "name": "main",
       "actors": [
         {
-          "costume": "info",
-          "x": 1000,
-          "y": 760,
-          "text": "Info",
-          "textOutlineColor": "#001a80ff",
-          "viewAlignmentX": "RIGHT",
-          "viewAlignmentY": "TOP",
+          "costume": "sceneButton",
+          "x": 33,
+          "y": 444,
+          "text": "Overlapping",
           "direction": 0,
           "scaleX": 1,
-          "scaleY": 1
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "overlapping/menu"
+            }
+          ]
         }
       ]
     }

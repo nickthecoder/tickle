@@ -35,4 +35,6 @@ class ThresholdPixelOverlapping(val threshold: Int, val pixelOverlap: PixelOverl
     override fun overlapping(actorA: Actor, actorB: Actor): Boolean {
         return pixelOverlap.overlapping(actorA, actorB, threshold)
     }
+
+    override fun toString() = "ThresholdPixelOverlapping( size=${pixelOverlap.size}, threshold=$threshold )"
 }

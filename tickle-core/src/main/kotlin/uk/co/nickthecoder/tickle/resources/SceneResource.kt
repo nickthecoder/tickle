@@ -76,7 +76,7 @@ open class SceneResource {
             } else {
                 stageResource.actorResources.forEach { actorResource ->
                     actorResource.createActor()?.let { actor ->
-                        stage.add(actor, false)
+                        stage.add(actor)
                     }
                 }
             }

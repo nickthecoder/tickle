@@ -5,13 +5,8 @@ Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickl
     Battlegrounds scene (using "Preferences")
         Pictures of Earth, the moon and mars with markers. Ticked when completed.
     More levels
-    Mother-ship
+    Mother ship factory?
     Sounds
-    Final battle(s) - make the world BIG, and pan around.
-        Have moons to smash into the alien formations
-        Maybe gravity too (so that everything tends to orbit)
-        Your ship moves like "thrust" - maybe a new sprite too (similar, but more pointy)
-    Cease fire. Save the aliens, by dragging them (thrust style)
 
 Bug : Collisions not working correctly when pose is rotated.
 

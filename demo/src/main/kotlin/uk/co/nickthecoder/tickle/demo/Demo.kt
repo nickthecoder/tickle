@@ -19,9 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.demo
 
 import uk.co.nickthecoder.tickle.AbstractProducer
-import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.editor.EditorMain
-import uk.co.nickthecoder.tickle.groovy.GroovyLanguage
 
 class Demo : AbstractProducer() {
 
@@ -29,13 +27,9 @@ class Demo : AbstractProducer() {
         instance = this
     }
 
-    override fun begin() {
-        Game.instance.window.enableVSync(1)
-    }
-
     companion object {
         /**
-         * A convenience, so that game scripts can easily get access to the game.
+         * A convenience, so that game code can easily get access to the game.
          */
         lateinit var instance: Demo
     }
@@ -51,6 +45,5 @@ class Demo : AbstractProducer() {
  * (which is simply the name of the directory that the build.gradle script is contained within).
  */
 fun main(args: Array<String>) {
-    GroovyLanguage().register()
     EditorMain("demo", args).start()
 }

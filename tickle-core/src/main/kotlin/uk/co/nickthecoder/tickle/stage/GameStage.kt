@@ -38,7 +38,10 @@ open class GameStage() : Stage {
 
     override val actors: Set<Actor> = mutableActors
 
+    private var began = false
+
     override fun begin() {
+        began = true
         // Note. We create a new list (of Role), so that there is no concurrent modification exception if an actor is
         // removed from the stage.
         actors.map { it.role }.forEach { role ->
@@ -95,7 +98,7 @@ open class GameStage() : Stage {
         }
     }
 
-    override fun add(actor: Actor, activate: Boolean) {
+    override fun add(actor: Actor) {
 
         actor.costume.bodyDef?.let { bodyDef ->
             world?.createBody(bodyDef, actor)
@@ -103,8 +106,8 @@ open class GameStage() : Stage {
 
         mutableActors.add(actor)
         actor.stage = this
-        actor.role?.begin()
-        if (activate) {
+        if (began) {
+            actor.role?.begin()
             actor.role?.let { role ->
                 try {
                     role.activated()

@@ -118,8 +118,8 @@ open class OptimisedStage : GameStage() {
         return findRolesStrategy.findRoles(this, type)
     }
 
-    override fun add(actor: Actor, activate: Boolean) {
-        super.add(actor, activate)
+    override fun add(actor: Actor) {
+        super.add(actor)
         findRolesStrategy.add(actor)
     }
 

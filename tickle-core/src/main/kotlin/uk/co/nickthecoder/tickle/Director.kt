@@ -118,37 +118,37 @@ abstract class AbstractDirector : Director {
     /**
      * The default implementation does nothing.
      */
-    override fun sceneLoaded() {}
+    override open fun sceneLoaded() {}
 
     /**
      * The default implementation does nothing.
      */
-    override fun begin() {}
+    override open fun begin() {}
 
     /**
      * The default implementation does nothing.
      */
-    override fun activated() {}
+    override open fun activated() {}
 
     /**
      * The default implementation does nothing.
      */
-    override fun end() {}
+    override open fun end() {}
 
     /**
      * The default implementation does nothing.
      */
-    override fun onKey(event: KeyEvent) {}
+    override open fun onKey(event: KeyEvent) {}
 
     /**
      * The default implementation does nothing.
      */
-    override fun onMouseButton(event: MouseEvent) {}
+    override open fun onMouseButton(event: MouseEvent) {}
 
     /**
      * If [paused] is true, does nothing, otherwise it calls tick on all views, then calls tick on all stages.
      */
-    override fun preTick() {
+    override open fun preTick() {
         if (!paused) {
             super.preTick()
         }
@@ -157,12 +157,12 @@ abstract class AbstractDirector : Director {
     /**
      * The default implementation does nothing.
      */
-    override fun tick() {}
+    override open fun tick() {}
 
     /**
      * If [paused] is true, does nothing, otherwise it calls tick on each stage's TickleWorld (the physics engine).
      */
-    override fun postTick() {
+    override open fun postTick() {
         if (!paused) {
             super.postTick()
         }
