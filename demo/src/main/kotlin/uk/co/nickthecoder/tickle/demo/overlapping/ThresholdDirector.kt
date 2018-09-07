@@ -5,5 +5,5 @@ import uk.co.nickthecoder.tickle.collision.PixelOverlapping
 
 open class ThresholdDirector : OverlappingDirector() {
 
-    override fun createOverlapping(): Overlapping = PixelOverlapping(100, 200)
+    override fun createOverlapping(): Overlapping = PixelOverlapping(100, 128)
 }

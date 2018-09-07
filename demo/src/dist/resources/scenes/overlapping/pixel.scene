@@ -274,22 +274,6 @@
           "scaleY": 1
         },
         {
-          "costume": "overlapping-target2",
-          "x": 250,
-          "y": 150,
-          "direction": 119.99999999999999,
-          "scaleX": 1,
-          "scaleY": 1
-        },
-        {
-          "costume": "overlapping-target2",
-          "x": 250,
-          "y": 50,
-          "direction": 255,
-          "scaleX": 1,
-          "scaleY": 1
-        },
-        {
           "costume": "overlapping-moving2",
           "x": 187,
           "y": 350,
@@ -365,7 +349,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "408.0x350.0"
+              "value": "411.0x350.0"
             },
             {
               "name": "message",
@@ -431,7 +415,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "405.0x50.0"
+              "value": "407.0x50.0"
             },
             {
               "name": "message",

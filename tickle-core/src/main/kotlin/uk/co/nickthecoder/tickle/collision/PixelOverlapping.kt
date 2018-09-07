@@ -141,32 +141,34 @@ open class PixelOverlapping(val size: Int, val threshold: Int = 128)
             // This is surely an indication of a bug, but I've run out of time for now,
             // and the bug seem minor in the test cases I've created.
 
-            // Render B to a buffer "normally", rather than the screen's frame buffer.
+
+            // Render B to a buffer normally.
             glBindTexture(GL_TEXTURE_2D, 0)
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bFrameBufferId)
+            renderer.beginView()
             renderer.clear()
             renderer.begin()
             actorB.appearance.draw(renderer)
             renderer.end()
+            renderer.endView()
 
-            // Render A to a buffer "normally"
+            // Render A to a buffer normally.
             glBindTexture(GL_TEXTURE_2D, 0)
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, aFrameBufferId)
+            renderer.beginView()
             renderer.clear()
             renderer.begin()
             actorA.appearance.draw(renderer)
             renderer.end()
+            renderer.endView()
 
             // We've now rendered A and B to their own buffer
-
             if (dump) {
                 println("Actor B $actorB")
                 bTexture.dumpAlpha()
-                actorA.poseAppearance?.pose?.texture?.bind()
 
                 println("Actor A $actorA")
                 aTexture.dumpAlpha()
-                actorA.poseAppearance?.pose?.texture?.bind()
             }
 
             // Now merge the two using the MINIMUM values of each.
@@ -181,12 +183,15 @@ open class PixelOverlapping(val size: Int, val threshold: Int = 128)
             bSourceRect.right = width.toDouble() / size
             bSourceRect.top = height.toDouble() / size
 
+            renderer.beginView()
             // Use GL_MIN_EXT, as we want transparent (low) alpha values wherever EITHER A or B are transparent.
             glBlendEquationEXT(GL_MIN_EXT)
-
             renderer.begin()
             renderer.drawTexture(bTexture, 0.0, 0.0, width.toDouble(), height.toDouble(), bSourceRect)
             renderer.end()
+            renderer.endView()
+
+            glBindTexture(GL_TEXTURE_2D, 0)
 
             // Now we should have opaque pixels where the actors overlap, and transparent everywhere else.
             if (dump) {
@@ -209,6 +214,7 @@ open class PixelOverlapping(val size: Int, val threshold: Int = 128)
             // Use MAX blending, as we only care about the most opaque overlapping pixels
             glBlendEquationEXT(GL_MAX_EXT)
 
+            renderer.beginView()
             renderer.clear()
             renderer.begin()
             val sourceRect = Rectd()
@@ -220,6 +226,8 @@ open class PixelOverlapping(val size: Int, val threshold: Int = 128)
                 renderer.drawTexture(aTexture, 0.0, 0.0, width.toDouble(), 1.0, sourceRect)
             }
             renderer.end()
+            renderer.endView()
+
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
             glBlendEquationEXT(GL_FUNC_ADD_EXT)
 

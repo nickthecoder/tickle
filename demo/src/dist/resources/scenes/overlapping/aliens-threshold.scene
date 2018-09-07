@@ -111,7 +111,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "92.0x400.0"
+              "value": "96.0x400.0"
             },
             {
               "name": "message",
@@ -133,7 +133,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "76.0x250.0"
+              "value": "82.0x250.0"
             },
             {
               "name": "message",
@@ -155,7 +155,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "93.0x100.0"
+              "value": "99.0x100.0"
             },
             {
               "name": "message",

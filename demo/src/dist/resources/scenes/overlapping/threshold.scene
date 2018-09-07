@@ -274,22 +274,6 @@
           "scaleY": 1
         },
         {
-          "costume": "overlapping-target2",
-          "x": 250,
-          "y": 150,
-          "direction": 119.99999999999999,
-          "scaleX": 1,
-          "scaleY": 1
-        },
-        {
-          "costume": "overlapping-target2",
-          "x": 250,
-          "y": 50,
-          "direction": 255,
-          "scaleX": 1,
-          "scaleY": 1
-        },
-        {
           "costume": "overlapping-moving2",
           "x": 187,
           "y": 350,
@@ -321,7 +305,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "225.0x250.0"
+              "value": "227.0x250.0"
             },
             {
               "name": "message",
@@ -365,7 +349,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "413.0x350.0"
+              "value": "418.0x350.0"
             },
             {
               "name": "message",
@@ -387,7 +371,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "417.0x250.0"
+              "value": "419.0x250.0"
             },
             {
               "name": "message",
@@ -409,7 +393,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "407.0x150.0"
+              "value": "410.0x150.0"
             },
             {
               "name": "message",
@@ -431,7 +415,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "410.0x50.0"
+              "value": "414.0x50.0"
             },
             {
               "name": "message",
@@ -480,16 +464,6 @@
           "x": 450,
           "y": 50,
           "direction": 135,
-          "scaleX": 1,
-          "scaleY": 1
-        },
-        {
-          "costume": "smallText",
-          "x": 287,
-          "y": 316,
-          "text": "Hmm, is it weird that the onese above and below\nthis text look so different.",
-          "textOutlineColor": "#00000000",
-          "direction": 0,
           "scaleX": 1,
           "scaleY": 1
         }
