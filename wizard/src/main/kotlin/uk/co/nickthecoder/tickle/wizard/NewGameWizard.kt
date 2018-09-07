@@ -335,7 +335,7 @@ fun main(args: Array<String>) {
 """
 
 
-    fun readMeContents() = """#${gameName.value}
+    fun readMeContents() = """# ${gameName.value}
 
 
 To build the game :
