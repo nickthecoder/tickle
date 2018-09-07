@@ -7,7 +7,7 @@
     "resizable": false,
     "fullScreen": false,
     "initialScene": "menu",
-    "testScene": "bug-1",
+    "testScene": "overlapping/menu",
     "producer": "uk.co.nickthecoder.tickle.demo.Demo"
   },
   "preferences": {

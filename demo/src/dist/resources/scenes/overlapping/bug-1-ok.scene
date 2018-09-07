@@ -59,7 +59,7 @@
           "costume": "sceneButton",
           "x": 521,
           "y": 25,
-          "text": "aliens-threshold",
+          "text": "bug-1-ok",
           "textOutlineColor": "#00000000",
           "direction": 0,
           "scaleX": 1,
@@ -67,7 +67,7 @@
           "attributes": [
             {
               "name": "scene",
-              "value": "overlapping/aliens-threshold"
+              "value": "overlapping/bug-1-ok"
             }
           ]
         },
@@ -81,7 +81,7 @@
         },
         {
           "costume": "overlapping-moving4",
-          "x": 50,
+          "x": 78,
           "y": 250,
           "direction": 29.999999999999996,
           "scaleX": 1,

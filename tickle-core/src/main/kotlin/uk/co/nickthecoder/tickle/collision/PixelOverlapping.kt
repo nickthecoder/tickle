@@ -28,7 +28,7 @@ import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.Rectd
 
-private val dump = false
+private val dump = true
 
 /**
  * Tests if any overlapping pixels have an alpha value greater than zero. For many images, this isn't very good,
@@ -103,7 +103,7 @@ class PixelOverlapping(val size: Int = 128)
             renderer.clearColor(transparent)
             renderer.clear()
 
-            // Draw actor A "normally" (The fragment shader will draw a WHITE pixels, but including the textures alpha (i.e. the rgb of the texture is ignored)
+            // Draw actor A "normally"
             renderer.begin()
             actorA.appearance.draw(renderer)
             renderer.end()
@@ -111,31 +111,39 @@ class PixelOverlapping(val size: Int = 128)
             if (dump) {
                 println("Actor A $actorA")
                 overlapTexture.dumpAlpha()
-                actorA.poseAppearance?.pose?.texture?.bind()
-                glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, overlapFrameBufferId)
+                // The following line is WEIRD. If I comment it out, then it changes behaviour.
+                // But if I ALSO comment out the line ABOVE, then it "works" again.
+                // Note, it doesn't seem to matter WHICH texture I bind either. Hmm. I wish I knew OpenGL better,
+                // but it is the kind of code I detest. Side effects EVERYWHERE. Grr.
+                actorB.poseAppearance?.pose?.texture?.bind()
             }
 
-            // Use MIN blending, as we only care about the least opaque of the two pixelso
-            glBlendEquationEXT(GL_MIN_EXT)
+            // Now, let's prepare to render actorB.
+            // Use MIN blending, as we only care about the least opaque of the two pixels.
 
-            // Draw actor B using logical AND (and still drawing WHITE pixels, but using the texture's alpha channel)
-            //glEnable(GL_COLOR_LOGIC_OP)
-            //glLogicOp(GL_AND)
+            // NOTE. I've now spotted a fatal flaw. This only works if objectB is aligned with the xy axis.
+            // i.e. rotations of 90° are ok, but other rotations will fail.
+            // This is because a rotated B will only change PART of the rectangle we care about,
+            // so if A is opaque anywhere else, those pixels will be unchanged, and therefore we get a false positive.
+            // Possible solutions :
+            // Render B to ANOTHER buffer, which is first cleared, and then render the whole of that buffer onto this
+            // on, using GL_MIN_EXT.
+            // Clear the pixels that B's rectangle doesn't touch. How?
+            // Only test the pixels that B's rectangle does touch.
+            glBlendEquationEXT(GL_MIN_EXT)
 
             renderer.begin()
             actorB.appearance.draw(renderer)
             renderer.end()
 
-            // Stop using logical AND, and return to normal blending
-            //glDisable(GL_COLOR_LOGIC_OP)
-
-            // Now we have WHITE pixels where the actors overlap, and transparent everywhere else.
+            // Now we have opaque pixels where the actors overlap, and transparent everywhere else.
             if (dump) {
                 println("Overlap")
                 overlapTexture.dumpAlpha()
+                actorB.poseAppearance?.pose?.texture?.bind()
             }
 
-            // Blit each line of the overlapTexture onto the lineTexture
+            // Render each line of the overlapTexture onto the lineTexture
             // By doing so, we reduce the amount of data transfered from GPU to main memory
             glViewport(0, 0, width, 1)
             projection.identity()
@@ -164,8 +172,10 @@ class PixelOverlapping(val size: Int = 128)
 
             // The lineTexture should now contain the result we need. Read the pixels, and compare with the threshold.
             if (dump) {
-                println("Line")
-                lineTexture.dumpAlpha()
+                //println("Line")
+                //lineTexture.dumpAlpha()
+                //println("")
+                //println("left=$left right=$right top=$top bottom=$bottom width=$width height=$height")
             }
 
             val pixels = lineTexture.read()

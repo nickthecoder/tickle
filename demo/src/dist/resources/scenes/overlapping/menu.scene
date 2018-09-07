@@ -117,6 +117,38 @@
               "value": "overlapping/aliens-pixel"
             }
           ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 200,
+          "y": 440,
+          "text": "bug-1",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "overlapping/bug-1"
+            }
+          ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 200,
+          "y": 400,
+          "text": "bug-1-ok",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "overlapping/bug-1-ok"
+            }
+          ]
         }
       ]
     }
