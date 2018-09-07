@@ -1,5 +1,11 @@
 {
   "director": "uk.co.nickthecoder.tickle.demo.overlapping.OverlappingDirector",
+  "directorAttributes": [
+    {
+      "name": "nextScene",
+      "value": "overlapping/aliens-threshold"
+    }
+  ],
   "background": "#4d804d",
   "showMouse": true,
   "layout": "default",

@@ -6,7 +6,7 @@
     "height": 480,
     "resizable": false,
     "fullScreen": false,
-    "initialScene": "menu",
+    "initialScene": "overlapping/pixel",
     "testScene": "overlapping/menu",
     "producer": "uk.co.nickthecoder.tickle.demo.Demo"
   },

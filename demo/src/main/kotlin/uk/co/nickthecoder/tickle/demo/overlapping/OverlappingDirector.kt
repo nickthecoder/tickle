@@ -13,5 +13,5 @@ open class OverlappingDirector : TestDirector() {
         overlapping = createOverlapping()
     }
 
-    open fun createOverlapping(): Overlapping = PixelOverlapping()
+    open fun createOverlapping(): Overlapping = PixelOverlapping(100, 0)
 }

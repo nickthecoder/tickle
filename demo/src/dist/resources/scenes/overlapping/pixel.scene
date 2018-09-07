@@ -1,5 +1,11 @@
 {
   "director": "uk.co.nickthecoder.tickle.demo.overlapping.OverlappingDirector",
+  "directorAttributes": [
+    {
+      "name": "nextScene",
+      "value": "overlapping/threshold"
+    }
+  ],
   "background": "#000000",
   "showMouse": true,
   "layout": "default",
@@ -337,7 +343,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "415.0x450.0"
+              "value": "416.0x450.0"
             },
             {
               "name": "message",
@@ -403,7 +409,7 @@
           "attributes": [
             {
               "name": "expected",
-              "value": "405.0x150.0"
+              "value": "406.0x150.0"
             },
             {
               "name": "message",

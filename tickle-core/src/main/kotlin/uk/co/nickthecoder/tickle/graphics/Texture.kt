@@ -70,9 +70,18 @@ class Texture(val width: Int, val height: Int, val pixelFormat: Int, buffer: Byt
     }
 
     fun cleanUp() {
-        unbind()
-        glDeleteTextures(handle)
+        //if (privateHandle != 0) {
+            unbind()
+            glDeleteTextures(privateHandle)
+            //privateHandle = 0
+        //}
     }
+
+    /*
+    protected fun finalize() {
+        cleanUp()
+    }
+    */
 
     /**
      * Can only delete if there are no Poses using this texture.

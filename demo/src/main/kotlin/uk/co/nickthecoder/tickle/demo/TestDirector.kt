@@ -1,9 +1,9 @@
 package uk.co.nickthecoder.tickle.demo
 
-import com.intellij.util.xmlb.annotations.Attribute
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.AbstractDirector
 import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.util.Attribute
 import uk.co.nickthecoder.tickle.util.Button
 
 open class TestDirector : AbstractDirector() {

@@ -20,7 +20,6 @@ class Moving : AbstractRole() {
     override fun begin() {
         super.begin()
         (Game.instance.director as TestDirector).testCount++
-        println(Game.instance.director)
     }
 
     override fun tick() {
