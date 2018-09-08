@@ -62,7 +62,7 @@ object EditorActions {
     val RESET_ZORDERS = EditorAction("zOrders.reset", KeyCode.Z, control = true, shift = true, label = "Reset All Z-Orders")
 
     val STAMPS = listOf(KeyCode.DIGIT1, KeyCode.DIGIT2, KeyCode.DIGIT3, KeyCode.DIGIT4, KeyCode.DIGIT5, KeyCode.DIGIT6, KeyCode.DIGIT7, KeyCode.DIGIT8, KeyCode.DIGIT9)
-            .mapIndexed { index, keyCode -> EditorAction("stamp$index", keyCode) }
+            .mapIndexed { index, keyCode -> EditorAction("stamp$index", keyCode, control = true) }
 
     val TAB_CLOSE = EditorAction("tab.close", KeyCode.W, control = true, label = "Close Tab")
 

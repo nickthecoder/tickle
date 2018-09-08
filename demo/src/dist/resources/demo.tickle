@@ -13,8 +13,7 @@
   "preferences": {
     "outputFormat": "PRETTY",
     "packages": [
-      "uk.co.nickthecoder.tickle",
-      "uk.co.nickthecoder.tickle.demo"
+      "uk.co.nickthecoder.tickle"
     ],
     "treeThumbnailSize": 24,
     "costumePickerThumbnailSize": 50,

@@ -97,7 +97,10 @@ class Layers(val sceneEditor: SceneEditor) {
             if (layout?.layoutStages?.get(layer.stageName)?.isDefault == true) {
                 currentLayer = layer
             }
-
+        }
+        // If no stage was set as default, the use the first layer.
+        if (currentLayer == null) {
+            currentLayer = stageLayers.firstOrNull()
         }
 
         add(glass)

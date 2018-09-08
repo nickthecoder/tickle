@@ -32,7 +32,6 @@ import uk.co.nickthecoder.tickle.editor.resources.DesignActorResource
 import uk.co.nickthecoder.tickle.editor.resources.DesignSceneResource
 import uk.co.nickthecoder.tickle.editor.resources.ModificationType
 import uk.co.nickthecoder.tickle.editor.scene.history.*
-import uk.co.nickthecoder.tickle.editor.tabs.SceneTab
 import uk.co.nickthecoder.tickle.editor.util.background
 
 class SceneEditor(val sceneResource: DesignSceneResource) {
@@ -47,6 +46,10 @@ class SceneEditor(val sceneResource: DesignSceneResource) {
     val borderPane = BorderPane()
 
     var mouseHandler: MouseHandler? = Select()
+        set(v) {
+            field?.end()
+            field = v
+        }
 
     val selection = Selection()
 
@@ -192,7 +195,6 @@ class SceneEditor(val sceneResource: DesignSceneResource) {
     }
 
     fun onEscape() {
-        mouseHandler?.escape()
         selection.clear()
         mouseHandler = Select()
     }
@@ -369,7 +371,7 @@ class SceneEditor(val sceneResource: DesignSceneResource) {
             history.endBatch()
         }
 
-        open fun escape() {}
+        open fun end() {}
     }
 
     inner class Select : MouseHandler() {
@@ -550,6 +552,10 @@ class SceneEditor(val sceneResource: DesignSceneResource) {
             layers.glass.newActor = newActor
         }
 
+        override fun end() {
+            layers.glass.newActor = null
+        }
+
         override fun onMouseMoved(event: MouseEvent) {
 
             newActor.draggedX = viewX(event)
@@ -578,7 +584,6 @@ class SceneEditor(val sceneResource: DesignSceneResource) {
                 history.makeChange(change)
             }
         }
-
     }
 }
 

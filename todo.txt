@@ -8,8 +8,6 @@ Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickl
     Mother ship factory?
     Sounds
 
-Bug : Collisions not working correctly when pose is rotated.
-
 Create a "launcher" module, so that Groovy based games don't need a compilation step.
 Same as the existing "main", but it REQUIRES a resources file, rather than searching from the current directory.
 Also consider allowing resources opened from a zip file (with a custom file extension),

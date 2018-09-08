@@ -27,11 +27,11 @@ import uk.co.nickthecoder.paratask.gui.MyTab
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
+import uk.co.nickthecoder.tickle.editor.util.ClassAndAttributesParameter
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.editor.util.DesignAttributes
 import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.stage.*
-import uk.co.nickthecoder.tickle.editor.util.ClassAndAttributesParameter
 
 class LayoutTab(val name: String, val layout: Layout)
 
@@ -57,6 +57,9 @@ class LayoutTab(val name: String, val layout: Layout)
         borderPane.center = minorTabs
 
         addDeleteButton { Resources.instance.layouts.remove(name) }
+
+        stagesTask.taskD.root.listen { needsSaving = true }
+        viewsTask.taskD.root.listen { needsSaving = true }
     }
 
     override fun save(): Boolean {
