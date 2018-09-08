@@ -41,7 +41,7 @@
       "actors": [
         {
           "costume": "sceneButton",
-          "x": 50,
+          "x": 100,
           "y": 440,
           "text": "Pixel",
           "textOutlineColor": "#00000000",
@@ -57,9 +57,10 @@
         },
         {
           "costume": "sceneButton",
-          "x": 501,
-          "y": 9,
-          "text": "Back to Main Menu",
+          "x": 550,
+          "y": 40,
+          "text": "Main Menu",
+          "textOutlineColor": "#00000000",
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1,
@@ -72,7 +73,7 @@
         },
         {
           "costume": "sceneButton",
-          "x": 50,
+          "x": 100,
           "y": 400,
           "text": "Threshold",
           "textOutlineColor": "#00000000",
@@ -88,7 +89,7 @@
         },
         {
           "costume": "sceneButton",
-          "x": 50,
+          "x": 100,
           "y": 320,
           "text": "aliens-threshold",
           "textOutlineColor": "#00000000",
@@ -104,7 +105,7 @@
         },
         {
           "costume": "sceneButton",
-          "x": 50,
+          "x": 100,
           "y": 360,
           "text": "aliens-pixel",
           "textOutlineColor": "#00000000",
@@ -120,7 +121,7 @@
         },
         {
           "costume": "sceneButton",
-          "x": 200,
+          "x": 250,
           "y": 440,
           "text": "bug-1",
           "textOutlineColor": "#00000000",
@@ -136,7 +137,7 @@
         },
         {
           "costume": "sceneButton",
-          "x": 200,
+          "x": 250,
           "y": 400,
           "text": "bug-1-ok",
           "textOutlineColor": "#00000000",

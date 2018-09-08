@@ -48,7 +48,7 @@
         {
           "costume": "sceneButton",
           "x": 550,
-          "y": 50,
+          "y": 69,
           "text": "menu",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -64,7 +64,7 @@
         {
           "costume": "sceneButton",
           "x": 550,
-          "y": 25,
+          "y": 27,
           "text": "threshold",
           "textOutlineColor": "#00000000",
           "direction": 0,

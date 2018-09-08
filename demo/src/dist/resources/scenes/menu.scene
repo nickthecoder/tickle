@@ -41,8 +41,8 @@
       "actors": [
         {
           "costume": "sceneButton",
-          "x": 33,
-          "y": 444,
+          "x": 80,
+          "y": 355,
           "text": "Overlapping",
           "direction": 0,
           "scaleX": 1,
@@ -53,6 +53,16 @@
               "value": "overlapping/menu"
             }
           ]
+        },
+        {
+          "costume": "smallText",
+          "x": 289,
+          "y": 468,
+          "text": "Hello",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
         }
       ]
     }

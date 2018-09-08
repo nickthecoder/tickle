@@ -24,10 +24,7 @@ import uk.co.nickthecoder.tickle.AttributeData
 import uk.co.nickthecoder.tickle.AttributeType
 import uk.co.nickthecoder.tickle.RuntimeAttributes
 import uk.co.nickthecoder.tickle.graphics.Color
-import uk.co.nickthecoder.tickle.util.Angle
-import uk.co.nickthecoder.tickle.util.Attribute
-import uk.co.nickthecoder.tickle.util.CostumeAttribute
-import uk.co.nickthecoder.tickle.util.Polar2d
+import uk.co.nickthecoder.tickle.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.jvm.jvmErasure
@@ -41,8 +38,8 @@ class DesignAttributes : RuntimeAttributes() {
      * string representation of the data whenever the parameter changes.
      *
      * When isDesigning == true, an instance of the Role (or other class that uses Attributes) is created, so that
-     * we can find the default value the field has immediately after creation. In this way, we can show the default
-     * value in the Editor/SceneEditor.
+     * we can find the default classValue the field has immediately after creation. In this way, we can show the default
+     * classValue in the Editor/SceneEditor.
      */
     override fun updateAttributesMetaData(klass: Class<*>) {
 
@@ -153,8 +150,12 @@ class DesignAttributes : RuntimeAttributes() {
                 }
             }
             else -> {
-                System.err.println("Type $klass (for attribute $name) is not currently supported.")
-                null
+                if (SimpleInstance::class.java.isAssignableFrom(klass.java)) {
+                    ClassInstanceParameter("attribute_$name", label = name, type = klass.java)
+                } else {
+                    System.err.println("Type $klass (for attribute $name) is not currently supported.")
+                    null
+                }
             }
         }
     }

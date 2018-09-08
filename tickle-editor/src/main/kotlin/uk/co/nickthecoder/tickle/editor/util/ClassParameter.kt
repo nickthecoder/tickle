@@ -7,7 +7,7 @@ import uk.co.nickthecoder.paratask.util.uncamel
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 
-class ClassParameter(
+open class ClassParameter(
         name: String,
         val type: Class<*>,
         label: String = name.uncamel(),
@@ -20,7 +20,7 @@ class ClassParameter(
 
     private val newButtonP = ButtonParameter("${name}New", buttonText = "New ${type.simpleName}") { newScript() }
 
-    var value: Class<*>?
+    var classValue: Class<*>?
         get() = classP.value
         set(value) {
             classP.value = value
@@ -50,7 +50,7 @@ class ClassParameter(
     }
 
     override fun copy(): ClassParameter {
-        return ClassParameter(name, type, label, required = classP.required, value = value)
+        return ClassParameter(name, type, label, required = classP.required, value = classValue)
     }
 
 }

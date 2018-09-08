@@ -63,8 +63,8 @@
         },
         {
           "costume": "sceneButton",
-          "x": 521,
-          "y": 25,
+          "x": 550,
+          "y": 26,
           "text": "aliens-threshold",
           "textOutlineColor": "#00000000",
           "direction": 0,

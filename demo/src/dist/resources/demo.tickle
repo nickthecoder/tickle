@@ -57,7 +57,7 @@
       "name": "small",
       "fontName": "SansSerif",
       "style": "PLAIN",
-      "size": 14,
+      "size": 18,
       "xPadding": 1,
       "yPadding": 1
     }
@@ -358,8 +358,8 @@
           "textStyles": [
             {
               "font": "small",
-              "halign": "LEFT",
-              "valign": "BOTTOM",
+              "halign": "CENTER",
+              "valign": "CENTER",
               "color": "#ffffffff"
             }
           ]
@@ -369,6 +369,10 @@
         {
           "name": "scene",
           "value": ""
+        },
+        {
+          "name": "actions",
+          "value": "uk.co.nickthecoder.tickle.util.GrowButtonActions"
         }
       ]
     },

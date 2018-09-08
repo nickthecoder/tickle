@@ -196,7 +196,7 @@ class ActorAttributesForm(
         }
 
         // Note. We are not updating the dynamic "attributes", because they should ONLY be updated via their
-        // Parameters, The scene editor should NOT be changing the string value directly.
+        // Parameters, The scene editor should NOT be changing the string classValue directly.
 
         sceneResource.fireChange(actorResource, ModificationType.CHANGE)
         dirty = false
@@ -225,7 +225,7 @@ class ActorAttributesForm(
             textStyleP.hidden = textStyle == null
         }
         // Note. We do not update the dynamic "attributes", because they should ONLY be updated via their
-        // Parameters, The scene editor should NOT be changing the string value directly.
+        // Parameters, The scene editor should NOT be changing the string classValue directly.
         dirty = false
     }
 

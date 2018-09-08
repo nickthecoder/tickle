@@ -202,7 +202,7 @@ class SceneDetailsTask(val sceneTab: SceneTab, val name: String, val sceneResour
         }
 
         try {
-            directorP.value = ScriptManager.classForName(sceneResource.directorString)
+            directorP.classValue = ScriptManager.classForName(sceneResource.directorString)
         } catch (e: Exception) {
             //
         }
@@ -225,7 +225,7 @@ class SceneDetailsTask(val sceneTab: SceneTab, val name: String, val sceneResour
 
     override fun run() {
         with(sceneResource) {
-            directorString = directorP.value!!.name
+            directorString = directorP.classValue!!.name
             layoutName = layoutP.value!!
             showMouse = showMouseP.value == true
             background = backgroundColorP.value.toTickle()
@@ -237,7 +237,7 @@ class SceneDetailsTask(val sceneTab: SceneTab, val name: String, val sceneResour
     }
 
     fun updateAttributes() {
-        sceneResource.directorAttributes.updateAttributesMetaData(directorP.value!!)
+        sceneResource.directorAttributes.updateAttributesMetaData(directorP.classValue!!)
         attributesP.children.toList().forEach {
             attributesP.remove(it)
         }

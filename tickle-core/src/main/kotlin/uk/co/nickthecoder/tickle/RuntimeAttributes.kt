@@ -20,8 +20,10 @@ package uk.co.nickthecoder.tickle
 
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.util.Angle
 import uk.co.nickthecoder.tickle.util.Polar2d
+import uk.co.nickthecoder.tickle.util.SimpleInstance
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KProperty1
@@ -71,7 +73,7 @@ open class RuntimeAttributes : Attributes {
         try {
             val property = klass.memberProperties.filterIsInstance<KProperty1<Any?, Any?>>().firstOrNull { it.name == name }
             if (property == null) {
-                System.err.println("ERROR. Could not find a mutable property (var) called '$name' on class '${klass.qualifiedName}'")
+                System.err.println("ERROR. Could not find a property called '$name' on class '${klass.qualifiedName}'")
             } else {
                 if (property is KMutableProperty1<Any?, Any?>) {
                     property.set(obj, fromString(value, property.returnType.jvmErasure))
@@ -112,9 +114,8 @@ open class RuntimeAttributes : Attributes {
         } else if (klass == Boolean::class || klass == Int::class || klass == Float::class || klass == Double::class || klass == String::class) {
 
             throw IllegalArgumentException("Cannot change immutable type $klass.")
-
         } else {
-            throw IllegalArgumentException("Type $klass is not currently supported.")
+            throw IllegalArgumentException("Type $klass is not currently supported (2)")
         }
     }
 
@@ -129,7 +130,14 @@ open class RuntimeAttributes : Attributes {
             Vector2d::class -> vector2dFromString(value)
             Angle::class -> Angle.degrees(value.toDouble())
             Color::class -> Color.fromString(value)
-            else -> throw IllegalArgumentException("Type $klass is not currently supported.")
+
+            else -> {
+                if (SimpleInstance::class.java.isAssignableFrom(klass.java)) {
+                    ScriptManager.classForName(value).newInstance()
+                } else {
+                    throw IllegalArgumentException("Type $klass is not currently supported (1).")
+                }
+            }
         }
     }
 

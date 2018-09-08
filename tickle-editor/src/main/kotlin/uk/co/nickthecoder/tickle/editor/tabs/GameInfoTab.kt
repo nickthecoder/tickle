@@ -82,7 +82,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
         ClassLister.setChoices(filterBitsP, FilterBits::class.java)
 
         try {
-            producerP.value = ScriptManager.classForName(gameInfo.producerString)
+            producerP.classValue = ScriptManager.classForName(gameInfo.producerString)
         } catch (e: Exception) {
             System.err.println("Couldn't find class ${gameInfo.producerString}, defaulting to NoProducer")
         }
@@ -114,7 +114,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
             initialScenePath = Resources.instance.scenePathToFile(initialSceneP.value)
             testScenePath = Resources.instance.scenePathToFile(testSceneP.value)
             resizable = resizableP.value!!
-            producerString = producerP.value!!.name
+            producerString = producerP.classValue!!.name
             physicsEngine = physicsEngineP.value == true
         }
 

@@ -161,7 +161,7 @@ class CostumeTab(val name: String, val costume: Costume)
 
         init {
             nameP.value = name
-            roleClassP.value = costume.roleClass()
+            roleClassP.classValue = costume.roleClass()
             canRotateP.value = costume.canRotate
             zOrderP.value = costume.zOrder
             costumeGroupP.costumeP.value = costume.costumeGroup
@@ -173,7 +173,7 @@ class CostumeTab(val name: String, val costume: Costume)
         }
 
         override fun run() {
-            costume.roleString = if (roleClassP.value == null) "" else ScriptManager.nameForClass(roleClassP.value!!)
+            costume.roleString = if (roleClassP.classValue == null) "" else ScriptManager.nameForClass(roleClassP.classValue!!)
             costume.canRotate = canRotateP.value == true
             costume.zOrder = zOrderP.value!!
             costume.showInSceneEditor = showInSceneEditorP.value == true
@@ -197,14 +197,14 @@ class CostumeTab(val name: String, val costume: Costume)
 
         fun updateAttributes() {
 
-            roleClassP.value?.let {
+            roleClassP.classValue?.let {
                 costume.attributes.updateAttributesMetaData(it)
             }
 
             attributesP.children.toList().forEach {
                 attributesP.remove(it)
             }
-            attributesP.hidden = roleClassP.value == null
+            attributesP.hidden = roleClassP.classValue == null
 
 
             costume.attributes.data().sortedBy { it.order }.forEach { data ->

@@ -169,7 +169,7 @@
         },
         {
           "costume": "smallText",
-          "x": 367,
+          "x": 300,
           "y": 386,
           "text": "Note, these don't appear to touch,\nbecause we aren't using a suitable\nthreshold.\n\nSo, we see when the fuzzy edges\nof the images touch.\n\nThe edges are so fuzzy, we can't\nsee just how far out the fuzz gets!",
           "direction": 0,
