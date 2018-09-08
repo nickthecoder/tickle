@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.util
 
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.AbstractRole
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.Do
@@ -31,6 +32,7 @@ abstract class Button : AbstractRole(), MouseListener {
     @CostumeAttribute
     var actions: ButtonActions? = null
 
+    var enableEnterExit: Boolean = true
 
     var enabled: Boolean = true
         set(v) {
@@ -59,10 +61,36 @@ abstract class Button : AbstractRole(), MouseListener {
             }
         }
 
+    private val mousePosition = Vector2d()
+
+    private var mouseHovering: Boolean = false
+        set(v) {
+            if (v != field) {
+                field = v
+                addAction(if (v) {
+                    actions?.enterAction(this)
+                } else {
+                    actions?.exitAction(this)
+                })
+            }
+        }
+
+    override fun activated() {
+        if (actions?.enterAction(this) == null && actions?.exitAction(this) == null) {
+            enableEnterExit = false
+        }
+    }
+
     override fun tick() {
         currentAction?.let {
             if (it.act()) {
                 currentAction = null
+            }
+        }
+        if (enableEnterExit) {
+            actor.stage?.firstView()?.let {
+                it.mousePosition(mousePosition)
+                mouseHovering = actor.contains(mousePosition)
             }
         }
     }

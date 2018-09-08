@@ -17,6 +17,16 @@ interface ButtonActions : SimpleInstance {
     fun upAction(button: Button): Action? = null
 
     /**
+     * Whenever the mouse enters the Button area
+     */
+    fun enterAction(button: Button) : Action? = null
+
+    /**
+     * Whenever the mouse exists the Button's area
+     */
+    fun exitAction(button: Button) : Action? = null
+
+    /**
      * The Action to perform when the button is clicked.
      * Note, the Button's onClicked() method will be called AFTER this Action has finished.
      * If null is returned, then the onClicked() will happen immediately.

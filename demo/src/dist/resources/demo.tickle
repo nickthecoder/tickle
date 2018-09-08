@@ -372,7 +372,7 @@
         },
         {
           "name": "actions",
-          "value": "uk.co.nickthecoder.tickle.util.GrowButtonActions"
+          "value": "uk.co.nickthecoder.tickle.util.ExampleButtonActions"
         }
       ]
     },
