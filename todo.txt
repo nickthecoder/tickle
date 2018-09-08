@@ -1,11 +1,19 @@
 Current Work
 ============
 
+
+interface ButtonActions {
+    fun downAction() : Action? = null
+    ditto for up and clicked.
+}
+Then on Button :
+@Attribute
+var buttonActions : ButtonActions
+
+
 Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickle)
-    Battlegrounds scene (using "Preferences")
-        Pictures of Earth, the moon and mars with markers. Ticked when completed.
     More levels
-    Mother ship factory?
+    Convert "countdowns" to delays?
     Sounds
 
 Create a "launcher" module, so that Groovy based games don't need a compilation step.

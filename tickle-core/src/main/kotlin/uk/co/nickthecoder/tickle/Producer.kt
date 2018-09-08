@@ -23,6 +23,7 @@ import uk.co.nickthecoder.tickle.events.MouseButtonListener
 import uk.co.nickthecoder.tickle.events.MouseEvent
 import uk.co.nickthecoder.tickle.events.ResizeEvent
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.util.AutoFlushPreferences
 import java.util.prefs.Preferences
 
 /**
@@ -79,7 +80,7 @@ interface Producer : MouseButtonListener {
      * The default node uses Tickle's package name and the id of your game (as defined in [GameInfo]).
      */
     fun preferencesRoot(): Preferences {
-        return Preferences.userNodeForPackage(Game::class.java).node(Resources.instance.gameInfo.id)
+        return AutoFlushPreferences(Preferences.userNodeForPackage(Game::class.java).node(Resources.instance.gameInfo.id))
     }
 
 }
