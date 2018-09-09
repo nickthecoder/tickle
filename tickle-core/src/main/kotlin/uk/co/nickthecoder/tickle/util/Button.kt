@@ -27,17 +27,29 @@ import uk.co.nickthecoder.tickle.events.ButtonState
 import uk.co.nickthecoder.tickle.events.MouseEvent
 import uk.co.nickthecoder.tickle.events.MouseListener
 
+/**
+ * You can use one of the built-in buttons, such as [QuitButton] and [SceneButton], or you can write your own.
+ * Create a sub-class of Button, and write an [onClicked] method.
+ *
+ * You can add "special effects" to a button, such as enlarging the button while the mouse hovers over it,
+ * changing its color. In fact you can do whatever you like.
+ * From within the Tickle resources editor, edit your button's Costume, and you should see an item labelled
+ * "effects" in the "Attributes" section.
+ *
+ * You can choose one of the built-in classes ([ExampleButtonEffects] and [EventButtonEffects]), or create
+ * your own. See [ButtonEffects] for more information.
+ */
 abstract class Button : AbstractRole(), MouseListener {
 
     @CostumeAttribute
-    var actions: ButtonActions? = null
+    var effects: ButtonEffects? = null
 
     var enableEnterExit: Boolean = true
 
     var enabled: Boolean = true
         set(v) {
             field = v
-            addAction(if (v) actions?.enableAction(this) else actions?.disableAction(this))
+            addAction(if (v) effects?.enable(this) else effects?.disable(this))
         }
 
     private var currentAction: SequentialAction? = null
@@ -54,9 +66,9 @@ abstract class Button : AbstractRole(), MouseListener {
             if (v != field) {
                 field = v
                 addAction(if (v) {
-                    actions?.downAction(this)
+                    effects?.down(this)
                 } else {
-                    actions?.upAction(this)
+                    effects?.up(this)
                 })
             }
         }
@@ -68,15 +80,15 @@ abstract class Button : AbstractRole(), MouseListener {
             if (v != field) {
                 field = v
                 addAction(if (v) {
-                    actions?.enterAction(this)
+                    effects?.enter(this)
                 } else {
-                    actions?.exitAction(this)
+                    effects?.exit(this)
                 })
             }
         }
 
     override fun activated() {
-        if (actions?.enterAction(this) == null && actions?.exitAction(this) == null) {
+        if (effects?.enter(this) == null && effects?.exit(this) == null) {
             enableEnterExit = false
         }
     }
@@ -103,7 +115,7 @@ abstract class Button : AbstractRole(), MouseListener {
             } else if (event.state == ButtonState.RELEASED) {
                 event.release()
                 if (down) {
-                    val action = actions?.clickedAction(this)
+                    val action = effects?.clicked(this)
                     addAction(action)
                     addAction(Do { onClicked(event) })
                 }

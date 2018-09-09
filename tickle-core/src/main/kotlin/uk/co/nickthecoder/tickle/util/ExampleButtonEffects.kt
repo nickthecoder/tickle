@@ -7,20 +7,22 @@ import uk.co.nickthecoder.tickle.action.animation.Turn
 
 /**
  * This is merely an example of ButtonActions.
- * Get creative, and use other actions, such as changing color, rotating through 360°,
- * maybe the button should do a jiggle!
+ * It scales the actor, when the mouse hovers over the button, and shrinks again when it exits.
+ * The click action rotates the button through 360 degrees.
  */
-class ExampleButtonActions : ButtonActions {
+open class ExampleButtonEffects(val scale: Double) : ButtonEffects {
 
-    override fun enterAction(button: Button): Action? {
-        return Scale(button.actor, 0.1, 1.5, Eases.easeOut)
+    constructor() : this(1.2)
+
+    override fun enter(button: Button): Action? {
+        return Scale(button.actor, 0.1, scale, Eases.easeOut)
     }
 
-    override fun exitAction(button: Button): Action? {
+    override fun exit(button: Button): Action? {
         return Scale(button.actor, 0.1, 1.0, Eases.easeIn)
     }
 
-    override fun clickedAction(button: Button): Action? {
+    override fun clicked(button: Button): Action? {
         return Turn(button.actor.direction, 0.5, button.actor.direction + Angle.degrees(360.0), Eases.easeInOut)
     }
 
