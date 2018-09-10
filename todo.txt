@@ -1,20 +1,9 @@
 Current Work
 ============
 
-
-interface ButtonActions {
-    fun downAction() : Action? = null
-    ditto for up and clicked.
-}
-Then on Button :
-@Attribute
-var buttonActions : ButtonActions
-
-
 Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickle)
     More levels
     Convert "countdowns" to delays?
-    Sounds
 
 Create a "launcher" module, so that Groovy based games don't need a compilation step.
 Same as the existing "main", but it REQUIRES a resources file, rather than searching from the current directory.

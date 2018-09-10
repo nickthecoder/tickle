@@ -18,26 +18,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.action
 
-import uk.co.nickthecoder.tickle.Actor
-
+/**
+ * A compound Action, where each child action is acted upon sequentially.
+ */
 class SequentialAction(vararg child: Action) : CompoundAction() {
+
+    private var childStarted = false
+
+    /**
+     * Used by ActionHolder to combine an existing Action into a sequence without restarting it.
+     * It is generally not advisable for games to use this constructor directly.
+     */
+    constructor(child1: Action, child2: Action, isStarted: Boolean) : this(child1, child2) {
+        childStarted = isStarted
+    }
 
     override val children = mutableListOf<Action>()
 
-    var currentChild: Action? = null
+    private var currentChild: Action? = null
 
-    var index: Int = -1
+    private var index: Int = -1
 
     init {
         children.addAll(child)
     }
 
     override fun begin(): Boolean {
-        children.forEachIndexed { i, child ->
-            if (!child.begin()) {
-                index = i
-                currentChild = child
-                return false
+        if (childStarted) {
+            index = 0
+            currentChild = children[0]
+
+            // If this animation is restarted, then the normal being process should occur.
+            childStarted = false
+
+            return false
+        } else {
+            children.forEachIndexed { i, child ->
+                if (!child.begin()) {
+                    index = i
+                    currentChild = child
+                    return false
+                }
             }
         }
         index = -1
@@ -61,6 +82,10 @@ class SequentialAction(vararg child: Action) : CompoundAction() {
         return true // There was no current child.
     }
 
+    /**
+     * Note. Adding a new Action after this Action has already finished will NOT cause the new Action to be acted
+     * upon. You may however restart the whole sequence, in which case the new Action will be acted on as usual.
+     */
     override fun then(other: Action): SequentialAction {
         children.add(other)
         return this

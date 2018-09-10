@@ -22,10 +22,37 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class ParallelAction(vararg child: Action) : CompoundAction() {
 
+    private var firstChildStarted: Action? = null
+
+
+    /**
+     * Used by ActionHolder to combine an existing Action into a sequence without restarting it.
+     * It is generally not advisable for games to use this constructor directly.
+     */
+    constructor(child1: Action, child2: Action, child1Started: Boolean) : this(child1, child2) {
+        if (child1Started) firstChildStarted = child1
+    }
+
+    /**
+     * This holds the children that are still active (i.e. those that haven't finished).
+     * During [act], children that finish are moved from here to [finishedChildren].
+     * When/if the ParallelAction is restarted, the finishedChildren are added back to
+     * this list.
+     */
     override val children = CopyOnWriteArrayList<Action>()
 
+    /**
+     * When adding a new child it is added to this list, their begin method is not called at this time.
+     * During [act], this each member is then moved to either [finishedChildren] or [chidren]
+     * depending on the result of their begin.
+     */
     private val unstartedChildren = mutableListOf<Action>()
 
+    /**
+     * During [act], and [begin], any children that finish are moved from [children] into
+     * this list.
+     * This list is then added to [children] if/when the ParallelAction is restarted.
+     */
     private val finishedChildren = mutableListOf<Action>()
 
     init {
@@ -44,10 +71,18 @@ class ParallelAction(vararg child: Action) : CompoundAction() {
 
         var finished = true
         children.forEach { child ->
-            if (!child.begin()) {
+            val childFinished = if (firstChildStarted == child) false else child.begin()
+            if (childFinished) {
+                children.remove(child)
+                finishedChildren.add(child)
+            } else {
                 finished = false // One child isn't finished, so we aren't finished.
             }
         }
+
+        // If we restart, then we don't want to treat the first child special. We need to start all children as normal.
+        firstChildStarted = null
+
         unstartedChildren.clear()
 
         return finished
@@ -67,7 +102,11 @@ class ParallelAction(vararg child: Action) : CompoundAction() {
 
         if (unstartedChildren.isNotEmpty()) {
             unstartedChildren.forEach {
-                it.begin()
+                if (it.begin()) {
+                    finishedChildren.add(it)
+                } else {
+                    children.add(it)
+                }
             }
             unstartedChildren.clear()
         }

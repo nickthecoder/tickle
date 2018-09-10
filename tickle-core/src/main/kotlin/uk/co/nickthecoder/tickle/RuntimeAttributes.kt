@@ -73,7 +73,8 @@ open class RuntimeAttributes : Attributes {
         try {
             val property = klass.memberProperties.filterIsInstance<KProperty1<Any?, Any?>>().firstOrNull { it.name == name }
             if (property == null) {
-                System.err.println("ERROR. Could not find a property called '$name' on class '${klass.qualifiedName}'")
+                System.err.println("WARNING. Could not find a property called '$name' on class '${klass.qualifiedName}'")
+                map.remove(name)
             } else {
                 if (property is KMutableProperty1<Any?, Any?>) {
                     property.set(obj, fromString(value, property.returnType.jvmErasure))
@@ -132,7 +133,9 @@ open class RuntimeAttributes : Attributes {
             Color::class -> Color.fromString(value)
 
             else -> {
-                if (SimpleInstance::class.java.isAssignableFrom(klass.java)) {
+                if (klass.java.isEnum) {
+                    (klass as KClass<out Enum<*>>).java.enumConstants.filter { it.name == value }.first()
+                } else if (SimpleInstance::class.java.isAssignableFrom(klass.java)) {
                     ScriptManager.classForName(value).newInstance()
                 } else {
                     throw IllegalArgumentException("Type $klass is not currently supported (1).")

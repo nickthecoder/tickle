@@ -19,10 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.util
 
 import org.joml.Vector2d
-import uk.co.nickthecoder.tickle.AbstractRole
-import uk.co.nickthecoder.tickle.action.Action
-import uk.co.nickthecoder.tickle.action.Do
-import uk.co.nickthecoder.tickle.action.SequentialAction
+import uk.co.nickthecoder.tickle.ActionRole
 import uk.co.nickthecoder.tickle.events.ButtonState
 import uk.co.nickthecoder.tickle.events.MouseEvent
 import uk.co.nickthecoder.tickle.events.MouseListener
@@ -39,7 +36,7 @@ import uk.co.nickthecoder.tickle.events.MouseListener
  * You can choose one of the built-in classes ([ExampleButtonEffects] and [EventButtonEffects]), or create
  * your own. See [ButtonEffects] for more information.
  */
-abstract class Button : AbstractRole(), MouseListener {
+abstract class Button : ActionRole(), MouseListener {
 
     @CostumeAttribute
     var effects: ButtonEffects? = null
@@ -48,16 +45,9 @@ abstract class Button : AbstractRole(), MouseListener {
 
     var enabled: Boolean = true
         set(v) {
-            field = v
-            addAction(if (v) effects?.enable(this) else effects?.disable(this))
-        }
-
-    private var currentAction: SequentialAction? = null
-        set(v) {
-            if (v?.begin() == true) {
-                field = null
-            } else {
+            if (field != v) {
                 field = v
+                then(if (v) effects?.enable(this) else effects?.disable(this))
             }
         }
 
@@ -65,11 +55,7 @@ abstract class Button : AbstractRole(), MouseListener {
         set(v) {
             if (v != field) {
                 field = v
-                addAction(if (v) {
-                    effects?.down(this)
-                } else {
-                    effects?.up(this)
-                })
+                then(if (v) effects?.down(this) else effects?.up(this))
             }
         }
 
@@ -79,11 +65,7 @@ abstract class Button : AbstractRole(), MouseListener {
         set(v) {
             if (v != field) {
                 field = v
-                addAction(if (v) {
-                    effects?.enter(this)
-                } else {
-                    effects?.exit(this)
-                })
+                then(if (v) effects?.enter(this) else effects?.exit(this))
             }
         }
 
@@ -94,11 +76,8 @@ abstract class Button : AbstractRole(), MouseListener {
     }
 
     override fun tick() {
-        currentAction?.let {
-            if (it.act()) {
-                currentAction = null
-            }
-        }
+        super.tick()
+
         if (enableEnterExit) {
             actor.stage?.firstView()?.let {
                 it.mousePosition(mousePosition)
@@ -116,8 +95,8 @@ abstract class Button : AbstractRole(), MouseListener {
                 event.release()
                 if (down) {
                     val action = effects?.clicked(this)
-                    addAction(action)
-                    addAction(Do { onClicked(event) })
+                    action?.let { then(it) }
+                    then { onClicked(event) }
                 }
                 down = false
             }
@@ -130,13 +109,4 @@ abstract class Button : AbstractRole(), MouseListener {
 
     abstract fun onClicked(event: MouseEvent)
 
-    private fun addAction(action: Action?) {
-        if (action == null) return
-
-        if (currentAction == null) {
-            currentAction = SequentialAction(action)
-        } else {
-            currentAction?.add(action)
-        }
-    }
 }

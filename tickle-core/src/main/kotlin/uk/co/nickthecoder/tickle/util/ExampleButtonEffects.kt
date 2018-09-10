@@ -15,11 +15,11 @@ open class ExampleButtonEffects(val scale: Double) : ButtonEffects {
     constructor() : this(1.2)
 
     override fun enter(button: Button): Action? {
-        return Scale(button.actor, 0.1, scale, Eases.easeOut)
+        return Scale(button.actor, 0.1, button.actor.scaleXY * 1.2, Eases.easeOut)
     }
 
     override fun exit(button: Button): Action? {
-        return Scale(button.actor, 0.1, 1.0, Eases.easeIn)
+        return Scale(button.actor, 0.1, button.actor.scaleXY / 1.2, Eases.easeIn)
     }
 
     override fun clicked(button: Button): Action? {

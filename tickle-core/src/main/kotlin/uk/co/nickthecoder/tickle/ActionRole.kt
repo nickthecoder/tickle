@@ -19,39 +19,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.action.Action
-import uk.co.nickthecoder.tickle.action.NoAction
-
+import uk.co.nickthecoder.tickle.action.ActionHolder
 
 /**
- * A Role that only has a single Action, and does nothing in the tick method itself.
+ * A Role that only has a single Action.
+ * It is a convenient way of using an Action within a Role.
+ *
+ * The hard work is done by the super class [ActionHolder].
+ *
+ * Instead of overriding the tick method, an ActionRole override [createAction].
+ * It can override tick as well if it need to, but be sure to call super.tick()!
+ *
+ * Note, if you want the Actor to die, then ensure you include a [Kill] action,
+ * otherwise the Actor will stay living, but do nothing.
  */
-open class ActionRole : Role {
-
-    private var finished: Boolean = false
-
-    var action: Action = NoAction()
-        set(v) {
-            field = v
-            finished = v.begin()
-        }
+open class ActionRole : ActionHolder(), Role {
 
     override lateinit var actor: Actor
 
     override fun begin() {}
 
-    override fun end() {}
-
     override fun activated() {
-        action = createAction()
+        then(createAction())
     }
 
-    open fun createAction(): Action = NoAction()
+    open fun createAction(): Action? = null
 
     override fun tick() {
-        if (!finished) {
-            finished = action.act()
-        }
+        act()
     }
 
-    fun isFinished(): Boolean = finished
+    override fun end() {}
+
 }

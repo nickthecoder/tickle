@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.action
 
 /**
- * Performs no action, and never ends. It is used by ActionRole when 'die = false'.
+ * Performs no action, and never ends.
  */
 class NoAction : Action {
     override fun act() = false

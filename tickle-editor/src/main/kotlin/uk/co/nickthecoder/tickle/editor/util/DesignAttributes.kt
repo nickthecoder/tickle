@@ -150,7 +150,10 @@ class DesignAttributes : RuntimeAttributes() {
                 }
             }
             else -> {
-                if (SimpleInstance::class.java.isAssignableFrom(klass.java)) {
+                if (klass.java.isEnum) {
+                    createEnumParameter( klass as KClass<out Enum<*>>, "sttribute_$name", name )
+
+                } else if (SimpleInstance::class.java.isAssignableFrom(klass.java)) {
                     ClassInstanceParameter("attribute_$name", label = name, type = klass.java)
                 } else {
                     System.err.println("Type $klass (for attribute $name) is not currently supported.")
@@ -159,6 +162,7 @@ class DesignAttributes : RuntimeAttributes() {
             }
         }
     }
+
 
     override fun getOrCreateData(name: String): DesignAttributeData {
         map[name]?.let { return it as DesignAttributeData }
@@ -169,6 +173,9 @@ class DesignAttributes : RuntimeAttributes() {
 
 }
 
+inline fun <reified T : Enum<T>> printAllValues() {
+    print(enumValues<T>().joinToString { it.name })
+}
 class DesignAttributeData(
         value: String? = null,
         attributeType: AttributeType = AttributeType.NORMAL,

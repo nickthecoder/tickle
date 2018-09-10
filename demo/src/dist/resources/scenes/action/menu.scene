@@ -40,25 +40,10 @@
       "name": "main",
       "actors": [
         {
-          "costume": "sceneButton",
-          "x": 80,
-          "y": 355,
-          "text": "Overlapping",
-          "direction": 0,
-          "scaleX": 1,
-          "scaleY": 1,
-          "attributes": [
-            {
-              "name": "scene",
-              "value": "overlapping/menu"
-            }
-          ]
-        },
-        {
           "costume": "smallText",
-          "x": 289,
-          "y": 468,
-          "text": "Hello",
+          "x": 261,
+          "y": 464,
+          "text": "Action",
           "textOutlineColor": "#00000000",
           "direction": 0,
           "scaleX": 1,
@@ -66,9 +51,9 @@
         },
         {
           "costume": "sceneButton",
-          "x": 77,
-          "y": 322,
-          "text": "Action",
+          "x": 64,
+          "y": 403,
+          "text": "Ease",
           "textOutlineColor": "#00000000",
           "direction": 0,
           "scaleX": 1,
@@ -76,7 +61,7 @@
           "attributes": [
             {
               "name": "scene",
-              "value": "action/menu"
+              "value": "action/ease"
             }
           ]
         }

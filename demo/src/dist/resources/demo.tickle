@@ -17,7 +17,7 @@
     ],
     "treeThumbnailSize": 24,
     "costumePickerThumbnailSize": 50,
-    "isMaximized": false,
+    "isMaximized": true,
     "windowWidth": 1076,
     "windowHeight": 702,
     "apiURL": "http://nickthecoder.co.uk/public/tickle/api-0.1/tickle-core/"
@@ -342,6 +342,46 @@
         }
       ],
       "showInSceneEditor": true
+    },
+    {
+      "name": "action",
+      "costumes": [
+        {
+          "name": "moveBy",
+          "role": "uk.co.nickthecoder.tickle.demo.action.MoveTest",
+          "canRotate": false,
+          "zOrder": 0,
+          "initialEvent": "default",
+          "showInSceneEditor": true,
+          "events": [
+            {
+              "name": "default",
+              "poses": [
+                "red"
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "0.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "linear"
+            },
+            {
+              "name": "expected",
+              "value": "0.0x0.0"
+            },
+            {
+              "name": "message",
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "showInSceneEditor": true
     }
   ],
   "costumes": [
@@ -369,10 +409,6 @@
         {
           "name": "scene",
           "value": ""
-        },
-        {
-          "name": "actions",
-          "value": "uk.co.nickthecoder.tickle.util.ExampleButtonActions"
         }
       ]
     },

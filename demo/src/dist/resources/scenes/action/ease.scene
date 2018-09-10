@@ -1,0 +1,875 @@
+{
+  "director": "uk.co.nickthecoder.tickle.demo.TestDirector",
+  "directorAttributes": [
+    {
+      "name": "nextScene",
+      "value": ""
+    }
+  ],
+  "background": "#000000",
+  "showMouse": true,
+  "layout": "default",
+  "snapToGrid": {
+    "enabled": true,
+    "xSpacing": 50,
+    "ySpacing": 50,
+    "xOffset": 0,
+    "yOffset": 0,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "snapToGuides": {
+    "enabled": true,
+    "closeness": 5,
+    "x": [
+      
+    ],
+    "y": [
+      
+    ]
+  },
+  "snapToOthers": {
+    "enabled": true,
+    "xCloseness": 10,
+    "yCloseness": 10
+  },
+  "snapRotation": {
+    "enabled": true,
+    "step": 15,
+    "closeness": 15
+  },
+  "include": [
+    
+  ],
+  "stages": [
+    {
+      "name": "main",
+      "actors": [
+        {
+          "costume": "moveBy",
+          "x": 50,
+          "y": 450,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "expected",
+              "value": "150.0x450.0"
+            },
+            {
+              "name": "message",
+              "value": "Linear"
+            },
+            {
+              "name": "ease",
+              "value": "linear"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 50,
+          "y": 400,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeIn"
+            },
+            {
+              "name": "expected",
+              "value": "150.0x400.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseIn"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 50,
+          "y": 350,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInCubic"
+            },
+            {
+              "name": "expected",
+              "value": "150.0x350.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseInCubic"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 50,
+          "y": 300,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInExpo"
+            },
+            {
+              "name": "expected",
+              "value": "150.0x300.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseInExpo"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 50,
+          "y": 200,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInCirc"
+            },
+            {
+              "name": "expected",
+              "value": "150.0x200.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseInCirc"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 50,
+          "y": 150,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInBack"
+            },
+            {
+              "name": "expected",
+              "value": "150.0x150.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseInBack"
+            }
+          ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 600,
+          "y": 100,
+          "text": "ease",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "action/ease"
+            }
+          ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 600,
+          "y": 77,
+          "text": "menu",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "action/menu"
+            }
+          ]
+        },
+        {
+          "costume": "smallText",
+          "x": 100,
+          "y": 450,
+          "text": "Linear",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 100,
+          "y": 400,
+          "text": "EaseIn",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 100,
+          "y": 350,
+          "text": "EaseInCubic",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 100,
+          "y": 300,
+          "text": "EaseInQuad",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 100,
+          "y": 200,
+          "text": "EaseInCirc",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 100,
+          "y": 150,
+          "text": "EaseInBack",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "moveBy",
+          "x": 250,
+          "y": 400,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeOut"
+            },
+            {
+              "name": "expected",
+              "value": "350.0x400.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseOut"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 250,
+          "y": 350,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeOutQuad"
+            },
+            {
+              "name": "expected",
+              "value": "350.0x350.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseOutQuad"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 250,
+          "y": 300,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeOutCubic"
+            },
+            {
+              "name": "expected",
+              "value": "350.0x300.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseOutCubic"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 250,
+          "y": 250,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInCirc"
+            },
+            {
+              "name": "expected",
+              "value": "350.0x250.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseOutCirc"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 250,
+          "y": 150,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeOutBack"
+            },
+            {
+              "name": "expected",
+              "value": "350.0x150.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseOutBack"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 450,
+          "y": 400,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInOut"
+            },
+            {
+              "name": "expected",
+              "value": "550.0x400.0"
+            },
+            {
+              "name": "message",
+              "value": "InOut"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 450,
+          "y": 350,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInOutCubic"
+            },
+            {
+              "name": "expected",
+              "value": "550.0x350.0"
+            },
+            {
+              "name": "message",
+              "value": "InOutCubic"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 450,
+          "y": 300,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInOutQuad"
+            },
+            {
+              "name": "expected",
+              "value": "550.0x300.0"
+            },
+            {
+              "name": "message",
+              "value": "InOutQuad"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 450,
+          "y": 250,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInOutExpo"
+            },
+            {
+              "name": "expected",
+              "value": "550.0x250.0"
+            },
+            {
+              "name": "message",
+              "value": "InOutExpo"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 450,
+          "y": 200,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInOutCirc"
+            },
+            {
+              "name": "expected",
+              "value": "550.0x200.0"
+            },
+            {
+              "name": "message",
+              "value": "InOutCirc"
+            }
+          ]
+        },
+        {
+          "costume": "smallText",
+          "x": 300,
+          "y": 400,
+          "text": "EaseOut",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 300,
+          "y": 350,
+          "text": "EaseOutCubic",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 300,
+          "y": 300,
+          "text": "EaseOutQuad",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 300,
+          "y": 250,
+          "text": "EaseOutExpo",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 300,
+          "y": 150,
+          "text": "EaseOutBack",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 500,
+          "y": 400,
+          "text": "InOut",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 500,
+          "y": 350,
+          "text": "InOutCubic",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 500,
+          "y": 300,
+          "text": "InOutQuad",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 500,
+          "y": 250,
+          "text": "InOutExpo",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 500,
+          "y": 200,
+          "text": "InOutCirc",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "moveBy",
+          "x": 50,
+          "y": 250,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInExpo"
+            },
+            {
+              "name": "expected",
+              "value": "150.0x250.0"
+            },
+            {
+              "name": "message",
+              "value": "EaseInExpo"
+            }
+          ]
+        },
+        {
+          "costume": "smallText",
+          "x": 100,
+          "y": 250,
+          "text": "EaseInExpo",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "moveBy",
+          "x": 250,
+          "y": 200,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "linear"
+            },
+            {
+              "name": "expected",
+              "value": "350.0x200.0"
+            },
+            {
+              "name": "message",
+              "value": "OutCirc"
+            }
+          ]
+        },
+        {
+          "costume": "smallText",
+          "x": 300,
+          "y": 200,
+          "text": "EaseOutCirc",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "moveBy",
+          "x": 450,
+          "y": 150,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "easeInOutBack"
+            },
+            {
+              "name": "expected",
+              "value": "550.0x150.0"
+            },
+            {
+              "name": "message",
+              "value": "InOutBack"
+            }
+          ]
+        },
+        {
+          "costume": "smallText",
+          "x": 500,
+          "y": 150,
+          "text": "InOutBack",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "moveBy",
+          "x": 50,
+          "y": 50,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "bounce"
+            },
+            {
+              "name": "expected",
+              "value": "150.0x50.0"
+            },
+            {
+              "name": "message",
+              "value": "Bounce"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 250,
+          "y": 50,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "bounce2"
+            },
+            {
+              "name": "expected",
+              "value": "350.0x50.0"
+            },
+            {
+              "name": "message",
+              "value": "Bounce2"
+            }
+          ]
+        },
+        {
+          "costume": "moveBy",
+          "x": 450,
+          "y": 50,
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "amount",
+              "value": "100.0x0.0"
+            },
+            {
+              "name": "ease",
+              "value": "bounce3"
+            },
+            {
+              "name": "expected",
+              "value": "550.0x50.0"
+            },
+            {
+              "name": "message",
+              "value": "Bounce3"
+            }
+          ]
+        },
+        {
+          "costume": "smallText",
+          "x": 100,
+          "y": 50,
+          "text": "Bounce",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 300,
+          "y": 50,
+          "text": "Bounce2",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        {
+          "costume": "smallText",
+          "x": 500,
+          "y": 50,
+          "text": "Bounce3",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        }
+      ]
+    }
+  ]
+}

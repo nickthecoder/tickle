@@ -18,38 +18,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.action
 
-class Repeat(val child: Action, val times: Int) : Action {
+/**
+ * Repeatedly begins, and acts on the [body] Action until the [condition] returns true.
+ * This action ends when [body] ends and the [condition] returns true.
+ *
+ * [body] will be run at least once, unlike [WhilstBoolean], where the body may not run at all.
+ *
+ * Note that [body] will NOT terminate unnaturally early (unlike [WhilstBoolean)
+ */
+class UntilBoolean(
+        val body: Action,
+        val condition: () -> Boolean)
 
-    constructor(times: Int, child: Action) : this(child, times)
-
-    private var current = -1
+    : Action {
 
     override fun begin(): Boolean {
-        if (times <= 0) {
-            return true
-        }
-        current = 1
-        while (child.begin()) {
-            current++
-            if (current > times) {
-                return true
-            }
-        }
+        body.begin()
         return false
     }
 
     override fun act(): Boolean {
-        if (child.act()) {
-            current++
-            if (current > times) {
+        if (body.act()) {
+            if (condition()) {
                 return true
             }
-            while (child.begin()) {
-                current++
-                if (current > times) {
-                    return true
-                }
-            }
+            body.begin()
         }
         return false
     }
