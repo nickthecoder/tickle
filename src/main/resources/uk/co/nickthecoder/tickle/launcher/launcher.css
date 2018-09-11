@@ -1,0 +1,31 @@
+.big {
+    -fx-padding: 16px;
+    -fx-spacing: 16px;
+}
+
+}.big .button {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-alignment: bottom-center;
+}
+
+.big .button.play {
+    -fx-background-image: url( 'play-large.png' );
+}
+.big .button.edit {
+    -fx-background-image: url( 'edit-large.png' );
+}
+.big .button.new {
+     -fx-background-image: url( 'new-large.png' );
+}
+
+
+.recent {
+    -fx-padding: 16px;
+    -fx-spacing: 6px;
+}
+
+.title {
+    -fx-font-size: 24px;
+    -fx-font-fill: #000;
+}

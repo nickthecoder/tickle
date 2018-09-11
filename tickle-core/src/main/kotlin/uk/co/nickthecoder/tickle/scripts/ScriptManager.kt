@@ -46,12 +46,13 @@ object ScriptManager {
      * Also, packages are NOT supported, so there are no subdirectories.
      */
     fun setClasspath(directory: File) {
+        println("ScriptManager path = $directory")
         classpath = directory
+        languages.values.forEach { it.setClasspath(classpath) }
         scan()
     }
 
     fun scan() {
-        languages.values.forEach { it.setClasspath(classpath) }
         if (languages.isNotEmpty()) {
             println("Scanning script directory $classpath")
             classpath.listFiles()?.forEach { file ->

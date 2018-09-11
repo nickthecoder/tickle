@@ -42,12 +42,6 @@ subprojects {
     group = 'uk.co.nickthecoder'
 }
 
-
-defaultTasks 'install', 'installDist'
-
-apply plugin: 'idea'
-
-
 project(':tickle-core') {
 
     apply plugin: 'kotlin'
@@ -103,22 +97,6 @@ project(':tickle-editor') {
     }
 }
 
-project(':wizard') {
-
-    apply plugin: 'kotlin'
-    apply plugin: 'application'
-    apply plugin: 'maven'
-
-    defaultTasks 'run'
-    mainClassName = "uk.co.nickthecoder.tickle.wizard.NewGameWizardKt"
-
-    dependencies {
-        compile 'uk.co.nickthecoder:paratask-core:0.2'
-        compile 'org.reflections:reflections:0.9.11'
-    }
-}
-
-
 project(':tickle-groovy') {
 
     apply plugin: 'kotlin'
@@ -159,4 +137,25 @@ project(':demo') {
         compile project(':tickle-groovy')
     }
 
+}
+
+
+defaultTasks 'install', 'installDist'
+
+apply plugin: 'idea'
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+defaultTasks 'installDist'
+mainClassName = "uk.co.nickthecoder.tickle.launcher.LauncherKt"
+
+dependencies {
+    compile project(':tickle-core')
+    compile project(':tickle-editor')
+    compile project(':tickle-groovy')
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
 }

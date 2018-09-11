@@ -16,14 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-package uk.co.nickthecoder.tickle.wizard
+package uk.co.nickthecoder.tickle.launcher
 
-import javafx.application.Application
-import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.ParameterException
 import uk.co.nickthecoder.paratask.TaskDescription
-import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.paratask.util.child
 import uk.co.nickthecoder.paratask.util.process.Exec
@@ -31,20 +28,6 @@ import uk.co.nickthecoder.paratask.util.process.OSCommand
 import uk.co.nickthecoder.paratask.util.process.PrintErrSink
 import uk.co.nickthecoder.paratask.util.process.PrintOutSink
 import java.io.File
-
-/**
- * The JavaFX Application to launch the NewGameWizard Task.
- * Usage : Application.launch(NewGameWizardApp::class.java)
- */
-class NewGameWizardApp : Application() {
-    override fun start(stage: Stage?) {
-        TaskPrompter(NewGameWizard()).placeOnStage(stage ?: Stage())
-    }
-}
-
-fun main(vararg args: String) {
-    Application.launch(NewGameWizardApp::class.java)
-}
 
 /**
  * Creates a new project (for a new game).
@@ -62,7 +45,7 @@ fun main(vararg args: String) {
  *
  * This uses a JavaFX GUI. Use [NewGameWizardApp] to launch.
  */
-class NewGameWizard : AbstractTask() {
+class NewGameWizard() : AbstractTask() {
 
     private val gameName = StringParameter("gameName", hint = "Only letters, numbers, spaces and underscores are allowed. e.g. Space Invaders", required = true)
 
@@ -84,7 +67,7 @@ class NewGameWizard : AbstractTask() {
 
     private val intellij = BooleanParameter("createIntellijProject", value = false, hint = "Most useful when writing the game in Kotlin")
 
-    private val git = BooleanParameter("initialiseGit", value = true, hint="If you don't know what git is, google it! It's very useful.")
+    private val git = BooleanParameter("initialiseGit", value = true, hint = "If you don't know what git is, google it! It's very useful.")
 
     override val taskD = TaskDescription("New Game Wizard")
             .addParameters(gameName, parentDirectory, size, initialSceneName, packageBase, groovy, intellij, git)
@@ -119,11 +102,14 @@ class NewGameWizard : AbstractTask() {
         return File(kotlin, packageName().replace('.', File.separatorChar))
     }
 
+    fun resourcesDir() = gameDirectory().child("src", "dist", "resources")
+
+    fun resourcesFile() = File(resourcesDir(), identifier() + ".tickle")
+
     override fun run() {
-        val id = identifier()
         val directory = gameDirectory()
         val packageDir = mainPackageDir()
-        val resourcesDir = directory.child("src", "dist", "resources")
+        val resourcesDir = resourcesDir()
 
         println("Creating directory structure at : $directory")
 
@@ -137,7 +123,7 @@ class NewGameWizard : AbstractTask() {
             File(resourcesDir, "scripts").mkdir()
         }
 
-        val resourcesFile = File(resourcesDir, id + ".tickle")
+        val resourcesFile = resourcesFile()
         println("Creating $resourcesFile")
         resourcesFile.writeText(resourceContents())
 
@@ -175,7 +161,6 @@ class NewGameWizard : AbstractTask() {
             if (intellij.value == true) {
                 exec(directory, "gradle", "idea")
             }
-            exec(directory, "build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()}", "--editor")
         }
 
         println("\nTo build the game : ")
@@ -235,10 +220,10 @@ repositories {
 }
 
 dependencies {
-    compile 'uk.co.nickthecoder:tickle-core:$tickleVersion'
-    compile 'uk.co.nickthecoder:tickle-editor:$tickleVersion'
+    compile 'uk.co.nickthecoder:tickle-core:${tickleVersion}'
+    compile 'uk.co.nickthecoder:tickle-editor:${tickleVersion}'
     //compile 'org.reflections:reflections:0.9.11'
-    ${if (groovy.value == true) "compile 'uk.co.nickthecoder:tickle-groovy:$tickleVersion'" else ""}
+    ${if (groovy.value == true) "compile 'uk.co.nickthecoder:tickle-groovy:${tickleVersion}'" else ""}
 }
 
 """
