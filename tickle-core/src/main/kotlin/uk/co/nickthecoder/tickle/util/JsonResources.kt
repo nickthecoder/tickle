@@ -28,6 +28,7 @@ import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.physics.*
 import uk.co.nickthecoder.tickle.resources.*
+import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.stage.FlexHAlignment
 import uk.co.nickthecoder.tickle.stage.FlexVAlignment
@@ -78,6 +79,7 @@ open class JsonResources {
 
     fun loadResources(): Resources {
         val jroot = Json.parse(InputStreamReader(FileInputStream(resources.file))).asObject()
+        ScriptManager.setClasspath(File(resources.file.parent, "scripts"))
 
         val jinfo = jroot.get("info")
         val jpreferences = jroot.get("preferences")

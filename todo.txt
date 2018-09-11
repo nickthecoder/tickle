@@ -5,12 +5,10 @@ Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickl
     More levels
     Convert "countdowns" to delays?
 
-Create a "launcher" module, so that Groovy based games don't need a compilation step.
-Same as the existing "main", but it REQUIRES a resources file, rather than searching from the current directory.
-Also consider allowing resources opened from a zip file (with a custom file extension),
-so that a game can be distributed easily).
-Hmm, version problems. The API will change, and therefore it will only work when the tickle runtime matches
-that of the game.
+Create a "launcher" module
+    NewGameWizard should have "Scripted/Unscripted". If scripted, then don't create src/main/dist etc,
+    and no main class, nor a gradle file.
+    Update readme
 
 ScriptManager has listeners which it informs about reloads (including errors).
     Use this to position cursor to errors

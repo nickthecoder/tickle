@@ -65,12 +65,10 @@ class NewGameWizard() : AbstractTask() {
 
     private val groovy = BooleanParameter("enableGroovyScripts", value = true)
 
-    private val intellij = BooleanParameter("createIntellijProject", value = false, hint = "Most useful when writing the game in Kotlin")
-
     private val git = BooleanParameter("initialiseGit", value = true, hint = "If you don't know what git is, google it! It's very useful.")
 
     override val taskD = TaskDescription("New Game Wizard")
-            .addParameters(gameName, parentDirectory, size, initialSceneName, packageBase, groovy, intellij, git)
+            .addParameters(gameName, parentDirectory, size, initialSceneName, packageBase, groovy, git)
 
 
     override fun check() {
@@ -88,6 +86,8 @@ class NewGameWizard() : AbstractTask() {
 
     fun identifier() = gameName.value.replace(Regex(" "), "")
 
+    fun scripted() = groovy.value == true
+
     fun gameDirectory() = File(parentDirectory.value, identifier().toLowerCase())
 
     fun packageName(): String {
@@ -102,7 +102,7 @@ class NewGameWizard() : AbstractTask() {
         return File(kotlin, packageName().replace('.', File.separatorChar))
     }
 
-    fun resourcesDir() = gameDirectory().child("src", "dist", "resources")
+    fun resourcesDir() = if (scripted()) gameDirectory() else gameDirectory().child("src", "dist", "resources")
 
     fun resourcesFile() = File(resourcesDir(), identifier() + ".tickle")
 
@@ -110,6 +110,7 @@ class NewGameWizard() : AbstractTask() {
         val directory = gameDirectory()
         val packageDir = mainPackageDir()
         val resourcesDir = resourcesDir()
+        val scripted = groovy.value == true
 
         println("Creating directory structure at : $directory")
 
@@ -119,7 +120,7 @@ class NewGameWizard() : AbstractTask() {
         resourcesDir.child("scenes").mkdir()
         resourcesDir.child("images").mkdir()
         resourcesDir.child("sounds").mkdir()
-        if (groovy.value == true) {
+        if (scripted) {
             File(resourcesDir, "scripts").mkdir()
         }
 
@@ -127,17 +128,19 @@ class NewGameWizard() : AbstractTask() {
         println("Creating $resourcesFile")
         resourcesFile.writeText(resourceContents())
 
-        val mainClassFile = File(packageDir, identifier() + ".kt")
-        println("Creating $mainClassFile")
-        mainClassFile.writeText(mainClassContents())
-
         val mainSceneFile = resourcesDir.child("scenes", "menu.scene")
         println("Creating $mainSceneFile")
         mainSceneFile.writeText(mainSceneContents())
 
-        val gradleFile = File(directory, "build.gradle")
-        println("Creating $gradleFile")
-        gradleFile.writeText(gradleContents())
+        if (!scripted) {
+            val mainClassFile = File(packageDir, identifier() + ".kt")
+            println("Creating $mainClassFile")
+            mainClassFile.writeText(mainClassContents())
+
+            val gradleFile = File(directory, "build.gradle")
+            println("Creating $gradleFile")
+            gradleFile.writeText(gradleContents())
+        }
 
         val readmeFile = File(directory, "README.md")
         println("Creating $readmeFile")
@@ -156,20 +159,19 @@ class NewGameWizard() : AbstractTask() {
 
         println("\nProject Created.\n")
 
-        if (exec(directory, "gradle", "installDist")) {
-            println("\n\nBuild OK\n")
-            if (intellij.value == true) {
-                exec(directory, "gradle", "idea")
+        if (!scripted) {
+            if (exec(directory, "gradle", "installDist")) {
+                println("\n\nBuild OK\n")
             }
+            println("\nTo build the game : ")
+            println("cd '$directory'")
+            println("gradle installDist")
+            println("\nTo run the game : ")
+            println("build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()}")
+            println("\nTo launch the editor : ")
+            println("build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()} --editor")
         }
 
-        println("\nTo build the game : ")
-        println("cd '$directory'")
-        println("gradle installDist")
-        println("\nTo run the game : ")
-        println("build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()}")
-        println("\nTo launch the editor : ")
-        println("build/install/${identifier().toLowerCase()}/bin/${identifier().toLowerCase()} --editor")
     }
 
     fun exec(dir: File, program: String, vararg args: String): Boolean {
@@ -241,8 +243,7 @@ dependencies {
   "preferences": {
     "outputFormat": "PRETTY",
     "packages": [
-      "uk.co.nickthecoder.tickle",
-      "${packageName()}"
+      "uk.co.nickthecoder.tickle" ${if (scripted()) "" else "," + packageName()}
     ]
   },
   "layouts": [
@@ -320,8 +321,9 @@ fun main(args: Array<String>) {
 """
 
 
-    fun readMeContents() = """# ${gameName.value}
+    fun readMeContents() = "# ${gameName.value}" + if (scripted()) """
 
+""" else """
 
 To build the game :
 
@@ -339,9 +341,8 @@ To create a zip file, ready for distribution :
 
     gradle distZip
 
+""" + "Powered by [Tickle](https://github.com/nickthecoder/tickle) and [LWJGL](https://www.lwjgl.org/)."
 
-Powered by [Tickle](https://github.com/nickthecoder/tickle) and [LWJGL](https://www.lwjgl.org/).
-"""
 }
 
 private var tickleVersion = "0.1"

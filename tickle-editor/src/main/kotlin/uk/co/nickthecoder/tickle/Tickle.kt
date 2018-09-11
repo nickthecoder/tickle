@@ -23,7 +23,6 @@ import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.resources.Resources
-import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.SoundManager
 import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
@@ -67,7 +66,6 @@ open class Tickle(val programName: String, val args: Array<String>) {
         println("Resource file = $resourcesFile")
         resourcesFile?.let {
             val path = File(it.parent, "scripts")
-            ScriptManager.setClasspath(path)
         }
 
         launch()

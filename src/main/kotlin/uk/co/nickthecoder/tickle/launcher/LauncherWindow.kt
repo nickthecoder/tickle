@@ -20,7 +20,6 @@ import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.DesignJsonResources
 import uk.co.nickthecoder.tickle.graphics.Window
-import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.startGame
 import java.io.File
 import java.util.*
@@ -92,7 +91,6 @@ class LauncherWindow(val stage: Stage, val glWindow: Window) {
         stage.hide()
 
         Platform.runLater {
-            ScriptManager.setClasspath(File(resourcesFile.parent, "scripts"))
             startGame(resourcesFile)
 
             glWindow.hide()
@@ -111,7 +109,6 @@ class LauncherWindow(val stage: Stage, val glWindow: Window) {
     fun onEdit(resourcesFile: File) {
         addRecent(resourcesFile)
 
-        ScriptManager.setClasspath(File(resourcesFile.parent, "scripts"))
         val json = DesignJsonResources(resourcesFile)
         val resources = json.loadResources()
         Game(glWindow, resources)
