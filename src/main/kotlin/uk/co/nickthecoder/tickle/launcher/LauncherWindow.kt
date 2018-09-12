@@ -50,7 +50,7 @@ class LauncherWindow(val stage: Stage, val glWindow: Window) {
         scene.stylesheets.add(resource.toExternalForm())
 
         with(buttons) {
-            children.addAll(playButton, editButton, newButton)
+            children.addAll(newButton, playButton, editButton)
             styleClass.add("big")
             alignment = Pos.CENTER
         }
@@ -125,9 +125,11 @@ class LauncherWindow(val stage: Stage, val glWindow: Window) {
 
     fun onNew() {
         val task = NewGameWizard()
-        task.taskRunner.listen { ok ->
-            if (ok) {
-                onEdit(task.resourcesFile())
+        task.taskRunner.listen { cancelled ->
+            if (!cancelled) {
+                Platform.runLater {
+                    onEdit(task.resourcesFile())
+                }
             }
         }
         TaskPrompter(task).placeOnStage(Stage())
@@ -168,6 +170,7 @@ class LauncherWindow(val stage: Stage, val glWindow: Window) {
         val rp = recentPreferences()
         rp.putLong(file.path, Date().time)
         rp.flush()
+        updateRecent()
     }
 
     fun listRecent(): List<File> {

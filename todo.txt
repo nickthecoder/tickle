@@ -5,11 +5,6 @@ Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickl
     More levels
     Convert "countdowns" to delays?
 
-Create a "launcher" module
-    NewGameWizard should have "Scripted/Unscripted". If scripted, then don't create src/main/dist etc,
-    and no main class, nor a gradle file.
-    Update readme
-
 ScriptManager has listeners which it informs about reloads (including errors).
     Use this to position cursor to errors
     New tab type, which lists errors during scan().
@@ -21,10 +16,6 @@ New ScriptException, which includes line number and column number (both? optiona
 
 Remove groovy dependency from paratask-core. And maybe json too.
 
-Can I dynamically load a (set of) jar files, so that the editor doesn't need to be re-started
-when writing in compiled kotlin?
-If so, then kotlin code could ALSO be edited in the editor???
-
 F4 on a class name opens the help window at the appropriate place.
     If there are multiple matches, then popup the package names.
 
@@ -35,84 +26,55 @@ Next
 Double click an existing Pose within a Texture to recreate its bounds.
     Maybe a context menu, with double click to open the Pose's tab.
 
-More levels in puzzle picnic.
-
-Clear "level complete" preferences, to test Doll's House.
-    Shortcut key on the main menu / route menu.
 
 BUGS
-====
+----
 
 InputPicker :
-	Java FX key code name "Number Sign" does not map to anything in enum class Key
-	"Windows" is this meta?
-	Shift, Control, alt etc don't work either.
+    Java FX key code name "Number Sign" does not map to anything in enum class Key
+    "Windows" is this meta?
+    Shift, Control, alt etc don't work either.
 
-Possible Optimisations
-----------------------
-
-PixelOverlapping
-	Don't clear the whole overlapTexture
-	Consider making "lineTexture" a smaller, fixed width, and doing a nested loop over x.
 
 New Features
-------------
+============
 
 Key combos, such as Shift+XXX and Ctrl+XXX
-
-Support enums as attributes.
-
-Message Button, calls Director or Producer
-    Maybe use this for the "Exit" button in Rag Doll
-
-Edit Shape enclosed in a scroll pane, and Pose can be scaled.
-
-Option to load textures only when needed.
 
 Editor to allow resources to be reloaded.
 
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
 
 In-Game input mapper, allowing user to change existing inputs (but not add new ones).
-	JavaFX or OpenGL?
-	OpenGL
-		Game is not reliant on JavaFX or Paratask
-		Can use LWJGL's input stuff, therefore no confusion over keyboard mappings.
-		Harder to code though.
+    JavaFX or OpenGL?
+    OpenGL
+        Game is not reliant on JavaFX or Paratask
+        Can use LWJGL's input stuff, therefore no confusion over keyboard mappings.
+        Harder to code though.
 
 Allow text style to be overriden in the SceneEditor.
-	Only save the overridden values if they differ from the Costume's values.
+    Only save the overridden values if they differ from the Costume's values.
 
 Editor
-	Allow a texture to be reloaded (Texture and ImageCache).
-	
-	Prevent deletion of textures used by a pose
-	Prevent deletion of poses used by a costume
+    Allow a texture to be reloaded (Texture and ImageCache).
 
-	Pose tab to have a list of costumes using it
-		In a "minor tab"?
-		Or just a button which opens all costumes using that pose.
+    Prevent deletion of textures used by a pose
+    Prevent deletion of poses used by a costume
+
+    Pose tab to have a list of costumes using it
+        In a "minor tab"?
+        Or just a button which opens all costumes using that pose.
 
 Ensure Textures are deleted when removed from resources (Use finalise?).
 
 
-## Block Based Programming
+Block Based Programming
+-----------------------
 
 I'd really like to avoid "tick", and instead be one big block of code, that has init stuff at the top,
 and a while loop afterwards.
-Either :
-  Every Role has its own Thread
-    blocks during the redraw phase
-    synchronises when updating/accessing attributes, such as x, y, angle etc to avoid weirdness.
-  Round robin through each Role, performing a single action
-     Use "delay" blocks to govern the speed
-The down side of removing "tick" is that it cannot be nicely converted to "real" code :-(
 
-If I create a special base class for these roles, then I could use Threads, and each action calls code
-which does the synchronize (hidden from the programmer).
-
-Like Scratch, except without the anti-patterns!
-Start off with Role only, then extend it to Director and Producer.
+This can be done with Actions.
 
 Block types :
 
@@ -125,30 +87,6 @@ While, Until (no for)
 
 If (condition), else
 
-### Plan
-
-Create a game using gradle scripting language (scripts to be listed within the editor)
-Automatically reload the classes when the file changes.
-Must ensure that these classes can be found by the combo boxes in the editor.
-
-Note. Can be run using existing Tickle project (maybe a sub-module, or a different project).
-i.e. no need for a separate project. No compiling.
-Create a file association, so that the .tickle file can be run from the File Manager.
-Maybe use a different file type (.tickleg ???) (especially if I create a new project for this!)
-
-If no resources file given, then display a dialog to choose one
-(and give an option to open the editor, or play the game).
-
-At first, use gradle to subclass Role in the usual fashion.
-Then create a new sub-class of Role, which doesn't use tick(), and uses Threads instead, with
-synchronization on each method to avoid weirdness.
-Also synchronize the redraw part of Tickle (on the same object - Game?).
-wait() method waits 1 tick
-wait( seconds ) waits any time you like.
-
-die() must interrupt the thread, allowing it to end prematurely.
-
-Only then, do we can create diagrams, which get translated into gradle threads.
 
 ### A simplified editor
 To go with a "simpler" block-based language, the resources editor should also be easier.
@@ -178,18 +116,10 @@ The "Actors" and the "Layers" panels can be ignored.
 
 # Later
 
-Create a test suite "game".
-    Each scene tests stuff, (e.g. tests Actions)
-    If it passes, then the next scene is started.
-    A successful test should end with the "success" scene.
-    Failure will stop at the scene which failed.
-    Split the tests into groups (each in their own directory). Allow all groups, or a single group to be tested.
+Add more to the "demo" test suites.
 
 Create a test suite for the editor too.
     Much of this will need the help of paratask
-
-Create a test suite for the NewGameWizard.
-    The tests can just test the contents of the generated files.
 
 Add all native code (not only the current OS) into tickle-core
 (otherwise it will only work on one platform when distributed).
@@ -197,21 +127,21 @@ Or maybe, create tickle-natives-linux etc AND tickle-natives-all
     Demo can then depend on the 'current' OS, and 3rd party games can choose
 
 TextStyle to have an extraSpacing property which causes letters to be moved further apart
-	Ditto for extra line height.
+    Ditto for extra line height.
 
 Game based on "flocking" :	https://www.youtube.com/watch?v=M028vafB0l8
 
 XRayStageView
-	Age Of Empires style outline of actors hidden behind buildings.
-		Use a z buffer?
-	Render all buildings and movables in one pass as a normal IsometricStageView (ordered based on Actor's Y position)
-		Render all movables to an off-screen buffer using their outline images. (Tagged "REVEAL")
-		Render all buildings to an off-screen buffer using just their masks (Tagged "HIDES")
-		Combine the two using logical AND
-		Render the result to the window.
-	Note. when rendering the outlines, it would be nice to do this in two stages, one for a white outline,
-	and again for a coloured thinner image coloured based on who's side the character belongs to.
-	Rather than have multiple overlapping views, have one compound view, so that we only need to scroll the compound view.
+    Age Of Empires style outline of actors hidden behind buildings.
+        Use a z buffer?
+    Render all buildings and movables in one pass as a normal IsometricStageView (ordered based on Actor's Y position)
+        Render all movables to an off-screen buffer using their outline images. (Tagged "REVEAL")
+        Render all buildings to an off-screen buffer using just their masks (Tagged "HIDES")
+        Combine the two using logical AND
+        Render the result to the window.
+    Note. when rendering the outlines, it would be nice to do this in two stages, one for a white outline,
+    and again for a coloured thinner image coloured based on who's side the character belongs to.
+    Rather than have multiple overlapping views, have one compound view, so that we only need to scroll the compound view.
 
 I may also need to use Kotlin AND java annotations to look for attributes (assuming Groovy supports java annotations).
 I may need a new interface for script languages which do not conform to the way I search for properties/attributes.
@@ -221,11 +151,11 @@ I may need a new interface for script languages which do not conform to the way 
 
 
 Fog of War (FogOfWarFilter???)
-	Filter which objects to render based on their proximity to friendly units.
-	Note, this should NOT be a StageView, but a new interface RoleFilter.
-	The default filter should be NoFilter, which always returns true.
-	Problem. Cannot use nearest "friendly", because the nearest may have a short range, whereas a
-	further "friendly" with a greater range WILL see it. Hmm. Tricky.
+    Filter which objects to render based on their proximity to friendly units.
+    Note, this should NOT be a StageView, but a new interface RoleFilter.
+    The default filter should be NoFilter, which always returns true.
+    Problem. Cannot use nearest "friendly", because the nearest may have a short range, whereas a
+    further "friendly" with a greater range WILL see it. Hmm. Tricky.
 
 Fog of War 2 (FogOfWarMap)
     Only render places corresponding to places that can be seen.

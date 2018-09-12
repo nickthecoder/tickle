@@ -51,9 +51,8 @@ project(':tickle-core') {
     defaultTasks 'install'
 
     dependencies {
-        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-
         compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
+        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
         compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 
         // See : https://www.lwjgl.org/customize
@@ -107,19 +106,6 @@ project(':tickle-groovy') {
     dependencies {
         compile project(':tickle-core')
         compile 'org.codehaus.groovy:groovy-all:2.4.5'
-    }
-}
-
-project(':tickle-kotlin') {
-
-    apply plugin: 'kotlin'
-    apply plugin: 'maven'
-
-    defaultTasks 'install'
-
-    dependencies {
-        compile project(':tickle-core')
-        compile "org.jetbrains.kotlin:kotlin-script-util:$kotlin_version"
     }
 }
 

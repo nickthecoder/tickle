@@ -243,7 +243,7 @@ dependencies {
   "preferences": {
     "outputFormat": "PRETTY",
     "packages": [
-      "uk.co.nickthecoder.tickle" ${if (scripted()) "" else "," + packageName()}
+      "uk.co.nickthecoder.tickle" ${if (scripted()) "" else """, "${packageName()}" """}
     ]
   },
   "layouts": [
@@ -321,7 +321,13 @@ fun main(args: Array<String>) {
 """
 
 
-    fun readMeContents() = "# ${gameName.value}" + if (scripted()) """
+    fun readMeContents() = "# ${gameName.value}" + (if (scripted()) """
+
+To play the game, you must first install
+[Tickle](https://github.com/nickthecoder/tickle).
+
+Start Tickle, then click "Play", and choose the file : "${identifier()}.tickle".
+(If you've set up the proper file associations for ".tickle" files, you can double click it instead).
 
 """ else """
 
@@ -341,8 +347,9 @@ To create a zip file, ready for distribution :
 
     gradle distZip
 
-""" + "Powered by [Tickle](https://github.com/nickthecoder/tickle) and [LWJGL](https://www.lwjgl.org/)."
-
+""") + """
+    Powered by [Tickle](https://github.com/nickthecoder/tickle) and [LWJGL](https://www.lwjgl.org/).
+"""
 }
 
 private var tickleVersion = "0.1"

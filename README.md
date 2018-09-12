@@ -17,7 +17,7 @@ The Aim
 
 I think Tickle scores 4 out of 5 (it isn't as flexible as I'd like yet).
 I can knock up an quick demo game in less than a day using Tickle. It really is fun, quick and easy, and I've yet
-to find a performance bottle neck for the kind of games that I enjoy writing.
+to find a performance bottleneck for the kind of games that I enjoy writing.
 
 The current target audience for Tickle are people who are already familiar with programming.
 Tickle is capable of writing top-quality indie style games.
@@ -31,34 +31,6 @@ suitable for complete novices (including pre-teens).
 I also plan on offering a gentle transition from novice to expert programmers.
 Scratch is great until you out-grow it, at which point your only option is to start again (from scratch),
 using a completely new game engine. Surely this leads many (most??) to give up.
-
-The first stage in this transition is to convert the "Scratch" diagram into
-a "real", text based programming language at the press of a button (I'll probably choose Groovy, or maybe Jython)
-I took this idea from the [Alice game engine](https://en.wikipedia.org/wiki/Alice_(software)).
-This feature shows children (or novice adults) that while dragging and dropping blocks,
-they have really been writing code, but didn't know it! How wonderful!
-
-At this stage, the code will still be quite limited, offering only a sub-set of the power of Tickle.
-Each script can contain endless loops (just as Scratch does).
-Tickle will run each script in their own thread (so that endless loops aren't problematic).
-Synchronization is hidden behind the scenes, so that the nastiness of multi-threading is avoided.
-Note, this won't really be multi-threaded (because all bar one thread will be blocking).
-It will be easy to code, at the expense of performance and flexibility.
-
-The next stage will continue using Groovy, but will reveal the full power of Tickle.
-The game logic will be harder to write, but will run faster.
-The fake multi-threading is gone, and therefore endless loops are forbidden.
-Instead each game object has a "tick" method, which is called once per frame.
-This is quite a tricky mental leap. Hopefully the additional features will give enough encouragement to
-struggle through.
-
-The final stage is to use Kotlin for all, or part of your game.
-This gives the flexibility to re-implement any of Tickle's interfaces to suit your game's particular needs.
-Allowing you to do things which Tickle doesn't directly support. The world if your oyster!
-For example, create a game using isometric views (which Tickle doesn't yet support out of the box).
-
-At any of these stages, you can switch from using the simplified editor to the full version.
-Offering the more complex features, such as "costume events" and "layouts" for multiple views per scene.
 
 
 Resources Editor
@@ -77,14 +49,11 @@ Scene Editor
 ------------
 
 Tickle has a built-in scene editor, allowing game levels to be created quickly.
-Saving and loading scenes is done for you. (They are saved a simple json strings).
+Saving and loading scenes is done for you. (They are saved as a simple json strings).
 
 As with the Resources Editor, objects placed in a scene can have custom properties.
 For example, keys and doors can share a property, so that picking up a key
-opens a particular door (or a set of doors).
-
-You could also use custom properties within the Scene Editor so that every ship has their own speed and maximum health etc.
-(though it is more common to do so per Costume, from within the Resources Editor).
+opens a particular door (or set of doors).
 
 
 Compiling
@@ -117,21 +86,20 @@ Now we can compile Tickle :
 Note. 'gradle install installDist' will install Tickle into the **local** maven repository,
 and build the application.
 
-You can now run the (crappy) demo :
+You can now run the demo (to check that everything is working) :
 
     demo/build/install/demo/bin/demo
 
 
-To run the editor :
+Creating a New Game using a Compiled Language (i.e. Kotlin)
+-----------------------------------------------------------
 
-    demo/build/install/demo/bin/demo --editor
+Start the tickle "launcher"
 
-Building a Game
----------------
+    build/install/bin/tickle
 
-Use the new game wizard to create a bare-bones project.
-
-    wizard/build/install/wizard/bin/wizard
+Click the "Create Game" button. Fill out the form, and ensure that "Enable Groovy Scripts" is NOT ticked.
+(If you do want to use Groovy, instead of kotlin, see below).
 
 If we called the new game "Foo" :
 
@@ -159,6 +127,28 @@ Note, the target machine will also need a Java Virtual Machine (JVM) installed, 
 included as part of the zip file.
 
 
+Creating a New Game using Groovy Scripting Language
+---------------------------------------------------
+
+Start the tickle "launcher"
+
+    build/install/bin/tickle
+
+Click the "Create Game" button. Fill out the form, ensuring that "Enable Groovy Script" is ticked.
+
+After a short pause, the Tickle editor can appear. We can run the game (using the "Run" button in the toolbar).
+Hopefully, a boring black, featureless window appears.
+
+You can play your game (or edit it) from the command line using :
+
+    build/install/bin/tickle YOUR_TICKLE_FILE
+
+    build/install/bin/tickle --edit YOUR_TICKLE_FILE
+
+Rather than starting the tickle launcher then clicking buttons, it is much easier if you add "file associations"
+for files of type ".tickle".
+Google it, if you don't know how ;-) It differs depending on your operating system.
+
 Structure
 ---------
 
@@ -166,7 +156,7 @@ Tickle is split into modules...
 
 **tickle-core** contains everything needed during actual game-play
 
-**tickle-editor** contains additional classes needed for the editor (to edit game resources, and game leveals (aka Scenes).
+**tickle-editor** contains additional classes needed for the editor (to edit game resources, and game levels (aka Scenes).
 
 **tickle-groovy** Adds support for groovy to be used as a scripting language for game development
 
@@ -201,46 +191,11 @@ Rewriting from scratch (no pun intended) would be quicker than refactoring scrat
 
 Thus Tickle was born, written in my new favourite language, Kotlin. Gosh Kotlin is good, I cannot praise it enough.
 
-Writing a Game
---------------
-
-First, use the "new game wizard" :
-
-    cd tickle (Wherever you have installed Tickle)
-    wizard/build/install/wizard/bin/wizard
-
-You can test your new game (if you called it foo) :
-
-    cd foo
-    build/install/foo/bin/foo
-
-Hopefully a window will appear, with a boring black contents.
-
-Now start up your favourite IDE, and get writing.
-Sorry, I haven't written any documentation yet. I think your best bet is to look the demo code inside Tickle,
-or look at a complete game, such as [Rapid Rag Doll](https://github.com/nickthecoder/rapidragdoll).
-
-You can recompile at any time :
-
-    gradle installApp
-
-Start the editor :
-
-    build/install/foo/bin/foo --editor
-
-Run the game :
-
-    build/install/foo/bin/foo
-
-You can of course perform these actions from within your IDE (that's what I do).
-But as these steps are different depending on the IDE you choose, I only show the command line version here.
 
 Current Status
 --------------
 
 All of the key features have been written, but there is still a huge number of features that I'd like to add.
-
-I've not found any bugs for quite a while now (but I'm sure you can find some for me to fix ;-)
 
 I've written my first Tickle-powered, fully-featured game (called [Rapid Rag Doll](https://github.com/nickthecoder/rapidragdoll)).
 I think its quite slick (though not finished - no sound, and not enough levels).
@@ -252,7 +207,7 @@ For the type of games I intend to write, I've had no problems with performance, 
 whose graphics card can't handle most games I've thrown at it.
 
 Support for scripting language is a little patchy at the moment (some features only work with Kotlin).
-I'm working on it! So I advise you to use only Kotlin for now.
+I'm working on it! So I advise you to use only Kotlin for now. Update. I've written a whole game in Groovy ;-)
 
 The Scene Editor is a little rough in places, but no show-stoppers AFAIK.
 
