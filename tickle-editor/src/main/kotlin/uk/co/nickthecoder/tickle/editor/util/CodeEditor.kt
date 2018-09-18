@@ -27,21 +27,10 @@ class CodeEditor {
     val searchBar = SearchBar(matcher)
     val replaceBar = ReplaceBar(matcher)
 
-    val dirtyProperty = SimpleBooleanProperty(false)
-    var dirty: Boolean
-        get() = dirtyProperty.get()
-        set(v) {
-            dirtyProperty.set(v)
-        }
-
     init {
         with(tediArea) {
             wordIterator = CodeWordBreakIterator()
             displayLineNumbers = true
-
-            textProperty().addListener { _, _, _ ->
-                dirty = true
-            }
         }
 
         searchBar.toolBar.styleClass.add(".bottom")
@@ -63,12 +52,10 @@ class CodeEditor {
 
     fun load(file: File) {
         tediArea.text = file.readText()
-        dirty = false
     }
 
     fun save(file: File) {
         file.writeText(tediArea.text)
-        dirty = false
     }
 
     fun onKeyPressed(event: KeyEvent) {
