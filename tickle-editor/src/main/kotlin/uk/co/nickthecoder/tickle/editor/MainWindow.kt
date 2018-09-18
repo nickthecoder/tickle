@@ -34,6 +34,7 @@ import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
+import uk.co.nickthecoder.tedi.TediArea
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.tabs.*
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
@@ -76,6 +77,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         stage.title = "Tickle Resources Editor"
         stage.scene = scene
         ParaTask.style(scene)
+        TediArea.style(scene)
 
         with(borderPane) {
             top = toolBar

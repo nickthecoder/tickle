@@ -26,6 +26,8 @@ Next
 Double click an existing Pose within a Texture to recreate its bounds.
     Maybe a context menu, with double click to open the Pose's tab.
 
+Make editorTab.needsSaving a Property, and use that to change the button states.
+    bind to CodeEditor's dirty.
 
 BUGS
 ----

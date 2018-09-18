@@ -89,6 +89,7 @@ project(':tickle-editor') {
         compile project(':tickle-core')
 
         compile 'uk.co.nickthecoder:paratask-core:0.2'
+        compile 'uk.co.nickthecoder:tedi-core:0.1'
         compile 'org.reflections:reflections:0.9.11'
 
         // For kotlin scripting in the FX Coder.

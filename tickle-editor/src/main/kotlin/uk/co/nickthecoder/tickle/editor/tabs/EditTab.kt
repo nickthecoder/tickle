@@ -30,10 +30,12 @@ import javafx.scene.layout.HBox
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.AbstractTask
 import uk.co.nickthecoder.paratask.TaskDescription
+import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.paratask.gui.defaultWhileFocusWithin
 import uk.co.nickthecoder.paratask.parameters.StringParameter
 import uk.co.nickthecoder.tickle.editor.EditorAction
+import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.DesignResources
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
@@ -63,10 +65,13 @@ abstract class EditTab(
 
     protected val cancelButton = Button("Cancel")
 
+    private val shortcuts = ShortcutHelper("Edit Tab", MainWindow.instance.borderPane)
+
     var needsSaving = false
         set(v) {
             okButton.isDisable = !v
             applyButton.isDisable = !v
+            cancelButton.text = if (v) "Cancel" else "Close"
             field = v
         }
 
@@ -85,12 +90,11 @@ abstract class EditTab(
 
         with(cancelButton) {
             onAction = EventHandler { onCancel() }
-            isCancelButton = true
+            // isCancelButton = true
         }
 
         with(applyButton) {
             onAction = EventHandler { onApply() }
-            isCancelButton = true
         }
 
         with(okButton) {
@@ -110,6 +114,10 @@ abstract class EditTab(
 
         with(buttons) {
             children.addAll(leftButtons, rightButtons)
+        }
+
+        with(shortcuts) {
+            add(EditorActions.SAVE) { onApply() }
         }
 
         Resources.instance.listeners.add(this)
