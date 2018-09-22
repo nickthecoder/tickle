@@ -1,6 +1,5 @@
 package uk.co.nickthecoder.tickle.editor.util
 
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
@@ -8,9 +7,9 @@ import javafx.scene.layout.VBox
 import uk.co.nickthecoder.tedi.CodeWordBreakIterator
 import uk.co.nickthecoder.tedi.TediArea
 import uk.co.nickthecoder.tedi.requestFocusOnSceneAvailable
+import uk.co.nickthecoder.tedi.ui.FindBar
 import uk.co.nickthecoder.tedi.ui.RemoveHiddenChildren
 import uk.co.nickthecoder.tedi.ui.ReplaceBar
-import uk.co.nickthecoder.tedi.ui.SearchBar
 import uk.co.nickthecoder.tedi.ui.TextInputControlMatcher
 import java.io.File
 
@@ -20,31 +19,31 @@ class CodeEditor {
 
     val tediArea = TediArea()
 
-    val searchAndReplaceBox = VBox()
+    private val findAndReplaceBox = VBox()
 
-    val matcher = TextInputControlMatcher(tediArea)
+    private val matcher = TextInputControlMatcher(tediArea)
 
-    val searchBar = SearchBar(matcher)
-    val replaceBar = ReplaceBar(matcher)
+    private val findBar = FindBar(matcher)
+    private val replaceBar = ReplaceBar(matcher)
 
     init {
         with(tediArea) {
+            styleClass.add("code")
             wordIterator = CodeWordBreakIterator()
-            displayLineNumbers = true
         }
 
-        searchBar.toolBar.styleClass.add(".bottom")
+        findBar.toolBar.styleClass.add(".bottom")
         replaceBar.toolBar.styleClass.add(".bottom")
 
-        RemoveHiddenChildren(searchAndReplaceBox.children)
-        searchAndReplaceBox.children.addAll(searchBar.toolBar, replaceBar.toolBar)
+        RemoveHiddenChildren(findAndReplaceBox.children)
+        findAndReplaceBox.children.addAll(findBar.toolBar, replaceBar.toolBar)
 
-        // Hides the search and replace toolbars.
+        // Hides the find and replace toolbars.
         matcher.inUse = false
 
         with(borderPane) {
             center = tediArea
-            bottom = searchAndReplaceBox
+            bottom = findAndReplaceBox
         }
 
         borderPane.addEventFilter(KeyEvent.KEY_PRESSED) { onKeyPressed(it) }
@@ -68,7 +67,7 @@ class CodeEditor {
             // FIND
                 KeyCode.F -> {
                     matcher.inUse = true
-                    searchBar.search.requestFocusOnSceneAvailable()
+                    findBar.find.requestFocusOnSceneAvailable()
                 }
             // Replace (R is already used for "Run")
                 KeyCode.H -> {
