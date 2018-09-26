@@ -4,7 +4,7 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.VBox
-import uk.co.nickthecoder.tedi.CodeWordBreakIterator
+import uk.co.nickthecoder.tedi.SourceCodeWordIterator
 import uk.co.nickthecoder.tedi.TediArea
 import uk.co.nickthecoder.tedi.requestFocusOnSceneAvailable
 import uk.co.nickthecoder.tedi.ui.FindBar
@@ -29,7 +29,7 @@ class CodeEditor {
     init {
         with(tediArea) {
             styleClass.add("code")
-            wordIterator = CodeWordBreakIterator()
+            wordIterator = SourceCodeWordIterator()
         }
 
         findBar.toolBar.styleClass.add(".bottom")
