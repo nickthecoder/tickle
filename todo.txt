@@ -1,6 +1,10 @@
 Current Work
 ============
 
+Next
+====
+
+
 Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickle)
     More levels
     Convert "countdowns" to delays?
@@ -19,18 +23,18 @@ Remove groovy dependency from paratask-core. And maybe json too.
 F4 on a class name opens the help window at the appropriate place.
     If there are multiple matches, then popup the package names.
 
-
-Next
-====
-
 Double click an existing Pose within a Texture to recreate its bounds.
     Maybe a context menu, with double click to open the Pose's tab.
 
 Make editorTab.needsSaving a Property, and use that to change the button states.
     bind to CodeEditor's dirty.
 
-BUGS
-----
+Remove kotlin scripting for FX Coder, and replace with Groovy.
+    Not least to get rid of the damn warning!
+
+
+Long Standing BUGS
+------------------
 
 InputPicker :
     Java FX key code name "Number Sign" does not map to anything in enum class Key

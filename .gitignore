@@ -17,6 +17,8 @@
 /tickle-kotlin/out
 /demo/build
 /demo/out
+/metadata/build
+/metadata/out
 /tickle.iml
 /tickle.ipr
 /tickle.iws

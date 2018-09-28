@@ -127,13 +127,27 @@ project(':demo') {
 }
 
 
-defaultTasks 'install', 'installDist'
+project(':metadata') {
+
+    apply plugin: 'kotlin'
+    apply plugin: 'application'
+
+    defaultTasks 'run'
+    mainClassName = "uk.co.nickthecoder.tickle.metadata.MetaDataKt"
+
+    dependencies {
+        compile project(':tickle-core')
+        compile 'com.google.guava:guava:26.0-jre'
+    }
+
+}
+
 
 apply plugin: 'idea'
 apply plugin: 'kotlin'
 apply plugin: 'application'
 
-defaultTasks 'installDist'
+defaultTasks ':metadata:run', 'install', 'installDist'
 mainClassName = "uk.co.nickthecoder.tickle.launcher.LauncherKt"
 
 dependencies {
