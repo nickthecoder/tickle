@@ -4,6 +4,7 @@ Current Work
 Next
 ====
 
+Add other types of joints, such as WeldJoint
 
 Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickle)
     More levels
@@ -17,8 +18,6 @@ New tab type Script Log.
     Double click to open the script.
     "Clear" button next to "Save"
 New ScriptException, which includes line number and column number (both? optional)
-
-Remove groovy dependency from paratask-core. And maybe json too.
 
 F4 on a class name opens the help window at the appropriate place.
     If there are multiple matches, then popup the package names.

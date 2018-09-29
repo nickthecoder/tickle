@@ -532,8 +532,8 @@ open class JsonResources {
         val bodyDef = TickleBodyDef()
         with(bodyDef) {
             type = BodyType.valueOf(jbody.getString("bodyType", BodyType.DYNAMIC.name))
-            linearDamping = jbody.getFloat("linearDamping", 0f)
-            angularDamping = jbody.getFloat("angularDamping", 0f)
+            linearDamping = jbody.getDouble("linearDamping", 0.0)
+            angularDamping = jbody.getDouble("angularDamping", 0.0)
             bullet = jbody.getBoolean("bullet", false)
             fixedRotation = jbody.getBoolean("fixedRotation", false)
         }

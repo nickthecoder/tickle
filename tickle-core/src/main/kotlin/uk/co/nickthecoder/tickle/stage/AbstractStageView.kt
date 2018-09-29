@@ -98,7 +98,6 @@ abstract class AbstractStageView(override val comparator: Comparator<ActorDetail
 
     var mouseCapturedBy: MouseButtonListener? = null
 
-
     override fun screenToView(screen: Vector2d, into: Vector2d) {
         val fromCenterX = screen.x - (rect.left + rect.right) / 2.0
         val fromCenterY = (Window.instance?.height ?: Resources.instance.gameInfo.height) - screen.y - (rect.top + rect.bottom) / 2.0

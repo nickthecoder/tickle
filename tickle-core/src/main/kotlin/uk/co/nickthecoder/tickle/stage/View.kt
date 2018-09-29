@@ -68,8 +68,18 @@ interface View : MouseButtonListener {
         result.set(0.0, 0.0)
     }
 
+    /**
+     * Returns the position of the mouse pointer in the view's coordinate system.
+     */
+    fun mousePosition(): Vector2d {
+        mousePosition(mousePosition)
+        return mousePosition
+    }
+
     fun changeRect(newRect: Recti) {
         rect = newRect
     }
 
 }
+
+private val mousePosition = Vector2d()

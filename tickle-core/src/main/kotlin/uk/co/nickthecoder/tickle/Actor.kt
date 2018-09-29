@@ -24,6 +24,7 @@ import org.joml.Matrix4f
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
+import uk.co.nickthecoder.tickle.physics.TickleBody
 import uk.co.nickthecoder.tickle.physics.TickleWorld
 import uk.co.nickthecoder.tickle.physics.scale
 import uk.co.nickthecoder.tickle.resources.ActorXAlignment
@@ -140,7 +141,7 @@ class Actor(var costume: Costume, role: Role? = null)
             return field || position != oldPosition || oldScale != scale
         }
 
-    var body: Body? = null
+    var body: TickleBody? = null
 
     val textAppearance: TextAppearance?
         get() {
@@ -197,7 +198,7 @@ class Actor(var costume: Costume, role: Role? = null)
 
             body?.let { body ->
                 if (oldScale != scale) {
-                    body.scale((scale.x / oldScale.x).toFloat(), (scale.y / oldScale.y).toFloat())
+                    body.jBox2DBody.scale((scale.x / oldScale.x).toFloat(), (scale.y / oldScale.y).toFloat())
                     oldScale.set(scale)
                     oldPosition.set(position)
                     // TODO Is this needed?
@@ -358,16 +359,16 @@ class Actor(var costume: Costume, role: Role? = null)
      */
     internal fun updateBody() {
         body?.let { body ->
-            val world = body.world as TickleWorld
+            val world = body.tickleWorld
             world.pixelsToWorld(tempVec, position)
-            body.setTransform(tempVec, (direction.radians - (poseAppearance?.directionRadians ?: 0.0)).toFloat())
+            body.jBox2DBody.setTransform(tempVec, (direction.radians - (poseAppearance?.directionRadians ?: 0.0)).toFloat())
         }
     }
 
     internal fun updateFromBody(world: TickleWorld) {
         body?.let { body ->
-            world.worldToPixels(position, body.position)
-            direction.radians = body.angle.toDouble() + (poseAppearance?.directionRadians ?: 0.0)
+            world.worldToPixels(position, body.jBox2DBody.position)
+            direction.radians = body.jBox2DBody.angle.toDouble() + (poseAppearance?.directionRadians ?: 0.0)
             // Copy the Actor's position, so that we can test if game code has changed the position, and therefore
             // we will know if the Body needs to be updated. See ensureBodyIsUpToDate.
             oldPosition.set(position)

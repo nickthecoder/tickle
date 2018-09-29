@@ -40,9 +40,9 @@ class RoleContactManager : ContactListener {
     }
 
     fun beginContact(contact: Contact, bodyA: Body, bodyB: Body) {
-        val role = (bodyA.userData as Actor).role
+        val role = bodyA.actor().role
         if (role is ContactListenerRole) {
-            role.beginContact(contact, bodyB.userData as Actor)
+            role.beginContact(contact, bodyB.actor())
         }
     }
 
@@ -52,9 +52,9 @@ class RoleContactManager : ContactListener {
     }
 
     fun endContact(contact: Contact, bodyA: Body, bodyB: Body) {
-        val role = (bodyA.userData as Actor).role
+        val role = bodyA.actor().role
         if (role is ContactListenerRole) {
-            role.endContact(contact, bodyB.userData as Actor)
+            role.endContact(contact, bodyB.actor())
         }
     }
 

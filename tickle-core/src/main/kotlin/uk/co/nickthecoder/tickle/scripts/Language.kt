@@ -73,7 +73,6 @@ abstract class Language {
 
     fun addScript(file: File) {
         try {
-            val oldClass = classes[name]
             val klass = loadScript(file)
             val name = file.nameWithoutExtension
             classes[name] = klass

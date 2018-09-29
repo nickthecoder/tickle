@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle
 
 import org.joml.Vector2d
-import uk.co.nickthecoder.tickle.physics.TickleWorld
 import uk.co.nickthecoder.tickle.physics.offset
 import uk.co.nickthecoder.tickle.physics.scale
 
@@ -62,14 +61,14 @@ abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
 
     override fun updateBody() {
         if (oldSize != size) {
-            actor.body?.scale((size.x / oldSize.x).toFloat(), (size.y / oldSize.y).toFloat())
+            actor.body?.jBox2DBody?.scale((size.x / oldSize.x).toFloat(), (size.y / oldSize.y).toFloat())
 
             oldSize.set(size)
         }
         if (oldAlignment != sizeAlignment) {
             actor.body?.let { body ->
-                val world = body.world as TickleWorld
-                body.offset(
+                val world = body.tickleWorld
+                body.jBox2DBody.offset(
                         world.pixelsToWorld((oldAlignment.x - sizeAlignment.x) * width()),
                         world.pixelsToWorld((oldAlignment.y - sizeAlignment.y) * height()))
             }

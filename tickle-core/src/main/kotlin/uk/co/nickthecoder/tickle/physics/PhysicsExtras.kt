@@ -8,8 +8,6 @@ import org.jbox2d.dynamics.Body
 import org.jbox2d.dynamics.BodyType
 import org.jbox2d.dynamics.Fixture
 import org.jbox2d.dynamics.FixtureDef
-import org.jbox2d.dynamics.joints.Joint
-import org.joml.Vector2d
 
 
 fun BodyType.hasFixtures() = this == BodyType.DYNAMIC || this == BodyType.STATIC
@@ -125,26 +123,5 @@ fun Fixture.scale(body: Body, scaleX: Float, scaleY: Float) {
         body.destroyFixture(this)
         body.createFixture(fixtureDef)
     }
-}
-
-private val tempVec2 = Vec2()
-
-fun Joint.anchorA(out: Vector2d) {
-    val world = this.bodyA.world as TickleWorld
-    getAnchorA(tempVec2)
-    world.worldToPixels(out, tempVec2)
-}
-
-fun Joint.anchorB(out: Vector2d) {
-    val world = this.bodyB.world as TickleWorld
-    getAnchorB(tempVec2)
-    world.worldToPixels(out, tempVec2)
-}
-
-/**
- * Vec2 class only has a scalar multiply method, so this adds a vector multiplication.
- */
-fun Vec2.mul(scaleX: Float, scaleY: Float): Vec2 {
-    return Vec2(x * scaleX, y * scaleY)
 }
 

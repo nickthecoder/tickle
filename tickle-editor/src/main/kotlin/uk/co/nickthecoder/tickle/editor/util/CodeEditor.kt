@@ -97,8 +97,8 @@ class CodeEditor {
                 addItem(item2)
 
                 val pack = packageName(className)
-                val item1 = MenuItem("Import ${pack}.*")
-                item1.onAction = EventHandler { addImport("${pack}.*") }
+                val item1 = MenuItem("Import $pack.*")
+                item1.onAction = EventHandler { addImport("$pack.*") }
                 addItem(item1)
             }
             if (classNames.size > 1) addSeparator = true
@@ -125,7 +125,7 @@ class CodeEditor {
     }
 
     fun addImport(imp: String) {
-        tediArea.insertText(importPosition(), "import ${imp}\n")
+        tediArea.insertText(importPosition(), "import $imp\n")
     }
 
     fun importPosition(): Int {
@@ -197,8 +197,8 @@ class CodeEditor {
     }
 
     companion object {
-        val wordPattern = Pattern.compile("\\b\\w+?\\b")
-        val packagePattern = Pattern.compile("^\\spackage", Pattern.MULTILINE)
-        val importPattern = Pattern.compile("^\\s*import\\s(?<IMPORT>.*)\\s", Pattern.MULTILINE)
+        val wordPattern: Pattern = Pattern.compile("\\b\\w+?\\b")
+        val packagePattern: Pattern = Pattern.compile("^\\spackage", Pattern.MULTILINE)
+        val importPattern: Pattern = Pattern.compile("^\\s*import\\s(?<IMPORT>.*)\\s", Pattern.MULTILINE)
     }
 }

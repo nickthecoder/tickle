@@ -58,7 +58,6 @@ interface StageView : View {
 
     fun bottomFirst(actors: Iterable<Actor>) = actors.sortedWith(comparator)
 
-
     /**
      * Adjusts any actors who's position is not relative to the bottom left.
      * This is used by games with resizable windows, and actors need to be aligned with the right edge for example.

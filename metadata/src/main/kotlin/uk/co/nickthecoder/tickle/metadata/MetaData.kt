@@ -4,6 +4,11 @@ import com.google.common.reflect.ClassPath
 import uk.co.nickthecoder.tickle.Role
 import java.io.File
 
+/**
+ * Builds a object containing meta-data about the classes within tickle-core.
+ * The built object  is compiled into the tickle-editor jar, to help CodeEditor
+ * perform auto-completion and auto-import.
+ */
 fun main(vararg args: String) {
 
     val projectDir = if (File("").absoluteFile.name == "metadata") File("..") else File(".")
