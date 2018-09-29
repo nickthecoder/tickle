@@ -59,8 +59,8 @@ class TicklePinJoint(
             jointDef.enableLimit = true
             jointDef.lowerAngle = fromAngle!!.radians.toFloat()
             jointDef.upperAngle = toAngle!!.radians.toFloat()
-            jointDef.collideConnected = collideConnected
         }
+        jointDef.collideConnected = collideConnected
         return jointDef
     }
 
