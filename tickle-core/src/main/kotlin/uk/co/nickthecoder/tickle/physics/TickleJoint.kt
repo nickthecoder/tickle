@@ -37,7 +37,7 @@ abstract class TickleJoint<J : Joint, D : JointDef>(
         }
 
     init {
-        val bodyB = actorB.body ?: throw IllegalArgumentException("actorB does not have a body. Check the 'Physics' tab of its costume.")
+        actorB.body ?: throw IllegalArgumentException("actorB does not have a body. Check the 'Physics' tab of its costume.")
         if (actorA.body?.tickleWorld != actorB.body?.tickleWorld) throw IllegalArgumentException("actorA's world is not the same as actorB's")
     }
 

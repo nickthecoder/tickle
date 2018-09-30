@@ -134,6 +134,7 @@ open class RuntimeAttributes : Attributes {
 
             else -> {
                 if (klass.java.isEnum) {
+                    @Suppress("UNCHECKED_CAST")
                     (klass as KClass<out Enum<*>>).java.enumConstants.filter { it.name == value }.first()
                 } else if (SimpleInstance::class.java.isAssignableFrom(klass.java)) {
                     ScriptManager.classForName(value).newInstance()

@@ -81,7 +81,7 @@ class DesignAttributes : RuntimeAttributes() {
                         // I believe this is safe, because this class creates the parameters based on the return type
                         // of the property. So this is safe as long as createParameter is correct.
                         @Suppress("UNCHECKED_CAST")
-                        val theValue = (property as KProperty1<Any, Any>).get(instance!!)
+                        val theValue = (property as KProperty1<Any, Any>).get(instance)
                         @Suppress("UNCHECKED_CAST")
                         (data.parameter as ValueParameter<Any>).value = theValue
                         data.value = data.parameter!!.stringValue
@@ -151,7 +151,8 @@ class DesignAttributes : RuntimeAttributes() {
             }
             else -> {
                 if (klass.java.isEnum) {
-                    createEnumParameter( klass as KClass<out Enum<*>>, "sttribute_$name", name )
+                    @Suppress("UNCHECKED_CAST")
+                    createEnumParameter(klass as KClass<out Enum<*>>, "attribute_$name", name)
 
                 } else if (SimpleInstance::class.java.isAssignableFrom(klass.java)) {
                     ClassInstanceParameter("attribute_$name", label = name, type = klass.java)
@@ -176,6 +177,7 @@ class DesignAttributes : RuntimeAttributes() {
 inline fun <reified T : Enum<T>> printAllValues() {
     print(enumValues<T>().joinToString { it.name })
 }
+
 class DesignAttributeData(
         value: String? = null,
         attributeType: AttributeType = AttributeType.NORMAL,

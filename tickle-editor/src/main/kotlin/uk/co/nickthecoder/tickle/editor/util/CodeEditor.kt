@@ -13,6 +13,7 @@ import uk.co.nickthecoder.tedi.SourceCodeWordIterator
 import uk.co.nickthecoder.tedi.TediArea
 import uk.co.nickthecoder.tedi.requestFocusOnSceneAvailable
 import uk.co.nickthecoder.tedi.syntax.GroovySyntax
+import uk.co.nickthecoder.tedi.syntax.HighlightMatchedPairs
 import uk.co.nickthecoder.tedi.ui.FindBar
 import uk.co.nickthecoder.tedi.ui.RemoveHiddenChildren
 import uk.co.nickthecoder.tedi.ui.ReplaceBar
@@ -39,6 +40,7 @@ class CodeEditor {
             wordIterator = SourceCodeWordIterator()
 
             GroovySyntax.instance.attach(tediArea)
+            HighlightMatchedPairs(tediArea)
         }
 
         findBar.toolBar.styleClass.add(".bottom")
