@@ -56,9 +56,9 @@
         },
         {
           "costume": "smallText",
-          "x": 289,
-          "y": 468,
-          "text": "Hello",
+          "x": 236,
+          "y": 465,
+          "text": "Demo Main Menu",
           "textOutlineColor": "#00000000",
           "direction": 0,
           "scaleX": 1,

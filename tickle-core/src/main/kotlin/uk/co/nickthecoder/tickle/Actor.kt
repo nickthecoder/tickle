@@ -378,7 +378,7 @@ class Actor(var costume: Costume, role: Role? = null)
     fun ensureBodyIsUpToDate() {
         body?.let {
             // NinePatchAppearance and TiledAppearance need to scale and/or change the offsets of the fixtures
-            // if the size of alignment has changed.
+            // if the size or alignment has changed.
             appearance.updateBody()
 
             // oldPosition and oldScale are both used for two purposes :

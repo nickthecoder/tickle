@@ -8,7 +8,16 @@
     "fullScreen": false,
     "initialScene": "overlapping/pixel",
     "testScene": "overlapping/menu",
-    "producer": "uk.co.nickthecoder.tickle.demo.Demo"
+    "producer": "uk.co.nickthecoder.tickle.demo.Demo",
+    "physics": {
+      "gravity_x": 0,
+      "gravity_y": -100,
+      "velocityIterations": 8,
+      "positionIterations": 3,
+      "scale": 40,
+      "filterGroups": "uk.co.nickthecoder.tickle.physics.ExampleFilterGroups",
+      "filterBits": "uk.co.nickthecoder.tickle.physics.ExampleFilterBits"
+    }
   },
   "preferences": {
     "outputFormat": "PRETTY",
@@ -149,6 +158,17 @@
       "top": 98,
       "offsetX": 70,
       "offsetY": 44,
+      "direction": 0
+    },
+    {
+      "name": "ground",
+      "texture": "graphics",
+      "left": 41,
+      "bottom": 395,
+      "right": 70,
+      "top": 366,
+      "offsetX": 0,
+      "offsetY": 0,
       "direction": 0
     }
   ],
@@ -379,6 +399,90 @@
               "value": ""
             }
           ]
+        }
+      ],
+      "showInSceneEditor": true
+    },
+    {
+      "name": "physics",
+      "costumes": [
+        {
+          "name": "ground",
+          "role": "uk.co.nickthecoder.tickle.demo.physics.Ground",
+          "canRotate": true,
+          "zOrder": 0,
+          "initialEvent": "default",
+          "showInSceneEditor": true,
+          "events": [
+            {
+              "name": "default",
+              "poses": [
+                "ground"
+              ]
+            }
+          ],
+          "body": {
+            "bodyType": "STATIC",
+            "fixtures": [
+              {
+                "friction": 0.1,
+                "density": 1,
+                "restitution": 0.9,
+                "isSensor": false,
+                "group": 0,
+                "category": 1,
+                "mask": 14,
+                "box": {
+                  "x": 14,
+                  "y": 14,
+                  "width": 29,
+                  "height": 29,
+                  "angle": 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "head",
+          "role": "",
+          "canRotate": true,
+          "zOrder": 0,
+          "initialEvent": "default",
+          "showInSceneEditor": true,
+          "events": [
+            {
+              "name": "default",
+              "poses": [
+                "red"
+              ]
+            }
+          ],
+          "body": {
+            "bodyType": "DYNAMIC",
+            "linearDamping": 0.5,
+            "angularDamping": 0.5,
+            "bullet": false,
+            "fixedRotation": false,
+            "fixtures": [
+              {
+                "friction": 0.1,
+                "density": 1,
+                "restitution": 0.8,
+                "isSensor": false,
+                "group": 0,
+                "category": 2,
+                "mask": 15,
+                "box": {
+                  "x": 1,
+                  "y": 0,
+                  "width": 29,
+                  "height": 31,
+                  "angle": 0
+                }
+              }
+            ]
+          }
         }
       ],
       "showInSceneEditor": true

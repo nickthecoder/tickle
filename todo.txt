@@ -1,10 +1,37 @@
+BUGS
+====
+
+A pose with a direction != 0 used for tiling or a nine patch doesn't work correctly.
+
 Current Work
 ============
+
+Debugging physics
+    Commented out :
+        ResizeAppearance.updateBody
+        TickleWorld.tick doesn't attempt to update the body.
+        Actor.updateBody
+        Actor.calculateMatrix
 
 Next
 ====
 
-Add other types of joints, such as WeldJoint
+Test joints in the Demo
+
+CodeEditor 2nd pass of syntax.
+    Search for ^import\s(.*)\s$, remembering all the imports
+    Look for \\b[A-Z][\w]*\\b, and check if they are in the imports.
+        If not, add a "UnknownClass" range (a new sub class).
+        Then right click (or Alt+Enter) presents the possible imports
+
+    In Tedi :
+        Keep a list of the {, [, ( then when a matching ), ], } is found join them together
+        Can also highlight those that are unmatched.
+    Then, listen to caretPosition, find the highlight ending there, and if it is a matchedPunctuation,
+        add an underscore to the other in the pair.
+
+
+
 
 Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickle)
     More levels

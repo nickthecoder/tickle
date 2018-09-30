@@ -95,7 +95,6 @@ class TickleWorld(
         bodyDef.fixtureDefs.forEach { fixtureDef ->
             val shape = fixtureDef.shapeDef.createShape(this)
             fixtureDef.shape = shape
-            // TODO Check this out!
             body.jBox2DBody.createFixture(fixtureDef)
 
         }
@@ -141,9 +140,7 @@ class TickleWorld(
         while (body != null) {
             val tickleBody = body.userData as TickleBody
             val actor = tickleBody.actor
-            if (actor is Actor) {
-                actor.updateFromBody(this)
-            }
+            actor.updateFromBody(this)
             body = body.next
         }
     }
