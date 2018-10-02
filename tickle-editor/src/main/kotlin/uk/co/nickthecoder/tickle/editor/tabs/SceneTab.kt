@@ -59,8 +59,6 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
     private val detailsTab = MyTab("Details", taskForm.build())
     private val editorTab = MyTab("Scene Editor", sceneEditor.build())
 
-    private val testButton = Button("Test")
-
     private val copyButton = Button("Copy")
 
     private val renameButton = Button("Rename")
@@ -81,8 +79,6 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
         applyButton.text = "Save"
         rightButtons.children.remove(okButton)
-        rightButtons.children.add(0, testButton)
-        testButton.onAction = EventHandler { onTest() }
 
         leftButtons.children.addAll(copyButton, renameButton, deleteButton)
 
@@ -111,12 +107,6 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
             return true
         }
         return false
-    }
-
-    fun onTest() {
-        if (save()) {
-            MainWindow.instance.startGame(Resources.instance.sceneFileToPath(sceneFile))
-        }
     }
 
     fun onCopy() {

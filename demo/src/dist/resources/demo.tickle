@@ -169,7 +169,8 @@
       "top": 366,
       "offsetX": 0,
       "offsetY": 0,
-      "direction": 0
+      "direction": 90,
+      "tiled": true
     }
   ],
   "costumeGroups": [

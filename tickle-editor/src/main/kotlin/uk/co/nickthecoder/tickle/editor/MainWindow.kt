@@ -144,6 +144,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     fun onCloseTab() {
         val selectedTab = tabPane.selectedTab
         if (selectedTab is EditTab) {
+
             if (selectedTab.needsSaving) {
                 val alert = Alert(Alert.AlertType.CONFIRMATION)
                 with(alert) {
@@ -153,11 +154,10 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
                         selectedTab.close()
                     }
                 }
+                return
             }
-
-        } else {
-            selectedTab?.close()
         }
+        selectedTab?.close()
     }
 
     fun onCloseRequest(event: WindowEvent) {
@@ -258,7 +258,12 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
 
     fun testGame() {
-        startGame(Resources.instance.sceneFileToPath(Resources.instance.gameInfo.testScenePath))
+        val tab = tabPane.selectedTab
+        if (tab is SceneTab) {
+            startGame(Resources.instance.sceneFileToPath(tab.sceneFile))
+        } else {
+            startGame(Resources.instance.sceneFileToPath(Resources.instance.gameInfo.testScenePath))
+        }
     }
 
     fun fxcoder() {

@@ -53,6 +53,8 @@ open class ActorResource(val isDesigning: Boolean = false)
                         sizeAlignment.y = ninePatch.pose.offsetY / size.y
                     }
                 } else {
+                    direction.radians = pose.direction.radians
+
                     if (pose.tiled) {
                         size.x = pose.rect.width.toDouble()
                         size.y = pose.rect.height.toDouble()

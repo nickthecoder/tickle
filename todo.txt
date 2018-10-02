@@ -10,9 +10,6 @@ Current Work
 Next
 ====
 
-Place a heading at the top of Costume,Pose,... tabs, with their resource type label.
-
-
 Allow images to be DRAGGED into the resources tree.
     If it OUTSIDE of the resources directory, then copy it.
         Use the Pose's name as the filename (and error if that file already exists).
