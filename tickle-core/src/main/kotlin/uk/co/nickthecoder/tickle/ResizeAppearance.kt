@@ -40,8 +40,6 @@ abstract class ResizeAppearance(actor: Actor) : AbstractAppearance(actor) {
 
     protected val oldAlignment = Vector2d(0.5, 0.5)
 
-    private var bodyDirty = false
-
 
     override fun height() = size.y
 

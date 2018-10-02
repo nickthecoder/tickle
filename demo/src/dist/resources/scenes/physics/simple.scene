@@ -41,16 +41,16 @@
       "actors": [
         {
           "costume": "head",
-          "x": 114,
-          "y": 262,
+          "x": 311,
+          "y": 397,
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1
         },
         {
           "costume": "head",
-          "x": 192,
-          "y": 167,
+          "x": 272,
+          "y": 375,
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1
@@ -65,41 +65,41 @@
         },
         {
           "costume": "head",
-          "x": 318,
-          "y": 270,
+          "x": 348,
+          "y": 421,
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1
         },
         {
           "costume": "head",
-          "x": 432,
-          "y": 265,
+          "x": 271,
+          "y": 430,
           "direction": 0,
           "scaleX": 1,
           "scaleY": 1
         },
         {
-          "costume": "ground",
-          "x": 252,
-          "y": 149,
+          "costume": "ground-tiled",
+          "x": 313,
+          "y": 120,
           "direction": 90,
           "scaleX": 1,
           "scaleY": 1,
-          "sizeX": 115,
-          "sizeY": 74,
+          "sizeX": 174,
+          "sizeY": 27,
           "alignmentX": 0,
           "alignmentY": 0
         },
         {
-          "costume": "ground",
-          "x": 198,
-          "y": 279,
+          "costume": "ground-nine-patch",
+          "x": 79,
+          "y": 104,
           "direction": 90,
           "scaleX": 1,
           "scaleY": 1,
-          "sizeX": 100,
-          "sizeY": 29,
+          "sizeX": 170,
+          "sizeY": 30,
           "alignmentX": 0,
           "alignmentY": 0
         }

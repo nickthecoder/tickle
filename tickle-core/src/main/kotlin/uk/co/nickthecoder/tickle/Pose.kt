@@ -132,13 +132,15 @@ class Pose(
         return copy
     }
 
-
+/*
+    // Causes a problem - Copy a Pose, and double clicking the copy won't open the copy (as the original is equal to it).
     override fun equals(other: Any?): Boolean {
         if (other !is Pose) {
             return false
         }
-        return (rect == other.rect) && rectd == other.rectd && texture == other.texture && direction.radians == other.direction.radians
+        return rect == other.rect && rectd == other.rectd && texture == other.texture && direction.radians == other.direction.radians && tiled == other.tiled
     }
+*/
 
     override fun toString(): String {
         return "Pose rect=$rect offset=($offsetX , $offsetY) direction=$direction rectd=$rectd"

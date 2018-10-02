@@ -35,6 +35,9 @@ data class NinePatch(var pose: Pose, var left: Int, var bottom: Int, var right: 
  */
 class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppearance(actor) {
 
+    override val directionRadians: Double
+        get() = ninePatch.pose.direction.radians
+
     /**
      * A 3x3 array of Poses
      */
@@ -82,16 +85,13 @@ class NinePatchAppearance(actor: Actor, val ninePatch: NinePatch) : ResizeAppear
         oldAlignment.set(sizeAlignment)
     }
 
-    override val directionRadians: Double
-        get() = ninePatch.pose.direction.radians
-
     override fun draw(renderer: Renderer) {
 
         val widths = listOf(ninePatch.left.toDouble(), width() - ninePatch.left - ninePatch.right, ninePatch.right.toDouble())
         val heights = listOf(ninePatch.bottom.toDouble(), height() - ninePatch.top - ninePatch.bottom, ninePatch.top.toDouble())
 
-        val lefts = listOf(0.0, ninePatch.left.toDouble(), (width() - ninePatch.right).toDouble())
-        val bottoms = listOf(0.0, ninePatch.bottom.toDouble(), (height() - ninePatch.top).toDouble())
+        val lefts = listOf(0.0, ninePatch.left.toDouble(), (width() - ninePatch.right))
+        val bottoms = listOf(0.0, ninePatch.bottom.toDouble(), (height() - ninePatch.top))
 
         //println("Drawing nine patch $width , $height widths=$widths heights = $heights")
 

@@ -106,7 +106,7 @@ fun ActorResource.isOverlapping(x: Double, y: Double): Boolean {
 fun ActorResource.isAt(x: Double, y: Double): Boolean {
     var tx = x - this.x
     var ty = y - this.y
-    val poseDirection = pose?.direction?.radians ?: 0.0
+    val poseDirection = pose?.direction?.radians ?: ninePatch?.pose?.direction?.radians ?: 0.0
     if (poseDirection != direction.radians) {
         val sin = Math.sin(poseDirection - direction.radians)
         val cos = Math.cos(poseDirection - direction.radians)
