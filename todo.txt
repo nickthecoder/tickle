@@ -10,8 +10,6 @@ Current Work
 Next
 ====
 
-When Testing or Running, save all open tabs.
-
 Place a heading at the top of Costume,Pose,... tabs, with their resource type label.
 
 

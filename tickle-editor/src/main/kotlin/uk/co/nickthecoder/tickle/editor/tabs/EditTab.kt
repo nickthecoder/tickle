@@ -21,6 +21,7 @@ package uk.co.nickthecoder.tickle.editor.tabs
 import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.control.Button
+import javafx.scene.control.Label
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
@@ -91,6 +92,11 @@ abstract class EditTab(
         with(borderPane) {
             styleClass.add("prompt")
             bottom = buttons
+            ResourceType.resourceType(data)?.let { rt ->
+                if (rt != ResourceType.SCRIPT && rt != ResourceType.SCENE) {
+                    top = Label(rt.label).apply { styleClass.add("heading") }
+                }
+            }
         }
 
         with(cancelButton) {
