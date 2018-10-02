@@ -122,7 +122,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
             add(EditorActions.ACCORDION_THREE) { accordionPane(2) }
             add(EditorActions.ACCORDION_FOUR) { accordionPane(3) }
             add(EditorActions.ACCORDION_FIVE) { accordionPane(4) }
-            add(EditorActions.TAB_CLOSE) { tabPane.selectedTab?.close() }
+            add(EditorActions.TAB_CLOSE) { onCloseTab() }
 
             add(EditorActions.SHOW_COSTUME_PICKER) { accordionPane(1) }
 
@@ -139,6 +139,25 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         instance = this
         stage.onCloseRequest = EventHandler<WindowEvent> { onCloseRequest(it) }
 
+    }
+
+    fun onCloseTab() {
+        val selectedTab = tabPane.selectedTab
+        if (selectedTab is EditTab) {
+            if (selectedTab.needsSaving) {
+                val alert = Alert(Alert.AlertType.CONFIRMATION)
+                with(alert) {
+                    headerText = "Close tab without saving?"
+                    showAndWait()
+                    if (result == ButtonType.OK) {
+                        selectedTab.close()
+                    }
+                }
+            }
+
+        } else {
+            selectedTab?.close()
+        }
     }
 
     fun onCloseRequest(event: WindowEvent) {
@@ -204,7 +223,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     }
 
     fun saveAllTabs() {
-        tabPane.tabs.forEach { tab->
+        tabPane.tabs.forEach { tab ->
             if (tab is EditTab) {
                 tab.save()
             }
