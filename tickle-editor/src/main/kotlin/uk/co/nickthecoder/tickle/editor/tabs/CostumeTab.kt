@@ -115,7 +115,7 @@ class CostumeTab(val name: String, val costume: Costume)
         }
     }
 
-    override fun save(): Boolean {
+    override fun justSave(): Boolean {
         if (detailsForm.check()) {
             if (eventsForm.check()) {
                 if (physicsForm.check()) {

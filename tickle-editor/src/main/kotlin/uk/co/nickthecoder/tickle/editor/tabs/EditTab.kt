@@ -95,15 +95,17 @@ abstract class EditTab(
 
         with(cancelButton) {
             onAction = EventHandler { onCancel() }
-            // isCancelButton = true
         }
 
         with(applyButton) {
-            onAction = EventHandler { onApply() }
+            onAction = EventHandler { save() }
         }
 
         with(okButton) {
-            onAction = EventHandler { onOk() }
+            onAction = EventHandler {
+                save()
+                close()
+            }
             defaultWhileFocusWithin(borderPane)
         }
 
@@ -122,7 +124,7 @@ abstract class EditTab(
         }
 
         with(shortcuts) {
-            add(EditorActions.SAVE) { onApply() }
+            add(EditorActions.SAVE) { save() }
         }
 
         if (data is Deletable) {
@@ -163,22 +165,22 @@ abstract class EditTab(
         leftButtons.children.add(button)
     }
 
-    abstract fun save(): Boolean
-
-    protected fun onCancel() {
-        close()
-    }
-
-    protected fun onApply() {
-        if (save()) {
+    fun save(): Boolean {
+        val result = justSave()
+        if (result) {
+            styleClass.remove("error")
             needsSaving = false
             Resources.instance.fireChanged(data)
             (Resources.instance as DesignResources).save()
+        } else {
+            if (!styleClass.contains("error")) styleClass.add("error")
         }
+        return result
     }
 
-    protected fun onOk() {
-        onApply()
+    protected abstract fun justSave(): Boolean
+
+    protected fun onCancel() {
         close()
     }
 

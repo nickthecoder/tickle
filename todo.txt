@@ -11,7 +11,6 @@ Next
 ====
 
 When Testing or Running, save all open tabs.
-Highlight unsaved tabs
 
 Place a heading at the top of Costume,Pose,... tabs, with their resource type label.
 

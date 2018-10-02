@@ -57,7 +57,7 @@ class ScriptTab(val scriptStub: ScriptStub)
 
     override fun extraShortcuts() = scriptShortcuts
 
-    override fun save(): Boolean {
+    override fun justSave(): Boolean {
         codeEditor.save(file)
         ScriptManager.load(file)
         return true

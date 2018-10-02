@@ -203,8 +203,17 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         TaskPrompter(NewResourceTask()).placeOnStage(Stage())
     }
 
+    fun saveAllTabs() {
+        tabPane.tabs.forEach { tab->
+            if (tab is EditTab) {
+                tab.save()
+            }
+        }
+    }
+
     fun startGame(scenePath: String = Resources.instance.sceneFileToPath(Resources.instance.gameInfo.initialScenePath)) {
 
+        saveAllTabs()
         ScriptManager.reloadAll()
 
         stage.hide()

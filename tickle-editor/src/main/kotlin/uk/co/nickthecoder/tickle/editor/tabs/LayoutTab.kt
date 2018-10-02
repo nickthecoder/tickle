@@ -60,7 +60,7 @@ class LayoutTab(val name: String, val layout: Layout)
         viewsTask.taskD.root.listen { needsSaving = true }
     }
 
-    override fun save(): Boolean {
+    override fun justSave(): Boolean {
         if (stagesForm.check()) {
             if (viewsForm.check()) {
                 stagesTask.run()

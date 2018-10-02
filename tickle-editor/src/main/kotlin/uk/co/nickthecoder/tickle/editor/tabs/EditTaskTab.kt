@@ -36,7 +36,7 @@ open class EditTaskTab(
         task.taskD.root.listen { needsSaving = true }
     }
 
-    override fun save(): Boolean {
+    override fun justSave(): Boolean {
         if (taskForm.check()) {
             task.run()
             return true

@@ -104,7 +104,7 @@ class SceneTab(val sceneName: String, sceneStub: SceneStub)
 
     override fun extraShortcuts() = sceneEditor.shortcuts
 
-    override fun save(): Boolean {
+    override fun justSave(): Boolean {
         if (taskForm.check()) {
             task.run()
             DesignJsonScene(sceneResource).save(sceneResource.file!!)

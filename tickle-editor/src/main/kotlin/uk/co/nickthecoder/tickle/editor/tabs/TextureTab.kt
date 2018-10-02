@@ -78,7 +78,7 @@ class TextureTab(name: String, val texture: Texture)
         posesEditor.closed()
     }
 
-    override fun save(): Boolean {
+    override fun justSave(): Boolean {
         val result = taskForm.check()
         if (result) {
             task.run()

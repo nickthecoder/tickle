@@ -53,5 +53,5 @@ class APITab : EditTab("API Documentation", APIStub, graphicName = ResourceType.
         cancelButton.text = "Close"
     }
 
-    override fun save() = true
+    override fun justSave() = true
 }
