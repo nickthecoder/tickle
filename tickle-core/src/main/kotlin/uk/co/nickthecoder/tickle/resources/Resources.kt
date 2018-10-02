@@ -23,6 +23,7 @@ import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.sound.Sound
 import java.io.File
+import java.lang.IllegalStateException
 
 open class Resources {
 
@@ -63,6 +64,10 @@ open class Resources {
 
     init {
         instance = this
+    }
+
+    open fun save() {
+        throw IllegalStateException("Resources are read-only")
     }
 
     open fun createAttributes(): Attributes {

@@ -27,7 +27,7 @@ class DesignResources : Resources() {
         return DesignAttributes()
     }
 
-    fun save() {
+    override fun save() {
         DesignJsonResources(this).save(this.file)
     }
 

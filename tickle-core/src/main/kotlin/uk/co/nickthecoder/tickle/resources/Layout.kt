@@ -23,6 +23,7 @@ import uk.co.nickthecoder.tickle.stage.*
 import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Dependable
 import uk.co.nickthecoder.tickle.util.Renamable
+import java.util.regex.Pattern
 
 class Layout : Deletable, Renamable {
 
@@ -68,7 +69,45 @@ class Layout : Deletable, Renamable {
     }
 
     override fun rename(newName: String) {
-        Resources.instance.layouts.rename(this, newName)
+
+        val oldName = Resources.instance.findName(this)
+        oldName ?: throw IllegalStateException("Could not find the existing name for the Layout, before renaming")
+
+        Resources.instance.layouts.rename(oldName, newName)
+
+        // We will be replacing the name in scene files using regular expression
+        // This saves us from loading and re-saving the data via JSON.
+        val attributeName = "layout"
+        // The attribute name may or may not be enclosed with double quotes.
+        val attributeNamePatternString = attributeName + "|" + "\"$attributeName\""
+        // This is what we will be replacing
+        val groupString = "(?<NAME>$oldName)"
+        // So, we are looking for one of :
+        //     layout : "oldName"
+        //     "layout" : "oldName"
+        val pattern = Pattern.compile(attributeNamePatternString + "\\s*:\\s*\"" + groupString + "\"")
+
+        for (ss in SceneStub.allScenesStubs()) {
+            try {
+                val text = ss.file.readText()
+                val buffer = StringBuffer(text)
+                val matcher = pattern.matcher(text)
+                var offset = 0
+                while (matcher.find()) {
+                    if (matcher.group("NAME") != null) {
+                        buffer.replace(offset + matcher.start("NAME"), offset + matcher.end("NAME"), newName)
+                        offset += newName.length - oldName.length
+                    }
+                }
+
+                ss.file.writeText(buffer.toString())
+
+            } catch (e: Exception) {
+                println("ERROR. Failed to load scene ${ss.file} while renaming a Layout.")
+            }
+        }
+        Resources.instance.fireRenamed(this, oldName, newName)
+        Resources.instance.save()
     }
 
 }
