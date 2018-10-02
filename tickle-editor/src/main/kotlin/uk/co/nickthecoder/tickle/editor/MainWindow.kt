@@ -45,6 +45,7 @@ import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Layout
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.SceneStub
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 
@@ -251,7 +252,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
     }
 
-    fun createTab(name: String, data: Any): EditorTab? {
+    private fun createTab(name: String, data: Any): EditorTab? {
 
         when (data) {
             is GameInfo -> return GameInfoTab()

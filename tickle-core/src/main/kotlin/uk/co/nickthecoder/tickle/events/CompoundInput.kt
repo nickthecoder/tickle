@@ -20,6 +20,7 @@ package uk.co.nickthecoder.tickle.events
 
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Dependable
 import uk.co.nickthecoder.tickle.util.Renamable
 
 
@@ -44,7 +45,7 @@ class CompoundInput : Input, Deletable, Renamable {
     }
 
 
-    override fun usedBy() = null
+    override fun dependables() = emptyList<Dependable>()
 
     override fun delete() {
         Resources.instance.inputs.remove(this)

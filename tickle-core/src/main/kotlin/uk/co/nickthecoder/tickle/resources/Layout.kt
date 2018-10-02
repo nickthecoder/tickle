@@ -21,6 +21,7 @@ package uk.co.nickthecoder.tickle.resources
 import uk.co.nickthecoder.tickle.Scene
 import uk.co.nickthecoder.tickle.stage.*
 import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Dependable
 import uk.co.nickthecoder.tickle.util.Renamable
 
 class Layout : Deletable, Renamable {
@@ -60,10 +61,7 @@ class Layout : Deletable, Renamable {
         return scene
     }
 
-    override fun usedBy(): Any? {
-        // TODO, Need to load all scenes
-        return null
-    }
+    override fun dependables(): List<Dependable> = SceneStub.allScenesStubs().filter { it.dependsOn(this) }
 
     override fun delete() {
         Resources.instance.layouts.remove(this)

@@ -21,6 +21,7 @@ package uk.co.nickthecoder.tickle
 import uk.co.nickthecoder.tickle.resources.ResourceMap
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Dependable
 import uk.co.nickthecoder.tickle.util.Renamable
 
 class CostumeGroup(resources: Resources)
@@ -32,7 +33,7 @@ class CostumeGroup(resources: Resources)
      * A CostumeGroup can be deleted, even if it has Costumes (because those costumes become group-less).
      * So a CostumeGroup always returns null, and can therefore always be deleted.
      */
-    override fun usedBy(): Any? = null
+    override fun dependables() = emptyList<Dependable>()
 
     override fun delete() {
         items().toMutableMap().forEach { name, costume ->

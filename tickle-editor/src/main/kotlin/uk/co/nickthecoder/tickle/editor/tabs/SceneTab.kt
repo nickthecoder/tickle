@@ -33,12 +33,12 @@ import uk.co.nickthecoder.paratask.parameters.fields.TaskForm
 import uk.co.nickthecoder.tickle.Director
 import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.editor.MainWindow
-import uk.co.nickthecoder.tickle.editor.SceneStub
 import uk.co.nickthecoder.tickle.editor.resources.*
 import uk.co.nickthecoder.tickle.editor.scene.SceneEditor
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.resources.SceneStub
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import java.io.File
 

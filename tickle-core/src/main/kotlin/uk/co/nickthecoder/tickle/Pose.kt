@@ -30,7 +30,7 @@ class Pose(
         val texture: Texture,
         rect: YDownRect = YDownRect(0, 0, texture.width, texture.height))
 
-    : Copyable<Pose>, Deletable, Renamable {
+    : Copyable<Pose>, Deletable, Renamable, Dependable {
 
     var rect: YDownRect = rect
         set(v) {
@@ -105,19 +105,25 @@ class Pose(
     }
 
 
-    override fun usedBy(): Any? {
-        return Resources.instance.costumes.items().values.firstOrNull { it.uses(this) }
+    // Dependency
+
+    // Deletable
+    override fun dependables(): List<Costume> {
+        return Resources.instance.costumes.items().values.filter { it.dependsOn(this) }
     }
 
     override fun delete() {
         Resources.instance.poses.remove(this)
     }
 
+
+    // Renamable
     override fun rename(newName: String) {
         Resources.instance.poses.rename(this, newName)
     }
 
 
+    // Copyable
     override fun copy(): Pose {
         val copy = Pose(texture, YDownRect(rect.left, rect.top, rect.right, rect.bottom))
         copy.offsetX = offsetX
@@ -125,6 +131,7 @@ class Pose(
         copy.direction.radians = direction.radians
         return copy
     }
+
 
     override fun equals(other: Any?): Boolean {
         if (other !is Pose) {

@@ -39,9 +39,9 @@ import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.resources.Resources
-import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 
 class PoseTab(name: String, val pose: Pose)
     : EditTaskTab(PoseTask(name, pose), name, pose, graphicName = "pose.png") {
@@ -49,7 +49,6 @@ class PoseTab(name: String, val pose: Pose)
     val costumesButton = MenuButton("Costumes")
 
     init {
-        addDeleteButton { pose.delete() }
 
         addCopyButton(pose, ResourceType.COSTUME) { newName, newPose ->
             Resources.instance.poses.add(newName, newPose)
@@ -65,7 +64,7 @@ class PoseTab(name: String, val pose: Pose)
     private fun buildCostumesButton() {
         val costumes = mutableMapOf<String, Costume>()
         Resources.instance.costumes.items().forEach { name, costume ->
-            if (costume.uses(pose)) {
+            if (costume.dependsOn(pose)) {
                 costumes[name] = costume
             }
         }

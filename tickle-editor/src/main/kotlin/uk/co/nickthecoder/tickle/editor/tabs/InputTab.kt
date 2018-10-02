@@ -29,10 +29,6 @@ import uk.co.nickthecoder.tickle.resources.Resources
 
 class InputTab(name: String, input: CompoundInput)
     : EditTaskTab(InputTask(name, input), name, input, graphicName = "input.png") {
-
-    init {
-        addDeleteButton { Resources.instance.inputs.remove(name) }
-    }
 }
 
 class InputTask(val name: String, val compoundInput: CompoundInput) : AbstractTask() {

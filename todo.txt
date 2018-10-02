@@ -6,15 +6,31 @@ A pose with a direction != 0 used for tiling or a nine patch doesn't work correc
 Current Work
 ============
 
-Debugging physics
-    Commented out :
-        ResizeAppearance.updateBody
-        TickleWorld.tick doesn't attempt to update the body.
-        Actor.updateBody
-        Actor.calculateMatrix
+When deleting a Texture, should it delete the png file? (Ditto for other resources).
+
+Tested :
+    Texture, Pose, Font
+
 
 Next
 ====
+
+When Testing or Running, save all open tabs.
+Highlight unsaved tabs
+
+Place a heading at the top of Costume,Pose,... tabs, with their resource type label.
+
+
+Allow images to be DRAGGED into the resources tree.
+    If it OUTSIDE of the resources directory, then copy it.
+        Use the Pose's name as the filename (and error if that file already exists).
+    Still prompt for a NAME
+    Consider scanning the resources tree for new files (i.e. not existing Textures)
+        Maybe as a button, rather than automatically.
+        Option to DELETE the file, or create a new resource.
+
+    Ditto for Fonts and sounds.
+
 
 Test joints in the Demo
 

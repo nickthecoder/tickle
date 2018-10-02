@@ -18,6 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.resources
 
+import uk.co.nickthecoder.tickle.Costume
+
 /**
  * Details of all the Actors' initial state.
  * Used when loading and editing a Scene. Not used during actual game play.
@@ -26,4 +28,12 @@ class StageResource() {
 
     val actorResources = mutableListOf<ActorResource>()
 
+    fun dependsOn(costume: Costume): Boolean {
+        for (ar in actorResources) {
+            if (ar.costume() == costume) {
+                return true
+            }
+        }
+        return false
+    }
 }

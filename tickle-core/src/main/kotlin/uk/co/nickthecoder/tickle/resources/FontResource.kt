@@ -22,6 +22,7 @@ import uk.co.nickthecoder.tickle.graphics.FontTexture
 import uk.co.nickthecoder.tickle.graphics.FontTextureFactoryViaAWT
 import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Dependable
 import uk.co.nickthecoder.tickle.util.JsonResources
 import uk.co.nickthecoder.tickle.util.Renamable
 import java.awt.Font
@@ -76,9 +77,10 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
             }
         }
 
-    private var pngFile: File? = null
-    private var outlineFile: File? = null
-    private var metricsFile: File? = null
+    var pngFile: File? = null
+        set(v) {
+            field = v
+        }
 
     var fontTexture: FontTexture
         get() {
@@ -95,12 +97,7 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
 
     fun reload() {
         pngFile?.let { pngFile ->
-            metricsFile?.let { metricsFile ->
-                loadFromFile(pngFile, metricsFile)
-            }
-        }
-        outlineFile?.let {
-            loadOutline(it)
+            loadFromFile(pngFile)
         }
     }
 
@@ -108,18 +105,18 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
         cached = null
     }
 
-    fun loadFromFile(pngFile: File, metricsFile: File) {
+    fun loadFromFile(pngFile: File) {
         val texture = Texture.create(pngFile)
+        val metricsFile = File(pngFile.parentFile, pngFile.nameWithoutExtension + ".metrics")
         fontTexture = JsonResources.loadFontMetrics(metricsFile, texture)
         this.pngFile = pngFile
-        this.metricsFile = metricsFile
-    }
 
-    fun loadOutline(outlinePngFile: File) {
-        val outlineTexture = Texture.create(outlinePngFile)
-        outlineFontTexture = FontTexture(JsonResources.copyGlyphs(outlineTexture, fontTexture.glyphs), fontTexture.lineHeight,
-                leading = fontTexture.leading, ascent = fontTexture.ascent, descent = fontTexture.descent)
-        this.outlineFile = outlinePngFile
+        val outlineFile = File(pngFile.parentFile, pngFile.nameWithoutExtension + "-outline.png")
+        if (outlineFile.exists()) {
+            val outlineTexture = Texture.create(outlineFile)
+            outlineFontTexture = FontTexture(JsonResources.copyGlyphs(outlineTexture, fontTexture.glyphs), fontTexture.lineHeight,
+                    leading = fontTexture.leading, ascent = fontTexture.ascent, descent = fontTexture.descent)
+        }
     }
 
     private fun createFontTexture(): FontTexture {
@@ -133,8 +130,8 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
         return FontTextureFactoryViaAWT(font, xPadding = xPadding, yPadding = yPadding).create()
     }
 
-    override fun usedBy(): Any? {
-        return Resources.instance.costumes.items().values.firstOrNull { it.uses(this) }
+    override fun dependables(): List<Dependable> {
+        return Resources.instance.costumes.items().values.filter { it.dependsOn(this) }
     }
 
     override fun delete() {

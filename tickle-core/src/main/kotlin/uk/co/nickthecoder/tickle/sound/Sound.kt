@@ -23,12 +23,15 @@ import org.lwjgl.openal.AL10
 import org.lwjgl.stb.STBVorbis.*
 import org.lwjgl.stb.STBVorbisInfo
 import org.lwjgl.system.MemoryUtil.NULL
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Dependable
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.file.Files
 
 
-class Sound {
+class Sound : Deletable {
 
     init {
         SoundManager.ensureInitialised()
@@ -97,6 +100,16 @@ class Sound {
 
     fun cleanUp() {
         AL10.alDeleteBuffers(handle)
+    }
+
+    // Deletable
+
+    override fun dependables(): List<Dependable> {
+        return Resources.instance.costumes.items().values.filter{ it.dependsOn(this)}
+    }
+
+    override fun delete() {
+        Resources.instance.sounds.remove(this)
     }
 
     override fun toString() = "Sound : file=$file"

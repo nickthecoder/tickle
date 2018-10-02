@@ -78,6 +78,7 @@ open class Resources {
             is CompoundInput -> inputs.findName(resource)
             is Layout -> layouts.findName(resource)
             is FontResource -> fontResources.findName(resource)
+            is SceneStub -> resource.name
             else -> null
         }
     }

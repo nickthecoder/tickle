@@ -22,13 +22,15 @@ import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.physics.TickleBodyDef
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.resources.SceneStub
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.Copyable
 import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Dependable
 import uk.co.nickthecoder.tickle.util.Renamable
 
-class Costume : Copyable<Costume>, Deletable, Renamable {
+class Costume : Copyable<Costume>, Deletable, Renamable, Dependable {
 
     var roleString: String = ""
         set(v) {
@@ -164,27 +166,20 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
 
     fun pose(): Pose? = choosePose(initialEventName)
 
-    fun uses(pose: Pose): Boolean {
-        events.values.forEach { event ->
-            if (event.poses.contains(pose)) {
-                return true
-            }
-            if (event.ninePatches.map { it.pose }.contains(pose)) {
-                return true
-            }
-        }
-        return false
-    }
+    fun choosePose(eventName: String): Pose? = events[eventName]?.choosePose() ?: inheritEventsFrom?.choosePose(eventName)
 
-    fun uses(fontResource: FontResource): Boolean {
-        events.values.forEach { event ->
-            if (event.textStyles.firstOrNull { it.fontResource === fontResource } != null) {
-                return true
-            }
-        }
-        return false
-    }
+    fun chooseNinePatch(eventName: String): NinePatch? = events[eventName]?.chooseNinePatch() ?: inheritEventsFrom?.chooseNinePatch(eventName)
 
+    fun chooseCostume(eventName: String): Costume? = events[eventName]?.chooseCostume() ?: inheritEventsFrom?.chooseCostume(eventName)
+
+    fun chooseTextStyle(eventName: String): TextStyle? = events[eventName]?.chooseTextStyle() ?: inheritEventsFrom?.chooseTextStyle(eventName)
+
+    fun chooseString(eventName: String): String? = events[eventName]?.chooseString() ?: inheritEventsFrom?.chooseString(eventName)
+
+    fun chooseSound(eventName: String): Sound? = events[eventName]?.chooseSound() ?: inheritEventsFrom?.chooseSound(eventName)
+
+
+    // Copyable
     override fun copy(): Costume {
         val copy = Costume()
         copy.roleString = roleString
@@ -207,32 +202,113 @@ class Costume : Copyable<Costume>, Deletable, Renamable {
         return copy
     }
 
-    override fun usedBy(): Any? {
-        // TODO Need to load all scenes!
-        return null
+
+    // Dependable
+
+    fun dependsOn(pose: Pose): Boolean {
+        events.values.forEach { event ->
+            if (event.poses.contains(pose)) {
+                return true
+            }
+            if (event.ninePatches.map { it.pose }.contains(pose)) {
+                return true
+            }
+        }
+        return false
     }
+
+    fun dependsOn(fontResource: FontResource): Boolean {
+        events.values.forEach { event ->
+            if (event.textStyles.firstOrNull { it.fontResource === fontResource } != null) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun dependsOn(sound: Sound): Boolean {
+        events.values.forEach { event ->
+            if (event.sounds.contains(sound)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun dependsOn(costume: Costume): Boolean {
+        if (costume == this) return false
+
+        if (inheritEventsFrom == costume) return true
+        for (event in events.values) {
+            if (event.costumes.contains(costume)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun isBreakable(dependency: Deletable): Boolean {
+        return dependency is Pose || dependency is Costume || dependency is Sound
+    }
+
+    override fun breakDependency(dependency: Deletable) {
+        when (dependency) {
+            is Pose -> {
+                for (event in events.values) {
+                    event.poses.remove(dependency)
+                    event.ninePatches.removeIf { it.pose == dependency }
+                }
+            }
+
+            is Costume -> {
+                for (event in events.values) {
+                    event.costumes.remove(dependency)
+                }
+                if (inheritEventsFrom == dependency) {
+                    inheritEventsFrom = null
+                }
+            }
+
+            is FontResource -> {
+                for (event in events.values) {
+                    event.textStyles.removeIf { it.fontResource == dependency }
+                }
+            }
+
+            is Sound -> {
+                for (event in events.values) {
+                    event.sounds.remove(dependency)
+                }
+            }
+        }
+    }
+
+    // Deletable
+
+    override fun dependables(): List<Dependable> {
+        val result = mutableListOf<Dependable>()
+        result.addAll(Resources.instance.costumes.items().values.filter { it.dependsOn(this) })
+
+        for (stub in SceneStub.allScenesStubs()) {
+            if (stub.dependsOn(this)) {
+                result.add(stub)
+            }
+        }
+        return result
+    }
+
 
     override fun delete() {
         Resources.instance.costumes.remove(this)
         costumeGroup?.remove(this)
     }
 
+    // Renamable
     override fun rename(newName: String) {
         Resources.instance.costumes.rename(this, newName)
         costumeGroup?.rename(this, newName)
     }
 
-    fun choosePose(eventName: String): Pose? = events[eventName]?.choosePose() ?: inheritEventsFrom?.choosePose(eventName)
-
-    fun chooseNinePatch(eventName: String): NinePatch? = events[eventName]?.chooseNinePatch() ?: inheritEventsFrom?.chooseNinePatch(eventName)
-
-    fun chooseCostume(eventName: String): Costume? = events[eventName]?.chooseCostume() ?: inheritEventsFrom?.chooseCostume(eventName)
-
-    fun chooseTextStyle(eventName: String): TextStyle? = events[eventName]?.chooseTextStyle() ?: inheritEventsFrom?.chooseTextStyle(eventName)
-
-    fun chooseString(eventName: String): String? = events[eventName]?.chooseString() ?: inheritEventsFrom?.chooseString(eventName)
-
-    fun chooseSound(eventName: String): Sound? = events[eventName]?.chooseSound() ?: inheritEventsFrom?.chooseSound(eventName)
 
     override fun toString() = "Costume role='$roleString'. events=${events.values.joinToString()}"
 }

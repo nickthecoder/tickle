@@ -452,6 +452,9 @@ class DesignJsonResources : JsonResources {
             } else {
                 jfont.add("file", resources.toPath(fontResource.file!!))
             }
+            fontResource.pngFile?.let {
+                jfont.add("pngFile", resources.toPath(it))
+            }
             jfont.add("size", fontResource.size)
             jfont.add("xPadding", fontResource.xPadding)
             jfont.add("yPadding", fontResource.yPadding)

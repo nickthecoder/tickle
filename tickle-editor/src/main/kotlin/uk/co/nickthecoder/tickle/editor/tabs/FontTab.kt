@@ -32,18 +32,15 @@ import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.util.NewResourceTask
 import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Resources
-import uk.co.nickthecoder.tickle.util.JsonResources
 import java.io.File
 import javax.imageio.ImageIO
 
 
-class FontTab(name: String, val fontResource: FontResource)
+class FontTab(name: String, fontResource: FontResource)
 
     : EditTaskTab(FontTask(name, fontResource), name, data = fontResource, graphicName = "font.png") {
 
     init {
-        addDeleteButton { Resources.instance.fontResources.remove(name) }
-
         val createCostumeButton = Button("Create Costume")
         createCostumeButton.setOnAction { (task as FontTask).createCostume() }
         leftButtons.children.add(createCostumeButton)

@@ -18,16 +18,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.editor.util
 
+import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.geometry.Rectangle2D
+import javafx.scene.control.Alert
+import javafx.scene.control.Button
+import javafx.scene.control.ButtonType
+import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
-import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.*
 import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.editor.EditorAction
+import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.resources.ActorResource
+import uk.co.nickthecoder.tickle.resources.Resources
+import uk.co.nickthecoder.tickle.util.Deletable
 
 /*
  Contains many extension functions, used from within the SceneEditor.
@@ -172,3 +180,87 @@ private val noInsets = Insets(0.0)
 
 fun Color.background() = Background(BackgroundFill(toJavaFX(), squareCorners, noInsets))
 
+fun Alert.addStyleSheet() {
+    dialogPane.stylesheets.add(MainWindow::class.java.getResource("tickle.css").toExternalForm())
+}
+
+fun Deletable.deletePrompted(name: String) {
+
+    val usedBy = dependables()
+
+    val breakables = FlowPane()
+    val unbreakables = FlowPane()
+    val resourceLabel = ResourceType.resourceType(this)?.label ?: ""
+
+    for (dependency in usedBy) {
+        val editButton = createEditButton(dependency)
+        if (dependency.isBreakable(this)) {
+            breakables.children.add(editButton)
+        } else {
+            unbreakables.children.add(editButton)
+        }
+    }
+
+    if (unbreakables.children.isNotEmpty()) {
+
+        val vBox = VBox().apply { styleClass.add("form") }
+        val heading = Label("Because of the following dependencies : ").apply { styleClass.add("heading") }
+        vBox.children.addAll(heading, unbreakables)
+
+        if (breakables.children.isNotEmpty()) {
+            vBox.children.addAll(Label("These dependencies also exist, but can be broken : "), breakables)
+        }
+
+        val alert = Alert(Alert.AlertType.INFORMATION)
+
+        with(alert) {
+            addStyleSheet()
+            title = "Cannot Delete $resourceLabel '$name'"
+            headerText = title
+            dialogPane.content = vBox
+            showAndWait()
+        }
+
+    } else {
+
+        val alert = Alert(Alert.AlertType.CONFIRMATION)
+
+        with(alert) {
+            addStyleSheet()
+            title = "Delete $resourceLabel '$name'"
+            headerText = title
+
+            if (breakables.children.isNotEmpty()) {
+
+                val vBox = VBox().apply { styleClass.add("form") }
+                val label = Label("This will break the following dependencies : ")
+                vBox.children.addAll(label, breakables)
+                dialogPane.content = vBox
+            }
+
+            showAndWait()
+
+        }
+
+        if (alert.result == ButtonType.OK) {
+            usedBy.forEach { it.breakDependency(this) }
+            delete()
+        }
+    }
+}
+
+fun createEditButton(resource: Any): Button {
+    val name = Resources.instance.findName(resource) ?: "<unknown>"
+
+    val button = Button(name)
+    button.onAction = EventHandler {
+        MainWindow.instance.openTab(name, resource)
+    }
+
+    val resourceType = ResourceType.resourceType(resource)
+    resourceType?.let {
+        button.text += " (${resourceType.label})"
+        button.graphic = ImageView(EditorAction.imageResource(resourceType.graphicName))
+    }
+    return button
+}

@@ -56,8 +56,6 @@ class LayoutTab(val name: String, val layout: Layout)
         minorTabs.add(viewsTab)
         borderPane.center = minorTabs
 
-        addDeleteButton { Resources.instance.layouts.remove(name) }
-
         stagesTask.taskD.root.listen { needsSaving = true }
         viewsTask.taskD.root.listen { needsSaving = true }
     }

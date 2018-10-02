@@ -36,13 +36,11 @@ import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.editor.util.*
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.Texture
-import uk.co.nickthecoder.tickle.resources.FontResource
-import uk.co.nickthecoder.tickle.resources.Layout
-import uk.co.nickthecoder.tickle.resources.Resources
-import uk.co.nickthecoder.tickle.resources.ResourcesListener
+import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.JsonScene
 import uk.co.nickthecoder.tickle.util.Renamable
 import java.io.File
 
@@ -253,13 +251,11 @@ class ResourcesTree()
 
         override fun deleteMenuItem(): MenuItem? {
             if (data is Deletable) {
-                if (data.usedBy() == null) {
-                    val menuItem = MenuItem("Delete ${value}")
-                    menuItem.onAction = EventHandler {
-                        data.delete()
-                    }
-                    return menuItem
+                val menuItem = MenuItem("Delete ${value}")
+                menuItem.onAction = EventHandler {
+                    data.deletePrompted(name)
                 }
+                return menuItem
             }
             return null
         }
@@ -574,7 +570,7 @@ class ResourcesTree()
             sceneLister.listFiles(directory).forEach { file ->
                 children.add(SceneItem(file))
             }
-            isExpanded = true
+            isExpanded = false
         }
 
         override fun resourceAdded(resource: Any, name: String) {
@@ -589,7 +585,7 @@ class ResourcesTree()
 
         override fun isLeaf() = false
 
-        override val newResourceType = ResourceType.SCRIPT
+        override val newResourceType = ResourceType.SCENE
 
     }
 
@@ -711,14 +707,6 @@ class ResourcesTree()
     }
 }
 
-class SceneStub(val file: File) {
-    override fun equals(other: Any?): Boolean {
-        if (other is SceneStub) {
-            return file == other.file
-        }
-        return false
-    }
-}
 
 class ScriptStub(val file: File) {
     override fun equals(other: Any?): Boolean {
@@ -727,6 +715,8 @@ class ScriptStub(val file: File) {
         }
         return false
     }
+
+    override fun hashCode() = file.hashCode() + 2
 }
 
 object APIStub {}

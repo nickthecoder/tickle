@@ -24,6 +24,7 @@ import org.lwjgl.stb.STBImage.stbi_load
 import org.lwjgl.system.MemoryStack
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.Dependable
 import uk.co.nickthecoder.tickle.util.Renamable
 import java.io.File
 import java.io.IOException
@@ -83,11 +84,12 @@ class Texture(val width: Int, val height: Int, val pixelFormat: Int, buffer: Byt
     }
     */
 
+    // Deletable
     /**
      * Can only delete if there are no Poses using this texture.
      */
-    override fun usedBy(): Any? {
-        return Resources.instance.poses.items().values.firstOrNull() { it.texture == this }
+    override fun dependables() : List<Dependable> {
+        return Resources.instance.poses.items().values.filter { it.texture == this }
     }
 
     override fun delete() {

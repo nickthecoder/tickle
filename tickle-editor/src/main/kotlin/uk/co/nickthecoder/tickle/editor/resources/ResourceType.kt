@@ -18,6 +18,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.editor.resources
 
+import uk.co.nickthecoder.tickle.Costume
+import uk.co.nickthecoder.tickle.CostumeGroup
+import uk.co.nickthecoder.tickle.GameInfo
+import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.editor.ScriptStub
+import uk.co.nickthecoder.tickle.events.Input
+import uk.co.nickthecoder.tickle.graphics.Texture
+import uk.co.nickthecoder.tickle.resources.FontResource
+import uk.co.nickthecoder.tickle.resources.Layout
+import uk.co.nickthecoder.tickle.resources.SceneResource
+import uk.co.nickthecoder.tickle.resources.SceneStub
+import uk.co.nickthecoder.tickle.sound.Sound
+
 enum class ResourceType(val label: String, val graphicName: String) {
     ANY("Resource", "folder2.png"),
     GAME_INFO("Game Info", "gameInfo.png"),
@@ -37,4 +50,26 @@ enum class ResourceType(val label: String, val graphicName: String) {
     SCRIPT("Script", "script.png");
 
     fun canCreate(): Boolean = this != ANY && this != GAME_INFO && this != PREFERENCES
+
+    companion object {
+
+        fun resourceType(resource: Any): ResourceType? {
+            return when (resource) {
+                is GameInfo -> GAME_INFO
+                is Texture -> TEXTURE
+                is Pose -> POSE
+                is Costume -> COSTUME
+                is CostumeGroup -> COSTUME_GROUP
+                is Layout -> LAYOUT
+                is Input -> INPUT
+                is FontResource -> FONT
+                is Sound -> SOUND
+                is SceneResource -> SCENE
+                is SceneStub -> SCENE
+                is ScriptStub -> SCRIPT
+                else -> null
+            }
+        }
+    }
+
 }

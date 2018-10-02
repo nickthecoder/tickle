@@ -18,9 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.resources
 
+import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.NoDirector
 import uk.co.nickthecoder.tickle.Scene
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.util.Dependable
+import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
 
 /**
@@ -111,4 +114,78 @@ open class SceneResource {
         }
     }
 
+    fun dependsOn(costume: Costume): Boolean {
+        for (sr in stageResources.values) {
+            if (sr.dependsOn(costume)) return true
+        }
+        return false
+    }
+
+    fun dependsOn(layout: Layout) = Resources.instance.findName(layout) == layoutName
+
+}
+
+
+/**
+ * Used in place of a SceneResource, without having to load it.
+ * Used within the editor, and is only in the core project, because classes such as Costume
+ * need this for their implementation of Deletable.
+ * The Deletable methods will only be called from the editor though.
+ */
+class SceneStub(val file: File) : Dependable {
+
+    val name: String
+        get() = Resources.instance.toPath(file).removeSuffix(".scene").removePrefix("scenes/")
+
+    override fun equals(other: Any?): Boolean {
+        if (other is SceneStub) {
+            return file == other.file
+        }
+        return false
+    }
+
+    override fun hashCode() = file.hashCode() + 1
+
+    fun load(): SceneResource = JsonScene(file).sceneResource
+
+    fun dependsOn(costume: Costume): Boolean {
+        try {
+            return load().dependsOn(costume)
+        } catch (e: Exception) {
+            println("WARNING. Couldn't load $file, when checking dependencies of $costume")
+            return false
+        }
+    }
+
+    fun dependsOn(layout: Layout): Boolean {
+        try {
+            return load().dependsOn(layout)
+        } catch (e: Exception) {
+            println("WARNING. Couldn't load $file, when checking dependencies of $layout")
+            return false
+        }
+    }
+
+    companion object {
+
+        fun allScenesStubs(): List<SceneStub> {
+
+            val result = mutableListOf<SceneStub>()
+
+            fun addFrom(dir: File) {
+                val files = dir.listFiles()
+                for (file in files) {
+                    if (file.isDirectory) {
+                        addFrom(file)
+                    } else if (file.extension == "scene") {
+                        result.add(SceneStub(file))
+                    }
+                }
+            }
+
+            addFrom(Resources.instance.sceneDirectory)
+            return result
+        }
+
+    }
 }

@@ -677,7 +677,7 @@ open class JsonResources {
             val jfont = jele.asObject()
             val name = jfont.get("name").asString()
             val fontResource = FontResource()
-
+            val pngFilename = jfont.getString("pngFile", File(resources.texturesDirectory, "$name.png").path)
             val fontPath = jfont.getString("file", "")
 
             if (fontPath.isBlank()) {
@@ -692,16 +692,10 @@ open class JsonResources {
             fontResource.xPadding = jfont.getInt("xPadding", 1)
             fontResource.yPadding = jfont.getInt("yPadding", 1)
 
-            val pngFile = File(resources.texturesDirectory, "$name.png")
-            val outlinePngFile = File(resources.texturesDirectory, "$name-outline.png")
-            val metricsFile = File(resources.texturesDirectory, "$name.metrics")
-
-            if (pngFile.exists() && metricsFile.exists()) {
-                fontResource.loadFromFile(pngFile, metricsFile)
-
-                if (outlinePngFile.exists()) {
-                    fontResource.loadOutline(outlinePngFile)
-                }
+            val pngFile = resources.fromPath(pngFilename)
+            if (pngFile.exists()) {
+                fontResource.pngFile = pngFile
+                fontResource.loadFromFile(pngFile)
             }
 
             resources.fontResources.add(name, fontResource)

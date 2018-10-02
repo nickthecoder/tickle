@@ -20,9 +20,7 @@ package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.application.Platform
 import javafx.event.EventHandler
-import javafx.scene.control.Alert
 import javafx.scene.control.Button
-import javafx.scene.control.ButtonType
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
@@ -39,9 +37,11 @@ import uk.co.nickthecoder.tickle.editor.EditorActions
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.DesignResources
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
+import uk.co.nickthecoder.tickle.editor.util.deletePrompted
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
 import uk.co.nickthecoder.tickle.util.Copyable
+import uk.co.nickthecoder.tickle.util.Deletable
 
 
 abstract class EditTab(
@@ -120,6 +120,10 @@ abstract class EditTab(
             add(EditorActions.SAVE) { onApply() }
         }
 
+        if (data is Deletable) {
+            addDeleteButton(data)
+        }
+
         Resources.instance.listeners.add(this)
     }
 
@@ -134,17 +138,10 @@ abstract class EditTab(
         Resources.instance.listeners.remove(this)
     }
 
-    fun addDeleteButton(action: () -> Unit) {
+    protected fun addDeleteButton(deletable: Deletable) {
         val button = Button("Delete")
 
-        button.setOnAction {
-            val alert = Alert(Alert.AlertType.CONFIRMATION, "Delete '$dataName' ?", ButtonType.YES, ButtonType.NO)
-            alert.showAndWait()
-
-            if (alert.result == ButtonType.YES) {
-                action()
-            }
-        }
+        button.setOnAction { deletable.deletePrompted(dataName) }
         leftButtons.children.add(button)
     }
 

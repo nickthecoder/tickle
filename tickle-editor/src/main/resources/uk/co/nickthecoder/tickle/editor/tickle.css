@@ -24,3 +24,7 @@
 TextArea.script {
     -fx-font-family: monospaced;
 }
+
+.form {
+    -fx-spacing: 10px;
+}
