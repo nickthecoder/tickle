@@ -361,14 +361,14 @@ class Actor(var costume: Costume, role: Role? = null)
         body?.let { body ->
             val world = body.tickleWorld
             world.pixelsToWorld(tempVec, position)
-            body.jBox2DBody.setTransform(tempVec, (direction.radians - (poseAppearance?.directionRadians ?: 0.0)).toFloat())
+            body.jBox2DBody.setTransform(tempVec, (direction.radians - (appearance.directionRadians)).toFloat())
         }
     }
 
     internal fun updateFromBody(world: TickleWorld) {
         body?.let { body ->
             world.worldToPixels(position, body.jBox2DBody.position)
-            direction.radians = body.jBox2DBody.angle.toDouble() + (poseAppearance?.directionRadians ?: 0.0)
+            direction.radians = body.jBox2DBody.angle.toDouble() + (appearance.directionRadians ?: 0.0)
             // Copy the Actor's position, so that we can test if game code has changed the position, and therefore
             // we will know if the Body needs to be updated. See ensureBodyIsUpToDate.
             oldPosition.set(position)

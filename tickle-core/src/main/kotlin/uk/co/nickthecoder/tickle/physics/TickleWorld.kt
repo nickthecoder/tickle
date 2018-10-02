@@ -24,6 +24,7 @@ import org.jbox2d.dynamics.World
 import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Actor
 import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.util.Angle
 
 /**
  * Part of the Physics Engine, which allows objects to collide realistically with each other.
@@ -89,7 +90,7 @@ class TickleWorld(
 
     fun createBody(bodyDef: TickleBodyDef, actor: Actor): TickleBody {
         bodyDef.position = actor.position
-        bodyDef.angle = actor.direction
+        bodyDef.angle = Angle.radians(actor.direction.radians - actor.appearance.directionRadians)
 
         val body = bodyDef.createBody(this, actor)// jBox2dWorld.createBody(bodyDef.delegated)
         bodyDef.fixtureDefs.forEach { fixtureDef ->
