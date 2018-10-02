@@ -73,6 +73,11 @@ abstract class EditTab(
             applyButton.isDisable = !v
             cancelButton.text = if (v) "Cancel" else "Close"
             field = v
+            if (v) {
+                if (!styleClass.contains("dirty")) styleClass.add("dirty")
+            } else {
+                styleClass.remove("dirty")
+            }
         }
 
     init {

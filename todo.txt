@@ -6,11 +6,6 @@ A pose with a direction != 0 used for tiling or a nine patch doesn't work correc
 Current Work
 ============
 
-When deleting a Texture, should it delete the png file? (Ditto for other resources).
-
-Tested :
-    Texture, Pose, Font
-
 
 Next
 ====

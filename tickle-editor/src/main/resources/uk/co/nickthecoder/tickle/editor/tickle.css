@@ -28,3 +28,7 @@ TextArea.script {
 .form {
     -fx-spacing: 10px;
 }
+
+.my-tab-pane > .tab-header-area > .tabs-container > .tab.dirty {
+    -fx-base : #e0ffe0;
+}

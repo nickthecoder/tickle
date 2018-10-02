@@ -80,6 +80,9 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         ParaTask.style(scene)
         TediArea.style(scene)
 
+        val resource = MainWindow::class.java.getResource("tickle.css")
+        scene.stylesheets.add(resource.toExternalForm())
+
         with(borderPane) {
             top = toolBar
             center = splitPane
@@ -128,10 +131,6 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         tabPane.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
             onTabChanged(newValue)
         }
-
-
-        val resource = MainWindow::class.java.getResource("tickle.css")
-        scene.stylesheets.add(resource.toExternalForm())
 
         if (resourcesTree.resources.preferences.isMaximized) {
             stage.isMaximized = true
