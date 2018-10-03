@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-package uk.co.nickthecoder.tickle.editor
+package uk.co.nickthecoder.tickle.editor.tabs
 
 import groovy.util.Eval
 import javafx.application.Platform
@@ -24,7 +24,6 @@ import javafx.embed.swing.SwingFXUtils
 import javafx.event.EventHandler
 import javafx.geometry.Orientation
 import javafx.scene.Node
-import javafx.scene.Scene
 import javafx.scene.SnapshotParameters
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.Button
@@ -36,8 +35,7 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
-import javafx.stage.Stage
-import uk.co.nickthecoder.paratask.ParaTask
+import uk.co.nickthecoder.tickle.editor.MainWindow
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -45,44 +43,47 @@ import java.util.concurrent.CountDownLatch
 import javax.imageio.ImageIO
 
 
-class FXCoder(val stage: Stage) {
-
-    val borderPane = BorderPane()
-
-    val vSplitPane = SplitPane()
-
-    val hSplitPane = SplitPane()
-
-    var guiResults: Node? = null
-
-    val guiResultsScroll = ScrollPane()
-
-    val messageArea = TextArea()
-
-    val codeArea = TextArea()
-
-    val scene = Scene(borderPane)
-
-    val buttons = FlowPane()
-
-    val saveButton = Button("Save")
-
-    val openButton = Button("Open")
-
-    val runButton = Button("Run")
-
-    val saveImageButton = Button("Save Image")
-
-    var file: File? = null
+class FXCoderTab : EditorTab("FX Coder", FXCoder()) {
 
     init {
-        stage.title = "FX Coder"
-        stage.scene = scene
+        content = (data as FXCoder).borderPane
+    }
+}
+
+class FXCoder {
+
+    internal val borderPane = BorderPane()
+
+    private val vSplitPane = SplitPane()
+
+    private val hSplitPane = SplitPane()
+
+    private var guiResults: Node? = null
+
+    private val guiResultsScroll = ScrollPane()
+
+    private val messageArea = TextArea()
+
+    private val codeArea = TextArea()
+
+    private val buttons = FlowPane()
+
+    private val saveButton = Button("Save")
+
+    private val openButton = Button("Open")
+
+    private val runButton = Button("Run")
+
+    private val saveImageButton = Button("Save Image")
+
+    private var file: File? = null
+
+    init {
 
         borderPane.center = vSplitPane
         borderPane.bottom = buttons
 
-        vSplitPane.items.addAll(codeArea, hSplitPane)
+        vSplitPane.items.addAll(codeArea)
         vSplitPane.orientation = Orientation.VERTICAL
 
         hSplitPane.items.addAll(messageArea)
@@ -99,18 +100,14 @@ class FXCoder(val stage: Stage) {
         saveButton.onAction = EventHandler { save() }
         saveImageButton.onAction = EventHandler { saveImage() }
 
-        ParaTask.style(scene)
-
-        defaultCode()
-        stage.show()
+        codeArea.text = defaultCode()
     }
 
-    fun defaultCode() {
-        codeArea.text = """// FXCoder lets you run groovy scripts.
+    fun defaultCode() = """// FXCoder lets you run groovy scripts.
 // This can be useful for generating graphics, or automating processes in the Tickle editor.
 // Here's an example script as an example...
 
-import uk.co.nickthecoder.tickle.editor.FXCoder
+import uk.co.nickthecoder.tickle.editor.tabs.FXCoder
 import javafx.scene.canvas.Canvas
 import javafx.scene.paint.*
 
@@ -136,14 +133,14 @@ context.fillRect(0.0, 0.0, w,h)
 //     FXCode.saveCanvas( canvas, file )
 canvas
 """
-    }
+
 
     private fun createFileChooser(): FileChooser = FileChooser().apply {
         extensionFilters.add(FileChooser.ExtensionFilter("Groovy Source Code", "*.groovy"))
     }
 
     fun open() {
-        val openFile = createFileChooser().showOpenDialog(stage)
+        val openFile = createFileChooser().showOpenDialog(MainWindow.instance.stage)
 
         if (openFile != null && openFile.exists()) {
             codeArea.text = openFile.readText()
@@ -153,7 +150,7 @@ canvas
 
     private fun save() {
         if (file == null) {
-            file = createFileChooser().showSaveDialog(stage)
+            file = createFileChooser().showSaveDialog(MainWindow.instance.stage)
         }
         file?.writeText(codeArea.text)
     }
@@ -164,7 +161,7 @@ canvas
 
             val fileChooser = FileChooser()
             fileChooser.extensionFilters.add(FileChooser.ExtensionFilter("png files (*.png)", "*.png"))
-            val file = fileChooser.showSaveDialog(stage)
+            val file = fileChooser.showSaveDialog(MainWindow.instance.stage)
 
             if (file != null) {
                 saveCanvas(canvas, file)
@@ -209,6 +206,11 @@ canvas
         } finally {
             Platform.runLater {
                 runButton.isDisable = false
+
+                if (vSplitPane.items.size < 2) {
+                    vSplitPane.items.add(hSplitPane)
+                    vSplitPane.setDividerPosition(0, 0.9)
+                }
             }
         }
     }
