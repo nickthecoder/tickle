@@ -36,6 +36,7 @@ import javafx.scene.layout.FlowPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.util.CodeEditor
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -64,7 +65,7 @@ class FXCoder {
 
     private val messageArea = TextArea()
 
-    private val codeArea = TextArea()
+    private val codeEditor = CodeEditor()
 
     private val buttons = FlowPane()
 
@@ -83,7 +84,7 @@ class FXCoder {
         borderPane.center = vSplitPane
         borderPane.bottom = buttons
 
-        vSplitPane.items.addAll(codeArea)
+        vSplitPane.items.addAll(codeEditor.borderPane)
         vSplitPane.orientation = Orientation.VERTICAL
 
         hSplitPane.items.addAll(messageArea)
@@ -100,40 +101,8 @@ class FXCoder {
         saveButton.onAction = EventHandler { save() }
         saveImageButton.onAction = EventHandler { saveImage() }
 
-        codeArea.text = defaultCode()
+        codeEditor.tediArea.text = defaultCode
     }
-
-    fun defaultCode() = """// FXCoder lets you run groovy scripts.
-// This can be useful for generating graphics, or automating processes in the Tickle editor.
-// Here's an example script as an example...
-
-import uk.co.nickthecoder.tickle.editor.tabs.FXCoder
-import javafx.scene.canvas.Canvas
-import javafx.scene.paint.*
-
-def w = 50.0
-def h = 30.0
-
-// Note: scripts are NOT run in the JavaFX thread, but we are allowed to play with a Canvas
-// in the script's thread. Phew ;-)
-// However, any other GUI calls will need to within a runLater block :
-//     Platform.runLater{ ... }
-// Or use :
-//     FXCoder.runLaterAndWait{ ... }
-// If you need to wait for it to finish.
-
-def canvas = new Canvas(w,h)
-def context = canvas.graphicsContext2D
-
-context.fill = Color.WHEAT
-context.fillRect(0.0, 0.0, w,h)
-
-// By returning a canvas, a "Save Image" button will appear.
-// Alternatively, you could save the image from within the script.
-//     FXCode.saveCanvas( canvas, file )
-canvas
-"""
-
 
     private fun createFileChooser(): FileChooser = FileChooser().apply {
         extensionFilters.add(FileChooser.ExtensionFilter("Groovy Source Code", "*.groovy"))
@@ -143,7 +112,7 @@ canvas
         val openFile = createFileChooser().showOpenDialog(MainWindow.instance.stage)
 
         if (openFile != null && openFile.exists()) {
-            codeArea.text = openFile.readText()
+            codeEditor.tediArea.text = openFile.readText()
             file = openFile
         }
     }
@@ -152,7 +121,7 @@ canvas
         if (file == null) {
             file = createFileChooser().showSaveDialog(MainWindow.instance.stage)
         }
-        file?.writeText(codeArea.text)
+        file?.writeText(codeEditor.tediArea.text)
     }
 
     private fun saveImage() {
@@ -185,7 +154,7 @@ canvas
 
         try {
 
-            val result = Eval.me(codeArea.text)
+            val result = Eval.me(codeEditor.tediArea.text)
 
             Platform.runLater {
                 if (result is Node) {
@@ -238,6 +207,38 @@ canvas
             }
             countdown.await()
         }
+
+        val defaultCode = """// FXCoder lets you run groovy scripts.
+// This can be useful for generating graphics, or automating processes in the Tickle editor.
+// Here's an example script as an example...
+
+import uk.co.nickthecoder.tickle.editor.tabs.FXCoder
+import javafx.scene.canvas.Canvas
+import javafx.scene.paint.*
+
+def w = 50.0
+def h = 30.0
+
+// Note: scripts are NOT run in the JavaFX thread, but we are allowed to play with a Canvas
+// in the script's thread. Phew ;-)
+// However, any other GUI calls will need to be within a runLater block :
+//     Platform.runLater{ ... }
+// Or use :
+//     FXCoder.runLaterAndWait{ ... }
+// If you need to wait for it to finish.
+
+def canvas = new Canvas(w,h)
+def context = canvas.graphicsContext2D
+
+context.fill = Color.WHEAT
+context.fillRect(0.0, 0.0, w,h)
+
+// By returning a canvas, a "Save Image" button will appear.
+// Alternatively, you could save the image from within the script.
+//     FXCode.saveCanvas( canvas, file )
+canvas
+"""
+
     }
 
 }
