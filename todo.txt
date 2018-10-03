@@ -1,17 +1,14 @@
 BUGS
 ====
 
-A pose with a direction != 0 used for tiling or a nine patch doesn't work correctly.
-
-Copy a Pose, and try double click, and no new tab appears (equals problem?)
+Copy a Pose, thumbnail doesn't appear.
+    Ditto when a Pose is changed.
 
 Rename a pose in a group, and the original remains???
 
 Add/Delete/Rename costumes, and the CostumePicker doesn't update.
 
-
-With physics : A NinePatch and a Tiled pose with a non-zero direction doesn't take into account the direction (maybe not for
-a regular appearance either).
+Costumes not in a group aren't found by ???
 
 Current Work
 ============

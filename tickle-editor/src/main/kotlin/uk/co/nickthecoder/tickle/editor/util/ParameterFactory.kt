@@ -77,7 +77,7 @@ fun createCostumeParameter(parameterName: String = "costume", required: Boolean 
     }
 
     val defaultGroup = choiceParameter.group("")
-    Resources.instance.costumes.items().filter { value?.costumeGroup !== Resources.instance.costumes && value?.costumeGroup != null }.forEach { costumeName, costume ->
+    Resources.instance.costumes.items().filter { it.value.costumeGroup == null }.forEach { costumeName, costume ->
         defaultGroup.choice(costumeName, costume, costumeName)
     }
     Resources.instance.costumeGroups.items().forEach { groupName, costumeGroup ->
