@@ -11,9 +11,6 @@ Add/Delete/Rename costumes, and the CostumePicker doesn't update.
 Current Work
 ============
 
-Adding to CostumesGroup needs extra care (list contains 2 types of children).
-Ditto for scenes
-
 Next
 ====
 

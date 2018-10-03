@@ -175,7 +175,9 @@ class ResourcesTree()
     }
 
 
-    inner class RootItem : ResourceItem(resources.file.nameWithoutExtension, ResourceType.ANY) {
+    inner class RootItem :
+            ResourceItem(resources.file.nameWithoutExtension, ResourceType.ANY),
+            ResourcesListener {
 
         init {
             children.addAll(
@@ -194,11 +196,79 @@ class ResourcesTree()
             if (ScriptManager.languages().isNotEmpty()) {
                 children.add(ScriptsItem())
             }
+            resources.listeners.add(this)
+
         }
 
         override val newResourceType = null
 
         override fun isLeaf() = false
+
+        override fun resourceAdded(resource: Any, name: String) {
+
+            fun scan(parent: ResourceItem) {
+                parent.children.forEach { child ->
+                    if (child is ResourcesListener) {
+                        child.resourceAdded(resource, name)
+                    }
+                    if (child is ResourceItem) {
+                        scan(child)
+                    }
+                }
+            }
+            scan(this)
+        }
+
+        override fun resourceRemoved(resource: Any, name: String) {
+
+            fun scan(parent: ResourceItem) {
+                for (child in parent.children) {
+                    if (child is DataItem && child.data == resource) {
+                        parent.remove(child)
+                        break
+                    }
+                    if (child is ResourceItem) {
+                        scan(child)
+                    }
+                }
+            }
+            scan(this)
+        }
+
+        override fun resourceChanged(resource: Any) {
+
+            fun scan(parent: ResourceItem) {
+                parent.children.forEach { child ->
+                    if (child is DataItem && child.data == resource) {
+                        if (parent is ResourcesListener) {
+                            parent.resourceChanged(resource)
+                        }
+                    }
+                    if (child is ResourceItem) {
+                        scan(child)
+                    }
+                }
+            }
+            scan(this)
+        }
+
+        override fun resourceRenamed(resource: Any, oldName: String, newName: String) {
+
+            fun scan(parent: ResourceItem) {
+                parent.children.forEach { child ->
+                    if (child is DataItem && child.data == resource) {
+                        if (parent is ResourcesListener) {
+                            parent.resourceRenamed(resource, oldName, newName)
+                        }
+                    }
+                    if (child is ResourceItem) {
+                        scan(child)
+                    }
+                }
+            }
+            scan(this)
+        }
+
     }
 
     inner class GameInfoItem() : DataItem("Game Info", resources.gameInfo, ResourceType.GAME_INFO) {
@@ -228,7 +298,6 @@ class ResourcesTree()
         : ResourceItem(name, resourceType), ResourcesListener {
 
         init {
-            resources.listeners.add(this)
             if (graphic != null) {
                 this.graphic = graphic
             }
@@ -237,10 +306,13 @@ class ResourcesTree()
         override fun data() = data
 
         override fun resourceRenamed(resource: Any, oldName: String, newName: String) {
-            if (resource === data) {
-                if (name == oldName) {
-                    name = newName
-                    value = name
+            if (resource == data && name == oldName) {
+                name = newName
+                value = name
+                val parent = parent
+                if (parent is ResourceItem) {
+                    parent.remove(this)
+                    parent.add(this)
                 }
             }
         }
@@ -251,10 +323,6 @@ class ResourcesTree()
                     (it as ResourceItem).remove(this)
                 }
             }
-        }
-
-        override fun removed() {
-            resources.listeners.remove(this)
         }
 
         override fun deleteMenuItem(): MenuItem? {
@@ -287,15 +355,7 @@ class ResourcesTree()
 
         : ResourceItem(label, resourceType), ResourcesListener {
 
-        init {
-            resources.listeners.add(this)
-        }
-
         override fun isLeaf() = false
-
-        override fun removed() {
-            resources.listeners.remove(this)
-        }
 
     }
 
@@ -449,7 +509,7 @@ class ResourcesTree()
                 i++
             }
             while (i < children.size && (children[i] as ResourceItem).label < child.label) {
-                i ++
+                i++
             }
             children.add(i, child)
             updateLabel()
@@ -622,7 +682,7 @@ class ResourcesTree()
                 i++
             }
             while (i < children.size && (children[i] as ResourceItem).label < child.label) {
-                i ++
+                i++
             }
             children.add(i, child)
             updateLabel()
