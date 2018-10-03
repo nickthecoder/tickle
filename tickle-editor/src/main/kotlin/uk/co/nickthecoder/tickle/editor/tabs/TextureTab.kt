@@ -75,6 +75,7 @@ class TextureTab(name: String, val texture: Texture)
     }
 
     override fun removed() {
+        super.removed()
         posesEditor.closed()
     }
 

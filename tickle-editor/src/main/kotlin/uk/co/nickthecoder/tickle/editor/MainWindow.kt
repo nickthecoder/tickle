@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.editor
 
 import javafx.application.Platform
+import javafx.collections.ListChangeListener
 import javafx.event.EventHandler
 import javafx.scene.Node
 import javafx.scene.Scene
@@ -30,7 +31,6 @@ import javafx.scene.layout.Priority
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
 import uk.co.nickthecoder.paratask.ParaTask
-import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.tedi.TediArea
@@ -63,7 +63,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     val resourcesPane = TitledPane("Resources", resourcesTree)
 
-    val tabPane = MyTabPane<EditorTab>()
+    val tabPane = TabPane()
 
     val scene = Scene(borderPane, resourcesTree.resources.preferences.windowWidth, resourcesTree.resources.preferences.windowHeight)
 
@@ -72,6 +72,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     private var extraShortcuts: ShortcutHelper? = null
 
     private val shortcuts = ShortcutHelper("MainWindow", borderPane)
+
 
     init {
         stage.title = "Tickle Resources Editor"
@@ -101,13 +102,13 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
 
         val toolBarPadding = HBox()
-        HBox.setHgrow(toolBarPadding, Priority.ALWAYS);
+        HBox.setHgrow(toolBarPadding, Priority.ALWAYS)
         with(toolBar.items) {
             add(EditorActions.RELOAD.createButton(shortcuts) { reload() })
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
             add(EditorActions.RUN.createButton(shortcuts) { startGame() })
             add(EditorActions.TEST.createButton(shortcuts) { testGame() })
-            add(EditorActions.FXCODER.createButton(shortcuts) { tabPane.add(FXCoderTab()) })
+            add(EditorActions.FXCODER.createButton(shortcuts) { openTab(FXCoderTab()) })
             if (ScriptManager.languages().isNotEmpty()) {
                 add(EditorActions.RELOAD_SCRIPTS.createButton(shortcuts) { ScriptManager.reloadAll() })
             }
@@ -129,6 +130,13 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         tabPane.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
             onTabChanged(newValue)
         }
+        tabPane.tabs.addListener(ListChangeListener<Tab> { c ->
+            while (c.next()) {
+                if (c.wasRemoved()) {
+                    c.removed.filterIsInstance<EditorTab>().forEach { it.removed() }
+                }
+            }
+        })
 
         if (resourcesTree.resources.preferences.isMaximized) {
             stage.isMaximized = true
@@ -140,7 +148,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     }
 
     fun onCloseTab() {
-        val selectedTab = tabPane.selectedTab
+        val selectedTab = tabPane.selectionModel.selectedItem
         if (selectedTab is EditTab) {
 
             if (selectedTab.needsSaving) {
@@ -155,7 +163,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
                 return
             }
         }
-        selectedTab?.close()
+        (selectedTab as? EditTab)?.close()
     }
 
     fun onCloseRequest(event: WindowEvent) {
@@ -176,7 +184,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
                     tabPane.tabs.forEach { tab ->
                         if (tab is EditTab) {
                             if (!tab.save()) {
-                                tab.isSelected = true
+                                tabPane.selectionModel.selectedItem === tab
                                 // Tab not saved, so abort the closing of the main window.
                                 event.consume()
                                 return
@@ -208,7 +216,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     }
 
     fun findTab(data: Any): EditorTab? {
-        return tabPane.tabs.firstOrNull { it.data == data }
+        return tabPane.tabs.filterIsInstance<EditorTab>().firstOrNull { it.data == data }
     }
 
     fun reload() {
@@ -222,9 +230,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     fun saveAllTabs() {
         tabPane.tabs.forEach { tab ->
-            if (tab is EditTab) {
-                tab.save()
-            }
+            (tab as? EditTab)?.save()
         }
     }
 
@@ -256,7 +262,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
 
     fun testGame() {
-        val tab = tabPane.selectedTab
+        val tab = tabPane.selectionModel.selectedItem
         if (tab is SceneTab) {
             startGame(Resources.instance.sceneFileToPath(tab.sceneFile))
         } else {
@@ -264,17 +270,18 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
     }
 
+    fun openTab(tab: EditorTab) {
+        tabPane.tabs.add(tab)
+        tabPane.selectionModel.select(tab)
+    }
+
     fun openTab(dataName: String, data: Any) {
 
         val tab = findTab(data)
         if (tab == null) {
-            val newTab = createTab(dataName, data)
-            if (newTab != null) {
-                tabPane.add(newTab)
-                newTab.isSelected = true
-            }
+            createTab(dataName, data)?.let { openTab(it) }
         } else {
-            tab.isSelected = true
+            tabPane.selectionModel.select(tab)
         }
     }
 
@@ -299,7 +306,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
     }
 
-    fun onTabChanged(tab: EditorTab?) {
+    fun onTabChanged(tab: Tab?) {
         extraSidePanels.forEach {
             accordion.panes.remove(it)
         }

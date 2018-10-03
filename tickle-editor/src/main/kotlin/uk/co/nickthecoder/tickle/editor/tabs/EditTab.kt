@@ -148,6 +148,7 @@ abstract class EditTab(
     }
 
     override fun removed() {
+        super.removed()
         Resources.instance.listeners.remove(this)
     }
 

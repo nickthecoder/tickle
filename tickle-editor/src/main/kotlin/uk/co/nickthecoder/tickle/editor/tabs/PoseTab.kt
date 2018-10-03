@@ -168,9 +168,7 @@ class PoseTask(val name: String, val pose: Pose) : AbstractTask() {
     fun editTexture() {
         val trName = Resources.instance.textures.findName(pose.texture)
         if (trName != null) {
-            val tab = TextureTab(trName, pose.texture)
-            MainWindow.instance.tabPane.add(tab)
-            tab.isSelected = true
+            MainWindow.instance.openTab(trName, pose.texture)
         }
     }
 

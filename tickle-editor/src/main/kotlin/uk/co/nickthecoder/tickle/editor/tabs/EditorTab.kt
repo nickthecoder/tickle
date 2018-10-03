@@ -19,15 +19,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.editor.tabs
 
 import javafx.scene.Node
-import javafx.scene.control.Label
-import uk.co.nickthecoder.paratask.gui.MyTab
+import javafx.scene.control.Tab
 
 open class EditorTab(
         val dataName: String,
         val data: Any,
         graphic: Node? = null)
 
-    : MyTab(dataName, Label("Empty"), graphic) {
+    : Tab() {
 
+    init {
+        setGraphic(graphic)
+        text = dataName
+    }
+
+    fun close() {
+        tabPane.tabs.remove(this)
+    }
+
+    open fun removed() {}
 
 }
