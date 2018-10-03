@@ -5,14 +5,6 @@ Rename a pose in a group, and the original remains???
 
 Add/Delete/Rename costumes, and the CostumePicker doesn't update.
 
-Vector2D highlights the 2 as a number
-
-Exception in thread "JavaFX Application Thread" java.lang.IndexOutOfBoundsException
-	at javafx.scene.control.TextInputControl.getText(TextInputControl.java:451)
-	at uk.co.nickthecoder.tedi.TediArea.endOfNextWord(TediArea.kt:450)
-	at uk.co.nickthecoder.tedi.TediArea.selectEndOfNextWord(TediArea.kt:505)
-	at uk.co.nickthecoder.tedi.TediAreaBehavior.mouseDoubleClick(TediAreaBehavior.kt:277)
-
 Current Work
 ============
 

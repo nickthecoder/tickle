@@ -30,7 +30,6 @@ import javafx.scene.layout.Priority
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
 import uk.co.nickthecoder.paratask.ParaTask
-import uk.co.nickthecoder.paratask.gui.MySplitPane
 import uk.co.nickthecoder.paratask.gui.MyTabPane
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
@@ -56,7 +55,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
     val toolBar = ToolBar()
 
-    val splitPane = MySplitPane()
+    val splitPane = SplitPane()
 
     val resourcesTree = ResourcesTree()
 
@@ -89,9 +88,8 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
 
         with(splitPane) {
-            dividerRatio = 0.2
-            left = accordion
-            right = tabPane
+            setDividerPositions(0.2)
+            items.addAll(accordion, tabPane)
         }
 
         // I like the animation, but it's too slow, and there is no API to change the speed. Turn it off. Grr.
