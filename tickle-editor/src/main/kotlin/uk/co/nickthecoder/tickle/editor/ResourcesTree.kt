@@ -240,9 +240,7 @@ class ResourcesTree()
             fun scan(parent: ResourceItem) {
                 parent.children.forEach { child ->
                     if (child is DataItem && child.data == resource) {
-                        if (parent is ResourcesListener) {
-                            parent.resourceChanged(resource)
-                        }
+                        child.resourceChanged(resource)
                     }
                     if (child is ResourceItem) {
                         scan(child)
@@ -408,7 +406,7 @@ class ResourcesTree()
         override fun isLeaf() = false
     }
 
-    inner class PosesItem() : TopLevelItem("Poses", ResourceType.POSE) {
+    inner class PosesItem : TopLevelItem("Poses", ResourceType.POSE) {
 
         init {
             resources.poses.items().map { it }.sortedBy { it.key }.forEach { (name, pose) ->
@@ -426,8 +424,13 @@ class ResourcesTree()
         override fun toString() = "All Poses (${children.size})"
     }
 
-    inner class PoseItem(name: String, pose: Pose) : DataItem(name, pose, ResourceType.POSE, wrappedThumbnail(pose)) {
+    inner class PoseItem(name: String, val pose: Pose) : DataItem(name, pose, ResourceType.POSE, wrappedThumbnail(pose)) {
 
+        override fun resourceChanged(resource: Any) {
+            if (resource === data) {
+                graphic = wrappedThumbnail(pose)
+            }
+        }
     }
 
 

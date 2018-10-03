@@ -1,15 +1,14 @@
 BUGS
 ====
 
-Copy a Pose, thumbnail doesn't appear.
-    Ditto when a Pose is changed.
-
 Rename a pose in a group, and the original remains???
 
 Add/Delete/Rename costumes, and the CostumePicker doesn't update.
 
 Current Work
 ============
+
+Use regular TabPane and SplitPane
 
 Next
 ====
