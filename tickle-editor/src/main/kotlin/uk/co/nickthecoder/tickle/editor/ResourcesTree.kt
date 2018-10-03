@@ -40,7 +40,6 @@ import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
 import uk.co.nickthecoder.tickle.util.Deletable
-import uk.co.nickthecoder.tickle.util.JsonScene
 import uk.co.nickthecoder.tickle.util.Renamable
 import java.io.File
 
@@ -101,7 +100,7 @@ class ResourcesTree()
         }
     }
 
-    abstract inner class ResourceItem(label: String = "", val resourceType: ResourceType)
+    abstract inner class ResourceItem(val label: String = "", val resourceType: ResourceType)
 
         : TreeItem<String>(label) {
 
@@ -144,6 +143,15 @@ class ResourcesTree()
 
         init {
             graphic = ImageView(EditorAction.imageResource(resourceType.graphicName))
+        }
+
+        open fun add(child: ResourceItem) {
+            var i = 0
+            while (i < children.size && (children[i] as ResourceItem).label < child.label) {
+                i++
+            }
+            children.add(i, child)
+            updateLabel()
         }
 
         fun remove(child: ResourceItem) {
@@ -303,8 +311,7 @@ class ResourcesTree()
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Texture) {
-                children.add(TextureItem(name, resource))
-                updateLabel()
+                add(TextureItem(name, resource))
             }
         }
 
@@ -333,7 +340,7 @@ class ResourcesTree()
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Pose) {
                 if (resource.texture === texture) {
-                    children.add(DataItem(name, resource, ResourceType.POSE))
+                    add(PoseItem(name, resource))
                 }
             }
         }
@@ -345,19 +352,22 @@ class ResourcesTree()
 
         init {
             resources.poses.items().map { it }.sortedBy { it.key }.forEach { (name, pose) ->
-                children.add(DataItem(name, pose, ResourceType.POSE, wrappedThumbnail(pose)))
+                children.add(PoseItem(name, pose))
             }
             updateLabel()
         }
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Pose) {
-                children.add(DataItem(name, resource, ResourceType.POSE, wrappedThumbnail(resource)))
-                updateLabel()
+                add(PoseItem(name, resource))
             }
         }
 
         override fun toString() = "All Poses (${children.size})"
+    }
+
+    inner class PoseItem(name: String, pose: Pose) : DataItem(name, pose, ResourceType.POSE, wrappedThumbnail(pose)) {
+
     }
 
 
@@ -372,8 +382,7 @@ class ResourcesTree()
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is FontResource) {
-                children.add(DataItem(name, resource, ResourceType.FONT))
-                updateLabel()
+                add(DataItem(name, resource, ResourceType.FONT))
             }
         }
 
@@ -392,8 +401,7 @@ class ResourcesTree()
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Sound) {
-                children.add(DataItem(name, resource, ResourceType.SOUND))
-                updateLabel()
+                add(DataItem(name, resource, ResourceType.SOUND))
             }
         }
 
@@ -417,15 +425,34 @@ class ResourcesTree()
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is CostumeGroup) {
-                children.add(CostumeGroupItem(name, resource))
-                updateLabel()
+                add(CostumeGroupItem(name, resource))
             }
             if (resource is Costume) {
                 if (resources.findCostumeGroup(name) == null) {
-                    children.add(CostumeItem(name, resource, null))
-                    updateLabel()
+                    add(CostumeItem(name, resource, null))
                 }
             }
+        }
+
+        fun add(child: CostumeGroupItem) {
+            var i = 0
+            while (i < children.size && children[i] is CostumeGroupItem && (children[i] as ResourceItem).label < child.label) {
+                i++
+            }
+            children.add(i, child)
+            updateLabel()
+        }
+
+        fun add(child: CostumeItem) {
+            var i = 0
+            while (i < children.size && children[i] is CostumeGroupItem) {
+                i++
+            }
+            while (i < children.size && (children[i] as ResourceItem).label < child.label) {
+                i ++
+            }
+            children.add(i, child)
+            updateLabel()
         }
 
         /**
@@ -456,8 +483,7 @@ class ResourcesTree()
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Costume && costumeGroup.findName(resource) != null) {
-                children.add(CostumeItem(name, resource, costumeGroup))
-                updateLabel()
+                add(CostumeItem(name, resource, costumeGroup))
             }
         }
 
@@ -527,8 +553,7 @@ class ResourcesTree()
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is Layout) {
-                children.add(DataItem(name, resource, ResourceType.LAYOUT))
-                updateLabel()
+                add(DataItem(name, resource, ResourceType.LAYOUT))
             }
         }
 
@@ -548,8 +573,7 @@ class ResourcesTree()
 
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is CompoundInput) {
-                children.add(DataItem(name, resource, ResourceType.INPUT))
-                updateLabel()
+                add(DataItem(name, resource, ResourceType.INPUT))
             }
         }
 
@@ -576,11 +600,32 @@ class ResourcesTree()
         override fun resourceAdded(resource: Any, name: String) {
             if (resource is File && resource.parentFile == directory) {
                 if (resource.isDirectory) {
-                    children.add(ScenesDirectoryItem(resource.name, resource))
+                    add(ScenesDirectoryItem(resource.name, resource))
                 } else if (resource.extension == "scene") {
-                    children.add(SceneItem(resource))
+                    add(SceneItem(resource))
                 }
             }
+        }
+
+        fun add(child: ScenesDirectoryItem) {
+            var i = 0
+            while (i < children.size && children[i] is ScenesDirectoryItem && (children[i] as ResourceItem).label < child.label) {
+                i++
+            }
+            children.add(i, child)
+            updateLabel()
+        }
+
+        fun add(child: SceneItem) {
+            var i = 0
+            while (i < children.size && children[i] is ScenesDirectoryItem) {
+                i++
+            }
+            while (i < children.size && (children[i] as ResourceItem).label < child.label) {
+                i ++
+            }
+            children.add(i, child)
+            updateLabel()
         }
 
         override fun isLeaf() = false

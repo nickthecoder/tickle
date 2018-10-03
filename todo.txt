@@ -8,11 +8,11 @@ Rename a pose in a group, and the original remains???
 
 Add/Delete/Rename costumes, and the CostumePicker doesn't update.
 
-Costumes not in a group aren't found by ???
-
 Current Work
 ============
 
+Adding to CostumesGroup needs extra care (list contains 2 types of children).
+Ditto for scenes
 
 Next
 ====
@@ -35,13 +35,7 @@ CodeEditor 2nd pass of syntax.
     Look for \\b[A-Z][\w]*\\b, and check if they are in the imports.
         If not, add a "UnknownClass" range (a new sub class).
         Then right click (or Alt+Enter) presents the possible imports
-
-    In Tedi :
-        Keep a list of the {, [, ( then when a matching ), ], } is found join them together
-        Can also highlight those that are unmatched.
-    Then, listen to caretPosition, find the highlight ending there, and if it is a matchedPunctuation,
-        add an underscore to the other in the pair.
-
+    Need to exclude all classes in java.lang
 
 
 

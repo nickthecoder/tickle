@@ -40,9 +40,9 @@ import uk.co.nickthecoder.tickle.util.Deletable
 /*
  Contains many extension functions, used from within the SceneEditor.
  These are functions that I don't want on the actual objects, because I don't want them available
- from a running Game, and some may have dependancies only available from the editor module, which will not
+ from a running Game, and some may have dependencies only available from the editor module, which will not
  be in the class path during an actual game.
- e.g. I may not want a dependancy on awt, or javafx during an actual game, which will make porting a game to
+ e.g. I may not want a dependency on awt, or javafx during an actual game, which will make porting a game to
  Android easier.
 */
 
