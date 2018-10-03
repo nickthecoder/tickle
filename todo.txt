@@ -60,6 +60,12 @@ Make editorTab.needsSaving a Property, and use that to change the button states.
 Remove kotlin scripting for FX Coder, and replace with Groovy.
     Not least to get rid of the damn warning!
 
+Consider creating a generic tree structure for resources
+    At the top level, are the "fake" items, such as Preferences and GameInfo
+    You can then created folders as you see fit (no more images and fonts folders).
+    Gets tricky for scripts. Even if we COULD put scripts in random places, is that a good idea?
+    Also tricky for poses. Do they ONLY belong to a Texture?
+    Inputs don't seem to fit into this model, and will remain like they are.
 
 Long Standing BUGS
 ------------------
@@ -86,20 +92,8 @@ In-Game input mapper, allowing user to change existing inputs (but not add new o
         Can use LWJGL's input stuff, therefore no confusion over keyboard mappings.
         Harder to code though.
 
-Allow text style to be overriden in the SceneEditor.
+Allow text style to be overridden in the SceneEditor.
     Only save the overridden values if they differ from the Costume's values.
-
-Editor
-    Allow a texture to be reloaded (Texture and ImageCache).
-
-    Prevent deletion of textures used by a pose
-    Prevent deletion of poses used by a costume
-
-    Pose tab to have a list of costumes using it
-        In a "minor tab"?
-        Or just a button which opens all costumes using that pose.
-
-Ensure Textures are deleted when removed from resources (Use finalise?).
 
 
 Block Based Programming
@@ -153,7 +147,6 @@ The "Actors" and the "Layers" panels can be ignored.
 Add more to the "demo" test suites.
 
 Create a test suite for the editor too.
-    Much of this will need the help of paratask
 
 Add all native code (not only the current OS) into tickle-core
 (otherwise it will only work on one platform when distributed).

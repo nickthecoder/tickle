@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.editor
 
+import groovy.util.Eval
 import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
 import javafx.event.EventHandler
@@ -36,13 +37,12 @@ import javafx.scene.layout.FlowPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.stage.Stage
-import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngineFactory
 import uk.co.nickthecoder.paratask.ParaTask
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.util.concurrent.CountDownLatch
 import javax.imageio.ImageIO
-import javax.script.ScriptEngine
 
 
 class FXCoder(val stage: Stage) {
@@ -106,41 +106,59 @@ class FXCoder(val stage: Stage) {
     }
 
     fun defaultCode() {
-        codeArea.text = """import javafx.scene.canvas.Canvas
+        codeArea.text = """// FXCoder lets you run groovy scripts.
+// This can be useful for generating graphics, or automating processes in the Tickle editor.
+// Here's an example script as an example...
+
+import uk.co.nickthecoder.tickle.editor.FXCoder
+import javafx.scene.canvas.Canvas
 import javafx.scene.paint.*
 
-val w = 50.0
-val h = 30.0
+def w = 50.0
+def h = 30.0
 
-val canvas = Canvas(w,h)
+// Note: scripts are NOT run in the JavaFX thread, but we are allowed to play with a Canvas
+// in the script's thread. Phew ;-)
+// However, any other GUI calls will need to within a runLater block :
+//     Platform.runLater{ ... }
+// Or use :
+//     FXCoder.runLaterAndWait{ ... }
+// If you need to wait for it to finish.
 
-with( canvas.graphicsContext2D ) {
-  fill = Color.WHEAT
-  fillRect(0.0, 0.0, w,h)
-}
+def canvas = new Canvas(w,h)
+def context = canvas.graphicsContext2D
 
+context.fill = Color.WHEAT
+context.fillRect(0.0, 0.0, w,h)
+
+// By returning a canvas, a "Save Image" button will appear.
+// Alternatively, you could save the image from within the script.
+//     FXCode.saveCanvas( canvas, file )
 canvas
 """
     }
 
-    fun open() {
-        val chooser = FileChooser()
-        with(chooser) {
-            extensionFilters.add(FileChooser.ExtensionFilter("Kotlin Source Code", "*.kt"))
-            val openFile = showOpenDialog(stage)
+    private fun createFileChooser(): FileChooser = FileChooser().apply {
+        extensionFilters.add(FileChooser.ExtensionFilter("Groovy Source Code", "*.groovy"))
+    }
 
-            if (openFile != null && openFile.exists()) {
-                codeArea.text = openFile.readText()
-                file = openFile
-            }
+    fun open() {
+        val openFile = createFileChooser().showOpenDialog(stage)
+
+        if (openFile != null && openFile.exists()) {
+            codeArea.text = openFile.readText()
+            file = openFile
         }
     }
 
-    fun save() {
+    private fun save() {
+        if (file == null) {
+            file = createFileChooser().showSaveDialog(stage)
+        }
         file?.writeText(codeArea.text)
     }
 
-    fun saveImage() {
+    private fun saveImage() {
         val canvas = guiResults
         if (canvas is Canvas) {
 
@@ -149,17 +167,12 @@ canvas
             val file = fileChooser.showSaveDialog(stage)
 
             if (file != null) {
-                val writableImage = WritableImage(canvas.width.toInt(), canvas.height.toInt())
-                val snapParams = SnapshotParameters().also { it.fill = Color.TRANSPARENT }
-                canvas.snapshot(snapParams, writableImage)
-                val renderedImage = SwingFXUtils.fromFXImage(writableImage, null)
-                ImageIO.write(renderedImage, "png", file)
+                saveCanvas(canvas, file)
             }
         }
     }
 
-
-    fun run() {
+    private fun run() {
         saveImageButton.isVisible = false
         messageArea.text = "Running..."
         runButton.isDisable = true
@@ -167,30 +180,62 @@ canvas
         hSplitPane.items.remove(guiResultsScroll)
 
         Thread {
-            val engine = KotlinJsr223JvmLocalScriptEngineFactory().scriptEngine
-            Platform.runLater { runScript(engine) }
+            runScript()
         }.start()
     }
 
-    fun runScript(engine: ScriptEngine) {
+    private fun runScript() {
 
         try {
-            val result: Any? = engine.eval(codeArea.text)
-            if (result is Node) {
-                guiResults = result
-                guiResultsScroll.content = guiResults
-                hSplitPane.items.add(guiResultsScroll)
-            }
-            messageArea.text = result?.toString() ?: "No results returned"
-            saveImageButton.isVisible = result is Canvas
 
+            val result = Eval.me(codeArea.text)
+
+            Platform.runLater {
+                if (result is Node) {
+                    guiResults = result
+                    guiResultsScroll.content = guiResults
+                    hSplitPane.items.add(guiResultsScroll)
+                }
+                messageArea.text = result?.toString() ?: "No results returned"
+                saveImageButton.isVisible = result is Canvas
+            }
 
         } catch (e: Exception) {
             val stringWriter = StringWriter()
             e.printStackTrace(PrintWriter(stringWriter))
-            messageArea.text = stringWriter.toString()
+            Platform.runLater {
+                messageArea.text = stringWriter.toString()
+            }
         } finally {
-            runButton.isDisable = false
+            Platform.runLater {
+                runButton.isDisable = false
+            }
         }
     }
+
+    companion object {
+
+        @JvmStatic
+        fun saveCanvas(canvas: Canvas, file: File) {
+            val writableImage = WritableImage(canvas.width.toInt(), canvas.height.toInt())
+            val snapParams = SnapshotParameters().also { it.fill = Color.TRANSPARENT }
+            canvas.snapshot(snapParams, writableImage)
+            val renderedImage = SwingFXUtils.fromFXImage(writableImage, null)
+            ImageIO.write(renderedImage, "png", file)
+        }
+
+        @JvmStatic
+        fun runLaterAndWait(action: () -> Unit) {
+            val countdown = CountDownLatch(1)
+            Platform.runLater {
+                try {
+                    action()
+                } finally {
+                    countdown.countDown()
+                }
+            }
+            countdown.await()
+        }
+    }
+
 }

@@ -64,9 +64,6 @@ open class Tickle(val programName: String, val args: Array<String>) {
             resourcesFile = guessTickleFile()
         }
         println("Resource file = $resourcesFile")
-        resourcesFile?.let {
-            val path = File(it.parent, "scripts")
-        }
 
         launch()
     }
@@ -181,33 +178,38 @@ open class Tickle(val programName: String, val args: Array<String>) {
         }
         return null
     }
-}
 
-/**
- * Starts the game (not the editor).
- */
-fun startGame(resourcesFile: File, scenePath: String? = null, fullScreen: Boolean? = null) {
+    companion object {
 
-    // Setup an error callback.
-    GLFWErrorCallback.createPrint(System.err).set()
+        /**
+         * Starts the game (not the editor).
+         */
+        @JvmStatic
+        fun startGame(resourcesFile: File, scenePath: String? = null, fullScreen: Boolean? = null) {
 
-    if (!GLFW.glfwInit()) {
-        throw IllegalStateException("Unable to initialize GLFW")
+            // Setup an error callback.
+            GLFWErrorCallback.createPrint(System.err).set()
+
+            if (!GLFW.glfwInit()) {
+                throw IllegalStateException("Unable to initialize GLFW")
+            }
+
+            val json = JsonResources(resourcesFile)
+            val gameInfo = json.loadGameInfo()
+
+            val window = Window(gameInfo.title, gameInfo.width, gameInfo.height, fullScreen = if (fullScreen == null) gameInfo.fullScreen else fullScreen)
+            window.show()
+            GL.createCapabilities()
+
+            val resources = json.loadResources()
+            Game(window, resources).run(scenePath ?: Resources.instance.sceneFileToPath(resources.gameInfo.initialScenePath))
+
+            // Clean up OpenGL and OpenAL
+            window.delete()
+            SoundManager.cleanUp()
+            GLFW.glfwTerminate()
+            GLFW.glfwSetErrorCallback(null).free()
+        }
+
     }
-
-    val json = JsonResources(resourcesFile)
-    val gameInfo = json.loadGameInfo()
-
-    val window = Window(gameInfo.title, gameInfo.width, gameInfo.height, fullScreen = if (fullScreen == null) gameInfo.fullScreen else fullScreen)
-    window.show()
-    GL.createCapabilities()
-
-    val resources = json.loadResources()
-    Game(window, resources).run(scenePath ?: Resources.instance.sceneFileToPath(resources.gameInfo.initialScenePath))
-
-    // Clean up OpenGL and OpenAL
-    window.delete()
-    SoundManager.cleanUp()
-    GLFW.glfwTerminate()
-    GLFW.glfwSetErrorCallback(null).free()
 }

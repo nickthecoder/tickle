@@ -17,20 +17,6 @@ buildscript {
     }
 }
 
-import org.gradle.internal.os.OperatingSystem
-
-switch (OperatingSystem.current()) {
-    case OperatingSystem.WINDOWS:
-        project.ext.lwjglNatives = "natives-windows"
-        break
-    case OperatingSystem.LINUX:
-        project.ext.lwjglNatives = "natives-linux"
-        break
-    case OperatingSystem.MAC_OS:
-        project.ext.lwjglNatives = "natives-macos"
-        break
-}
-
 subprojects {
 
     repositories {
@@ -65,12 +51,30 @@ project(':tickle-core') {
         compile "org.lwjgl:lwjgl-stb:$lwjglVersion"
         compile "org.joml:joml:${jomlVersion}"
 
-        runtime "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives"
-        runtime "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives"
-        runtime "org.lwjgl:lwjgl-jemalloc:$lwjglVersion:$lwjglNatives"
-        runtime "org.lwjgl:lwjgl-openal:$lwjglVersion:$lwjglNatives"
-        runtime "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
-        runtime "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
+        // Include all platform natives, so that a single version of tickle works across all platforms.
+        runtime "org.lwjgl:lwjgl:$lwjglVersion:natives-windows"
+        runtime "org.lwjgl:lwjgl:$lwjglVersion:natives-linux"
+        runtime "org.lwjgl:lwjgl:$lwjglVersion:natives-macos"
+
+        runtime "org.lwjgl:lwjgl-glfw:$lwjglVersion:natives-windows"
+        runtime "org.lwjgl:lwjgl-glfw:$lwjglVersion:natives-linux"
+        runtime "org.lwjgl:lwjgl-glfw:$lwjglVersion:natives-macos"
+
+        runtime "org.lwjgl:lwjgl-jemalloc:$lwjglVersion:natives-windows"
+        runtime "org.lwjgl:lwjgl-jemalloc:$lwjglVersion:natives-linux"
+        runtime "org.lwjgl:lwjgl-jemalloc:$lwjglVersion:natives-macos"
+
+        runtime "org.lwjgl:lwjgl-openal:$lwjglVersion:natives-windows"
+        runtime "org.lwjgl:lwjgl-openal:$lwjglVersion:natives-linux"
+        runtime "org.lwjgl:lwjgl-openal:$lwjglVersion:natives-macos"
+
+        runtime "org.lwjgl:lwjgl-opengl:$lwjglVersion:natives-windows"
+        runtime "org.lwjgl:lwjgl-opengl:$lwjglVersion:natives-linux"
+        runtime "org.lwjgl:lwjgl-opengl:$lwjglVersion:natives-macos"
+
+        runtime "org.lwjgl:lwjgl-stb:$lwjglVersion:natives-windows"
+        runtime "org.lwjgl:lwjgl-stb:$lwjglVersion:natives-linux"
+        runtime "org.lwjgl:lwjgl-stb:$lwjglVersion:natives-macos"
 
         compile "org.jbox2d:jbox2d-library:2.1.2.2"
         testCompile 'junit:junit:4.11'
@@ -97,8 +101,9 @@ project(':tickle-editor') {
         compile 'uk.co.nickthecoder:tedi-core:0.1'
         compile 'org.reflections:reflections:0.9.11'
 
-        // For kotlin scripting in the FX Coder.
-        compile "org.jetbrains.kotlin:kotlin-script-util:$kotlin_version"
+        // For groovy scripting in the FX Coder.
+        // Make sure this is the same version used by tickle-groovy (below)
+        compile 'org.codehaus.groovy:groovy-all:2.4.5'
     }
 }
 
@@ -111,6 +116,7 @@ project(':tickle-groovy') {
 
     dependencies {
         compile project(':tickle-core')
+        // Make sure this is the same version used by tickle-editor (above)
         compile 'org.codehaus.groovy:groovy-all:2.4.5'
     }
 }

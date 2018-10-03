@@ -300,6 +300,7 @@ object ClassMetaData {
         "TextStyle" to listOf( "uk.co.nickthecoder.tickle.graphics.TextStyle" ),
         "TextVAlignment" to listOf( "uk.co.nickthecoder.tickle.graphics.TextVAlignment" ),
         "Texture" to listOf( "uk.co.nickthecoder.tickle.graphics.Texture" ),
+        "Tickle" to listOf( "uk.co.nickthecoder.tickle.Tickle" ),
         "TickleBody" to listOf( "uk.co.nickthecoder.tickle.physics.TickleBody" ),
         "TickleBodyDef" to listOf( "uk.co.nickthecoder.tickle.physics.TickleBodyDef" ),
         "TickleBodyKt" to listOf( "uk.co.nickthecoder.tickle.physics.TickleBodyKt" ),

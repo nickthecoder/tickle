@@ -17,10 +17,10 @@ import javafx.stage.FileChooser
 import javafx.stage.Stage
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.tickle.Game
+import uk.co.nickthecoder.tickle.Tickle
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.DesignJsonResources
 import uk.co.nickthecoder.tickle.graphics.Window
-import uk.co.nickthecoder.tickle.startGame
 import java.io.File
 import java.util.*
 import java.util.prefs.Preferences
@@ -91,7 +91,7 @@ class LauncherWindow(val stage: Stage, val glWindow: Window) {
         stage.hide()
 
         Platform.runLater {
-            startGame(resourcesFile)
+            Tickle.startGame(resourcesFile)
 
             glWindow.hide()
             stage.close()

@@ -4,10 +4,10 @@ import javafx.application.Application
 import javafx.stage.Stage
 import org.lwjgl.glfw.GLFW
 import uk.co.nickthecoder.paratask.util.AutoExit
+import uk.co.nickthecoder.tickle.Tickle
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.groovy.GroovyLanguage
 import uk.co.nickthecoder.tickle.sound.SoundManager
-import uk.co.nickthecoder.tickle.startGame
 import java.io.File
 
 class Launcher : Application() {
@@ -55,7 +55,7 @@ fun main(args: Array<String>) {
             } else {
                 // Play the game without starting the JavaFX GUI.
                 GroovyLanguage().register()
-                startGame(file)
+                Tickle.startGame(file)
                 return
             }
         }
