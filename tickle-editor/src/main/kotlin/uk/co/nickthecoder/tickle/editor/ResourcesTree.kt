@@ -86,8 +86,7 @@ class ResourcesTree()
     }
 
     fun editItem() {
-        val item = selectionModel.selectedItem
-        if (item == null) return
+        val item = selectionModel.selectedItem ?: return
 
         if (item is DataItem) {
 
@@ -100,15 +99,13 @@ class ResourcesTree()
         }
     }
 
-    abstract inner class ResourceItem(val label: String = "", val resourceType: ResourceType)
+    abstract inner class ResourceItem(label: String = "", val resourceType: ResourceType)
 
         : TreeItem<String>(label) {
 
         open fun data(): Any? = null
 
         override fun isLeaf() = true
-
-        open fun removed() {}
 
         open val newResourceType: ResourceType? = resourceType
 
@@ -147,7 +144,7 @@ class ResourcesTree()
 
         open fun add(child: ResourceItem) {
             var i = 0
-            while (i < children.size && (children[i] as ResourceItem).label < child.label) {
+            while (i < children.size && (children[i] as ResourceItem).value < child.value) {
                 i++
             }
             children.add(i, child)
@@ -156,15 +153,7 @@ class ResourcesTree()
 
         fun remove(child: ResourceItem) {
             children.remove(child)
-            child.removed()
             updateLabel()
-        }
-
-        fun clear() {
-            children.forEach { child ->
-                (child as ResourceItem).removed()
-            }
-            children.clear()
         }
 
         fun updateLabel() {
@@ -207,12 +196,12 @@ class ResourcesTree()
         override fun resourceAdded(resource: Any, name: String) {
 
             fun scan(parent: ResourceItem) {
-                parent.children.forEach { child ->
-                    if (child is ResourcesListener) {
-                        child.resourceAdded(resource, name)
-                    }
+                for (child in parent.children) {
                     if (child is ResourceItem) {
                         scan(child)
+                    }
+                    if (child is ResourcesListener) {
+                        child.resourceAdded(resource, name)
                     }
                 }
             }
@@ -223,12 +212,12 @@ class ResourcesTree()
 
             fun scan(parent: ResourceItem) {
                 for (child in parent.children) {
-                    if (child is DataItem && child.data == resource) {
-                        parent.remove(child)
-                        break
-                    }
                     if (child is ResourceItem) {
                         scan(child)
+                    }
+                    if (child is DataItem && child.data == resource) {
+                        parent.remove(child)
+                        return
                     }
                 }
             }
@@ -238,12 +227,13 @@ class ResourcesTree()
         override fun resourceChanged(resource: Any) {
 
             fun scan(parent: ResourceItem) {
-                parent.children.forEach { child ->
-                    if (child is DataItem && child.data == resource) {
-                        child.resourceChanged(resource)
-                    }
+                for (child in parent.children) {
                     if (child is ResourceItem) {
                         scan(child)
+                    }
+                    if (child is DataItem && child.data == resource) {
+                        child.resourceChanged(resource)
+                        return
                     }
                 }
             }
@@ -253,14 +243,16 @@ class ResourcesTree()
         override fun resourceRenamed(resource: Any, oldName: String, newName: String) {
 
             fun scan(parent: ResourceItem) {
-                parent.children.forEach { child ->
-                    if (child is DataItem && child.data == resource) {
-                        if (parent is ResourcesListener) {
-                            parent.resourceRenamed(resource, oldName, newName)
-                        }
-                    }
+                for (child in parent.children) {
                     if (child is ResourceItem) {
                         scan(child)
+                    }
+                    if (child is DataItem && child.data == resource) {
+                        parent.remove(child)
+                        child.name = newName
+                        child.updateLabel()
+                        parent.add(child)
+                        return
                     }
                 }
             }
@@ -301,27 +293,9 @@ class ResourcesTree()
             }
         }
 
+        override fun toString() = name
+
         override fun data() = data
-
-        override fun resourceRenamed(resource: Any, oldName: String, newName: String) {
-            if (resource == data && name == oldName) {
-                name = newName
-                value = name
-                val parent = parent
-                if (parent is ResourceItem) {
-                    parent.remove(this)
-                    parent.add(this)
-                }
-            }
-        }
-
-        override fun resourceRemoved(resource: Any, name: String) {
-            if (resource === data) {
-                parent?.let {
-                    (it as ResourceItem).remove(this)
-                }
-            }
-        }
 
         override fun deleteMenuItem(): MenuItem? {
             if (data is Deletable) {
@@ -490,16 +464,19 @@ class ResourcesTree()
             if (resource is CostumeGroup) {
                 add(CostumeGroupItem(name, resource))
             }
-            if (resource is Costume) {
-                if (resources.findCostumeGroup(name) == null) {
-                    add(CostumeItem(name, resource, null))
-                }
+            if (resource is Costume && resource.costumeGroup == null) {
+                add(CostumeItem(name, resource, null))
             }
+        }
+
+        override fun add(child: ResourceItem) {
+            if (child is CostumeGroupItem) add(child)
+            if (child is CostumeItem) add(child)
         }
 
         fun add(child: CostumeGroupItem) {
             var i = 0
-            while (i < children.size && children[i] is CostumeGroupItem && (children[i] as ResourceItem).label < child.label) {
+            while (i < children.size && children[i] is CostumeGroupItem && children[i].value < child.value) {
                 i++
             }
             children.add(i, child)
@@ -511,7 +488,7 @@ class ResourcesTree()
             while (i < children.size && children[i] is CostumeGroupItem) {
                 i++
             }
-            while (i < children.size && (children[i] as ResourceItem).label < child.label) {
+            while (i < children.size && children[i].value < child.value) {
                 i++
             }
             children.add(i, child)
@@ -573,23 +550,19 @@ class ResourcesTree()
 
         : DataItem(name, costume, ResourceType.COSTUME, wrappedThumbnail(costume)) {
 
-        override fun resourceRemoved(resource: Any, name: String) {
-            if (resource === costume) {
-                if (!exists(resource)) {
-                    parent?.let { (it as ResourceItem).remove(this) }
+        override fun resourceChanged(resource: Any) {
+            if (resource === costume && resource is Costume) {
+                if (costumeGroup != resource.costumeGroup) {
+                    // Costume has changed groups, so remove this
+                    parent.children.remove(this)
                 }
             }
         }
 
-        /**
-         * If a costume was ADDED to a CostumeGroup, we need to REMOVE it, if this is in the non-group
-         */
-        override fun resourceAdded(resource: Any, name: String) {
-            if (costumeGroup == null && resource === costume) {
-                if (resources.findCostumeGroup(name) != null) {
-                    parent?.let {
-                        (it as ResourceItem).remove(this)
-                    }
+        override fun resourceRemoved(resource: Any, name: String) {
+            if (resource === costume) {
+                if (!exists(resource)) {
+                    parent?.let { (it as ResourceItem).remove(this) }
                 }
             }
         }
@@ -672,7 +645,7 @@ class ResourcesTree()
 
         fun add(child: ScenesDirectoryItem) {
             var i = 0
-            while (i < children.size && children[i] is ScenesDirectoryItem && (children[i] as ResourceItem).label < child.label) {
+            while (i < children.size && children[i] is ScenesDirectoryItem && children[i].value < child.value) {
                 i++
             }
             children.add(i, child)
@@ -684,7 +657,7 @@ class ResourcesTree()
             while (i < children.size && children[i] is ScenesDirectoryItem) {
                 i++
             }
-            while (i < children.size && (children[i] as ResourceItem).label < child.label) {
+            while (i < children.size && children[i].value < child.value) {
                 i++
             }
             children.add(i, child)

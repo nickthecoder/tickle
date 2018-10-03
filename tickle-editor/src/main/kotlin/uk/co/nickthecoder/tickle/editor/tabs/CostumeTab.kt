@@ -179,6 +179,9 @@ class CostumeTab(val name: String, val costume: Costume)
                 costume.costumeGroup?.remove(name)
                 costume.costumeGroup = costumeGroupP.costumeP.value
                 costume.costumeGroup?.add(nameP.value, costume)
+                if (costume.costumeGroup == null) {
+                    Resources.instance.fireAdded(costume, name)
+                }
             }
             if (nameP.value != name) {
                 Resources.instance.costumes.rename(name, nameP.value)
