@@ -146,6 +146,7 @@ class FXCoder {
         runButton.isDisable = true
         borderPane.requestLayout()
         hSplitPane.items.remove(guiResultsScroll)
+        codeEditor.hideError()
 
         Thread {
             runScript()
@@ -172,6 +173,7 @@ class FXCoder {
             Platform.runLater {
                 if (e is GroovyRuntimeException) {
                     codeEditor.highlightError(GroovyLanguage.convertException(e))
+                    messageArea.text = "Error"
                 } else {
                     val stringWriter = StringWriter()
                     e.printStackTrace(PrintWriter(stringWriter))
