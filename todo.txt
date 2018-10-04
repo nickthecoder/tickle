@@ -9,8 +9,6 @@ Current Work
 Next
 ====
 
-Editor to allow resources to be reloaded.
-
 ScriptManager has listeners which it informs about reloads (including errors).
     Use this to position cursor to errors
     New tab type, which lists errors during scan().

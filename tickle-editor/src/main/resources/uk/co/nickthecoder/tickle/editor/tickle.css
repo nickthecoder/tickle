@@ -34,6 +34,6 @@ TextArea.script {
     -fx-spacing: 10px;
 }
 
-.my-tab-pane > .tab-header-area > .tabs-container > .tab.dirty {
+.tab-pane > .tab-header-area > .headers-region > .tab:top.dirty {
     -fx-base : #e0ffe0;
 }
