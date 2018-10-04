@@ -21,6 +21,8 @@ import uk.co.nickthecoder.tickle.Tickle
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.DesignJsonResources
 import uk.co.nickthecoder.tickle.graphics.Window
+import uk.co.nickthecoder.tickle.util.DelayedErrorHandler
+import uk.co.nickthecoder.tickle.util.ErrorHandler
 import java.io.File
 import java.util.*
 import java.util.prefs.Preferences
@@ -108,6 +110,9 @@ class LauncherWindow(val stage: Stage, val glWindow: Window) {
 
     fun onEdit(resourcesFile: File) {
         addRecent(resourcesFile)
+
+        // Main window will handle errors when it is created
+        ErrorHandler.errorHandler = DelayedErrorHandler()
 
         val json = DesignJsonResources(resourcesFile)
         val resources = json.loadResources()

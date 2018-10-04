@@ -26,6 +26,7 @@ import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.editor.util.CodeEditor
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.ResourcesListener
+import uk.co.nickthecoder.tickle.scripts.ScriptException
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import java.io.File
 
@@ -39,6 +40,16 @@ class ScriptTab(val scriptStub: ScriptStub)
 
     private val scriptShortcuts = ShortcutHelper("Script Tab", MainWindow.instance.borderPane)
 
+    private var hasErrors: Boolean = false
+        set(v) {
+            field = v
+            if (v) {
+                if (!styleClass.contains("errors")) styleClass.add("errors")
+            } else {
+                styleClass.remove("errors")
+            }
+        }
+
     init {
         applyButton.text = "Save"
         okButton.isVisible = false
@@ -48,7 +59,6 @@ class ScriptTab(val scriptStub: ScriptStub)
         codeEditor.load(file)
         codeEditor.tediArea.requestFocusOnSceneAvailable()
 
-        // TODO Replace this with a "bind" when needsSaving is implemented as a property.
         codeEditor.tediArea.textProperty().addListener { _ ->
             needsSaving = true
         }
@@ -57,9 +67,20 @@ class ScriptTab(val scriptStub: ScriptStub)
 
     override fun extraShortcuts() = scriptShortcuts
 
+    fun highlightError(e: ScriptException) {
+        hasErrors = true
+        codeEditor.highlightError(e)
+    }
+
     override fun justSave(): Boolean {
         codeEditor.save(file)
-        ScriptManager.load(file)
+        try {
+            ScriptManager.load(file)
+            hasErrors = false
+            codeEditor.hideError()
+        } catch (e: ScriptException) {
+            highlightError(e)
+        }
         return true
     }
 

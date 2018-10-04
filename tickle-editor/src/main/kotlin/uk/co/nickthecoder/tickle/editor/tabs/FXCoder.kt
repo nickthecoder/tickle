@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.editor.tabs
 
+import groovy.lang.GroovyRuntimeException
 import groovy.util.Eval
 import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
@@ -37,6 +38,7 @@ import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.CodeEditor
+import uk.co.nickthecoder.tickle.groovy.GroovyLanguage
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -167,10 +169,14 @@ class FXCoder {
             }
 
         } catch (e: Exception) {
-            val stringWriter = StringWriter()
-            e.printStackTrace(PrintWriter(stringWriter))
             Platform.runLater {
-                messageArea.text = stringWriter.toString()
+                if (e is GroovyRuntimeException) {
+                    codeEditor.highlightError(GroovyLanguage.convertException(e))
+                } else {
+                    val stringWriter = StringWriter()
+                    e.printStackTrace(PrintWriter(stringWriter))
+                    messageArea.text = stringWriter.toString()
+                }
             }
         } finally {
             Platform.runLater {

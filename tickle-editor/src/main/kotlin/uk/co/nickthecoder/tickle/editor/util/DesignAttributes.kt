@@ -48,7 +48,7 @@ class DesignAttributes : RuntimeAttributes() {
         try {
             instance = klass.newInstance()
         } catch (e: Exception) {
-            e.printStackTrace()
+            ErrorHandler.handleError(e)
             // Do nothing
             return
         }

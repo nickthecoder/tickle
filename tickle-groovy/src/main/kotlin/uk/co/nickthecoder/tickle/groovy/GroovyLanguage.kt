@@ -18,12 +18,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.groovy
 
+import groovy.lang.GroovyRuntimeException
 import groovy.util.GroovyScriptEngine
 import uk.co.nickthecoder.tickle.Director
 import uk.co.nickthecoder.tickle.Producer
 import uk.co.nickthecoder.tickle.Role
 import uk.co.nickthecoder.tickle.scripts.Language
+import uk.co.nickthecoder.tickle.scripts.ScriptException
 import java.io.File
+import java.util.regex.Pattern
 
 
 class GroovyLanguage : Language() {
@@ -34,7 +37,7 @@ class GroovyLanguage : Language() {
 
     override val name = "Groovy"
 
-    private lateinit var path : File
+    private lateinit var path: File
 
     override fun setClasspath(directory: File) {
         path = directory
@@ -47,7 +50,14 @@ class GroovyLanguage : Language() {
     }
 
     override fun loadScript(file: File): Class<*> {
-        return engine.loadScriptByName(file.name)
+        try {
+            return engine.loadScriptByName(file.name)
+        } catch (e: GroovyRuntimeException) {
+            throw convertException(e)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw ScriptException(e)
+        }
     }
 
     override fun clear() {
@@ -161,5 +171,31 @@ class $name extends AbstractProducer {
 
 """
 
+    companion object {
+
+        private val messagePattern = Pattern.compile("file\\:(?<FILE>.*?\\.groovy)|line (?<LINE>\\d*), column (?<COLUMN>\\d*)")
+
+        fun convertException(e: GroovyRuntimeException): ScriptException {
+            var message = e.message ?: return ScriptException(e)
+
+            val matcher = messagePattern.matcher(message)
+
+            var file: File? = null
+            var line: Int? = null
+            var column: Int? = null
+
+            while (matcher.find()) {
+                matcher.group("FILE")?.let { file = File(it) }
+                matcher.group("LINE")?.let { line = it.toInt() }
+                matcher.group("COLUMN")?.let {
+                    column = it.toInt()
+                    message = message.substring(0, matcher.end())
+                }
+            }
+            message = message.removePrefix("startup failed:\n")
+            return ScriptException(message, e, file, line, column)
+        }
+
+    }
 
 }

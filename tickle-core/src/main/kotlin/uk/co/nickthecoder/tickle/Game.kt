@@ -47,7 +47,7 @@ class Game(
     var scene: Scene = Scene()
 
     var gameLoop: GameLoop
-    var errorHandler: ErrorHandler = SimpleErrorHandler()
+    var errorHandler: GameErrorHandler = SimpleGameErrorHandler()
 
     /**
      * A measure of time in seconds. Updated once per frame, It is actually just System.nano converted to

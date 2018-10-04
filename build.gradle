@@ -87,26 +87,6 @@ project(':tickle-core') {
     }
 }
 
-project(':tickle-editor') {
-
-    apply plugin: 'kotlin'
-    apply plugin: 'maven'
-
-    defaultTasks 'install'
-
-    dependencies {
-        compile project(':tickle-core')
-
-        compile 'uk.co.nickthecoder:paratask-core:0.2'
-        compile 'uk.co.nickthecoder:tedi-core:0.1'
-        compile 'org.reflections:reflections:0.9.11'
-
-        // For groovy scripting in the FX Coder.
-        // Make sure this is the same version used by tickle-groovy (below)
-        compile 'org.codehaus.groovy:groovy-all:2.4.5'
-    }
-}
-
 project(':tickle-groovy') {
 
     apply plugin: 'kotlin'
@@ -118,6 +98,25 @@ project(':tickle-groovy') {
         compile project(':tickle-core')
         // Make sure this is the same version used by tickle-editor (above)
         compile 'org.codehaus.groovy:groovy-all:2.4.5'
+    }
+}
+
+project(':tickle-editor') {
+
+    apply plugin: 'kotlin'
+    apply plugin: 'maven'
+
+    defaultTasks 'install'
+
+    dependencies {
+        compile project(':tickle-core')
+        // For groovy scripting in the FX Coder.
+        compile project(':tickle-groovy')
+
+        compile 'uk.co.nickthecoder:paratask-core:0.2'
+        compile 'uk.co.nickthecoder:tedi-core:0.1'
+        compile 'org.reflections:reflections:0.9.11'
+
     }
 }
 

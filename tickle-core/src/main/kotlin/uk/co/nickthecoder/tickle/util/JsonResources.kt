@@ -719,8 +719,7 @@ open class JsonResources {
     }
 
     fun error(e: Exception, message: String) {
-        System.err.println(message)
-        e.printStackTrace()
+        ErrorHandler.handleError(JsonLoadException(e, message))
     }
 
     companion object {
@@ -770,3 +769,5 @@ open class JsonResources {
     }
 
 }
+
+class JsonLoadException(e: Exception, message: String) : Exception(message, e)

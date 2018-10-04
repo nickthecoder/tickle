@@ -27,6 +27,8 @@ import uk.co.nickthecoder.tickle.editor.resources.DesignJsonResources
 import uk.co.nickthecoder.tickle.graphics.Window
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.sound.SoundManager
+import uk.co.nickthecoder.tickle.util.DelayedErrorHandler
+import uk.co.nickthecoder.tickle.util.ErrorHandler
 import java.io.File
 
 class Editor : Application() {
@@ -37,6 +39,10 @@ class Editor : Application() {
 
         AutoExit.disable()
         window = Window("Tickle Editor Hidden Window", 100, 100)
+
+        // MainWindow will handle any errors later, when it is created.
+        ErrorHandler.errorHandler = DelayedErrorHandler()
+
         val json = DesignJsonResources(resourceFile!!)
         val resources = if (resourceFile == null) Resources() else json.loadResources()
         Game(window, resources)

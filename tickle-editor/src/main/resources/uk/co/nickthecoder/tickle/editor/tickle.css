@@ -34,6 +34,13 @@ TextArea.script {
     -fx-spacing: 10px;
 }
 
-.tab-pane > .tab-header-area > .headers-region > .tab:top.dirty {
+.tab-pane > .tab-header-area > .headers-region > .tab.errors {
+    -fx-base : #ffe0e0;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab.dirty {
     -fx-base : #e0ffe0;
+}
+.code-error {
+    -fx-padding : 4px;
+    -fx-text-fill : #aa0000;
 }

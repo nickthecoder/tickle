@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.scripts
 
+import uk.co.nickthecoder.tickle.util.ErrorHandler
 import java.io.File
 
 /**
@@ -56,7 +57,11 @@ object ScriptManager {
         if (languages.isNotEmpty()) {
             println("Scanning script directory $classpath")
             classpath.listFiles()?.forEach { file ->
-                load(file)
+                try {
+                    load(file)
+                } catch (e: ScriptException) {
+                    ErrorHandler.handleError(e)
+                }
             }
         }
     }

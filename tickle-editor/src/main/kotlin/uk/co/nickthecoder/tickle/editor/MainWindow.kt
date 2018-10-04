@@ -46,11 +46,13 @@ import uk.co.nickthecoder.tickle.resources.FontResource
 import uk.co.nickthecoder.tickle.resources.Layout
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.SceneStub
+import uk.co.nickthecoder.tickle.scripts.ScriptException
 import uk.co.nickthecoder.tickle.scripts.ScriptManager
 import uk.co.nickthecoder.tickle.sound.Sound
+import uk.co.nickthecoder.tickle.util.ErrorHandler
 
 
-class MainWindow(val stage: Stage, val glWindow: Window) {
+class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
 
     val borderPane = BorderPane()
 
@@ -76,6 +78,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
 
 
     init {
+
         stage.title = "Tickle Resources Editor"
         stage.scene = scene
         ParaTask.style(scene)
@@ -145,6 +148,8 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         stage.show()
         instance = this
         stage.onCloseRequest = EventHandler<WindowEvent> { onCloseRequest(it) }
+
+        ErrorHandler.errorHandler = this
 
     }
 
@@ -280,14 +285,18 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         tabPane.selectionModel.select(tab)
     }
 
-    fun openTab(dataName: String, data: Any) {
+    fun openTab(dataName: String, data: Any): Tab? {
 
         val tab = findTab(data)
         if (tab == null) {
-            createTab(dataName, data)?.let { openTab(it) }
+            val newTab = createTab(dataName, data)
+            newTab?.let { openTab(it) }
+            return newTab
         } else {
             tabPane.selectionModel.select(tab)
+            return tab
         }
+
     }
 
     private fun createTab(name: String, data: Any): EditorTab? {
@@ -337,6 +346,21 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
         }
 
         accordion.expandedPane = resourcesPane
+    }
+
+    override fun handleError(e: Exception) {
+        if (e is ScriptException) {
+            e.file?.let { file ->
+                val tab = openTab(file.nameWithoutExtension, ScriptStub(file))
+                if (tab is ScriptTab) { // It should be!
+                    tab.highlightError(e)
+                    return
+                }
+            }
+        }
+        // TODO Handle other errors.
+        println("MainWindow isn't handling this well!")
+        e.printStackTrace()
     }
 
     companion object {

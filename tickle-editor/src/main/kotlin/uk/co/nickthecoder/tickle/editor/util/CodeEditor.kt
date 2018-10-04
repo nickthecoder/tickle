@@ -2,6 +2,7 @@ package uk.co.nickthecoder.tickle.editor.util
 
 import javafx.event.EventHandler
 import javafx.scene.control.ContextMenu
+import javafx.scene.control.Label
 import javafx.scene.control.MenuItem
 import javafx.scene.control.SeparatorMenuItem
 import javafx.scene.input.KeyCode
@@ -18,6 +19,7 @@ import uk.co.nickthecoder.tedi.ui.FindBar
 import uk.co.nickthecoder.tedi.ui.RemoveHiddenChildren
 import uk.co.nickthecoder.tedi.ui.ReplaceBar
 import uk.co.nickthecoder.tedi.ui.TextInputControlMatcher
+import uk.co.nickthecoder.tickle.scripts.ScriptException
 import java.io.File
 import java.util.regex.Pattern
 
@@ -26,6 +28,8 @@ class CodeEditor {
     val borderPane = BorderPane()
 
     val tediArea = TediArea()
+
+    private val error = Label("")
 
     private val findAndReplaceBox = VBox()
 
@@ -47,7 +51,7 @@ class CodeEditor {
         replaceBar.toolBar.styleClass.add(".bottom")
 
         RemoveHiddenChildren(findAndReplaceBox.children)
-        findAndReplaceBox.children.addAll(findBar.toolBar, replaceBar.toolBar)
+        findAndReplaceBox.children.addAll(error, findBar.toolBar, replaceBar.toolBar)
 
         // Hides the find and replace toolbars.
         matcher.inUse = false
@@ -57,9 +61,40 @@ class CodeEditor {
             bottom = findAndReplaceBox
         }
 
+        error.isVisible = false
+        error.styleClass.add("code-error")
+
         borderPane.addEventFilter(KeyEvent.KEY_PRESSED) { onKeyPressed(it) }
         tediArea.addEventFilter(MouseEvent.MOUSE_PRESSED) { onMousePressedRelease(it) }
         tediArea.addEventFilter(MouseEvent.MOUSE_RELEASED) { onMousePressedRelease(it) }
+    }
+
+    fun highlightError(e: ScriptException) {
+        val line = e.line
+        if (line != null) {
+            error.onMouseClicked = EventHandler {
+                positionCaret(line, e.column)
+                tediArea.requestFocus()
+            }
+            positionCaret(line, e.column)
+        } else {
+            error.onMouseClicked = null
+        }
+        error.text = e.message
+        error.isVisible = true
+        tediArea.requestFocus()
+    }
+
+    fun hideError() {
+        error.isVisible = false
+    }
+
+    fun positionCaret(line: Int, column: Int?) {
+        if (column == null) {
+            tediArea.positionCaret(tediArea.positionOfLine(line - 1))
+        } else {
+            tediArea.positionCaret(tediArea.positionOfLine(line - 1, column - 1))
+        }
     }
 
     fun load(file: File) {

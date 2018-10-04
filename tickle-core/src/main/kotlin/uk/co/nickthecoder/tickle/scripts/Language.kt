@@ -72,14 +72,10 @@ abstract class Language {
     abstract fun loadScript(file: File): Class<*>
 
     fun addScript(file: File) {
-        try {
-            val klass = loadScript(file)
-            val name = file.nameWithoutExtension
-            classes[name] = klass
-            classToName[WeakReference(klass)] = name
-        } catch (e: Exception) { // TODO Change to a ScriptException, and handle the error, sending events to listeners
-            System.err.println("Failed to load script $file :\n$e")
-        }
+        val klass = loadScript(file)
+        val name = file.nameWithoutExtension
+        classes[name] = klass
+        classToName[WeakReference(klass)] = name
     }
 
     fun classForName(name: String): Class<*>? {
