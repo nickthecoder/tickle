@@ -70,17 +70,17 @@ class Texture(val width: Int, val height: Int, val pixelFormat: Int, buffer: Byt
         }
     }
 
-    fun cleanUp() {
-        //if (privateHandle != 0) {
+    fun destroy() {
+        if (privateHandle != 0) {
             unbind()
             glDeleteTextures(privateHandle)
-            //privateHandle = 0
-        //}
+            privateHandle = 0
+        }
     }
 
     /*
     protected fun finalize() {
-        cleanUp()
+        destroy()
     }
     */
 

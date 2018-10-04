@@ -18,10 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.editor.resources
 
-import uk.co.nickthecoder.tickle.Costume
-import uk.co.nickthecoder.tickle.CostumeGroup
-import uk.co.nickthecoder.tickle.GameInfo
-import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.ScriptStub
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.graphics.Texture
@@ -34,7 +31,7 @@ import uk.co.nickthecoder.tickle.sound.Sound
 enum class ResourceType(val label: String, val graphicName: String) {
     ANY("Resource", "folder2.png"),
     GAME_INFO("Game Info", "gameInfo.png"),
-    PREFERENCES("Preferences", "preferences.png"),
+    PREFERENCES("Editor Preferences", "preferences.png"),
     API_Documentation("API Documentation", "api.png"),
     TEXTURE("Texture", "texture.png"),
     POSE("Pose", "pose.png"),
@@ -56,6 +53,7 @@ enum class ResourceType(val label: String, val graphicName: String) {
         fun resourceType(resource: Any): ResourceType? {
             return when (resource) {
                 is GameInfo -> GAME_INFO
+                is EditorPreferences -> PREFERENCES
                 is Texture -> TEXTURE
                 is Pose -> POSE
                 is Costume -> COSTUME

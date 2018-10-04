@@ -161,6 +161,12 @@ open class Resources {
 
     fun scriptDirectory() = File(file.parent, "scripts")
 
+    fun destroy() {
+        textures.items().values.forEach { it.destroy() }
+        fontResources.items().values.forEach { it.destroy() }
+        sounds.items().values.forEach { it.destroy() }
+    }
+
     companion object {
         /**
          * A convenience, so that game scripts can easily get access to the resources.

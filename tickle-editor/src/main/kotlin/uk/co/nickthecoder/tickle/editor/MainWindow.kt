@@ -35,6 +35,7 @@ import uk.co.nickthecoder.paratask.gui.ShortcutHelper
 import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.tedi.TediArea
 import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.editor.resources.DesignJsonResources
 import uk.co.nickthecoder.tickle.editor.tabs.*
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.util.NewResourceTask
@@ -220,8 +221,12 @@ class MainWindow(val stage: Stage, val glWindow: Window) {
     }
 
     fun reload() {
-        Resources.instance.reload()
+        saveAllTabs()
+        tabPane.tabs.clear()
+        Resources.instance.destroy()
+        DesignJsonResources(Resources.instance.file).loadResources()
         ImageCache.clear()
+        resourcesTree.reload()
     }
 
     fun newResource() {

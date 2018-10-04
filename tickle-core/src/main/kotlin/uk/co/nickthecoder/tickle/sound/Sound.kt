@@ -98,7 +98,7 @@ class Sound : Deletable {
         }
     }
 
-    fun cleanUp() {
+    fun destroy() {
         AL10.alDeleteBuffers(handle)
     }
 

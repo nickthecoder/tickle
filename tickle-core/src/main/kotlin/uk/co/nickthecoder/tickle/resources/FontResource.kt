@@ -138,6 +138,10 @@ class FontResource(var xPadding: Int = 1, var yPadding: Int = 1)
         Resources.instance.fontResources.remove(this)
     }
 
+    fun destroy() {
+        fontTexture.destroy()
+    }
+
     override fun rename(newName: String) {
         Resources.instance.fontResources.rename(this, newName)
     }

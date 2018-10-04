@@ -1,17 +1,34 @@
 BUGS
 ====
 
-Rename a pose in a group, and the original remains???
-
 Add/Delete/Rename costumes, and the CostumePicker doesn't update.
 
 Current Work
 ============
 
-Use regular TabPane and SplitPane
-
 Next
 ====
+
+Editor to allow resources to be reloaded.
+
+ScriptManager has listeners which it informs about reloads (including errors).
+    Use this to position cursor to errors
+    New tab type, which lists errors during scan().
+New tab type Script Log.
+    A message whenever a script is (re)loaded.
+    Double click to open the script.
+    "Clear" button next to "Save"
+New ScriptException, which includes line number and column number (both? optional)
+
+F4 on a class name opens the help window at the appropriate place.
+
+Code snippets
+    e.g. Move Forward, Move Towards, Die, Change Costume, Change Size
+
+Intellisense as much as possible
+
+Hover help
+    Floating popups of javadoc comments for methods/fields.
 
 Allow images to be DRAGGED into the resources tree.
     If it OUTSIDE of the resources directory, then copy it.
@@ -39,33 +56,11 @@ Finish Drunk Invaders! (thus proving that Groovy is well integrated within Tickl
     More levels
     Convert "countdowns" to delays?
 
-ScriptManager has listeners which it informs about reloads (including errors).
-    Use this to position cursor to errors
-    New tab type, which lists errors during scan().
-New tab type Script Log.
-    A message whenever a script is (re)loaded.
-    Double click to open the script.
-    "Clear" button next to "Save"
-New ScriptException, which includes line number and column number (both? optional)
-
-F4 on a class name opens the help window at the appropriate place.
-    If there are multiple matches, then popup the package names.
-
 Double click an existing Pose within a Texture to recreate its bounds.
     Maybe a context menu, with double click to open the Pose's tab.
 
-Make editorTab.needsSaving a Property, and use that to change the button states.
-    bind to CodeEditor's dirty.
+Block Based Programming (Scratch style)
 
-Remove kotlin scripting for FX Coder, and replace with Groovy.
-    Not least to get rid of the damn warning!
-
-Consider creating a generic tree structure for resources
-    At the top level, are the "fake" items, such as Preferences and GameInfo
-    You can then created folders as you see fit (no more images and fonts folders).
-    Gets tricky for scripts. Even if we COULD put scripts in random places, is that a good idea?
-    Also tricky for poses. Do they ONLY belong to a Texture?
-    Inputs don't seem to fit into this model, and will remain like they are.
 
 Long Standing BUGS
 ------------------
@@ -75,13 +70,10 @@ InputPicker :
     "Windows" is this meta?
     Shift, Control, alt etc don't work either.
 
-
-New Features
-============
+Later
+=====
 
 Key combos, such as Shift+XXX and Ctrl+XXX
-
-Editor to allow resources to be reloaded.
 
 Key input to have a "ghosting" test, where multiple key presses are displayed, to help avoid certain key combinations.
 
@@ -95,63 +87,6 @@ In-Game input mapper, allowing user to change existing inputs (but not add new o
 Allow text style to be overridden in the SceneEditor.
     Only save the overridden values if they differ from the Costume's values.
 
-
-Block Based Programming
------------------------
-
-I'd really like to avoid "tick", and instead be one big block of code, that has init stuff at the top,
-and a while loop afterwards.
-
-This can be done with Actions.
-
-Block types :
-
-Move By (dx,dy), Move To (x,y), Rotate By (degrees), Rotate To (degrees), Rotate Towards ( x, y )
-HeadTowards( x, y ), Set Heading (degrees), Adjust Heading (degrees), Forwards (distance) etc.
-
-(Note that all have a direction, so that Forwards can be implemented).
-
-While, Until (no for)
-
-If (condition), else
-
-
-### A simplified editor
-To go with a "simpler" block-based language, the resources editor should also be easier.
-No "Inputs", no "Layouts", no separation of "Pose" and "Costume", No "Events" etc.
-
-Limited to a single window, which cannot be resized (but the size CAN be chosen).
-A single Layout with a single Stage, and a single View.
-Sounds are added by simply dragging a sound file into the editor
-   A window appears, where you give it a unique name (which defaults to the filename without the extension).
-Likewise, a Pose/Costume is created by dragging an image into the editor.
-   All such Pose/Costumes can act as both a Pose and a Costume.
-   These can have a "Hide" boolean, which prevents them appearing in the Scene Editor.
-       We could include ALL such things, but order favouring those with the most code (so complex items
-       will naturally be at the top of the list!)
-   Maybe all images are automatically combined into a single Texture, or a separate Texture is created for each.
-   But Textures are never mentioned in any way!
-Include one or more fonts by default
-Editor Preferences are hidden
-No Physics engine
-How Producer/Director is handled can be left till later!
-   Can easily have a single Producer (which is initially empty)
-   Maybe do away with Director, and if we want resuable code appearing on multiple scenes, then use a
-       "Role", which is made invisible (or just off-screen).
-
-The Scene Editor can display the Attributes panel, and the "Costume Picker" at the same time.
-The "Actors" and the "Layers" panels can be ignored.
-
-# Later
-
-Add more to the "demo" test suites.
-
-Create a test suite for the editor too.
-
-Add all native code (not only the current OS) into tickle-core
-(otherwise it will only work on one platform when distributed).
-Or maybe, create tickle-natives-linux etc AND tickle-natives-all
-    Demo can then depend on the 'current' OS, and 3rd party games can choose
 
 TextStyle to have an extraSpacing property which causes letters to be moved further apart
     Ditto for extra line height.

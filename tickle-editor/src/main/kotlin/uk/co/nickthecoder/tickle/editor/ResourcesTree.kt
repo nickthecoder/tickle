@@ -47,7 +47,8 @@ class ResourcesTree()
 
     : TreeView<String>() {
 
-    val resources = Resources.instance as DesignResources
+    val resources
+        get() = Resources.instance as DesignResources
 
     init {
         isEditable = false
@@ -59,6 +60,10 @@ class ResourcesTree()
         addEventFilter(KeyEvent.KEY_PRESSED) { onKeyPressed(it) }
 
         root.isExpanded = true
+    }
+
+    fun reload() {
+        (root as RootItem).reload()
     }
 
     fun onMousePressed(event: MouseEvent) {
@@ -169,6 +174,12 @@ class ResourcesTree()
             ResourcesListener {
 
         init {
+            resources.listeners.add(this)
+            reload()
+        }
+
+        fun reload() {
+            children.clear()
             children.addAll(
                     GameInfoItem(),
                     EditorPreferencesItem(),
@@ -185,8 +196,6 @@ class ResourcesTree()
             if (ScriptManager.languages().isNotEmpty()) {
                 children.add(ScriptsItem())
             }
-            resources.listeners.add(this)
-
         }
 
         override val newResourceType = null

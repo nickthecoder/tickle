@@ -100,5 +100,9 @@ class FontTexture(
         return (text.count { it == '\n' } + extra) * lineHeight
     }
 
+    fun destroy() {
+        glyphs.values.firstOrNull()?.pose?.texture?.destroy()
+    }
+
 }
 
