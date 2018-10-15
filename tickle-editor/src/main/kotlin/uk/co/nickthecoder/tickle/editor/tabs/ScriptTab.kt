@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.editor.tabs
 
 import uk.co.nickthecoder.paratask.gui.ShortcutHelper
-import uk.co.nickthecoder.tedi.requestFocusOnSceneAvailable
+import uk.co.nickthecoder.tedi.util.requestFocusOnSceneAvailable
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.ScriptStub
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType

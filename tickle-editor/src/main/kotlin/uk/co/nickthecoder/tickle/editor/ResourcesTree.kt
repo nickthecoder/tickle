@@ -43,7 +43,7 @@ import uk.co.nickthecoder.tickle.util.Deletable
 import uk.co.nickthecoder.tickle.util.Renamable
 import java.io.File
 
-class ResourcesTree()
+class ResourcesTree
 
     : TreeView<String>() {
 
@@ -560,7 +560,7 @@ class ResourcesTree()
         : DataItem(name, costume, ResourceType.COSTUME, wrappedThumbnail(costume)) {
 
         override fun resourceChanged(resource: Any) {
-            if (resource === costume && resource is Costume) {
+            if (resource === costume) {
                 if (costumeGroup != resource.costumeGroup) {
                     // Costume has changed groups, so remove this
                     parent.children.remove(this)

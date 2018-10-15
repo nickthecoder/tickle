@@ -119,10 +119,7 @@ class TickleWorld(
         var body = jBox2dWorld.bodyList
         while (body != null) {
             val tickleBody = body.userData as TickleBody
-            val actor = tickleBody.actor
-            if (actor is Actor) {
-                actor.ensureBodyIsUpToDate()
-            }
+            tickleBody.actor.ensureBodyIsUpToDate()
             body = body.next
         }
 

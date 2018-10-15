@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.editor.util
 
+import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.Label
@@ -12,13 +13,13 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.VBox
 import uk.co.nickthecoder.tedi.SourceCodeWordIterator
 import uk.co.nickthecoder.tedi.TediArea
-import uk.co.nickthecoder.tedi.requestFocusOnSceneAvailable
 import uk.co.nickthecoder.tedi.syntax.GroovySyntax
 import uk.co.nickthecoder.tedi.syntax.HighlightMatchedPairs
 import uk.co.nickthecoder.tedi.ui.FindBar
 import uk.co.nickthecoder.tedi.ui.RemoveHiddenChildren
 import uk.co.nickthecoder.tedi.ui.ReplaceBar
 import uk.co.nickthecoder.tedi.ui.TextInputControlMatcher
+import uk.co.nickthecoder.tedi.util.requestFocusOnSceneAvailable
 import uk.co.nickthecoder.tickle.scripts.ScriptException
 import java.io.File
 import java.util.regex.Pattern
@@ -73,10 +74,15 @@ class CodeEditor {
         val line = e.line
         if (line != null) {
             error.onMouseClicked = EventHandler {
-                positionCaret(line, e.column)
                 tediArea.requestFocus()
+                Platform.runLater {
+                    positionCaret(line, e.column)
+                }
             }
-            positionCaret(line, e.column)
+            tediArea.requestFocus()
+            Platform.runLater {
+                positionCaret(line, e.column)
+            }
         } else {
             error.onMouseClicked = null
         }
