@@ -42,7 +42,15 @@ class Game(
     var renderer = Renderer(window)
 
     var producer: Producer = NoProducer()
+
     var director: Director = NoDirector()
+        set(v) {
+            if (v is MouseListener) {
+                mouseListeners.remove(v)
+            }
+            field = v
+        }
+
     var sceneName: String = ""
     var scene: Scene = Scene()
 
@@ -65,6 +73,8 @@ class Game(
     private val previousScreenMousePosition = Vector2d(-1.0, -1.0)
 
     private val currentScreenMousePosition = Vector2d()
+
+    private val mouseListeners = mutableListOf<MouseListener>()
 
 
     val preferences by lazy { AutoFlushPreferences(producer.preferencesRoot()) }
@@ -194,27 +204,40 @@ class Game(
 
         processRunLater()
 
-        mouseCapturedBy?.let { capturedBy ->
-            if (capturedBy is MouseListener) {
-                Window.instance?.mousePosition(currentScreenMousePosition)
-                if (currentScreenMousePosition != previousScreenMousePosition) {
-                    previousScreenMousePosition.set(currentScreenMousePosition)
+        Window.instance?.mousePosition(currentScreenMousePosition)
 
-                    var button = -1
-                    for (b in 0..2) {
-                        val state = glfwGetMouseButton(window.handle, b);
-                        if (state == GLFW_PRESS) {
-                            button = b
-                        }
-                    }
-                    val event = MouseEvent(Window.instance!!, button, if (button == -1) ButtonState.UNKNOWN else ButtonState.PRESSED, 0)
+        if (currentScreenMousePosition != previousScreenMousePosition) {
+            previousScreenMousePosition.set(currentScreenMousePosition)
 
-                    event.screenPosition.set(currentScreenMousePosition)
+            var button = -1
+            for (b in 0..2) {
+                val state = glfwGetMouseButton(window.handle, b)
+                if (state == GLFW_PRESS) {
+                    button = b
+                }
+            }
+            val event = MouseEvent(Window.instance!!, button, if (button == -1) ButtonState.UNKNOWN else ButtonState.PRESSED, 0)
+            event.screenPosition.set(currentScreenMousePosition)
+
+            mouseCapturedBy?.let { capturedBy ->
+                if (capturedBy is MouseListener) {
+
                     event.captured = true
                     capturedBy.onMouseMove(event)
                     if (!event.captured) {
                         mouseCapturedBy = null
                     }
+                    event.consume()
+                }
+            }
+            if (!event.isConsumed()) {
+                for (ml in mouseListeners) {
+                    ml.onMouseMove(event)
+                    if (event.captured) {
+                        mouseCapturedBy = ml
+                        break
+                    }
+                    if (event.isConsumed()) break
                 }
             }
         }
@@ -228,6 +251,14 @@ class Game(
             return
         }
         director.onKey(event)
+    }
+
+    fun addMouseListener(listener: MouseListener) {
+        mouseListeners.add(listener)
+    }
+
+    fun removeMouseListener(listener: MouseListener) {
+        mouseListeners.remove(listener)
     }
 
     override fun onMouseButton(event: MouseEvent) {
