@@ -36,6 +36,7 @@ import uk.co.nickthecoder.paratask.gui.TaskPrompter
 import uk.co.nickthecoder.tedi.TediArea
 import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.resources.DesignJsonResources
+import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.editor.tabs.*
 import uk.co.nickthecoder.tickle.editor.util.ImageCache
 import uk.co.nickthecoder.tickle.editor.util.NewResourceTask
@@ -297,6 +298,12 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
             return tab
         }
 
+    }
+
+
+    fun openNamedTab(dataName: String, type: ResourceType): Tab? {
+        val data: Any = type.findResource(dataName) ?: return null
+        return openTab(dataName, data)
     }
 
     private fun createTab(name: String, data: Any): EditorTab? {

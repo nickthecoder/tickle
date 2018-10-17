@@ -123,6 +123,8 @@ open class JsonResources {
             loadInputs(jinputs)
         }
 
+        postLoad(jroot)
+
         // Now all costume have been loaded, lets add the costume events.
         costumeEvents.forEach { data ->
             data.costumeEvent.costumes.add(resources.costumes.find(data.costumeName)!!)
@@ -138,6 +140,8 @@ open class JsonResources {
 
         return resources
     }
+
+    open protected fun postLoad(jroot: JsonObject) {}
 
     // EDITOR PREFERENCES
 

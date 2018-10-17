@@ -21,7 +21,10 @@ package uk.co.nickthecoder.tickle.editor.resources
 import com.eclipsesource.json.JsonArray
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.PrettyPrint
+import javafx.application.Platform
 import uk.co.nickthecoder.tickle.Costume
+import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.tabs.EditTab
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
 import uk.co.nickthecoder.tickle.events.*
 import uk.co.nickthecoder.tickle.resources.FontResource
@@ -43,6 +46,14 @@ class DesignJsonResources : JsonResources {
 
     constructor(resources: DesignResources) : super(resources)
 
+    override fun postLoad(jroot: JsonObject) {
+        super.postLoad(jroot)
+        // The MainWindow may not exist yet, so runLater, when it will exist.
+        Platform.runLater {
+            loadTabs(jroot)
+        }
+    }
+
     override fun loadPreferences(jpreferences: JsonObject) {
         super.loadPreferences(jpreferences)
         ClassLister.packages(resources.preferences.packages)
@@ -63,6 +74,7 @@ class DesignJsonResources : JsonResources {
         addArray(jroot, "costumeGroups", saveCostumeGroups())
         addArray(jroot, "costumes", saveCostumes(resources.costumes, false))
         addArray(jroot, "inputs", saveInputs())
+        addArray(jroot, "tabs", saveTabs())
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
             jroot.writeTo(it, resources.preferences.outputFormat.writerConfig)
@@ -70,7 +82,7 @@ class DesignJsonResources : JsonResources {
     }
 
 
-    fun savePreferences(): JsonObject {
+    private fun savePreferences(): JsonObject {
         val jpreferences = JsonObject()
         with(resources.preferences) {
 
@@ -92,7 +104,7 @@ class DesignJsonResources : JsonResources {
     }
 
 
-    fun saveInfo(): JsonObject {
+    private fun saveInfo(): JsonObject {
         val jinfo = JsonObject()
 
         with(resources.gameInfo) {
@@ -127,7 +139,7 @@ class DesignJsonResources : JsonResources {
         return jinfo
     }
 
-    fun saveLayouts(): JsonArray {
+    private fun saveLayouts(): JsonArray {
         val jlayouts = JsonArray()
         resources.layouts.items().forEach { name, layout ->
             val jlayout = JsonObject()
@@ -189,7 +201,7 @@ class DesignJsonResources : JsonResources {
         return jlayouts
     }
 
-    fun saveTextures(): JsonArray {
+    private fun saveTextures(): JsonArray {
         val jtextures = JsonArray()
         resources.textures.items().forEach { name, texture ->
             texture.file?.let { file ->
@@ -203,7 +215,7 @@ class DesignJsonResources : JsonResources {
     }
 
 
-    fun savePoses(): JsonArray {
+    private fun savePoses(): JsonArray {
         val jposes = JsonArray()
         resources.poses.items().forEach { name, pose ->
             resources.textures.findName(pose.texture)?.let { textureName ->
@@ -239,7 +251,7 @@ class DesignJsonResources : JsonResources {
 
     }
 
-    fun saveCostumeGroups(): JsonArray {
+    private fun saveCostumeGroups(): JsonArray {
         val jgroups = JsonArray()
 
         resources.costumeGroups.items().forEach { name, group ->
@@ -253,7 +265,7 @@ class DesignJsonResources : JsonResources {
         return jgroups
     }
 
-    fun saveCostumes(costumes: ResourceMap<Costume>, all: Boolean): JsonArray {
+    private fun saveCostumes(costumes: ResourceMap<Costume>, all: Boolean): JsonArray {
         val jcostumes = JsonArray()
 
         costumes.items().forEach { name, costume ->
@@ -358,7 +370,7 @@ class DesignJsonResources : JsonResources {
         return jcostumes
     }
 
-    fun saveInputs(): JsonArray {
+    private fun saveInputs(): JsonArray {
         val jinputs = JsonArray()
         resources.inputs.items().forEach { name, input ->
             val jinput = JsonObject()
@@ -393,7 +405,7 @@ class DesignJsonResources : JsonResources {
         return jinputs
     }
 
-    fun addKeyInputs(input: Input, toArray: JsonArray) {
+    private fun addKeyInputs(input: Input, toArray: JsonArray) {
 
         if (input is KeyInput) {
             val jkey = JsonObject()
@@ -408,7 +420,7 @@ class DesignJsonResources : JsonResources {
         }
     }
 
-    fun addJoystickButtonInputs(input: Input, toArray: JsonArray) {
+    private fun addJoystickButtonInputs(input: Input, toArray: JsonArray) {
 
         if (input is JoystickButtonInput) {
             val jjoystick = JsonObject()
@@ -423,7 +435,7 @@ class DesignJsonResources : JsonResources {
         }
     }
 
-    fun addJoystickAxisInputs(input: Input, toArray: JsonArray) {
+    private fun addJoystickAxisInputs(input: Input, toArray: JsonArray) {
 
         if (input is JoystickAxisInput) {
             val jjoystick = JsonObject()
@@ -441,7 +453,7 @@ class DesignJsonResources : JsonResources {
     }
 
 
-    fun saveFonts(): JsonArray {
+    private fun saveFonts(): JsonArray {
         val jfonts = JsonArray()
         resources.fontResources.items().forEach { name, fontResource ->
             val jfont = JsonObject()
@@ -466,7 +478,7 @@ class DesignJsonResources : JsonResources {
     }
 
 
-    fun saveSounds(): JsonArray {
+    private fun saveSounds(): JsonArray {
         val jsounds = JsonArray()
         resources.sounds.items().forEach { name, sound ->
             sound.file?.let { file ->
@@ -477,6 +489,39 @@ class DesignJsonResources : JsonResources {
             }
         }
         return jsounds
+    }
+
+    private fun loadTabs(jroot: JsonObject) {
+        val jtabs = jroot.get("tabs")
+        if (jtabs is JsonArray) {
+            for (jtab in jtabs) {
+                if (jtab is JsonObject) {
+                    val name = jtab.getString("name", null)
+                    val type = jtab.getString("type", null)
+                    if (name != null && type != null) {
+                        val resourceType = ResourceType.valueOf(type)
+                        MainWindow.instance.openNamedTab(name, resourceType)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun saveTabs(): JsonArray {
+        val jtabs = JsonArray()
+        val tabs = MainWindow.instance.tabPane.tabs
+        for (tab in tabs) {
+            if (tab is EditTab) {
+                val type = ResourceType.resourceType(tab.data)
+                type?.let {
+                    val jtab = JsonObject()
+                    jtab.add("name", tab.dataName)
+                    jtab.add("type", type.name)
+                    jtabs.add(jtab)
+                }
+            }
+        }
+        return jtabs
     }
 
     companion object {

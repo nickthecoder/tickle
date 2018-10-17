@@ -22,11 +22,9 @@ import uk.co.nickthecoder.tickle.*
 import uk.co.nickthecoder.tickle.editor.ScriptStub
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.graphics.Texture
-import uk.co.nickthecoder.tickle.resources.FontResource
-import uk.co.nickthecoder.tickle.resources.Layout
-import uk.co.nickthecoder.tickle.resources.SceneResource
-import uk.co.nickthecoder.tickle.resources.SceneStub
+import uk.co.nickthecoder.tickle.resources.*
 import uk.co.nickthecoder.tickle.sound.Sound
+import java.io.File
 
 enum class ResourceType(val label: String, val graphicName: String) {
     ANY("Resource", "folder2.png"),
@@ -47,6 +45,24 @@ enum class ResourceType(val label: String, val graphicName: String) {
     SCRIPT("Script", "script.png");
 
     fun canCreate(): Boolean = this != ANY && this != GAME_INFO && this != PREFERENCES
+
+    fun findResource(name: String): Any? {
+        val resources = Resources.instance
+
+        return when (this) {
+            TEXTURE -> resources.textures.find(name)
+            POSE -> resources.poses.find(name)
+            COSTUME -> resources.costumes.find(name)
+            COSTUME_GROUP -> resources.costumeGroups.find(name)
+            LAYOUT -> resources.layouts.find(name)
+            INPUT -> resources.inputs.find(name)
+            FONT -> resources.fontResources.find(name)
+            SOUND -> resources.sounds.find(name)
+            SCENE -> SceneStub(resources.scenePathToFile(name))
+            SCRIPT -> ScriptStub(File(Resources.instance.scriptDirectory(), name))
+            else -> null
+        }
+    }
 
     companion object {
 
