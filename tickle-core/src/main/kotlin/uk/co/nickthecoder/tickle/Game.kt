@@ -140,7 +140,8 @@ class Game(
             println("Scene $scenePath not found. Ignoring.")
         } catch (e: Exception) {
             sceneName = oldSceneName
-            println("Failed to load scene $scenePath. Ignoring. $e")
+            println("Failed to load scene $scenePath. Ignoring.")
+            e.printStackTrace()
         }
     }
 

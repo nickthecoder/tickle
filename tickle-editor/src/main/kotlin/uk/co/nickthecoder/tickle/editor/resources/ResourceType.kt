@@ -58,8 +58,22 @@ enum class ResourceType(val label: String, val graphicName: String) {
             INPUT -> resources.inputs.find(name)
             FONT -> resources.fontResources.find(name)
             SOUND -> resources.sounds.find(name)
-            SCENE -> SceneStub(resources.scenePathToFile(name))
-            SCRIPT -> ScriptStub(File(Resources.instance.scriptDirectory(), name))
+            SCENE -> {
+                val file = resources.scenePathToFile(name)
+                if (file.exists()) {
+                    SceneStub(file)
+                } else {
+                    null
+                }
+            }
+            SCRIPT -> {
+                val file = File(Resources.instance.scriptDirectory(), name)
+                if (file.exists()) {
+                    ScriptStub(file)
+                } else {
+                    null
+                }
+            }
             else -> null
         }
     }

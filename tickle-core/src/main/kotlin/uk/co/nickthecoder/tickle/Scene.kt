@@ -166,7 +166,7 @@ class Scene {
                     System.err.println("WARNING. Mering stage $stageName with a stage of the same name, but a different class")
                 }
                 // TODO Add warning if they have different StageConstraints when StageConstraints are implemented.
-                extraStage.actors.forEach { actor ->
+                extraStage.actors.toList().forEach { actor ->
                     existingStage.add(actor)
                 }
             }

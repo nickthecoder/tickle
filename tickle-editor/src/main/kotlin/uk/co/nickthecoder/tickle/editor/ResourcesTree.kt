@@ -799,6 +799,14 @@ class ResourcesTree
 
 
 class ScriptStub(val file: File) {
+
+    val name: String
+        get() = if (file.isAbsolute) {
+            Resources.instance.scriptDirectory().toRelativeString(file)
+        } else {
+            file.path
+        }
+
     override fun equals(other: Any?): Boolean {
         if (other is ScriptStub) {
             return file == other.file

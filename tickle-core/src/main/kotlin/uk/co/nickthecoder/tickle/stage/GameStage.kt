@@ -99,32 +99,38 @@ open class GameStage() : Stage {
     }
 
     override fun add(actor: Actor) {
+        if (actor._stage != this) {
 
-        actor.costume.bodyDef?.let { bodyDef ->
-            world?.createBody(bodyDef, actor)
-        }
+            actor._stage?.remove(actor)
 
-        mutableActors.add(actor)
-        actor.stage = this
-        if (began) {
-            actor.role?.begin()
-            actor.role?.let { role ->
-                try {
-                    role.activated()
-                } catch (e: Exception) {
-                    Game.instance.errorHandler.roleError(role, e)
+            actor.costume.bodyDef?.let { bodyDef ->
+                world?.createBody(bodyDef, actor)
+            }
+
+            mutableActors.add(actor)
+            actor._stage = this
+            if (began) {
+                actor.role?.begin()
+                actor.role?.let { role ->
+                    try {
+                        role.activated()
+                    } catch (e: Exception) {
+                        Game.instance.errorHandler.roleError(role, e)
+                    }
                 }
             }
         }
     }
 
     override fun remove(actor: Actor) {
-        actor.body?.let {
-            world?.destroyBody(it)
-            actor.body = null
+        if (actor._stage == this) {
+            actor.body?.let {
+                world?.destroyBody(it)
+                actor.body = null
+            }
+            mutableActors.remove(actor)
+            actor._stage = null
         }
-        mutableActors.remove(actor)
-        actor.stage = null
     }
 
     override fun addView(view: StageView) {

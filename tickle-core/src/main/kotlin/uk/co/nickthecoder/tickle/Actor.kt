@@ -65,7 +65,25 @@ class Actor(var costume: Costume, role: Role? = null)
             }
         }
 
-    var stage: Stage? = null
+    /**
+     * This is a simple variable holding the [Stage] this actor is on.
+     * Note that [stage] is really a get/set without a field.
+     * By having this pair, an Actor's stage can be set by the game programmer in two ways :
+     * 1. Setting Actor.stage
+     * 2. Calling Stage.add( actor )
+     */
+    internal var _stage: Stage? = null
+
+    var stage: Stage?
+        get() = _stage
+        set(v) {
+            if (v == null) {
+                _stage?.remove(this)
+            } else {
+                v.add(this)
+            }
+        }
+
 
     val position = Vector2d(0.0, 0.0)
 
