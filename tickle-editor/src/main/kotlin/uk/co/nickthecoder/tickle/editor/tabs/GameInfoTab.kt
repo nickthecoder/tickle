@@ -61,6 +61,8 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val physicsEngineP = BooleanParameter("physicsEngine", value = gameInfo.physicsEngine)
     val gravityP = Vector2dParameter("gravity", value = gameInfo.physicsInfo.gravity).asHorizontal()
     val scaleP = DoubleParameter("scale", value = gameInfo.physicsInfo.scale)
+
+    val framesPerSecondP = IntParameter("framesPerSecond", value = gameInfo.physicsInfo.framesPerSecond)
     val velocityIterationsP = IntParameter("velocityIterations", value = gameInfo.physicsInfo.velocityIterations)
     val positionIterationsP = IntParameter("positionIterations", value = gameInfo.physicsInfo.positionIterations)
 
@@ -68,7 +70,7 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
     val filterBitsP = GroupedChoiceParameter<Class<*>>("filterBits", value = NoFilterBits::class.java, allowSingleItemSubMenus = true)
 
     val physicsDetailsP = SimpleGroupParameter("physicsDetails")
-            .addParameters(gravityP, scaleP, velocityIterationsP, positionIterationsP, filterGroupsP, filterBitsP)
+            .addParameters(gravityP, scaleP, framesPerSecondP, velocityIterationsP, positionIterationsP, filterGroupsP, filterBitsP)
             .asBox()
 
     override val taskD = TaskDescription("editGameInfo")
@@ -121,8 +123,11 @@ class GameInfoTask(val gameInfo: GameInfo) : AbstractTask() {
         with(gameInfo.physicsInfo) {
             gravity = gravityP.value
             scale = scaleP.value!!
+
+            framesPerSecond = framesPerSecondP.value!!
             velocityIterations = velocityIterationsP.value!!
             positionIterations = positionIterationsP.value!!
+
             filterGroupsString = filterGroupsP.value!!.name
             filterBitsString = filterBitsP.value!!.name
         }

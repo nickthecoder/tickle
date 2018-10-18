@@ -4,9 +4,9 @@
   "showMouse": true,
   "layout": "default",
   "snapToGrid": {
-    "enabled": false,
+    "enabled": true,
     "xSpacing": 50,
-    "ySpacing": 50,
+    "ySpacing": 20,
     "xOffset": 0,
     "yOffset": 0,
     "xCloseness": 10,
@@ -41,8 +41,8 @@
       "actors": [
         {
           "costume": "sceneButton",
-          "x": 80,
-          "y": 355,
+          "x": 100,
+          "y": 380,
           "text": "Overlapping",
           "direction": 0,
           "scaleX": 1,
@@ -56,8 +56,8 @@
         },
         {
           "costume": "smallText",
-          "x": 236,
-          "y": 465,
+          "x": 250,
+          "y": 460,
           "text": "Demo Main Menu",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -66,8 +66,8 @@
         },
         {
           "costume": "sceneButton",
-          "x": 77,
-          "y": 322,
+          "x": 100,
+          "y": 340,
           "text": "Action",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -77,6 +77,22 @@
             {
               "name": "scene",
               "value": "action/menu"
+            }
+          ]
+        },
+        {
+          "costume": "sceneButton",
+          "x": 100,
+          "y": 300,
+          "text": "Physics",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1,
+          "attributes": [
+            {
+              "name": "scene",
+              "value": "physics/menu"
             }
           ]
         }

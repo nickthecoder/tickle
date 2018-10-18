@@ -129,6 +129,7 @@ class DesignJsonResources : JsonResources {
             with(resources.gameInfo.physicsInfo) {
                 jphysics.add("gravity_x", gravity.x)
                 jphysics.add("gravity_y", gravity.y)
+                jphysics.add("framesPerSecond", framesPerSecond)
                 jphysics.add("velocityIterations", velocityIterations)
                 jphysics.add("positionIterations", positionIterations)
                 jphysics.add("scale", scale)

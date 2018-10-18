@@ -28,9 +28,9 @@ import uk.co.nickthecoder.tickle.loop.GameLoop
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.resources.SceneResource
 import uk.co.nickthecoder.tickle.util.AutoFlushPreferences
+import uk.co.nickthecoder.tickle.util.ErrorHandler
 import uk.co.nickthecoder.tickle.util.JsonScene
 import java.io.File
-import java.io.FileNotFoundException
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class Game(
@@ -38,6 +38,17 @@ class Game(
         val resources: Resources)
 
     : WindowListener {
+
+    /**
+     * When true, prevent all stage, views and roles from receiving tick events.
+     *
+     * NOTE. [Director] and [Producer] have their tick methods called whether paused or not
+     *
+     * If you want some role to continue to tick while paused, then add extra code into your
+     * [Director]'s or [Producer]'s preTick, tick or postTick methods, manually calling those
+     * role's tick method.
+     */
+    var paused: Boolean = false
 
     var renderer = Renderer(window)
 
@@ -135,13 +146,9 @@ class Game(
         sceneName = scenePath
         try {
             startScene(loadScene(Resources.instance.scenePathToFile(scenePath)))
-        } catch (e: FileNotFoundException) {
-            sceneName = oldSceneName
-            println("Scene $scenePath not found. Ignoring.")
         } catch (e: Exception) {
             sceneName = oldSceneName
-            println("Failed to load scene $scenePath. Ignoring.")
-            e.printStackTrace()
+            ErrorHandler.handleError(e)
         }
     }
 
@@ -167,6 +174,7 @@ class Game(
         director.activated()
         producer.sceneActivated()
         seconds = System.nanoTime() / 1_000_000_000.0
+        gameLoop.sceneStarted()
         System.gc()
     }
 
@@ -191,20 +199,26 @@ class Game(
         quitting = true
     }
 
+    /**
+     * Returns true until the game is about to end. The game can end either by calling [quit], or
+     * by closing the window (e.g. Alt+F4, or by clicking the window's close button).
+     *
+     * In both cases, the game doesn't stop immediately. The game loop is completed, allowing
+     * everything to end cleanly.
+     *
+     * NOTE. isRunning ignores the [paused] boolean. i.e. a paused game is still considered to be running.
+     */
     fun isRunning() = !quitting && !window.shouldClose()
 
-    fun tick() {
-
-        producer.preTick()
-        director.preTick()
-
-        director.tick()
-
-        director.postTick()
-        producer.postTick()
-
-        processRunLater()
-
+    /**
+     * Called by the [GameLoop]. Do NOT call this directly from elsewhere!
+     *
+     * If the mouse position has moved, then create a MouseEvent, and call all mouse listeners.
+     *
+     * Note, if the mouse has been captured, then only the listener that has captured the mouse
+     * will be notified of the event.
+     */
+    fun mouseMoveTick() {
         Window.instance?.mousePosition(currentScreenMousePosition)
 
         if (currentScreenMousePosition != previousScreenMousePosition) {
@@ -242,8 +256,6 @@ class Game(
                 }
             }
         }
-
-        scene.draw(renderer)
     }
 
     override fun onKey(event: KeyEvent) {
@@ -305,9 +317,18 @@ class Game(
         return event.isConsumed()
     }
 
+    /**
+     * Uses a ConcurrentLinkedQueue, rather than a simple list, so that [runLater] can be called within
+     * a runLater lambda without fear of a concurrent modification exception.
+     */
     private var runLaters = ConcurrentLinkedQueue<() -> Unit>()
 
-    private fun processRunLater() {
+    /**
+     * Called by the [GameLoop] (do NOT call this directly from elsewhere!)
+     *
+     * Runs all of the lambdas sent to [runLater] since the last call to [processRunLater].
+     */
+    fun processRunLater() {
         var entry = runLaters.poll()
         while (entry != null) {
             entry()

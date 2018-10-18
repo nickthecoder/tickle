@@ -190,6 +190,7 @@ open class JsonResources {
                 with(resources.gameInfo.physicsInfo) {
                     gravity.x = jphysics.getDouble("gravity_x", 0.0)
                     gravity.y = jphysics.getDouble("gravity_y", 0.0)
+                    framesPerSecond = jphysics.getInt("framesPerSecond", 30)
                     velocityIterations = jphysics.getInt("velocityIterations", 8)
                     positionIterations = jphysics.getInt("positionIterations", 3)
                     scale = jphysics.getDouble("scale", 100.0)

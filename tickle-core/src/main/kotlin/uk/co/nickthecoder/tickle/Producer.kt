@@ -55,6 +55,8 @@ interface Producer : MouseButtonListener {
 
     fun preTick()
 
+    fun tick()
+
     fun postTick()
 
     fun sceneEnd()
@@ -99,9 +101,11 @@ abstract class AbstractProducer : Producer {
 
     override fun sceneActivated() {}
 
-    override fun postTick() {}
-
     override fun preTick() {}
+
+    override fun tick() {}
+
+    override fun postTick() {}
 
     override fun sceneEnd() {}
 

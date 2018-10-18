@@ -42,7 +42,7 @@
         {
           "costume": "sceneButton",
           "x": 100,
-          "y": 440,
+          "y": 360,
           "text": "Pixel",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -58,7 +58,7 @@
         {
           "costume": "sceneButton",
           "x": 550,
-          "y": 40,
+          "y": 440,
           "text": "Main Menu",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -74,7 +74,7 @@
         {
           "costume": "sceneButton",
           "x": 100,
-          "y": 400,
+          "y": 320,
           "text": "Threshold",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -90,7 +90,7 @@
         {
           "costume": "sceneButton",
           "x": 100,
-          "y": 320,
+          "y": 240,
           "text": "aliens-threshold",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -106,7 +106,7 @@
         {
           "costume": "sceneButton",
           "x": 100,
-          "y": 360,
+          "y": 280,
           "text": "aliens-pixel",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -122,7 +122,7 @@
         {
           "costume": "sceneButton",
           "x": 250,
-          "y": 440,
+          "y": 360,
           "text": "bug-1",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -138,7 +138,7 @@
         {
           "costume": "sceneButton",
           "x": 250,
-          "y": 400,
+          "y": 320,
           "text": "bug-1-ok",
           "textOutlineColor": "#00000000",
           "direction": 0,
@@ -150,6 +150,16 @@
               "value": "overlapping/bug-1-ok"
             }
           ]
+        },
+        {
+          "costume": "smallText",
+          "x": 250,
+          "y": 460,
+          "text": "Overlapping",
+          "textOutlineColor": "#00000000",
+          "direction": 0,
+          "scaleX": 1,
+          "scaleY": 1
         }
       ]
     }

@@ -41,26 +41,14 @@ import uk.co.nickthecoder.tickle.util.Angle
  */
 class TickleWorld(
         gravity: Vector2d = Vector2d(0.0, 0.0),
-        val scale: Float = 100f,
+        val scale: Float,
+        val timeStep: Float,
         val velocityIterations: Int = 8,
         val positionIterations: Int = 3) {
 
     val jBox2dWorld = JBox2DWorld(pixelsToWorld(gravity), true)
 
-    /**
-     * Read the JBox2D's World.step method's documentation for more details.
-     *
-     * The default value is 1/30 (i.e. 30 frames per second).
-     */
-    var maxTimeStep = 1.0 / 30.0 // 30 frames per second
-
-    /**
-     * If the time step interval is more than maxTimeStep, should multiple steps be calculated, or just one?
-     * When true, a single step is calculated, and the remaining time is ignored.
-     * When false, multiple steps are calculated to fill the actual elapsed time. This will be more accurate, but
-     * will take more time.
-     */
-    var truncate = false
+    var accumulator: Double = 0.0
 
     var gravity: Vector2d
         get() = worldToPixels(jBox2dWorld.gravity)
@@ -69,6 +57,10 @@ class TickleWorld(
         }
 
     private var previousTickSeconds: Double = 0.0
+
+    init {
+        previousTickSeconds = Game.instance.seconds
+    }
 
     fun pixelsToWorld(pixels: Double) = pixels.toFloat() / scale
 
@@ -107,40 +99,53 @@ class TickleWorld(
         jBox2dWorld.destroyBody(body.jBox2DBody)
     }
 
+    fun resetAccumulator() {
+        accumulator = 0.0
+        previousTickSeconds = Game.instance.seconds
+    }
+
     fun tick() {
-        if (previousTickSeconds == Game.instance.seconds) {
-            // If the world is shared by multiple stages, then ignore the 2nd (and 3rd...) ticks
-            return
+        if (previousTickSeconds == 0.0) {
+            previousTickSeconds = Game.instance.seconds
+        }
+        accumulator += (Game.instance.seconds - previousTickSeconds)
+
+        if (accumulator > timeStep) {
+
+            // First make sure that the body is up to date. If the Actor's position or direction have been changed by game code,
+            // then the Body will need to be updated before we can call "step".
+            var body = jBox2dWorld.bodyList
+            while (body != null) {
+                val tickleBody = body.userData as TickleBody
+                tickleBody.actor.ensureBodyIsUpToDate()
+                body = body.next
+            }
+
+            jBox2dWorld.step(timeStep.toFloat(), velocityIterations, positionIterations)
+            accumulator -= timeStep
+
+            // We've performed ONE step for this frame already.
+            // But if the frame rate is low, then we may need to do another one.
+            // Note. timeStep * 1.5 is used rather than 1.0 so that if the actual frame rate is
+            // very close to the required frame rate we don't end up doing 2 frames in one iteration,
+            // and then zero in the next.
+            while (accumulator > timeStep * 1.5) {
+                jBox2dWorld.step(timeStep.toFloat(), velocityIterations, positionIterations)
+                accumulator -= timeStep
+            }
+
+            // Update the actor's positions and directions
+            body = jBox2dWorld.bodyList
+            while (body != null) {
+                val tickleBody = body.userData as TickleBody
+                val actor = tickleBody.actor
+                actor.updateFromBody(this)
+                body = body.next
+            }
+        } else {
+            //println("Skipped physics for this frame")
         }
         previousTickSeconds = Game.instance.seconds
-
-        // First make sure that the body is up to date. If the Actor's position or direction have been changed by game code,
-        // then the Body will need to be updated before we can call "step".
-        var body = jBox2dWorld.bodyList
-        while (body != null) {
-            val tickleBody = body.userData as TickleBody
-            tickleBody.actor.ensureBodyIsUpToDate()
-            body = body.next
-        }
-
-        // Perform all of the JBox2D calculations
-        var interval = Game.instance.tickDuration
-        if (interval > maxTimeStep && truncate) {
-            interval = maxTimeStep
-        }
-        while (interval > 0.0) {
-            jBox2dWorld.step(Math.min(interval, maxTimeStep).toFloat(), velocityIterations, positionIterations)
-            interval -= maxTimeStep
-        }
-
-        // Update the actor's positions and directions
-        body = jBox2dWorld.bodyList
-        while (body != null) {
-            val tickleBody = body.userData as TickleBody
-            val actor = tickleBody.actor
-            actor.updateFromBody(this)
-            body = body.next
-        }
     }
 
     fun addContactListener(contactListener: ContactListener) {

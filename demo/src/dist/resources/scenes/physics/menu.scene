@@ -43,7 +43,7 @@
           "costume": "smallText",
           "x": 300,
           "y": 460,
-          "text": "Action",
+          "text": "Physics",
           "textOutlineColor": "#00000000",
           "direction": 0,
           "scaleX": 1,
@@ -53,7 +53,7 @@
           "costume": "sceneButton",
           "x": 64,
           "y": 403,
-          "text": "Ease",
+          "text": "Simple",
           "textOutlineColor": "#00000000",
           "direction": 0,
           "scaleX": 1,
@@ -61,7 +61,7 @@
           "attributes": [
             {
               "name": "scene",
-              "value": "action/ease"
+              "value": "physics/simple"
             }
           ]
         },

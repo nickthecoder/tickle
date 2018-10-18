@@ -52,22 +52,11 @@ interface Director : MouseButtonListener {
 
     fun activated()
 
-    fun preTick() {
-        Game.instance.scene.views.values.forEach { view ->
-            view.tick()
-        }
-        Game.instance.scene.stages.values.forEach { stage ->
-            stage.tick()
-        }
-    }
+    fun preTick()
 
     fun tick()
 
-    fun postTick() {
-        Game.instance.scene.stages.values.forEach { stage ->
-            stage.world?.tick()
-        }
-    }
+    fun postTick()
 
     fun end()
 
@@ -96,19 +85,18 @@ interface Director : MouseButtonListener {
 abstract class AbstractDirector : Director {
 
     /**
-     * When true, prevent all stage, views and roles from receiving tick events.
-     * You can override this behaviour by changing the implementation of [preTick] and [postTick]
-     */
-    var paused: Boolean = false
-
-    /**
      * The default behaviour is to create a single shared world attached to every Stage.
      * It is quite common to override this method, and create a single world on just one stage.
      */
     override fun createWorlds() {
         if (Resources.instance.gameInfo.physicsEngine) {
             val pi = Resources.instance.gameInfo.physicsInfo
-            val world: TickleWorld = TickleWorld(pi.gravity, pi.scale.toFloat(), velocityIterations = pi.velocityIterations, positionIterations = pi.positionIterations)
+            val world: TickleWorld = TickleWorld(
+                    gravity = pi.gravity,
+                    scale = pi.scale.toFloat(),
+                    timeStep = 1.0f / pi.framesPerSecond,
+                    velocityIterations = pi.velocityIterations,
+                    positionIterations = pi.positionIterations)
             Game.instance.scene.stages.values.forEach { stage ->
                 stage.world = world
             }
@@ -118,55 +106,47 @@ abstract class AbstractDirector : Director {
     /**
      * The default implementation does nothing.
      */
-    override open fun sceneLoaded() {}
+    override fun sceneLoaded() {}
 
     /**
      * The default implementation does nothing.
      */
-    override open fun begin() {}
+    override fun begin() {}
 
     /**
      * The default implementation does nothing.
      */
-    override open fun activated() {}
+    override fun activated() {}
 
     /**
      * The default implementation does nothing.
      */
-    override open fun end() {}
+    override fun end() {}
 
     /**
      * The default implementation does nothing.
      */
-    override open fun onKey(event: KeyEvent) {}
+    override fun onKey(event: KeyEvent) {}
 
     /**
      * The default implementation does nothing.
      */
-    override open fun onMouseButton(event: MouseEvent) {}
-
-    /**
-     * If [paused] is true, does nothing, otherwise it calls tick on all views, then calls tick on all stages.
-     */
-    override open fun preTick() {
-        if (!paused) {
-            super.preTick()
-        }
-    }
+    override fun onMouseButton(event: MouseEvent) {}
 
     /**
      * The default implementation does nothing.
      */
-    override open fun tick() {}
+    override fun preTick() {}
 
     /**
-     * If [paused] is true, does nothing, otherwise it calls tick on each stage's TickleWorld (the physics engine).
+     * The default implementation does nothing.
      */
-    override open fun postTick() {
-        if (!paused) {
-            super.postTick()
-        }
-    }
+    override fun tick() {}
+
+    /**
+     * The default implementation does nothing.
+     */
+    override fun postTick() {}
 
     /**
      * The default implementation does nothing.
