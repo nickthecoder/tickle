@@ -29,16 +29,16 @@ import uk.co.nickthecoder.tickle.scripts.ScriptManager
  * Looks after a single Scene. A game will typically have at least two Directors, one to handle the menu or splash
  * screen, and another for playing the game. They are typically called "Menu" and "Play".
  *
- * A typical game has many "levels", and a Director is created when a new level is loaded, and is delete when the
- * level ends. Therefore they cannot hold information that is carried over from one level to the next (such as
+ * A typical game has many "scenes" (AKA "levels"), and a Director is created when a new scene is loaded,
+ * and is thrown away when the scene ends.
+ * Therefore they cannot hold information that is carried over from one scene to the next (e.g. score,
  * lives remaining). Such information must be held on Producer instead.
  *
- * Typical uses of a Directory :
+ * Typical uses of a Director :
  *
- * Decide when the level has been completed (or failed), and move to the next level, or return to the main menu.
- * Play music
- * Act as a single point of communication between the Actors' Roles
- * Holds "tag" data for each Role in the scene (see tagManager)
+ * - Decide when the level has been completed (or failed), and move to the next level, or return to the main menu.
+ * - Listen for a "quit" key, to end the game, and return to the main menu.
+ * - Act as a single point of communication between the Actors' Roles
  *
  * There are many more things that Director can do!
  */

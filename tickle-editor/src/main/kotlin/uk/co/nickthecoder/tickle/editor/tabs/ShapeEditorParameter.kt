@@ -34,7 +34,7 @@ import uk.co.nickthecoder.paratask.parameters.fields.ParameterField
 import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.util.AngleParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
-import uk.co.nickthecoder.tickle.editor.util.image
+import uk.co.nickthecoder.tickle.editor.util.cachedImage
 import uk.co.nickthecoder.tickle.physics.BoxDef
 import uk.co.nickthecoder.tickle.physics.CircleDef
 import uk.co.nickthecoder.tickle.physics.PolygonDef
@@ -252,7 +252,7 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
             restore()
 
             this.globalAlpha = 0.5
-            drawImage(pose.image(),
+            drawImage(pose.texture.cachedImage(),
                     pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(),
                     0.0, 0.0, pose.rect.width.toDouble(), pose.rect.height.toDouble())
             this.globalAlpha = 1.0
@@ -302,7 +302,8 @@ class ShapeEditorField(shapeEditorParameter: ShapeEditorParameter) : ParameterFi
     }
 
     inner class RadiusHandle(val centerXP: DoubleParameter, val centerYP: DoubleParameter, val radiusParameter: DoubleParameter) : Handle() {
-        override fun position() = Vector2d((centerXP.value ?: 0.0) + (radiusParameter.value ?: 0.0), (centerYP.value ?: 0.0))
+        override fun position() = Vector2d((centerXP.value ?: 0.0) + (radiusParameter.value ?: 0.0), (centerYP.value
+                ?: 0.0))
 
         override fun moveTo(x: Double, y: Double) {
             radiusParameter.value = x - (centerXP.value ?: 0.0)

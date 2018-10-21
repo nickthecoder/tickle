@@ -25,7 +25,6 @@ import javafx.scene.control.Alert
 import javafx.scene.control.Button
 import javafx.scene.control.ButtonType
 import javafx.scene.control.Label
-import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.*
 import uk.co.nickthecoder.tickle.Pose
@@ -33,9 +32,12 @@ import uk.co.nickthecoder.tickle.editor.EditorAction
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
 import uk.co.nickthecoder.tickle.graphics.Color
+import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.resources.ActorResource
 import uk.co.nickthecoder.tickle.resources.Resources
 import uk.co.nickthecoder.tickle.util.Deletable
+import uk.co.nickthecoder.tickle.util.PixelArray
+
 
 /*
  Contains many extension functions, used from within the SceneEditor.
@@ -46,23 +48,29 @@ import uk.co.nickthecoder.tickle.util.Deletable
  Android easier.
 */
 
-// POSE
 
-fun Pose.image(): Image? {
-    return ImageCache.image(texture)
+// Texture
+
+fun Texture.toImage() = PixelArray(this).toImage()
+
+fun Texture.cachedImage() = ImageCache.image(this)
+
+fun Texture.toImageView(cacheImage: Boolean = true): ImageView {
+    val image = if (cacheImage) cachedImage() else toImage()
+    return ImageView(image)
 }
 
-fun Pose.imageView(): ImageView? {
-    texture.file?.let { file ->
-        val iv = ImageView(ImageCache.image(file))
-        iv.viewport = Rectangle2D(rect.left.toDouble(), rect.top.toDouble(), rect.width.toDouble(), rect.height.toDouble())
-        return iv
-    }
-    return null
+
+// POSE
+
+fun Pose.toImageView(cacheImage: Boolean = true): ImageView? {
+    val iv = texture.toImageView(cacheImage)
+    iv.viewport = Rectangle2D(rect.left.toDouble(), rect.top.toDouble(), rect.width.toDouble(), rect.height.toDouble())
+    return iv
 }
 
 fun Pose.thumbnail(size: Int): ImageView? {
-    val iv = imageView()
+    val iv = toImageView()
 
     if (iv != null) {
         if (iv.viewport.width > size || iv.viewport.height > size) {
@@ -93,7 +101,6 @@ fun Pose.isPixelIsOpaque(x: Double, y: Double, threshold: Double = 0.05): Boolea
     }
     return false
 }
-
 
 // ACTOR RESOURCE
 

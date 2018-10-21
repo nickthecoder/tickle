@@ -21,7 +21,7 @@ package uk.co.nickthecoder.tickle.editor.scene
 import javafx.scene.canvas.Canvas
 import uk.co.nickthecoder.tickle.NinePatch
 import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.editor.util.image
+import uk.co.nickthecoder.tickle.editor.util.cachedImage
 import uk.co.nickthecoder.tickle.graphics.Color
 import uk.co.nickthecoder.tickle.graphics.TextStyle
 import uk.co.nickthecoder.tickle.resources.ActorResource
@@ -133,7 +133,7 @@ abstract class Layer {
                     if (sourceWidths[x] < 0.00001 || sourceHeights[y] < 0.00001) continue
 
                     drawImage(
-                            pose.image(),
+                            pose.texture.cachedImage(),
                             pose.rect.left + sourceLefts[x], pose.rect.bottom - sourceBottoms[y], sourceWidths[x], -sourceHeights[y], // Source rect
                             destLefts[x], destBottoms[y], destWidths[x], destHeights[y]) // Dest rect
                 }
@@ -154,7 +154,7 @@ abstract class Layer {
 
             for (y in 0..down - 1) {
                 for (x in 0..across - 1) {
-                    drawImage(pose.image(),
+                    drawImage(pose.texture.cachedImage(),
                             pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(),
                             x * w, y * h, w, h)
                 }
@@ -165,7 +165,7 @@ abstract class Layer {
     }
 
     fun drawPose(pose: Pose) {
-        val image = pose.image()
+        val image = pose.texture.cachedImage()
         canvas.graphicsContext2D.drawImage(
                 image,
                 pose.rect.left.toDouble(), pose.rect.bottom.toDouble(), pose.rect.width.toDouble(), -pose.rect.height.toDouble(), // Source rect

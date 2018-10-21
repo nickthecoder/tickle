@@ -12,6 +12,7 @@
     "physics": {
       "gravity_x": 0,
       "gravity_y": -100,
+      "framesPerSecond": 30,
       "velocityIterations": 8,
       "positionIterations": 3,
       "scale": 40,
@@ -26,7 +27,7 @@
     ],
     "treeThumbnailSize": 24,
     "costumePickerThumbnailSize": 50,
-    "isMaximized": true,
+    "isMaximized": false,
     "windowWidth": 1076,
     "windowHeight": 702,
     "apiURL": "http://nickthecoder.co.uk/public/tickle/api-0.1/tickle-core/"
@@ -591,6 +592,16 @@
           ]
         }
       ]
+    }
+  ],
+  "tabs": [
+    {
+      "name": "alien1",
+      "type": "POSE"
+    },
+    {
+      "name": "graphics",
+      "type": "TEXTURE"
     }
   ]
 }

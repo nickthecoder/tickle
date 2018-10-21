@@ -20,7 +20,6 @@ package uk.co.nickthecoder.tickle.editor.tabs
 
 import groovy.lang.GroovyRuntimeException
 import groovy.util.Eval
-import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
 import javafx.event.EventHandler
 import javafx.geometry.Orientation
@@ -31,18 +30,22 @@ import javafx.scene.control.Button
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.SplitPane
 import javafx.scene.control.TextArea
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
 import javafx.scene.image.WritableImage
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.FlowPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
+import uk.co.nickthecoder.tickle.Pose
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.CodeEditor
+import uk.co.nickthecoder.tickle.editor.util.toImageView
+import uk.co.nickthecoder.tickle.graphics.Texture
 import uk.co.nickthecoder.tickle.groovy.GroovyLanguage
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
-import java.util.concurrent.CountDownLatch
 import javax.imageio.ImageIO
 
 
@@ -127,15 +130,20 @@ class FXCoder {
     }
 
     private fun saveImage() {
-        val canvas = guiResults
-        if (canvas is Canvas) {
+        val results = guiResults
+
+        if (results is Canvas || results is ImageView) {
 
             val fileChooser = FileChooser()
             fileChooser.extensionFilters.add(FileChooser.ExtensionFilter("png files (*.png)", "*.png"))
             val file = fileChooser.showSaveDialog(MainWindow.instance.stage)
 
             if (file != null) {
-                saveCanvas(canvas, file)
+                if (results is Canvas) {
+                    saveCanvas(results, file)
+                } else if (results is ImageView) {
+                    saveImage(results.image, file)
+                }
             }
         }
     }
@@ -148,9 +156,7 @@ class FXCoder {
         hSplitPane.items.remove(guiResultsScroll)
         codeEditor.hideError()
 
-        Thread {
-            runScript()
-        }.start()
+        runScript()
     }
 
     private fun runScript() {
@@ -159,35 +165,39 @@ class FXCoder {
 
             val result = Eval.me(codeEditor.tediArea.text)
 
-            Platform.runLater {
-                if (result is Node) {
-                    guiResults = result
-                    guiResultsScroll.content = guiResults
-                    hSplitPane.items.add(guiResultsScroll)
-                }
-                messageArea.text = result?.toString() ?: "No results returned"
-                saveImageButton.isVisible = result is Canvas
+            guiResults = when (result) {
+                is Node -> result
+                is Image -> ImageView(result)
+                is Pose -> result.toImageView(false)
+                is Texture -> result.toImageView(false)
+                else -> null
             }
+
+            if (guiResults != null) {
+                guiResultsScroll.content = guiResults
+                hSplitPane.items.add(guiResultsScroll)
+            }
+            messageArea.text = result?.toString() ?: "No results returned"
+            saveImageButton.isVisible = guiResults is Canvas || guiResults is ImageView
+
 
         } catch (e: Exception) {
-            Platform.runLater {
-                if (e is GroovyRuntimeException) {
-                    codeEditor.highlightError(GroovyLanguage.convertException(e))
-                    messageArea.text = "Error"
-                } else {
-                    val stringWriter = StringWriter()
-                    e.printStackTrace(PrintWriter(stringWriter))
-                    messageArea.text = stringWriter.toString()
-                }
-            }
-        } finally {
-            Platform.runLater {
-                runButton.isDisable = false
 
-                if (vSplitPane.items.size < 2) {
-                    vSplitPane.items.add(hSplitPane)
-                    vSplitPane.setDividerPosition(0, 0.9)
-                }
+            if (e is GroovyRuntimeException) {
+                codeEditor.highlightError(GroovyLanguage.convertException(e))
+                messageArea.text = "Error"
+            } else {
+                val stringWriter = StringWriter()
+                e.printStackTrace(PrintWriter(stringWriter))
+                messageArea.text = stringWriter.toString()
+            }
+
+        } finally {
+            runButton.isDisable = false
+
+            if (vSplitPane.items.size < 2) {
+                vSplitPane.items.add(hSplitPane)
+                vSplitPane.setDividerPosition(0, 0.9)
             }
         }
     }
@@ -204,16 +214,9 @@ class FXCoder {
         }
 
         @JvmStatic
-        fun runLaterAndWait(action: () -> Unit) {
-            val countdown = CountDownLatch(1)
-            Platform.runLater {
-                try {
-                    action()
-                } finally {
-                    countdown.countDown()
-                }
-            }
-            countdown.await()
+        fun saveImage(image: Image, file: File) {
+            val renderedImage = SwingFXUtils.fromFXImage(image, null)
+            ImageIO.write(renderedImage, "png", file)
         }
 
         val defaultCode = """// FXCoder lets you run groovy scripts.
@@ -227,13 +230,10 @@ import javafx.scene.paint.*
 def w = 50.0
 def h = 30.0
 
-// Note: scripts are NOT run in the JavaFX thread, but we are allowed to play with a Canvas
-// in the script's thread. Phew ;-)
-// However, any other GUI calls will need to be within a runLater block :
-//     Platform.runLater{ ... }
-// Or use :
-//     FXCoder.runLaterAndWait{ ... }
-// If you need to wait for it to finish.
+// Note: scripts are run in the JavaFX thread, which will cause the GUI
+// to freeze if your script takes a long time.
+// You can consider using Threads, but remember that GUI operations,
+// (including OpenGL operations) must be on the JavaFX thread.
 
 def canvas = new Canvas(w,h)
 def context = canvas.graphicsContext2D
@@ -241,9 +241,10 @@ def context = canvas.graphicsContext2D
 context.fill = Color.WHEAT
 context.fillRect(0.0, 0.0, w,h)
 
-// By returning a canvas, a "Save Image" button will appear.
-// Alternatively, you could save the image from within the script.
-//     FXCode.saveCanvas( canvas, file )
+// By returning a Canvas or an Image, a "Save Image" button will appear.
+// Alternatively, you could save it from within the script.
+//     FXCoder.saveCanvas( canvas, file )
+//     FXCoder.saveImage( image, file )
 canvas
 """
 

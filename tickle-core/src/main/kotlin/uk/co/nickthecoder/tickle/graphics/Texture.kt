@@ -31,14 +31,24 @@ import java.io.IOException
 import java.nio.ByteBuffer
 
 
-class Texture(val width: Int, val height: Int, val pixelFormat: Int, buffer: ByteBuffer?, val file: File? = null)
+class Texture(width: Int, height: Int, pixelFormat: Int, buffer: ByteBuffer?, val file: File? = null)
 
     : Deletable, Renamable {
 
-    var privateHandle: Int = glGenTextures()
+    private var privateHandle: Int = glGenTextures()
 
     val handle: Int
         get() = privateHandle
+
+    private var privateWidth = width
+
+    private var privateHeight = height
+
+    val width: Int
+        get() = privateWidth
+
+    val height: Int
+        get() = privateHeight
 
     init {
         glBindTexture(GL_TEXTURE_2D, handle)
@@ -49,13 +59,55 @@ class Texture(val width: Int, val height: Int, val pixelFormat: Int, buffer: Byt
     fun reload() {
         file?.let {
             val loadedImage = load(it)
-            unbind()
-            glDeleteTextures(handle)
-            privateHandle = glGenTextures()
-            glBindTexture(GL_TEXTURE_2D, handle)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, loadedImage.buffer)
+            write(loadedImage.width, loadedImage.height, loadedImage.buffer)
         }
+    }
+
+    /**
+     * Writes a new image into the Texture
+     */
+    fun write(width: Int, height: Int, buffer: ByteBuffer, pixelFormat: Int = GL_RGBA) {
+        unbind()
+        // TODO Do we need to delete the old texture? Can we just do the final glTexImage2D Instead?
+        glDeleteTextures(handle)
+        privateHandle = glGenTextures()
+        glBindTexture(GL_TEXTURE_2D, handle)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, buffer)
+        privateWidth = width
+        privateHeight = height
+    }
+
+    /**
+     * Transfers the texture from the GPU back to main memory (which is SLOW).
+     * The result is a ByteArray of size width * height * 4, and the format is RGBA.
+     * i.e. to get the alpha value at x,y :
+     *
+     *     read()[ (y * height + x) * 4 + 3 ]
+     *
+     * and then deal with the annoyance of java's lack of unsigned bytes. Grr :
+     *
+     *     .toInt() & 0xFF
+     */
+    fun read(flip: Boolean = false): ByteArray {
+        bind()
+        val pixels = ByteArray(width * height * 4)
+        val buffer = ByteBuffer.allocateDirect(pixels.size)
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer)
+        buffer.get(pixels)
+        if (flip) {
+            for (y in 0 until height / 2) {
+                for (x in 0 until width) {
+                    for (c in 0..3) {
+                        val tmp = pixels[((height - 1 - y) * width + x) * 4 + c]
+                        pixels[((height - 1 - y) * width + x) * 4 + c] = pixels[(y * width + x) * 4 + c]
+                        pixels[(y * width + x) * 4 + c] = tmp
+                    }
+                }
+            }
+        }
+        return pixels
     }
 
     fun bind() {
@@ -88,7 +140,7 @@ class Texture(val width: Int, val height: Int, val pixelFormat: Int, buffer: Byt
     /**
      * Can only delete if there are no Poses using this texture.
      */
-    override fun dependables() : List<Dependable> {
+    override fun dependables(): List<Dependable> {
         return Resources.instance.poses.items().values.filter { it.texture == this }
     }
 
@@ -98,26 +150,6 @@ class Texture(val width: Int, val height: Int, val pixelFormat: Int, buffer: Byt
 
     override fun rename(newName: String) {
         Resources.instance.textures.rename(this, newName)
-    }
-
-    /**
-     * Transfers the texture from the GPU back to main memory (which is SLOW).
-     * The result is a ByteArray or size width * height * 4, and the format is RGBA.
-     * i.e. to get the alpha value at x,y :
-     *
-     *     read()[ (y * height + x) * 4 + 3 ]
-     *
-     * and then deal with the annoyance of java's lack of unsigned bytes. Grr :
-     *
-     *     .toInt() & 0xFF
-     */
-    fun read(): ByteArray {
-        bind()
-        val pixels = ByteArray(width * height * 4)
-        val buffer = ByteBuffer.allocateDirect(pixels.size)
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer)
-        buffer.get(pixels)
-        return pixels
     }
 
     /**

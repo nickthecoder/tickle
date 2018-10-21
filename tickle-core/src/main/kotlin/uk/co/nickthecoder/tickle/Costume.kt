@@ -162,21 +162,27 @@ class Costume : Copyable<Costume>, Deletable, Renamable, Dependable {
      * This makes is easy to create invisible objects in the game, but visible in the editor.
      */
     fun editorPose(): Pose? = choosePose("editor") ?: choosePose(initialEventName)
-            ?: chooseNinePatch(initialEventName)?.pose
+    ?: chooseNinePatch(initialEventName)?.pose
 
     fun pose(): Pose? = choosePose(initialEventName)
 
-    fun choosePose(eventName: String): Pose? = events[eventName]?.choosePose() ?: inheritEventsFrom?.choosePose(eventName)
+    fun choosePose(eventName: String): Pose? = events[eventName]?.choosePose()
+            ?: inheritEventsFrom?.choosePose(eventName)
 
-    fun chooseNinePatch(eventName: String): NinePatch? = events[eventName]?.chooseNinePatch() ?: inheritEventsFrom?.chooseNinePatch(eventName)
+    fun chooseNinePatch(eventName: String): NinePatch? = events[eventName]?.chooseNinePatch()
+            ?: inheritEventsFrom?.chooseNinePatch(eventName)
 
-    fun chooseCostume(eventName: String): Costume? = events[eventName]?.chooseCostume() ?: inheritEventsFrom?.chooseCostume(eventName)
+    fun chooseCostume(eventName: String): Costume? = events[eventName]?.chooseCostume()
+            ?: inheritEventsFrom?.chooseCostume(eventName)
 
-    fun chooseTextStyle(eventName: String): TextStyle? = events[eventName]?.chooseTextStyle() ?: inheritEventsFrom?.chooseTextStyle(eventName)
+    fun chooseTextStyle(eventName: String): TextStyle? = events[eventName]?.chooseTextStyle()
+            ?: inheritEventsFrom?.chooseTextStyle(eventName)
 
-    fun chooseString(eventName: String): String? = events[eventName]?.chooseString() ?: inheritEventsFrom?.chooseString(eventName)
+    fun chooseString(eventName: String): String? = events[eventName]?.chooseString()
+            ?: inheritEventsFrom?.chooseString(eventName)
 
-    fun chooseSound(eventName: String): Sound? = events[eventName]?.chooseSound() ?: inheritEventsFrom?.chooseSound(eventName)
+    fun chooseSound(eventName: String): Sound? = events[eventName]?.chooseSound()
+            ?: inheritEventsFrom?.chooseSound(eventName)
 
 
     // Copyable

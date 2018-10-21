@@ -23,6 +23,12 @@ import uk.co.nickthecoder.tickle.Role
 /**
  * Remembers which Roles have which tags. Director has a TagManager, and is the easiest way to manage tags.
  * However, if you need multiple TagManager per Scene, then you do not need to use the one on Director.
+ *
+ * NOTE.TagManager was originally created because I found the concept useful when working with other game
+ * engines. However, since writing Tickle, I've found TagManager to be redundant. Instead, I tend to use
+ * interfaces where I would previously use Tags. YMMV.
+ * TagManager can be more efficient than filtering all Roles based on their interface, so if your game
+ * has LOTS of game objects, then TagManager may still be useful.
  */
 class TagManager {
 
