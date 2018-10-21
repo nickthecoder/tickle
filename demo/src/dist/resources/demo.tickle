@@ -27,7 +27,7 @@
     ],
     "treeThumbnailSize": 24,
     "costumePickerThumbnailSize": 50,
-    "isMaximized": false,
+    "isMaximized": true,
     "windowWidth": 1076,
     "windowHeight": 702,
     "apiURL": "http://nickthecoder.co.uk/public/tickle/api-0.1/tickle-core/"
@@ -60,6 +60,10 @@
     {
       "name": "graphics",
       "file": "images/graphics.png"
+    },
+    {
+      "name": "fragments",
+      "file": "images/fragments.png"
     }
   ],
   "fonts": [
@@ -183,6 +187,74 @@
       "offsetY": 0,
       "direction": 90,
       "tiled": true
+    },
+    {
+      "name": "alienFragment1",
+      "texture": "fragments",
+      "left": 0,
+      "bottom": 43,
+      "right": 76,
+      "top": 0,
+      "offsetX": 33,
+      "offsetY": 22,
+      "direction": 0,
+      "snapPoints": [
+        {
+          "x": 38,
+          "y": -9
+        }
+      ]
+    },
+    {
+      "name": "alienFragment2",
+      "texture": "fragments",
+      "left": 76,
+      "bottom": 73,
+      "right": 172,
+      "top": 0,
+      "offsetX": 48,
+      "offsetY": 39,
+      "direction": 0,
+      "snapPoints": [
+        {
+          "x": 48,
+          "y": 47
+        }
+      ]
+    },
+    {
+      "name": "alienFragment3",
+      "texture": "fragments",
+      "left": 172,
+      "bottom": 68,
+      "right": 215,
+      "top": 0,
+      "offsetX": 18,
+      "offsetY": 36,
+      "direction": 0,
+      "snapPoints": [
+        {
+          "x": 51,
+          "y": 43
+        }
+      ]
+    },
+    {
+      "name": "alienFragment4",
+      "texture": "fragments",
+      "left": 0,
+      "bottom": 99,
+      "right": 56,
+      "top": 43,
+      "offsetX": 31,
+      "offsetY": 25,
+      "direction": 0,
+      "snapPoints": [
+        {
+          "x": 8,
+          "y": 47
+        }
+      ]
     }
   ],
   "costumeGroups": [
@@ -596,12 +668,8 @@
   ],
   "tabs": [
     {
-      "name": "alien1",
-      "type": "POSE"
-    },
-    {
-      "name": "graphics",
-      "type": "TEXTURE"
+      "name": "fragment.groovy",
+      "type": "FXCODER"
     }
   ]
 }

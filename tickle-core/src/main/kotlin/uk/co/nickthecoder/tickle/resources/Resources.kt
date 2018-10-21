@@ -159,7 +159,9 @@ open class Resources {
         fontResources.items().values.forEach { it.reload() }
     }
 
-    fun scriptDirectory() = File(file.parent, "scripts")
+    fun scriptDirectory() = File(file.parentFile.absoluteFile, "scripts")
+
+    fun fxcoderDirectory() = File(file.parentFile.absoluteFile, "fxcoder")
 
     fun destroy() {
         textures.items().values.forEach { it.destroy() }

@@ -67,7 +67,7 @@ class ResourcesTree
     }
 
     fun onMousePressed(event: MouseEvent) {
-        if (event.clickCount == 2) {
+        if (event.eventType == MouseEvent.MOUSE_PRESSED && event.clickCount == 2) {
             editItem()
             event.consume()
         }
@@ -191,7 +191,9 @@ class ResourcesTree
                     CostumesItem(),
                     InputsItem(),
                     LayoutsItem(),
-                    ScenesDirectoryItem("Scenes", resources.sceneDirectory.absoluteFile))
+                    ScenesDirectoryItem("Scenes", resources.sceneDirectory.absoluteFile),
+                    FXCoderDirectory()
+            )
 
             if (ScriptManager.languages().isNotEmpty()) {
                 children.add(ScriptsItem())
@@ -795,17 +797,78 @@ class ResourcesTree
             return menuItem
         }
     }
+
+
+    inner class FXCoderDirectory : TopLevelItem("FXCoder", ResourceType.FXCODER_DIRECTORY) {
+
+        var fxCoderDirectory = resources.fxcoderDirectory()
+
+        init {
+            val lister = FileLister(extensions = listOf("groovy"))
+            lister.listFiles(fxCoderDirectory).forEach { file ->
+                children.add(FXCoderItem(file))
+            }
+            updateLabel()
+        }
+
+        override fun resourceAdded(resource: Any, name: String) {
+            if (resource is File && resource.parentFile == fxCoderDirectory) {
+                children.add(FXCoderItem(resource))
+                updateLabel()
+            }
+        }
+
+        override val newResourceType = ResourceType.FXCODER
+
+        override fun isLeaf() = false
+
+        override fun toString() = "FXCoder (${children.size})"
+
+    }
+
+    inner class FXCoderItem(val file: File)
+
+        : DataItem(file.nameWithoutExtension, FXCoderStub(file), ResourceType.FXCODER) {
+
+        override fun resourceRemoved(resource: Any, name: String) {
+            if (resource is File && resource == file) {
+                parent?.let {
+                    (it as ResourceItem).remove(this)
+                    updateLabel()
+                }
+            } else {
+                super.resourceRemoved(resource, name)
+            }
+        }
+
+        override fun deleteMenuItem(): MenuItem? {
+            val menuItem = MenuItem("Delete")
+            menuItem.onAction = EventHandler {
+                val name = file.nameWithoutExtension
+                file.delete()
+                resources.fireRemoved(file, name)
+            }
+            return menuItem
+        }
+
+        /*
+        override fun renameMenuItem(): MenuItem? {
+            val menuItem = MenuItem("Rename")
+            menuItem.onAction = EventHandler {
+                TaskPrompter(RenameScriptTask(file)).placeOnStage(Stage())
+            }
+            return menuItem
+        }
+        */
+    }
 }
 
 
 class ScriptStub(val file: File) {
 
     val name: String
-        get() = if (file.isAbsolute) {
-            Resources.instance.scriptDirectory().toRelativeString(file)
-        } else {
-            file.path
-        }
+        get() = file.absoluteFile.toRelativeString(Resources.instance.scriptDirectory())
+
 
     override fun equals(other: Any?): Boolean {
         if (other is ScriptStub) {
@@ -815,6 +878,23 @@ class ScriptStub(val file: File) {
     }
 
     override fun hashCode() = file.hashCode() + 2
+}
+
+class FXCoderStub(val file: File) {
+
+    val name: String
+        get() {
+            return file.absoluteFile.toRelativeString(Resources.instance.fxcoderDirectory())
+        }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is FXCoderStub) {
+            return file == other.file
+        }
+        return false
+    }
+
+    override fun hashCode() = file.hashCode() + 3
 }
 
 object APIStub {}

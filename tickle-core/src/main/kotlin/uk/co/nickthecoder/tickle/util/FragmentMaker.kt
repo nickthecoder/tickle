@@ -1,5 +1,6 @@
 package uk.co.nickthecoder.tickle.util
 
+import org.joml.Vector2d
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.CostumeEvent
 import uk.co.nickthecoder.tickle.Pose
@@ -38,38 +39,44 @@ import uk.co.nickthecoder.tickle.Producer
  */
 class FragmentMaker(
         val sourcePose: Pose,
-        val colorMask: Pose) {
+        val maskPose: Pose) {
 
     constructor(costume: Costume, sourceEventName: String = "default", maskEventName: String = "fragmentMask") :
             this(costume.choosePose(sourceEventName)!!, costume.choosePose(maskEventName)!!)
 
     var texture: ManagedTexture? = null
 
-    fun generate(): List<Pose> {
+    fun generate(): List<FragmentInfo> {
+
+        if (maskPose.rect.width > sourcePose.rect.width) throw IllegalArgumentException("The mask is wider than the source")
+        if (maskPose.rect.height > sourcePose.rect.height) throw IllegalArgumentException("The mask is taller than the source")
 
         val width = sourcePose.rect.width
         val height = sourcePose.rect.height
 
         val source = PixelArray(sourcePose.texture)
+        val mask = PixelArray(maskPose.texture)
 
-        fun colorAt(x: Int, y: Int): Int {
-            return source.colorAt(x + sourcePose.rect.left, y + sourcePose.rect.top)
+        fun sourcePixelAt(x: Int, y: Int): Int {
+            return source.pixelAt(x + sourcePose.rect.left, y + sourcePose.rect.top)
         }
 
-        fun pixelAt(x: Int, y: Int): Int {
-            return source.pixelAt(x + sourcePose.rect.left, y + sourcePose.rect.top)
+        fun maskColorAt(x: Int, y: Int): Int {
+            return mask.colorAt(x + maskPose.rect.left, y + maskPose.rect.top)
         }
 
         // Create FragmentInfo for each unique color in the mask image
         val infoMap = mutableMapOf<Int, FragmentInfo>()
         for (y in 0 until height) {
             for (x in 0 until width) {
-                val color = colorAt(x, y)
-                val info = infoMap[color]
-                if (info == null) {
-                    infoMap[color] = FragmentInfo(color, x, y)
-                } else {
-                    info.update(x, y)
+                val color = maskColorAt(x, y)
+                if (color != 0) {
+                    val info = infoMap[color]
+                    if (info == null) {
+                        infoMap[color] = FragmentInfo(color, x, y)
+                    } else {
+                        info.update(x, y)
+                    }
                 }
             }
         }
@@ -80,30 +87,47 @@ class FragmentMaker(
             this.texture = texture
         }
 
-        val poses = mutableListOf<Pose>()
-
+        // Create poses
         for (info in infoMap.values) {
 
             val dest = PixelArray(info.width, info.height)
-            for (y in 0 until info.height) {
-                val ty = y + info.minY
-                for (x in 0 until info.width) {
-                    val tx = x + info.minX
-                    if (colorAt(x + info.minX, y + info.minY) == info.color) {
-                        dest.setPixel(tx, ty, pixelAt(tx, ty))
+            println("Created dest array ${info.width} x ${info.height}")
+
+            for (y in 0 until dest.height) {
+                val sourceY = y + info.minY
+                for (x in 0 until dest.width) {
+                    val sourceX = x + info.minX
+                    if (maskColorAt(sourceX, sourceY) == info.color) {
+                        dest.setPixel(x, y, sourcePixelAt(sourceX, sourceY))
                     } else {
-                        dest.setAlpha(tx, ty, 0)
+                        dest.setAlpha(x, y, 0)
                     }
                 }
             }
             val pose = texture.add(dest)
-            poses.add(pose)
+            //pose.offsetX = Math.round(info.centerX).toDouble() - info.minX
+            //pose.offsetY = pose.rect.height - (Math.round(info.centerY).toDouble() - info.minY)
+            //pose.snapPoints.add(Vector2d(sourcePose.offsetX - info.minX, sourcePose.offsetY - (sourcePose.rect.height - info.maxY)))
+
+            // Make the offsets such that the fragment will appear in the same place as the source when added to the stage.
+            pose.offsetX = sourcePose.offsetX - info.minX
+            pose.offsetY = sourcePose.offsetY - (sourcePose.rect.height - info.maxY)
+            // Add a snap point at the center of gravity (ish).
+            // It is likely that once the fragment actor has been created, its PoseAppearance's offset will be
+            // changed to this snap point, so that rotation will look sensible.
+            pose.snapPoints.add(Vector2d(Math.round(info.centerX).toDouble() - info.minX, pose.rect.height - (Math.round(info.centerY).toDouble() - info.minY)))
+            info.pose = pose
         }
 
-        return poses
+        return infoMap.values.toList()
     }
 
     class FragmentInfo(val color: Int, var minX: Int, var minY: Int) {
+        var pose: Pose? = null
+
+        /**
+         * Relative to the source pose (from the TOP)
+         */
         var maxX: Int = minX
         var maxY = minY
 
@@ -113,7 +137,22 @@ class FragmentMaker(
         val height: Int
             get() = maxY - minY + 1
 
+        private var sumX: Double = 0.0
+        private var sumY: Double = 0.0
+        private var pixelCount = 0
+
+        /**
+         * Relative to the source pose (from the TOP)
+         */
+        val centerX
+            get() = sumX / pixelCount
+        val centerY
+            get() = sumY / pixelCount
+
         fun update(x: Int, y: Int) {
+            sumX += x
+            sumY += y
+            pixelCount++
             if (x < minX) minX = x
             if (x > maxX) maxX = x
             if (y < minY) minY = y

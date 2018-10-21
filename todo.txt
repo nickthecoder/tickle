@@ -3,11 +3,16 @@ BUGS
 
 Add/Delete/Rename costumes, and the CostumePicker doesn't update.
 
+Texture is holding its data upside down!
+
 Current Work
 ============
 
 Next
 ====
+
+Make FXCoder scripts be part of the resources tree.
+    tabs should re-open like the other tabs or restart.
 
 ScriptManager has listeners which it informs about reloads (including errors).
     Use this to position cursor to errors

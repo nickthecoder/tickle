@@ -27,9 +27,9 @@ class PixelArray(val width: Int, val height: Int, val array: ByteArray) {
      */
     fun pixelAt(x: Int, y: Int): Int {
         val offset = (y * width + x) * 4
-        return array[offset].toInt() and 0xff +
-                (array[offset + 1].toInt() and 0xff).shl(8) +
-                (array[offset + 2].toInt() and 0xff).shl(16) +
+        return array[offset].toInt() and 0xff or
+                (array[offset + 1].toInt() and 0xff).shl(8) or
+                (array[offset + 2].toInt() and 0xff).shl(16) or
                 (array[offset + 3].toInt() and 0xff).shl(24)
     }
 
@@ -38,8 +38,8 @@ class PixelArray(val width: Int, val height: Int, val array: ByteArray) {
      */
     fun colorAt(x: Int, y: Int): Int {
         val offset = (y * width + x) * 4
-        return (array[offset].toInt() and 0xff) +
-                (array[offset + 1].toInt() and 0xff).shl(8) +
+        return (array[offset].toInt() and 0xff) or
+                (array[offset + 1].toInt() and 0xff).shl(8) or
                 (array[offset + 2].toInt() and 0xff).shl(16)
     }
 
@@ -48,9 +48,9 @@ class PixelArray(val width: Int, val height: Int, val array: ByteArray) {
      */
     fun argbColorAt(x: Int, y: Int): Int {
         val offset = (y * width + x) * 4
-        return (array[offset + 2].toInt() and 0xff) + // Blue
-                (array[offset + 1].toInt() and 0xff).shl(8) + // Green
-                (array[offset].toInt() and 0xff).shl(16) + // Red
+        return (array[offset + 2].toInt() and 0xff) or // Blue
+                (array[offset + 1].toInt() and 0xff).shl(8) or // Green
+                (array[offset].toInt() and 0xff).shl(16) or // Red
                 (array[offset + 3].toInt() and 0xff).shl(24) // alpha
     }
 

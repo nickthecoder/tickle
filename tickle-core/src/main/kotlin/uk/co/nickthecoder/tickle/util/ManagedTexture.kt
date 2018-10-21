@@ -34,14 +34,10 @@ class ManagedTexture(width: Int, height: Int) {
         addSpace(YDownRect(pose.rect.left, pose.rect.top, pose.rect.right, pose.rect.bottom))
     }
 
-    fun add(pixelArray: PixelArray): Pose {
-        return add(pixelArray.width, pixelArray.height, pixelArray.array)
-    }
-
-    fun add(w: Int, h: Int, image: ByteArray): Pose {
-        val space = findSpareSpace(w, h)
-        val xGap = space.width - w
-        val yGap = space.height - h
+    fun add(image: PixelArray): Pose {
+        val space = findSpareSpace(image.width, image.height)
+        val xGap = space.width - image.width
+        val yGap = space.height - image.height
 
         spareSpace.remove(space)
         val gap1: YDownRect
@@ -51,13 +47,13 @@ class ManagedTexture(width: Int, height: Int) {
         if (xGap > yGap) {
             // X2
             // 12
-            gap1 = YDownRect(space.left, space.top + h, space.left + w, space.bottom)
-            gap2 = YDownRect(space.left + w, space.top, space.right, space.bottom)
+            gap1 = YDownRect(space.left, space.top + image.height, space.left + image.width, space.bottom)
+            gap2 = YDownRect(space.left + image.width, space.top, space.right, space.bottom)
         } else {
             // X1
             // 22
-            gap1 = YDownRect(space.left + w, space.top, space.right, space.top + h)
-            gap2 = YDownRect(space.left, space.top + h, space.right, space.bottom)
+            gap1 = YDownRect(space.left + image.width, space.top, space.right, space.top + image.height)
+            gap2 = YDownRect(space.left, space.top + image.height, space.right, space.bottom)
         }
         if (gap1.width != 0 && gap1.height != 0) {
             spareSpace.add(gap1)
@@ -66,22 +62,21 @@ class ManagedTexture(width: Int, height: Int) {
             spareSpace.add(gap2)
         }
 
-        val texturePixels = texture.read()
+        val texturePixels = PixelArray(texture)
+        //texturePixels.blit(image)
         // Copy the image data onto texturePixels
-        for (y in 0..h) {
+        for (y in 0 until image.height) {
             val py = y + space.top
-            for (x in 0..w) {
+            for (x in 0 until image.width) {
                 val px = x + space.left
-                for (c in 0..4) {
-                    texturePixels[(py * texture.width + px) * 4 + c] = image[(y * w + x) * 4 + c]
-                }
+                texturePixels.setPixel(px, py, image.pixelAt(x, y))
             }
         }
         // Update the texture with the new image
-        texture.write(texture.width, texture.height, ByteBuffer.wrap(texturePixels))
+        texture.write(texture.width, texture.height, texturePixels.toBuffer(true))
 
         // Create a pose
-        val rect = YDownRect(space.left, space.top, space.left + w, space.top + h)
+        val rect = YDownRect(space.left, space.top, space.left + image.width, space.top + image.height)
         val pose = Pose(texture, rect)
         return pose
     }

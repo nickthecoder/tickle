@@ -33,11 +33,10 @@ import javafx.scene.control.TextArea
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.image.WritableImage
-import javafx.scene.layout.BorderPane
-import javafx.scene.layout.FlowPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.editor.FXCoderStub
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.util.CodeEditor
 import uk.co.nickthecoder.tickle.editor.util.toImageView
@@ -49,16 +48,7 @@ import java.io.StringWriter
 import javax.imageio.ImageIO
 
 
-class FXCoderTab : EditorTab("FX Coder", FXCoder()) {
-
-    init {
-        content = (data as FXCoder).borderPane
-    }
-}
-
-class FXCoder {
-
-    internal val borderPane = BorderPane()
+class FXCoderTab(val fxCoderStub: FXCoderStub) : EditTab(fxCoderStub.name, fxCoderStub) {
 
     private val vSplitPane = SplitPane()
 
@@ -72,22 +62,15 @@ class FXCoder {
 
     private val codeEditor = CodeEditor()
 
-    private val buttons = FlowPane()
-
-    private val saveButton = Button("Save")
-
-    private val openButton = Button("Open")
-
     private val runButton = Button("Run")
 
     private val saveImageButton = Button("Save Image")
 
-    private var file: File? = null
-
     init {
+        applyButton.text = "Save"
+        okButton.isVisible = false
 
         borderPane.center = vSplitPane
-        borderPane.bottom = buttons
 
         vSplitPane.items.addAll(codeEditor.borderPane)
         vSplitPane.orientation = Orientation.VERTICAL
@@ -97,36 +80,28 @@ class FXCoder {
         messageArea.prefRowCount = 3
         messageArea.isEditable = false
 
-        buttons.styleClass.add("buttons")
-        buttons.children.addAll(saveImageButton, saveButton, openButton, runButton)
         saveImageButton.isVisible = false
 
         runButton.onAction = EventHandler { run() }
-        openButton.onAction = EventHandler { open() }
-        saveButton.onAction = EventHandler { save() }
         saveImageButton.onAction = EventHandler { saveImage() }
 
-        codeEditor.tediArea.text = defaultCode
-    }
+        rightButtons.children.add(runButton)
+        leftButtons.children.add(saveImageButton)
 
-    private fun createFileChooser(): FileChooser = FileChooser().apply {
-        extensionFilters.add(FileChooser.ExtensionFilter("Groovy Source Code", "*.groovy"))
-    }
+        if (fxCoderStub.file.exists() == true) {
+            codeEditor.tediArea.text = fxCoderStub.file.readText()
+        } else {
+            codeEditor.tediArea.text = defaultCode
+        }
 
-    fun open() {
-        val openFile = createFileChooser().showOpenDialog(MainWindow.instance.stage)
-
-        if (openFile != null && openFile.exists()) {
-            codeEditor.tediArea.text = openFile.readText()
-            file = openFile
+        codeEditor.tediArea.textProperty().addListener { _ ->
+            needsSaving = true
         }
     }
 
-    private fun save() {
-        if (file == null) {
-            file = createFileChooser().showSaveDialog(MainWindow.instance.stage)
-        }
-        file?.writeText(codeEditor.tediArea.text)
+    override fun justSave(): Boolean {
+        fxCoderStub.file.writeText(codeEditor.tediArea.text)
+        return true
     }
 
     private fun saveImage() {
@@ -223,7 +198,7 @@ class FXCoder {
 // This can be useful for generating graphics, or automating processes in the Tickle editor.
 // Here's an example script as an example...
 
-import uk.co.nickthecoder.tickle.editor.tabs.FXCoder
+import uk.co.nickthecoder.tickle.editor.tabs.FXCoderTab
 import javafx.scene.canvas.Canvas
 import javafx.scene.paint.*
 
@@ -243,8 +218,8 @@ context.fillRect(0.0, 0.0, w,h)
 
 // By returning a Canvas or an Image, a "Save Image" button will appear.
 // Alternatively, you could save it from within the script.
-//     FXCoder.saveCanvas( canvas, file )
-//     FXCoder.saveImage( image, file )
+//     FXCoderTab.saveCanvas( canvas, file )
+//     FXCoderTab.saveImage( image, file )
 canvas
 """
 

@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.editor.resources
 
 import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.editor.FXCoderStub
 import uk.co.nickthecoder.tickle.editor.ScriptStub
 import uk.co.nickthecoder.tickle.events.Input
 import uk.co.nickthecoder.tickle.graphics.Texture
@@ -42,7 +43,9 @@ enum class ResourceType(val label: String, val graphicName: String) {
     SCENE_DIRECTORY("Scene Directory", "folder.png"),
     SCENE("Scene", "scene.png"),
     SCRIPT_DIRECTORY("Script Directory", "folder.png"),
-    SCRIPT("Script", "script.png");
+    SCRIPT("Script", "script.png"),
+    FXCODER_DIRECTORY("Script Directory", "folder.png"),
+    FXCODER("FXCoder Script", "fxcoder.png");
 
     fun canCreate(): Boolean = this != ANY && this != GAME_INFO && this != PREFERENCES
 
@@ -74,6 +77,14 @@ enum class ResourceType(val label: String, val graphicName: String) {
                     null
                 }
             }
+            FXCODER -> {
+                val file = File(Resources.instance.fxcoderDirectory(), name)
+                if (file.exists()) {
+                    FXCoderStub(file)
+                } else {
+                    null
+                }
+            }
             else -> null
         }
     }
@@ -95,6 +106,7 @@ enum class ResourceType(val label: String, val graphicName: String) {
                 is SceneResource -> SCENE
                 is SceneStub -> SCENE
                 is ScriptStub -> SCRIPT
+                is FXCoderStub -> FXCODER
                 else -> null
             }
         }

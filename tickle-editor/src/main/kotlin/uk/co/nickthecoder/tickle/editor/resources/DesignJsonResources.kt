@@ -25,6 +25,7 @@ import javafx.application.Platform
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.tabs.EditTab
+import uk.co.nickthecoder.tickle.editor.tabs.FXCoderTab
 import uk.co.nickthecoder.tickle.editor.tabs.SceneTab
 import uk.co.nickthecoder.tickle.editor.tabs.ScriptTab
 import uk.co.nickthecoder.tickle.editor.util.ClassLister
@@ -518,13 +519,16 @@ class DesignJsonResources : JsonResources {
                 val type = ResourceType.resourceType(tab.data)
                 type?.let {
                     val jtab = JsonObject()
-                    if (tab is SceneTab) {
-                        jtab.add("name", tab.sceneName)
+                    val name = if (tab is SceneTab) {
+                        tab.sceneName
                     } else if (tab is ScriptTab) {
-                        jtab.add("name", tab.scriptStub.name)
+                        tab.scriptStub.name
+                    } else if (tab is FXCoderTab) {
+                        tab.fxCoderStub.name
                     } else {
-                        jtab.add("name", tab.dataName)
+                        tab.dataName
                     }
+                    jtab.add("name", name)
                     jtab.add("type", type.name)
                     jtabs.add(jtab)
                 }

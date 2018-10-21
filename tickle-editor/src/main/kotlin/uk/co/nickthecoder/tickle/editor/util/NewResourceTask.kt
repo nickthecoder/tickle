@@ -28,11 +28,13 @@ import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.CostumeGroup
 import uk.co.nickthecoder.tickle.Pose
+import uk.co.nickthecoder.tickle.editor.FXCoderStub
 import uk.co.nickthecoder.tickle.editor.MainWindow
 import uk.co.nickthecoder.tickle.editor.ScriptStub
 import uk.co.nickthecoder.tickle.editor.resources.DesignJsonScene
 import uk.co.nickthecoder.tickle.editor.resources.DesignSceneResource
 import uk.co.nickthecoder.tickle.editor.resources.ResourceType
+import uk.co.nickthecoder.tickle.editor.tabs.FXCoderTab
 import uk.co.nickthecoder.tickle.events.CompoundInput
 import uk.co.nickthecoder.tickle.graphics.*
 import uk.co.nickthecoder.tickle.resources.*
@@ -77,6 +79,8 @@ class NewResourceTask(resourceType: ResourceType = ResourceType.ANY, defaultName
 
     val scriptLanguageP = ChoiceParameter<Language>("language")
 
+    val fxCoderP = InformationParameter("fxCoder", information = "")
+
     init {
         ScriptManager.languages().forEach { language ->
             scriptLanguageP.addChoice(language.name, language, language.name)
@@ -119,6 +123,7 @@ class NewResourceTask(resourceType: ResourceType = ResourceType.ANY, defaultName
             ResourceType.SCENE -> sceneP
             ResourceType.SOUND -> soundP
             ResourceType.SCRIPT -> scriptLanguageP
+            ResourceType.FXCODER -> fxCoderP
             else -> null
 
         }
@@ -134,9 +139,11 @@ class NewResourceTask(resourceType: ResourceType = ResourceType.ANY, defaultName
                     "Scene Directory" to sceneDirectoryP,
                     "Scene" to sceneP,
                     "Sound" to soundP,
-                    "Script" to scriptLanguageP)
+                    "Script" to scriptLanguageP,
+                    "FXCoder" to fxCoderP)
 
-            taskD.addParameters(textureP, poseP, fontP, costumeP, costumeGroupP, layoutP, inputP, sceneDirectoryP, sceneP, soundP, scriptLanguageP)
+            taskD.addParameters(textureP, poseP, fontP, costumeP, costumeGroupP, layoutP, inputP, sceneDirectoryP, sceneP, soundP, scriptLanguageP, fxCoderP)
+
         } else {
             resourceTypeP.hidden = true
             resourceTypeP.value = parameter
@@ -156,9 +163,6 @@ class NewResourceTask(resourceType: ResourceType = ResourceType.ANY, defaultName
             inputP -> Resources.instance.inputs
             fontP -> Resources.instance.fontResources
             soundP -> Resources.instance.sounds
-            sceneDirectoryP -> null
-            sceneP -> null
-            scriptLanguageP -> null
             else -> null
         }
 
@@ -217,9 +221,9 @@ class NewResourceTask(resourceType: ResourceType = ResourceType.ANY, defaultName
                 data = input
             }
             sceneDirectoryP -> {
-                val dir = File(Resources.instance.sceneDirectory, nameP.value)
+                val dir = File(Resources.instance.sceneDirectory, name)
                 dir.mkdir()
-                Resources.instance.fireAdded(dir, nameP.value)
+                Resources.instance.fireAdded(dir, name)
             }
             sceneP -> {
                 val dir = sceneP.value!!
@@ -234,29 +238,35 @@ class NewResourceTask(resourceType: ResourceType = ResourceType.ANY, defaultName
                 }
                 newScene.layoutName = layoutName
                 DesignJsonScene(newScene).save(file)
-                Resources.instance.fireAdded(file, nameP.value)
+                Resources.instance.fireAdded(file, name)
             }
             fontP -> {
                 val fontResource = FontResource()
                 fontP.update(fontResource)
-                Resources.instance.fontResources.add(nameP.value, fontResource)
+                Resources.instance.fontResources.add(name, fontResource)
                 data = fontResource
             }
             soundP -> {
                 val sound = Sound(soundP.value!!)
-                Resources.instance.sounds.add(nameP.value, sound)
+                Resources.instance.sounds.add(name, sound)
                 data = sound
             }
             scriptLanguageP -> {
-                scriptLanguageP.value?.createScript(Resources.instance.scriptDirectory(), nameP.value, newScriptType)?.let { file ->
+                scriptLanguageP.value?.createScript(Resources.instance.scriptDirectory(), name, newScriptType)?.let { file ->
                     data = ScriptStub(file)
-                    Resources.instance.fireAdded(file, nameP.value)
+                    Resources.instance.fireAdded(file, name)
                 }
+            }
+            fxCoderP -> {
+                val file = File(Resources.instance.fxcoderDirectory(), "$name.groovy")
+                file.writeText(FXCoderTab.defaultCode)
+                data = FXCoderStub(file)
+                Resources.instance.fireAdded(file, name)
             }
         }
 
         data?.let {
-            MainWindow.instance.openTab(nameP.value, it)
+            MainWindow.instance.openTab(name, it)
         }
     }
 

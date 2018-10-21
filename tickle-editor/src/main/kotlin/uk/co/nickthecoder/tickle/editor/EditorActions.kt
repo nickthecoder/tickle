@@ -66,8 +66,6 @@ object EditorActions {
 
     val TAB_CLOSE = EditorAction("tab.close", KeyCode.W, control = true, label = "Close Tab")
 
-    val FXCODER = EditorAction("fxcoder", KeyCode.F12, tooltip = "FX Coder")
-
     val RELOAD_SCRIPTS = EditorAction("scripts.reload", KeyCode.F5, label = "Reload Scripts", tooltip = "Reload all scripts")
 
 }

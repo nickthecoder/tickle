@@ -31,7 +31,7 @@ import java.io.IOException
 import java.nio.ByteBuffer
 
 
-class Texture(width: Int, height: Int, pixelFormat: Int, buffer: ByteBuffer?, val file: File? = null)
+class Texture(width: Int, height: Int, pixelFormat: Int, buffer: ByteBuffer?, var file: File? = null)
 
     : Deletable, Renamable {
 

@@ -113,7 +113,6 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
             add(EditorActions.RUN.createButton(shortcuts) { startGame() })
             add(EditorActions.TEST.createButton(shortcuts) { testGame() })
-            add(EditorActions.FXCODER.createButton(shortcuts) { openTab(FXCoderTab()) })
             if (ScriptManager.languages().isNotEmpty()) {
                 add(EditorActions.RELOAD_SCRIPTS.createButton(shortcuts) { ScriptManager.reloadAll() })
             }
@@ -308,22 +307,23 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
 
     private fun createTab(name: String, data: Any): EditorTab? {
 
-        when (data) {
+        return when (data) {
             is GameInfo -> return GameInfoTab()
 
-            is EditorPreferences -> return EditorPreferencesTab()
-            is Texture -> return TextureTab(name, data)
-            is Pose -> return PoseTab(name, data)
-            is Layout -> return LayoutTab(name, data)
-            is CompoundInput -> return InputTab(name, data)
-            is Costume -> return CostumeTab(name, data)
-            is CostumeGroup -> return CostumeGroupTab(name, data)
-            is SceneStub -> return SceneTab(name, data)
-            is FontResource -> return FontTab(name, data)
-            is Sound -> return SoundTab(name, data)
-            is ScriptStub -> return ScriptTab(data)
-            APIStub -> return APITab()
-            else -> return null
+            is EditorPreferences -> EditorPreferencesTab()
+            is Texture -> TextureTab(name, data)
+            is Pose -> PoseTab(name, data)
+            is Layout -> LayoutTab(name, data)
+            is CompoundInput -> InputTab(name, data)
+            is Costume -> CostumeTab(name, data)
+            is CostumeGroup -> CostumeGroupTab(name, data)
+            is SceneStub -> SceneTab(name, data)
+            is FontResource -> FontTab(name, data)
+            is Sound -> SoundTab(name, data)
+            is ScriptStub -> ScriptTab(data)
+            is FXCoderStub -> FXCoderTab(data)
+            APIStub -> APITab()
+            else -> null
         }
     }
 

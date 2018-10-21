@@ -53,6 +53,7 @@ class ScriptTab(val scriptStub: ScriptStub)
     init {
         applyButton.text = "Save"
         okButton.isVisible = false
+
         borderPane.center = codeEditor.borderPane
         Resources.instance.listeners.add(this)
 

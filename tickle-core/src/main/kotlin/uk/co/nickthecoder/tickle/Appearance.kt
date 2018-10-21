@@ -205,13 +205,35 @@ class PoseAppearance(actor: Actor, var pose: Pose)
         pose.draw(renderer, actor)
     }
 
+    /**
+     * Initially, this is the Pose's offset, but can be changed, to allow rotation about a
+     * different point. Note, the Actor's position will be changed by the opposite amount,
+     * so that it appears to stays in the same place.
+     */
+    var offsetX = pose.offsetX
+        set(v) {
+            actor.position.x += field - v
+            field = v
+        }
+
+    /**
+     * Initially, this is the Pose's offset, but can be changed, to allow rotation about a
+     * different point. Note, the Actor's position will be changed by the opposite amount,
+     * so that it appears to stays in the same place.
+     */
+    var offsetY = pose.offsetY
+        set(v) {
+            actor.position.y += field - v
+            field = v
+        }
+
     override fun width(): Double = pose.rect.width.toDouble()
 
     override fun height(): Double = pose.rect.height.toDouble()
 
-    override fun offsetX() = pose.offsetX
+    override fun offsetX() = offsetX
 
-    override fun offsetY() = pose.offsetY
+    override fun offsetY() = offsetY
 
     override fun touching(point: Vector2d): Boolean = pixelTouching(point)
 
