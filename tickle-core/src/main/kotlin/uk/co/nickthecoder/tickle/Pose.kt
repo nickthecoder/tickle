@@ -65,9 +65,9 @@ class Pose(
 
     fun updateRectd() {
         rectd.left = rect.left.toDouble() / texture.width
-        rectd.bottom = 1 - (rect.bottom.toDouble() / texture.height)
+        rectd.bottom = rect.bottom.toDouble() / texture.height
         rectd.right = rect.right.toDouble() / texture.width
-        rectd.top = 1 - (rect.top.toDouble() / texture.height)
+        rectd.top = rect.top.toDouble() / texture.height
     }
 
     private val WHITE = Color.white()

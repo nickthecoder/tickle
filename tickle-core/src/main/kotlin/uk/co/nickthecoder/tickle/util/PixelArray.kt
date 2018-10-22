@@ -16,7 +16,7 @@ class PixelArray(val width: Int, val height: Int, val array: ByteArray) {
 
     constructor(width: Int, height: Int) : this(width, height, ByteArray(width * height * 4))
 
-    constructor(texture: Texture) : this(texture.width, texture.height, texture.read(true))
+    constructor(texture: Texture) : this(texture.width, texture.height, texture.read())
 
     fun redAt(x: Int, y: Int) = array[(y * width + x) * 4].toInt() and 0xff
     fun greenAt(x: Int, y: Int) = array[(y * width + x) * 4 + 1].toInt() and 0xff
@@ -76,25 +76,14 @@ class PixelArray(val width: Int, val height: Int, val array: ByteArray) {
         array[(y * width + x) * 4 + 3] = (alpha and 0xff).toByte()
     }
 
-    fun toBuffer(flip: Boolean): ByteBuffer {
-        println("Creating buffer size ${array.size} (same as ${width * height * 4}) for $width x $height")
+    fun toBuffer(): ByteBuffer {
         val buffer = ByteBuffer.allocateDirect(array.size)
-        if (flip) {
-            for (y in height - 1 downTo 0) {
-                for (x in 0 until width) {
-                    for (c in 0..3) {
-                        buffer.put(array[(y * width + x) * 4 + c])
-                    }
-                }
-            }
-        } else {
-            buffer.put(array)
-        }
+        buffer.put(array)
         buffer.position(0)
         return buffer
     }
 
-    fun toTexture() = Texture(width, height, GL_RGBA, toBuffer(true))
+    fun toTexture() = Texture(width, height, GL_RGBA, toBuffer())
 
     fun toImage(): Image {
         val image = WritableImage(width, height)

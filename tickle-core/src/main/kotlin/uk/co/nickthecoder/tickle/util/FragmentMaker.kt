@@ -91,7 +91,6 @@ class FragmentMaker(
         for (info in infoMap.values) {
 
             val dest = PixelArray(info.width, info.height)
-            println("Created dest array ${info.width} x ${info.height}")
 
             for (y in 0 until dest.height) {
                 val sourceY = y + info.minY

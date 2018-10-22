@@ -11,9 +11,6 @@ Current Work
 Next
 ====
 
-Make FXCoder scripts be part of the resources tree.
-    tabs should re-open like the other tabs or restart.
-
 ScriptManager has listeners which it informs about reloads (including errors).
     Use this to position cursor to errors
     New tab type, which lists errors during scan().

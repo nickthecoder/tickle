@@ -73,7 +73,7 @@ class ManagedTexture(width: Int, height: Int) {
             }
         }
         // Update the texture with the new image
-        texture.write(texture.width, texture.height, texturePixels.toBuffer(true))
+        texture.write(texture.width, texture.height, texturePixels.toBuffer())
 
         // Create a pose
         val rect = YDownRect(space.left, space.top, space.left + image.width, space.top + image.height)

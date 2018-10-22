@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package uk.co.nickthecoder.tickle.graphics
 
 import org.lwjgl.opengl.GL11.*
-import org.lwjgl.stb.STBImage
 import org.lwjgl.stb.STBImage.stbi_load
 import org.lwjgl.system.MemoryStack
 import uk.co.nickthecoder.tickle.resources.Resources
@@ -90,23 +89,12 @@ class Texture(width: Int, height: Int, pixelFormat: Int, buffer: ByteBuffer?, va
      *
      *     .toInt() & 0xFF
      */
-    fun read(flip: Boolean = false): ByteArray {
+    fun read(): ByteArray {
         bind()
         val pixels = ByteArray(width * height * 4)
         val buffer = ByteBuffer.allocateDirect(pixels.size)
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer)
         buffer.get(pixels)
-        if (flip) {
-            for (y in 0 until height / 2) {
-                for (x in 0 until width) {
-                    for (c in 0..3) {
-                        val tmp = pixels[((height - 1 - y) * width + x) * 4 + c]
-                        pixels[((height - 1 - y) * width + x) * 4 + c] = pixels[(y * width + x) * 4 + c]
-                        pixels[(y * width + x) * 4 + c] = tmp
-                    }
-                }
-            }
-        }
         return pixels
     }
 
@@ -185,7 +173,7 @@ class Texture(width: Int, height: Int, pixelFormat: Int, buffer: ByteBuffer?, va
                 val height = stack.mallocInt(1)
                 val channels = stack.mallocInt(1)
 
-                STBImage.stbi_set_flip_vertically_on_load(true)
+                // STBImage.stbi_set_flip_vertically_on_load(true)
                 val buffer = stbi_load(file.path, width, height, channels, 4)
                 buffer ?: throw IOException("Failed to load texture from ${file.absoluteFile}")
                 return LoadedImage(width.get(), height.get(), buffer)

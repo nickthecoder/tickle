@@ -25,8 +25,6 @@ import uk.co.nickthecoder.tickle.util.YDownRect
 import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.RenderingHints
-import java.awt.geom.AffineTransform
-import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
 
 
@@ -111,8 +109,6 @@ open class FontTextureFactoryViaAWT(
         val bufferedImage = BufferedImage(requiredWidth, requiredHeight, BufferedImage.TYPE_INT_ARGB)
         val g = bufferedImage.createGraphics()
         g.font = font
-        //g.paint = java.awt.Color.GREEN
-        //g.fillRect(0, 0, requiredWidth, requiredHeight)
         g.paint = java.awt.Color.WHITE
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
@@ -121,16 +117,9 @@ open class FontTextureFactoryViaAWT(
             g.drawString(c.toString(), glyphData.x + xPadding.toInt(), glyphData.y + metrics.ascent + yPadding.toInt())
         }
 
-        /* Flip image to get the origin at the bottom left */
-
-        val transform = AffineTransform.getScaleInstance(1.0, -1.0)
-        transform.translate(0.0, (-requiredHeight).toDouble())
-        val operation = AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR)
-        val flippedImage = operation.filter(bufferedImage, null)
-
         /* Get pixel data of image */
         val pixels = IntArray(requiredWidth * requiredHeight)
-        flippedImage.getRGB(0, 0, requiredWidth, requiredHeight, pixels, 0, requiredWidth)
+        bufferedImage.getRGB(0, 0, requiredWidth, requiredHeight, pixels, 0, requiredWidth)
 
         /* Put pixel data into a ByteBuffer, ensuring it is in RGBA order */
         val buffer = MemoryUtil.memAlloc(requiredWidth * requiredHeight * 4)

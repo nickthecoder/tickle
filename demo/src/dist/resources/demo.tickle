@@ -27,8 +27,8 @@
     ],
     "treeThumbnailSize": 24,
     "costumePickerThumbnailSize": 50,
-    "isMaximized": true,
-    "windowWidth": 1076,
+    "isMaximized": false,
+    "windowWidth": 1203,
     "windowHeight": 702,
     "apiURL": "http://nickthecoder.co.uk/public/tickle/api-0.1/tickle-core/"
   },
@@ -192,67 +192,67 @@
       "name": "alienFragment1",
       "texture": "fragments",
       "left": 0,
-      "bottom": 43,
-      "right": 76,
+      "bottom": 51,
+      "right": 50,
       "top": 0,
-      "offsetX": 33,
-      "offsetY": 22,
+      "offsetX": 50,
+      "offsetY": -1,
       "direction": 0,
       "snapPoints": [
         {
-          "x": 38,
-          "y": -9
+          "x": 28,
+          "y": 24
         }
       ]
     },
     {
       "name": "alienFragment2",
       "texture": "fragments",
-      "left": 76,
-      "bottom": 73,
-      "right": 172,
+      "left": 50,
+      "bottom": 98,
+      "right": 106,
       "top": 0,
-      "offsetX": 48,
-      "offsetY": 39,
+      "offsetX": 8,
+      "offsetY": 46,
       "direction": 0,
       "snapPoints": [
         {
-          "x": 48,
-          "y": 47
+          "x": 32,
+          "y": 57
         }
       ]
     },
     {
       "name": "alienFragment3",
       "texture": "fragments",
-      "left": 172,
-      "bottom": 68,
-      "right": 215,
+      "left": 106,
+      "bottom": 71,
+      "right": 166,
       "top": 0,
-      "offsetX": 18,
-      "offsetY": 36,
+      "offsetX": 19,
+      "offsetY": 47,
       "direction": 0,
       "snapPoints": [
         {
-          "x": 51,
-          "y": 43
+          "x": 27,
+          "y": 36
         }
       ]
     },
     {
       "name": "alienFragment4",
       "texture": "fragments",
-      "left": 0,
-      "bottom": 99,
-      "right": 56,
-      "top": 43,
-      "offsetX": 31,
-      "offsetY": 25,
+      "left": 166,
+      "bottom": 59,
+      "right": 243,
+      "top": 0,
+      "offsetX": 51,
+      "offsetY": 47,
       "direction": 0,
       "snapPoints": [
         {
-          "x": 8,
-          "y": 47
+          "x": 24,
+          "y": 25
         }
       ]
     }
@@ -670,6 +670,18 @@
     {
       "name": "fragment.groovy",
       "type": "FXCODER"
+    },
+    {
+      "name": "alien1",
+      "type": "POSE"
+    },
+    {
+      "name": "alien2",
+      "type": "POSE"
+    },
+    {
+      "name": "small",
+      "type": "FONT"
     }
   ]
 }
