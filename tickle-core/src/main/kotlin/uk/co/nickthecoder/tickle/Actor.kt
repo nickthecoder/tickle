@@ -154,7 +154,7 @@ class Actor(var costume: Costume, role: Role? = null)
 
     internal val modelMatrix = Matrix4f()
 
-    private var dirtyMatrix: Boolean = true
+    internal var dirtyMatrix: Boolean = true
         get() {
             return field || position != oldPosition || oldScale != scale
         }
@@ -259,12 +259,7 @@ class Actor(var costume: Costume, role: Role? = null)
             tiled.resize(pose.rect.width.toDouble(), pose.rect.height.toDouble())
             appearance = tiled
         } else {
-            val a = appearance
-            if (a is PoseAppearance) {
-                a.pose = pose
-            } else {
-                appearance = PoseAppearance(this, pose)
-            }
+            appearance = PoseAppearance(this, pose)
         }
     }
 

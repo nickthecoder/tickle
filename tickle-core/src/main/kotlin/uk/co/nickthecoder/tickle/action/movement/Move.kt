@@ -18,18 +18,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package uk.co.nickthecoder.tickle.action.movement
 
-import org.joml.Vector2f
+import org.joml.Vector2d
+import uk.co.nickthecoder.tickle.Game
 import uk.co.nickthecoder.tickle.action.Action
 
 open class Move(
-        val position: Vector2f,
-        val velocity: Vector2f)
+        val position: Vector2d,
+        val velocity: Vector2d)
 
     : Action {
 
+    private var previousTime = Game.instance.seconds
+
+    override fun begin(): Boolean {
+        previousTime = Game.instance.seconds
+        return super.begin()
+    }
+
     override fun act(): Boolean {
-        position.x += velocity.x
-        position.y += velocity.y
+        val diff = Game.instance.seconds - previousTime
+        position.x += velocity.x * diff
+        position.y += velocity.y * diff
+        previousTime = Game.instance.seconds
         return false
     }
 }

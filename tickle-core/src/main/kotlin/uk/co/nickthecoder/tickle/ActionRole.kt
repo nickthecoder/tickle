@@ -20,6 +20,7 @@ package uk.co.nickthecoder.tickle
 
 import uk.co.nickthecoder.tickle.action.Action
 import uk.co.nickthecoder.tickle.action.ActionHolder
+import uk.co.nickthecoder.tickle.action.Kill
 
 /**
  * A Role that only has a single Action.
@@ -33,7 +34,9 @@ import uk.co.nickthecoder.tickle.action.ActionHolder
  * Note, if you want the Actor to die, then ensure you include a [Kill] action,
  * otherwise the Actor will stay living, but do nothing.
  */
-open class ActionRole : ActionHolder(), Role {
+open class ActionRole(private val defaultAction: Action?) : ActionHolder(), Role {
+
+    constructor() : this(null)
 
     override lateinit var actor: Actor
 
@@ -43,7 +46,7 @@ open class ActionRole : ActionHolder(), Role {
         then(createAction())
     }
 
-    open fun createAction(): Action? = null
+    open fun createAction(): Action? = defaultAction
 
     override fun tick() {
         act()

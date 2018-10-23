@@ -24,9 +24,11 @@ class Colorize(
         val color: Color,
         seconds: Double,
         val finalColor: Color,
-        ease: Ease = LinearEase.instance)
+        ease: Ease)
 
     : AnimationAction(seconds, ease) {
+
+    constructor(color: Color, seconds: Double, finalColor: Color) : this(color, seconds, finalColor, LinearEase.instance)
 
     private val initialColor = Color.white()
 

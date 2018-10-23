@@ -29,8 +29,12 @@ class Scale(
 
     : AnimationAction(seconds, ease) {
 
+    constructor(actor: Actor, seconds: Double, finalScale: Vector2d) : this(actor, seconds, finalScale, LinearEase.instance)
+
     constructor(actor: Actor, seconds: Double, finalScale: Double, ease: Ease = LinearEase.instance)
             : this(actor, seconds = seconds, finalScale = Vector2d(finalScale, finalScale), ease = ease)
+
+    constructor(actor: Actor, seconds: Double, finalScale: Double) : this(actor, seconds, finalScale, LinearEase.instance)
 
     private var initialScale = Vector2d()
 

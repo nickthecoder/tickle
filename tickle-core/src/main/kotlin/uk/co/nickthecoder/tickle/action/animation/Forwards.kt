@@ -26,9 +26,11 @@ class Forwards(
         val by: Double,
         val heading: Angle,
         seconds: Double,
-        ease: Ease = Eases.linear)
+        ease: Ease)
 
     : AnimationAction(seconds, ease) {
+
+    constructor(position: Vector2d, by: Double, heading: Angle, seconds: Double) : this(position, by, heading, seconds, LinearEase.instance)
 
     override fun storeInitialValue() {
     }

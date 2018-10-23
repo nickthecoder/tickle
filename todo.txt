@@ -3,13 +3,13 @@ BUGS
 
 Add/Delete/Rename costumes, and the CostumePicker doesn't update.
 
-Texture is holding its data upside down!
-
 Current Work
 ============
 
 Next
 ====
+
+The tickle.util package is a mishmash. Has utilities for Tickle AND stuff for game designers.
 
 ScriptManager has listeners which it informs about reloads (including errors).
     Use this to position cursor to errors

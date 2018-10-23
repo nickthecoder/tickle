@@ -93,16 +93,24 @@ open class Angle() {
 
     companion object {
 
-        @JvmStatic fun degrees(degrees: Double) = Angle().apply { this.degrees = degrees }
+        @JvmStatic
+        fun degrees(degrees: Double) = Angle().apply { this.degrees = degrees }
 
-        @JvmStatic fun radians(radians: Double) = Angle().apply { this.radians = radians }
+        @JvmStatic
+        fun radians(radians: Double) = Angle().apply { this.radians = radians }
 
-        @JvmStatic fun of(vector: Vector2d) = Angle().apply { this.radians = radiansOf(vector) }
 
-        @JvmStatic fun radiansOf(vector: Vector2d) = Math.atan2(vector.y, vector.x)
+        @JvmStatic
+        fun radiansOf(vector: Vector2d) = Math.atan2(vector.y, vector.x)
 
-        @JvmStatic fun radiansOf(a: Vector2d, from: Vector2d) = Math.atan2(a.y - from.y, a.x - from.x)
+        @JvmStatic
+        fun of(vector: Vector2d) = Angle().apply { this.radians = radiansOf(vector) }
 
-        @JvmStatic fun of(a: Vector2d, from: Vector2d) = Math.atan2(a.y - from.y, a.x - from.x)
+
+        @JvmStatic
+        fun radiansOf(a: Vector2d, from: Vector2d) = Math.atan2(a.y - from.y, a.x - from.x)
+
+        @JvmStatic
+        fun of(a: Vector2d, from: Vector2d) = Angle().apply { this.radians = radiansOf(a, from) }
     }
 }

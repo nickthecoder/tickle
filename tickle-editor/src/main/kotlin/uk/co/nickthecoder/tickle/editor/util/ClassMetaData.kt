@@ -118,6 +118,7 @@ object ClassMetaData {
         "FontTextureFactoryViaAWT" to listOf( "uk.co.nickthecoder.tickle.graphics.FontTextureFactoryViaAWT" ),
         "ForeverAction" to listOf( "uk.co.nickthecoder.tickle.action.ForeverAction" ),
         "Forwards" to listOf( "uk.co.nickthecoder.tickle.action.animation.Forwards" ),
+        "Fragment" to listOf( "uk.co.nickthecoder.tickle.util.Fragment" ),
         "FragmentMaker" to listOf( "uk.co.nickthecoder.tickle.util.FragmentMaker" ),
         "FrustumIntersection" to listOf( "org.joml.FrustumIntersection" ),
         "FrustumRayBuilder" to listOf( "org.joml.FrustumRayBuilder" ),

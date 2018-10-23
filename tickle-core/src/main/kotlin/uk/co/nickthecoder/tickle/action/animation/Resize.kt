@@ -25,9 +25,11 @@ class Resize(
         seconds: Double,
         val finalWidth: Double = actor.appearance.width(),
         val finalHeight: Double = actor.appearance.height(),
-        ease: Ease = LinearEase.instance)
+        ease: Ease)
 
     : AnimationAction(seconds, ease) {
+
+    constructor(actor: Actor, seconds: Double, finalWidth: Double, finalHeight: Double) : this(actor, seconds, finalWidth, finalHeight, LinearEase.instance)
 
     private var initialWidth = 0.0
     private var initialHeight = 0.0

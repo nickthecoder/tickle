@@ -1,10 +1,8 @@
 package uk.co.nickthecoder.tickle.util
 
 import org.joml.Vector2d
-import uk.co.nickthecoder.tickle.Costume
-import uk.co.nickthecoder.tickle.CostumeEvent
-import uk.co.nickthecoder.tickle.Pose
-import uk.co.nickthecoder.tickle.Producer
+import uk.co.nickthecoder.tickle.*
+import uk.co.nickthecoder.tickle.action.Action
 
 /**
  * Create a set of [Pose]s, where each pose is just *part* of the original.
@@ -104,9 +102,7 @@ class FragmentMaker(
                 }
             }
             val pose = texture.add(dest)
-            //pose.offsetX = Math.round(info.centerX).toDouble() - info.minX
-            //pose.offsetY = pose.rect.height - (Math.round(info.centerY).toDouble() - info.minY)
-            //pose.snapPoints.add(Vector2d(sourcePose.offsetX - info.minX, sourcePose.offsetY - (sourcePose.rect.height - info.maxY)))
+            pose.direction.radians = sourcePose.direction.radians
 
             // Make the offsets such that the fragment will appear in the same place as the source when added to the stage.
             pose.offsetX = sourcePose.offsetX - info.minX
@@ -252,6 +248,41 @@ class FragmentMaker(
         fun randomMaskPose(pose: Pose, fragmentCount: Int, alphaThreshold: Int = 1): Pose {
             val texture = randomMask(pose, fragmentCount, alphaThreshold).toTexture()
             return Pose(texture, YDownRect(0, 0, texture.width, texture.height))
+        }
+
+
+        @JvmStatic
+        fun createActors(parent: Actor, eventName: String = "fragments"): List<Actor> {
+            val event = parent.costume.events[eventName] ?: return emptyList()
+
+            val actors = mutableListOf<Actor>()
+            for (pose in event.poses) {
+                val actor = Actor(parent.costume)
+                actor.appearance = PoseAppearance(actor, pose)
+                actors.add(actor)
+                actor.position.set(parent.position)
+                actor.zOrder = parent.zOrder
+                actor.direction = parent.direction
+                parent.stage?.add(actor)
+                // FragmentMaker put the center of gravity into a snap point. Use it if it is there.
+                if (pose.snapPoints.isNotEmpty()) {
+                    val snap = pose.snapPoints[0]
+                    actor.poseAppearance?.changeOffset(snap.x, snap.y)
+                }
+            }
+
+            return actors
+        }
+
+        @JvmStatic
+        fun createRoles(parent: Actor, eventName: String = "fragments", actionFactory: (Actor, Vector2d) -> Action): List<ActionRole> {
+            return createActors(parent, eventName).map { actor ->
+                val offset = Vector2d(actor.position).sub(parent.position)
+                val action = actionFactory(actor, offset)
+                val actionRole = ActionRole(action)
+                actor.role = actionRole
+                actionRole
+            }
         }
 
     }

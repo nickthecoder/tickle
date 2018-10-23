@@ -24,9 +24,11 @@ class Turn(
         val heading: Angle,
         seconds: Double,
         val angle: Angle,
-        ease: Ease = LinearEase.instance)
+        ease: Ease)
 
     : AnimationAction(seconds, ease) {
+
+    constructor(heading: Angle, seconds: Double, angle: Angle) : this(heading, seconds, angle, LinearEase.instance)
 
     private var initialRadians: Double = 0.0
 
@@ -42,7 +44,8 @@ class Turn(
     }
 
     companion object {
-        @JvmStatic fun turnTo(
+        @JvmStatic
+        fun turnTo(
                 heading: Angle,
                 seconds: Double,
                 finalAngle: Angle,

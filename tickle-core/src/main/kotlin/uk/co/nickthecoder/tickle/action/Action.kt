@@ -167,6 +167,8 @@ interface Action {
         return ForeverAction(this)
     }
 
+    fun forSeconds(seconds: Double): WhilstAction = whilst(Delay(seconds))
+
     /**
      * Creates a [RepeatAction] action, i.e. one that repeats this action n times.
      *

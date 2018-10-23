@@ -135,10 +135,10 @@ class ManagedTexture(width: Int, height: Int) {
 
         val oldArray = texture.read()
         val newArray = ByteArray(texture.width * (texture.height + extraHeight * 4))
-        for (i in 0..oldArray.size) {
+        for (i in 0 until oldArray.size) {
             newArray[i] = oldArray[i]
         }
-        for (i in oldArray.size..newArray.size) {
+        for (i in oldArray.size until newArray.size) {
             newArray[i] = 0
         }
         texture.write(texture.width, texture.height + extraHeight, ByteBuffer.wrap(newArray))

@@ -24,9 +24,11 @@ class Fade(
         val color: Color,
         seconds: Double,
         val finalAlpha: Float,
-        ease: Ease = LinearEase.instance)
+        ease: Ease)
 
     : AnimationAction(seconds, ease) {
+
+    constructor(color: Color, seconds: Double, finalAlpha: Float) : this(color, seconds, finalAlpha, LinearEase.instance)
 
     private var initialAlpha = 0f
 

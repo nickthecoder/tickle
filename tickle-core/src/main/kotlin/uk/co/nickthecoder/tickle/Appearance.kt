@@ -202,30 +202,50 @@ class PoseAppearance(actor: Actor, var pose: Pose)
         get() = pose.direction.radians
 
     override fun draw(renderer: Renderer) {
-        pose.draw(renderer, actor)
+        val left = actor.x - offsetX
+        val bottom = actor.y - offsetY
+
+        if (actor.isSimpleImage()) {
+            renderer.drawTexture(
+                    pose.texture,
+                    left, bottom, left + pose.rect.width, bottom + pose.rect.height,
+                    pose.rectd,
+                    color = actor.color)
+
+        } else {
+            renderer.drawTexture(
+                    pose.texture,
+                    left, bottom, left + pose.rect.width, bottom + pose.rect.height,
+                    pose.rectd,
+                    color = actor.color,
+                    modelMatrix = actor.calculateModelMatrix())
+        }
     }
 
     /**
      * Initially, this is the Pose's offset, but can be changed, to allow rotation about a
-     * different point. Note, the Actor's position will be changed by the opposite amount,
-     * so that it appears to stays in the same place.
+     * different point. Note, consider changing the Actor's so that it appears to stays in the same place.
      */
     var offsetX = pose.offsetX
-        set(v) {
-            actor.position.x += field - v
-            field = v
-        }
+
+    /**
+     * Changes the offset, and adjusting the actor's position, so that the actor appears not to have moved.
+     */
+    fun changeOffset(newX: Double, newY: Double) {
+        val delta = Vector2d(newX - offsetX, newY - offsetY)
+        delta.rotate(actor.direction.radians - directionRadians)
+        delta.mul(actor.scale)
+        actor.position.x += delta.x
+        actor.position.y += delta.y
+        offsetX = newX
+        offsetY = newY
+    }
 
     /**
      * Initially, this is the Pose's offset, but can be changed, to allow rotation about a
-     * different point. Note, the Actor's position will be changed by the opposite amount,
-     * so that it appears to stays in the same place.
+     * different point. Note, consider changing the Actor's so that it appears to stays in the same place.
      */
     var offsetY = pose.offsetY
-        set(v) {
-            actor.position.y += field - v
-            field = v
-        }
 
     override fun width(): Double = pose.rect.width.toDouble()
 

@@ -83,27 +83,6 @@ class Pose(
                 modelMatrix)
     }
 
-    fun draw(renderer: Renderer, actor: Actor) {
-        val left = actor.x - offsetX
-        val bottom = actor.y - offsetY
-
-        if (actor.isSimpleImage()) {
-            renderer.drawTexture(
-                    texture,
-                    left, bottom, left + rect.width, bottom + rect.height,
-                    rectd,
-                    color = actor.color)
-
-        } else {
-            renderer.drawTexture(
-                    texture,
-                    left, bottom, left + rect.width, bottom + rect.height,
-                    rectd,
-                    color = actor.color,
-                    modelMatrix = actor.calculateModelMatrix())
-        }
-    }
-
 
     // Dependency
 

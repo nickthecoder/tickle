@@ -282,11 +282,16 @@ open class JsonResources {
     // POSES
 
     fun loadPoses(jposes: JsonArray) {
-        jposes.forEach { jele ->
+        for (jele in jposes) {
             val jpose = jele.asObject()
             val name = jpose.get("name").asString()
             val textureName = jpose.get("texture").asString()
-            val pose = Pose(resources.textures.find(textureName)!!)
+            val texture = resources.textures.find(textureName)
+            if (texture == null) {
+                error("Texture $textureName not found for pose $name.")
+                continue
+            }
+            val pose = Pose(texture)
 
             pose.rect.left = jpose.get("left").asInt()
             pose.rect.bottom = jpose.get("bottom").asInt()
@@ -723,6 +728,10 @@ open class JsonResources {
         }
     }
 
+    fun error(message: String) {
+        ErrorHandler.handleError(JsonLoadException(message))
+    }
+
     fun error(e: Exception, message: String) {
         ErrorHandler.handleError(JsonLoadException(e, message))
     }
@@ -775,4 +784,7 @@ open class JsonResources {
 
 }
 
-class JsonLoadException(e: Exception, message: String) : Exception(message, e)
+class JsonLoadException : Exception {
+    constructor(message: String) : super(message)
+    constructor(e: Exception, message: String) : super(message, e)
+}
