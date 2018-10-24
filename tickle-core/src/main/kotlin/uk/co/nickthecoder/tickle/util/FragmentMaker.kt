@@ -251,6 +251,12 @@ class FragmentMaker(
         }
 
 
+        /**
+         * Create a set of Actors at the same position as the [parent], and on the same Stage.
+         * The [Pose] is taken from the parent's Costume event with name [eventName].
+         * The roles for the new Actors are null.
+         * The costumes are null too.
+         */
         @JvmStatic
         fun createActors(parent: Actor, eventName: String = "fragments"): List<Actor> {
             val event = parent.costume.events[eventName] ?: return emptyList()
@@ -265,17 +271,33 @@ class FragmentMaker(
                 actor.direction = parent.direction
                 parent.stage?.add(actor)
                 // FragmentMaker put the center of gravity into a snap point. Use it if it is there.
-                if (pose.snapPoints.isNotEmpty()) {
-                    val snap = pose.snapPoints[0]
-                    actor.poseAppearance?.changeOffset(snap.x, snap.y)
+                pose.snapPoints.firstOrNull()?.let {
+                    actor.poseAppearance?.changeOffset(it.x, it.y)
                 }
             }
 
             return actors
         }
 
+        /**
+         * Similar to [createActors], but instead of the roles being null, they are an [ActionRole], where the
+         * action is defined by the lambda [actionFactory].
+         *
+         * The parameters to the lambda is the newly created Actor, and the difference in position between
+         * the [parent] Actor, and the newly created Actor.
+         *
+         * A typical action may be something like :
+         *
+         *     Move(actor.position, offset.mul(speed))
+         *         .and( Turn(actor.direction, 1.0, Angle.degrees(Rand.between( -360.0, 360.0 ))).forever() )
+         *         .whilst( Fade(actor.color, seconds, 0f) )
+         *         .then( Kill(actor) )
+         *
+         * Where actor and offset are the inputs to the lambda, and speed and seconds are any values you like.
+         * This will spin, translate, fade, and then kill the actor.
+         */
         @JvmStatic
-        fun createRoles(parent: Actor, eventName: String = "fragments", actionFactory: (Actor, Vector2d) -> Action): List<ActionRole> {
+        fun createActionRoles(parent: Actor, eventName: String = "fragments", actionFactory: (Actor, Vector2d) -> Action): List<ActionRole> {
             return createActors(parent, eventName).map { actor ->
                 val offset = Vector2d(actor.position).sub(parent.position)
                 val action = actionFactory(actor, offset)
