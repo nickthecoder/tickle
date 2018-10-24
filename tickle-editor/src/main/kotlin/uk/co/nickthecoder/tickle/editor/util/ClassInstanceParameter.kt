@@ -40,11 +40,11 @@ class ClassInstanceParameter(
 
     override val converter = object : StringConverter<Any?>() {
         override fun fromString(string: String?): Any? {
-            if (string == null) return null
+            if (string == null || string.isEmpty()) return null
             return ScriptManager.classForName(string).newInstance()
         }
 
-        override fun toString(obj: Any?) = obj?.javaClass?.name
+        override fun toString(obj: Any?) = obj?.javaClass?.name ?: ""
     }
 
     override fun errorMessage(v: Any?): String? = null

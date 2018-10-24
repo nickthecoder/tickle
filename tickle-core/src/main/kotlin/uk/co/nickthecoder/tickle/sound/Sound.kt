@@ -51,6 +51,10 @@ class Sound : Deletable {
         reload()
     }
 
+    fun play() {
+        SoundManager.play(this)
+    }
+
     fun reload() {
         file?.let {
             when (file.extension) {
@@ -105,7 +109,7 @@ class Sound : Deletable {
     // Deletable
 
     override fun dependables(): List<Dependable> {
-        return Resources.instance.costumes.items().values.filter{ it.dependsOn(this)}
+        return Resources.instance.costumes.items().values.filter { it.dependsOn(this) }
     }
 
     override fun delete() {
