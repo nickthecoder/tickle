@@ -110,7 +110,7 @@ object ClassMetaData {
         "Follow" to listOf( "uk.co.nickthecoder.tickle.action.movement.Follow" ),
         "FollowAngle" to listOf( "uk.co.nickthecoder.tickle.action.movement.FollowAngle" ),
         "FollowMouse" to listOf( "uk.co.nickthecoder.tickle.action.movement.FollowMouse" ),
-        "Follower" to listOf( "uk.co.nickthecoder.tickle.Follower" ),
+        "Follower" to listOf( "uk.co.nickthecoder.tickle.util.Follower" ),
         "FontResource" to listOf( "uk.co.nickthecoder.tickle.resources.FontResource" ),
         "FontSandbox" to listOf( "uk.co.nickthecoder.tickle.sandbox.FontSandbox" ),
         "FontSandboxKt" to listOf( "uk.co.nickthecoder.tickle.sandbox.FontSandboxKt" ),
