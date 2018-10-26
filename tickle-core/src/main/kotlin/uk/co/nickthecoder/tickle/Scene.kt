@@ -57,6 +57,16 @@ class Scene {
         }
     }
 
+    fun findActorById(id: Int): Actor? {
+        stages().forEach {
+            val result = it.findActorById(id)
+            if (result != null) {
+                return result
+            }
+        }
+        return null
+    }
+
     /**
      * Changes the size of the view based on the size in GameInfo. This is done when the scene is first loaded.
      * Note that [View.changeRect] is NOT called, so the actors are NOT adjusted based on their alignment.

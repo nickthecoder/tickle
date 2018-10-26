@@ -53,6 +53,10 @@ interface Stage {
 
     fun firstView(): StageView? = views.firstOrNull()
 
+    fun findActorById(id: Int): Actor? {
+        return actors.firstOrNull { it.id == id }
+    }
+
     /**
      * Note, the default implementation is slow, as it iterates over all actors. If you call this often and/or the stage
      * has hundreds of Actors, consider creating a subclass, optimised using a Neighbourhood.
