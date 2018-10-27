@@ -477,21 +477,11 @@ class GlassLayer(private val sceneEditor: SceneEditor)
             val dx = now.x - was.x
             val dy = now.y - was.y
 
-            if (isLeft) {
-                actorResource.x += dx * (1 - actorResource.sizeAlignment.x)
-                actorResource.size.x -= dx
-            } else {
-                actorResource.x += dx * actorResource.sizeAlignment.x
-                actorResource.size.x += dx
-            }
+            actorResource.size.x += if (isLeft) -dx else dx
+            actorResource.size.y += if (isBottom) -dy else dy
 
-            if (isBottom) {
-                actorResource.y += dy * (1 - actorResource.sizeAlignment.y)
-                actorResource.size.y -= dy
-            } else {
-                actorResource.y += dy * actorResource.sizeAlignment.y
-                actorResource.size.y += dy
-            }
+            actorResource.x -= x() - x
+            actorResource.y -= y() - y
 
             sceneEditor.history.makeChange(Resize(actorResource, oldX, oldY, oldSizeX, oldSizeY))
 
@@ -536,26 +526,14 @@ class GlassLayer(private val sceneEditor: SceneEditor)
             val was = Vector2d(x(), y())
             viewToActor(actorResource, was)
 
-            val dx = now.x - was.x
-            val dy = now.y - was.y
-            val alignX = pose.offsetX / pose.rect.width
-            val alignY = pose.offsetY / pose.rect.height
+            val factorX = (pose.rect.width + now.x - was.x) / pose.rect.width
+            val factorY = (pose.rect.height + now.y - was.y) / pose.rect.height
 
-            actorResource.x += alignX * dx * actorResource.scale.x
-            actorResource.y += alignY * dy * actorResource.scale.y
+            actorResource.scale.x *= if (isLeft) 1.0 / factorX else factorX
+            actorResource.scale.y *= if (isBottom) 1.0 / factorY else factorY
 
-            if (isLeft) {
-                actorResource.scale.x /= (pose.rect.width + dx) / pose.rect.width
-            } else {
-                actorResource.scale.x *= (pose.rect.width + dx) / pose.rect.width
-            }
-
-            if (isBottom) {
-                actorResource.scale.y /= (pose.rect.height + dy) / pose.rect.height
-            } else {
-                actorResource.scale.y *= (pose.rect.height + dy) / pose.rect.height
-            }
-
+            actorResource.x -= x() - x
+            actorResource.y -= y() - y
 
             sceneEditor.history.makeChange(Scale(actorResource, oldX, oldY, oldScaleX, oldScaleY))
 
