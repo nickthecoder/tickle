@@ -24,6 +24,7 @@ import com.eclipsesource.json.PrettyPrint
 import javafx.application.Platform
 import uk.co.nickthecoder.tickle.Costume
 import uk.co.nickthecoder.tickle.editor.MainWindow
+import uk.co.nickthecoder.tickle.editor.ResourcesTree
 import uk.co.nickthecoder.tickle.editor.tabs.EditTab
 import uk.co.nickthecoder.tickle.editor.tabs.FXCoderTab
 import uk.co.nickthecoder.tickle.editor.tabs.SceneTab
@@ -54,6 +55,7 @@ class DesignJsonResources : JsonResources {
         // The MainWindow may not exist yet, so runLater, when it will exist.
         Platform.runLater {
             loadTabs(jroot)
+            loadExpandedTreeNodes(jroot)
         }
     }
 
@@ -78,6 +80,7 @@ class DesignJsonResources : JsonResources {
         addArray(jroot, "costumes", saveCostumes(resources.costumes, false))
         addArray(jroot, "inputs", saveInputs())
         addArray(jroot, "tabs", saveTabs())
+        addArray(jroot, "expand", saveExpandedTreeNodes())
 
         BufferedWriter(OutputStreamWriter(FileOutputStream(file))).use {
             jroot.writeTo(it, resources.preferences.outputFormat.writerConfig)
@@ -536,6 +539,58 @@ class DesignJsonResources : JsonResources {
             }
         }
         return jtabs
+    }
+
+    private fun loadExpandedTreeNodes(jroot: JsonObject) {
+        val jExpand = jroot.get("expand")
+        val treeRoot = MainWindow.instance.resourcesTree.root
+        if (jExpand is JsonArray) {
+            for (jNode in jExpand) {
+                if (jNode is JsonObject) {
+                    val name = jNode.getString("name", null)
+                    val type = jNode.getString("type", null)
+                    for (child in treeRoot.children) {
+                        if (child is ResourcesTree.DataItem && child.name == name && child.resourceType.name == type) {
+                            child.isExpanded = true
+                        } else if (child is ResourcesTree.TopLevelItem && child.resourceType.name == type) {
+                            child.isExpanded = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Saves which top-level nodes in the ResourcesTree are expanded
+     */
+    private fun saveExpandedTreeNodes(): JsonArray {
+        val jExpand = JsonArray()
+        val tabs = MainWindow.instance.resourcesTree.root as ResourcesTree.RootItem
+        for (item in tabs.children) {
+            if (item.isExpanded) {
+                var name: String? = null
+                var type: ResourceType? = null
+
+                if (item is ResourcesTree.DataItem) {
+                    name = item.name
+                    type = item.resourceType
+                } else if (item is ResourcesTree.TopLevelItem) {
+                    type = item.resourceType
+                }
+
+                if (type != null) {
+                    val jNode = JsonObject()
+                    if (name != null) {
+                        jNode.add("name", name)
+                    }
+                    jNode.add("type", type.name)
+                    jExpand.add(jNode)
+                }
+
+            }
+        }
+        return jExpand
     }
 
     companion object {

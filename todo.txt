@@ -9,6 +9,12 @@ Current Work
 Next
 ====
 
+Quick Open resources by typing part of their name (Shows all matches)
+    Defaults to all resource types.
+    Other shortcuts for specific resource types.
+
+Remember expanded tree nodes (in a similar manner that open tabs are remembered).
+
 The tickle.util package is a mishmash. Has utilities for Tickle AND stuff for game designers.
 
 ScriptManager has listeners which it informs about reloads (including errors).

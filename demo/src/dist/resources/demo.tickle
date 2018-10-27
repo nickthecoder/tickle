@@ -680,30 +680,18 @@
       ]
     }
   ],
-  "tabs": [
+  "expand": [
     {
-      "name": "fragment.groovy",
-      "type": "FXCODER"
+      "type": "TEXTURE"
     },
     {
-      "name": "alien1",
-      "type": "POSE"
+      "type": "SOUND"
     },
     {
-      "name": "alien2",
-      "type": "POSE"
+      "type": "LAYOUT"
     },
     {
-      "name": "small",
-      "type": "FONT"
-    },
-    {
-      "name": "ground-nine-patch",
-      "type": "COSTUME"
-    },
-    {
-      "name": "simple",
-      "type": "SCENE"
+      "type": "SCENE_DIRECTORY"
     }
   ]
 }

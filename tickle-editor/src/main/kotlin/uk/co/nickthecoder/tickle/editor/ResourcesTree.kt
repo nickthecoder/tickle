@@ -349,7 +349,6 @@ class ResourcesTree
                 children.add(TextureItem(name, texture))
             }
             updateLabel()
-            isExpanded = true
         }
 
         override fun resourceAdded(resource: Any, name: String) {
