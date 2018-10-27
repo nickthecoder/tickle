@@ -433,6 +433,7 @@ open class JsonResources {
                 error(e, "Failed to create role : ${jcostume.getString("role", "")}")
             }
             costume.canRotate = jcostume.getBoolean("canRotate", false)
+            costume.canScale = jcostume.getBoolean("canScale", false)
             costume.zOrder = jcostume.getDouble("zOrder", 0.0)
             costume.initialEventName = jcostume.getString("initialEvent", "default")
             costume.showInSceneEditor = jcostume.getBoolean("showInSceneEditor", true)

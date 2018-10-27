@@ -42,6 +42,8 @@ class Costume : Copyable<Costume>, Deletable, Renamable, Dependable {
 
     var canRotate: Boolean = false
 
+    var canScale: Boolean = false
+
     var zOrder: Double = 0.0
 
     val attributes = Resources.instance.createAttributes()

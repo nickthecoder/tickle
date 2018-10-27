@@ -280,6 +280,7 @@ class DesignJsonResources : JsonResources {
                 jcostume.add("name", name)
                 jcostume.add("role", costume.roleString)
                 jcostume.add("canRotate", costume.canRotate)
+                jcostume.add("canScale", costume.canScale)
                 jcostume.add("zOrder", costume.zOrder)
                 jcostume.add("initialEvent", costume.initialEventName)
                 jcostume.add("showInSceneEditor", costume.showInSceneEditor)

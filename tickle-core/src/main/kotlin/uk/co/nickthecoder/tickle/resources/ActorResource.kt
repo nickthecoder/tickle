@@ -140,11 +140,14 @@ open class ActorResource(val isDesigning: Boolean = false)
 
     fun isSizable(): Boolean {
         val costume = costume()
-        if (costume?.chooseNinePatch(costume.initialEventName) != null) {
-            return true
-        }
+        if (costume?.chooseNinePatch(costume.initialEventName) != null) return true
+
         val pose = costume?.choosePose(costume.initialEventName)
         return pose?.tiled == true
+    }
+
+    fun isScalable(): Boolean {
+        return costume()?.canScale == true
     }
 
     fun isNinePatch(): Boolean {

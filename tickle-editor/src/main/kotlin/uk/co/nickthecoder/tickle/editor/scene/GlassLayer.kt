@@ -152,6 +152,11 @@ class GlassLayer(private val sceneEditor: SceneEditor)
                 dragHandles.add(SizeHandle(latest, true, false))
                 dragHandles.add(SizeHandle(latest, false, true))
                 dragHandles.add(SizeHandle(latest, false, false))
+            } else if (latest.isScalable()) {
+                dragHandles.add(ScaleHandle(latest, true, true))
+                dragHandles.add(ScaleHandle(latest, true, false))
+                dragHandles.add(ScaleHandle(latest, false, true))
+                dragHandles.add(ScaleHandle(latest, false, false))
             }
 
             latest.attributes.map().forEach { name, data ->
@@ -422,8 +427,8 @@ class GlassLayer(private val sceneEditor: SceneEditor)
 
     }
 
-    inner class SizeHandle(val actorResource: DesignActorResource, val isLeft: Boolean, val isBottom: Boolean)
-        : AbstractDragHandle("Resize") {
+    abstract inner class SizeScaleHandle(name: String, val actorResource: DesignActorResource, val isLeft: Boolean, val isBottom: Boolean)
+        : AbstractDragHandle(name) {
 
         override fun draw() {
             with(canvas.graphicsContext2D) {
@@ -437,6 +442,24 @@ class GlassLayer(private val sceneEditor: SceneEditor)
                 restore()
             }
         }
+
+
+        fun actorToView(actorResource: ActorResource, vector: Vector2d) {
+            vector.mul(actorResource.scale)
+            vector.rotate(actorResource.direction.radians - (actorResource.editorPose?.direction?.radians ?: 0.0))
+            vector.add(actorResource.x, actorResource.y)
+        }
+
+        fun viewToActor(actorResource: ActorResource, vector: Vector2d) {
+            vector.add(-actorResource.x, -actorResource.y)
+            vector.rotate(-actorResource.direction.radians + (actorResource.editorPose?.direction?.radians ?: 0.0))
+            vector.mul(1 / actorResource.scale.x, 1 / actorResource.scale.y)
+        }
+    }
+
+    inner class SizeHandle(actorResource: DesignActorResource, isLeft: Boolean, isBottom: Boolean)
+        : SizeScaleHandle("Resize", actorResource, isLeft, isBottom) {
+
 
         override fun moveTo(x: Double, y: Double, snap: Boolean) {
 
@@ -469,14 +492,14 @@ class GlassLayer(private val sceneEditor: SceneEditor)
                 actorResource.y += dy * actorResource.sizeAlignment.y
                 actorResource.size.y += dy
             }
-            actorResource.draggedX = actorResource.x
-            actorResource.draggedY = actorResource.y
 
             sceneEditor.history.makeChange(Resize(actorResource, oldX, oldY, oldSizeX, oldSizeY))
+
+            actorResource.draggedX = actorResource.x
+            actorResource.draggedY = actorResource.y
         }
 
         override fun x(): Double {
-
             val vector = Vector2d(
                     (if (isLeft) 0.0 else actorResource.size.x) - actorResource.sizeAlignment.x * actorResource.size.x,
                     (if (isBottom) 0.0 else actorResource.size.y) - actorResource.sizeAlignment.y * actorResource.size.y)
@@ -493,15 +516,70 @@ class GlassLayer(private val sceneEditor: SceneEditor)
             actorToView(actorResource, vector)
             return vector.y
         }
+    }
 
-        fun actorToView(actorResource: ActorResource, vector: Vector2d) {
-            vector.rotate(actorResource.direction.radians - (actorResource.editorPose?.direction?.radians ?: 0.0))
-            vector.add(actorResource.x, actorResource.y)
+    inner class ScaleHandle(actorResource: DesignActorResource, isLeft: Boolean, isBottom: Boolean)
+        : SizeScaleHandle("Scale", actorResource, isLeft, isBottom) {
+
+        override fun moveTo(x: Double, y: Double, snap: Boolean) {
+
+            val pose = actorResource.pose ?: return
+
+            val oldX = actorResource.x
+            val oldY = actorResource.y
+            val oldScaleX = actorResource.scale.x
+            val oldScaleY = actorResource.scale.y
+
+            val now = Vector2d(x, y)
+            viewToActor(actorResource, now)
+
+            val was = Vector2d(x(), y())
+            viewToActor(actorResource, was)
+
+            val dx = now.x - was.x
+            val dy = now.y - was.y
+            val alignX = pose.offsetX / pose.rect.width
+            val alignY = pose.offsetY / pose.rect.height
+
+            actorResource.x += alignX * dx * actorResource.scale.x
+            actorResource.y += alignY * dy * actorResource.scale.y
+
+            if (isLeft) {
+                actorResource.scale.x /= (pose.rect.width + dx) / pose.rect.width
+            } else {
+                actorResource.scale.x *= (pose.rect.width + dx) / pose.rect.width
+            }
+
+            if (isBottom) {
+                actorResource.scale.y /= (pose.rect.height + dy) / pose.rect.height
+            } else {
+                actorResource.scale.y *= (pose.rect.height + dy) / pose.rect.height
+            }
+
+
+            sceneEditor.history.makeChange(Scale(actorResource, oldX, oldY, oldScaleX, oldScaleY))
+
+            actorResource.draggedX = actorResource.x
+            actorResource.draggedY = actorResource.y
         }
 
-        fun viewToActor(actorResource: ActorResource, vector: Vector2d) {
-            vector.add(-actorResource.x, -actorResource.y)
-            vector.rotate(-actorResource.direction.radians + (actorResource.editorPose?.direction?.radians ?: 0.0))
+        override fun x(): Double {
+            val pose = actorResource.pose ?: return 0.0
+            val vector = Vector2d(
+                    (if (isLeft) -pose.offsetX else pose.rect.width - pose.offsetX),
+                    (if (isBottom) -pose.offsetY else pose.rect.height - pose.offsetY))
+            actorToView(actorResource, vector)
+            return vector.x
+        }
+
+        override fun y(): Double {
+            val pose = actorResource.pose ?: return 0.0
+            val vector = Vector2d(
+                    (if (isLeft) -pose.offsetX else pose.rect.width - pose.offsetX),
+                    (if (isBottom) -pose.offsetY else pose.rect.height - pose.offsetY))
+
+            actorToView(actorResource, vector)
+            return vector.y
         }
     }
 
