@@ -143,6 +143,8 @@ class CostumeTab(val name: String, val costume: Costume)
 
         private val canRotateP = BooleanParameter("canRotate")
 
+        private val canScaleP = BooleanParameter("canScale")
+
         private val zOrderP = DoubleParameter("zOrder")
 
         private val costumeGroupP = CostumeGroupParameter { chooseCostumeGroup(it) }
@@ -154,12 +156,13 @@ class CostumeTab(val name: String, val costume: Costume)
         private val attributesP = SimpleGroupParameter("attributes")
 
         override val taskD = TaskDescription("costumeDetails")
-                .addParameters(nameP, roleClassP, canRotateP, zOrderP, costumeGroupP, showInSceneEditorP, attributesP)
+                .addParameters(nameP, roleClassP, canRotateP, canScaleP, zOrderP, costumeGroupP, showInSceneEditorP, attributesP)
 
         init {
             nameP.value = name
             roleClassP.classValue = costume.roleClass()
             canRotateP.value = costume.canRotate
+            canScaleP.value = costume.canScale
             zOrderP.value = costume.zOrder
             costumeGroupP.costumeP.value = costume.costumeGroup
 
@@ -172,6 +175,7 @@ class CostumeTab(val name: String, val costume: Costume)
         override fun run() {
             costume.roleString = if (roleClassP.classValue == null) "" else ScriptManager.nameForClass(roleClassP.classValue!!)
             costume.canRotate = canRotateP.value == true
+            costume.canScale = canScaleP.value == true
             costume.zOrder = zOrderP.value!!
             costume.showInSceneEditor = showInSceneEditorP.value == true
 

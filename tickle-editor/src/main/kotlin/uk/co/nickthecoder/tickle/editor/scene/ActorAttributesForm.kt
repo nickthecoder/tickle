@@ -22,6 +22,7 @@ import javafx.application.Platform
 import javafx.scene.Node
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.HBox
+import org.joml.Vector2d
 import uk.co.nickthecoder.paratask.parameters.*
 import uk.co.nickthecoder.tickle.editor.resources.DesignActorResource
 import uk.co.nickthecoder.tickle.editor.resources.DesignSceneResource
@@ -32,7 +33,8 @@ import uk.co.nickthecoder.tickle.editor.scene.history.ChangedValueParameter
 import uk.co.nickthecoder.tickle.editor.util.DesignAttributeData
 import uk.co.nickthecoder.tickle.editor.util.TextStyleParameter
 import uk.co.nickthecoder.tickle.editor.util.Vector2dParameter
-import uk.co.nickthecoder.tickle.resources.*
+import uk.co.nickthecoder.tickle.resources.ActorXAlignment
+import uk.co.nickthecoder.tickle.resources.ActorYAlignment
 
 
 class ActorAttributesForm(
@@ -42,43 +44,43 @@ class ActorAttributesForm(
 
     : SceneResourceListener, ParameterListener {
 
-    val xP = DoubleParameter("x", value = actorResource.x)
+    private val xP = DoubleParameter("x", value = actorResource.x)
 
-    val yP = DoubleParameter("y", value = actorResource.y)
+    private val yP = DoubleParameter("y", value = actorResource.y)
 
     val zOrderP = DoubleParameter("zOrder", value = actorResource.zOrder)
 
-    val viewAlignmentXP = ChoiceParameter<ActorXAlignment>("viewAlignmentX", value = actorResource.viewAlignmentX)
+    private val viewAlignmentXP = ChoiceParameter<ActorXAlignment>("viewAlignmentX", value = actorResource.viewAlignmentX)
             .enumChoices(true)
 
-    val viewAlignmentYP = ChoiceParameter<ActorYAlignment>("viewAlignmentY", value = actorResource.viewAlignmentY)
+    private val viewAlignmentYP = ChoiceParameter<ActorYAlignment>("viewAlignmentY", value = actorResource.viewAlignmentY)
             .enumChoices(true)
 
-    val alignmentGroupP = SimpleGroupParameter("textAlignment", label = "Alignment")
+    private val alignmentGroupP = SimpleGroupParameter("textAlignment", label = "Alignment")
             .addParameters(viewAlignmentXP, viewAlignmentYP)
             .asHorizontal(LabelPosition.NONE)
 
-    val directionP = DoubleParameter("direction", value = actorResource.direction.degrees)
+    private val directionP = DoubleParameter("direction", value = actorResource.direction.degrees)
 
-    val scaleP = Vector2dParameter("scale", value = actorResource.scale)
+    private val scaleP = Vector2dParameter("scale", value = actorResource.scale)
 
-    val textP = StringParameter("text", value = actorResource.text, rows = 3)
+    private val textP = StringParameter("text", value = actorResource.text, rows = 3)
 
-    val textStyleP = TextStyleParameter("textStyle")
+    private val textStyleP = TextStyleParameter("textStyle")
             .asVertical()
 
-    val sizeP = Vector2dParameter("size", value = actorResource.size)
+    private val sizeP = Vector2dParameter("size", value = actorResource.size)
 
-    val resizeableAlignmentP = Vector2dParameter("resizeableAlignment", label = "Alignment", value = actorResource.sizeAlignment)
+    private val resizeableAlignmentP = Vector2dParameter("resizeableAlignment", label = "Alignment", value = actorResource.sizeAlignment)
 
-    val resizableGroupP = SimpleGroupParameter("resizeable")
+    private val resizableGroupP = SimpleGroupParameter("resizeable")
             .addParameters(sizeP, resizeableAlignmentP)
             .asPlain()
 
 
-    val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
+    private val attributesP = SimpleGroupParameter("attributes", label = "").asVertical()
 
-    val groupP = SimpleGroupParameter("actorGroup")
+    private val groupP = SimpleGroupParameter("actorGroup")
             .addParameters(attributesP, xP, yP, zOrderP, alignmentGroupP, directionP, scaleP)
             .asVertical()
 
@@ -202,7 +204,7 @@ class ActorAttributesForm(
         dirty = false
     }
 
-    fun updateParameters() {
+    private fun updateParameters() {
         with(actorResource) {
             yP.value = y
             xP.value = x
@@ -211,11 +213,11 @@ class ActorAttributesForm(
 
             directionP.value = direction.degrees
             if (isSizable()) {
-                sizeP.value.set(size)
-                resizeableAlignmentP.value.set(sizeAlignment)
-            } else {
-                scaleP.value.set(scale)
+                sizeP.value = Vector2d(size)
+                resizeableAlignmentP.value = Vector2d(sizeAlignment)
             }
+            scaleP.value = Vector2d(scale)
+
             textP.value = text
             textStyle?.let { textStyleP.from(it) }
 
