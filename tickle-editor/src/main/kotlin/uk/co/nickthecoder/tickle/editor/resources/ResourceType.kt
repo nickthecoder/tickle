@@ -35,7 +35,7 @@ enum class ResourceType(val label: String, val graphicName: String) {
     TEXTURE("Texture", "texture.png"),
     POSE("Pose", "pose.png"),
     COSTUME("Costume", "costume.png"),
-    COSTUME_GROUP("Costume Group", "folder2.png"),
+    COSTUME_GROUP("Costume Group", "costumeGroup.png"),
     LAYOUT("Layout", "layout.png"),
     INPUT("Input", "input.png"),
     FONT("Font", "font.png"),
