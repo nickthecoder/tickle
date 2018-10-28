@@ -692,6 +692,9 @@
     },
     {
       "type": "SCENE_DIRECTORY"
+    },
+    {
+      "type": "FXCODER_DIRECTORY"
     }
   ]
 }

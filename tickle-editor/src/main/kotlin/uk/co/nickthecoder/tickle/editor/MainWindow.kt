@@ -111,6 +111,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
         with(toolBar.items) {
             add(EditorActions.RELOAD.createButton(shortcuts) { reload() })
             add(EditorActions.NEW.createButton(shortcuts) { newResource() })
+            add(EditorActions.OPEN.createButton(shortcuts) { openResource() })
             add(EditorActions.RUN.createButton(shortcuts) { startGame() })
             add(EditorActions.TEST.createButton(shortcuts) { testGame() })
             if (ScriptManager.languages().isNotEmpty()) {
@@ -153,7 +154,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
 
     }
 
-    fun onCloseTab() {
+    private fun onCloseTab() {
         val selectedTab = tabPane.selectionModel.selectedItem
         if (selectedTab is EditTab) {
 
@@ -172,7 +173,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
         (selectedTab as? EditTab)?.close()
     }
 
-    fun onCloseRequest(event: WindowEvent) {
+    private fun onCloseRequest(event: WindowEvent) {
         // Check if there are tabs open, and if so, ask if they should be saved.
         if (tabPane.tabs.filterIsInstance<EditTab>().filter { it.needsSaving }.isNotEmpty()) {
             val alert = Alert(Alert.AlertType.CONFIRMATION)
@@ -215,17 +216,17 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
         resourcesTree.resources.save()
     }
 
-    fun accordionPane(n: Int) {
+    private fun accordionPane(n: Int) {
         if (n >= 0 && n < accordion.panes.count()) {
             accordion.expandedPane = accordion.panes[n]
         }
     }
 
-    fun findTab(data: Any): EditorTab? {
+    private fun findTab(data: Any): EditorTab? {
         return tabPane.tabs.filterIsInstance<EditorTab>().firstOrNull { it.data == data }
     }
 
-    fun reload() {
+    private fun reload() {
         saveAllTabs()
         tabPane.tabs.clear()
         Resources.instance.destroy()
@@ -234,17 +235,21 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
         resourcesTree.reload()
     }
 
-    fun newResource() {
+    private fun newResource() {
         TaskPrompter(NewResourceTask()).placeOnStage(Stage())
     }
 
-    fun saveAllTabs() {
+    private fun openResource() {
+        OpenResource(stage)
+    }
+
+    private fun saveAllTabs() {
         tabPane.tabs.forEach { tab ->
             (tab as? EditTab)?.save()
         }
     }
 
-    fun startGame(scenePath: String = Resources.instance.sceneFileToPath(Resources.instance.gameInfo.initialScenePath)) {
+    private fun startGame(scenePath: String = Resources.instance.sceneFileToPath(Resources.instance.gameInfo.initialScenePath)) {
 
         saveAllTabs()
         ScriptManager.reloadAll()
@@ -271,7 +276,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
     }
 
 
-    fun testGame() {
+    private fun testGame() {
         val tab = tabPane.selectionModel.selectedItem
         if (tab is SceneTab) {
             startGame(Resources.instance.sceneFileToPath(tab.sceneFile))
@@ -280,7 +285,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
         }
     }
 
-    fun openTab(tab: EditorTab) {
+    private fun openTab(tab: EditorTab) {
         tabPane.tabs.add(tab)
         tabPane.selectionModel.select(tab)
     }
@@ -327,7 +332,7 @@ class MainWindow(val stage: Stage, val glWindow: Window) : ErrorHandler {
         }
     }
 
-    fun onTabChanged(tab: Tab?) {
+    private fun onTabChanged(tab: Tab?) {
         extraSidePanels.forEach {
             accordion.panes.remove(it)
         }

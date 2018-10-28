@@ -30,6 +30,7 @@ object EditorActions {
     val RUN = EditorAction("run", KeyCode.R, control = true, label = "Run", tooltip = "Run the game")
     val TEST = EditorAction("test", KeyCode.T, control = true, label = "Test", tooltip = "Test the game")
     val RELOAD = EditorAction("reload", KeyCode.F5, label = "Reload", tooltip = "Reload textures, fonts & sounds")
+    val OPEN = EditorAction("open", KeyCode.O, control = true, label = "Open", tooltip = "Open Resource")
 
     val SAVE = EditorAction("save", KeyCode.S, control = true, label = "Save")
 

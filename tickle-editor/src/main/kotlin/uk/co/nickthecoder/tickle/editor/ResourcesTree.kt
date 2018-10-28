@@ -722,7 +722,6 @@ class ResourcesTree
                 children.add(ScriptItem(file))
             }
             updateLabel()
-            isExpanded = true
         }
 
         override fun resourceAdded(resource: Any, name: String) {
