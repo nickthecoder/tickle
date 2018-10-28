@@ -48,10 +48,15 @@ class OpenResource(parentStage: Stage) : Stage() {
     }
 
     private fun textChanged() {
-        val list = mutableListOf<Pair<String, ResourceType>>()
+        val list = mutableListOf<MatchedResource>()
         val upperSearch = textField.text.toUpperCase()
 
-        fun matches(name: String): Boolean = name.toUpperCase().contains(upperSearch)
+        fun matchScore(name: String): Double {
+            val index = name.toUpperCase().indexOf(upperSearch)
+            if (index < 0) return Double.MAX_VALUE
+
+            return index.toDouble() + (name.length - upperSearch.length) * 0.1
+        }
 
         textField.contextMenu?.hide()
         // If I don't create a new context menu every time, then when a menu is too big, and is scrolled, then
@@ -63,8 +68,9 @@ class OpenResource(parentStage: Stage) : Stage() {
 
                 fun addMatches(names: Set<String>) {
                     for (name in names) {
-                        if (matches(name)) {
-                            list.add(Pair(name, resourceType))
+                        val score = matchScore(name)
+                        if (score != Double.MAX_VALUE) {
+                            list.add(MatchedResource(name, resourceType, score))
                         }
                     }
                 }
@@ -72,14 +78,15 @@ class OpenResource(parentStage: Stage) : Stage() {
                 fun addFiles(dir: File, ext: String) {
                     val lister = FileLister(10, onlyFiles = true, extensions = listOf(ext))
                     lister.listFiles(dir).forEach { file ->
-                        if (matches(file.nameWithoutExtension)) {
+                        val score = matchScore(file.nameWithoutExtension)
+                        if (score != Double.MAX_VALUE) {
                             val file2 = file.relativeToOrSelf(resources.file.parentFile.absoluteFile)
                             val adjustedName = when (resourceType) {
                                 ResourceType.SCRIPT -> file2.path.removePrefix("scripts${File.separatorChar}")
                                 ResourceType.SCENE -> file2.path.removePrefix("scenes${File.separatorChar}").removeSuffix(".scene")
                                 else -> file2.path
                             }
-                            list.add(Pair(adjustedName, resourceType))
+                            list.add(MatchedResource(adjustedName, resourceType, score))
                         }
                     }
                 }
@@ -105,7 +112,7 @@ class OpenResource(parentStage: Stage) : Stage() {
         }
 
         textField.contextMenu.items.clear()
-        list.forEach { (name, resourceType) ->
+        list.sortedBy { it.score }.forEach { (name, resourceType) ->
             val item = MenuItem(name, ImageView(EditorAction.imageResource(resourceType.graphicName)))
             item.onAction = EventHandler { selectItem(name, resourceType) }
             textField.contextMenu.items.add(item)
@@ -127,4 +134,6 @@ class OpenResource(parentStage: Stage) : Stage() {
         MainWindow.instance.openNamedTab(adjustedName, resourceType)
         hide()
     }
+
+    data class MatchedResource(val name: String, val resourceType: ResourceType, val score: Double)
 }
